@@ -25,71 +25,73 @@ import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
  */
-public final class NewtonRaphsonSolverTest {
+final class NewtonRaphsonSolverTest {
     /**
      *
      */
     @Test
-    public void testSinZero() {
+    void testSinZero() {
         UnivariateDifferentiableFunction f = new Sin();
         double result;
 
         NewtonRaphsonSolver solver = new NewtonRaphsonSolver();
         result = solver.solve(100, f, 3, 4);
-        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 1, 4);
-        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
 
-        Assertions.assertTrue(solver.getEvaluations() > 0);
+        assertTrue(solver.getEvaluations() > 0);
     }
 
     /**
      *
      */
     @Test
-    public void testQuinticZero() {
+    void testQuinticZero() {
         final UnivariateDifferentiableFunction f = new QuinticFunction();
         double result;
 
         NewtonRaphsonSolver solver = new NewtonRaphsonSolver();
         result = solver.solve(100, f, -0.2, 0.2);
-        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
+        assertEquals(0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, -0.1, 0.3);
-        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
+        assertEquals(0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, -0.3, 0.45);
-        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
+        assertEquals(0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.3, 0.7);
-        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        assertEquals(0.5, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.2, 0.6);
-        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        assertEquals(0.5, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.05, 0.95);
-        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        assertEquals(0.5, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.85, 1.25);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.8, 1.2);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.85, 1.75);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.55, 1.45);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.85, 5);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
     }
 }

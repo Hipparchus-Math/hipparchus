@@ -21,7 +21,6 @@
  */
 package org.hipparchus.util;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,16 +32,22 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 
 /**
  * Test cases for the {@link OpenIntToDoubleHashMap}.
  */
-public class OpenIntToDoubleHashMapTest {
+class OpenIntToDoubleHashMapTest {
 
     private final Map<Integer, Double> javaMap = new HashMap<>();
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         javaMap.put(50, 100.0);
         javaMap.put(75, 75.0);
         javaMap.put(25, 500.0);
@@ -78,95 +83,95 @@ public class OpenIntToDoubleHashMapTest {
     }
 
     @Test
-    public void testPutAndGetWith0ExpectedSize() {
+    void testPutAndGetWith0ExpectedSize() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap(0);
-        assertPutAndGet(map);
+        customAssertPutAndGet(map);
     }
 
     @Test
-    public void testPutAndGetWithExpectedSize() {
+    void testPutAndGetWithExpectedSize() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap(500);
-        assertPutAndGet(map);
+        customAssertPutAndGet(map);
     }
 
     @Test
-    public void testPutAndGet() {
+    void testPutAndGet() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap();
-        assertPutAndGet(map);
+        customAssertPutAndGet(map);
     }
 
-    private void assertPutAndGet(OpenIntToDoubleHashMap map) {
-        assertPutAndGet(map, 0, new HashSet<>());
+    private void customAssertPutAndGet(OpenIntToDoubleHashMap map) {
+        customAssertPutAndGet(map, 0, new HashSet<>());
     }
 
-    private void assertPutAndGet(OpenIntToDoubleHashMap map, int mapSize,
-            Set<Integer> keysInMap) {
-        Assertions.assertEquals(mapSize, map.size());
+    private void customAssertPutAndGet(OpenIntToDoubleHashMap map, int mapSize,
+                                       Set<Integer> keysInMap) {
+        assertEquals(mapSize, map.size());
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet()) {
             map.put(mapEntry.getKey(), mapEntry.getValue());
             if (!keysInMap.contains(mapEntry.getKey()))
                 ++mapSize;
-            Assertions.assertEquals(mapSize, map.size());
-            Assertions.assertTrue(Precision.equals(mapEntry.getValue(), map.get(mapEntry.getKey()), 1));
+            assertEquals(mapSize, map.size());
+            assertTrue(Precision.equals(mapEntry.getValue(), map.get(mapEntry.getKey()), 1));
         }
     }
 
     @Test
-    public void testPutAbsentOnExisting() {
+    void testPutAbsentOnExisting() {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         int size = javaMap.size();
         for (Map.Entry<Integer, Double> mapEntry : generateAbsent().entrySet()) {
             map.put(mapEntry.getKey(), mapEntry.getValue());
-            Assertions.assertEquals(++size, map.size());
-            Assertions.assertTrue(Precision.equals(mapEntry.getValue(), map.get(mapEntry.getKey()), 1));
+            assertEquals(++size, map.size());
+            assertTrue(Precision.equals(mapEntry.getValue(), map.get(mapEntry.getKey()), 1));
         }
     }
 
     @Test
-    public void testPutOnExisting() {
+    void testPutOnExisting() {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet()) {
             map.put(mapEntry.getKey(), mapEntry.getValue());
-            Assertions.assertEquals(javaMap.size(), map.size());
-            Assertions.assertTrue(Precision.equals(mapEntry.getValue(), map.get(mapEntry.getKey()), 1));
+            assertEquals(javaMap.size(), map.size());
+            assertTrue(Precision.equals(mapEntry.getValue(), map.get(mapEntry.getKey()), 1));
         }
     }
 
     @Test
-    public void testGetAbsent() {
+    void testGetAbsent() {
         Map<Integer, Double> generated = generateAbsent();
         OpenIntToDoubleHashMap map = createFromJavaMap();
 
         for (Map.Entry<Integer, Double> mapEntry : generated.entrySet())
-            Assertions.assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
+            assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
     }
 
     @Test
-    public void testGetFromEmpty() {
+    void testGetFromEmpty() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap();
-        Assertions.assertTrue(Double.isNaN(map.get(5)));
-        Assertions.assertTrue(Double.isNaN(map.get(0)));
-        Assertions.assertTrue(Double.isNaN(map.get(50)));
+        assertTrue(Double.isNaN(map.get(5)));
+        assertTrue(Double.isNaN(map.get(0)));
+        assertTrue(Double.isNaN(map.get(50)));
     }
 
     @Test
-    public void testRemove() {
+    void testRemove() {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         int mapSize = javaMap.size();
-        Assertions.assertEquals(mapSize, map.size());
+        assertEquals(mapSize, map.size());
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet()) {
             map.remove(mapEntry.getKey());
-            Assertions.assertEquals(--mapSize, map.size());
-            Assertions.assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
+            assertEquals(--mapSize, map.size());
+            assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
         }
 
         /* Ensure that put and get still work correctly after removals */
-        assertPutAndGet(map);
+        customAssertPutAndGet(map);
     }
 
     /* This time only remove some entries */
     @Test
-    public void testRemove2() {
+    void testRemove2() {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         int mapSize = javaMap.size();
         int count = 0;
@@ -174,24 +179,24 @@ public class OpenIntToDoubleHashMapTest {
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet()) {
             keysInMap.remove(mapEntry.getKey());
             map.remove(mapEntry.getKey());
-            Assertions.assertEquals(--mapSize, map.size());
-            Assertions.assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
+            assertEquals(--mapSize, map.size());
+            assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
             if (count++ > 5)
                 break;
         }
 
         /* Ensure that put and get still work correctly after removals */
-        assertPutAndGet(map, mapSize, keysInMap);
+        customAssertPutAndGet(map, mapSize, keysInMap);
     }
 
     @Test
-    public void testRemoveFromEmpty() {
+    void testRemoveFromEmpty() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap();
-        Assertions.assertTrue(Double.isNaN(map.remove(50)));
+        assertTrue(Double.isNaN(map.remove(50)));
     }
 
     @Test
-    public void testRemoveAbsent() {
+    void testRemoveAbsent() {
         Map<Integer, Double> generated = generateAbsent();
 
         OpenIntToDoubleHashMap map = createFromJavaMap();
@@ -199,8 +204,8 @@ public class OpenIntToDoubleHashMapTest {
 
         for (Map.Entry<Integer, Double> mapEntry : generated.entrySet()) {
             map.remove(mapEntry.getKey());
-            Assertions.assertEquals(mapSize, map.size());
-            Assertions.assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
+            assertEquals(mapSize, map.size());
+            assertTrue(Double.isNaN(map.get(mapEntry.getKey())));
         }
     }
 
@@ -218,91 +223,91 @@ public class OpenIntToDoubleHashMapTest {
     }
 
     @Test
-    public void testCopy() {
+    void testCopy() {
         OpenIntToDoubleHashMap copy =
             new OpenIntToDoubleHashMap(createFromJavaMap());
-        Assertions.assertEquals(javaMap.size(), copy.size());
+        assertEquals(javaMap.size(), copy.size());
 
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet())
-            Assertions.assertTrue(Precision.equals(mapEntry.getValue(), copy.get(mapEntry.getKey()), 1));
+            assertTrue(Precision.equals(mapEntry.getValue(), copy.get(mapEntry.getKey()), 1));
     }
 
     @Test
-    public void testContainsKey() {
+    void testContainsKey() {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet()) {
-            Assertions.assertTrue(map.containsKey(mapEntry.getKey()));
+            assertTrue(map.containsKey(mapEntry.getKey()));
         }
         for (Map.Entry<Integer, Double> mapEntry : generateAbsent().entrySet()) {
-            Assertions.assertFalse(map.containsKey(mapEntry.getKey()));
+            assertFalse(map.containsKey(mapEntry.getKey()));
         }
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet()) {
             int key = mapEntry.getKey();
-            Assertions.assertTrue(map.containsKey(key));
+            assertTrue(map.containsKey(key));
             map.remove(key);
-            Assertions.assertFalse(map.containsKey(key));
+            assertFalse(map.containsKey(key));
         }
     }
 
     @Test
-    public void testIterator() {
+    void testIterator() {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         OpenIntToDoubleHashMap.Iterator iterator = map.iterator();
         for (int i = 0; i < map.size(); ++i) {
-            Assertions.assertTrue(iterator.hasNext());
+            assertTrue(iterator.hasNext());
             iterator.advance();
             int key = iterator.key();
-            Assertions.assertTrue(map.containsKey(key));
-            Assertions.assertEquals(javaMap.get(key), map.get(key), 0);
-            Assertions.assertEquals(javaMap.get(key), iterator.value(), 0);
-            Assertions.assertTrue(javaMap.containsKey(key));
+            assertTrue(map.containsKey(key));
+            assertEquals(javaMap.get(key), map.get(key), 0);
+            assertEquals(javaMap.get(key), iterator.value(), 0);
+            assertTrue(javaMap.containsKey(key));
         }
-        Assertions.assertFalse(iterator.hasNext());
+        assertFalse(iterator.hasNext());
         try {
             iterator.advance();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (NoSuchElementException nsee) {
             // expected
         }
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         OpenIntToDoubleHashMap map1 = new OpenIntToDoubleHashMap();
         map1.put(2,   2.5);
         map1.put(17, -0.5);
         map1.put(16,  0.0);
-        Assertions.assertEquals(map1, map1);
+        assertEquals(map1, map1);
         OpenIntToDoubleHashMap map2 = new OpenIntToDoubleHashMap();
         map2.put(17, -0.5);
         map2.put(2,   2.5);
         map2.put(16,  0.0);
-        Assertions.assertEquals(map1, map2);
+        assertEquals(map1, map2);
         map2.put(16,  0.25);
-        Assertions.assertNotEquals(map1, map2);
+        assertNotEquals(map1, map2);
         map2.put(16,  0.0);
-        Assertions.assertEquals(map1, map2);
-        Assertions.assertNotEquals("", map1);
-        Assertions.assertNotEquals(null, map1);
+        assertEquals(map1, map2);
+        assertNotEquals("", map1);
+        assertNotEquals(null, map1);
     }
 
     @Test
-    public void testHashcode() {
+    void testHashcode() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap();
         map.put(2,   2.5);
         map.put(17, -0.5);
         map.put(16,  0.0);
-        Assertions.assertEquals(-686630537, map.hashCode());
+        assertEquals(-686630537, map.hashCode());
     }
 
     @Test
-    public void testConcurrentModification() {
+    void testConcurrentModification() {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         OpenIntToDoubleHashMap.Iterator iterator = map.iterator();
         map.put(3, 3);
         try {
             iterator.advance();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (ConcurrentModificationException cme) {
             // expected
         }
@@ -314,7 +319,7 @@ public class OpenIntToDoubleHashMapTest {
      * of puts and removes.
      */
     @Test
-    public void testPutKeysWithCollisions() {
+    void testPutKeysWithCollisions() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap();
         int key1 = -1996012590;
         double value1 = 1.0;
@@ -323,14 +328,14 @@ public class OpenIntToDoubleHashMapTest {
         map.put(key2, value1);
         int key3 = 1008859686;
         map.put(key3, value1);
-        Assertions.assertTrue(Precision.equals(value1, map.get(key3), 1));
-        Assertions.assertEquals(3, map.size());
+        assertTrue(Precision.equals(value1, map.get(key3), 1));
+        assertEquals(3, map.size());
 
         map.remove(key2);
         double value2 = 2.0;
         map.put(key3, value2);
-        Assertions.assertTrue(Precision.equals(value2, map.get(key3), 1));
-        Assertions.assertEquals(2, map.size());
+        assertTrue(Precision.equals(value2, map.get(key3), 1));
+        assertEquals(2, map.size());
     }
 
     /**
@@ -338,21 +343,21 @@ public class OpenIntToDoubleHashMapTest {
      * different manner.
      */
     @Test
-    public void testPutKeysWithCollision2() {
+    void testPutKeysWithCollision2() {
         OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap();
         int key1 = 837989881;
         double value1 = 1.0;
         map.put(key1, value1);
         int key2 = 476463321;
         map.put(key2, value1);
-        Assertions.assertEquals(2, map.size());
-        Assertions.assertTrue(Precision.equals(value1, map.get(key2), 1));
+        assertEquals(2, map.size());
+        assertTrue(Precision.equals(value1, map.get(key2), 1));
 
         map.remove(key1);
         double value2 = 2.0;
         map.put(key2, value2);
-        Assertions.assertEquals(1, map.size());
-        Assertions.assertTrue(Precision.equals(value2, map.get(key2), 1));
+        assertEquals(1, map.size());
+        assertTrue(Precision.equals(value2, map.get(key2), 1));
     }
 
 }

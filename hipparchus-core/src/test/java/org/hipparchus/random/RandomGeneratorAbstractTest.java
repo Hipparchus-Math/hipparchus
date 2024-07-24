@@ -24,12 +24,12 @@ package org.hipparchus.random;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -229,7 +229,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
             }
             observed[j] = observed[j]++;
         }
-        UnitTestUtils.assertChiSquareAccept(expected, observed, 0.01);
+        UnitTestUtils.customAssertChiSquareAccept(expected, observed, 0.01);
     }
 
 
@@ -313,7 +313,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
            }
         }
 
-        UnitTestUtils.assertChiSquareAccept(expected, count, 0.001);
+        UnitTestUtils.customAssertChiSquareAccept(expected, count, 0.001);
     }
 
     // MATH-1300
@@ -421,7 +421,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         System.arraycopy(b1, b1.length - b3.length, b3, 0, b3.length);
 
         // Sequence of calls must be the same.
-        Assertions.assertArrayEquals(b2, b3, "chunkSize=" + chunkSize + " numChunks=" + numChunks);
+        assertArrayEquals(b2, b3, "chunkSize=" + chunkSize + " numChunks=" + numChunks);
     }
 
     @Override

@@ -22,7 +22,6 @@
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.util.Pair;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -35,18 +34,21 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Test for {@link AbstractRuleFactory}.
  *
  */
-public class RuleFactoryTest {
+class RuleFactoryTest {
     /**
      * Tests that a given rule rule will be computed and added once to the cache
      * whatever the number of times this rule is called concurrently.
      */
     @Test
-        public void testConcurrentCreation() throws InterruptedException,
-                                                    ExecutionException {
+    void testConcurrentCreation() throws InterruptedException,
+        ExecutionException {
         // Number of times the same rule will be called.
         final int numTasks = 20;
 
@@ -67,7 +69,7 @@ public class RuleFactoryTest {
 
         // Assertion would fail if "getRuleInternal" were not "synchronized".
         final int n = RuleBuilder.getNumberOfCalls();
-        Assertions.assertEquals(1, n, "Rule computation was called " + n + " times");
+        assertEquals(1, n, "Rule computation was called " + n + " times");
     }
 
     private static class RuleBuilder implements Callable<Pair<double[], double[]>> {
@@ -92,7 +94,7 @@ public class RuleFactoryTest {
             // Tracks whether this computation has been called more than once.
             nCalls.getAndIncrement();
 
-            Assertions.assertDoesNotThrow(() -> {
+            assertDoesNotThrow(() -> {
                 // Sleep to simulate computation time.
                 Thread.sleep(20);
             }, "Unexpected interruption");

@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.junit.jupiter.api.Test;
 
-public class MidpointIntegratorTest extends RungeKuttaIntegratorAbstractTest {
+class MidpointIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
     protected RungeKuttaIntegrator createIntegrator(double step) {
         return new MidpointIntegrator(step);

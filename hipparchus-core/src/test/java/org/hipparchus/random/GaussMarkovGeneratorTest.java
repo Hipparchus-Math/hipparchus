@@ -17,21 +17,22 @@
 package org.hipparchus.random;
 
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GaussMarkovGeneratorTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class GaussMarkovGeneratorTest {
 
     @Test
-    public void testExpectation() {
+    void testExpectation() {
         final double          tau             = 3600.0;
         final double          stationarySigma = 0.2;
         final RandomGenerator random          = new Well1024a(0xb8005f29892534a8L);
         GaussMarkovGenerator  gm              = new GaussMarkovGenerator(tau,
                                                                          stationarySigma,
                                                                          random);
-        Assertions.assertEquals(tau,             gm.getTau(),             1.0e-15);
-        Assertions.assertEquals(stationarySigma, gm.getStationarySigma(), 1.0e-15);
+        assertEquals(tau,             gm.getTau(),             1.0e-15);
+        assertEquals(stationarySigma, gm.getStationarySigma(), 1.0e-15);
 
         double sum = 0;
         int count = 0;
@@ -41,11 +42,11 @@ public class GaussMarkovGeneratorTest {
 
             ++count;
         }
-        Assertions.assertEquals(0.0, sum / count, 0.014);
+        assertEquals(0.0, sum / count, 0.014);
     }
 
     @Test
-    public void testVariance() {
+    void testVariance() {
         final double          tau             = 3600.0;
         final double          stationarySigma = 0.2;
         final RandomGenerator random          = new Well1024a(0x09efbd4e87e7791eL);
@@ -63,7 +64,7 @@ public class GaussMarkovGeneratorTest {
             sum2 += v * v;
         }
 
-        Assertions.assertEquals(gm.getStationarySigma(), FastMath.sqrt(sum2 / count), 3.7e-5);
+        assertEquals(gm.getStationarySigma(), FastMath.sqrt(sum2 / count), 3.7e-5);
 
     }
 

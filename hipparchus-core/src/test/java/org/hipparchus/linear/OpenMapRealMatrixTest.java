@@ -22,22 +22,22 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public final class OpenMapRealMatrixTest {
+final class OpenMapRealMatrixTest {
 
     @Test
-    public void testMath679() {
+    void testMath679() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new OpenMapRealMatrix(3, Integer.MAX_VALUE);
         });
     }
 
     @Test
-    public void testMath870() {
+    void testMath870() {
         // Caveat: This implementation assumes that, for any {@code x},
         // the equality {@code x * 0d == 0d} holds. But it is is not true for
         // {@code NaN}. Moreover, zero entries will lose their sign.
@@ -51,7 +51,7 @@ public final class OpenMapRealMatrixTest {
         for (int i = 0; i < b.getRowDimension(); ++i) {
             for (int j = 0; j < b.getColumnDimension(); ++j) {
                 // NaNs and infinities have disappeared, this is a limitation of our implementation
-                Assertions.assertEquals(0.0, b.getEntry(i, j), 1.0e-20);
+                assertEquals(0.0, b.getEntry(i, j), 1.0e-20);
             }
         }
     }

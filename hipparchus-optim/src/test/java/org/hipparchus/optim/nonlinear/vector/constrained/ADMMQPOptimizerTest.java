@@ -19,17 +19,21 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
 
     protected ConstraintOptimizer buildOptimizer() {
         return new ADMMQPOptimizer();
     }
 
     @Test
-    public void test1() {
+    void test1() {
         QuadraticFunction q = new QuadraticFunction(new double[][] { { 4.0, -2.0 }, { -2.0, 4.0 } },
                                                     new double[] { 6.0, 0.0 },
                                                     0.0);
@@ -54,7 +58,7 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
     }
 
     @Test
-    public void test2() {
+    void test2() {
         QuadraticFunction q = new QuadraticFunction(new double[][] { { 6.0, 2.0 }, { 2.0, 8.0 } },
                                                     new double[] { 5.0, 1.0 },
                                                     0.0);
@@ -78,7 +82,7 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
     }
 
     @Test
-    public void testBounded() {
+    void testBounded() {
         QuadraticFunction q = new QuadraticFunction(new double[][] { { 1.0, 0.0 }, { 0, 1.0 } },
                                                     new double[] { -3.0, -1.0 },
                                                     5.0);
@@ -98,7 +102,7 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
     }
 
     @Test
-    public void testOptimizeWithGuess() {
+    void testOptimizeWithGuess() {
         // GIVEN
         final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(false, false);
         optimizer.parseOptimizationData(new InitialGuess(new double[2]));
@@ -107,13 +111,13 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assertions.assertNotNull(optimizer.getConvergenceChecker());
-        Assertions.assertTrue(optimizer.isConverged());
-        Assertions.assertEquals(0., solution.getValue(), 0);
+        assertNotNull(optimizer.getConvergenceChecker());
+        assertTrue(optimizer.isConverged());
+        assertEquals(0., solution.getValue(), 0);
     }
 
     @Test
-    public void testOptimizeWithoutScaling() {
+    void testOptimizeWithoutScaling() {
         // GIVEN
         final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(false, false);
 
@@ -121,13 +125,13 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assertions.assertNotNull(optimizer.getConvergenceChecker());
-        Assertions.assertTrue(optimizer.isConverged());
-        Assertions.assertEquals(0., solution.getValue(), 0);
+        assertNotNull(optimizer.getConvergenceChecker());
+        assertTrue(optimizer.isConverged());
+        assertEquals(0., solution.getValue(), 0);
     }
 
     @Test
-    public void testOptimizeWithPolishWithScaling() {
+    void testOptimizeWithPolishWithScaling() {
         // GIVEN
         final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(true, true);
 
@@ -135,13 +139,13 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assertions.assertNotNull(optimizer.getConvergenceChecker());
-        Assertions.assertTrue(optimizer.isConverged());
-        Assertions.assertEquals(0., solution.getValue(), 0);
+        assertNotNull(optimizer.getConvergenceChecker());
+        assertTrue(optimizer.isConverged());
+        assertEquals(0., solution.getValue(), 0);
     }
 
     @Test
-    public void testOptimizeWithPolishWithoutScaling() {
+    void testOptimizeWithPolishWithoutScaling() {
         // GIVEN
         final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(true, false);
 
@@ -149,9 +153,9 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assertions.assertNotNull(optimizer.getConvergenceChecker());
-        Assertions.assertTrue(optimizer.isConverged());
-        Assertions.assertEquals(0., solution.getValue(), 0);
+        assertNotNull(optimizer.getConvergenceChecker());
+        assertTrue(optimizer.isConverged());
+        assertEquals(0., solution.getValue(), 0);
     }
 
     private ADMMQPOptimizer createOptimizerOnSimpleProblem(final boolean polishing, final boolean scaling) {
@@ -170,7 +174,7 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
     }
 
     @Test
-    public void testParseOptimizationDataException() {
+    void testParseOptimizationDataException() {
         // GIVEN
         final ADMMQPOptimizer testSQPOptimizer = new ADMMQPOptimizer();
         final EqualityConstraint equalityConstraint = new LinearEqualityConstraint(new double[1][1], new double[1]);
@@ -179,9 +183,9 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         // WHEN
         try {
             testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
-            Assertions.fail();
+            fail();
         } catch (final MathIllegalArgumentException exception) {
-            Assertions.assertEquals("rank of constraints must be lesser than domain dimension, but 1 >= 1",
+            assertEquals("rank of constraints must be lesser than domain dimension, but 1 >= 1",
                     exception.getMessage());
         }
     }

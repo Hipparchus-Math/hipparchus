@@ -24,116 +24,121 @@ package org.hipparchus.geometry.euclidean.threed;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class LineTest {
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class LineTest {
 
     @Test
-    public void testContains() throws MathIllegalArgumentException, MathRuntimeException {
+    void testContains() throws MathIllegalArgumentException, MathRuntimeException {
         Vector3D p1 = new Vector3D(0, 0, 1);
         Line l = new Line(p1, new Vector3D(0, 0, 2), 1.0e-10);
-        Assertions.assertTrue(l.contains(p1));
-        Assertions.assertTrue(l.contains(new Vector3D(1.0, p1, 0.3, l.getDirection())));
+        assertTrue(l.contains(p1));
+        assertTrue(l.contains(new Vector3D(1.0, p1, 0.3, l.getDirection())));
         Vector3D u = l.getDirection().orthogonal();
         Vector3D v = Vector3D.crossProduct(l.getDirection(), u);
         for (double alpha = 0; alpha < 2 * FastMath.PI; alpha += 0.3) {
-            Assertions.assertFalse(l.contains(p1.add(new Vector3D(FastMath.cos(alpha), u,
+            assertFalse(l.contains(p1.add(new Vector3D(FastMath.cos(alpha), u,
                 FastMath.sin(alpha), v))));
         }
     }
 
     @Test
-    public void testSimilar() throws MathIllegalArgumentException, MathRuntimeException {
+    void testSimilar() throws MathIllegalArgumentException, MathRuntimeException {
         Vector3D p1  = new Vector3D (1.2, 3.4, -5.8);
         Vector3D p2  = new Vector3D (3.4, -5.8, 1.2);
         Line     lA  = new Line(p1, p2, 1.0e-10);
         Line     lB  = new Line(p2, p1, 1.0e-10);
-        Assertions.assertTrue(lA.isSimilarTo(lB));
-        Assertions.assertFalse(lA.isSimilarTo(new Line(p1, p1.add(lA.getDirection().orthogonal()), 1.0e-10)));
+        assertTrue(lA.isSimilarTo(lB));
+        assertFalse(lA.isSimilarTo(new Line(p1, p1.add(lA.getDirection().orthogonal()), 1.0e-10)));
     }
 
     @Test
-    public void testPointDistance() throws MathIllegalArgumentException {
+    void testPointDistance() throws MathIllegalArgumentException {
         Line l = new Line(new Vector3D(0, 1, 1), new Vector3D(0, 2, 2), 1.0e-10);
-        Assertions.assertEquals(FastMath.sqrt(3.0 / 2.0), l.distance(new Vector3D(1, 0, 1)), 1.0e-10);
-        Assertions.assertEquals(0, l.distance(new Vector3D(0, -4, -4)), 1.0e-10);
+        assertEquals(FastMath.sqrt(3.0 / 2.0), l.distance(new Vector3D(1, 0, 1)), 1.0e-10);
+        assertEquals(0, l.distance(new Vector3D(0, -4, -4)), 1.0e-10);
     }
 
     @Test
-    public void testLineDistance() throws MathIllegalArgumentException {
+    void testLineDistance() throws MathIllegalArgumentException {
         Line l = new Line(new Vector3D(0, 1, 1), new Vector3D(0, 2, 2), 1.0e-10);
-        Assertions.assertEquals(1.0,
+        assertEquals(1.0,
                             l.distance(new Line(new Vector3D(1, 0, 1), new Vector3D(1, 0, 2), 1.0e-10)),
                             1.0e-10);
-        Assertions.assertEquals(0.5,
+        assertEquals(0.5,
                             l.distance(new Line(new Vector3D(-0.5, 0, 0), new Vector3D(-0.5, -1, -1), 1.0e-10)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.distance(l),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.distance(new Line(new Vector3D(0, -4, -4), new Vector3D(0, -5, -5), 1.0e-10)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.distance(new Line(new Vector3D(0, -4, -4), new Vector3D(0, -3, -4), 1.0e-10)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.distance(new Line(new Vector3D(0, -4, -4), new Vector3D(1, -4, -4), 1.0e-10)),
                             1.0e-10);
-        Assertions.assertEquals(FastMath.sqrt(8),
+        assertEquals(FastMath.sqrt(8),
                             l.distance(new Line(new Vector3D(0, -4, 0), new Vector3D(1, -4, 0), 1.0e-10)),
                             1.0e-10);
     }
 
     @Test
-    public void testClosest() throws MathIllegalArgumentException {
+    void testClosest() throws MathIllegalArgumentException {
         Line l = new Line(new Vector3D(0, 1, 1), new Vector3D(0, 2, 2), 1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.closestPoint(new Line(new Vector3D(1, 0, 1), new Vector3D(1, 0, 2), 1.0e-10)).distance(new Vector3D(0, 0, 0)),
                             1.0e-10);
-        Assertions.assertEquals(0.5,
+        assertEquals(0.5,
                             l.closestPoint(new Line(new Vector3D(-0.5, 0, 0), new Vector3D(-0.5, -1, -1), 1.0e-10)).distance(new Vector3D(-0.5, 0, 0)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.closestPoint(l).distance(new Vector3D(0, 0, 0)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.closestPoint(new Line(new Vector3D(0, -4, -4), new Vector3D(0, -5, -5), 1.0e-10)).distance(new Vector3D(0, 0, 0)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.closestPoint(new Line(new Vector3D(0, -4, -4), new Vector3D(0, -3, -4), 1.0e-10)).distance(new Vector3D(0, -4, -4)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.closestPoint(new Line(new Vector3D(0, -4, -4), new Vector3D(1, -4, -4), 1.0e-10)).distance(new Vector3D(0, -4, -4)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.closestPoint(new Line(new Vector3D(0, -4, 0), new Vector3D(1, -4, 0), 1.0e-10)).distance(new Vector3D(0, -2, -2)),
                             1.0e-10);
     }
 
     @Test
-    public void testIntersection() throws MathIllegalArgumentException {
+    void testIntersection() throws MathIllegalArgumentException {
         Line l = new Line(new Vector3D(0, 1, 1), new Vector3D(0, 2, 2), 1.0e-10);
-        Assertions.assertNull(l.intersection(new Line(new Vector3D(1, 0, 1), new Vector3D(1, 0, 2), 1.0e-10)));
-        Assertions.assertNull(l.intersection(new Line(new Vector3D(-0.5, 0, 0), new Vector3D(-0.5, -1, -1), 1.0e-10)));
-        Assertions.assertEquals(0.0,
+        assertNull(l.intersection(new Line(new Vector3D(1, 0, 1), new Vector3D(1, 0, 2), 1.0e-10)));
+        assertNull(l.intersection(new Line(new Vector3D(-0.5, 0, 0), new Vector3D(-0.5, -1, -1), 1.0e-10)));
+        assertEquals(0.0,
                             l.intersection(l).distance(new Vector3D(0, 0, 0)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.intersection(new Line(new Vector3D(0, -4, -4), new Vector3D(0, -5, -5), 1.0e-10)).distance(new Vector3D(0, 0, 0)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.intersection(new Line(new Vector3D(0, -4, -4), new Vector3D(0, -3, -4), 1.0e-10)).distance(new Vector3D(0, -4, -4)),
                             1.0e-10);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             l.intersection(new Line(new Vector3D(0, -4, -4), new Vector3D(1, -4, -4), 1.0e-10)).distance(new Vector3D(0, -4, -4)),
                             1.0e-10);
-        Assertions.assertNull(l.intersection(new Line(new Vector3D(0, -4, 0), new Vector3D(1, -4, 0), 1.0e-10)));
+        assertNull(l.intersection(new Line(new Vector3D(0, -4, 0), new Vector3D(1, -4, 0), 1.0e-10)));
     }
 
     @Test
-    public void testRevert() {
+    void testRevert() {
 
         // setup
         Line line = new Line(new Vector3D(1653345.6696423641, 6170370.041579291, 90000),
@@ -145,13 +150,13 @@ public class LineTest {
         Line reverted = line.revert();
 
         // verify
-        Assertions.assertArrayEquals(expected.toArray(), reverted.getDirection().toArray(), 0);
+        assertArrayEquals(expected.toArray(), reverted.getDirection().toArray(), 0);
 
     }
 
     /** Test for issue #78. */
     @Test
-    public void testCancellation() {
+    void testCancellation() {
          // setup
         // point
         Vector3D p = new Vector3D(1e16, 1e16, 1e16);
@@ -163,9 +168,9 @@ public class LineTest {
 
         // verify
         double ulp = FastMath.ulp(p.getNorm());
-        Assertions.assertArrayEquals(line.getOrigin().toArray(), Vector3D.ZERO.toArray(), ulp);
-        Assertions.assertArrayEquals(line.getDirection().toArray(), u.normalize().toArray(), 0);
-        Assertions.assertEquals(0, line.getTolerance(), 0);
+        assertArrayEquals(line.getOrigin().toArray(), Vector3D.ZERO.toArray(), ulp);
+        assertArrayEquals(line.getDirection().toArray(), u.normalize().toArray(), 0);
+        assertEquals(0, line.getTolerance(), 0);
     }
 
 }

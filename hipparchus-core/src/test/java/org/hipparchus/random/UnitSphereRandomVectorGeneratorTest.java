@@ -22,16 +22,18 @@
 package org.hipparchus.random;
 
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class UnitSphereRandomVectorGeneratorTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class UnitSphereRandomVectorGeneratorTest {
     /**
      * Test the distribution of points from {@link UnitSphereRandomVectorGenerator#nextVector()}
      * in two dimensions.
      */
     @Test
-    public void test2DDistribution() {
+    void test2DDistribution() {
 
         RandomGenerator rg = new JDKRandomGenerator();
         rg.setSeed(17399225432l);
@@ -42,8 +44,8 @@ public class UnitSphereRandomVectorGeneratorTest {
         int steps = 1000000;
         for (int i = 0; i < steps; ++i) {
             final double[] v = generator.nextVector();
-            Assertions.assertEquals(2, v.length);
-            Assertions.assertEquals(1, length(v), 1e-10);
+            assertEquals(2, v.length);
+            assertEquals(1, length(v), 1e-10);
             // Compute angle formed with vector (1,0)
             // Cosine of angle is their dot product, because both are unit length
             // Dot product here is just the first element of the vector by construction
@@ -55,7 +57,7 @@ public class UnitSphereRandomVectorGeneratorTest {
         // Simplistic test for roughly even distribution
         final int expectedBucketSize = steps / angleBuckets.length;
         for (int bucket : angleBuckets) {
-            Assertions.assertTrue(FastMath.abs(expectedBucketSize - bucket) < 350,
+            assertTrue(FastMath.abs(expectedBucketSize - bucket) < 350,
                               "Bucket count " + bucket + " vs expected " + expectedBucketSize);
         }
     }

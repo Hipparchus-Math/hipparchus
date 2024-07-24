@@ -23,15 +23,16 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FieldDerivativeTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class FieldDerivativeTest {
 
     private static final double TOLERANCE = 1e-10;
 
     @Test
-    public void testGetReal() {
+    void testGetReal() {
         // GIVEN
         final double expectedOperation = 0.5;
         final TestDerivative testDerivative = new TestDerivative(expectedOperation);
@@ -39,11 +40,11 @@ public class FieldDerivativeTest {
         // WHEN
         final double actualOperation = testFieldDerivative.getReal();
         // THEN
-        Assertions.assertEquals(expectedOperation, actualOperation, 0.);
+        assertEquals(expectedOperation, actualOperation, 0.);
     }
 
     @Test
-    public void testPow() {
+    void testPow() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(2.);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -54,11 +55,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .pow(testDerivative.getValue(), testDerivative2.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testLog10() {
+    void testLog10() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -67,11 +68,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .log10(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testCosh() {
+    void testCosh() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -80,11 +81,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .cosh(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testSinh() {
+    void testSinh() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -93,11 +94,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .sinh(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testAcos() {
+    void testAcos() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -106,11 +107,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .acos(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testFloor() {
+    void testFloor() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -119,11 +120,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .floor(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testCeil() {
+    void testCeil() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -132,11 +133,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .ceil(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testRint() {
+    void testRint() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -145,11 +146,11 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .rint(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue().getValue(), actualOperation.getValue().getValue(), TOLERANCE);
     }
 
     @Test
-    public void testSign() {
+    void testSign() {
         // GIVEN
         final TestDerivative testDerivative = new TestDerivative(0.5);
         final TestFieldDerivative testFieldDerivative = new TestFieldDerivative(testDerivative);
@@ -158,7 +159,7 @@ public class FieldDerivativeTest {
         // THEN
         final TestFieldDerivative expectedOperation = new TestFieldDerivative(new TestDerivative(FastMath
                 .signum(testDerivative.getValue())));
-        Assertions.assertEquals(expectedOperation, actualOperation);
+        assertEquals(expectedOperation, actualOperation);
     }
 
     private static class TestFieldDerivative implements FieldDerivative<TestDerivative, TestFieldDerivative> {

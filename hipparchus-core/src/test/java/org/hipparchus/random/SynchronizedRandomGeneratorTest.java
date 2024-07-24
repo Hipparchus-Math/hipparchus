@@ -21,7 +21,6 @@
  */
 package org.hipparchus.random;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -32,10 +31,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class SynchronizedRandomGeneratorTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class SynchronizedRandomGeneratorTest {
 
     @Test
-    public void testAdapter() {
+    void testAdapter() {
         final int seed = 12345;
         final RandomGenerator orig = new MersenneTwister(seed);
         final RandomGenerator wrap
@@ -49,25 +51,25 @@ public class SynchronizedRandomGeneratorTest {
             orig.nextBytes(bOrig);
             wrap.nextBytes(bWrap);
             for (int k = 0; k < bSize; k++) {
-                Assertions.assertEquals(bOrig[k], bWrap[k]);
+                assertEquals(bOrig[k], bWrap[k]);
             }
 
-            Assertions.assertEquals(orig.nextInt(), wrap.nextInt());
+            assertEquals(orig.nextInt(), wrap.nextInt());
 
             final int range = (i + 1) * 89;
-            Assertions.assertEquals(orig.nextInt(range), wrap.nextInt(range));
+            assertEquals(orig.nextInt(range), wrap.nextInt(range));
 
-            Assertions.assertEquals(orig.nextLong(), wrap.nextLong());
-            Assertions.assertEquals(orig.nextBoolean(), wrap.nextBoolean());
-            Assertions.assertEquals(orig.nextFloat(), wrap.nextFloat(), 0);
-            Assertions.assertEquals(orig.nextDouble(), wrap.nextDouble(), 0);
-            Assertions.assertEquals(orig.nextGaussian(), wrap.nextGaussian(), 0);
+            assertEquals(orig.nextLong(), wrap.nextLong());
+            assertEquals(orig.nextBoolean(), wrap.nextBoolean());
+            assertEquals(orig.nextFloat(), wrap.nextFloat(), 0);
+            assertEquals(orig.nextDouble(), wrap.nextDouble(), 0);
+            assertEquals(orig.nextGaussian(), wrap.nextGaussian(), 0);
 
         }
     }
 
     @Test
-    public void testMath899Sync() throws Throwable {
+    void testMath899Sync() throws Throwable {
         try {
             final int numberOfThreads = 5;
             final int numberOfGenerators = 5;
@@ -80,7 +82,7 @@ public class SynchronizedRandomGeneratorTest {
                               numberOfSamples);
             }
         } catch (InterruptedException e) {
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         } catch (ExecutionException e) {
             throw e.getCause();
         }

@@ -35,33 +35,35 @@ import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Check events handlers and step handlers are called at consistent times.
  *
  * @author Luc Maisonobe
  */
-public class EventsScheduling {
+class EventsScheduling {
 
     @Test
-    public void testForward() {
+    void testForward() {
         doTest(0.0, 1.0, 32);
     }
 
     @Test
-    public void testBackward() {
+    void testBackward() {
         doTest(1.0, 0.0, 32);
     }
 
     @Test
-    public void testFieldForward() {
+    void testFieldForward() {
         doTestField(0.0, 1.0, 32);
     }
 
     @Test
-    public void testFieldBackward() {
+    void testFieldBackward() {
         doTestField(1.0, 0.0, 32);
     }
 
@@ -96,7 +98,7 @@ public class EventsScheduling {
 
         integrator.integrate(new ExpandableODE(ode), initialState, stop);
 
-        Assertions.assertEquals(expectedCalls, checker.calls);
+        assertEquals(expectedCalls, checker.calls);
 
     }
 
@@ -132,7 +134,7 @@ public class EventsScheduling {
 
         integrator.integrate(new FieldExpandableODE<>(ode), initialState, new Binary64(stop));
 
-        Assertions.assertEquals(expectedCalls, checker.calls);
+        assertEquals(expectedCalls, checker.calls);
 
     }
 
@@ -156,14 +158,14 @@ public class EventsScheduling {
                 // check scheduling is always consistent with integration direction
                 if (start < stop) {
                     // forward direction
-                    Assertions.assertTrue(time >= start);
-                    Assertions.assertTrue(time <= stop);
-                    Assertions.assertTrue(time >= last);
+                    assertTrue(time >= start);
+                    assertTrue(time <= stop);
+                    assertTrue(time >= last);
                } else {
                     // backward direction
-                   Assertions.assertTrue(time <= start);
-                   Assertions.assertTrue(time >= stop);
-                   Assertions.assertTrue(time <= last);
+                   assertTrue(time <= start);
+                   assertTrue(time >= stop);
+                   assertTrue(time <= last);
                 }
             }
             last = time;

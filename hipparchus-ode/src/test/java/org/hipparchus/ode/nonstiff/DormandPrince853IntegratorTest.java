@@ -20,7 +20,7 @@ package org.hipparchus.ode.nonstiff;
 import org.junit.jupiter.api.Test;
 
 
-public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegratorAbstractTest {
+class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegratorAbstractTest {
 
     protected EmbeddedRungeKuttaIntegrator
     createIntegrator(final double minStep, final double maxStep,

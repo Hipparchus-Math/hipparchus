@@ -26,7 +26,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 import org.junit.jupiter.api.Test;
 
-public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
+class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
     protected AbstractODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
                                                              final double t0, final double[] y0,

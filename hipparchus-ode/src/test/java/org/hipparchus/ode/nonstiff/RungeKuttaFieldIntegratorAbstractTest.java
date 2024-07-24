@@ -53,12 +53,17 @@ import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
@@ -90,7 +95,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             double[]   regularB = regularIntegrator.getB();
             double[]   regularC = regularIntegrator.getC();
 
-            Assertions.assertEquals(regularA.length, fieldA.length);
+            assertEquals(regularA.length, fieldA.length);
             for (int i = 0; i < regularA.length; ++i) {
                 checkArray(regularA[i], fieldA[i]);
             }
@@ -100,17 +105,17 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException  |
                  SecurityException      | NoSuchMethodException  | InvocationTargetException |
                  InstantiationException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 
     private <T extends CalculusFieldElement<T>> void checkArray(double[] regularArray, T[] fieldArray) {
-        Assertions.assertEquals(regularArray.length, fieldArray.length);
+        assertEquals(regularArray.length, fieldArray.length);
         for (int i = 0; i < regularArray.length; ++i) {
             if (regularArray[i] == 0) {
-                Assertions.assertEquals(0.0, fieldArray[i].getReal());
+                assertEquals(0.0, fieldArray[i].getReal());
             } else {
-                Assertions.assertEquals(regularArray[i], fieldArray[i].getReal(), FastMath.ulp(regularArray[i]));
+                assertEquals(regularArray[i], fieldArray[i].getReal(), FastMath.ulp(regularArray[i]));
             }
         }
     }
@@ -152,10 +157,10 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         FieldODEStateAndDerivative<T> result = integrator.integrate(new FieldExpandableODE<T>(ode),
                                                                     new FieldODEState<T>(t0, y0),
                                                                     tEvent);
-        Assertions.assertEquals(tEvent.getReal(), result.getTime().getReal(), epsilonT);
+        assertEquals(tEvent.getReal(), result.getTime().getReal(), epsilonT);
         T[] y = result.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
-            Assertions.assertEquals(y0[i].multiply(k[i].multiply(result.getTime().subtract(t0)).exp()).getReal(),
+            assertEquals(y0[i].multiply(k[i].multiply(result.getTime().subtract(t0)).exp()).getReal(),
                                 y[i].getReal(),
                                 epsilonY);
         }
@@ -178,7 +183,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             }
             public FieldODEEventHandler<T> getHandler() {
                 return (state, detector, increasing) -> {
-                    Assertions.assertEquals(tEvent.getReal(), state.getTime().getReal(), epsilonT);
+                    assertEquals(tEvent.getReal(), state.getTime().getReal(), epsilonT);
                     return Action.CONTINUE;
                 };
             }
@@ -186,10 +191,10 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         result = integrator.integrate(new FieldExpandableODE<T>(ode),
                                       new FieldODEState<T>(t0, y0),
                                       tEvent.add(120));
-        Assertions.assertEquals(tEvent.add(120).getReal(), result.getTime().getReal(), epsilonT);
+        assertEquals(tEvent.add(120).getReal(), result.getTime().getReal(), epsilonT);
         y = result.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
-            Assertions.assertEquals(y0[i].multiply(k[i].multiply(result.getTime().subtract(t0)).exp()).getReal(),
+            assertEquals(y0[i].multiply(k[i].multiply(result.getTime().subtract(t0)).exp()).getReal(),
                                 y[i].getReal(),
                                 epsilonY);
         }
@@ -207,18 +212,18 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             integrator.integrate(new FieldExpandableODE<T>(pb),
                                  new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, pb.getDimension() + 10)),
                                  field.getOne());
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, ie.getSpecifier());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, ie.getSpecifier());
         }
         try  {
             TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
             integrator.integrate(new FieldExpandableODE<T>(pb),
                                  new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, pb.getDimension())),
                                  field.getZero());
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
-            Assertions.assertEquals(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL, ie.getSpecifier());
+            assertEquals(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL, ie.getSpecifier());
         }
     }
 
@@ -257,17 +262,17 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 for (int l = 0; l < functions.length; ++l) {
                     integ.addEventDetector(functions[l]);
                 }
-                Assertions.assertEquals(functions.length, integ.getEventDetectors().size());
+                assertEquals(functions.length, integ.getEventDetectors().size());
                 FieldODEStateAndDerivative<T> stop = integ.integrate(new FieldExpandableODE<T>(pb),
                                                                      pb.getInitialState(),
                                                                      pb.getFinalTime());
                 if (functions.length == 0) {
-                    Assertions.assertEquals(pb.getFinalTime().getReal(), stop.getTime().getReal(), epsilonT);
+                    assertEquals(pb.getFinalTime().getReal(), stop.getTime().getReal(), epsilonT);
                 }
 
                 T error = handler.getMaximalValueError();
                 if (i > 4) {
-                    Assertions.assertTrue(error.subtract(previousValueError.abs().multiply(safetyValueFactor)).getReal() < 0);
+                    assertTrue(error.subtract(previousValueError.abs().multiply(safetyValueFactor)).getReal() < 0);
                 }
                 previousValueError = error;
 
@@ -275,12 +280,12 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 if (i > 4) {
                     // can't expect time error to be less than event finding tolerance
                     T timeTol = max(eventTol, previousTimeError.abs().multiply(safetyTimeFactor));
-                    Assertions.assertTrue(timeError.subtract(timeTol).getReal() <= 0);
+                    assertTrue(timeError.subtract(timeTol).getReal() <= 0);
                 }
                 previousTimeError = timeError;
 
                 integ.clearEventDetectors();
-                Assertions.assertEquals(0, integ.getEventDetectors().size());
+                assertEquals(0, integ.getEventDetectors().size());
             }
 
         }
@@ -316,10 +321,10 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assertions.assertEquals(0, handler.getLastError().getReal(),         epsilonLast);
-        Assertions.assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
-        Assertions.assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
-        Assertions.assertEquals(name, integ.getName());
+        assertEquals(0, handler.getLastError().getReal(),         epsilonLast);
+        assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
+        assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
+        assertEquals(name, integ.getName());
 
     }
 
@@ -341,10 +346,10 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assertions.assertTrue(handler.getLastError().getReal()         > belowLast);
-        Assertions.assertTrue(handler.getMaximalValueError().getReal() > belowMaxValue);
-        Assertions.assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
-        Assertions.assertEquals(name, integ.getName());
+        assertTrue(handler.getLastError().getReal()         > belowLast);
+        assertTrue(handler.getMaximalValueError().getReal() > belowMaxValue);
+        assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
+        assertEquals(name, integ.getName());
 
     }
 
@@ -366,10 +371,10 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assertions.assertEquals(0, handler.getLastError().getReal(),         epsilonLast);
-        Assertions.assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
-        Assertions.assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
-        Assertions.assertEquals(name, integ.getName());
+        assertEquals(0, handler.getLastError().getReal(),         epsilonLast);
+        assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
+        assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
+        assertEquals(name, integ.getName());
 
     }
 
@@ -385,7 +390,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         integ.addStepHandler(new KeplerHandler<T>(pb, expectedMaxError, epsilon));
         final FieldExpandableODE<T> expandable = new FieldExpandableODE<T>(pb);
-        Assertions.assertSame(pb, expandable.getPrimary());
+        assertSame(pb, expandable.getPrimary());
         integ.integrate(expandable, pb.getInitialState(), pb.getFinalTime());
     }
 
@@ -415,7 +420,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             }
         }
         public void finish(FieldODEStateAndDerivative<T> finalState) {
-            Assertions.assertEquals(expectedMaxError, maxError.getReal(), epsilon);
+            assertEquals(expectedMaxError, maxError.getReal(), epsilon);
         }
     }
 
@@ -430,7 +435,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(new FieldODEStepHandler<T>() {
             public void handleStep(FieldODEStateInterpolator<T> interpolator) {
                 if (interpolator.getCurrentState().getTime().subtract(finalTime).getReal() < -0.001) {
-                    Assertions.assertEquals(step.getReal(),
+                    assertEquals(step.getReal(),
                                         interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).getReal(),
                                         epsilon);
                 }
@@ -467,7 +472,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         T dx = y[0].subtract(yth[0]);
         T dy = y[1].subtract(yth[1]);
         T error = dx.square().add(dy.square());
-        Assertions.assertEquals(0.0, error.getReal(), epsilon);
+        assertEquals(0.0, error.getReal(), epsilon);
     }
 
     @Test
@@ -487,8 +492,8 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             }
 
             public T[] computeDerivatives(T t, T[] y) {
-                Assertions.assertTrue(t.getReal() >= FastMath.nextAfter(t0.getReal(), Double.NEGATIVE_INFINITY));
-                Assertions.assertTrue(t.getReal() <= FastMath.nextAfter(t.getReal(),   Double.POSITIVE_INFINITY));
+                assertTrue(t.getReal() >= FastMath.nextAfter(t0.getReal(), Double.NEGATIVE_INFINITY));
+                assertTrue(t.getReal() <= FastMath.nextAfter(t.getReal(),   Double.POSITIVE_INFINITY));
                 T[] yDot = MathArrays.buildArray(field, 1);
                 yDot[0] = y[0].multiply(-100.0);
                 return yDot;
@@ -514,16 +519,16 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                               withMaxCheck(field.getZero().newInstance(1.0)).
                                               withMaxIter(1000).
                                               withThreshold(field.getZero().newInstance(1.0e-12));
-      Assertions.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
-      Assertions.assertEquals(1000,    stepProblem.getMaxIterationCount());
-      Assertions.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy().getReal(), 1.0e-25);
-      Assertions.assertNotNull(stepProblem.getHandler());
+      assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
+      assertEquals(1000,    stepProblem.getMaxIterationCount());
+      assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy().getReal(), 1.0e-25);
+      assertNotNull(stepProblem.getHandler());
       RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.3));
       integ.addEventDetector(stepProblem);
       FieldODEStateAndDerivative<T> result = integ.integrate(new FieldExpandableODE<T>(stepProblem),
                                                              new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, 1)),
                                                              field.getZero().add(10.0));
-      Assertions.assertEquals(8.0, result.getPrimaryState()[0].getReal(), epsilon);
+      assertEquals(8.0, result.getPrimaryState()[0].getReal(), epsilon);
     }
 
     @Test
@@ -568,14 +573,14 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
         // check values
         for (int i = 0; i < sinCos.getDimension(); ++i) {
-            Assertions.assertEquals(sinCos.theoreticalY(t.getReal())[i], result.getPrimaryState()[i].getValue(), epsilonY);
+            assertEquals(sinCos.theoreticalY(t.getReal())[i], result.getPrimaryState()[i].getValue(), epsilonY);
         }
 
         // check derivatives
         final double[][] derivatives = sinCos.getDerivatives(t.getReal());
         for (int i = 0; i < sinCos.getDimension(); ++i) {
             for (int parameter = 0; parameter < factory.getCompiler().getFreeParameters(); ++parameter) {
-                Assertions.assertEquals(derivatives[i][parameter],
+                assertEquals(derivatives[i][parameter],
                                     dYdP(result.getPrimaryState()[i], parameter),
                                     epsilonPartials[parameter]);
             }
@@ -647,11 +652,11 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                     T tCurr = interpolator.getCurrentState().getTime();
                     T t     = tPrev.multiply(10 - i).add(tCurr.multiply(i)).divide(10);
                     FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
-                    Assertions.assertEquals(2, state.getPrimaryStateDimension());
-                    Assertions.assertEquals(1, state.getNumberOfSecondaryStates());
-                    Assertions.assertEquals(2, state.getSecondaryStateDimension(0));
-                    Assertions.assertEquals(1, state.getSecondaryStateDimension(1));
-                    Assertions.assertEquals(3, state.getCompleteStateDimension());
+                    assertEquals(2, state.getPrimaryStateDimension());
+                    assertEquals(1, state.getNumberOfSecondaryStates());
+                    assertEquals(2, state.getSecondaryStateDimension(0));
+                    assertEquals(1, state.getSecondaryStateDimension(1));
+                    assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
                                           t.sin().subtract(state.getPrimaryState()[0]).norm());
                     max[0] = FastMath.max(max[0],
@@ -671,9 +676,9 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
         FieldODEStateAndDerivative<T> finalState =
                         integrator.integrate(expandable, initialState, field.getZero().add(10.0));
-        Assertions.assertEquals(10.0, finalState.getTime().getReal(), 1.0e-12);
-        Assertions.assertEquals(0, max[0], epsilonSinCos);
-        Assertions.assertEquals(0, max[1], epsilonLinear);
+        assertEquals(10.0, finalState.getTime().getReal(), 1.0e-12);
+        assertEquals(0, max[0], epsilonSinCos);
+        assertEquals(0, max[1], epsilonLinear);
 
     }
 
@@ -773,7 +778,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     public void testIssue250() {
         final Gradient defaultStep = Gradient.constant(3, 60.);
         RungeKuttaFieldIntegrator<Gradient> integrator = createIntegrator(defaultStep.getField(), defaultStep);
-        Assertions.assertEquals(defaultStep.getReal(), integrator.getDefaultStep().getReal(), 0.);
+        assertEquals(defaultStep.getReal(), integrator.getDefaultStep().getReal(), 0.);
     }
 
     @Test
@@ -796,7 +801,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
         final int size = terminalState1.getCompleteStateDimension();
         for (int i = 0; i < size; i++) {
-            Assertions.assertEquals(terminalState1.getCompleteState()[i], terminalState2.getCompleteState()[i]);
+            assertEquals(terminalState1.getCompleteState()[i], terminalState2.getCompleteState()[i]);
         }
     }
 

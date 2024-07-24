@@ -22,8 +22,10 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for LaplaceDistribution.
@@ -31,18 +33,18 @@ import org.junit.jupiter.api.Test;
 public class LaplaceDistributionTest extends RealDistributionAbstractTest {
 
     @Test
-    public void testParameters() {
+    void testParameters() {
         LaplaceDistribution d = makeDistribution();
-        Assertions.assertEquals(0, d.getLocation(), Precision.EPSILON);
-        Assertions.assertEquals(1, d.getScale(), Precision.EPSILON);
+        assertEquals(0, d.getLocation(), Precision.EPSILON);
+        assertEquals(1, d.getScale(), Precision.EPSILON);
     }
 
     @Test
-    public void testSupport() {
+    void testSupport() {
         LaplaceDistribution d = makeDistribution();
-        Assertions.assertTrue(Double.isInfinite(d.getSupportLowerBound()));
-        Assertions.assertTrue(Double.isInfinite(d.getSupportUpperBound()));
-        Assertions.assertTrue(d.isSupportConnected());
+        assertTrue(Double.isInfinite(d.getSupportLowerBound()));
+        assertTrue(Double.isInfinite(d.getSupportUpperBound()));
+        assertTrue(d.isSupportConnected());
     }
 
     @Override

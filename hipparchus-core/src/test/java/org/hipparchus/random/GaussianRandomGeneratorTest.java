@@ -18,14 +18,15 @@
 package org.hipparchus.random;
 
 import org.hipparchus.UnitTestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GaussianRandomGeneratorTest {
+
+class GaussianRandomGeneratorTest {
 
     @Test
-    public void testMeanAndStandardDeviation() {
+    void testMeanAndStandardDeviation() {
         RandomGenerator rg = new JDKRandomGenerator();
         rg.setSeed(17399225432l);
         GaussianRandomGenerator generator = new GaussianRandomGenerator(rg);
@@ -33,8 +34,8 @@ public class GaussianRandomGeneratorTest {
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assertions.assertEquals(0.0, UnitTestUtils.mean(sample), 0.012);
-        Assertions.assertEquals(1.0, UnitTestUtils.variance(sample), 0.01);
+        assertEquals(0.0, UnitTestUtils.mean(sample), 0.012);
+        assertEquals(1.0, UnitTestUtils.variance(sample), 0.01);
     }
 
 }

@@ -19,176 +19,178 @@ package org.hipparchus.special.elliptic.legendre;
 import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class LegendreEllipticIntegralTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class LegendreEllipticIntegralTest {
 
     @Test
-    public void testNoConvergence() {
-        Assertions.assertTrue(Double.isNaN(LegendreEllipticIntegral.bigK(Double.NaN)));
+    void testNoConvergence() {
+        assertTrue(Double.isNaN(LegendreEllipticIntegral.bigK(Double.NaN)));
     }
 
     @Test
-    public void testComplementary() {
+    void testComplementary() {
         for (double m = 0.01; m < 1; m += 0.01) {
             double k1 = LegendreEllipticIntegral.bigK(m);
             double k2 = LegendreEllipticIntegral.bigKPrime(1 - m);
-            Assertions.assertEquals(k1, k2, FastMath.ulp(k1));
+            assertEquals(k1, k2, FastMath.ulp(k1));
         }
     }
 
     @Test
-    public void testAbramowitzStegunExample3() {
-        Assertions.assertEquals(3.591545001,
+    void testAbramowitzStegunExample3() {
+        assertEquals(3.591545001,
                             LegendreEllipticIntegral.bigK(80.0 / 81.0),
                             2.0e-9);
     }
 
     @Test
-    public void testAbramowitzStegunExample4() {
-        Assertions.assertEquals(1.019106060,
+    void testAbramowitzStegunExample4() {
+        assertEquals(1.019106060,
                             LegendreEllipticIntegral.bigE(80.0 / 81.0),
                             2.0e-8);
     }
 
     @Test
-    public void testAbramowitzStegunExample8() {
+    void testAbramowitzStegunExample8() {
         final double m    = 1.0 / 5.0;
         final double phi1 = FastMath.acos(FastMath.sqrt(2) / 3.0);
         final double phi2 = FastMath.acos(FastMath.sqrt(2) / 2.0);
-        Assertions.assertEquals(1.115921, LegendreEllipticIntegral.bigF(phi1, m), 1.0e-6);
-        Assertions.assertEquals(0.800380, LegendreEllipticIntegral.bigF(phi2, m), 1.0e-6);
+        assertEquals(1.115921, LegendreEllipticIntegral.bigF(phi1, m), 1.0e-6);
+        assertEquals(0.800380, LegendreEllipticIntegral.bigF(phi2, m), 1.0e-6);
     }
 
     @Test
-    public void testAbramowitzStegunExample9() {
+    void testAbramowitzStegunExample9() {
         final double m    = 1.0 / 2.0;
         final double phi1 = MathUtils.SEMI_PI;
         final double phi2 = FastMath.PI / 6.0;
-        Assertions.assertEquals(1.854075, LegendreEllipticIntegral.bigF(phi1, m), 1.0e-6);
-        Assertions.assertEquals(0.535623, LegendreEllipticIntegral.bigF(phi2, m), 1.0e-6);
+        assertEquals(1.854075, LegendreEllipticIntegral.bigF(phi1, m), 1.0e-6);
+        assertEquals(0.535623, LegendreEllipticIntegral.bigF(phi2, m), 1.0e-6);
     }
 
     @Test
-    public void testAbramowitzStegunExample10() {
+    void testAbramowitzStegunExample10() {
         final double m    = 4.0 / 5.0;
         final double phi  = FastMath.PI / 6.0;
-        Assertions.assertEquals(0.543604, LegendreEllipticIntegral.bigF(phi, m), 1.0e-6);
+        assertEquals(0.543604, LegendreEllipticIntegral.bigF(phi, m), 1.0e-6);
     }
 
     @Test
-    public void testAbramowitzStegunExample14() {
+    void testAbramowitzStegunExample14() {
         final double k    = 3.0 / 5.0;
         final double phi1 = FastMath.asin(FastMath.sqrt(5.0) / 3.0);
         final double phi2 = FastMath.asin(5.0 / (3.0 * FastMath.sqrt(17.0)));
-        Assertions.assertEquals(0.80904, LegendreEllipticIntegral.bigE(phi1, k * k), 1.0e-5);
-        Assertions.assertEquals(0.41192, LegendreEllipticIntegral.bigE(phi2, k * k), 1.0e-5);
+        assertEquals(0.80904, LegendreEllipticIntegral.bigE(phi1, k * k), 1.0e-5);
+        assertEquals(0.41192, LegendreEllipticIntegral.bigE(phi2, k * k), 1.0e-5);
     }
 
     @Test
-    public void testAbramowitzStegunTable175() {
+    void testAbramowitzStegunTable175() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(32));
-        Assertions.assertEquals(0.26263487,
+        assertEquals(0.26263487,
                             LegendreEllipticIntegral.bigF(FastMath.toRadians(15), sinAlpha1 * sinAlpha1),
                             1.0e-8);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(46));
-        Assertions.assertEquals(1.61923762,
+        assertEquals(1.61923762,
                             LegendreEllipticIntegral.bigF(FastMath.toRadians(80), sinAlpha2 * sinAlpha2),
                             1.0e-8);
     }
 
     @Test
-    public void testAbramowitzStegunTable176() {
+    void testAbramowitzStegunTable176() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(64));
-        Assertions.assertEquals(0.42531712,
+        assertEquals(0.42531712,
                             LegendreEllipticIntegral.bigE(FastMath.toRadians(25), sinAlpha1 * sinAlpha1),
                             1.0e-8);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(76));
-        Assertions.assertEquals(0.96208074,
+        assertEquals(0.96208074,
                             LegendreEllipticIntegral.bigE(FastMath.toRadians(70), sinAlpha2 * sinAlpha2),
                             1.0e-8);
     }
 
     @Test
-    public void testAbramowitzStegunTable179() {
+    void testAbramowitzStegunTable179() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(15));
-        Assertions.assertEquals(1.62298,
+        assertEquals(1.62298,
                             LegendreEllipticIntegral.bigPi(0.4, FastMath.toRadians(75), sinAlpha1 * sinAlpha1),
                             1.0e-5);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(60));
-        Assertions.assertEquals(1.03076,
+        assertEquals(1.03076,
                             LegendreEllipticIntegral.bigPi(0.8, FastMath.toRadians(45), sinAlpha2 * sinAlpha2),
                             1.0e-5);
         final double sinAlpha3 = FastMath.sin(FastMath.toRadians(15));
-        Assertions.assertEquals(2.79990,
+        assertEquals(2.79990,
                             LegendreEllipticIntegral.bigPi(0.9, FastMath.toRadians(75), sinAlpha3 * sinAlpha3),
                             1.0e-5);
     }
 
     @Test
-    public void testCompleteVsIncompleteF() {
+    void testCompleteVsIncompleteF() {
         for (double m = 0.01; m < 1; m += 0.01) {
             double complete   = LegendreEllipticIntegral.bigK(m);
             double incomplete = LegendreEllipticIntegral.bigF(MathUtils.SEMI_PI, m);
-            Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
+            assertEquals(complete, incomplete, FastMath.ulp(complete));
         }
     }
 
     @Test
-    public void testCompleteVsIncompleteE() {
+    void testCompleteVsIncompleteE() {
         for (double m = 0.01; m < 1; m += 0.01) {
             double complete   = LegendreEllipticIntegral.bigE(m);
             double incomplete = LegendreEllipticIntegral.bigE(MathUtils.SEMI_PI, m);
-            Assertions.assertEquals(complete, incomplete, 4 * FastMath.ulp(complete));
+            assertEquals(complete, incomplete, 4 * FastMath.ulp(complete));
         }
     }
 
     @Test
-    public void testCompleteVsIncompleteD() {
+    void testCompleteVsIncompleteD() {
         for (double m = 0.01; m < 1; m += 0.01) {
             double complete   = LegendreEllipticIntegral.bigD(m);
             double incomplete = LegendreEllipticIntegral.bigD(MathUtils.SEMI_PI, m);
-            Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
+            assertEquals(complete, incomplete, FastMath.ulp(complete));
         }
     }
 
     @Test
-    public void testCompleteVsIncompletePi() {
+    void testCompleteVsIncompletePi() {
         for (double alpha2 = 0.01; alpha2 < 1; alpha2 += 0.01) {
             for (double m = 0.01; m < 1; m += 0.01) {
                 double complete   = LegendreEllipticIntegral.bigPi(alpha2, m);
                 double incomplete = LegendreEllipticIntegral.bigPi(alpha2, MathUtils.SEMI_PI, m);
-                Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
+                assertEquals(complete, incomplete, FastMath.ulp(complete));
             }
         }
     }
 
     @Test
-    public void testNomeMediumParameter() {
-        Assertions.assertEquals(0.0857957337021947665168, LegendreEllipticIntegral.nome(0.75), 1.0e-15);
+    void testNomeMediumParameter() {
+        assertEquals(0.0857957337021947665168, LegendreEllipticIntegral.nome(0.75), 1.0e-15);
     }
 
     @Test
-    public void testNomeSmallParameter() {
-        Assertions.assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(0.95e-16), 1.0e-22);
+    void testNomeSmallParameter() {
+        assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(0.95e-16), 1.0e-22);
     }
 
     @Test
-    public void testIntegralsSmallParameter() {
-        Assertions.assertEquals(7.8539816428e-10,
+    void testIntegralsSmallParameter() {
+        assertEquals(7.8539816428e-10,
                             LegendreEllipticIntegral.bigK(2.0e-9) - MathUtils.SEMI_PI,
                             1.0e-15);
     }
 
     @Test
-    public void testPrecomputedDelta() {
+    void testPrecomputedDelta() {
 
         double n   = 0.7;
         double m   = 0.2;
         double phi = 1.2;
         double ref = 1.8264362537906997;
-        Assertions.assertEquals(ref, LegendreEllipticIntegral.bigPi(n, phi, m), 1.0e-15);
+        assertEquals(ref, LegendreEllipticIntegral.bigPi(n, phi, m), 1.0e-15);
 
         // no argument reduction and no precomputed delta
         final double csc     = 1.0 / FastMath.sin(phi);
@@ -198,7 +200,7 @@ public class LegendreEllipticIntegralTest {
         final double cMn     = csc2 - n;
         final double pinphim = CarlsonEllipticIntegral.rF(cM1, cMm, csc2) +
                                CarlsonEllipticIntegral.rJ(cM1, cMm, csc2, cMn) * n / 3;
-        Assertions.assertEquals(ref, pinphim, 1.0e-15);
+        assertEquals(ref, pinphim, 1.0e-15);
 
     }
 

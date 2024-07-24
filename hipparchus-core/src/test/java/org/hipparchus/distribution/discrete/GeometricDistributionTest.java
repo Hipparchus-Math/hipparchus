@@ -14,8 +14,9 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for GeometricDistribution.
@@ -152,16 +153,16 @@ public class GeometricDistributionTest extends IntegerDistributionAbstractTest {
     // ----------------- Additional test cases ---------------------------------
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         GeometricDistribution dist;
 
         dist = new GeometricDistribution(0.5);
-        Assertions.assertEquals(dist.getNumericalMean(), (1.0d - 0.5d) / 0.5d, tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), (1.0d - 0.5d) / (0.5d * 0.5d), tol);
+        assertEquals(dist.getNumericalMean(), (1.0d - 0.5d) / 0.5d, tol);
+        assertEquals(dist.getNumericalVariance(), (1.0d - 0.5d) / (0.5d * 0.5d), tol);
 
         dist = new GeometricDistribution(0.3);
-        Assertions.assertEquals(dist.getNumericalMean(), (1.0d - 0.3d) / 0.3d, tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), (1.0d - 0.3d) / (0.3d * 0.3d), tol);
+        assertEquals(dist.getNumericalMean(), (1.0d - 0.3d) / 0.3d, tol);
+        assertEquals(dist.getNumericalVariance(), (1.0d - 0.3d) / (0.3d * 0.3d), tol);
     }
 }

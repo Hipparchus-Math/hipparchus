@@ -27,41 +27,43 @@ import org.hipparchus.analysis.function.Inverse;
 import org.hipparchus.analysis.function.Log;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test of the {@link LegendreRuleFactory}.
  *
  */
-public class LegendreTest {
+class LegendreTest {
     private static final GaussIntegratorFactory factory = new GaussIntegratorFactory();
 
     @Test
-    public void testTooLArgeNumberOfPoints() {
+    void testTooLArgeNumberOfPoints() {
         try {
             factory.legendre(10000, 0, Math.PI / 2);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
-            Assertions.assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testCos() {
+    void testCos() {
         final UnivariateFunction cos = new Cos();
 
         final GaussIntegrator integrator = factory.legendre(7, 0, Math.PI / 2);
         final double s = integrator.integrate(cos);
         // System.out.println("s=" + s + " e=" + 1);
-        Assertions.assertEquals(1, s, Math.ulp(1d));
+        assertEquals(1, s, Math.ulp(1d));
     }
 
 
     @Test
-    public void testInverse() {
+    void testInverse() {
         final UnivariateFunction inv = new Inverse();
         final UnivariateFunction log = new Log();
 
@@ -72,6 +74,6 @@ public class LegendreTest {
         final double s = integrator.integrate(inv);
         final double expected = log.value(hi) - log.value(lo);
         // System.out.println("s=" + s + " e=" + expected);
-        Assertions.assertEquals(expected, s, 1e-14);
+        assertEquals(expected, s, 1e-14);
     }
 }

@@ -278,7 +278,7 @@ public class Fraction
      */
     public static Pair<Fraction, Boolean> convergent(double value, int maxConvergents, ConvergenceTest convergenceTest) {
         Pair<ConvergenceStep, Boolean> converged = convergent(value, maxConvergents, s -> {
-            assertNoIntegerOverflow(s, value);
+            customAssertNoIntegerOverflow(s, value);
             return convergenceTest.test((int) s.getNumerator(), (int) s.getDenominator());
         });
         return Pair.create(STEP_TO_FRACTION.apply(converged.getKey()), converged.getValue());
@@ -297,7 +297,7 @@ public class Fraction
             throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, value, 1l);
         }
         return ConvergentsIterator.convergent(value, maxConvergents, s -> {
-            assertNoIntegerOverflow(s, value);
+            customAssertNoIntegerOverflow(s, value);
             return convergenceTests.test(s);
         });
     }
@@ -306,7 +306,7 @@ public class Fraction
      * @param s convergent
      * @param value corresponding value
      */
-    private static void assertNoIntegerOverflow(ConvergenceStep s, double value) {
+    private static void customAssertNoIntegerOverflow(ConvergenceStep s, double value) {
         if (s.getNumerator() > Integer.MAX_VALUE || s.getDenominator() > Integer.MAX_VALUE) {
             throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value,
                     s.getNumerator(), s.getDenominator());

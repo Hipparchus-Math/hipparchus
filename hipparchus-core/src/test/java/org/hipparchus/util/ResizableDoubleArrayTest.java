@@ -18,13 +18,13 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.ResizableDoubleArray.ExpansionMode;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * This class contains test cases for the ResizableDoubleArray.
  */
-public class ResizableDoubleArrayTest {
+class ResizableDoubleArrayTest {
 
     protected ResizableDoubleArray da = null;
 
@@ -41,21 +41,21 @@ public class ResizableDoubleArrayTest {
     protected ResizableDoubleArray ra = null;
 
     @AfterEach
-    public void tearDown()
+    void tearDown()
         throws Exception {
         da = null;
         ra = null;
     }
 
     @BeforeEach
-    public void setUp()
+    void setUp()
         throws Exception {
         da = new ResizableDoubleArray();
         ra = new ResizableDoubleArray();
     }
 
     @Test
-    public void testConstructors() {
+    void testConstructors() {
         float defaultExpansionFactor = 2.0f;
         double defaultContractionCriteria = 2.5;
         ExpansionMode defaultMode = ResizableDoubleArray.ExpansionMode.MULTIPLICATIVE;
@@ -144,7 +144,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testGetValues() {
+    void testGetValues() {
         double[] controlArray = {
             2.0, 4.0, 6.0
         };
@@ -163,7 +163,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testMinMax() {
+    void testMinMax() {
         da.addElement(2.0);
         da.addElement(22.0);
         da.addElement(-2.0);
@@ -187,7 +187,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testSetElementArbitraryExpansion1() {
+    void testSetElementArbitraryExpansion1() {
 
         // MULTIPLICATIVE_MODE
         da.addElement(2.0);
@@ -209,7 +209,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testSetElementArbitraryExpansion2() {
+    void testSetElementArbitraryExpansion2() {
         // Make sure numElements and expansion work correctly for expansion
         // boundary cases
         da.addElement(2.0);
@@ -247,7 +247,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testAdd1000() {
+    void testAdd1000() {
         for (int i = 0; i < 1000; i++) {
             da.addElement(i);
         }
@@ -264,7 +264,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testAddElements() {
+    void testAddElements() {
         ResizableDoubleArray testDa = new ResizableDoubleArray();
 
         // MULTIPLICATIVE_MODE
@@ -291,7 +291,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testAddElementRolling() {
+    void testAddElementRolling() {
         ra.addElement(0.5);
         ra.addElement(1.0);
         ra.addElement(1.0);
@@ -373,7 +373,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testSetNumberOfElements() {
+    void testSetNumberOfElements() {
         da.addElement(1.0);
         da.addElement(1.0);
         da.addElement(1.0);
@@ -397,7 +397,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testWithInitialCapacity() {
+    void testWithInitialCapacity() {
 
         ResizableDoubleArray eDA2 = new ResizableDoubleArray(2);
         assertEquals(0, eDA2.getNumElements(), "Initial number of elements should be 0");
@@ -418,7 +418,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testWithInitialCapacityAndExpansionFactor() {
+    void testWithInitialCapacityAndExpansionFactor() {
 
         ResizableDoubleArray eDA3 = new ResizableDoubleArray(3, 3.0, 3.5);
         assertEquals(0, eDA3.getNumElements(), "Initial number of elements should be 0");
@@ -442,7 +442,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testDiscard() {
+    void testDiscard() {
         da.addElement(2.0);
         da.addElement(2.0);
         da.addElement(2.0);
@@ -495,7 +495,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testSubstitute() {
+    void testSubstitute() {
 
         da.addElement(2.0);
         da.addElement(2.0);
@@ -514,7 +514,7 @@ public class ResizableDoubleArrayTest {
 
         assertEquals(11, da.getNumElements(), "Number of elements should be 11");
 
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             da.discardMostRecentElements(10);
         }, "Trying to discard a negative number of element is not allowed");
 
@@ -526,7 +526,7 @@ public class ResizableDoubleArrayTest {
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testEqualsAndHashCode()
+    void testEqualsAndHashCode()
         throws Exception {
 
         // Wrong type
@@ -599,7 +599,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testGetArrayRef() {
+    void testGetArrayRef() {
         final ResizableDoubleArray a = new ResizableDoubleArray();
 
         // Modify "a" through the public API.
@@ -616,7 +616,7 @@ public class ResizableDoubleArrayTest {
     }
 
     @Test
-    public void testCompute() {
+    void testCompute() {
         final ResizableDoubleArray a = new ResizableDoubleArray();
         final int max = 20;
         for (int i = 1; i <= max; i++) {

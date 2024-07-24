@@ -27,10 +27,13 @@ import org.hipparchus.analysis.XMinus5Function;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Base class for root-finding algorithms tests derived from
@@ -63,13 +66,13 @@ public abstract class BaseSecantSolverAbstractTest {
         result = solver.solve(100, f, 3, 4);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
-        Assertions.assertTrue(solver.getEvaluations() <= 6);
+        assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        assertTrue(solver.getEvaluations() <= 6);
         result = solver.solve(100, f, 1, 4);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
-        Assertions.assertTrue(solver.getEvaluations() <= 7);
+        assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        assertTrue(solver.getEvaluations() <= 7);
     }
 
     @Test
@@ -114,8 +117,8 @@ public abstract class BaseSecantSolverAbstractTest {
             //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
 
             // Check solution.
-            Assertions.assertEquals(result, testData[2], atol);
-            Assertions.assertTrue(solver.getEvaluations() <= counts[i] + 1,
+            assertEquals(result, testData[2], atol);
+            assertTrue(solver.getEvaluations() <= counts[i] + 1,
                     "" + solver.getEvaluations() + " <= " + (counts[i] + 1));
         }
     }
@@ -128,16 +131,16 @@ public abstract class BaseSecantSolverAbstractTest {
         // End-point is root. This should be a special case in the solver, and
         // the initial end-point should be returned exactly.
         double result = solver.solve(100, f, 5.0, 6.0);
-        Assertions.assertEquals(5.0, result, 0.0);
+        assertEquals(5.0, result, 0.0);
 
         result = solver.solve(100, f, 4.0, 5.0);
-        Assertions.assertEquals(5.0, result, 0.0);
+        assertEquals(5.0, result, 0.0);
 
         result = solver.solve(100, f, 5.0, 6.0, 5.5);
-        Assertions.assertEquals(5.0, result, 0.0);
+        assertEquals(5.0, result, 0.0);
 
         result = solver.solve(100, f, 4.0, 5.0, 4.5);
-        Assertions.assertEquals(5.0, result, 0.0);
+        assertEquals(5.0, result, 0.0);
     }
 
     @Test
@@ -146,10 +149,10 @@ public abstract class BaseSecantSolverAbstractTest {
         UnivariateSolver solver = getSolver();
 
         double result = solver.solve(100, f, 5.0, FastMath.nextUp(5.0));
-        Assertions.assertEquals(5.0, result, 0.0);
+        assertEquals(5.0, result, 0.0);
 
         result = solver.solve(100, f, FastMath.nextDown(5.0), 5.0);
-        Assertions.assertEquals(5.0, result, 0.0);
+        assertEquals(5.0, result, 0.0);
     }
 
     @Test
@@ -158,19 +161,19 @@ public abstract class BaseSecantSolverAbstractTest {
         UnivariateSolver solver = getSolver();
         try {  // bad interval
             solver.solve(100, f, 1, -1);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
+            fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5);
-            Assertions.fail("Expecting MathIllegalArgumentException - non-bracketing");
+            fail("Expecting MathIllegalArgumentException - non-bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5, 1.2);
-            Assertions.fail("Expecting MathIllegalArgumentException - non-bracketing");
+            fail("Expecting MathIllegalArgumentException - non-bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -186,7 +189,7 @@ public abstract class BaseSecantSolverAbstractTest {
             // Test whether the allowed solutions are taken into account.
             double solution = getSolution(solver, 100, f, left, right, AllowedSolution.LEFT_SIDE);
             if (!Double.isNaN(solution)) {
-                Assertions.assertTrue(solution <= 0.0);
+                assertTrue(solution <= 0.0);
             }
 
             // Prepare for next test.
@@ -205,7 +208,7 @@ public abstract class BaseSecantSolverAbstractTest {
             // Test whether the allowed solutions are taken into account.
             double solution = getSolution(solver, 100, f, left, right, AllowedSolution.RIGHT_SIDE);
             if (!Double.isNaN(solution)) {
-                Assertions.assertTrue(solution >= 0.0);
+                assertTrue(solution >= 0.0);
             }
 
             // Prepare for next test.
@@ -223,7 +226,7 @@ public abstract class BaseSecantSolverAbstractTest {
             // Test whether the allowed solutions are taken into account.
             double solution = getSolution(solver, 100, f, left, right, AllowedSolution.BELOW_SIDE);
             if (!Double.isNaN(solution)) {
-                Assertions.assertTrue(f.value(solution) <= 0.0);
+                assertTrue(f.value(solution) <= 0.0);
             }
 
             // Prepare for next test.
@@ -242,7 +245,7 @@ public abstract class BaseSecantSolverAbstractTest {
             // Test whether the allowed solutions are taken into account.
             double solution = getSolution(solver, 100, f, left, right, AllowedSolution.ABOVE_SIDE);
             if (!Double.isNaN(solution)) {
-                Assertions.assertTrue(f.value(solution) >= 0.0);
+                assertTrue(f.value(solution) >= 0.0);
             }
 
             // Prepare for next test.
@@ -278,9 +281,9 @@ public abstract class BaseSecantSolverAbstractTest {
             Field methodField = BaseSecantSolver.class.getDeclaredField("method");
             methodField.setAccessible(true);
             BaseSecantSolver.Method method = (BaseSecantSolver.Method) methodField.get(solver);
-            Assertions.assertEquals(expected, method);
+            assertEquals(expected, method);
         } catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 

@@ -20,8 +20,9 @@ package org.hipparchus.random;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UncorrelatedRandomVectorGeneratorTest {
     private double[] mean;
@@ -39,7 +40,7 @@ public class UncorrelatedRandomVectorGeneratorTest {
     }
 
     @Test
-    public void testMeanAndCorrelation() {
+    void testMeanAndCorrelation() {
         final int n = generator.nextVector().length;
         final double[] estimatedMean = new double[generator.nextVector().length];
         final RealMatrix matrix = new Array2DRowRealMatrix(10000, n);
@@ -57,13 +58,13 @@ public class UncorrelatedRandomVectorGeneratorTest {
         RealMatrix estimatedCorrelation = UnitTestUtils.covarianceMatrix(matrix);
         //RealMatrix estimatedCorrelation = covStat.getResult();
         for (int i = 0; i < estimatedMean.length; ++i) {
-            Assertions.assertEquals(mean[i], estimatedMean[i], 0.07);
+            assertEquals(mean[i], estimatedMean[i], 0.07);
             for (int j = 0; j < i; ++j) {
                 scale = standardDeviation[i] * standardDeviation[j];
-                Assertions.assertEquals(0, estimatedCorrelation.getEntry(i, j) / scale, 0.03);
+                assertEquals(0, estimatedCorrelation.getEntry(i, j) / scale, 0.03);
             }
             scale = standardDeviation[i] * standardDeviation[i];
-            Assertions.assertEquals(1, estimatedCorrelation.getEntry(i, i) / scale, 0.025);
+            assertEquals(1, estimatedCorrelation.getEntry(i, i) / scale, 0.025);
         }
     }
 }

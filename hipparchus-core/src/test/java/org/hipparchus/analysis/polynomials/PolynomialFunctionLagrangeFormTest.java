@@ -22,8 +22,10 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for Lagrange form of polynomial function.
@@ -33,13 +35,13 @@ import org.junit.jupiter.api.Test;
  * small tolerance to account only for round-off errors.
  *
  */
-public final class PolynomialFunctionLagrangeFormTest {
+final class PolynomialFunctionLagrangeFormTest {
 
     /**
      * Test of polynomial for the linear function.
      */
     @Test
-    public void testLinearFunction() {
+    void testLinearFunction() {
         PolynomialFunctionLagrangeForm p;
         double[] c;
         double z;
@@ -53,27 +55,27 @@ public final class PolynomialFunctionLagrangeFormTest {
         p = new PolynomialFunctionLagrangeForm(x, y);
 
         z = 2.0; expected = -1.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         z = 4.5; expected = 2.75; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         z = 6.0; expected = 5.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
-        Assertions.assertEquals(1, p.degree());
+        assertEquals(1, p.degree());
 
         c = p.getCoefficients();
-        Assertions.assertEquals(2, c.length);
-        Assertions.assertEquals(-4.0, c[0], tolerance);
-        Assertions.assertEquals(1.5, c[1], tolerance);
+        assertEquals(2, c.length);
+        assertEquals(-4.0, c[0], tolerance);
+        assertEquals(1.5, c[1], tolerance);
     }
 
     /**
      * Test of polynomial for the quadratic function.
      */
     @Test
-    public void testQuadraticFunction() {
+    void testQuadraticFunction() {
         PolynomialFunctionLagrangeForm p;
         double[] c;
         double z;
@@ -87,28 +89,28 @@ public final class PolynomialFunctionLagrangeFormTest {
         p = new PolynomialFunctionLagrangeForm(x, y);
 
         z = 1.0; expected = 4.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         z = 2.5; expected = 22.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         z = -2.0; expected = -5.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
-        Assertions.assertEquals(2, p.degree());
+        assertEquals(2, p.degree());
 
         c = p.getCoefficients();
-        Assertions.assertEquals(3, c.length);
-        Assertions.assertEquals(-3.0, c[0], tolerance);
-        Assertions.assertEquals(5.0, c[1], tolerance);
-        Assertions.assertEquals(2.0, c[2], tolerance);
+        assertEquals(3, c.length);
+        assertEquals(-3.0, c[0], tolerance);
+        assertEquals(5.0, c[1], tolerance);
+        assertEquals(2.0, c[2], tolerance);
     }
 
     /**
      * Test of polynomial for the quintic function.
      */
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
         PolynomialFunctionLagrangeForm p;
         double[] c;
         double z;
@@ -122,38 +124,38 @@ public final class PolynomialFunctionLagrangeFormTest {
         p = new PolynomialFunctionLagrangeForm(x, y);
 
         z = 0.0; expected = 0.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         z = -2.0; expected = 0.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         z = 4.0; expected = 360.0; result = p.value(z);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
-        Assertions.assertEquals(5, p.degree());
+        assertEquals(5, p.degree());
 
         c = p.getCoefficients();
-        Assertions.assertEquals(6, c.length);
-        Assertions.assertEquals(0.0, c[0], tolerance);
-        Assertions.assertEquals(6.0, c[1], tolerance);
-        Assertions.assertEquals(1.0, c[2], tolerance);
-        Assertions.assertEquals(-7.0, c[3], tolerance);
-        Assertions.assertEquals(-1.0, c[4], tolerance);
-        Assertions.assertEquals(1.0, c[5], tolerance);
+        assertEquals(6, c.length);
+        assertEquals(0.0, c[0], tolerance);
+        assertEquals(6.0, c[1], tolerance);
+        assertEquals(1.0, c[2], tolerance);
+        assertEquals(-7.0, c[3], tolerance);
+        assertEquals(-1.0, c[4], tolerance);
+        assertEquals(1.0, c[5], tolerance);
     }
 
     /**
      * Test of parameters for the polynomial.
      */
     @Test
-    public void testParameters() {
+    void testParameters() {
 
         try {
             // bad input array length
             double[] x = { 1.0 };
             double[] y = { 2.0 };
             new PolynomialFunctionLagrangeForm(x, y);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad input array length");
+            fail("Expecting MathIllegalArgumentException - bad input array length");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -162,7 +164,7 @@ public final class PolynomialFunctionLagrangeFormTest {
             double[] x = { 1.0, 2.0, 3.0, 4.0 };
             double[] y = { 0.0, -4.0, -24.0 };
             new PolynomialFunctionLagrangeForm(x, y);
-            Assertions.fail("Expecting MathIllegalArgumentException - mismatch input arrays");
+            fail("Expecting MathIllegalArgumentException - mismatch input arrays");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

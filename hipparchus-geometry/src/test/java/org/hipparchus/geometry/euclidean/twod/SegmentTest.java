@@ -22,27 +22,28 @@
 package org.hipparchus.geometry.euclidean.twod;
 
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SegmentTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class SegmentTest {
 
     @Test
-    public void testDistance() {
+    void testDistance() {
         Vector2D start = new Vector2D(2, 2);
         Vector2D end = new Vector2D(-2, -2);
         Segment segment = new Segment(start, end, new Line(start, end, 1.0e-10));
 
         // distance to center of segment
-        Assertions.assertEquals(FastMath.sqrt(2), segment.distance(new Vector2D(1, -1)), 1.0e-10);
+        assertEquals(FastMath.sqrt(2), segment.distance(new Vector2D(1, -1)), 1.0e-10);
 
         // distance a point on segment
-        Assertions.assertEquals(FastMath.sin(Math.PI / 4.0), segment.distance(new Vector2D(0, -1)), 1.0e-10);
+        assertEquals(FastMath.sin(Math.PI / 4.0), segment.distance(new Vector2D(0, -1)), 1.0e-10);
 
         // distance to end point
-        Assertions.assertEquals(FastMath.sqrt(8), segment.distance(new Vector2D(0, 4)), 1.0e-10);
+        assertEquals(FastMath.sqrt(8), segment.distance(new Vector2D(0, 4)), 1.0e-10);
 
         // distance to start point
-        Assertions.assertEquals(FastMath.sqrt(8), segment.distance(new Vector2D(0, -4)), 1.0e-10);
+        assertEquals(FastMath.sqrt(8), segment.distance(new Vector2D(0, -4)), 1.0e-10);
     }
 }

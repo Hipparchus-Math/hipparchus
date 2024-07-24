@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.junit.jupiter.api.Test;
 
-public class EulerIntegratorTest extends RungeKuttaIntegratorAbstractTest {
+class EulerIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
     protected RungeKuttaIntegrator createIntegrator(double step) {
         return new EulerIntegrator(step);

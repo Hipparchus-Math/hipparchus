@@ -23,11 +23,15 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -35,7 +39,7 @@ import java.util.List;
  *
  */
 
-public class OneWayAnovaTest {
+class OneWayAnovaTest {
 
     protected OneWayAnova testStatistic = new OneWayAnova();
 
@@ -49,21 +53,21 @@ public class OneWayAnovaTest {
             {110.0, 115.0, 111.0, 117.0, 128.0, 117.0 };
 
     @Test
-    public void testAnovaFValue() {
+    void testAnovaFValue() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
         List<double[]> threeClasses = new ArrayList<double[]>();
         threeClasses.add(classA);
         threeClasses.add(classB);
         threeClasses.add(classC);
 
-        Assertions.assertEquals(24.67361709460624,
+        assertEquals(24.67361709460624,
                  testStatistic.anovaFValue(threeClasses), 1E-12, "ANOVA F-value");
 
         List<double[]> twoClasses = new ArrayList<double[]>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
-        Assertions.assertEquals(0.0150579150579,
+        assertEquals(0.0150579150579,
                  testStatistic.anovaFValue(twoClasses), 1E-12, "ANOVA F-value");
 
         List<double[]> emptyContents = new ArrayList<double[]>();
@@ -71,7 +75,7 @@ public class OneWayAnovaTest {
         emptyContents.add(classC);
         try {
             testStatistic.anovaFValue(emptyContents);
-            Assertions.fail("empty array for key classX, MathIllegalArgumentException expected");
+            fail("empty array for key classX, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -80,7 +84,7 @@ public class OneWayAnovaTest {
         tooFew.add(classA);
         try {
             testStatistic.anovaFValue(tooFew);
-            Assertions.fail("less than two classes, MathIllegalArgumentException expected");
+            fail("less than two classes, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -88,27 +92,27 @@ public class OneWayAnovaTest {
 
 
     @Test
-    public void testAnovaPValue() {
+    void testAnovaPValue() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
         List<double[]> threeClasses = new ArrayList<double[]>();
         threeClasses.add(classA);
         threeClasses.add(classB);
         threeClasses.add(classC);
 
-        Assertions.assertEquals(6.959446E-06,
+        assertEquals(6.959446E-06,
                  testStatistic.anovaPValue(threeClasses), 1E-12, "ANOVA P-value");
 
         List<double[]> twoClasses = new ArrayList<double[]>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
-        Assertions.assertEquals(0.904212960464,
+        assertEquals(0.904212960464,
                  testStatistic.anovaPValue(twoClasses), 1E-12, "ANOVA P-value");
 
     }
 
     @Test
-    public void testAnovaPValueSummaryStatistics() {
+    void testAnovaPValueSummaryStatistics() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
         List<StreamingStatistics> threeClasses = new ArrayList<StreamingStatistics>();
         StreamingStatistics statsA = new StreamingStatistics();
@@ -127,33 +131,33 @@ public class OneWayAnovaTest {
         }
         threeClasses.add(statsC);
 
-        Assertions.assertEquals(6.959446E-06,
+        assertEquals(6.959446E-06,
                  testStatistic.anovaPValue(threeClasses, true), 1E-12, "ANOVA P-value");
 
         List<StreamingStatistics> twoClasses = new ArrayList<StreamingStatistics>();
         twoClasses.add(statsA);
         twoClasses.add(statsB);
 
-        Assertions.assertEquals(0.904212960464,
+        assertEquals(0.904212960464,
                  testStatistic.anovaPValue(twoClasses, false), 1E-12, "ANOVA P-value");
 
     }
 
     @Test
-    public void testAnovaTest() {
+    void testAnovaTest() {
         // Target comparison values computed using R version 2.3.1 (Linux version)
         List<double[]> threeClasses = new ArrayList<double[]>();
         threeClasses.add(classA);
         threeClasses.add(classB);
         threeClasses.add(classC);
 
-        Assertions.assertTrue(testStatistic.anovaTest(threeClasses, 0.01), "ANOVA Test P<0.01");
+        assertTrue(testStatistic.anovaTest(threeClasses, 0.01), "ANOVA Test P<0.01");
 
         List<double[]> twoClasses = new ArrayList<double[]>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
-        Assertions.assertFalse(testStatistic.anovaTest(twoClasses, 0.01), "ANOVA Test P>0.01");
+        assertFalse(testStatistic.anovaTest(twoClasses, 0.01), "ANOVA Test P>0.01");
     }
 
 }

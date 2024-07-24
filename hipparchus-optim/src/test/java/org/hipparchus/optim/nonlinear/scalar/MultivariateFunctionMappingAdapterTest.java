@@ -28,12 +28,14 @@ import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.noderiv.AbstractSimplex;
 import org.hipparchus.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
 import org.hipparchus.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class MultivariateFunctionMappingAdapterTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class MultivariateFunctionMappingAdapterTest {
     @Test
-    public void testStartSimplexInsideRange() {
+    void testStartSimplexInsideRange() {
         final BiQuadratic biQuadratic = new BiQuadratic(2.0, 2.5, 1.0, 3.0, 2.0, 3.0);
         final MultivariateFunctionMappingAdapter wrapped
             = new MultivariateFunctionMappingAdapter(biQuadratic,
@@ -55,12 +57,12 @@ public class MultivariateFunctionMappingAdapterTest {
                                  new InitialGuess(wrapped.boundedToUnbounded(new double[] { 1.5, 2.25 })));
         final double[] bounded = wrapped.unboundedToBounded(optimum.getPoint());
 
-        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 2e-7);
-        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 2e-7);
+        assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 2e-7);
+        assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 2e-7);
     }
 
     @Test
-    public void testOptimumOutsideRange() {
+    void testOptimumOutsideRange() {
         final BiQuadratic biQuadratic = new BiQuadratic(4.0, 0.0, 1.0, 3.0, 2.0, 3.0);
         final MultivariateFunctionMappingAdapter wrapped
             = new MultivariateFunctionMappingAdapter(biQuadratic,
@@ -82,12 +84,12 @@ public class MultivariateFunctionMappingAdapterTest {
                                  new InitialGuess(wrapped.boundedToUnbounded(new double[] { 1.5, 2.25 })));
         final double[] bounded = wrapped.unboundedToBounded(optimum.getPoint());
 
-        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 2e-7);
-        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 2e-7);
+        assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 2e-7);
+        assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 2e-7);
     }
 
     @Test
-    public void testUnbounded() {
+    void testUnbounded() {
         final BiQuadratic biQuadratic = new BiQuadratic(4.0, 0.0,
                                                         Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
                                                         Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
@@ -111,12 +113,12 @@ public class MultivariateFunctionMappingAdapterTest {
                                  new InitialGuess(wrapped.boundedToUnbounded(new double[] { 1.5, 2.25 })));
         final double[] bounded = wrapped.unboundedToBounded(optimum.getPoint());
 
-        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 2e-7);
-        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 2e-7);
+        assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 2e-7);
+        assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 2e-7);
     }
 
     @Test
-    public void testHalfBounded() {
+    void testHalfBounded() {
         final BiQuadratic biQuadratic = new BiQuadratic(4.0, 4.0,
                                                         1.0, Double.POSITIVE_INFINITY,
                                                         Double.NEGATIVE_INFINITY, 3.0);
@@ -140,8 +142,8 @@ public class MultivariateFunctionMappingAdapterTest {
                                  new InitialGuess(wrapped.boundedToUnbounded(new double[] { 1.5, 2.25 })));
         final double[] bounded = wrapped.unboundedToBounded(optimum.getPoint());
 
-        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 1e-7);
-        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 1e-7);
+        assertEquals(biQuadratic.getBoundedXOptimum(), bounded[0], 1e-7);
+        assertEquals(biQuadratic.getBoundedYOptimum(), bounded[1], 1e-7);
     }
 
     private static class BiQuadratic implements MultivariateFunction {
@@ -167,10 +169,10 @@ public class MultivariateFunctionMappingAdapterTest {
 
         public double value(double[] point) {
             // the function should never be called with out of range points
-            Assertions.assertTrue(point[0] >= xMin);
-            Assertions.assertTrue(point[0] <= xMax);
-            Assertions.assertTrue(point[1] >= yMin);
-            Assertions.assertTrue(point[1] <= yMax);
+            assertTrue(point[0] >= xMin);
+            assertTrue(point[0] <= xMax);
+            assertTrue(point[1] >= yMin);
+            assertTrue(point[1] <= yMax);
 
             final double dx = point[0] - xOptimum;
             final double dy = point[1] - yOptimum;

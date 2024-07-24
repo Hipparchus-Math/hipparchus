@@ -24,12 +24,12 @@ package org.hipparchus.distribution.multivariate;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.Pair;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -37,10 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * in order to create a mixture model composed of {@link MultivariateNormalDistribution
  * normal distributions}.
  */
-public class MultivariateNormalMixtureModelDistributionTest {
+class MultivariateNormalMixtureModelDistributionTest {
 
     @Test
-    public void testNonUnitWeightSum() {
+    void testNonUnitWeightSum() {
         final double[] weights = { 1, 2 };
         final double[][] means = { { -1.5, 2.0 },
                                    { 4.0, 8.2 } };
@@ -53,12 +53,12 @@ public class MultivariateNormalMixtureModelDistributionTest {
 
         final List<Pair<Double, MultivariateNormalDistribution>> comp = d.getComponents();
 
-        Assertions.assertEquals(1d / 3, comp.get(0).getFirst().doubleValue(), Math.ulp(1d));
-        Assertions.assertEquals(2d / 3, comp.get(1).getFirst().doubleValue(), Math.ulp(1d));
+        assertEquals(1d / 3, comp.get(0).getFirst().doubleValue(), Math.ulp(1d));
+        assertEquals(2d / 3, comp.get(1).getFirst().doubleValue(), Math.ulp(1d));
     }
 
     @Test
-    public void testWeightSumOverFlow() {
+    void testWeightSumOverFlow() {
         assertThrows(MathRuntimeException.class, () -> {
             final double[] weights = {0.5 * Double.MAX_VALUE, 0.51 * Double.MAX_VALUE};
             final double[][] means = {{-1.5, 2.0},
@@ -72,7 +72,7 @@ public class MultivariateNormalMixtureModelDistributionTest {
     }
 
     @Test
-    public void testPreconditionPositiveWeights() {
+    void testPreconditionPositiveWeights() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final double[] negativeWeights = {-0.5, 1.5};
             final double[][] means = {{-1.5, 2.0},
@@ -89,7 +89,7 @@ public class MultivariateNormalMixtureModelDistributionTest {
      * Test the accuracy of the density calculation.
      */
     @Test
-    public void testDensities() {
+    void testDensities() {
         final double[] weights = { 0.3, 0.7 };
         final double[][] means = { { -1.5, 2.0 },
                                    { 4.0, 8.2 } };
@@ -117,7 +117,7 @@ public class MultivariateNormalMixtureModelDistributionTest {
                                             0.009932042831700297 };
 
         for (int i = 0; i < testValues.length; i++) {
-            Assertions.assertEquals(correctDensities[i], d.density(testValues[i]), Math.ulp(1d));
+            assertEquals(correctDensities[i], d.density(testValues[i]), Math.ulp(1d));
         }
     }
 
@@ -125,7 +125,7 @@ public class MultivariateNormalMixtureModelDistributionTest {
      * Test the accuracy of sampling from the distribution.
      */
     @Test
-    public void testSampling() {
+    void testSampling() {
         final double[] weights = { 0.3, 0.7 };
         final double[][] means = { { -1.5, 2.0 },
                                    { 4.0, 8.2 } };
@@ -143,7 +143,7 @@ public class MultivariateNormalMixtureModelDistributionTest {
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < samples[i].length; j++) {
-                Assertions.assertEquals(correctSamples[i][j], samples[i][j], 1e-16);
+                assertEquals(correctSamples[i][j], samples[i][j], 1e-16);
             }
         }
     }

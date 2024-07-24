@@ -26,10 +26,11 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for HyperGeometriclDistribution.
@@ -111,7 +112,7 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
 
     /** Verify that if there are no failures, mass is concentrated on sampleSize */
     @Test
-    public void testDegenerateNoFailures() {
+    void testDegenerateNoFailures() {
         HypergeometricDistribution dist = new HypergeometricDistribution(5,5,3);
         setDistribution(dist);
         setCumulativeTestPoints(new int[] {-1, 0, 1, 3, 10 });
@@ -123,13 +124,13 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assertions.assertEquals(3, dist.getSupportLowerBound());
-        Assertions.assertEquals(3, dist.getSupportUpperBound());
+        assertEquals(3, dist.getSupportLowerBound());
+        assertEquals(3, dist.getSupportUpperBound());
     }
 
     /** Verify that if there are no successes, mass is concentrated on 0 */
     @Test
-    public void testDegenerateNoSuccesses() {
+    void testDegenerateNoSuccesses() {
         HypergeometricDistribution dist = new HypergeometricDistribution(5,0,3);
         setDistribution(dist);
         setCumulativeTestPoints(new int[] {-1, 0, 1, 3, 10 });
@@ -141,13 +142,13 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assertions.assertEquals(0, dist.getSupportLowerBound());
-        Assertions.assertEquals(0, dist.getSupportUpperBound());
+        assertEquals(0, dist.getSupportLowerBound());
+        assertEquals(0, dist.getSupportUpperBound());
     }
 
     /** Verify that if sampleSize = populationSize, mass is concentrated on numberOfSuccesses */
     @Test
-    public void testDegenerateFullSample() {
+    void testDegenerateFullSample() {
         HypergeometricDistribution dist = new HypergeometricDistribution(5,3,5);
         setDistribution(dist);
         setCumulativeTestPoints(new int[] {-1, 0, 1, 3, 10 });
@@ -159,54 +160,54 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assertions.assertEquals(3, dist.getSupportLowerBound());
-        Assertions.assertEquals(3, dist.getSupportUpperBound());
+        assertEquals(3, dist.getSupportLowerBound());
+        assertEquals(3, dist.getSupportUpperBound());
     }
 
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         try {
             new HypergeometricDistribution(0, 3, 5);
-            Assertions.fail("negative population size. MathIllegalArgumentException expected");
+            fail("negative population size. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, -1, 5);
-            Assertions.fail("negative number of successes. MathIllegalArgumentException expected");
+            fail("negative number of successes. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, -1);
-            Assertions.fail("negative sample size. MathIllegalArgumentException expected");
+            fail("negative sample size. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 6, 5);
-            Assertions.fail("numberOfSuccesses > populationSize. MathIllegalArgumentException expected");
+            fail("numberOfSuccesses > populationSize. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, 6);
-            Assertions.fail("sampleSize > populationSize. MathIllegalArgumentException expected");
+            fail("sampleSize > populationSize. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
     }
 
     @Test
-    public void testAccessors() {
+    void testAccessors() {
         HypergeometricDistribution dist = new HypergeometricDistribution(5, 3, 4);
-        Assertions.assertEquals(5, dist.getPopulationSize());
-        Assertions.assertEquals(3, dist.getNumberOfSuccesses());
-        Assertions.assertEquals(4, dist.getSampleSize());
+        assertEquals(5, dist.getPopulationSize());
+        assertEquals(3, dist.getNumberOfSuccesses());
+        assertEquals(4, dist.getSampleSize());
     }
 
     @Test
-    public void testLargeValues() {
+    void testLargeValues() {
         int populationSize = 3456;
         int sampleSize = 789;
         int numberOfSucceses = 101;
@@ -240,20 +241,20 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
             int x = (int)data[i][0];
             double pmf = data[i][1];
             double actualPmf = dist.probability(x);
-            UnitTestUtils.assertRelativelyEquals("Expected equals for <"+x+"> pmf",pmf, actualPmf, 1.0e-9);
+            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <"+x+"> pmf", pmf, actualPmf, 1.0e-9);
 
             double cdf = data[i][2];
             double actualCdf = dist.cumulativeProbability(x);
-            UnitTestUtils.assertRelativelyEquals("Expected equals for <"+x+"> cdf",cdf, actualCdf, 1.0e-9);
+            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <"+x+"> cdf", cdf, actualCdf, 1.0e-9);
 
             double cdf1 = data[i][3];
             double actualCdf1 = dist.upperCumulativeProbability(x);
-            UnitTestUtils.assertRelativelyEquals("Expected equals for <"+x+"> cdf1",cdf1, actualCdf1, 1.0e-9);
+            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <"+x+"> cdf1", cdf1, actualCdf1, 1.0e-9);
         }
     }
 
     @Test
-    public void testMoreLargeValues() {
+    void testMoreLargeValues() {
         int populationSize = 26896;
         int sampleSize = 895;
         int numberOfSucceses = 55;
@@ -281,21 +282,21 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         HypergeometricDistribution dist;
 
         dist = new HypergeometricDistribution(1500, 40, 100);
-        Assertions.assertEquals(dist.getNumericalMean(), 40d * 100d / 1500d, tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), ( 100d * 40d * (1500d - 100d) * (1500d - 40d) ) / ( (1500d * 1500d * 1499d) ), tol);
+        assertEquals(dist.getNumericalMean(), 40d * 100d / 1500d, tol);
+        assertEquals(dist.getNumericalVariance(), ( 100d * 40d * (1500d - 100d) * (1500d - 40d) ) / ( (1500d * 1500d * 1499d) ), tol);
 
         dist = new HypergeometricDistribution(3000, 55, 200);
-        Assertions.assertEquals(dist.getNumericalMean(), 55d * 200d / 3000d, tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), ( 200d * 55d * (3000d - 200d) * (3000d - 55d) ) / ( (3000d * 3000d * 2999d) ), tol);
+        assertEquals(dist.getNumericalMean(), 55d * 200d / 3000d, tol);
+        assertEquals(dist.getNumericalVariance(), ( 200d * 55d * (3000d - 200d) * (3000d - 55d) ) / ( (3000d * 3000d * 2999d) ), tol);
     }
 
     @Test
-    public void testMath644() {
+    void testMath644() {
         int N = 14761461;  // population
         int m = 1035;      // successes in population
         int n = 1841;      // number of trials
@@ -303,16 +304,16 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         int k = 0;
         final HypergeometricDistribution dist = new HypergeometricDistribution(N, m, n);
 
-        Assertions.assertEquals(0, Precision.compareTo(1.0, dist.upperCumulativeProbability(k), 1));
-        Assertions.assertTrue(Precision.compareTo(dist.cumulativeProbability(k), 0.0, 1) > 0);
+        assertEquals(0, Precision.compareTo(1.0, dist.upperCumulativeProbability(k), 1));
+        assertTrue(Precision.compareTo(dist.cumulativeProbability(k), 0.0, 1) > 0);
 
         // another way to calculate the upper cumulative probability
         double upper = 1.0 - dist.cumulativeProbability(k) + dist.probability(k);
-        Assertions.assertEquals(0, Precision.compareTo(1.0, upper, 1));
+        assertEquals(0, Precision.compareTo(1.0, upper, 1));
     }
 
     @Test
-    public void testMath1356() {
+    void testMath1356() {
         HypergeometricDistribution dist = new HypergeometricDistribution(11, 11, 1);
         assertEquals(1.0, dist.probability(1), 1e-6);
         assertEquals(0.0, dist.probability(0), 1e-6);

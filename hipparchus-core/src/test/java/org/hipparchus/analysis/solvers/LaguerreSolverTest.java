@@ -27,8 +27,10 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for Laguerre solver.
@@ -39,12 +41,12 @@ import org.junit.jupiter.api.Test;
  * invoked, and 15 to 20 iterations to find all roots for quintic function.
  *
  */
-public final class LaguerreSolverTest {
+final class LaguerreSolverTest {
     /**
      * Test of solver for the linear function.
      */
     @Test
-    public void testLinearFunction() {
+    void testLinearFunction() {
         double min, max, expected, result, tolerance;
 
         // p(x) = 4x - 1
@@ -56,14 +58,14 @@ public final class LaguerreSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
      * Test of solver for the quadratic function.
      */
     @Test
-    public void testQuadraticFunction() {
+    void testQuadraticFunction() {
         double min, max, expected, result, tolerance;
 
         // p(x) = 2x^2 + 5x - 3 = (x+3)(2x-1)
@@ -75,20 +77,20 @@ public final class LaguerreSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = -4.0; max = -1.0; expected = -3.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
      * Test of solver for the quintic function.
      */
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
         double min, max, expected, result, tolerance;
 
         // p(x) = x^5 - x^4 - 12x^3 + x^2 - x - 12 = (x+1)(x+3)(x-4)(x^2-x+1)
@@ -100,27 +102,27 @@ public final class LaguerreSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = -5.0; max = -2.5; expected = -3.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = 3.0; max = 6.0; expected = 4.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
      * Test of solver for the quintic function using
-     * {@link LaguerreSolver#solveAllComplex(double[],double) solveAllComplex}.
+     * {@link LaguerreSolver#solveAllComplex(double[], double) solveAllComplex}.
      */
     @Test
-    public void testQuinticFunction2() {
+    void testQuinticFunction2() {
         // p(x) = x^5 + 4x^3 + x^2 + 4 = (x+1)(x^2-x+1)(x^2+4)
         final double[] coefficients = { 4.0, 0.0, 1.0, 4.0, 0.0, 1.0 };
         final LaguerreSolver solver = new LaguerreSolver();
@@ -133,7 +135,7 @@ public final class LaguerreSolverTest {
                                                 new Complex(0.5, -0.5 * FastMath.sqrt(3.0)) }) {
             final double tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                                                   FastMath.abs(expected.norm() * solver.getRelativeAccuracy()));
-            UnitTestUtils.assertContains(result, expected, tolerance);
+            UnitTestUtils.customAssertContains(result, expected, tolerance);
         }
     }
 
@@ -141,7 +143,7 @@ public final class LaguerreSolverTest {
      * Test of parameters for the solver.
      */
     @Test
-    public void testParameters() {
+    void testParameters() {
         double[] coefficients = { -3.0, 5.0, 2.0 };
         PolynomialFunction f = new PolynomialFunction(coefficients);
         LaguerreSolver solver = new LaguerreSolver();
@@ -149,21 +151,21 @@ public final class LaguerreSolverTest {
         try {
             // bad interval
             solver.solve(100, f, 1, -1);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
+            fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // no bracketing
             solver.solve(100, f, 2, 3);
-            Assertions.fail("Expecting MathIllegalArgumentException - no bracketing");
+            fail("Expecting MathIllegalArgumentException - no bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testIssue177() {
+    void testIssue177() {
         doTestIssue177(new double[] {-100.0,    0.0, 0.0, 0.0, 1.0}, FastMath.sqrt(10.0));
         doTestIssue177(new double[] {        -100.0, 0.0, 0.0, 1.0}, FastMath.cbrt(100.0));
         doTestIssue177(new double[] { -16.0,    0.0, 0.0, 0.0, 1.0}, 2.0);
@@ -171,10 +173,10 @@ public final class LaguerreSolverTest {
 
     private void doTestIssue177(final double[] coefficients, final double expected) {
         Complex[] roots = new LaguerreSolver(1.0e-5).solveAllComplex(coefficients, 0);
-        Assertions.assertEquals(coefficients.length - 1, roots.length);
+        assertEquals(coefficients.length - 1, roots.length);
         for (final Complex root : roots) {
-            Assertions.assertEquals(expected, root.norm(), 1.0e-15);
-            Assertions.assertEquals(0.0, MathUtils.normalizeAngle(roots.length * root.getArgument(), 0.0), 1.0e-15);
+            assertEquals(expected, root.norm(), 1.0e-15);
+            assertEquals(0.0, MathUtils.normalizeAngle(roots.length * root.getArgument(), 0.0), 1.0e-15);
         }
     }
 

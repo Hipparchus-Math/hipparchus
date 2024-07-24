@@ -19,13 +19,14 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class VectorDifferentiableFunctionTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class VectorDifferentiableFunctionTest {
 
     @Test
-    public void testValue() {
+    void testValue() {
         // GIVEN
         final double[] x = new double[] { 2. };
         final TestVectorDifferentiableFunction function = new TestVectorDifferentiableFunction();
@@ -33,11 +34,11 @@ public class VectorDifferentiableFunctionTest {
         final double[] actualValue = function.value(x);
         // THEN
         final double expectedValueElement = x[0];
-        Assertions.assertEquals(expectedValueElement, actualValue[0], 0);
+        assertEquals(expectedValueElement, actualValue[0], 0);
     }
 
     @Test
-    public void testGradient() {
+    void testGradient() {
         // GIVEN
         final double[] x = new double[] { 2. };
         final TestVectorDifferentiableFunction function = new TestVectorDifferentiableFunction();
@@ -45,7 +46,7 @@ public class VectorDifferentiableFunctionTest {
         final RealMatrix actualGradient = function.gradient(x);
         // THEN
         final double expectedValueElement = 1.;
-        Assertions.assertEquals(expectedValueElement, actualGradient.getEntry(0, 0), 0);
+        assertEquals(expectedValueElement, actualGradient.getEntry(0, 0), 0);
     }
 
     private static class TestVectorDifferentiableFunction implements VectorDifferentiableFunction {

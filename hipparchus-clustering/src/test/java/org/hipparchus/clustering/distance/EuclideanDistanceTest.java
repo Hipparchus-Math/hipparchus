@@ -22,27 +22,28 @@
 package org.hipparchus.clustering.distance;
 
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link EuclideanDistance} class.
  */
-public class EuclideanDistanceTest {
+class EuclideanDistanceTest {
     final DistanceMeasure distance = new EuclideanDistance();
 
     @Test
-    public void testZero() {
+    void testZero() {
         final double[] a = { 0, 1, -2, 3.4, 5, -6.7, 89 };
-        Assertions.assertEquals(0, distance.compute(a, a), 0d);
+        assertEquals(0, distance.compute(a, a), 0d);
     }
 
     @Test
-    public void test() {
+    void test() {
         final double[] a = { 1, -2, 3, 4 };
         final double[] b = { -5, -6, 7, 8 };
         final double expected = FastMath.sqrt(84);
-        Assertions.assertEquals(expected, distance.compute(a, b), 0d);
-        Assertions.assertEquals(expected, distance.compute(b, a), 0d);
+        assertEquals(expected, distance.compute(a, b), 0d);
+        assertEquals(expected, distance.compute(b, a), 0d);
     }
 }

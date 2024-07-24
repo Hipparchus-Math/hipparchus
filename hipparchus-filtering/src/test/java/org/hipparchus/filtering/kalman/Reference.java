@@ -21,7 +21,6 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +28,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class Reference {
 
@@ -113,7 +115,7 @@ public class Reference {
                 }
             }
         } catch (IOException ioe) {
-            Assertions.fail(ioe.getLocalizedMessage());
+            fail(ioe.getLocalizedMessage());
         }
         return loaded;
     }
@@ -159,18 +161,18 @@ public class Reference {
     }
 
     private void checkVector(final RealVector referenceVector, final RealVector otherVector, final double tolerance) {
-        Assertions.assertEquals(referenceVector.getDimension(), otherVector.getDimension());
+        assertEquals(referenceVector.getDimension(), otherVector.getDimension());
         for (int i = 0; i < referenceVector.getDimension(); ++i) {
-            Assertions.assertEquals(referenceVector.getEntry(i), otherVector.getEntry(i), tolerance, time + ": ");
+            assertEquals(referenceVector.getEntry(i), otherVector.getEntry(i), tolerance, time + ": ");
         }
     }
 
     private void checkMatrix(final RealMatrix referenceMatrix, final RealMatrix otherMatrix, final double tolerance) {
-        Assertions.assertEquals(referenceMatrix.getRowDimension(), otherMatrix.getRowDimension());
-        Assertions.assertEquals(referenceMatrix.getColumnDimension(), otherMatrix.getColumnDimension());
+        assertEquals(referenceMatrix.getRowDimension(), otherMatrix.getRowDimension());
+        assertEquals(referenceMatrix.getColumnDimension(), otherMatrix.getColumnDimension());
         for (int i = 0; i < referenceMatrix.getRowDimension(); ++i) {
             for (int j = i; j < referenceMatrix.getColumnDimension(); ++j) {
-                Assertions.assertEquals(referenceMatrix.getEntry(i, j), otherMatrix.getEntry(i, j), tolerance, time + ": ");
+                assertEquals(referenceMatrix.getEntry(i, j), otherMatrix.getEntry(i, j), tolerance, time + ": ");
             }
         }
     }

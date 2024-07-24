@@ -22,10 +22,11 @@
 
 package org.hipparchus.random;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public final class ISAACTest extends RandomGeneratorAbstractTest {
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
+final class ISAACTest extends RandomGeneratorAbstractTest {
 
     @Override
     protected RandomGenerator makeGenerator() {
@@ -375,15 +376,15 @@ public final class ISAACTest extends RandomGeneratorAbstractTest {
     };
 
     @Test
-    public void testReference() {
+    void testReference() {
         ISAACRandom isaacRandom = new ISAACRandom(SEED_1);
 
         int[] actualSequence = getActualSequence(isaacRandom);
-        Assertions.assertArrayEquals(EXPECTED_SEQUENCE_1, actualSequence);
+        assertArrayEquals(EXPECTED_SEQUENCE_1, actualSequence);
 
         isaacRandom.setSeed(SEED_2);
         actualSequence = getActualSequence(isaacRandom);
-        Assertions.assertArrayEquals(EXPECTED_SEQUENCE_2, actualSequence);
+        assertArrayEquals(EXPECTED_SEQUENCE_2, actualSequence);
 
     }
 

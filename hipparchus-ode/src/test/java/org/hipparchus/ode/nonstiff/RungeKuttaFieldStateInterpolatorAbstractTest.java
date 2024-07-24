@@ -28,9 +28,10 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.MathArrays;
-import org.junit.jupiter.api.Assertions;
 
 import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends FieldODEStateInterpolatorAbstractTest {
 
@@ -139,7 +140,7 @@ public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends Field
         } catch (ClassNotFoundException | InstantiationException   | IllegalAccessException    |
                  NoSuchFieldException   | IllegalArgumentException | InvocationTargetException |
                  NoSuchMethodException  | SecurityException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
 
         return regularInterpolator;

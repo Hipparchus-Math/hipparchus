@@ -23,111 +23,113 @@ import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.DoubleFunction;
 import java.util.function.Function;
 
-public class FieldJacobiEllipticTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class FieldJacobiEllipticTest {
 
     @Test
-    public void testCircular() {
+    void testCircular() {
         doTestCircular(Binary64Field.getInstance());
     }
 
     @Test
-    public void testHyperbolic() {
+    void testHyperbolic() {
         doTestHyperbolic(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNoConvergence() {
+    void testNoConvergence() {
         doTestNoConvergence(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNegativeParameter() {
+    void testNegativeParameter() {
         doTestNegativeParameter(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample1() {
+    void testAbramowitzStegunExample1() {
         doTestAbramowitzStegunExample1(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample2() {
+    void testAbramowitzStegunExample2() {
         doTestAbramowitzStegunExample2(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample3() {
+    void testAbramowitzStegunExample3() {
         doTestAbramowitzStegunExample3(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample4() {
+    void testAbramowitzStegunExample4() {
         doTestAbramowitzStegunExample4(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample5() {
+    void testAbramowitzStegunExample5() {
         doTestAbramowitzStegunExample5(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample7() {
+    void testAbramowitzStegunExample7() {
         doTestAbramowitzStegunExample7(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample8() {
+    void testAbramowitzStegunExample8() {
         doTestAbramowitzStegunExample8(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAbramowitzStegunExample9() {
+    void testAbramowitzStegunExample9() {
         doTestAbramowitzStegunExample9(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAllFunctions() {
+    void testAllFunctions() {
         doTestAllFunctions(Binary64Field.getInstance());
     }
 
     @Test
-    public void testHighAccuracy() {
+    void testHighAccuracy() {
         final DfpField field = new DfpField(60);
         FieldJacobiElliptic<Dfp> je = JacobiEllipticBuilder.build(field.newDfp("0.75"));
         Dfp sn        = je.valuesN(field.newDfp("1.3")).sn();
         // this value was computed using Wolfram Alpha
         Dfp reference = field.newDfp("0.8929235150418389265984488063926925504375953835259703680383");
-        Assertions.assertTrue(sn.subtract(reference).abs().getReal() < 5.0e-58);
+        assertTrue(sn.subtract(reference).abs().getReal() < 5.0e-58);
     }
 
     @Test
-    public void testInverseCopolarN() {
+    void testInverseCopolarN() {
         doTestInverseCopolarN(Binary64Field.getInstance());
     }
 
     @Test
-    public void testInverseCopolarS() {
+    void testInverseCopolarS() {
         doTestInverseCopolarS(Binary64Field.getInstance());
     }
 
     @Test
-    public void testInverseCopolarC() {
+    void testInverseCopolarC() {
         doTestInverseCopolarC(Binary64Field.getInstance());
     }
 
     @Test
-    public void testInverseCopolarD() {
+    void testInverseCopolarD() {
         doTestInverseCopolarD(Binary64Field.getInstance());
     }
 
     @Test
-    public void testDerivatives() {
+    void testDerivatives() {
 
         final double m  = 0.75;
         final double m1 = 1 - m;
@@ -146,21 +148,21 @@ public class FieldJacobiEllipticTest {
         FieldCopolarD<UnivariateDerivative1> valuesDU = jeU.valuesD(new UnivariateDerivative1(u, 1.0));
 
         // see Abramowitz and Stegun section 16.16
-        Assertions.assertEquals(      valuesND.cn() * valuesND.dn(), valuesNU.sn().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals(-1  * valuesND.sn() * valuesND.dn(), valuesNU.cn().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals(-m  * valuesND.sn() * valuesND.cn(), valuesNU.dn().getFirstDerivative(), 2.0e-15);
+        assertEquals(      valuesND.cn() * valuesND.dn(), valuesNU.sn().getFirstDerivative(), 2.0e-15);
+        assertEquals(-1  * valuesND.sn() * valuesND.dn(), valuesNU.cn().getFirstDerivative(), 2.0e-15);
+        assertEquals(-m  * valuesND.sn() * valuesND.cn(), valuesNU.dn().getFirstDerivative(), 2.0e-15);
 
-        Assertions.assertEquals(-m1 * valuesDD.sd() * valuesDD.nd(), valuesDU.cd().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals(      valuesDD.cd() * valuesDD.nd(), valuesDU.sd().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals( m  * valuesDD.sd() * valuesDD.cd(), valuesDU.nd().getFirstDerivative(), 2.0e-15);
+        assertEquals(-m1 * valuesDD.sd() * valuesDD.nd(), valuesDU.cd().getFirstDerivative(), 2.0e-15);
+        assertEquals(      valuesDD.cd() * valuesDD.nd(), valuesDU.sd().getFirstDerivative(), 2.0e-15);
+        assertEquals( m  * valuesDD.sd() * valuesDD.cd(), valuesDU.nd().getFirstDerivative(), 2.0e-15);
 
-        Assertions.assertEquals( m1 * valuesCD.sc() * valuesCD.nc(), valuesCU.dc().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals(      valuesCD.sc() * valuesCD.dc(), valuesCU.nc().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals(      valuesCD.dc() * valuesCD.nc(), valuesCU.sc().getFirstDerivative(), 2.0e-15);
+        assertEquals( m1 * valuesCD.sc() * valuesCD.nc(), valuesCU.dc().getFirstDerivative(), 2.0e-15);
+        assertEquals(      valuesCD.sc() * valuesCD.dc(), valuesCU.nc().getFirstDerivative(), 2.0e-15);
+        assertEquals(      valuesCD.dc() * valuesCD.nc(), valuesCU.sc().getFirstDerivative(), 2.0e-15);
 
-        Assertions.assertEquals(-1  * valuesSD.ds() * valuesSD.cs(), valuesSU.ns().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals(-1  * valuesSD.cs() * valuesSD.ns(), valuesSU.ds().getFirstDerivative(), 2.0e-15);
-        Assertions.assertEquals(-1  * valuesSD.ns() * valuesSD.ds(), valuesSU.cs().getFirstDerivative(), 2.0e-15);
+        assertEquals(-1  * valuesSD.ds() * valuesSD.cs(), valuesSU.ns().getFirstDerivative(), 2.0e-15);
+        assertEquals(-1  * valuesSD.cs() * valuesSD.ns(), valuesSU.ds().getFirstDerivative(), 2.0e-15);
+        assertEquals(-1  * valuesSD.ns() * valuesSD.ds(), valuesSU.cs().getFirstDerivative(), 2.0e-15);
 
     }
 
@@ -170,9 +172,9 @@ public class FieldJacobiEllipticTest {
             final FieldJacobiElliptic<T> je = build(field, m);
             for (double t = -10; t < 10; t += 0.01) {
                 final FieldCopolarN<T> n = je.valuesN(t);
-                Assertions.assertEquals(FastMath.sin(t), n.sn().getReal(), eps);
-                Assertions.assertEquals(FastMath.cos(t), n.cn().getReal(), eps);
-                Assertions.assertEquals(1.0,             n.dn().getReal(), eps);
+                assertEquals(FastMath.sin(t), n.sn().getReal(), eps);
+                assertEquals(FastMath.cos(t), n.cn().getReal(), eps);
+                assertEquals(1.0,             n.dn().getReal(), eps);
             }
         }
     }
@@ -183,55 +185,55 @@ public class FieldJacobiEllipticTest {
             final FieldJacobiElliptic<T> je = build(field, 1.0 - m1);
             for (double t = -3; t < 3; t += 0.01) {
                 final FieldCopolarN<T> n = je.valuesN(t);
-                Assertions.assertEquals(FastMath.tanh(t),       n.sn().getReal(), eps);
-                Assertions.assertEquals(1.0 / FastMath.cosh(t), n.cn().getReal(), eps);
-                Assertions.assertEquals(1.0 / FastMath.cosh(t), n.dn().getReal(), eps);
+                assertEquals(FastMath.tanh(t),       n.sn().getReal(), eps);
+                assertEquals(1.0 / FastMath.cosh(t), n.cn().getReal(), eps);
+                assertEquals(1.0 / FastMath.cosh(t), n.dn().getReal(), eps);
             }
         }
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(final Field<T> field) {
-        Assertions.assertTrue(build(field, Double.NaN).valuesS(0.0).cs().isNaN());
+        assertTrue(build(field, Double.NaN).valuesS(0.0).cs().isNaN());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNegativeParameter(final Field<T> field) {
-        Assertions.assertEquals(0.49781366219021166315, build(field, -4.5).valuesN(8.3).sn().getReal(), 1.5e-10);
-        Assertions.assertEquals(0.86728401215332559984, build(field, -4.5).valuesN(8.3).cn().getReal(), 1.5e-10);
-        Assertions.assertEquals(1.45436686918553524215, build(field, -4.5).valuesN(8.3).dn().getReal(), 1.5e-10);
+        assertEquals(0.49781366219021166315, build(field, -4.5).valuesN(8.3).sn().getReal(), 1.5e-10);
+        assertEquals(0.86728401215332559984, build(field, -4.5).valuesN(8.3).cn().getReal(), 1.5e-10);
+        assertEquals(1.45436686918553524215, build(field, -4.5).valuesN(8.3).dn().getReal(), 1.5e-10);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample1(final Field<T> field) {
         // Abramowitz and Stegun give a result of -1667, but Wolfram Alpha gives the following value
-        Assertions.assertEquals(-1392.11114434139393839735, build(field, 0.64).valuesC(1.99650).nc().getReal(), 2.8e-10);
+        assertEquals(-1392.11114434139393839735, build(field, 0.64).valuesC(1.99650).nc().getReal(), 2.8e-10);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample2(final Field<T> field) {
-        Assertions.assertEquals(0.996253, build(field, 0.19).valuesN(0.20).dn().getReal(), 1.0e-6);
+        assertEquals(0.996253, build(field, 0.19).valuesN(0.20).dn().getReal(), 1.0e-6);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample3(final Field<T> field) {
-        Assertions.assertEquals(0.984056, build(field, 0.81).valuesN(0.20).dn().getReal(), 1.0e-6);
+        assertEquals(0.984056, build(field, 0.81).valuesN(0.20).dn().getReal(), 1.0e-6);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample4(final Field<T> field) {
-        Assertions.assertEquals(0.980278, build(field, 0.81).valuesN(0.20).cn().getReal(), 1.0e-6);
+        assertEquals(0.980278, build(field, 0.81).valuesN(0.20).cn().getReal(), 1.0e-6);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample5(final Field<T> field) {
-        Assertions.assertEquals(0.60952, build(field, 0.36).valuesN(0.672).sn().getReal(), 1.0e-5);
-        Assertions.assertEquals(1.1740, build(field, 0.36).valuesC(0.672).dc().getReal(), 1.0e-4);
+        assertEquals(0.60952, build(field, 0.36).valuesN(0.672).sn().getReal(), 1.0e-5);
+        assertEquals(1.1740, build(field, 0.36).valuesC(0.672).dc().getReal(), 1.0e-4);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample7(final Field<T> field) {
-        Assertions.assertEquals(1.6918083, build(field, 0.09).valuesS(0.5360162).cs().getReal(), 1.0e-7);
+        assertEquals(1.6918083, build(field, 0.09).valuesS(0.5360162).cs().getReal(), 1.0e-7);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample8(final Field<T> field) {
-        Assertions.assertEquals(0.56458, build(field, 0.5).valuesN(0.61802).sn().getReal(), 1.0e-5);
+        assertEquals(0.56458, build(field, 0.5).valuesN(0.61802).sn().getReal(), 1.0e-5);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample9(final Field<T> field) {
-        Assertions.assertEquals(0.68402, build(field, 0.5).valuesC(0.61802).sc().getReal(), 1.0e-5);
+        assertEquals(0.68402, build(field, 0.5).valuesC(0.61802).sc().getReal(), 1.0e-5);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAllFunctions(final Field<T> field) {
@@ -248,18 +250,18 @@ public class FieldJacobiEllipticTest {
               1.57945467502452678756, 1.46125047743207819361, 0.59951990180590090343
         };
         final FieldJacobiElliptic<T> je = build(field, m);
-        Assertions.assertEquals(reference[ 0], je.valuesN(u).sn().getReal(), 4 * FastMath.ulp(reference[ 0]));
-        Assertions.assertEquals(reference[ 1], je.valuesN(u).cn().getReal(), 4 * FastMath.ulp(reference[ 1]));
-        Assertions.assertEquals(reference[ 2], je.valuesN(u).dn().getReal(), 4 * FastMath.ulp(reference[ 2]));
-        Assertions.assertEquals(reference[ 3], je.valuesS(u).cs().getReal(), 4 * FastMath.ulp(reference[ 3]));
-        Assertions.assertEquals(reference[ 4], je.valuesS(u).ds().getReal(), 4 * FastMath.ulp(reference[ 4]));
-        Assertions.assertEquals(reference[ 5], je.valuesS(u).ns().getReal(), 4 * FastMath.ulp(reference[ 5]));
-        Assertions.assertEquals(reference[ 6], je.valuesC(u).dc().getReal(), 4 * FastMath.ulp(reference[ 6]));
-        Assertions.assertEquals(reference[ 7], je.valuesC(u).nc().getReal(), 4 * FastMath.ulp(reference[ 7]));
-        Assertions.assertEquals(reference[ 8], je.valuesC(u).sc().getReal(), 4 * FastMath.ulp(reference[ 8]));
-        Assertions.assertEquals(reference[ 9], je.valuesD(u).nd().getReal(), 4 * FastMath.ulp(reference[ 9]));
-        Assertions.assertEquals(reference[10], je.valuesD(u).sd().getReal(), 4 * FastMath.ulp(reference[10]));
-        Assertions.assertEquals(reference[11], je.valuesD(u).cd().getReal(), 4 * FastMath.ulp(reference[11]));
+        assertEquals(reference[ 0], je.valuesN(u).sn().getReal(), 4 * FastMath.ulp(reference[ 0]));
+        assertEquals(reference[ 1], je.valuesN(u).cn().getReal(), 4 * FastMath.ulp(reference[ 1]));
+        assertEquals(reference[ 2], je.valuesN(u).dn().getReal(), 4 * FastMath.ulp(reference[ 2]));
+        assertEquals(reference[ 3], je.valuesS(u).cs().getReal(), 4 * FastMath.ulp(reference[ 3]));
+        assertEquals(reference[ 4], je.valuesS(u).ds().getReal(), 4 * FastMath.ulp(reference[ 4]));
+        assertEquals(reference[ 5], je.valuesS(u).ns().getReal(), 4 * FastMath.ulp(reference[ 5]));
+        assertEquals(reference[ 6], je.valuesC(u).dc().getReal(), 4 * FastMath.ulp(reference[ 6]));
+        assertEquals(reference[ 7], je.valuesC(u).nc().getReal(), 4 * FastMath.ulp(reference[ 7]));
+        assertEquals(reference[ 8], je.valuesC(u).sc().getReal(), 4 * FastMath.ulp(reference[ 8]));
+        assertEquals(reference[ 9], je.valuesD(u).nd().getReal(), 4 * FastMath.ulp(reference[ 9]));
+        assertEquals(reference[10], je.valuesD(u).sd().getReal(), 4 * FastMath.ulp(reference[10]));
+        assertEquals(reference[11], je.valuesD(u).cd().getReal(), 4 * FastMath.ulp(reference[11]));
     }
 
     private <T extends CalculusFieldElement<T>> FieldJacobiElliptic<T> build(final Field<T> field, final double m) {
@@ -311,9 +313,9 @@ public class FieldJacobiEllipticTest {
         for (int i = 0; i < n; ++i) {
             final T x             = field.getZero().newInstance(xMin + i * (xMax - xMin) / (n - 1));
             final T xFieldRebuilt = direct.apply(inverseField.apply(x));
-            Assertions.assertEquals(x.getReal(), xFieldRebuilt.getReal(), tolerance);
+            assertEquals(x.getReal(), xFieldRebuilt.getReal(), tolerance);
             final T xDoubleRebuilt = direct.apply(inverseDouble.apply(x.getReal()));
-            Assertions.assertEquals(x.getReal(), xDoubleRebuilt.getReal(), tolerance);
+            assertEquals(x.getReal(), xDoubleRebuilt.getReal(), tolerance);
         }
     }
 

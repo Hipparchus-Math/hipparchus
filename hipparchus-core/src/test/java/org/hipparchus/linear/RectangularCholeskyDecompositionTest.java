@@ -22,13 +22,15 @@
 
 package org.hipparchus.linear;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class RectangularCholeskyDecompositionTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class RectangularCholeskyDecompositionTest {
 
     @Test
-    public void testDecomposition3x3() {
+    void testDecomposition3x3() {
 
         RealMatrix m = MatrixUtils.createRealMatrix(new double[][] {
             { 1,   9,   9 },
@@ -42,18 +44,18 @@ public class RectangularCholeskyDecompositionTest {
         // as this decomposition permutes lines and columns, the root is NOT triangular
         // (in fact here it is the lower right part of the matrix which is zero and
         //  the upper left non-zero)
-        Assertions.assertEquals(0.8,  d.getRootMatrix().getEntry(0, 2), 1.0e-15);
-        Assertions.assertEquals(25.0, d.getRootMatrix().getEntry(2, 0), 1.0e-15);
-        Assertions.assertEquals(0.0,  d.getRootMatrix().getEntry(2, 2), 1.0e-15);
+        assertEquals(0.8,  d.getRootMatrix().getEntry(0, 2), 1.0e-15);
+        assertEquals(25.0, d.getRootMatrix().getEntry(2, 0), 1.0e-15);
+        assertEquals(0.0,  d.getRootMatrix().getEntry(2, 2), 1.0e-15);
 
         RealMatrix root = d.getRootMatrix();
         RealMatrix rebuiltM = root.multiplyTransposed(root);
-        Assertions.assertEquals(0.0, m.subtract(rebuiltM).getNorm1(), 1.0e-15);
+        assertEquals(0.0, m.subtract(rebuiltM).getNorm1(), 1.0e-15);
 
     }
 
     @Test
-    public void testFullRank() {
+    void testFullRank() {
 
         RealMatrix base = MatrixUtils.createRealMatrix(new double[][] {
             { 0.1159548705,      0.,           0.,           0.      },
@@ -69,16 +71,16 @@ public class RectangularCholeskyDecompositionTest {
 
         RealMatrix root = d.getRootMatrix();
         RealMatrix rebuiltM = root.multiply(root.transpose());
-        Assertions.assertEquals(0.0, m.subtract(rebuiltM).getNorm1(), 1.0e-15);
+        assertEquals(0.0, m.subtract(rebuiltM).getNorm1(), 1.0e-15);
 
         // the pivoted Cholesky decomposition is *not* unique. Here, the root is
         // not equal to the original triangular base matrix
-        Assertions.assertTrue(root.subtract(base).getNorm1() > 0.25);
+        assertTrue(root.subtract(base).getNorm1() > 0.25);
 
     }
 
     @Test
-    public void testMath789() {
+    void testMath789() {
 
         final RealMatrix m1 = MatrixUtils.createRealMatrix(new double[][]{
             {0.013445532, 0.010394690, 0.009881156, 0.010499559},
@@ -110,10 +112,10 @@ public class RectangularCholeskyDecompositionTest {
 
     private void composeAndTest(RealMatrix m, int expectedRank) {
         RectangularCholeskyDecomposition r = new RectangularCholeskyDecomposition(m);
-        Assertions.assertEquals(expectedRank, r.getRank());
+        assertEquals(expectedRank, r.getRank());
         RealMatrix root = r.getRootMatrix();
         RealMatrix rebuiltMatrix = root.multiplyTransposed(root);
-        Assertions.assertEquals(0.0, m.subtract(rebuiltMatrix).getNorm1(), 1.0e-16);
+        assertEquals(0.0, m.subtract(rebuiltMatrix).getNorm1(), 1.0e-16);
     }
 
 }

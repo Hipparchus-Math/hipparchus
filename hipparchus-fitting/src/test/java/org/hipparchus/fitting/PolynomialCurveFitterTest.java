@@ -26,17 +26,19 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Test for class {@link PolynomialCurveFitter}.
  */
-public class PolynomialCurveFitterTest {
+class PolynomialCurveFitterTest {
     @Test
-    public void testFit() {
+    void testFit() {
         final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(64925784252L);
 
         final double[] coeff = { 12.9, -3.4, 2.1 }; // 12.9 - 3.4 x + 2.1 x^2
@@ -54,11 +56,11 @@ public class PolynomialCurveFitterTest {
             = PolynomialCurveFitter.create(0).withStartPoint(new double[] { -1e-20, 3e15, -5e25 });
         final double[] best = fitter.fit(obs.toList());
 
-        UnitTestUtils.assertEquals("best != coeff", coeff, best, 1e-12);
+        UnitTestUtils.customAssertEquals("best != coeff", coeff, best, 1e-12);
     }
 
     @Test
-    public void testNoError() {
+    void testNoError() {
         final Random randomizer = new Random(64925784252l);
         for (int degree = 1; degree < 10; ++degree) {
             final PolynomialFunction p = buildRandomPolynomial(degree, randomizer);
@@ -74,13 +76,13 @@ public class PolynomialCurveFitterTest {
             for (double x = -1.0; x < 1.0; x += 0.01) {
                 final double error = FastMath.abs(p.value(x) - fitted.value(x)) /
                     (1.0 + FastMath.abs(p.value(x)));
-                Assertions.assertEquals(0.0, error, 1.0e-6);
+                assertEquals(0.0, error, 1.0e-6);
             }
         }
     }
 
     @Test
-    public void testSmallError() {
+    void testSmallError() {
         final Random randomizer = new Random(53882150042l);
         double maxError = 0;
         for (int degree = 0; degree < 10; ++degree) {
@@ -98,20 +100,20 @@ public class PolynomialCurveFitterTest {
                 final double error = FastMath.abs(p.value(x) - fitted.value(x)) /
                     (1.0 + FastMath.abs(p.value(x)));
                 maxError = FastMath.max(maxError, error);
-                Assertions.assertTrue(FastMath.abs(error) < 0.1);
+                assertTrue(FastMath.abs(error) < 0.1);
             }
         }
-        Assertions.assertTrue(maxError > 0.01);
+        assertTrue(maxError > 0.01);
     }
 
     @Test
-    public void testRedundantSolvable() {
+    void testRedundantSolvable() {
         // Levenberg-Marquardt should handle redundant information gracefully
         checkUnsolvableProblem(true);
     }
 
     @Test
-    public void testLargeSample() {
+    void testLargeSample() {
         final Random randomizer = new Random(0x5551480dca5b369bl);
         double maxError = 0;
         for (int degree = 0; degree < 10; ++degree) {
@@ -129,10 +131,10 @@ public class PolynomialCurveFitterTest {
                 final double error = FastMath.abs(p.value(x) - fitted.value(x)) /
                     (1.0 + FastMath.abs(p.value(x)));
                 maxError = FastMath.max(maxError, error);
-                Assertions.assertTrue(FastMath.abs(error) < 0.01);
+                assertTrue(FastMath.abs(error) < 0.01);
             }
         }
-        Assertions.assertTrue(maxError > 0.001);
+        assertTrue(maxError > 0.001);
     }
 
     private void checkUnsolvableProblem(boolean solvable) {
@@ -152,9 +154,9 @@ public class PolynomialCurveFitterTest {
 
             try {
                 fitter.fit(obs.toList());
-                Assertions.assertTrue(solvable || (degree == 0));
+                assertTrue(solvable || (degree == 0));
             } catch(MathIllegalStateException e) {
-                Assertions.assertTrue((! solvable) && (degree > 0));
+                assertTrue((! solvable) && (degree > 0));
             }
         }
     }

@@ -76,7 +76,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
      * Before method to ensure defaults retained
      */
     @BeforeEach
-    public void setup() {
+    void setup() {
         quantile         = 95.0;
         type             = Percentile.EstimationType.LEGACY;
         nanStrategy      = NaNStrategy.REMOVED;
@@ -103,21 +103,21 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testHighPercentile(){
+    void testHighPercentile(){
         final double[] d = new double[]{1, 2, 3};
         final Percentile p = new Percentile(75);
         assertEquals(3.0, p.evaluate(d), 1.0e-5);
     }
 
     @Test
-    public void testLowPercentile() {
+    void testLowPercentile() {
         final double[] d = new double[] {0, 1};
         final Percentile p = new Percentile(25);
         assertEquals(0d, p.evaluate(d), Double.MIN_VALUE);
     }
 
     @Test
-    public void testPercentile() {
+    void testPercentile() {
         final double[] d = new double[] {1, 3, 2, 4};
         final Percentile p = new Percentile(30);
         assertEquals(1.5, p.evaluate(d), 1.0e-5);
@@ -144,7 +144,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testNISTExample() {
+    void testNISTExample() {
         final double[] d = new double[] {95.1772, 95.1567, 95.1937, 95.1959,
                 95.1442, 95.0610,  95.1591, 95.1195, 95.1772, 95.0925, 95.1990, 95.1682
         };
@@ -154,13 +154,13 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void test5() {
+    void test5() {
         final Percentile percentile = new Percentile(5);
         assertEquals(this.percentile5, percentile.evaluate(testArray), getTolerance());
     }
 
     @Test
-    public void testNullEmpty() {
+    void testNullEmpty() {
         final Percentile percentile = new Percentile(50);
         final double[] nullArray = null;
         final double[] emptyArray = new double[] {};
@@ -174,7 +174,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testSingleton() {
+    void testSingleton() {
         final Percentile percentile = new Percentile(50);
         final double[] singletonArray = new double[] {1d};
         assertEquals(1d, percentile.evaluate(singletonArray), 0);
@@ -185,7 +185,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         final Percentile percentile = new Percentile(50);
         double[] specialValues = new double[] {0d, 1d, 2d, 3d, 4d,  Double.NaN};
         assertEquals(/*2.5d*/2d, percentile.evaluate(specialValues), 0);
@@ -202,7 +202,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testSetQuantile() {
+    void testSetQuantile() {
         final Percentile percentile = new Percentile(10);
         percentile.setQuantile(100); // OK
         assertEquals(100, percentile.getQuantile(), 0);
@@ -226,7 +226,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
      * implementation; this method verifies for all the types including Percentile.Type.CM Percentile.Type.
      */
     @Test
-    public void testAllTechniquesHighPercentile() {
+    void testAllTechniquesHighPercentile() {
         final double[] d = new double[] { 1, 2, 3 };
         testAssertMappedValues(d, new Object[][] { { Percentile.EstimationType.LEGACY, 3d }, { Percentile.EstimationType.R_1, 3d },
                 { Percentile.EstimationType.R_2, 3d }, { Percentile.EstimationType.R_3, 2d }, { Percentile.EstimationType.R_4, 2.25 }, { Percentile.EstimationType.R_5, 2.75 },
@@ -235,7 +235,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesLowPercentile() {
+    void testAllTechniquesLowPercentile() {
         final double[] d = new double[] { 0, 1 };
         testAssertMappedValues(d, new Object[][] { { Percentile.EstimationType.LEGACY, 0d }, { Percentile.EstimationType.R_1, 0d },
                 { Percentile.EstimationType.R_2, 0d }, { Percentile.EstimationType.R_3, 0d }, { Percentile.EstimationType.R_4, 0d }, {Percentile.EstimationType.R_5, 0d}, {Percentile.EstimationType.R_6, 0d},
@@ -289,19 +289,19 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesPercentileUsingMedianOf3Pivoting() {
+    void testAllTechniquesPercentileUsingMedianOf3Pivoting() {
         kthSelector = new KthSelector(PivotingStrategy.MEDIAN_OF_3);
         checkAllTechniquesPercentile();
     }
 
     @Test
-    public void testAllTechniquesPercentileUsingCentralPivoting() {
+    void testAllTechniquesPercentileUsingCentralPivoting() {
         kthSelector = new KthSelector(PivotingStrategy.CENTRAL);
         checkAllTechniquesPercentile();
     }
 
     @Test
-    public void testAllTechniquesNISTExample() {
+    void testAllTechniquesNISTExample() {
         final double[] d =
                 new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442, 95.0610,
                                95.1591, 95.1195, 95.1772, 95.0925, 95.1990, 95.1682 };
@@ -319,7 +319,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniques5() {
+    void testAllTechniques5() {
         reset(5, Percentile.EstimationType.LEGACY);
         final UnivariateStatistic percentile = getUnivariateStatistic();
         assertEquals(this.percentile5, percentile.evaluate(testArray), getTolerance());
@@ -332,7 +332,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesNullEmpty() {
+    void testAllTechniquesNullEmpty() {
 
         final double[] nullArray = null;
         final double[] emptyArray = new double[] {};
@@ -352,7 +352,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesSingleton() {
+    void testAllTechniquesSingleton() {
         final double[] singletonArray = new double[] { 1d };
         for (final Percentile.EstimationType e : Percentile.EstimationType.values()) {
             reset (50, e);
@@ -366,7 +366,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesEmpty() {
+    void testAllTechniquesEmpty() {
         final double[] singletonArray = new double[] { };
         for (final Percentile.EstimationType e : Percentile.EstimationType.values()) {
             reset (50, e);
@@ -380,7 +380,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testReplaceNanInRange() {
+    void testReplaceNanInRange() {
         final double[] specialValues =
             new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN, Double.NaN, 5d, 7d, Double.NaN, 8d};
         assertEquals(/*Double.NaN*/3.5, new Percentile(50d).evaluate(specialValues), 0d);
@@ -394,7 +394,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testRemoveNan() {
+    void testRemoveNan() {
         final double[] specialValues = new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
         final double[] expectedValues = new double[] { 0d, 1d, 2d, 3d, 4d };
         reset (50, Percentile.EstimationType.R_1);
@@ -408,7 +408,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testPercentileCopy() {
+    void testPercentileCopy() {
        reset(50d, Percentile.EstimationType.LEGACY);
        final Percentile original = getUnivariateStatistic();
        final Percentile copy = new Percentile(original);
@@ -419,7 +419,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesSpecialValues() {
+    void testAllTechniquesSpecialValues() {
         reset(50d, Percentile.EstimationType.LEGACY);
         final UnivariateStatistic percentile = getUnivariateStatistic();
         double[] specialValues = new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
@@ -474,7 +474,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesSetQuantile() {
+    void testAllTechniquesSetQuantile() {
         for (final Percentile.EstimationType e : Percentile.EstimationType.values()) {
             reset(10, e);
             final Percentile percentile = getUnivariateStatistic();
@@ -496,7 +496,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesEvaluateArraySegmentWeighted() {
+    void testAllTechniquesEvaluateArraySegmentWeighted() {
         for (final Percentile.EstimationType e : Percentile.EstimationType.values()) {
             reset(quantile, e);
             testEvaluateArraySegmentWeighted();
@@ -504,7 +504,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesEvaluateArraySegment() {
+    void testAllTechniquesEvaluateArraySegment() {
         for (final Percentile.EstimationType e : Percentile.EstimationType.values()) {
             reset(quantile, e);
             testEvaluateArraySegment();
@@ -512,7 +512,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesWeightedConsistency() {
+    void testAllTechniquesWeightedConsistency() {
         for (final Percentile.EstimationType e : Percentile.EstimationType.values()) {
             reset(quantile, e);
             testWeightedConsistency();
@@ -520,7 +520,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesEvaluation() {
+    void testAllTechniquesEvaluation() {
 
         testAssertMappedValues(testArray, new Object[][] { { Percentile.EstimationType.LEGACY, 20.820 },
                 { Percentile.EstimationType.R_1, 19.800 }, { Percentile.EstimationType.R_2, 19.800 }, { Percentile.EstimationType.R_3, 19.800 },
@@ -530,7 +530,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testPercentileWithTechnique() {
+    void testPercentileWithTechnique() {
         reset (50, Percentile.EstimationType.LEGACY);;
         final Percentile p = getUnivariateStatistic();
         assertEquals(Percentile.EstimationType.LEGACY, p.getEstimationType());
@@ -543,7 +543,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     static final int[] sampleSizes= { TINY, SMALL, NOMINAL, MEDIUM, STANDARD, BIG };
 
     @Test
-    public void testStoredVsDirect() {
+    void testStoredVsDirect() {
         final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
         final NormalDistribution normalDistribution = new NormalDistribution(4000, 50);
         for (final int sampleSize:sampleSizes) {
@@ -564,7 +564,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testPercentileWithDataRef() {
+    void testPercentileWithDataRef() {
         reset(50.0, Percentile.EstimationType.R_7);
         final Percentile p = getUnivariateStatistic();
         p.setData(testArray);
@@ -575,7 +575,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testNullEstimation() {
+    void testNullEstimation() {
         assertThrows(NullArgumentException.class, () -> {
             type = null;
             getUnivariateStatistic();
@@ -583,7 +583,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllEstimationTechniquesOnlyLimits() {
+    void testAllEstimationTechniquesOnlyLimits() {
         final int N=testArray.length;
 
         final double[] input = testArray.clone();
@@ -614,7 +614,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllEstimationTechniquesOnly() {
+    void testAllEstimationTechniquesOnly() {
         assertEquals("Legacy Hipparchus",Percentile.EstimationType.LEGACY.getName());
         final Object[][] map =
                 new Object[][] { { Percentile.EstimationType.LEGACY, 20.82 }, { Percentile.EstimationType.R_1, 19.8 },
@@ -643,7 +643,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllEstimationTechniquesOnlyForAllPivotingStrategies() {
+    void testAllEstimationTechniquesOnlyForAllPivotingStrategies() {
 
         assertEquals("Legacy Hipparchus",Percentile.EstimationType.LEGACY.getName());
 
@@ -654,7 +654,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllEstimationTechniquesOnlyForExtremeIndexes() {
+    void testAllEstimationTechniquesOnlyForExtremeIndexes() {
         final double MAX=100;
         final Object[][] map =
                 new Object[][] { { Percentile.EstimationType.LEGACY, 0d, MAX}, { Percentile.EstimationType.R_1, 0d,MAX+0.5 },
@@ -669,7 +669,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllEstimationTechniquesOnlyForNullsAndOOR() {
+    void testAllEstimationTechniquesOnlyForNullsAndOOR() {
 
         final Object[][] map =
                 new Object[][] { { Percentile.EstimationType.LEGACY, 20.82 }, { Percentile.EstimationType.R_1, 19.8 },
@@ -721,7 +721,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
 
     // Some NaNStrategy specific testing
     @Test
-    public void testNanStrategySpecific() {
+    void testNanStrategySpecific() {
         double[] specialValues = new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
         assertTrue(Double.isNaN(new Percentile(50d).withEstimationType(Percentile.EstimationType.LEGACY).withNaNStrategy(NaNStrategy.MAXIMAL).evaluate(specialValues, 3, 3)));
         assertEquals(2d,new Percentile(50d).withEstimationType(Percentile.EstimationType.R_1).withNaNStrategy(NaNStrategy.REMOVED).evaluate(specialValues),0d);
@@ -743,7 +743,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
 
     // Some NaNStrategy specific testing
     @Test
-    public void testNanStrategyFailed() {
+    void testNanStrategyFailed() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] specialValues =
                 new double[]{0d, 1d, 2d, 3d, 4d, Double.NaN};
@@ -755,7 +755,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesSpecialValuesWithNaNStrategy() {
+    void testAllTechniquesSpecialValuesWithNaNStrategy() {
         double[] specialValues =
                 new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
         try {

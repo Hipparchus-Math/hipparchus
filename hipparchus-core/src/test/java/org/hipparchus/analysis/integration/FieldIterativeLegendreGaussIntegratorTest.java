@@ -28,16 +28,19 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class FieldIterativeLegendreGaussIntegratorTest {
+
+class FieldIterativeLegendreGaussIntegratorTest {
 
     @Test
-    public void testSinFunction() {
+    void testSinFunction() {
         BaseAbstractFieldUnivariateIntegrator<Binary64> integrator
             = new IterativeLegendreFieldGaussIntegrator<>(Binary64Field.getInstance(), 5, 1.0e-14, 1.0e-10, 2, 15);
 
@@ -47,7 +50,7 @@ public class FieldIterativeLegendreGaussIntegratorTest {
         double tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                                         FastMath.abs(expected * integrator.getRelativeAccuracy()));
         double result = integrator.integrate(10000, x -> x.sin(), min, max).getReal();
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = new Binary64(-FastMath.PI/3);
         max = new Binary64(0);
@@ -55,11 +58,11 @@ public class FieldIterativeLegendreGaussIntegratorTest {
         tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                                  FastMath.abs(expected * integrator.getRelativeAccuracy()));
         result = integrator.integrate(10000, x -> x.sin(), min, max).getReal();
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
         CalculusFieldUnivariateFunction<Binary64> f =
                         t -> t.subtract(1).multiply(t.subtract(0.5)).multiply(t).multiply(t.add(0.5)).multiply(t.add(1));
         FieldUnivariateIntegrator<Binary64> integrator =
@@ -72,23 +75,23 @@ public class FieldIterativeLegendreGaussIntegratorTest {
         Binary64 max = new Binary64(1);
         double expected = -1.0/48;
         double result = integrator.integrate(10000, f, min, max).getReal();
-        Assertions.assertEquals(expected, result, 1.0e-16);
+        assertEquals(expected, result, 1.0e-16);
 
         min = new Binary64(0);
         max = new Binary64(0.5);
         expected = 11.0/768;
         result = integrator.integrate(10000, f, min, max).getReal();
-        Assertions.assertEquals(expected, result, 1.0e-16);
+        assertEquals(expected, result, 1.0e-16);
 
         min = new Binary64(-1);
         max = new Binary64(4);
         expected = 2048/3.0 - 78 + 1.0/48;
         result = integrator.integrate(10000, f, min, max).getReal();
-        Assertions.assertEquals(expected, result, 4.0e-16 * expected);
+        assertEquals(expected, result, 4.0e-16 * expected);
     }
 
     @Test
-    public void testExactIntegration() {
+    void testExactIntegration() {
         Random random = new Random(86343623467878363l);
         for (int n = 2; n < 6; ++n) {
             IterativeLegendreFieldGaussIntegrator<Binary64> integrator =
@@ -110,7 +113,7 @@ public class FieldIterativeLegendreGaussIntegratorTest {
                                                          p.toCalculusFieldUnivariateFunction(Binary64Field.getInstance()),
                                                          new Binary64(-5.0), new Binary64(15.0)).getReal();
                     double reference = exactIntegration(p, -5.0, 15.0);
-                    Assertions.assertEquals(reference, result, 1.0e-12 * (1.0 + FastMath.abs(reference)), n + " " + degree + " " + i);
+                    assertEquals(reference, result, 1.0e-12 * (1.0 + FastMath.abs(reference)), n + " " + degree + " " + i);
                 }
             }
 
@@ -119,7 +122,7 @@ public class FieldIterativeLegendreGaussIntegratorTest {
 
     // Cf. MATH-995
     @Test
-    public void testNormalDistributionWithLargeSigma() {
+    void testNormalDistributionWithLargeSigma() {
         final Binary64 sigma  = new Binary64(1000);
         final Binary64 mean   = new Binary64(0);
         final Binary64 factor = sigma.multiply(FastMath.sqrt(2 * FastMath.PI)).reciprocal();
@@ -134,11 +137,11 @@ public class FieldIterativeLegendreGaussIntegratorTest {
         final Binary64 a = new Binary64(-5000);
         final Binary64 b = new Binary64(5000);
         final double s = integrator.integrate(50, normal, a, b).getReal();
-        Assertions.assertEquals(1, s, 1e-5);
+        assertEquals(1, s, 1e-5);
     }
 
     @Test
-    public void testIssue464() {
+    void testIssue464() {
         final Binary64 value = new Binary64(0.2);
         CalculusFieldUnivariateFunction<Binary64> f =
                         x -> (x.getReal() >= 0 && x.getReal() <= 5) ? value : Binary64.ZERO;
@@ -147,20 +150,20 @@ public class FieldIterativeLegendreGaussIntegratorTest {
 
         // due to the discontinuity, integration implies *many* calls
         double maxX = 0.32462367623786328;
-        Assertions.assertEquals(maxX * value.getReal(),
+        assertEquals(maxX * value.getReal(),
                             gauss.integrate(Integer.MAX_VALUE, f, new Binary64(-10), new Binary64(maxX)).getReal(),
                             1.0e-7);
-        Assertions.assertTrue(gauss.getEvaluations() > 37000000);
-        Assertions.assertTrue(gauss.getIterations() < 30);
+        assertTrue(gauss.getEvaluations() > 37000000);
+        assertTrue(gauss.getIterations() < 30);
 
         // setting up limits prevents such large number of calls
         try {
             gauss.integrate(1000, f, new Binary64(-10), new Binary64(maxX));
-            Assertions.fail("expected MathIllegalStateException");
+            fail("expected MathIllegalStateException");
         } catch (MathIllegalStateException tmee) {
             // expected
-            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
-            Assertions.assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
+            assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
         }
 
         // integrating on the two sides should be simpler
@@ -168,8 +171,8 @@ public class FieldIterativeLegendreGaussIntegratorTest {
         int eval1   = gauss.getEvaluations();
         double sum2 = gauss.integrate(1000, f, new Binary64(0), new Binary64(maxX)).getReal();
         int eval2   = gauss.getEvaluations();
-        Assertions.assertEquals(maxX * value.getReal(), sum1 + sum2, 1.0e-7);
-        Assertions.assertTrue(eval1 + eval2 < 200);
+        assertEquals(maxX * value.getReal(), sum1 + sum2, 1.0e-7);
+        assertTrue(eval1 + eval2 < 200);
 
     }
 

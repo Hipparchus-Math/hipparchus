@@ -46,13 +46,15 @@ import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class EventSlopeFilterTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class EventSlopeFilterTest {
 
     @Test
-    public void testHistoryIncreasingForward() {
+    void testHistoryIncreasingForward() {
 
         // start point: g > 0
         testHistory(FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
@@ -69,7 +71,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testHistoryIncreasingForwardField() {
+    void testHistoryIncreasingForwardField() {
 
         // start point: g > 0
         testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
@@ -86,7 +88,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testHistoryIncreasingBackward() {
+    void testHistoryIncreasingBackward() {
 
         // start point: g > 0
         testHistory(FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
@@ -103,7 +105,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testHistoryIncreasingBackwardField() {
+    void testHistoryIncreasingBackwardField() {
 
         // start point: g > 0
         testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
@@ -120,7 +122,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testHistoryDecreasingForward() {
+    void testHistoryDecreasingForward() {
 
         // start point: g > 0
         testHistory(FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
@@ -137,7 +139,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testHistoryDecreasingForwardField() {
+    void testHistoryDecreasingForwardField() {
 
         // start point: g > 0
         testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
@@ -154,7 +156,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testHistoryDecreasingBackward() {
+    void testHistoryDecreasingBackward() {
 
         // start point: g > 0
         testHistory(FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
@@ -171,7 +173,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testHistoryDecreasingBackwardField() {
+    void testHistoryDecreasingBackwardField() {
 
         // start point: g > 0
         testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
@@ -214,9 +216,9 @@ public class EventSlopeFilterTest {
                                                                new double[] { FastMath.cos(t), -FastMath.sin(t) }));
             int turn = (int) FastMath.floor((t - refSwitch) / (2 * FastMath.PI));
             if (turn % 2 == 0) {
-                Assertions.assertEquals( signEven * FastMath.sin(t), g, 1.0e-10);
+                assertEquals( signEven * FastMath.sin(t), g, 1.0e-10);
             } else {
-                Assertions.assertEquals(-signEven * FastMath.sin(t), g, 1.0e-10);
+                assertEquals(-signEven * FastMath.sin(t), g, 1.0e-10);
             }
         }
 
@@ -243,9 +245,9 @@ public class EventSlopeFilterTest {
             double g = eventFilter.g(buildStateAndDerivative(field, t)).getReal();
             int turn = (int) FastMath.floor((t - refSwitch) / (2 * FastMath.PI));
             if (turn % 2 == 0) {
-                Assertions.assertEquals( signEven * FastMath.sin(t), g, 1.0e-10);
+                assertEquals( signEven * FastMath.sin(t), g, 1.0e-10);
             } else {
-                Assertions.assertEquals(-signEven * FastMath.sin(t), g, 1.0e-10);
+                assertEquals(-signEven * FastMath.sin(t), g, 1.0e-10);
             }
         }
 
@@ -263,7 +265,7 @@ public class EventSlopeFilterTest {
     }
 
     @Test
-    public void testIncreasingOnly()
+    void testIncreasingOnly()
         throws MathIllegalArgumentException, MathIllegalStateException {
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
         Event allEvents = new Event(0.1, 1.0e-7, 100, true, true);
@@ -273,17 +275,17 @@ public class EventSlopeFilterTest {
         double t0 = 0.5 * FastMath.PI;
         double tEnd = 5.5 * FastMath.PI;
         double[] y = { 0.0, 1.0 };
-        Assertions.assertEquals(tEnd,
+        assertEquals(tEnd,
                             integrator.integrate(new SineCosine(), new ODEState(t0, y), tEnd).getTime(),
                             1.0e-7);
 
-        Assertions.assertEquals(5, allEvents.getEventCount());
-        Assertions.assertEquals(2, onlyIncreasing.getEventCount());
+        assertEquals(5, allEvents.getEventCount());
+        assertEquals(2, onlyIncreasing.getEventCount());
 
     }
 
     @Test
-    public void testIncreasingOnlyField() {
+    void testIncreasingOnlyField() {
         doTestIncreasingOnlyField(Binary64Field.getInstance());
     }
 
@@ -299,18 +301,18 @@ public class EventSlopeFilterTest {
         T[] y  = MathArrays.buildArray(field, 2);
         y[0]   = field.getZero();
         y[1]   = field.getOne();
-        Assertions.assertEquals(tEnd.getReal(),
+        assertEquals(tEnd.getReal(),
                             integrator.integrate(new FieldExpandableODE<>(new FieldSineCosine<T>()),
                                                  new FieldODEState<>(t0, y), tEnd).getTime().getReal(),
                             1.0e-7);
 
-        Assertions.assertEquals(5, allEvents.getEventCount());
-        Assertions.assertEquals(2, onlyIncreasing.getEventCount());
+        assertEquals(5, allEvents.getEventCount());
+        assertEquals(2, onlyIncreasing.getEventCount());
 
     }
 
     @Test
-    public void testDecreasingOnly()
+    void testDecreasingOnly()
         throws MathIllegalArgumentException, MathIllegalStateException {
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
         Event allEvents = new Event(0.1, 1.0e-7, 1000, true, true);
@@ -320,17 +322,17 @@ public class EventSlopeFilterTest {
         double t0 = 0.5 * FastMath.PI;
         double tEnd = 5.5 * FastMath.PI;
         double[] y = { 0.0, 1.0 };
-        Assertions.assertEquals(tEnd,
+        assertEquals(tEnd,
                             integrator.integrate(new SineCosine(), new ODEState(t0, y), tEnd).getTime(),
                             1.0e-7);
 
-        Assertions.assertEquals(5, allEvents.getEventCount());
-        Assertions.assertEquals(3, onlyDecreasing.getEventCount());
+        assertEquals(5, allEvents.getEventCount());
+        assertEquals(3, onlyDecreasing.getEventCount());
 
     }
 
     @Test
-    public void testDecreasingOnlyField() {
+    void testDecreasingOnlyField() {
         doTestDecreasingOnlyField(Binary64Field.getInstance());
     }
 
@@ -346,18 +348,18 @@ public class EventSlopeFilterTest {
         T[] y  = MathArrays.buildArray(field, 2);
         y[0]   = field.getZero();
         y[1]   = field.getOne();
-        Assertions.assertEquals(tEnd.getReal(),
+        assertEquals(tEnd.getReal(),
                             integrator.integrate(new FieldExpandableODE<>(new FieldSineCosine<T>()),
                                                  new FieldODEState<>(t0, y), tEnd).getTime().getReal(),
                             1.0e-7);
 
-        Assertions.assertEquals(5, allEvents.getEventCount());
-        Assertions.assertEquals(3, onlyDecreasing.getEventCount());
+        assertEquals(5, allEvents.getEventCount());
+        assertEquals(3, onlyDecreasing.getEventCount());
 
     }
 
     @Test
-    public void testTwoOppositeFilters()
+    void testTwoOppositeFilters()
         throws MathIllegalArgumentException, MathIllegalStateException {
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
         Event allEvents = new Event(0.1, 1.0e-7, 100, true, true);
@@ -369,18 +371,18 @@ public class EventSlopeFilterTest {
         double t0 = 0.5 * FastMath.PI;
         double tEnd = 5.5 * FastMath.PI;
         double[] y = { 0.0, 1.0 };
-        Assertions.assertEquals(tEnd,
+        assertEquals(tEnd,
                             integrator.integrate(new SineCosine(), new ODEState(t0, y), tEnd).getTime(),
                             1.0e-7);
 
-        Assertions.assertEquals(5, allEvents.getEventCount());
-        Assertions.assertEquals(2, onlyIncreasing.getEventCount());
-        Assertions.assertEquals(3, onlyDecreasing.getEventCount());
+        assertEquals(5, allEvents.getEventCount());
+        assertEquals(2, onlyIncreasing.getEventCount());
+        assertEquals(3, onlyDecreasing.getEventCount());
 
     }
 
     @Test
-    public void testTwoOppositeFiltersField() {
+    void testTwoOppositeFiltersField() {
         doestTwoOppositeFiltersField(Binary64Field.getInstance());
     }
 
@@ -400,14 +402,14 @@ public class EventSlopeFilterTest {
         T[] y  = MathArrays.buildArray(field, 2);
         y[0]   = field.getZero();
         y[1]   = field.getOne();
-        Assertions.assertEquals(tEnd.getReal(),
+        assertEquals(tEnd.getReal(),
                             integrator.integrate(new FieldExpandableODE<>(new FieldSineCosine<T>()),
                                                  new FieldODEState<>(t0, y), tEnd).getTime().getReal(),
                             1.0e-7);
 
-        Assertions.assertEquals(5, allEvents.getEventCount());
-        Assertions.assertEquals(2, onlyIncreasing.getEventCount());
-        Assertions.assertEquals(3, onlyDecreasing.getEventCount());
+        assertEquals(5, allEvents.getEventCount());
+        assertEquals(2, onlyIncreasing.getEventCount());
+        assertEquals(3, onlyDecreasing.getEventCount());
 
     }
 
@@ -480,9 +482,9 @@ public class EventSlopeFilterTest {
         public ODEEventHandler getHandler() {
             return (ODEStateAndDerivative s, ODEEventDetector detector, boolean increasing) -> {
                 if (increasing) {
-                    Assertions.assertTrue(expectIncreasing);
+                    assertTrue(expectIncreasing);
                 } else {
-                    Assertions.assertTrue(expectDecreasing);
+                    assertTrue(expectDecreasing);
                 }
                 eventCount++;
                 return Action.RESET_STATE;
@@ -540,9 +542,9 @@ public class EventSlopeFilterTest {
         public FieldODEEventHandler<T> getHandler() {
             return (FieldODEStateAndDerivative<T> s, FieldODEEventDetector<T> detector, boolean increasing) -> {
                 if (increasing) {
-                    Assertions.assertTrue(expectIncreasing);
+                    assertTrue(expectIncreasing);
                 } else {
-                    Assertions.assertTrue(expectDecreasing);
+                    assertTrue(expectDecreasing);
                 }
                 eventCount++;
                 return Action.RESET_STATE;

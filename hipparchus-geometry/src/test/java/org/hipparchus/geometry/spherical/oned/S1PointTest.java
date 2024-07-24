@@ -24,70 +24,75 @@ package org.hipparchus.geometry.spherical.oned;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class S1PointTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class S1PointTest {
 
     @Test
-    public void testS1Point() {
+    void testS1Point() {
         for (int k = -2; k < 3; ++k) {
             S1Point p = new S1Point(1.0 + k * MathUtils.TWO_PI);
-            Assertions.assertEquals(FastMath.cos(1.0), p.getVector().getX(), 1.0e-10);
-            Assertions.assertEquals(FastMath.sin(1.0), p.getVector().getY(), 1.0e-10);
-            Assertions.assertFalse(p.isNaN());
+            assertEquals(FastMath.cos(1.0), p.getVector().getX(), 1.0e-10);
+            assertEquals(FastMath.sin(1.0), p.getVector().getY(), 1.0e-10);
+            assertFalse(p.isNaN());
         }
     }
 
     @Test
-    public void testNaN() {
-        Assertions.assertTrue(S1Point.NaN.isNaN());
-        Assertions.assertEquals(S1Point.NaN, new S1Point(Double.NaN));
-        Assertions.assertNotEquals(S1Point.NaN, new S1Point(1.0));
+    void testNaN() {
+        assertTrue(S1Point.NaN.isNaN());
+        assertEquals(S1Point.NaN, new S1Point(Double.NaN));
+        assertNotEquals(S1Point.NaN, new S1Point(1.0));
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testEquals() {
+    void testEquals() {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(1.0);
-        Assertions.assertEquals(a.hashCode(), b.hashCode());
-        Assertions.assertFalse(a == b);
-        Assertions.assertEquals(a, b);
-        Assertions.assertEquals(a, a);
-        Assertions.assertNotEquals('a', a);
-        Assertions.assertEquals(S1Point.NaN, S1Point.NaN);
-        Assertions.assertEquals(S1Point.NaN, new S1Point(Double.NaN));
+        assertEquals(a.hashCode(), b.hashCode());
+        assertFalse(a == b);
+        assertEquals(a, b);
+        assertEquals(a, a);
+        assertNotEquals('a', a);
+        assertEquals(S1Point.NaN, S1Point.NaN);
+        assertEquals(S1Point.NaN, new S1Point(Double.NaN));
     }
 
     @Test
-    public void testEqualsIeee754() {
+    void testEqualsIeee754() {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(1.0);
-        Assertions.assertEquals(a.hashCode(), b.hashCode());
-        Assertions.assertFalse(a == b);
-        Assertions.assertTrue(a.equalsIeee754(b));
-        Assertions.assertTrue(a.equalsIeee754(a));
-        Assertions.assertFalse(a.equalsIeee754('a'));
-        Assertions.assertFalse(S1Point.NaN.equalsIeee754(S1Point.NaN));
-        Assertions.assertFalse(S1Point.NaN.equalsIeee754(new S1Point(Double.NaN)));
+        assertEquals(a.hashCode(), b.hashCode());
+        assertFalse(a == b);
+        assertTrue(a.equalsIeee754(b));
+        assertTrue(a.equalsIeee754(a));
+        assertFalse(a.equalsIeee754('a'));
+        assertFalse(S1Point.NaN.equalsIeee754(S1Point.NaN));
+        assertFalse(S1Point.NaN.equalsIeee754(new S1Point(Double.NaN)));
     }
 
     @Test
-    public void testDistance() {
+    void testDistance() {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(a.getAlpha() + 0.5 * FastMath.PI);
-        Assertions.assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
+        assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
     }
 
     @Test
-    public void testSpace() {
+    void testSpace() {
         S1Point a = new S1Point(1.0);
-        Assertions.assertTrue(a.getSpace() instanceof Sphere1D);
-        Assertions.assertEquals(1, a.getSpace().getDimension());
+        assertTrue(a.getSpace() instanceof Sphere1D);
+        assertEquals(1, a.getSpace().getDimension());
         try {
             a.getSpace().getSubSpace();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException muoe) {
             // expected
         }

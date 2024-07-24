@@ -23,16 +23,17 @@ package org.hipparchus.optim.linear;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SimplexTableauTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class SimplexTableauTest {
 
     @Test
-    public void testInitialization() {
+    void testInitialization() {
         LinearObjectiveFunction f = createFunction();
         Collection<LinearConstraint> constraints = createConstraints();
         SimplexTableau tableau =
@@ -44,11 +45,11 @@ public class SimplexTableauTest {
                                              { 0, 0,   0,   1, -1, 0, 1, 0,  3},
                                              { 0, 0,   1,   1, -2, 0, 0, 1,  4}
         };
-        assertMatrixEquals(expectedInitialTableau, tableau.getData());
+        customAssertMatrixEquals(expectedInitialTableau, tableau.getData());
     }
 
     @Test
-    public void testDropPhase1Objective() {
+    void testDropPhase1Objective() {
         LinearObjectiveFunction f = createFunction();
         Collection<LinearConstraint> constraints = createConstraints();
         SimplexTableau tableau =
@@ -60,11 +61,11 @@ public class SimplexTableauTest {
                                       { 0,   1,   1, 0, 0, 1, 4}
         };
         tableau.dropPhase1Objective();
-        assertMatrixEquals(expectedTableau, tableau.getData());
+        customAssertMatrixEquals(expectedTableau, tableau.getData());
     }
 
     @Test
-    public void testTableauWithNoArtificialVars() {
+    void testTableauWithNoArtificialVars() {
         LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] {15, 10}, 0);
         Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
         constraints.add(new LinearConstraint(new double[] {1, 0}, Relationship.LEQ, 2));
@@ -78,16 +79,16 @@ public class SimplexTableauTest {
                                      {0,   0,   1, -1, 0, 1, 0, 3},
                                      {0,   1,   1, -2, 0, 0, 1, 4}
         };
-        assertMatrixEquals(initialTableau, tableau.getData());
+        customAssertMatrixEquals(initialTableau, tableau.getData());
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         LinearObjectiveFunction f = createFunction();
         Collection<LinearConstraint> constraints = createConstraints();
         SimplexTableau tableau =
             new SimplexTableau(f, constraints, GoalType.MAXIMIZE, false, 1.0e-6);
-        Assertions.assertEquals(tableau, UnitTestUtils.serializeAndRecover(tableau));
+        assertEquals(tableau, UnitTestUtils.serializeAndRecover(tableau));
     }
 
     private LinearObjectiveFunction createFunction() {
@@ -102,12 +103,12 @@ public class SimplexTableauTest {
         return constraints;
     }
 
-    private void assertMatrixEquals(double[][] expected, double[][] result) {
-        Assertions.assertEquals(expected.length, result.length, "Wrong number of rows.");
+    private void customAssertMatrixEquals(double[][] expected, double[][] result) {
+        assertEquals(expected.length, result.length, "Wrong number of rows.");
         for (int i = 0; i < expected.length; i++) {
-            Assertions.assertEquals(expected[i].length, result[i].length, "Wrong number of columns.");
+            assertEquals(expected[i].length, result[i].length, "Wrong number of columns.");
             for (int j = 0; j < expected[i].length; j++) {
-                Assertions.assertEquals(expected[i][j], result[i][j], 1.0e-15, "Wrong value at position [" + i + "," + j + "]");
+                assertEquals(expected[i][j], result[i][j], 1.0e-15, "Wrong value at position [" + i + "," + j + "]");
             }
         }
     }

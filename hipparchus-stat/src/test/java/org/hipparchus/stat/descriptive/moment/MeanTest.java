@@ -48,7 +48,7 @@ public class MeanTest extends StorelessUnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testSmallSamples() {
+    void testSmallSamples() {
         Mean mean = getUnivariateStatistic();
         assertTrue(Double.isNaN(mean.getResult()));
         mean.increment(1d);
@@ -56,7 +56,7 @@ public class MeanTest extends StorelessUnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testWeightedMean() {
+    void testWeightedMean() {
         Mean mean = getUnivariateStatistic();
         assertEquals(expectedWeightedValue(),
                      mean.evaluate(testArray, testWeightsArray, 0, testArray.length),

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link IllinoisSolver Illinois} solver.
  *
  */
-public final class IllinoisSolverTest extends BaseSecantSolverAbstractTest {
+final class IllinoisSolverTest extends BaseSecantSolverAbstractTest {
     /** {@inheritDoc} */
     @Override
     protected UnivariateSolver getSolver() {
@@ -44,7 +44,7 @@ public final class IllinoisSolverTest extends BaseSecantSolverAbstractTest {
     }
 
     @Test
-    public void testGitHubIssue44() {
+    void testGitHubIssue44() {
         checktype(new IllinoisSolver(1.0e-6, 1.0e-14, 1.0e-15), BaseSecantSolver.Method.ILLINOIS);
     }
 

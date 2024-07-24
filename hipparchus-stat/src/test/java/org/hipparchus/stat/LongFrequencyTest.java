@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Test cases for the {@link Frequency} class.
  */
-public final class LongFrequencyTest {
+final class LongFrequencyTest {
     private static final long ONE_LONG = 1L;
     private static final long TWO_LONG = 2L;
     private static final long THREE_LONG = 3L;
@@ -51,7 +51,7 @@ public final class LongFrequencyTest {
 
     /** test freq counts */
     @Test
-    public void testCounts() {
+    void testCounts() {
         LongFrequency f = new LongFrequency();
 
         assertEquals(0, f.getSumFreq(), "total count");
@@ -74,7 +74,7 @@ public final class LongFrequencyTest {
 
     /** test pcts */
     @Test
-    public void testPcts() {
+    void testPcts() {
         LongFrequency f = new LongFrequency();
 
         f.addValue(ONE_LONG);
@@ -100,7 +100,7 @@ public final class LongFrequencyTest {
      * Tests toString()
      */
     @Test
-    public void testToString() throws Exception {
+    void testToString() throws Exception {
         LongFrequency f = new LongFrequency();
 
         f.addValue(ONE_LONG);
@@ -126,7 +126,7 @@ public final class LongFrequencyTest {
     }
 
     @Test
-    public void testLongValues() {
+    void testLongValues() {
         LongFrequency f = new LongFrequency();
 
         Integer obj1 = null;
@@ -156,7 +156,7 @@ public final class LongFrequencyTest {
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         LongFrequency f = new LongFrequency();
 
         f.addValue(ONE_LONG);
@@ -167,7 +167,7 @@ public final class LongFrequencyTest {
     }
 
     @Test
-    public void testGetUniqueCount() {
+    void testGetUniqueCount() {
         LongFrequency f = new LongFrequency();
 
         assertEquals(0, f.getUniqueCount());
@@ -180,7 +180,7 @@ public final class LongFrequencyTest {
     }
 
     @Test
-    public void testIncrement() {
+    void testIncrement() {
         LongFrequency f = new LongFrequency();
 
         assertEquals(0, f.getUniqueCount());
@@ -196,7 +196,7 @@ public final class LongFrequencyTest {
     }
 
     @Test
-    public void testMerge() {
+    void testMerge() {
         LongFrequency f = new LongFrequency();
 
         assertEquals(0, f.getUniqueCount());
@@ -227,7 +227,7 @@ public final class LongFrequencyTest {
     }
 
     @Test
-    public void testMergeCollection() {
+    void testMergeCollection() {
         LongFrequency f = new LongFrequency();
 
         assertEquals(0, f.getUniqueCount());
@@ -255,7 +255,7 @@ public final class LongFrequencyTest {
     }
 
     @Test
-    public void testMode() {
+    void testMode() {
         LongFrequency f = new LongFrequency();
 
         List<Long> mode;

@@ -24,22 +24,22 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
  * Test for {@link UnivariatePeriodicInterpolator}.
  */
-public class UnivariatePeriodicInterpolatorTest {
+class UnivariatePeriodicInterpolatorTest {
     private final Random rng = new Random(1224465L);
 
     @Test
-    public void testSine() {
+    void testSine() {
         final int n = 30;
         final double[] xval = new double[n];
         final double[] yval = new double[n];
@@ -69,7 +69,7 @@ public class UnivariatePeriodicInterpolatorTest {
             final double y = f.value(x);
             final double yP = fP.value(x);
 
-            Assertions.assertEquals(y, yP, Math.ulp(1d), "x=" + x);
+            assertEquals(y, yP, Math.ulp(1d), "x=" + x);
         }
 
         // Test interpolation outside the primary interval.
@@ -79,12 +79,12 @@ public class UnivariatePeriodicInterpolatorTest {
             final double yIn = fP.value(xIn);
             final double yOut = fP.value(xOut);
 
-            Assertions.assertEquals(yIn, yOut, 1e-7);
+            assertEquals(yIn, yOut, 1e-7);
         }
     }
 
     @Test
-    public void testLessThanOnePeriodCoverage() {
+    void testLessThanOnePeriodCoverage() {
         final int n = 30;
         final double[] xval = new double[n];
         final double[] yval = new double[n];
@@ -110,12 +110,12 @@ public class UnivariatePeriodicInterpolatorTest {
             final double yIn = fP.value(xIn);
             final double yOut = fP.value(xOut);
 
-            Assertions.assertEquals(yIn, yOut, 1e-7);
+            assertEquals(yIn, yOut, 1e-7);
         }
     }
 
     @Test
-    public void testMoreThanOnePeriodCoverage() {
+    void testMoreThanOnePeriodCoverage() {
         final int n = 30;
         final double[] xval = new double[n];
         final double[] yval = new double[n];
@@ -141,12 +141,12 @@ public class UnivariatePeriodicInterpolatorTest {
             final double yIn = fP.value(xIn);
             final double yOut = fP.value(xOut);
 
-            Assertions.assertEquals(yIn, yOut, 1e-6);
+            assertEquals(yIn, yOut, 1e-6);
         }
     }
 
     @Test
-    public void testTooFewSamples() {
+    void testTooFewSamples() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final double[] xval = {2, 3, 7};
             final double[] yval = {1, 6, 5};
@@ -159,7 +159,7 @@ public class UnivariatePeriodicInterpolatorTest {
     }
 
     @Test
-    public void testUnsortedSamples() {
+    void testUnsortedSamples() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final double[] xval = {2, 3, 7, 4, 6};
             final double[] yval = {1, 6, 5, -1, -2};

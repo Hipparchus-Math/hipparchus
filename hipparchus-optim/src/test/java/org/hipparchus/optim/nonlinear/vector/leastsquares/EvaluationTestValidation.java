@@ -18,13 +18,14 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class demonstrates the main functionality of the
@@ -43,7 +44,7 @@ import java.util.List;
  *  mvn test -Dtest=EvaluationTestValidation -DargLine="-DmcRuns=1234 -server"
  * </code></pre>
  */
-public class EvaluationTestValidation {
+class EvaluationTestValidation {
     /** Number of runs. */
     private static final int MONTE_CARLO_RUNS = Integer.parseInt(System.getProperty("mcRuns",
                                                                                     "100"));
@@ -65,7 +66,7 @@ public class EvaluationTestValidation {
      */
     @Disabled
     @Test
-    public void testParametersErrorMonteCarloObservations() {
+    void testParametersErrorMonteCarloObservations() {
         // Error on the observations.
         final double yError = 15;
 
@@ -151,7 +152,7 @@ public class EvaluationTestValidation {
 
         // Check the error estimation.
         for (int i = 0; i < numParams; i++) {
-            Assertions.assertEquals(paramsFoundByDirectSolution[i].getStandardDeviation(),
+            assertEquals(paramsFoundByDirectSolution[i].getStandardDeviation(),
                                 sigmaEstimate[i].getMean(),
                                 8e-2);
         }
@@ -183,7 +184,7 @@ public class EvaluationTestValidation {
      */
     @Disabled
     @Test
-    public void testParametersErrorMonteCarloParameters() {
+    void testParametersErrorMonteCarloParameters() {
         // Error on the observations.
         final double yError = 15;
 

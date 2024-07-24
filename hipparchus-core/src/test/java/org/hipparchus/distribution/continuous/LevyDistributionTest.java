@@ -22,24 +22,26 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LevyDistributionTest extends RealDistributionAbstractTest {
 
     @Test
-    public void testParameters() {
+    void testParameters() {
         LevyDistribution d = makeDistribution();
-        Assertions.assertEquals(1.2, d.getLocation(), Precision.EPSILON);
-        Assertions.assertEquals(0.4,   d.getScale(),  Precision.EPSILON);
+        assertEquals(1.2, d.getLocation(), Precision.EPSILON);
+        assertEquals(0.4,   d.getScale(),  Precision.EPSILON);
     }
 
     @Test
-    public void testSupport() {
+    void testSupport() {
         LevyDistribution d = makeDistribution();
-        Assertions.assertEquals(d.getLocation(), d.getSupportLowerBound(), Precision.EPSILON);
-        Assertions.assertTrue(Double.isInfinite(d.getSupportUpperBound()));
-        Assertions.assertTrue(d.isSupportConnected());
+        assertEquals(d.getLocation(), d.getSupportLowerBound(), Precision.EPSILON);
+        assertTrue(Double.isInfinite(d.getSupportUpperBound()));
+        assertTrue(d.isSupportConnected());
     }
 
     @Override

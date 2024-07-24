@@ -28,10 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class EnumeratedDistributionTest {
+class EnumeratedDistributionTest {
 
     @Test
-    public void testCheckAndNormalizeBadArguments() {
+    void testCheckAndNormalizeBadArguments() {
         double[] bad = new double[] {-1, 0, 1, 1};
         try {
             EnumeratedDistribution.checkAndNormalize(bad);
@@ -77,7 +77,7 @@ public class EnumeratedDistributionTest {
     }
 
     @Test
-    public void testCheckAndNormalize() {
+    void testCheckAndNormalize() {
         double[] p = new double[] {0, 2, 2, 1};
         double[] normP = EnumeratedDistribution.checkAndNormalize(p);
         assertEquals(0, normP[0], 0);
@@ -89,7 +89,7 @@ public class EnumeratedDistributionTest {
     }
 
     @Test
-    public void testNullValues() {
+    void testNullValues() {
         final List<Pair<String, Double>> pmf = new ArrayList<>();
         pmf.add(new Pair<>("a", 0.5));
         pmf.add(new Pair<>(null, 0.5));
@@ -100,7 +100,7 @@ public class EnumeratedDistributionTest {
     }
 
     @Test
-    public void testRepeatedValues() {
+    void testRepeatedValues() {
         final List<Pair<String, Double>> pmf = new ArrayList<>();
         pmf.add(new Pair<>("a", 0.5));
         pmf.add(new Pair<>("a", 0.5));

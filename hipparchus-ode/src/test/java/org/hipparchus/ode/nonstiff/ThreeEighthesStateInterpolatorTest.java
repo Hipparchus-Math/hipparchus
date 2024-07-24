@@ -22,7 +22,7 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.junit.jupiter.api.Test;
 
-public class ThreeEighthesStateInterpolatorTest extends RungeKuttaStateInterpolatorAbstractTest {
+class ThreeEighthesStateInterpolatorTest extends RungeKuttaStateInterpolatorAbstractTest {
 
     @Override
     protected RungeKuttaStateInterpolator

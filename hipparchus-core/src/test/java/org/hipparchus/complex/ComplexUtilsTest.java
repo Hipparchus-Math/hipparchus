@@ -25,14 +25,14 @@ package org.hipparchus.complex;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  */
-public class ComplexUtilsTest {
+class ComplexUtilsTest {
 
     private final double inf = Double.POSITIVE_INFINITY;
     private final double negInf = Double.NEGATIVE_INFINITY;
@@ -46,31 +46,31 @@ public class ComplexUtilsTest {
     private final Complex infNaN = new Complex(inf, nan);
 
     @Test
-    public void testPolar2Complex() {
-        UnitTestUtils.assertEquals(Complex.ONE,
-                ComplexUtils.polar2Complex(1, 0), 10e-12);
-        UnitTestUtils.assertEquals(Complex.ZERO,
-                ComplexUtils.polar2Complex(0, 1), 10e-12);
-        UnitTestUtils.assertEquals(Complex.ZERO,
-                ComplexUtils.polar2Complex(0, -1), 10e-12);
-        UnitTestUtils.assertEquals(Complex.I,
-                ComplexUtils.polar2Complex(1, pi/2), 10e-12);
-        UnitTestUtils.assertEquals(Complex.I.negate(),
-                ComplexUtils.polar2Complex(1, -pi/2), 10e-12);
+    void testPolar2Complex() {
+        UnitTestUtils.customAssertEquals(Complex.ONE,
+                                         ComplexUtils.polar2Complex(1, 0), 10e-12);
+        UnitTestUtils.customAssertEquals(Complex.ZERO,
+                                         ComplexUtils.polar2Complex(0, 1), 10e-12);
+        UnitTestUtils.customAssertEquals(Complex.ZERO,
+                                         ComplexUtils.polar2Complex(0, -1), 10e-12);
+        UnitTestUtils.customAssertEquals(Complex.I,
+                                         ComplexUtils.polar2Complex(1, pi/2), 10e-12);
+        UnitTestUtils.customAssertEquals(Complex.I.negate(),
+                                         ComplexUtils.polar2Complex(1, -pi/2), 10e-12);
         double r = 0;
         for (int i = 0; i < 5; i++) {
           r += i;
           double theta = 0;
           for (int j =0; j < 20; j++) {
               theta += pi / 6;
-              UnitTestUtils.assertEquals(altPolar(r, theta),
-                      ComplexUtils.polar2Complex(r, theta), 10e-12);
+              UnitTestUtils.customAssertEquals(altPolar(r, theta),
+                                               ComplexUtils.polar2Complex(r, theta), 10e-12);
           }
           theta = -2 * pi;
           for (int j =0; j < 20; j++) {
               theta -= pi / 6;
-              UnitTestUtils.assertEquals(altPolar(r, theta),
-                      ComplexUtils.polar2Complex(r, theta), 10e-12);
+              UnitTestUtils.customAssertEquals(altPolar(r, theta),
+                                               ComplexUtils.polar2Complex(r, theta), 10e-12);
           }
         }
     }
@@ -80,42 +80,42 @@ public class ComplexUtilsTest {
     }
 
     @Test
-    public void testPolar2ComplexIllegalModulus() {
+    void testPolar2ComplexIllegalModulus() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             ComplexUtils.polar2Complex(-1, 0);
         });
     }
 
     @Test
-    public void testPolar2ComplexNaN() {
-        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(nan, 1));
-        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(1, nan));
-        UnitTestUtils.assertSame(Complex.NaN,
-                ComplexUtils.polar2Complex(nan, nan));
+    void testPolar2ComplexNaN() {
+        UnitTestUtils.customAssertSame(Complex.NaN, ComplexUtils.polar2Complex(nan, 1));
+        UnitTestUtils.customAssertSame(Complex.NaN, ComplexUtils.polar2Complex(1, nan));
+        UnitTestUtils.customAssertSame(Complex.NaN,
+                                       ComplexUtils.polar2Complex(nan, nan));
     }
 
     @Test
-    public void testPolar2ComplexInf() {
-        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(1, inf));
-        UnitTestUtils.assertSame(Complex.NaN,
-                ComplexUtils.polar2Complex(1, negInf));
-        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(inf, inf));
-        UnitTestUtils.assertSame(Complex.NaN,
-                ComplexUtils.polar2Complex(inf, negInf));
-        UnitTestUtils.assertSame(infInf, ComplexUtils.polar2Complex(inf, pi/4));
-        UnitTestUtils.assertSame(infNaN, ComplexUtils.polar2Complex(inf, 0));
-        UnitTestUtils.assertSame(infNegInf, ComplexUtils.polar2Complex(inf, -pi/4));
-        UnitTestUtils.assertSame(negInfInf, ComplexUtils.polar2Complex(inf, 3*pi/4));
-        UnitTestUtils.assertSame(negInfNegInf, ComplexUtils.polar2Complex(inf, 5*pi/4));
+    void testPolar2ComplexInf() {
+        UnitTestUtils.customAssertSame(Complex.NaN, ComplexUtils.polar2Complex(1, inf));
+        UnitTestUtils.customAssertSame(Complex.NaN,
+                                       ComplexUtils.polar2Complex(1, negInf));
+        UnitTestUtils.customAssertSame(Complex.NaN, ComplexUtils.polar2Complex(inf, inf));
+        UnitTestUtils.customAssertSame(Complex.NaN,
+                                       ComplexUtils.polar2Complex(inf, negInf));
+        UnitTestUtils.customAssertSame(infInf, ComplexUtils.polar2Complex(inf, pi/4));
+        UnitTestUtils.customAssertSame(infNaN, ComplexUtils.polar2Complex(inf, 0));
+        UnitTestUtils.customAssertSame(infNegInf, ComplexUtils.polar2Complex(inf, -pi/4));
+        UnitTestUtils.customAssertSame(negInfInf, ComplexUtils.polar2Complex(inf, 3*pi/4));
+        UnitTestUtils.customAssertSame(negInfNegInf, ComplexUtils.polar2Complex(inf, 5*pi/4));
     }
 
     @Test
-    public void testConvertToComplex() {
+    void testConvertToComplex() {
         final double[] real = new double[] { negInf, -123.45, 0, 1, 234.56, pi, inf };
         final Complex[] complex = ComplexUtils.convertToComplex(real);
 
         for (int i = 0; i < real.length; i++) {
-            Assertions.assertEquals(real[i], complex[i].getReal(), 0d);
+            assertEquals(real[i], complex[i].getReal(), 0d);
         }
     }
 }

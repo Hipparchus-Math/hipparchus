@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.junit.jupiter.api.Test;
 
-public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbstractTest {
+class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbstractTest {
 
     protected EmbeddedRungeKuttaIntegrator
     createIntegrator(final double minStep, final double maxStep,

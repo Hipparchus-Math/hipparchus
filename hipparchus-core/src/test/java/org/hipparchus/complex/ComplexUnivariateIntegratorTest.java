@@ -26,42 +26,42 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class ComplexUnivariateIntegratorTest {
+class ComplexUnivariateIntegratorTest {
 
     private ComplexUnivariateIntegrator integrator;
 
     @Test
-    public void testZero() {
+    void testZero() {
         final Complex start = new Complex(-1.75,   4.0);
         final Complex end   = new Complex( 1.5,  -12.0);
-        UnitTestUtils.assertEquals(Complex.ZERO,
-                                   integrator.integrate(1000, z -> Complex.ZERO, start, end),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(Complex.ZERO,
+                                         integrator.integrate(1000, z -> Complex.ZERO, start, end),
+                                         1.0e-15);
     }
 
     @Test
-    public void testIdentity() {
+    void testIdentity() {
         final Complex end = new Complex( 1.5, -12.0);
-        UnitTestUtils.assertEquals(end.multiply(end).multiply(0.5),
-                                   integrator.integrate(1000, z -> z, Complex.ZERO, end),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(end.multiply(end).multiply(0.5),
+                                         integrator.integrate(1000, z -> z, Complex.ZERO, end),
+                                         1.0e-15);
     }
 
     @Test
-    public void testPolynomialStraightPath() {
+    void testPolynomialStraightPath() {
         final FieldPolynomialFunction<Complex> polynomial =
                         new FieldPolynomialFunction<>(new Complex[] {
                             new Complex(1.25, 2.0), new Complex(-3.25, 0.125), new Complex(0.0, 3.0)
                         });
         final Complex start = new Complex(-1.75,   4.0);
         final Complex end   = new Complex( 1.5,  -12.0);
-        UnitTestUtils.assertEquals(polynomial.integrate(start, end),
-                                   integrator.integrate(1000, polynomial, start, end),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(polynomial.integrate(start, end),
+                                         integrator.integrate(1000, polynomial, start, end),
+                                         1.0e-15);
     }
 
     @Test
-    public void testPolynomialPolylinePath() {
+    void testPolynomialPolylinePath() {
         final FieldPolynomialFunction<Complex> polynomial =
                         new FieldPolynomialFunction<>(new Complex[] {
                             new Complex(1.25, 2.0), new Complex(-3.25, 0.125), new Complex(0.0, 3.0)
@@ -71,13 +71,13 @@ public class ComplexUnivariateIntegratorTest {
         final Complex z2 = new Complex( 6.00,  0.5);
         final Complex z3 = new Complex( 6.00, -6.5);
         final Complex z4 = new Complex( 1.5, -12.0);
-        UnitTestUtils.assertEquals(polynomial.integrate(z0, z4),
-                                   integrator.integrate(1000, polynomial, z0, z1, z2, z3, z4),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(polynomial.integrate(z0, z4),
+                                         integrator.integrate(1000, polynomial, z0, z1, z2, z3, z4),
+                                         1.0e-15);
     }
 
     @Test
-    public void testAroundPole() {
+    void testAroundPole() {
         final Complex pole = new Complex(-2.0, -1.0);
         final CalculusFieldUnivariateFunction<Complex> f = z -> z.subtract(pole).reciprocal();
         final Complex z0 = new Complex( 1,  0);
@@ -89,13 +89,13 @@ public class ComplexUnivariateIntegratorTest {
         final Complex z6 = new Complex(-1, -4);
         final Complex z7 = new Complex( 1, -2);
         final Complex z8 = new Complex( 1,  0);
-        UnitTestUtils.assertEquals(new Complex(0.0, MathUtils.TWO_PI),
-                                   integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(new Complex(0.0, MathUtils.TWO_PI),
+                                         integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
+                                         1.0e-15);
     }
 
     @Test
-    public void testAroundRoot() {
+    void testAroundRoot() {
         final Complex pole = new Complex(-2.0, -1.0);
         final CalculusFieldUnivariateFunction<Complex> f = z -> z.subtract(pole);
         final Complex z0 = new Complex( 1,  0);
@@ -107,20 +107,20 @@ public class ComplexUnivariateIntegratorTest {
         final Complex z6 = new Complex(-1, -4);
         final Complex z7 = new Complex( 1, -2);
         final Complex z8 = new Complex( 1,  0);
-        UnitTestUtils.assertEquals(Complex.ZERO,
-                                   integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(Complex.ZERO,
+                                         integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
+                                         1.0e-15);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         integrator = new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                           1.0e-12,
                                                                                           1.0e-12));
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         integrator = null;
     }
 

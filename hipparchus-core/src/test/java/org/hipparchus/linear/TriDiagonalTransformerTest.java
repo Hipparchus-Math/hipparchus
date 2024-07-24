@@ -22,15 +22,18 @@
 
 package org.hipparchus.linear;
 
-import java.util.Arrays;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TriDiagonalTransformerTest {
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class TriDiagonalTransformerTest {
 
     private double[][] testSquare5 = {
             { 1, 2, 3, 1, 1 },
@@ -47,17 +50,17 @@ public class TriDiagonalTransformerTest {
     };
 
     @Test
-    public void testNonSquare() {
+    void testNonSquare() {
         try {
             new TriDiagonalTransformer(MatrixUtils.createRealMatrix(new double[3][2]));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
-            Assertions.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
+            assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 
     @Test
-    public void testAEqualQTQt() {
+    void testAEqualQTQt() {
         checkAEqualQTQt(MatrixUtils.createRealMatrix(testSquare5));
         checkAEqualQTQt(MatrixUtils.createRealMatrix(testSquare3));
     }
@@ -68,11 +71,11 @@ public class TriDiagonalTransformerTest {
         RealMatrix qT = transformer.getQT();
         RealMatrix t  = transformer.getT();
         double norm = q.multiply(t).multiply(qT).subtract(matrix).getNorm1();
-        Assertions.assertEquals(0, norm, 4.0e-15);
+        assertEquals(0, norm, 4.0e-15);
     }
 
     @Test
-    public void testNoAccessBelowDiagonal() {
+    void testNoAccessBelowDiagonal() {
         checkNoAccessBelowDiagonal(testSquare5);
         checkNoAccessBelowDiagonal(testSquare3);
     }
@@ -89,17 +92,17 @@ public class TriDiagonalTransformerTest {
         RealMatrix qT = transformer.getQT();
         RealMatrix t  = transformer.getT();
         double norm = q.multiply(t).multiply(qT).subtract(MatrixUtils.createRealMatrix(data)).getNorm1();
-        Assertions.assertEquals(0, norm, 4.0e-15);
+        assertEquals(0, norm, 4.0e-15);
     }
 
     @Test
-    public void testQOrthogonal() {
+    void testQOrthogonal() {
         checkOrthogonal(new TriDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare5)).getQ());
         checkOrthogonal(new TriDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare3)).getQ());
     }
 
     @Test
-    public void testQTOrthogonal() {
+    void testQTOrthogonal() {
         checkOrthogonal(new TriDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare5)).getQT());
         checkOrthogonal(new TriDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare3)).getQT());
     }
@@ -107,11 +110,11 @@ public class TriDiagonalTransformerTest {
     private void checkOrthogonal(RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assertions.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-15);
+        assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-15);
     }
 
     @Test
-    public void testTTriDiagonal() {
+    void testTTriDiagonal() {
         checkTriDiagonal(new TriDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare5)).getT());
         checkTriDiagonal(new TriDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare3)).getT());
     }
@@ -122,14 +125,14 @@ public class TriDiagonalTransformerTest {
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
                 if ((i < j - 1) || (i > j + 1)) {
-                    Assertions.assertEquals(0, m.getEntry(i, j), 1.0e-16);
+                    assertEquals(0, m.getEntry(i, j), 1.0e-16);
                 }
             }
         }
     }
 
     @Test
-    public void testMatricesValues5() {
+    void testMatricesValues5() {
         checkMatricesValues(testSquare5,
                             new double[][] {
                                 { 1.0,  0.0,                 0.0,                  0.0,                   0.0 },
@@ -143,7 +146,7 @@ public class TriDiagonalTransformerTest {
     }
 
     @Test
-    public void testMatricesValues3() {
+    void testMatricesValues3() {
         checkMatricesValues(testSquare3,
                             new double[][] {
                                 {  1.0,  0.0,  0.0 },
@@ -162,7 +165,7 @@ public class TriDiagonalTransformerTest {
 
         // check values against known references
         RealMatrix q = transformer.getQ();
-        Assertions.assertEquals(0, q.subtract(MatrixUtils.createRealMatrix(qRef)).getNorm1(), 1.0e-14);
+        assertEquals(0, q.subtract(MatrixUtils.createRealMatrix(qRef)).getNorm1(), 1.0e-14);
 
         RealMatrix t = transformer.getT();
         double[][] tData = new double[mainDiagnonal.length][mainDiagnonal.length];
@@ -175,10 +178,10 @@ public class TriDiagonalTransformerTest {
                 tData[i][i + 1] = secondaryDiagonal[i];
             }
         }
-        Assertions.assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(tData)).getNorm1(), 1.0e-14);
+        assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(tData)).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
-        Assertions.assertTrue(q == transformer.getQ());
-        Assertions.assertTrue(t == transformer.getT());
+        assertTrue(q == transformer.getQ());
+        assertTrue(t == transformer.getT());
     }
 }

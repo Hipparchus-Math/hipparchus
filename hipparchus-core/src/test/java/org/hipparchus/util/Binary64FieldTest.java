@@ -23,47 +23,50 @@ package org.hipparchus.util;
 
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Binary64FieldTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class Binary64FieldTest {
 
     @Test
-    public void testZero() {
-        Assertions.assertEquals(Binary64.ZERO, Binary64Field.getInstance().getZero());
+    void testZero() {
+        assertEquals(Binary64.ZERO, Binary64Field.getInstance().getZero());
     }
 
     @Test
-    public void testOne() {
-        Assertions.assertEquals(Binary64.ONE, Binary64Field.getInstance().getOne());
+    void testOne() {
+        assertEquals(Binary64.ONE, Binary64Field.getInstance().getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testMap() {
+    void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
             map.put(new Binary64(i).getField(), 0);
         }
         // there should be only one field for all values
-        Assertions.assertEquals(1, map.size());
-        Assertions.assertEquals(Binary64Field.getInstance(), map.entrySet().iterator().next().getKey());
-        Assertions.assertNotEquals(Binary64Field.getInstance(), BigRealField.getInstance());
+        assertEquals(1, map.size());
+        assertEquals(Binary64Field.getInstance(), map.entrySet().iterator().next().getKey());
+        assertNotEquals(Binary64Field.getInstance(), BigRealField.getInstance());
     }
 
     @Test
-    public void testRunTImeClass() {
-        Assertions.assertEquals(Binary64.class, Binary64Field.getInstance().getRuntimeClass());
+    void testRunTImeClass() {
+        assertEquals(Binary64.class, Binary64Field.getInstance().getRuntimeClass());
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         // deserializing the singleton should give the singleton itself back
         Binary64Field field = Binary64Field.getInstance();
-        Assertions.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 
 }

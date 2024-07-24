@@ -30,18 +30,21 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test case for
  * {@link BracketingNthOrderBrentSolver bracketing n<sup>th</sup> order Brent}
  * solver.
  */
-public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTest {
+final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTest {
 
     /** {@inheritDoc} */
     @Override
@@ -56,61 +59,61 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
     }
 
     @Test
-    public void testInsufficientOrder1() {
-        Assertions.assertThrows(MathIllegalArgumentException.class, () -> {
+    void testInsufficientOrder1() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
 
             new BracketingNthOrderBrentSolver(1.0e-10, 1);
         });
     }
 
     @Test
-    public void testInsufficientOrder2() {
-        Assertions.assertThrows(MathIllegalArgumentException.class, () -> {
+    void testInsufficientOrder2() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
             new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1);
         });
     }
 
     @Test
-    public void testInsufficientOrder3() {
-        Assertions.assertThrows(MathIllegalArgumentException.class, () -> {
+    void testInsufficientOrder3() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
             new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1.0e-10, 1);
         });
     }
 
     @Test
-    public void testConstructorsOK() {
-        Assertions.assertEquals(2, new BracketingNthOrderBrentSolver(1.0e-10,
+    void testConstructorsOK() {
+        assertEquals(2, new BracketingNthOrderBrentSolver(1.0e-10,
                                                                      2).getMaximalOrder());
-        Assertions.assertEquals(2, new BracketingNthOrderBrentSolver(1.0e-10,
+        assertEquals(2, new BracketingNthOrderBrentSolver(1.0e-10,
                                                                      1.0e-10,
                                                                      2).getMaximalOrder());
-        Assertions.assertEquals(2, new BracketingNthOrderBrentSolver(1.0e-10,
+        assertEquals(2, new BracketingNthOrderBrentSolver(1.0e-10,
                                                                      1.0e-10,
                                                                      1.0e-10,
                                                                      2).getMaximalOrder());
     }
 
     @Test
-    public void testConvergenceOnFunctionAccuracy() {
+    void testConvergenceOnFunctionAccuracy() {
         BracketingNthOrderBrentSolver solver = new BracketingNthOrderBrentSolver(
                         1.0e-12, 1.0e-10, 0.001, 3);
         QuinticFunction f = new QuinticFunction();
         double result = solver.solve(20, f, 0.2, 0.9, 0.4,
                                      AllowedSolution.BELOW_SIDE);
-        Assertions.assertEquals(0, f.value(result),
+        assertEquals(0, f.value(result),
                                 solver.getFunctionValueAccuracy());
-        Assertions.assertTrue(f.value(result) <= 0);
-        Assertions.assertTrue(result - 0.5 > solver.getAbsoluteAccuracy());
+        assertTrue(f.value(result) <= 0);
+        assertTrue(result - 0.5 > solver.getAbsoluteAccuracy());
         result = solver.solve(20, f, -0.9, -0.2, -0.4,
                               AllowedSolution.ABOVE_SIDE);
-        Assertions.assertEquals(0, f.value(result),
+        assertEquals(0, f.value(result),
                                 solver.getFunctionValueAccuracy());
-        Assertions.assertTrue(f.value(result) >= 0);
-        Assertions.assertTrue(result + 0.5 < -solver.getAbsoluteAccuracy());
+        assertTrue(f.value(result) >= 0);
+        assertTrue(result + 0.5 < -solver.getAbsoluteAccuracy());
     }
 
     @Test
-    public void testIssue716() {
+    void testIssue716() {
         BracketingNthOrderBrentSolver solver = new BracketingNthOrderBrentSolver(
                         1.0e-12, 1.0e-10, 1.0e-22, 5);
         UnivariateFunction sharpTurn = new UnivariateFunction() {
@@ -121,14 +124,14 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         };
         double result = solver.solve(100, sharpTurn, -0.9999999, 30, 15,
                                      AllowedSolution.RIGHT_SIDE);
-        Assertions.assertEquals(0, sharpTurn.value(result),
+        assertEquals(0, sharpTurn.value(result),
                                 solver.getFunctionValueAccuracy());
-        Assertions.assertTrue(sharpTurn.value(result) >= 0);
-        Assertions.assertEquals(-0.5, result, 1.0e-10);
+        assertTrue(sharpTurn.value(result) >= 0);
+        assertEquals(-0.5, result, 1.0e-10);
     }
 
     @Test
-    public void testToleranceLessThanUlp() {
+    void testToleranceLessThanUlp() {
         // function that is never zero
         UnivariateFunction f = (x) -> x < 2.1 ? -1 : 1;
         // tolerance less than 1 ulp(x)
@@ -137,11 +140,11 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
 
         // make sure it doesn't throw a maxIterations exception
         double result = solver.solve(100, f, 0.0, 5.0);
-        Assertions.assertEquals(2.1, result, 0.0);
+        assertEquals(2.1, result, 0.0);
     }
 
     @Test
-    public void testFasterThanNewton() {
+    void testFasterThanNewton() {
         // the following test functions come from Beny Neta's paper:
         // "Several New Methods for solving Equations"
         // intern J. Computer Math Vol 23 pp 265-282
@@ -194,17 +197,17 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
     }
 
     @Test
-    public void testSolverStopIteratingOnceSolutionIsFound() {
+    void testSolverStopIteratingOnceSolutionIsFound() {
         final double absoluteAccuracy = 0.1;
         final double valueAccuracy = 1.;
         BracketingNthOrderBrentSolver solver = new BracketingNthOrderBrentSolver(
                         1e-14, absoluteAccuracy, valueAccuracy, 5);
         FunctionHipparcus function = new FunctionHipparcus();
         solver.solve(100, function, -100, 100);
-        Assertions.assertEquals(1, function.values.stream()
+        assertEquals(1, function.values.stream()
                         .filter(value -> FastMath.abs(value) < valueAccuracy)
                         .count());
-        Assertions.assertEquals(7, function.values.size());
+        assertEquals(7, function.values.size());
     }
 
     private static class FunctionHipparcus implements UnivariateFunction {
@@ -240,8 +243,8 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         } catch (MathIllegalStateException tmee) {
             resultB = Double.NaN;
         }
-        Assertions.assertEquals(root, resultN, newton.getAbsoluteAccuracy());
-        Assertions.assertEquals(root, resultB,
+        assertEquals(root, resultN, newton.getAbsoluteAccuracy());
+        assertEquals(root, resultB,
                                 bracketing.getAbsoluteAccuracy());
 
         // bracketing solver evaluates only function value, we set the weight to 1
@@ -250,7 +253,7 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         // Newton-Raphson solver evaluates both function value and derivative, we set the weight to 2
         final int weightedNewtonEvaluations = 2 * newton.getEvaluations();
 
-        Assertions.assertTrue(
+        assertTrue(
                         weightedBracketingEvaluations < weightedNewtonEvaluations);
 
     }

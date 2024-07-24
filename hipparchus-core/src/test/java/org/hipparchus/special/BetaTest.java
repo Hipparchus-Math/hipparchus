@@ -24,18 +24,20 @@ package org.hipparchus.special;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  */
-public class BetaTest {
+class BetaTest {
 
     /*
      * Use reflection to test private methods.
@@ -51,21 +53,21 @@ public class BetaTest {
         final Class<Double> d = Double.TYPE;
         b = Beta.class;
         AtomicReference<Method> m = new AtomicReference<>();
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             m.set(b.getDeclaredMethod("logGammaSum", d, d));
         });
         LOG_GAMMA_SUM_METHOD = m.get();
         LOG_GAMMA_SUM_METHOD.setAccessible(true);
 
         m.set(null);
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             m.set(b.getDeclaredMethod("logGammaMinusLogGammaSum", d, d));
         });
         LOG_GAMMA_MINUS_LOG_GAMMA_SUM_METHOD = m.get();
         LOG_GAMMA_MINUS_LOG_GAMMA_SUM_METHOD.setAccessible(true);
 
         m.set(null);
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             m.set(b.getDeclaredMethod("sumDeltaMinusDeltaSum", d, d));
         });
         SUM_DELTA_MINUS_DELTA_SUM_METHOD = m.get();
@@ -75,114 +77,114 @@ public class BetaTest {
     private void testRegularizedBeta(double expected, double x,
                                      double a, double b) {
         double actual = Beta.regularizedBeta(x, a, b);
-        UnitTestUtils.assertEquals(expected, actual, 10e-15);
+        UnitTestUtils.customAssertEquals(expected, actual, 10e-15);
     }
 
     private void testLogBeta(double expected, double a, double b) {
         double actual = Beta.logBeta(a, b);
-        UnitTestUtils.assertEquals(expected, actual, 10e-15);
+        UnitTestUtils.customAssertEquals(expected, actual, 10e-15);
     }
 
     @Test
-    public void testRegularizedBetaNanPositivePositive() {
+    void testRegularizedBetaNanPositivePositive() {
         testRegularizedBeta(Double.NaN, Double.NaN, 1.0, 1.0);
     }
 
     @Test
-    public void testRegularizedBetaPositiveNanPositive() {
+    void testRegularizedBetaPositiveNanPositive() {
         testRegularizedBeta(Double.NaN, 0.5, Double.NaN, 1.0);
     }
 
     @Test
-    public void testRegularizedBetaPositivePositiveNan() {
+    void testRegularizedBetaPositivePositiveNan() {
         testRegularizedBeta(Double.NaN, 0.5, 1.0, Double.NaN);
     }
 
     @Test
-    public void testRegularizedBetaNegativePositivePositive() {
+    void testRegularizedBetaNegativePositivePositive() {
         testRegularizedBeta(Double.NaN, -0.5, 1.0, 2.0);
     }
 
     @Test
-    public void testRegularizedBetaPositiveNegativePositive() {
+    void testRegularizedBetaPositiveNegativePositive() {
         testRegularizedBeta(Double.NaN, 0.5, -1.0, 2.0);
     }
 
     @Test
-    public void testRegularizedBetaPositivePositiveNegative() {
+    void testRegularizedBetaPositivePositiveNegative() {
         testRegularizedBeta(Double.NaN, 0.5, 1.0, -2.0);
     }
 
     @Test
-    public void testRegularizedBetaZeroPositivePositive() {
+    void testRegularizedBetaZeroPositivePositive() {
         testRegularizedBeta(0.0, 0.0, 1.0, 2.0);
     }
 
     @Test
-    public void testRegularizedBetaPositiveZeroPositive() {
+    void testRegularizedBetaPositiveZeroPositive() {
         testRegularizedBeta(Double.NaN, 0.5, 0.0, 2.0);
     }
 
     @Test
-    public void testRegularizedBetaPositivePositiveZero() {
+    void testRegularizedBetaPositivePositiveZero() {
         testRegularizedBeta(Double.NaN, 0.5, 1.0, 0.0);
     }
 
     @Test
-    public void testRegularizedBetaPositivePositivePositive() {
+    void testRegularizedBetaPositivePositivePositive() {
         testRegularizedBeta(0.75, 0.5, 1.0, 2.0);
     }
 
     @Test
-    public void testRegularizedBetaTinyArgument() {
+    void testRegularizedBetaTinyArgument() {
         double actual = Beta.regularizedBeta(1e-17, 1.0, 1e12);
         // This value is from R: pbeta(1e-17,1,1e12)
-        UnitTestUtils.assertEquals(9.999950000166648e-6, actual, 1e-16);
+        UnitTestUtils.customAssertEquals(9.999950000166648e-6, actual, 1e-16);
     }
 
     @Test
-    public void testMath1067() {
+    void testMath1067() {
         final double x = 0.22580645161290325;
         final double a = 64.33333333333334;
         final double b = 223;
 
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             Beta.regularizedBeta(x, a, b, 1e-14, 10000);
         }, "Infinite recursion");
     }
 
     @Test
-    public void testLogBetaNanPositive() {
+    void testLogBetaNanPositive() {
         testLogBeta(Double.NaN, Double.NaN, 2.0);
     }
 
     @Test
-    public void testLogBetaPositiveNan() {
+    void testLogBetaPositiveNan() {
         testLogBeta(Double.NaN, 1.0, Double.NaN);
     }
 
     @Test
-    public void testLogBetaNegativePositive() {
+    void testLogBetaNegativePositive() {
         testLogBeta(Double.NaN, -1.0, 2.0);
     }
 
     @Test
-    public void testLogBetaPositiveNegative() {
+    void testLogBetaPositiveNegative() {
         testLogBeta(Double.NaN, 1.0, -2.0);
     }
 
     @Test
-    public void testLogBetaZeroPositive() {
+    void testLogBetaZeroPositive() {
         testLogBeta(Double.NaN, 0.0, 2.0);
     }
 
     @Test
-    public void testLogBetaPositiveZero() {
+    void testLogBetaPositiveZero() {
         testLogBeta(Double.NaN, 1.0, 0.0);
     }
 
     @Test
-    public void testLogBetaPositivePositive() {
+    void testLogBetaPositivePositive() {
         testLogBeta(-0.693147180559945, 1.0, 2.0);
     }
 
@@ -299,21 +301,21 @@ public class BetaTest {
         try {
             return ((Double) LOG_GAMMA_SUM_METHOD.invoke(null, a, b)).doubleValue();
         } catch (final IllegalAccessException e) {
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         } catch (final IllegalArgumentException e) {
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
             if (te instanceof MathIllegalArgumentException) {
                 throw (MathIllegalArgumentException) te;
             }
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         }
         return Double.NaN;
     }
 
     @Test
-    public void testLogGammaSum() {
+    void testLogGammaSum() {
         final int ulps = 2;
         for (int i = 0; i < LOG_GAMMA_SUM_REF.length; i++) {
             final double[] ref = LOG_GAMMA_SUM_REF[i];
@@ -324,12 +326,12 @@ public class BetaTest {
             final double tol = ulps * FastMath.ulp(expected);
             final StringBuilder builder = new StringBuilder();
             builder.append(a).append(", ").append(b);
-            Assertions.assertEquals(expected, actual, tol, builder.toString());
+            assertEquals(expected, actual, tol, builder.toString());
         }
     }
 
     @Test
-    public void testLogGammaSumPrecondition1() {
+    void testLogGammaSumPrecondition1() {
         assertThrows(MathIllegalArgumentException.class, () -> {
 
             logGammaSum(0.0, 1.0);
@@ -337,7 +339,7 @@ public class BetaTest {
     }
 
     @Test
-    public void testLogGammaSumPrecondition2() {
+    void testLogGammaSumPrecondition2() {
         assertThrows(MathIllegalArgumentException.class, () -> {
 
             logGammaSum(3.0, 1.0);
@@ -345,7 +347,7 @@ public class BetaTest {
     }
 
     @Test
-    public void testLogGammaSumPrecondition3() {
+    void testLogGammaSumPrecondition3() {
         assertThrows(MathIllegalArgumentException.class, () -> {
 
             logGammaSum(1.0, 0.0);
@@ -353,7 +355,7 @@ public class BetaTest {
     }
 
     @Test
-    public void testLogGammaSumPrecondition4() {
+    void testLogGammaSumPrecondition4() {
         assertThrows(MathIllegalArgumentException.class, () -> {
 
             logGammaSum(1.0, 3.0);
@@ -493,21 +495,21 @@ public class BetaTest {
             final Method m = LOG_GAMMA_MINUS_LOG_GAMMA_SUM_METHOD;
             return ((Double) m.invoke(null, a, b)).doubleValue();
         } catch (final IllegalAccessException e) {
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         } catch (final IllegalArgumentException e) {
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
             if (te instanceof MathIllegalArgumentException) {
                 throw (MathIllegalArgumentException) te;
             }
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         }
         return Double.NaN;
     }
 
     @Test
-    public void testLogGammaMinusLogGammaSum() {
+    void testLogGammaMinusLogGammaSum() {
         final int ulps = 4;
         for (int i = 0; i < LOG_GAMMA_MINUS_LOG_GAMMA_SUM_REF.length; i++) {
             final double[] ref = LOG_GAMMA_MINUS_LOG_GAMMA_SUM_REF[i];
@@ -518,19 +520,19 @@ public class BetaTest {
             final double tol = ulps * FastMath.ulp(expected);
             final StringBuilder builder = new StringBuilder();
             builder.append(a).append(", ").append(b);
-            Assertions.assertEquals(expected, actual, tol, builder.toString());
+            assertEquals(expected, actual, tol, builder.toString());
         }
     }
 
     @Test
-    public void testLogGammaMinusLogGammaSumPrecondition1() {
+    void testLogGammaMinusLogGammaSumPrecondition1() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             logGammaMinusLogGammaSum(-1.0, 8.0);
         });
     }
 
     @Test
-    public void testLogGammaMinusLogGammaSumPrecondition2() {
+    void testLogGammaMinusLogGammaSumPrecondition2() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             logGammaMinusLogGammaSum(1.0, 7.0);
         });
@@ -670,21 +672,21 @@ public class BetaTest {
             final Method m = SUM_DELTA_MINUS_DELTA_SUM_METHOD;
             return ((Double) m.invoke(null, a, b)).doubleValue();
         } catch (final IllegalAccessException e) {
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         } catch (final IllegalArgumentException e) {
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
             if (te instanceof MathIllegalArgumentException) {
                 throw (MathIllegalArgumentException) te;
             }
-            Assertions.fail(e.getMessage());
+            fail(e.getMessage());
         }
         return Double.NaN;
     }
 
     @Test
-    public void testSumDeltaMinusDeltaSum() {
+    void testSumDeltaMinusDeltaSum() {
 
         final int ulps = 3;
         for (int i = 0; i < SUM_DELTA_MINUS_DELTA_SUM_REF.length; i++) {
@@ -696,12 +698,12 @@ public class BetaTest {
             final double tol = ulps * FastMath.ulp(expected);
             final StringBuilder builder = new StringBuilder();
             builder.append(a).append(", ").append(b);
-            Assertions.assertEquals(expected, actual, tol, builder.toString());
+            assertEquals(expected, actual, tol, builder.toString());
         }
     }
 
     @Test
-    public void testSumDeltaMinusDeltaSumPrecondition1() {
+    void testSumDeltaMinusDeltaSumPrecondition1() {
         assertThrows(MathIllegalArgumentException.class, () -> {
 
             sumDeltaMinusDeltaSum(9.0, 10.0);
@@ -709,7 +711,7 @@ public class BetaTest {
     }
 
     @Test
-    public void testSumDeltaMinusDeltaSumPrecondition2() {
+    void testSumDeltaMinusDeltaSumPrecondition2() {
         assertThrows(MathIllegalArgumentException.class, () -> {
 
             sumDeltaMinusDeltaSum(10.0, 9.0);
@@ -976,7 +978,7 @@ public class BetaTest {
     };
 
     @Test
-    public void testLogBeta() {
+    void testLogBeta() {
         final int ulps = 3;
         for (int i = 0; i < LOG_BETA_REF.length; i++) {
             final double[] ref = LOG_BETA_REF[i];
@@ -987,6 +989,6 @@ public class BetaTest {
             final double tol = ulps * FastMath.ulp(expected);
             final StringBuilder builder = new StringBuilder();
             builder.append(a).append(", ").append(b);
-            Assertions.assertEquals(expected, actual, tol, builder.toString());
+            assertEquals(expected, actual, tol, builder.toString());
         }
     }}

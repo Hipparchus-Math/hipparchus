@@ -25,13 +25,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BetaDistributionTest {
+class BetaDistributionTest {
 
     static final double[] alphaBetas = {0.1, 1, 10, 100, 1000};
     static final double epsilon = 0.1;
 
     @Test
-    public void testCumulative() {
+    void testCumulative() {
         double[] x = new double[]{-0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1};
         // all test data computed using R 2.5
         checkCumulative(0.1, 0.1,
@@ -162,7 +162,7 @@ public class BetaDistributionTest {
     }
 
     @Test
-    public void testDensity() {
+    void testDensity() {
         double[] x = new double[]{1e-6, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
         checkDensity(0.1, 0.1,
                 x, new double[]{
@@ -300,7 +300,7 @@ public class BetaDistributionTest {
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         BetaDistribution dist;
 

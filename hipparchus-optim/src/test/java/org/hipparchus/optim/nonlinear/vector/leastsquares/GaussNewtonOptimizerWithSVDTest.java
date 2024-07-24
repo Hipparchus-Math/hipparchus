@@ -30,10 +30,11 @@ import org.hipparchus.linear.SingularValueDecomposer;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -57,7 +58,7 @@ public class GaussNewtonOptimizerWithSVDTest
     }
 
     @Test
-    public void testMaxEvaluations() throws Exception {
+    void testMaxEvaluations() throws Exception {
         try{
         CircleVectorial circle = new CircleVectorial();
         circle.addPoint( 30.0,  68.0);
@@ -74,7 +75,7 @@ public class GaussNewtonOptimizerWithSVDTest
 
         optimizer.optimize(lsp);
 
-            fail(optimizer);
+            customFail(optimizer);
         }catch (MathIllegalStateException e){
             //expected
         }
@@ -90,7 +91,7 @@ public class GaussNewtonOptimizerWithSVDTest
          */
         try {
             super.testCircleFittingBadInit();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (AssertionError e) {
             //expected
         }
@@ -106,9 +107,9 @@ public class GaussNewtonOptimizerWithSVDTest
              * but the results are very bad
              */
             super.testHahn1();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+            assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
         }
     }
 
@@ -118,9 +119,9 @@ public class GaussNewtonOptimizerWithSVDTest
         /* this diverges with SVD and no normal equations */
         try {
             super.testGetIterations();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
+            assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
                                 e.getSpecifier());
         }
     }
@@ -146,7 +147,7 @@ public class GaussNewtonOptimizerWithSVDTest
         double actual = optimum.getResiduals().getNorm();
 
         //verify
-        Assertions.assertEquals(expected, actual, TOl);
+        assertEquals(expected, actual, TOl);
     }
 
 }

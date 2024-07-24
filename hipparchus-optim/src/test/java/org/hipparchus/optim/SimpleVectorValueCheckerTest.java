@@ -22,29 +22,30 @@
 package org.hipparchus.optim;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SimpleVectorValueCheckerTest {
+class SimpleVectorValueCheckerTest {
     @Test
-    public void testIterationCheckPrecondition() {
+    void testIterationCheckPrecondition() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new SimpleVectorValueChecker(1e-1, 1e-2, 0);
         });
     }
 
     @Test
-    public void testIterationCheck() {
+    void testIterationCheck() {
         final int max = 10;
         final SimpleVectorValueChecker checker = new SimpleVectorValueChecker(1e-1, 1e-2, max);
-        Assertions.assertTrue(checker.converged(max, null, null));
-        Assertions.assertTrue(checker.converged(max + 1, null, null));
+        assertTrue(checker.converged(max, null, null));
+        assertTrue(checker.converged(max + 1, null, null));
     }
 
     @Test
-    public void testIterationCheckDisabled() {
+    void testIterationCheckDisabled() {
         final SimpleVectorValueChecker checker = new SimpleVectorValueChecker(1e-8, 1e-8);
 
         final PointVectorValuePair a = new PointVectorValuePair(new double[] { 1d },
@@ -52,11 +53,11 @@ public class SimpleVectorValueCheckerTest {
         final PointVectorValuePair b = new PointVectorValuePair(new double[] { 10d },
                                                                 new double[] { 10d });
 
-        Assertions.assertFalse(checker.converged(-1, a, b));
-        Assertions.assertFalse(checker.converged(0, a, b));
-        Assertions.assertFalse(checker.converged(1000000, a, b));
+        assertFalse(checker.converged(-1, a, b));
+        assertFalse(checker.converged(0, a, b));
+        assertFalse(checker.converged(1000000, a, b));
 
-        Assertions.assertTrue(checker.converged(-1, a, a));
-        Assertions.assertTrue(checker.converged(-1, b, b));
+        assertTrue(checker.converged(-1, a, a));
+        assertTrue(checker.converged(-1, b, b));
     }
 }

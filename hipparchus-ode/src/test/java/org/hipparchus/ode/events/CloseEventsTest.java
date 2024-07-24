@@ -28,22 +28,27 @@ import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Check events are detected correctly when the event times are close.
  *
  * @author Evan Ward
  */
-public class CloseEventsTest {
+class CloseEventsTest {
 
     @Test
-    public void testCloseEventsFirstOneIsReset() {
+    void testCloseEventsFirstOneIsReset() {
         // setup
         // a fairly rare state to reproduce this bug. Two dates, d1 < d2, that
         // are very close. Event triggers on d1 will reset state to break out of
@@ -67,14 +72,14 @@ public class CloseEventsTest {
 
         // verify
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(9, events1.get(0).getT(), 0.0);
+        assertEquals(1, events1.size());
+        assertEquals(9, events1.get(0).getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
-        Assertions.assertEquals(0, events2.size());
+        assertEquals(0, events2.size());
     }
 
     @Test
-    public void testCloseEvents() {
+    void testCloseEvents() {
         // setup
         double e = 1e-15;
         ODEIntegrator integrator =
@@ -90,15 +95,15 @@ public class CloseEventsTest {
 
         // verify
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(5, events1.get(0).getT(), 0.0);
+        assertEquals(1, events1.size());
+        assertEquals(5, events1.get(0).getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
-        Assertions.assertEquals(1, events2.size());
-        Assertions.assertEquals(5.5, events2.get(0).getT(), 0.0);
+        assertEquals(1, events2.size());
+        assertEquals(5.5, events2.get(0).getT(), 0.0);
     }
 
     @Test
-    public void testSimultaneousEvents() {
+    void testSimultaneousEvents() {
         // setup
         ODEIntegrator integrator =
                 new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
@@ -113,11 +118,11 @@ public class CloseEventsTest {
 
         // verify
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(5, events1.get(0).getT(), 0.0);
+        assertEquals(1, events1.size());
+        assertEquals(5, events1.get(0).getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
-        Assertions.assertEquals(1, events2.size());
-        Assertions.assertEquals(5, events2.get(0).getT(), 0.0);
+        assertEquals(1, events2.size());
+        assertEquals(5, events2.get(0).getT(), 0.0);
     }
 
     /**
@@ -126,7 +131,7 @@ public class CloseEventsTest {
      * detect events that should not have occurred, both of which are problems.
      */
     @Test
-    public void testSimultaneousEventsReset() {
+    void testSimultaneousEventsReset() {
         // setup
         double tol = 1e-10;
         ODEIntegrator integrator =
@@ -162,13 +167,13 @@ public class CloseEventsTest {
 
         // verify
         // order is important to make sure the test checks what it is supposed to
-        Assertions.assertEquals(5, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(detector1, events.get(0).getDetector());
-        Assertions.assertEquals(5, events.get(1).getT(), 0.0);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertEquals(detector2, events.get(1).getDetector());
-        Assertions.assertEquals(2, events.size());
+        assertEquals(5, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(detector1, events.get(0).getDetector());
+        assertEquals(5, events.get(1).getT(), 0.0);
+        assertTrue(events.get(1).isIncreasing());
+        assertEquals(detector2, events.get(1).getDetector());
+        assertEquals(2, events.size());
     }
 
     /**
@@ -178,7 +183,7 @@ public class CloseEventsTest {
      * neither would actually back up at all. For Hipparchus GitHub #91.
      */
     @Test
-    public void testSimultaneousDiscontinuousEventsAfterReset() {
+    void testSimultaneousDiscontinuousEventsAfterReset() {
         // setup
         double t = FastMath.PI;
         double tol = 1e-10;
@@ -199,17 +204,17 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[]{-1e100, 0}), 10);
 
         // verify
-        Assertions.assertEquals(t, events.get(0).getT(),  tol);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(resetDetector, events.get(0).getDetector());
+        assertEquals(t, events.get(0).getT(),  tol);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(resetDetector, events.get(0).getDetector());
         // next two events can occur in either order
-        Assertions.assertEquals(t, events.get(1).getT(),  tol);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertEquals(detectors.get(0), events.get(1).getDetector());
-        Assertions.assertEquals(t, events.get(2).getT(),  tol);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertEquals(detectors.get(1), events.get(2).getDetector());
-        Assertions.assertEquals(3, events.size());
+        assertEquals(t, events.get(1).getT(),  tol);
+        assertTrue(events.get(1).isIncreasing());
+        assertEquals(detectors.get(0), events.get(1).getDetector());
+        assertEquals(t, events.get(2).getT(),  tol);
+        assertTrue(events.get(2).isIncreasing());
+        assertEquals(detectors.get(1), events.get(2).getDetector());
+        assertEquals(3, events.size());
     }
 
     /**
@@ -218,7 +223,7 @@ public class CloseEventsTest {
      * preserve the alternating increasing / decreasing sequence.
      */
     @Test
-    public void testFastSwitching() {
+    void testFastSwitching() {
         // setup
         // step size of 10 to land in between two events we would otherwise miss
         ODEIntegrator integrator =
@@ -233,14 +238,14 @@ public class CloseEventsTest {
         //verify
         // finds one or three events. Not 2.
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(9.9, events1.get(0).getT(), 0.1);
-        Assertions.assertTrue(events1.get(0).isIncreasing());
+        assertEquals(1, events1.size());
+        assertEquals(9.9, events1.get(0).getT(), 0.1);
+        assertTrue(events1.get(0).isIncreasing());
     }
 
     /** "A Tricky Problem" from bug #239. */
     @Test
-    public void testTrickyCaseLower() {
+    void testTrickyCaseLower() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -263,17 +268,17 @@ public class CloseEventsTest {
         //verify
         // really we only care that the Rules of Event Handling are not violated,
         // but I only know one way to do that in this case.
-        Assertions.assertEquals(5, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertFalse(events.get(0).isIncreasing());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertEquals(t3, events.get(2).getT(), tolerance);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertEquals(t4, events.get(3).getT(), tolerance);
-        Assertions.assertTrue(events.get(3).isIncreasing());
-        Assertions.assertEquals(t5, events.get(4).getT(), tolerance);
-        Assertions.assertFalse(events.get(4).isIncreasing());
+        assertEquals(5, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertFalse(events.get(0).isIncreasing());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertEquals(t3, events.get(2).getT(), tolerance);
+        assertTrue(events.get(2).isIncreasing());
+        assertEquals(t4, events.get(3).getT(), tolerance);
+        assertTrue(events.get(3).isIncreasing());
+        assertEquals(t5, events.get(4).getT(), tolerance);
+        assertFalse(events.get(4).isIncreasing());
     }
 
     /**
@@ -282,7 +287,7 @@ public class CloseEventsTest {
      * t3.
      */
     @Test
-    public void testRootFindingTolerance() {
+    void testRootFindingTolerance() {
         //setup
         double maxCheck = 10;
         double t2 = 11, t3 = t2 + 1e-5;
@@ -299,21 +304,21 @@ public class CloseEventsTest {
         // verify
         // if these fail the event finding did its job,
         // but this test isn't testing what it is supposed to be
-        Assertions.assertSame(detectorB, events.get(0).getDetector());
-        Assertions.assertSame(detectorA, events.get(1).getDetector());
-        Assertions.assertTrue(events.get(0).getT() < events.get(1).getT());
+        assertSame(detectorB, events.get(0).getDetector());
+        assertSame(detectorA, events.get(1).getDetector());
+        assertTrue(events.get(0).getT() < events.get(1).getT());
 
         // check event detection worked
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t3, events.get(0).getT(), 0.5);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(t2, events.get(1).getT(), 1e-6);
-        Assertions.assertTrue(events.get(1).isIncreasing());
+        assertEquals(2, events.size());
+        assertEquals(t3, events.get(0).getT(), 0.5);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(t2, events.get(1).getT(), 1e-6);
+        assertTrue(events.get(1).isIncreasing());
     }
 
     /** check when g(t < root) < 0,  g(root + convergence) < 0. */
     @Test
-    public void testRootPlusToleranceHasWrongSign() {
+    void testRootPlusToleranceHasWrongSign() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -332,25 +337,25 @@ public class CloseEventsTest {
 
         // verify
         // we only care that the rules are satisfied, there are other solutions
-        Assertions.assertEquals(3, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), toleranceB);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(0).getDetector());
-        Assertions.assertEquals(t3, events.get(1).getT(), toleranceB);
-        Assertions.assertFalse(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(1).getDetector());
-        Assertions.assertEquals(t2, events.get(2).getT(), tolerance);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(2).getDetector());
+        assertEquals(3, events.size());
+        assertEquals(t1, events.get(0).getT(), toleranceB);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorB, events.get(0).getDetector());
+        assertEquals(t3, events.get(1).getT(), toleranceB);
+        assertFalse(events.get(1).isIncreasing());
+        assertSame(detectorB, events.get(1).getDetector());
+        assertEquals(t2, events.get(2).getT(), tolerance);
+        assertTrue(events.get(2).isIncreasing());
+        assertSame(detectorA, events.get(2).getDetector());
         // chronological
         for (int i = 1; i < events.size(); i++) {
-            Assertions.assertTrue(events.get(i).getT() >= events.get(i - 1).getT());
+            assertTrue(events.get(i).getT() >= events.get(i - 1).getT());
         }
     }
 
     /** check when g(t < root) < 0,  g(root + convergence) < 0. */
     @Test
-    public void testRootPlusToleranceHasWrongSignAndLessThanTb() {
+    void testRootPlusToleranceHasWrongSignAndLessThanTb() {
         // setup
         // test is fragile w.r.t. implementation and these parameters
         double maxCheck = 10;
@@ -367,10 +372,10 @@ public class CloseEventsTest {
 
         // verify
         // allowed to find t1 or t3.
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorB, events.get(0).getDetector());
     }
 
     /**
@@ -378,7 +383,7 @@ public class CloseEventsTest {
      * < 0.
      */
     @Test
-    public void testDoubleRoot() {
+    void testDoubleRoot() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -395,14 +400,14 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
         // detector worked correctly
-        Assertions.assertEquals(0.0, detectorB.g(state(t1)));
-        Assertions.assertTrue(detectorB.g(state(t1 - 1e-6)) < 0);
-        Assertions.assertTrue(detectorB.g(state(t1 + 1e-6)) < 0);
+        assertEquals(0.0, detectorB.g(state(t1)));
+        assertTrue(detectorB.g(state(t1 - 1e-6)) < 0);
+        assertTrue(detectorB.g(state(t1 + 1e-6)) < 0);
     }
 
     /**
@@ -410,7 +415,7 @@ public class CloseEventsTest {
      * > 0.
      */
     @Test
-    public void testDoubleRootOppositeSign() {
+    void testDoubleRootOppositeSign() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -428,19 +433,19 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
         // detector worked correctly
-        Assertions.assertEquals(0.0, detectorB.g(state(t1)), 0.0);
-        Assertions.assertTrue(detectorB.g(state(t1 - 1e-6)) > 0);
-        Assertions.assertTrue(detectorB.g(state(t1 + 1e-6)) > 0);
+        assertEquals(0.0, detectorB.g(state(t1)), 0.0);
+        assertTrue(detectorB.g(state(t1 - 1e-6)) > 0);
+        assertTrue(detectorB.g(state(t1 + 1e-6)) > 0);
     }
 
     /** check root finding when zero at both ends. */
     @Test
-    public void testZeroAtBeginningAndEndOfInterval() {
+    void testZeroAtBeginningAndEndOfInterval() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -456,18 +461,18 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), 0.0);
-        Assertions.assertFalse(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), 0.0);
+        assertFalse(events.get(1).isIncreasing());
+        assertSame(detectorA, events.get(1).getDetector());
     }
 
     /** check root finding when zero at both ends. */
     @Test
-    public void testZeroAtBeginningAndEndOfIntervalOppositeSign() {
+    void testZeroAtBeginningAndEndOfIntervalOppositeSign() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -483,18 +488,18 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertFalse(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), 0.0);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertFalse(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), 0.0);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorA, events.get(1).getDetector());
     }
 
     /** Test where an event detector has to back up multiple times. */
     @Test
-    public void testMultipleBackups() {
+    void testMultipleBackups() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -516,13 +521,13 @@ public class CloseEventsTest {
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
-        Assertions.assertEquals(5, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertEquals(detectorC, events.get(1).getDetector());
+        assertEquals(5, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(detectorB, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertEquals(detectorC, events.get(1).getDetector());
         // reporting t3 and t4 is optional, seeing them is not.
         // we know a root was found at t3 because events are reported at t2 and t5.
         /*
@@ -533,20 +538,20 @@ public class CloseEventsTest {
         Assertions.assertEquals(true, events.get(3).isIncreasing());
         Assertions.assertEquals(detectorB, events.get(3).getDetector());
         */
-        Assertions.assertEquals(t5, events.get(2).getT(), tolerance);
-        Assertions.assertFalse(events.get(2).isIncreasing());
-        Assertions.assertEquals(detectorC, events.get(2).getDetector());
-        Assertions.assertEquals(t6, events.get(3).getT(), tolerance);
-        Assertions.assertTrue(events.get(3).isIncreasing());
-        Assertions.assertEquals(detectorA, events.get(3).getDetector());
-        Assertions.assertEquals(t7, events.get(4).getT(), tolerance);
-        Assertions.assertFalse(events.get(4).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(4).getDetector());
+        assertEquals(t5, events.get(2).getT(), tolerance);
+        assertFalse(events.get(2).isIncreasing());
+        assertEquals(detectorC, events.get(2).getDetector());
+        assertEquals(t6, events.get(3).getT(), tolerance);
+        assertTrue(events.get(3).isIncreasing());
+        assertEquals(detectorA, events.get(3).getDetector());
+        assertEquals(t7, events.get(4).getT(), tolerance);
+        assertFalse(events.get(4).isIncreasing());
+        assertEquals(detectorB, events.get(4).getDetector());
     }
 
     /** Test a reset event triggering another event at the same time. */
     @Test
-    public void testEventCausedByStateReset() {
+    void testEventCausedByStateReset() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -567,21 +572,21 @@ public class CloseEventsTest {
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
-        Assertions.assertEquals(3, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t1, events.get(1).getT(), tolerance);
-        Assertions.assertFalse(events.get(1).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(1).getDetector());
-        Assertions.assertEquals(t1 + 19, events.get(2).getT(), tolerance);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(2).getDetector());
+        assertEquals(3, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.get(1).getT(), tolerance);
+        assertFalse(events.get(1).isIncreasing());
+        assertEquals(detectorB, events.get(1).getDetector());
+        assertEquals(t1 + 19, events.get(2).getT(), tolerance);
+        assertTrue(events.get(2).isIncreasing());
+        assertEquals(detectorB, events.get(2).getDetector());
     }
 
     /** check when t + tolerance == t. */
     @Test
-    public void testConvergenceTooTight() {
+    void testConvergenceTooTight() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-18;
@@ -597,15 +602,15 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
     }
 
     /** check when root finding tolerance > event finding tolerance. */
     @Test
-    public void testToleranceMismatch() {
+    void testToleranceMismatch() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-18;
@@ -621,11 +626,11 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
+        assertEquals(1, events.size());
         // use root finder tolerance instead of event finder tolerance.
-        Assertions.assertEquals(t1, events.get(0).getT(), 1e-3);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.get(0).getT(), 1e-3);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
     }
 
     /**
@@ -636,7 +641,7 @@ public class CloseEventsTest {
      * DateDetector, it's useful, and not too hard to implement.
      */
     @Test
-    public void testEventChangesGFunctionDefinition() {
+    void testEventChangesGFunctionDefinition() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -676,13 +681,13 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorC, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorC, events.get(1).getDetector());
     }
 
     /**
@@ -691,7 +696,7 @@ public class CloseEventsTest {
      * cancels the occurrence of the event.
      */
     @Test
-    public void testEventChangesGFunctionDefinitionCancel() {
+    void testEventChangesGFunctionDefinitionCancel() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -732,10 +737,10 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
     }
 
     /**
@@ -744,7 +749,7 @@ public class CloseEventsTest {
      * delays the occurrence of the event.
      */
     @Test
-    public void testEventChangesGFunctionDefinitionDelay() {
+    void testEventChangesGFunctionDefinitionDelay() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -786,13 +791,13 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t3, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorC, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t3, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorC, events.get(1).getDetector());
     }
 
     /**
@@ -801,7 +806,7 @@ public class CloseEventsTest {
      * causes the event to happen sooner than originally expected.
      */
     @Test
-    public void testEventChangesGFunctionDefinitionAccelerate() {
+    void testEventChangesGFunctionDefinitionAccelerate() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -843,18 +848,18 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorC, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorC, events.get(1).getDetector());
     }
 
     /** check when root finding tolerance > event finding tolerance. */
     @Test
-    public void testToleranceStop() {
+    void testToleranceStop() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-18; // less than 1 ulp
@@ -871,18 +876,18 @@ public class CloseEventsTest {
                 integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
+        assertEquals(1, events.size());
         // use root finder tolerance instead of event finder tolerance.
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t1, finalState.getTime(), tolerance);
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, finalState.getTime(), tolerance);
 
         // try to resume propagation
         finalState = integrator.integrate(new Equation(), finalState, 30.0);
 
         // verify it got to the end
-        Assertions.assertEquals(30.0, finalState.getTime(), 0.0);
+        assertEquals(30.0, finalState.getTime(), 0.0);
     }
 
     /**
@@ -890,7 +895,7 @@ public class CloseEventsTest {
      * when restarting after a stop and cancellation occurs in the g function.
      */
     @Test
-    public void testLongInitialZero() {
+    void testLongInitialZero() {
         // setup
         double maxCheck = 10;
         double tolerance = 1;
@@ -914,7 +919,7 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(0, events.size());
+        assertEquals(0, events.size());
     }
 
     /**
@@ -923,7 +928,7 @@ public class CloseEventsTest {
      * detector to force a very small window for the first event detector.
      */
     @Test
-    public void testShortBracketingInterval() {
+    void testShortBracketingInterval() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -954,21 +959,21 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
 
         // verify
-        Assertions.assertEquals(3, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t1, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(1).getDetector());
-        Assertions.assertEquals(t2, events.get(2).getT(), tolerance);
-        Assertions.assertFalse(events.get(2).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(2).getDetector());
+        assertEquals(3, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorB, events.get(1).getDetector());
+        assertEquals(t2, events.get(2).getT(), tolerance);
+        assertFalse(events.get(2).isIncreasing());
+        assertSame(detectorA, events.get(2).getDetector());
     }
 
     /** Check that steps are restricted correctly with a continue event. */
     @Test
-    public void testEventStepHandler() {
+    void testEventStepHandler() {
         // setup
         double tolerance = 1e-18;
         ODEIntegrator integrator =
@@ -982,28 +987,28 @@ public class CloseEventsTest {
                 .integrate(new Equation(), new ODEState(0, new double[2]), 10);
 
         // verify
-        Assertions.assertEquals(10.0, finalState.getTime(), tolerance);
-        Assertions.assertEquals(0.0,
+        assertEquals(10.0, finalState.getTime(), tolerance);
+        assertEquals(0.0,
                 stepHandler.initialState.getTime(), tolerance);
-        Assertions.assertEquals(10.0, stepHandler.finalTime, tolerance);
-        Assertions.assertEquals(10.0,
+        assertEquals(10.0, stepHandler.finalTime, tolerance);
+        assertEquals(10.0,
                 stepHandler.finalState.getTime(), tolerance);
         ODEStateInterpolator interpolator = stepHandler.interpolators.get(0);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                 interpolator.getPreviousState().getTime(), tolerance);
-        Assertions.assertEquals(5.0,
+        assertEquals(5.0,
                 interpolator.getCurrentState().getTime(), tolerance);
         interpolator = stepHandler.interpolators.get(1);
-        Assertions.assertEquals(5.0,
+        assertEquals(5.0,
                 interpolator.getPreviousState().getTime(), tolerance);
-        Assertions.assertEquals(10.0,
+        assertEquals(10.0,
                 interpolator.getCurrentState().getTime(), tolerance);
-        Assertions.assertEquals(2, stepHandler.interpolators.size());
+        assertEquals(2, stepHandler.interpolators.size());
     }
 
     /** Test resetState(...) returns {@code null}. */
     @Test
-    public void testEventCausedByDerivativesReset() {
+    void testEventCausedByDerivativesReset() {
         // setup
         TimeDetector detectorA = new TimeDetector(10, 1e-6, 100, Action.RESET_STATE, 15.0) {
             @Override
@@ -1026,14 +1031,14 @@ public class CloseEventsTest {
         try {
             // action
             integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20.0);
-            Assertions.fail("Expected Exception");
+            fail("Expected Exception");
         } catch (NullPointerException e) {
             // expected
         }
     }
 
     @Test
-    public void testResetChangesSign() {
+    void testResetChangesSign() {
         OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
             public int getDimension() { return 1; }
             public double[] computeDerivatives(double t, double[] y) { return new double[] { 1.0 }; }
@@ -1044,9 +1049,9 @@ public class CloseEventsTest {
         ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small, 8.0, small, 1000);
         integrator.addEventDetector(eventsGenerator);
         final ODEStateAndDerivative end = integrator.integrate(equation, new ODEState(0.0, new double[1]), 100.0);
-        Assertions.assertEquals(2,                 eventsGenerator.getCount());
-        Assertions.assertEquals(9.0,               end.getCompleteState()[0], 1.0e-12);
-        Assertions.assertEquals(9.0 + 0.5 * small, end.getTime(),             1.0e-12);
+        assertEquals(2,                 eventsGenerator.getCount());
+        assertEquals(9.0,               end.getCompleteState()[0], 1.0e-12);
+        assertEquals(9.0 + 0.5 * small, end.getTime(),             1.0e-12);
     }
 
     /* The following tests are copies of the above tests, except that they propagate in
@@ -1055,7 +1060,7 @@ public class CloseEventsTest {
 
 
     @Test
-    public void testCloseEventsFirstOneIsResetReverse() {
+    void testCloseEventsFirstOneIsResetReverse() {
         // setup
         // a fairly rare state to reproduce this bug. Two dates, d1 < d2, that
         // are very close. Event triggers on d1 will reset state to break out of
@@ -1081,14 +1086,14 @@ public class CloseEventsTest {
 
         // verify
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(t1, events1.get(0).getT(), 0.0);
+        assertEquals(1, events1.size());
+        assertEquals(t1, events1.get(0).getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
-        Assertions.assertEquals(0, events2.size());
+        assertEquals(0, events2.size());
     }
 
     @Test
-    public void testCloseEventsReverse() {
+    void testCloseEventsReverse() {
         // setup
         double e = 1e-15;
         ODEIntegrator integrator =
@@ -1104,15 +1109,15 @@ public class CloseEventsTest {
 
         // verify
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(-5, events1.get(0).getT(), 0.0);
+        assertEquals(1, events1.size());
+        assertEquals(-5, events1.get(0).getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
-        Assertions.assertEquals(1, events2.size());
-        Assertions.assertEquals(-5.5, events2.get(0).getT(), 0.0);
+        assertEquals(1, events2.size());
+        assertEquals(-5.5, events2.get(0).getT(), 0.0);
     }
 
     @Test
-    public void testSimultaneousEventsReverse() {
+    void testSimultaneousEventsReverse() {
         // setup
         ODEIntegrator integrator =
                 new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
@@ -1127,11 +1132,11 @@ public class CloseEventsTest {
 
         // verify
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(-5, events1.get(0).getT(), 0.0);
+        assertEquals(1, events1.size());
+        assertEquals(-5, events1.get(0).getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
-        Assertions.assertEquals(1, events2.size());
-        Assertions.assertEquals(-5, events2.get(0).getT(), 0.0);
+        assertEquals(1, events2.size());
+        assertEquals(-5, events2.get(0).getT(), 0.0);
     }
 
     /**
@@ -1140,7 +1145,7 @@ public class CloseEventsTest {
      * detect events that should not have occurred, both of which are problems.
      */
     @Test
-    public void testSimultaneousEventsResetReverse() {
+    void testSimultaneousEventsResetReverse() {
         // setup
         double tol = 1e-10;
         ODEIntegrator integrator =
@@ -1176,13 +1181,13 @@ public class CloseEventsTest {
 
         // verify
         // order is important to make sure the test checks what it is supposed to
-        Assertions.assertEquals(-5, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(detector1, events.get(0).getDetector());
-        Assertions.assertEquals(-5, events.get(1).getT(), 0.0);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertEquals(detector2, events.get(1).getDetector());
-        Assertions.assertEquals(2, events.size());
+        assertEquals(-5, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(detector1, events.get(0).getDetector());
+        assertEquals(-5, events.get(1).getT(), 0.0);
+        assertTrue(events.get(1).isIncreasing());
+        assertEquals(detector2, events.get(1).getDetector());
+        assertEquals(2, events.size());
     }
 
     /**
@@ -1192,7 +1197,7 @@ public class CloseEventsTest {
      * neither would actually back up at all. For Hipparchus GitHub #91.
      */
     @Test
-    public void testSimultaneousDiscontinuousEventsAfterResetReverse() {
+    void testSimultaneousDiscontinuousEventsAfterResetReverse() {
         // setup
         double t = -FastMath.PI;
         double tol = 1e-10;
@@ -1213,17 +1218,17 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[]{-1e100, 0}), -10);
 
         // verify
-        Assertions.assertEquals(t, events.get(0).getT(),  tol);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(resetDetector, events.get(0).getDetector());
+        assertEquals(t, events.get(0).getT(),  tol);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(resetDetector, events.get(0).getDetector());
         // next two events can occur in either order
-        Assertions.assertEquals(t, events.get(1).getT(),  tol);
-        Assertions.assertFalse(events.get(1).isIncreasing());
-        Assertions.assertEquals(detectors.get(0), events.get(1).getDetector());
-        Assertions.assertEquals(t, events.get(2).getT(),  tol);
-        Assertions.assertFalse(events.get(2).isIncreasing());
-        Assertions.assertEquals(detectors.get(1), events.get(2).getDetector());
-        Assertions.assertEquals(3, events.size());
+        assertEquals(t, events.get(1).getT(),  tol);
+        assertFalse(events.get(1).isIncreasing());
+        assertEquals(detectors.get(0), events.get(1).getDetector());
+        assertEquals(t, events.get(2).getT(),  tol);
+        assertFalse(events.get(2).isIncreasing());
+        assertEquals(detectors.get(1), events.get(2).getDetector());
+        assertEquals(3, events.size());
     }
 
     /**
@@ -1232,7 +1237,7 @@ public class CloseEventsTest {
      * preserve the alternating increasing / decreasing sequence.
      */
     @Test
-    public void testFastSwitchingReverse() {
+    void testFastSwitchingReverse() {
         // setup
         // step size of 10 to land in between two events we would otherwise miss
         ODEIntegrator integrator =
@@ -1247,14 +1252,14 @@ public class CloseEventsTest {
         //verify
         // finds one or three events. Not 2.
         List<Event> events1 = detector1.getEvents();
-        Assertions.assertEquals(1, events1.size());
-        Assertions.assertEquals(-9.9, events1.get(0).getT(), 0.2);
-        Assertions.assertTrue(events1.get(0).isIncreasing());
+        assertEquals(1, events1.size());
+        assertEquals(-9.9, events1.get(0).getT(), 0.2);
+        assertTrue(events1.get(0).isIncreasing());
     }
 
     /** "A Tricky Problem" from bug #239. */
     @Test
-    public void testTrickyCaseLowerReverse() {
+    void testTrickyCaseLowerReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1277,17 +1282,17 @@ public class CloseEventsTest {
         //verify
         // really we only care that the Rules of Event Handling are not violated,
         // but I only know one way to do that in this case.
-        Assertions.assertEquals(5, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertFalse(events.get(0).isIncreasing());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertEquals(t3, events.get(2).getT(), tolerance);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertEquals(t4, events.get(3).getT(), tolerance);
-        Assertions.assertTrue(events.get(3).isIncreasing());
-        Assertions.assertEquals(t5, events.get(4).getT(), tolerance);
-        Assertions.assertFalse(events.get(4).isIncreasing());
+        assertEquals(5, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertFalse(events.get(0).isIncreasing());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertEquals(t3, events.get(2).getT(), tolerance);
+        assertTrue(events.get(2).isIncreasing());
+        assertEquals(t4, events.get(3).getT(), tolerance);
+        assertTrue(events.get(3).isIncreasing());
+        assertEquals(t5, events.get(4).getT(), tolerance);
+        assertFalse(events.get(4).isIncreasing());
     }
 
     /**
@@ -1296,7 +1301,7 @@ public class CloseEventsTest {
      * t3.
      */
     @Test
-    public void testRootFindingToleranceReverse() {
+    void testRootFindingToleranceReverse() {
         //setup
         double maxCheck = 10;
         double t2 = -11, t3 = t2 - 1e-5;
@@ -1314,21 +1319,21 @@ public class CloseEventsTest {
         // verify
         // if these fail the event finding did its job,
         // but this test isn't testing what it is supposed to be
-        Assertions.assertSame(detectorB, events.get(0).getDetector());
-        Assertions.assertSame(detectorA, events.get(1).getDetector());
-        Assertions.assertTrue(events.get(0).getT() > events.get(1).getT());
+        assertSame(detectorB, events.get(0).getDetector());
+        assertSame(detectorA, events.get(1).getDetector());
+        assertTrue(events.get(0).getT() > events.get(1).getT());
 
         // check event detection worked
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t3, events.get(0).getT(), 0.5);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(t2, events.get(1).getT(), 1e-6);
-        Assertions.assertTrue(events.get(1).isIncreasing());
+        assertEquals(2, events.size());
+        assertEquals(t3, events.get(0).getT(), 0.5);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(t2, events.get(1).getT(), 1e-6);
+        assertTrue(events.get(1).isIncreasing());
     }
 
     /** check when g(t < root) < 0,  g(root + convergence) < 0. */
     @Test
-    public void testRootPlusToleranceHasWrongSignReverse() {
+    void testRootPlusToleranceHasWrongSignReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1348,24 +1353,24 @@ public class CloseEventsTest {
 
         // verify
         // we only care that the rules are satisfied. There are multiple solutions.
-        Assertions.assertEquals(3, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), toleranceB);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(0).getDetector());
-        Assertions.assertEquals(t3, events.get(1).getT(), toleranceB);
-        Assertions.assertFalse(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(1).getDetector());
-        Assertions.assertEquals(t2, events.get(2).getT(), tolerance);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(2).getDetector());
+        assertEquals(3, events.size());
+        assertEquals(t1, events.get(0).getT(), toleranceB);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorB, events.get(0).getDetector());
+        assertEquals(t3, events.get(1).getT(), toleranceB);
+        assertFalse(events.get(1).isIncreasing());
+        assertSame(detectorB, events.get(1).getDetector());
+        assertEquals(t2, events.get(2).getT(), tolerance);
+        assertTrue(events.get(2).isIncreasing());
+        assertSame(detectorA, events.get(2).getDetector());
         // ascending order
-        Assertions.assertTrue(events.get(0).getT() >= events.get(1).getT());
-        Assertions.assertTrue(events.get(1).getT() >= events.get(2).getT());
+        assertTrue(events.get(0).getT() >= events.get(1).getT());
+        assertTrue(events.get(1).getT() >= events.get(2).getT());
     }
 
     /** check when g(t < root) < 0,  g(root + convergence) < 0. */
     @Test
-    public void testRootPlusToleranceHasWrongSignAndLessThanTbReverse() {
+    void testRootPlusToleranceHasWrongSignAndLessThanTbReverse() {
         // setup
         // test is fragile w.r.t. implementation and these parameters
         double maxCheck = 10;
@@ -1383,10 +1388,10 @@ public class CloseEventsTest {
 
         // verify
         // allowed to report t1 or t3.
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorB, events.get(0).getDetector());
     }
 
     /**
@@ -1394,7 +1399,7 @@ public class CloseEventsTest {
      * < 0.
      */
     @Test
-    public void testDoubleRootReverse() {
+    void testDoubleRootReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1412,14 +1417,14 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
         // detector worked correctly
-        Assertions.assertEquals(0.0, detectorB.g(state(t1)));
-        Assertions.assertTrue(detectorB.g(state(t1 + 1e-6)) < 0);
-        Assertions.assertTrue(detectorB.g(state(t1 - 1e-6)) < 0);
+        assertEquals(0.0, detectorB.g(state(t1)));
+        assertTrue(detectorB.g(state(t1 + 1e-6)) < 0);
+        assertTrue(detectorB.g(state(t1 - 1e-6)) < 0);
     }
 
     /**
@@ -1427,7 +1432,7 @@ public class CloseEventsTest {
      * > 0.
      */
     @Test
-    public void testDoubleRootOppositeSignReverse() {
+    void testDoubleRootOppositeSignReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1446,19 +1451,19 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
         // detector worked correctly
-        Assertions.assertEquals(0.0, detectorB.g(state(t1)), 0.0);
-        Assertions.assertTrue(detectorB.g(state(t1 + 1e-6)) > 0);
-        Assertions.assertTrue(detectorB.g(state(t1 - 1e-6)) > 0);
+        assertEquals(0.0, detectorB.g(state(t1)), 0.0);
+        assertTrue(detectorB.g(state(t1 + 1e-6)) > 0);
+        assertTrue(detectorB.g(state(t1 - 1e-6)) > 0);
     }
 
     /** check root finding when zero at both ends. */
     @Test
-    public void testZeroAtBeginningAndEndOfIntervalReverse() {
+    void testZeroAtBeginningAndEndOfIntervalReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1474,18 +1479,18 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), 0.0);
-        Assertions.assertFalse(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), 0.0);
+        assertFalse(events.get(1).isIncreasing());
+        assertSame(detectorA, events.get(1).getDetector());
     }
 
     /** check root finding when zero at both ends. */
     @Test
-    public void testZeroAtBeginningAndEndOfIntervalOppositeSignReverse() {
+    void testZeroAtBeginningAndEndOfIntervalOppositeSignReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1501,18 +1506,18 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertFalse(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), 0.0);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertFalse(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), 0.0);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorA, events.get(1).getDetector());
     }
 
     /** Test where an event detector has to back up multiple times. */
     @Test
-    public void testMultipleBackupsReverse() {
+    void testMultipleBackupsReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1534,13 +1539,13 @@ public class CloseEventsTest {
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
-        Assertions.assertEquals(5, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertEquals(detectorC, events.get(1).getDetector());
+        assertEquals(5, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(detectorB, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertEquals(detectorC, events.get(1).getDetector());
         // reporting t3 and t4 is optional, seeing them is not.
         // we know a root was found at t3 because events are reported at t2 and t5.
         /*
@@ -1551,20 +1556,20 @@ public class CloseEventsTest {
         Assertions.assertEquals(true, events.get(3).isIncreasing());
         Assertions.assertEquals(detectorB, events.get(3).getHandler());
         */
-        Assertions.assertEquals(t5, events.get(2).getT(), tolerance);
-        Assertions.assertFalse(events.get(2).isIncreasing());
-        Assertions.assertEquals(detectorC, events.get(2).getDetector());
-        Assertions.assertEquals(t6, events.get(3).getT(), tolerance);
-        Assertions.assertTrue(events.get(3).isIncreasing());
-        Assertions.assertEquals(detectorA, events.get(3).getDetector());
-        Assertions.assertEquals(t7, events.get(4).getT(), tolerance);
-        Assertions.assertFalse(events.get(4).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(4).getDetector());
+        assertEquals(t5, events.get(2).getT(), tolerance);
+        assertFalse(events.get(2).isIncreasing());
+        assertEquals(detectorC, events.get(2).getDetector());
+        assertEquals(t6, events.get(3).getT(), tolerance);
+        assertTrue(events.get(3).isIncreasing());
+        assertEquals(detectorA, events.get(3).getDetector());
+        assertEquals(t7, events.get(4).getT(), tolerance);
+        assertFalse(events.get(4).isIncreasing());
+        assertEquals(detectorB, events.get(4).getDetector());
     }
 
     /** Test a reset event triggering another event at the same time. */
     @Test
-    public void testEventCausedByStateResetReverse() {
+    void testEventCausedByStateResetReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1585,21 +1590,21 @@ public class CloseEventsTest {
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
-        Assertions.assertEquals(3, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertEquals(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t1, events.get(1).getT(), tolerance);
-        Assertions.assertFalse(events.get(1).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(1).getDetector());
-        Assertions.assertEquals(t1 - 19, events.get(2).getT(), tolerance);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertEquals(detectorB, events.get(2).getDetector());
+        assertEquals(3, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertEquals(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.get(1).getT(), tolerance);
+        assertFalse(events.get(1).isIncreasing());
+        assertEquals(detectorB, events.get(1).getDetector());
+        assertEquals(t1 - 19, events.get(2).getT(), tolerance);
+        assertTrue(events.get(2).isIncreasing());
+        assertEquals(detectorB, events.get(2).getDetector());
     }
 
     /** check when t + tolerance == t. */
     @Test
-    public void testConvergenceTooTightReverse() {
+    void testConvergenceTooTightReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-18;
@@ -1615,15 +1620,15 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), 0.0);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), 0.0);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
     }
 
     /** check when root finding tolerance > event finding tolerance. */
     @Test
-    public void testToleranceMismatchReverse() {
+    void testToleranceMismatchReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-18;
@@ -1639,11 +1644,11 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
+        assertEquals(1, events.size());
         // use root finding tolerance since it is larger
-        Assertions.assertEquals(t1, events.get(0).getT(), 1e-3);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.get(0).getT(), 1e-3);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
     }
 
     /**
@@ -1653,7 +1658,7 @@ public class CloseEventsTest {
      * too hard to implement.
      */
     @Test
-    public void testEventChangesGFunctionDefinitionReverse() {
+    void testEventChangesGFunctionDefinitionReverse() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -1693,13 +1698,13 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorC, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorC, events.get(1).getDetector());
     }
 
     /**
@@ -1708,7 +1713,7 @@ public class CloseEventsTest {
      * cancels the occurrence of the event.
      */
     @Test
-    public void testEventChangesGFunctionDefinitionCancelReverse() {
+    void testEventChangesGFunctionDefinitionCancelReverse() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -1749,10 +1754,10 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(1, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
     }
 
 
@@ -1762,7 +1767,7 @@ public class CloseEventsTest {
      * delays the occurrence of the event.
      */
     @Test
-    public void testEventChangesGFunctionDefinitionDelayReverse() {
+    void testEventChangesGFunctionDefinitionDelayReverse() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -1804,13 +1809,13 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t3, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorC, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t3, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorC, events.get(1).getDetector());
     }
 
     /**
@@ -1819,7 +1824,7 @@ public class CloseEventsTest {
      * causes the event to happen sooner than originally expected.
      */
     @Test
-    public void testEventChangesGFunctionDefinitionAccelerateReverse() {
+    void testEventChangesGFunctionDefinitionAccelerateReverse() {
         // setup
         double maxCheck = 5;
         double tolerance = 1e-6;
@@ -1861,18 +1866,18 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(2, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t2, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorC, events.get(1).getDetector());
+        assertEquals(2, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t2, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorC, events.get(1).getDetector());
     }
 
     /** check when root finding tolerance > event finding tolerance. */
     @Test
-    public void testToleranceStopReverse() {
+    void testToleranceStopReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-18; // less than 1 ulp
@@ -1889,18 +1894,18 @@ public class CloseEventsTest {
                 integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(1, events.size());
+        assertEquals(1, events.size());
         // use root finder tolerance instead of event finder tolerance.
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertTrue(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t1, finalState.getTime(), tolerance);
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertTrue(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, finalState.getTime(), tolerance);
 
         // try to resume propagation
         finalState = integrator.integrate(new Equation(), finalState, -30.0);
 
         // verify it got to the end
-        Assertions.assertEquals(-30.0, finalState.getTime(), 0.0);
+        assertEquals(-30.0, finalState.getTime(), 0.0);
     }
 
     /**
@@ -1908,7 +1913,7 @@ public class CloseEventsTest {
      * when restarting after a stop and cancellation occurs in the g function.
      */
     @Test
-    public void testLongInitialZeroReverse() {
+    void testLongInitialZeroReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1;
@@ -1932,7 +1937,7 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(0, events.size());
+        assertEquals(0, events.size());
     }
 
     /**
@@ -1941,7 +1946,7 @@ public class CloseEventsTest {
      * detector to force a very small window for the first event detector.
      */
     @Test
-    public void testShortBracketingIntervalReverse() {
+    void testShortBracketingIntervalReverse() {
         // setup
         double maxCheck = 10;
         double tolerance = 1e-6;
@@ -1972,21 +1977,21 @@ public class CloseEventsTest {
         integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
 
         // verify
-        Assertions.assertEquals(3, events.size());
-        Assertions.assertEquals(t1, events.get(0).getT(), tolerance);
-        Assertions.assertFalse(events.get(0).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(0).getDetector());
-        Assertions.assertEquals(t1, events.get(1).getT(), tolerance);
-        Assertions.assertTrue(events.get(1).isIncreasing());
-        Assertions.assertSame(detectorB, events.get(1).getDetector());
-        Assertions.assertEquals(t2, events.get(2).getT(), tolerance);
-        Assertions.assertTrue(events.get(2).isIncreasing());
-        Assertions.assertSame(detectorA, events.get(2).getDetector());
+        assertEquals(3, events.size());
+        assertEquals(t1, events.get(0).getT(), tolerance);
+        assertFalse(events.get(0).isIncreasing());
+        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.get(1).getT(), tolerance);
+        assertTrue(events.get(1).isIncreasing());
+        assertSame(detectorB, events.get(1).getDetector());
+        assertEquals(t2, events.get(2).getT(), tolerance);
+        assertTrue(events.get(2).isIncreasing());
+        assertSame(detectorA, events.get(2).getDetector());
     }
 
     /** Check that steps are restricted correctly with a continue event. */
     @Test
-    public void testEventStepHandlerReverse() {
+    void testEventStepHandlerReverse() {
         // setup
         double tolerance = 1e-18;
         ODEIntegrator integrator =
@@ -2000,28 +2005,28 @@ public class CloseEventsTest {
                 .integrate(new Equation(), new ODEState(0, new double[2]), -10);
 
         // verify
-        Assertions.assertEquals(-10.0, finalState.getTime(), tolerance);
-        Assertions.assertEquals(0.0,
+        assertEquals(-10.0, finalState.getTime(), tolerance);
+        assertEquals(0.0,
                 stepHandler.initialState.getTime(), tolerance);
-        Assertions.assertEquals(-10.0, stepHandler.finalTime, tolerance);
-        Assertions.assertEquals(-10.0,
+        assertEquals(-10.0, stepHandler.finalTime, tolerance);
+        assertEquals(-10.0,
                 stepHandler.finalState.getTime(), tolerance);
         ODEStateInterpolator interpolator = stepHandler.interpolators.get(0);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                 interpolator.getPreviousState().getTime(), tolerance);
-        Assertions.assertEquals(-5.0,
+        assertEquals(-5.0,
                 interpolator.getCurrentState().getTime(), tolerance);
         interpolator = stepHandler.interpolators.get(1);
-        Assertions.assertEquals(-5.0,
+        assertEquals(-5.0,
                 interpolator.getPreviousState().getTime(), tolerance);
-        Assertions.assertEquals(-10.0,
+        assertEquals(-10.0,
                 interpolator.getCurrentState().getTime(), tolerance);
-        Assertions.assertEquals(2, stepHandler.interpolators.size());
+        assertEquals(2, stepHandler.interpolators.size());
     }
 
     /** Test resetState(...) returns {@code null}. */
     @Test
-    public void testEventCausedByDerivativesResetReverse() {
+    void testEventCausedByDerivativesResetReverse() {
         // setup
         TimeDetector detectorA = new TimeDetector(10, 1e-6, 100, Action.RESET_STATE, -15.0) {
             @Override
@@ -2045,14 +2050,14 @@ public class CloseEventsTest {
         try {
             // action
             integrator.integrate(new Equation(), new ODEState(0, new double[2]), -20.0);
-            Assertions.fail("Expected Exception");
+            fail("Expected Exception");
         } catch (NullPointerException e) {
             // expected
         }
     }
 
     @Test
-    public void testResetChangesSignReverse() {
+    void testResetChangesSignReverse() {
         OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
             public int getDimension() { return 1; }
             public double[] computeDerivatives(double t, double[] y) { return new double[] { 1.0 }; }
@@ -2063,9 +2068,9 @@ public class CloseEventsTest {
         ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(-6.0, -9.0, +0.5 * small, 8.0, small, 1000);
         integrator.addEventDetector(eventsGenerator);
         final ODEStateAndDerivative end = integrator.integrate(equation, new ODEState(0.0, new double[1]), -100.0);
-        Assertions.assertEquals(2,                  eventsGenerator.getCount());
-        Assertions.assertEquals(-9.0,               end.getCompleteState()[0], 1.0e-12);
-        Assertions.assertEquals(-9.0 - 0.5 * small, end.getTime(),             1.0e-12);
+        assertEquals(2,                  eventsGenerator.getCount());
+        assertEquals(-9.0,               end.getCompleteState()[0], 1.0e-12);
+        assertEquals(-9.0 - 0.5 * small, end.getTime(),             1.0e-12);
     }
 
     /* utility classes and methods */
@@ -2303,7 +2308,7 @@ public class CloseEventsTest {
                 }
                 @Override
                 public ODEState resetState(ODEEventDetector detector, ODEStateAndDerivative state) {
-                    Assertions.assertEquals(eventTs[0], state.getTime(), 0);
+                    assertEquals(eventTs[0], state.getTime(), 0);
                     return resetState;
                 }
             };

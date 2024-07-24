@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ComplexComparatorTest {
+class ComplexComparatorTest {
 
     private final ComplexComparator comp = new ComplexComparator();
     private Complex o1 = new Complex(1, 1);
@@ -30,26 +30,26 @@ public class ComplexComparatorTest {
     private Complex o3 = new Complex(2, 0);
 
     @Test
-    public void test() {
+    void test() {
         assertEquals(comp.compare(o1, o2), -1 * comp.compare(o2, o1), "ok");
     }
 
     @Test
-    public void test2() {
+    void test2() {
         assertEquals(((comp.compare(o1, o2) > 0) && (comp.compare(o2, o3) > 0)),
                      comp.compare(o1, o3) > 0,
                      "ok");
     }
 
     @Test
-    public void test3() {
+    void test3() {
         assertEquals(((comp.compare(o1, o11) == 0)),
                      comp.compare(o1, o2) == comp.compare(o11, o2),
                      "ok");
     }
 
     @Test
-    public void test4() {
+    void test4() {
         assertTrue((comp.compare(o1, o11) == 0), "ok");
     }
 }

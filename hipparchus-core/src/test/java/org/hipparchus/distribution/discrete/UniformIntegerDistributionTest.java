@@ -24,9 +24,10 @@ package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for UniformIntegerDistribution.
@@ -93,21 +94,21 @@ public class UniformIntegerDistributionTest extends IntegerDistributionAbstractT
 
     /** Test mean/variance. */
     @Test
-    public void testMoments() {
+    void testMoments() {
         UniformIntegerDistribution dist;
 
         dist = new UniformIntegerDistribution(0, 5);
-        Assertions.assertEquals(2.5, dist.getNumericalMean(), 0);
-        Assertions.assertEquals(dist.getNumericalVariance(), 35 / 12.0, 0);
+        assertEquals(2.5, dist.getNumericalMean(), 0);
+        assertEquals(dist.getNumericalVariance(), 35 / 12.0, 0);
 
         dist = new UniformIntegerDistribution(0, 1);
-        Assertions.assertEquals(0.5, dist.getNumericalMean(), 0);
-        Assertions.assertEquals(dist.getNumericalVariance(), 3 / 12.0, 0);
+        assertEquals(0.5, dist.getNumericalMean(), 0);
+        assertEquals(dist.getNumericalVariance(), 3 / 12.0, 0);
     }
 
     // MATH-1141
     @Test
-    public void testPreconditionUpperBoundInclusive() {
+    void testPreconditionUpperBoundInclusive() {
         try {
             new UniformIntegerDistribution(1, 0);
         } catch (MathIllegalArgumentException e) {

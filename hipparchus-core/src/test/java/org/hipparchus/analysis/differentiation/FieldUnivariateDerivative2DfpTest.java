@@ -22,13 +22,15 @@ import org.hipparchus.dfp.DfpField;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for class {@link FieldUnivariateDerivative2} on {@link Dfp}.
  */
-public class FieldUnivariateDerivative2DfpTest extends FieldUnivariateDerivative2AbstractTest<Dfp> {
+class FieldUnivariateDerivative2DfpTest extends FieldUnivariateDerivative2AbstractTest<Dfp> {
 
     private static final DfpField FIELD = new DfpField(25);
 
@@ -39,7 +41,7 @@ public class FieldUnivariateDerivative2DfpTest extends FieldUnivariateDerivative
 
     @Test
     public void testHashcode() {
-        Assertions.assertEquals(-1300667743, build(2, 1, 4).hashCode());
+        assertEquals(-1300667743, build(2, 1, 4).hashCode());
     }
 
     @Override
@@ -54,7 +56,7 @@ public class FieldUnivariateDerivative2DfpTest extends FieldUnivariateDerivative
         final RandomGenerator random = new Well19937a(0x36d4f8862421e0e4l);
         for (int i = -300; i < 300; ++i) {
             final double x = FastMath.scalb(2.0 * random.nextDouble() - 1.0, i);
-            Assertions.assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
+            assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
         }
     }
 

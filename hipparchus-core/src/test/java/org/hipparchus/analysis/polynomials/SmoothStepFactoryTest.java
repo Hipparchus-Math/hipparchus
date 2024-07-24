@@ -20,17 +20,17 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SmoothStepFactoryTest {
+class SmoothStepFactoryTest {
 
     final double THRESHOLD = 1e-15;
 
     @Test
-    public void testExceptionBelowBoundary() {
+    void testExceptionBelowBoundary() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             // Given
             final double                               x = 2;
@@ -42,7 +42,7 @@ public class SmoothStepFactoryTest {
     }
 
     @Test
-    public void testExceptionOverBoundary() {
+    void testExceptionOverBoundary() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             // Given
             final double                               x = 17;
@@ -54,7 +54,7 @@ public class SmoothStepFactoryTest {
     }
 
     @Test
-    public void testEdgesConsistency() {
+    void testEdgesConsistency() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             // Given
             final double                               leftEdge = 5;
@@ -68,7 +68,7 @@ public class SmoothStepFactoryTest {
     }
 
     @Test
-    public void testBoundaries() {
+    void testBoundaries() {
         // Given
         final double leftEdge  = 5;
         final double rightEdge = 10;
@@ -82,12 +82,12 @@ public class SmoothStepFactoryTest {
         final double computedResult2 = clamp.value(leftEdge, rightEdge, x2);
 
         // Then
-        Assertions.assertEquals(0, computedResult1, THRESHOLD);
-        Assertions.assertEquals(1, computedResult2, THRESHOLD);
+        assertEquals(0, computedResult1, THRESHOLD);
+        assertEquals(1, computedResult2, THRESHOLD);
     }
 
     @Test
-    public void testNormalizedInput() {
+    void testNormalizedInput() {
 
         // Given
         final double                               x     = 0.4;
@@ -97,12 +97,12 @@ public class SmoothStepFactoryTest {
         final double computedResult = cubic.value(x);
 
         // Then
-        Assertions.assertEquals(0.352, computedResult, THRESHOLD);
+        assertEquals(0.352, computedResult, THRESHOLD);
 
     }
 
     @Test
-    public void testClampFunction() {
+    void testClampFunction() {
 
         // Given
         final double leftEdge  = 5;
@@ -115,12 +115,12 @@ public class SmoothStepFactoryTest {
         final double computedResult = clamp.value(leftEdge, rightEdge, x);
 
         // Then
-        Assertions.assertEquals(0.4, computedResult, THRESHOLD);
+        assertEquals(0.4, computedResult, THRESHOLD);
 
     }
 
     @Test
-    public void testQuadraticFunction1() {
+    void testQuadraticFunction1() {
 
         // Given
         final double leftEdge  = 5;
@@ -133,12 +133,12 @@ public class SmoothStepFactoryTest {
         final double computedResult = quadratic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assertions.assertEquals(0.32, computedResult, THRESHOLD);
+        assertEquals(0.32, computedResult, THRESHOLD);
 
     }
 
     @Test
-    public void testQuadraticFunction2() {
+    void testQuadraticFunction2() {
 
         // Given
         final double leftEdge  = 5;
@@ -151,12 +151,12 @@ public class SmoothStepFactoryTest {
         final double computedResult = quadratic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assertions.assertEquals(0.68, computedResult, THRESHOLD);
+        assertEquals(0.68, computedResult, THRESHOLD);
 
     }
 
     @Test
-    public void testCubicFunction() {
+    void testCubicFunction() {
 
         // Given
         final double leftEdge  = 5;
@@ -169,12 +169,12 @@ public class SmoothStepFactoryTest {
         final double computedResult = cubic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assertions.assertEquals(0.352, computedResult, THRESHOLD);
+        assertEquals(0.352, computedResult, THRESHOLD);
 
     }
 
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
 
         // Given
         final double leftEdge  = 5;
@@ -187,12 +187,12 @@ public class SmoothStepFactoryTest {
         final double computedResult = quintic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assertions.assertEquals(0.31744, computedResult, THRESHOLD);
+        assertEquals(0.31744, computedResult, THRESHOLD);
 
     }
 
     @Test
-    public void testFieldEdgesConsistency() {
+    void testFieldEdgesConsistency() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             // Given
             final Field<Binary64> field = Binary64Field.getInstance();
@@ -209,7 +209,7 @@ public class SmoothStepFactoryTest {
     }
 
     @Test
-    public void testFieldBoundaries() {
+    void testFieldBoundaries() {
         // Given
         final Field<Binary64> field = Binary64Field.getInstance();
 
@@ -225,12 +225,12 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult2 = clamp.value(leftEdge, rightEdge, x2);
 
         // Then
-        Assertions.assertEquals(0, computedResult1.getReal(), THRESHOLD);
-        Assertions.assertEquals(1, computedResult2.getReal(), THRESHOLD);
+        assertEquals(0, computedResult1.getReal(), THRESHOLD);
+        assertEquals(1, computedResult2.getReal(), THRESHOLD);
     }
 
     @Test
-    public void testFieldNormalizedInput() {
+    void testFieldNormalizedInput() {
 
         // Given
         final Field<Binary64> field = Binary64Field.getInstance();
@@ -242,12 +242,12 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult = cubic.value(x);
 
         // Then
-        Assertions.assertEquals(0.352, computedResult.getReal(), THRESHOLD);
+        assertEquals(0.352, computedResult.getReal(), THRESHOLD);
 
     }
 
     @Test
-    public void testFieldClampFunction() {
+    void testFieldClampFunction() {
 
         // Given
         final Field<Binary64> field     = Binary64Field.getInstance();
@@ -261,12 +261,12 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult = clamp.value(leftEdge, rightEdge, x);
 
         // Then
-        Assertions.assertEquals(0.4, computedResult.getReal(), THRESHOLD);
+        assertEquals(0.4, computedResult.getReal(), THRESHOLD);
 
     }
 
     @Test
-    public void testFieldQuadraticFunction1() {
+    void testFieldQuadraticFunction1() {
 
         // Given
         final Field<Binary64> field     = Binary64Field.getInstance();
@@ -282,13 +282,13 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult2 = quadratic.value((x - leftEdge) / (rightEdge - leftEdge));
 
         // Then
-        Assertions.assertEquals(0.32, computedResult.getReal(), THRESHOLD);
-        Assertions.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+        assertEquals(0.32, computedResult.getReal(), THRESHOLD);
+        assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
 
     }
 
     @Test
-    public void testFieldQuadraticFunction2() {
+    void testFieldQuadraticFunction2() {
 
         // Given
         final Field<Binary64> field     = Binary64Field.getInstance();
@@ -303,13 +303,13 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult2 = quadratic.value((x - leftEdge) / (rightEdge - leftEdge));
 
         // Then
-        Assertions.assertEquals(0.68, computedResult.getReal(), THRESHOLD);
-        Assertions.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+        assertEquals(0.68, computedResult.getReal(), THRESHOLD);
+        assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
 
     }
 
     @Test
-    public void testFieldCubicFunction() {
+    void testFieldCubicFunction() {
 
         // Given
         final Field<Binary64> field     = Binary64Field.getInstance();
@@ -323,12 +323,12 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult = cubic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assertions.assertEquals(0.352, computedResult.getReal(), THRESHOLD);
+        assertEquals(0.352, computedResult.getReal(), THRESHOLD);
 
     }
 
     @Test
-    public void testFieldQuinticFunction() {
+    void testFieldQuinticFunction() {
 
         // Given
         final Field<Binary64> field       = Binary64Field.getInstance();
@@ -346,9 +346,9 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult3 = quintic.value(new Binary64(xNormalized));
 
         // Then
-        Assertions.assertEquals(0.31744, computedResult.getReal(), THRESHOLD);
-        Assertions.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
-        Assertions.assertEquals(computedResult2.getReal(), computedResult3.getReal(), THRESHOLD);
+        assertEquals(0.31744, computedResult.getReal(), THRESHOLD);
+        assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+        assertEquals(computedResult2.getReal(), computedResult3.getReal(), THRESHOLD);
     }
 
 }

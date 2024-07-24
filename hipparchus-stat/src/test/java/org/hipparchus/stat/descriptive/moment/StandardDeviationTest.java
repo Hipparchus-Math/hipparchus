@@ -48,7 +48,7 @@ public class StandardDeviationTest extends StorelessUnivariateStatisticAbstractT
      * Make sure Double.NaN is returned iff n = 0
      */
     @Test
-    public void testNaN() {
+    void testNaN() {
         StandardDeviation std = getUnivariateStatistic();
         assertTrue(Double.isNaN(std.getResult()));
         std.increment(1d);
@@ -59,7 +59,7 @@ public class StandardDeviationTest extends StorelessUnivariateStatisticAbstractT
      * Test population version of variance
      */
     @Test
-    public void testPopulation() {
+    void testPopulation() {
         double[] values = { -1.0d, 3.1d, 4.0d, -2.1d, 22d, 11.7d, 3d, 14d };
         double sigma = populationStandardDeviation(values);
         SecondMoment m = new SecondMoment();

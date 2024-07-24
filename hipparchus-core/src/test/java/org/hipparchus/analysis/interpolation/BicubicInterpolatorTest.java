@@ -24,18 +24,20 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for the bicubic interpolator.
  */
-public final class BicubicInterpolatorTest {
+final class BicubicInterpolatorTest {
     /**
      * Test preconditions.
      */
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         double[] xval = new double[] {3, 4, 5, 6.5};
         double[] yval = new double[] {-4, -3, -1, 2.5};
         double[][] zval = new double[xval.length][yval.length];
@@ -48,7 +50,7 @@ public final class BicubicInterpolatorTest {
         double[] wxval = new double[] {3, 2, 5, 6.5};
         try {
             p = interpolator.interpolate(wxval, yval, zval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -56,7 +58,7 @@ public final class BicubicInterpolatorTest {
         double[] wyval = new double[] {-4, -3, -1, -1};
         try {
             p = interpolator.interpolate(xval, wyval, zval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -64,14 +66,14 @@ public final class BicubicInterpolatorTest {
         double[][] wzval = new double[xval.length][yval.length + 1];
         try {
             p = interpolator.interpolate(xval, yval, wzval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wzval = new double[xval.length - 1][yval.length];
         try {
             p = interpolator.interpolate(xval, yval, wzval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -83,7 +85,7 @@ public final class BicubicInterpolatorTest {
      * z = 2 x - 3 y + 5
      */
     @Test
-    public void testPlane() {
+    void testPlane() {
         BivariateFunction f = new BivariateFunction() {
                 @Override
                 public double value(double x, double y) {
@@ -103,7 +105,7 @@ public final class BicubicInterpolatorTest {
      * z = 2 x<sup>2</sup> - 3 y<sup>2</sup> + 4 x y - 5
      */
     @Test
-    public void testParaboloid() {
+    void testParaboloid() {
         BivariateFunction f = new BivariateFunction() {
                 @Override
                 public double value(double x, double y) {
@@ -170,7 +172,7 @@ public final class BicubicInterpolatorTest {
                 System.out.println(x + " " + y + " " + expected + " " + actual);
             }
 
-            Assertions.assertEquals(expected, actual, tolerance);
+            assertEquals(expected, actual, tolerance);
         }
     }
 }

@@ -25,12 +25,15 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-public class HessenbergTransformerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class HessenbergTransformerTest {
 
     private double[][] testSquare5 = {
             { 5, 4, 3, 2, 1 },
@@ -56,42 +59,42 @@ public class HessenbergTransformerTest {
     };
 
     @Test
-    public void testNonSquare() {
+    void testNonSquare() {
         try {
             new HessenbergTransformer(MatrixUtils.createRealMatrix(new double[3][2]));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
-            Assertions.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
+            assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 
     @Test
-    public void testAEqualPHPt() {
+    void testAEqualPHPt() {
         checkAEqualPHPt(MatrixUtils.createRealMatrix(testSquare5));
         checkAEqualPHPt(MatrixUtils.createRealMatrix(testSquare3));
         checkAEqualPHPt(MatrixUtils.createRealMatrix(testRandom));
    }
 
     @Test
-    public void testPOrthogonal() {
+    void testPOrthogonal() {
         checkOrthogonal(new HessenbergTransformer(MatrixUtils.createRealMatrix(testSquare5)).getP());
         checkOrthogonal(new HessenbergTransformer(MatrixUtils.createRealMatrix(testSquare3)).getP());
     }
 
     @Test
-    public void testPTOrthogonal() {
+    void testPTOrthogonal() {
         checkOrthogonal(new HessenbergTransformer(MatrixUtils.createRealMatrix(testSquare5)).getPT());
         checkOrthogonal(new HessenbergTransformer(MatrixUtils.createRealMatrix(testSquare3)).getPT());
     }
 
     @Test
-    public void testHessenbergForm() {
+    void testHessenbergForm() {
         checkHessenbergForm(new HessenbergTransformer(MatrixUtils.createRealMatrix(testSquare5)).getH());
         checkHessenbergForm(new HessenbergTransformer(MatrixUtils.createRealMatrix(testSquare3)).getH());
     }
 
     @Test
-    public void testRandomData() {
+    void testRandomData() {
         for (int run = 0; run < 100; run++) {
             Random r = new Random(System.currentTimeMillis());
 
@@ -112,7 +115,7 @@ public class HessenbergTransformerTest {
     }
 
     @Test
-    public void testRandomDataNormalDistribution() {
+    void testRandomDataNormalDistribution() {
         for (int run = 0; run < 100; run++) {
             Random r = new Random(System.currentTimeMillis());
             RandomDataGenerator gen = new RandomDataGenerator(100);
@@ -134,7 +137,7 @@ public class HessenbergTransformerTest {
     }
 
     @Test
-    public void testMatricesValues5() {
+    void testMatricesValues5() {
         checkMatricesValues(testSquare5,
                             new double[][] {
                                 { 1.0,  0.0,                0.0,                0.0,                0.0               },
@@ -153,7 +156,7 @@ public class HessenbergTransformerTest {
     }
 
     @Test
-    public void testMatricesValues3() {
+    void testMatricesValues3() {
         checkMatricesValues(testSquare3,
                             new double[][] {
                                 {  1.0,  0.0,               0.0               },
@@ -179,12 +182,12 @@ public class HessenbergTransformerTest {
 
         RealMatrix result = p.multiply(h).multiply(pT);
         double norm = result.subtract(matrix).getNorm1();
-        Assertions.assertEquals(0, norm, 1.0e-10);
+        assertEquals(0, norm, 1.0e-10);
 
         for (int i = 0; i < matrix.getRowDimension(); ++i) {
             for (int j = 0; j < matrix.getColumnDimension(); ++j) {
                 if (i > j + 1) {
-                    Assertions.assertEquals(matrix.getEntry(i, j), result.getEntry(i, j), 1.0e-12);
+                    assertEquals(matrix.getEntry(i, j), result.getEntry(i, j), 1.0e-12);
                 }
             }
         }
@@ -195,7 +198,7 @@ public class HessenbergTransformerTest {
     private void checkOrthogonal(RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assertions.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
+        assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
     }
 
     private void checkHessenbergForm(RealMatrix m) {
@@ -204,7 +207,7 @@ public class HessenbergTransformerTest {
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
                 if (i > j + 1) {
-                    Assertions.assertEquals(0, m.getEntry(i, j), 1.0e-16);
+                    assertEquals(0, m.getEntry(i, j), 1.0e-16);
                 }
             }
         }
@@ -216,13 +219,13 @@ public class HessenbergTransformerTest {
 
         // check values against known references
         RealMatrix p = transformer.getP();
-        Assertions.assertEquals(0, p.subtract(MatrixUtils.createRealMatrix(pRef)).getNorm1(), 1.0e-14);
+        assertEquals(0, p.subtract(MatrixUtils.createRealMatrix(pRef)).getNorm1(), 1.0e-14);
 
         RealMatrix h = transformer.getH();
-        Assertions.assertEquals(0, h.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm1(), 1.3e-14);
+        assertEquals(0, h.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm1(), 1.3e-14);
 
         // check the same cached instance is returned the second time
-        Assertions.assertTrue(p == transformer.getP());
-        Assertions.assertTrue(h == transformer.getH());
+        assertTrue(p == transformer.getP());
+        assertTrue(h == transformer.getH());
     }
 }

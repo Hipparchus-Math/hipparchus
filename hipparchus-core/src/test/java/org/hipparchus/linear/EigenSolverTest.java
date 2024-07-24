@@ -24,14 +24,17 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class EigenSolverTest {
+class EigenSolverTest {
 
     private double[][] bigSingular = {
         { 1.0, 2.0,   3.0,    4.0 },
@@ -42,15 +45,15 @@ public class EigenSolverTest {
 
     /** test non invertible matrix */
     @Test
-    public void testNonInvertible() {
+    void testNonInvertible() {
         Random r = new Random(9994100315209l);
         RealMatrix m =
             EigenDecompositionSymmetricTest.createTestMatrix(r, new double[] { 1.0, 0.0, -1.0, -2.0, -3.0 });
         DecompositionSolver es = new EigenDecompositionSymmetric(m).getSolver();
-        Assertions.assertFalse(es.isNonSingular());
+        assertFalse(es.isNonSingular());
         try {
             es.getInverse();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
@@ -58,16 +61,16 @@ public class EigenSolverTest {
 
     /** test invertible matrix */
     @Test
-    public void testInvertible() {
+    void testInvertible() {
         Random r = new Random(9994100315209l);
         RealMatrix m =
             EigenDecompositionSymmetricTest.createTestMatrix(r, new double[] { 1.0, 0.5, -1.0, -2.0, -3.0 });
         DecompositionSolver es = new EigenDecompositionSymmetric(m).getSolver();
-        Assertions.assertTrue(es.isNonSingular());
+        assertTrue(es.isNonSingular());
         RealMatrix inverse = es.getInverse();
         RealMatrix error =
             m.multiply(inverse).subtract(MatrixUtils.createRealIdentityMatrix(m.getRowDimension()));
-        Assertions.assertEquals(0, error.getNorm1(), 4.0e-15);
+        assertEquals(0, error.getNorm1(), 4.0e-15);
     }
 
     /**
@@ -75,7 +78,7 @@ public class EigenSolverTest {
      * Matrix with eigenvalues {8e-100, -1e-100, -1e-100}
      */
     @Test
-    public void testInvertibleTinyValues() {
+    void testInvertibleTinyValues() {
         final double tiny = 1e-100;
         RealMatrix m = MatrixUtils.createRealMatrix(new double[][] {
                 {3,  2,  4},
@@ -91,16 +94,16 @@ public class EigenSolverTest {
         for (int i = 0; i < m.getRowDimension(); i++) {
             for (int j = 0; j < m.getColumnDimension(); j++) {
                 if (i == j) {
-                    Assertions.assertTrue(Precision.equals(1, id.getEntry(i, j), 1e-15));
+                    assertTrue(Precision.equals(1, id.getEntry(i, j), 1e-15));
                 } else {
-                    Assertions.assertTrue(Precision.equals(0, id.getEntry(i, j), 1e-15));
+                    assertTrue(Precision.equals(0, id.getEntry(i, j), 1e-15));
                 }
             }
         }
     }
 
     @Test
-    public void testNonInvertibleMath1045() {
+    void testNonInvertibleMath1045() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             EigenDecompositionSymmetric eigen =
                 new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(bigSingular));
@@ -109,7 +112,7 @@ public class EigenSolverTest {
     }
 
     @Test
-    public void testZeroMatrix() {
+    void testZeroMatrix() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             EigenDecompositionSymmetric eigen =
                 new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(new double[][]{{0}}));
@@ -119,7 +122,7 @@ public class EigenSolverTest {
 
     /** test solve dimension errors */
     @Test
-    public void testSolveDimensionErrors() {
+    void testSolveDimensionErrors() {
         final double[] refValues = new double[] {
             2.003, 2.002, 2.001, 1.001, 1.000, 0.001
         };
@@ -129,19 +132,19 @@ public class EigenSolverTest {
         RealMatrix b = MatrixUtils.createRealMatrix(new double[2][2]);
         try {
             es.solve(b);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             es.solve(b.getColumnVector(0));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             es.solve(new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(0)));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
@@ -149,7 +152,7 @@ public class EigenSolverTest {
 
     /** test solve */
     @Test
-    public void testSolve() {
+    void testSolve() {
         RealMatrix m = MatrixUtils.createRealMatrix(new double[][] {
                 { 91,  5, 29, 32, 40, 14 },
                 {  5, 34, -1,  0,  2, -1 },
@@ -178,11 +181,11 @@ public class EigenSolverTest {
 
         // using RealMatrix
         RealMatrix solution=es.solve(b);
-        Assertions.assertEquals(0, solution.subtract(xRef).getNorm1(), 2.5e-12);
+        assertEquals(0, solution.subtract(xRef).getNorm1(), 2.5e-12);
 
         // using RealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
-            Assertions.assertEquals(0,
+            assertEquals(0,
                          es.solve(b.getColumnVector(i)).subtract(xRef.getColumnVector(i)).getNorm(),
                          2.0e-11);
         }
@@ -191,7 +194,7 @@ public class EigenSolverTest {
         for (int i = 0; i < b.getColumnDimension(); ++i) {
             ArrayRealVectorTest.RealVectorTestImpl v =
                 new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(i));
-            Assertions.assertEquals(0,
+            assertEquals(0,
                          es.solve(v).subtract(xRef.getColumnVector(i)).getNorm(),
                          2.0e-11);
         }

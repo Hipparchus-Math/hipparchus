@@ -23,7 +23,8 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
@@ -65,12 +66,12 @@ public abstract class GaussianQuadratureAbstractTest {
             // System.out.println(n + "/" + maxDegree + " " + integrator.getNumberOfPoints()
             //                    + " " + expected + " " + actual + " " + Math.ulp(expected));
             if (expected == 0) {
-                Assertions.assertEquals(expected, actual, eps, "while integrating monomial x**" + n +
+                assertEquals(expected, actual, eps, "while integrating monomial x**" + n +
                                     " with a " +
                                     integrator.getNumberOfPoints() + "-point quadrature rule");
             } else {
                 double err = FastMath.abs(actual - expected) / Math.ulp(expected);
-                Assertions.assertEquals(expected, actual, Math.ulp(expected) * numUlps, "while integrating monomial x**" + n + " with a " +
+                assertEquals(expected, actual, Math.ulp(expected) * numUlps, "while integrating monomial x**" + n + " with a " +
                                     + integrator.getNumberOfPoints() + "-point quadrature rule, " +
                                     " error was " + err + " ulps");
             }

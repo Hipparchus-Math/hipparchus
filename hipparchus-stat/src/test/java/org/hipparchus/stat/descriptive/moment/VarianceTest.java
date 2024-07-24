@@ -53,7 +53,7 @@ public class VarianceTest extends StorelessUnivariateStatisticAbstractTest{
      * Make sure Double.NaN is returned iff n = 0
      */
     @Test
-    public void testNaN() {
+    void testNaN() {
         Variance var = getUnivariateStatistic();
         assertTrue(Double.isNaN(var.getResult()));
         var.increment(1d);
@@ -64,7 +64,7 @@ public class VarianceTest extends StorelessUnivariateStatisticAbstractTest{
      * Test population version of variance
      */
     @Test
-    public void testPopulation() {
+    void testPopulation() {
         double[] values = { -1.0d, 3.1d, 4.0d, -2.1d, 22d, 11.7d, 3d, 14d };
         SecondMoment m = new SecondMoment();
         m.incrementAll(values);  // side effect is to add values
@@ -94,7 +94,7 @@ public class VarianceTest extends StorelessUnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testWeightedVariance() {
+    void testWeightedVariance() {
         Variance variance = getUnivariateStatistic();
         assertEquals(expectedWeightedValue(),
                      variance.evaluate(testArray, testWeightsArray, 0, testArray.length),

@@ -17,8 +17,11 @@
 package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElementAbstractTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<Binary64>> {
     public static final Binary64 X = new Binary64(1.2345);
@@ -43,225 +46,225 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
     }
 
     @Test
-    public void testComponents() {
-        Assertions.assertEquals(2, PLUS_ZERO.getDimension());
+    void testComponents() {
+        assertEquals(2, PLUS_ZERO.getDimension());
         final FieldTuple<Binary64> oneToFive = new FieldTuple<Binary64>(new Binary64(1),
                                                                           new Binary64(2),
                                                                           new Binary64(3),
                                                                           new Binary64(4),
                                                                           new Binary64(5));
-        Assertions.assertEquals(5, oneToFive.getDimension());
-        Assertions.assertArrayEquals(new Binary64[] {
+        assertEquals(5, oneToFive.getDimension());
+        assertArrayEquals(new Binary64[] {
             new Binary64(1), new Binary64(2), new Binary64(3), new Binary64(4), new Binary64(5) },
                                  oneToFive.getComponents());
-        Assertions.assertEquals(1, oneToFive.getComponent(0).getReal(), 1.0e-10);
-        Assertions.assertEquals(2, oneToFive.getComponent(1).getReal(), 1.0e-10);
-        Assertions.assertEquals(3, oneToFive.getComponent(2).getReal(), 1.0e-10);
-        Assertions.assertEquals(4, oneToFive.getComponent(3).getReal(), 1.0e-10);
-        Assertions.assertEquals(5, oneToFive.getComponent(4).getReal(), 1.0e-10);
+        assertEquals(1, oneToFive.getComponent(0).getReal(), 1.0e-10);
+        assertEquals(2, oneToFive.getComponent(1).getReal(), 1.0e-10);
+        assertEquals(3, oneToFive.getComponent(2).getReal(), 1.0e-10);
+        assertEquals(4, oneToFive.getComponent(3).getReal(), 1.0e-10);
+        assertEquals(5, oneToFive.getComponent(4).getReal(), 1.0e-10);
     }
 
     @Test
-    public void testEquals() {
-        Assertions.assertNotEquals(PLUS_ZERO, null);
-        Assertions.assertEquals(PLUS_ZERO, PLUS_ZERO);
-        Assertions.assertEquals(PLUS_X,    PLUS_X);
-        Assertions.assertEquals(PLUS_Y,    PLUS_Y);
-        Assertions.assertEquals(MINUS_X,   MINUS_X);
-        Assertions.assertEquals(MINUS_Y,   MINUS_Y);
-        Assertions.assertNotEquals(PLUS_X,  new FieldTuple<>(new Binary64(1),
+    void testEquals() {
+        assertNotEquals(PLUS_ZERO, null);
+        assertEquals(PLUS_ZERO, PLUS_ZERO);
+        assertEquals(PLUS_X,    PLUS_X);
+        assertEquals(PLUS_Y,    PLUS_Y);
+        assertEquals(MINUS_X,   MINUS_X);
+        assertEquals(MINUS_Y,   MINUS_Y);
+        assertNotEquals(PLUS_X,  new FieldTuple<>(new Binary64(1),
                                                          new Binary64(2),
                                                          new Binary64(3),
                                                          new Binary64(4),
                                                          new Binary64(5)));
-        Assertions.assertNotEquals(PLUS_X,  new FieldTuple<>(PLUS_X.getComponent(0), new Binary64(999.999)));
-        Assertions.assertNotEquals(null, PLUS_ZERO.getField());
-        Assertions.assertNotEquals(PLUS_X.getField(),  new FieldTuple<>(new Binary64(1),
+        assertNotEquals(PLUS_X,  new FieldTuple<>(PLUS_X.getComponent(0), new Binary64(999.999)));
+        assertNotEquals(null, PLUS_ZERO.getField());
+        assertNotEquals(PLUS_X.getField(),  new FieldTuple<>(new Binary64(1),
                         new Binary64(2),
                         new Binary64(3),
                         new Binary64(4),
                         new Binary64(5)).getField());
-        Assertions.assertEquals(PLUS_ZERO.getField(), MINUS_Y.getField());
+        assertEquals(PLUS_ZERO.getField(), MINUS_Y.getField());
     }
 
     @Test
-    public void testHashcode() {
-        Assertions.assertEquals(-1264241693, PLUS_ZERO.getField().hashCode());
-        Assertions.assertEquals(1492525478, PLUS_ZERO.hashCode());
-        Assertions.assertEquals(1492525478, MINUS_ZERO.hashCode());
-        Assertions.assertEquals(211878758, PLUS_X.hashCode());
-        Assertions.assertEquals(211878758, MINUS_X.hashCode());
-        Assertions.assertEquals(1460019622, new FieldTuple<>(new Binary64(1), new Binary64(2)).hashCode());
-        Assertions.assertEquals(1491476902, new FieldTuple<>(new Binary64(2), new Binary64(1)).hashCode());
+    void testHashcode() {
+        assertEquals(-1264241693, PLUS_ZERO.getField().hashCode());
+        assertEquals(1492525478, PLUS_ZERO.hashCode());
+        assertEquals(1492525478, MINUS_ZERO.hashCode());
+        assertEquals(211878758, PLUS_X.hashCode());
+        assertEquals(211878758, MINUS_X.hashCode());
+        assertEquals(1460019622, new FieldTuple<>(new Binary64(1), new Binary64(2)).hashCode());
+        assertEquals(1491476902, new FieldTuple<>(new Binary64(2), new Binary64(1)).hashCode());
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         FieldTuple<Binary64> expected, actual;
 
         expected = new FieldTuple<Binary64>(X.add(Y), X.add(Y));
         actual = PLUS_X.add(PLUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         actual = PLUS_Y.add(PLUS_X);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.add(Y.negate()), X.add(Y.negate()));
         actual = PLUS_X.add(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         actual = MINUS_Y.add(PLUS_X);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.negate().add(Y.negate()), X.negate().add(Y.negate()));
         actual = MINUS_X.add(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         actual = MINUS_Y.add(MINUS_X);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
     }
 
     @Test
-    public void testSubtract() {
+    void testSubtract() {
         FieldTuple<Binary64> expected, actual;
 
         expected = new FieldTuple<Binary64>(X.subtract(Y), X.subtract(Y));
         actual = PLUS_X.subtract(PLUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.subtract(Y.negate()), X.subtract(Y.negate()));
         actual = PLUS_X.subtract(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.negate().subtract(Y), X.negate().subtract(Y));
         actual = MINUS_X.subtract(PLUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.negate().subtract(Y.negate()), X.negate().subtract(Y.negate()));
         actual = MINUS_X.subtract(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
     }
 
     @Test
-    public void testNegate() {
+    void testNegate() {
         FieldTuple<Binary64> expected, actual;
 
         expected = MINUS_X;
         actual = PLUS_X.negate();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = PLUS_X;
         actual = MINUS_X.negate();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = MINUS_ZERO;
         actual = PLUS_ZERO.negate();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = PLUS_ZERO;
         actual = MINUS_ZERO.negate();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
     }
 
     @Test
-    public void testMultiply() {
+    void testMultiply() {
         FieldTuple<Binary64> expected, actual;
 
         expected = new FieldTuple<Binary64>(X.multiply(Y), X.multiply(Y));
         actual = PLUS_X.multiply(PLUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         actual = PLUS_Y.multiply(PLUS_X);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.multiply(Y.negate()), X.multiply(Y.negate()));
         actual = PLUS_X.multiply(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         actual = MINUS_Y.multiply(PLUS_X);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.negate().multiply(Y.negate()), X.negate().multiply(Y.negate()));
         actual = MINUS_X.multiply(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         actual = MINUS_Y.multiply(MINUS_X);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
     }
 
     @Test
-    public void testDivide() {
+    void testDivide() {
         FieldTuple<Binary64> expected, actual;
 
         expected = new FieldTuple<Binary64>(X.divide(Y), X.divide(Y));
         actual = PLUS_X.divide(PLUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.divide(Y.negate()), X.divide(Y.negate()));
         actual = PLUS_X.divide(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.negate().divide(Y), X.negate().divide(Y));
         actual = MINUS_X.divide(PLUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.negate().divide(Y.negate()), X.negate().divide(Y.negate()));
         actual = MINUS_X.divide(MINUS_Y);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
     }
 
     @Test
-    public void testReciprocal() {
+    void testReciprocal() {
         FieldTuple<Binary64> expected, actual;
 
         expected = new FieldTuple<Binary64>(X.reciprocal(), X.reciprocal());
         actual = PLUS_X.reciprocal();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = new FieldTuple<Binary64>(X.negate().reciprocal(), X.negate().reciprocal());
         actual = MINUS_X.reciprocal();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = PLUS_ZERO;
         actual = new FieldTuple<Binary64>(new Binary64(Double.POSITIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY)).reciprocal();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         expected = MINUS_ZERO;
         actual = new FieldTuple<Binary64>(new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.NEGATIVE_INFINITY)).reciprocal();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testToDegreesDefinition() {
+    void testToDegreesDefinition() {
         double epsilon = 3.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 final Binary64 dec64 = new Binary64(x);
                 FieldTuple<Binary64> value = new FieldTuple<Binary64>(dec64, dec64);
-                Assertions.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
+                assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
             }
         }
     }
 
     @Test
-    public void testToRadiansDefinition() {
+    void testToRadiansDefinition() {
         double epsilon = 3.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 final Binary64 dec64 = new Binary64(x);
                 FieldTuple<Binary64> value = new FieldTuple<Binary64>(dec64, dec64);
-                Assertions.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
+                assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
             }
         }
     }
 
     @Test
-    public void testDegRad() {
+    void testDegRad() {
         for (double x = 0.1; x < 1.2; x += 0.001) {
             final Binary64 dec64 = new Binary64(x);
             FieldTuple<Binary64> value = new FieldTuple<Binary64>(dec64, dec64);
             FieldTuple<Binary64> rebuilt = value.toDegrees().toRadians();
             FieldTuple<Binary64> zero = rebuilt.subtract(value);
-            Assertions.assertEquals(0, zero.getReal(), 3.0e-16);
+            assertEquals(0, zero.getReal(), 3.0e-16);
         }
     }
 

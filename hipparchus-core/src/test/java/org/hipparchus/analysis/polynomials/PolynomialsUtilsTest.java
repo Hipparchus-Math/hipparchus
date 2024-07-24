@@ -26,17 +26,20 @@ import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the PolynomialsUtils class.
  *
  */
-public class PolynomialsUtilsTest {
+class PolynomialsUtilsTest {
 
     @Test
-    public void testFirstChebyshevPolynomials() {
+    void testFirstChebyshevPolynomials() {
         checkPolynomial(PolynomialsUtils.createChebyshevPolynomial(3), "-3 x + 4 x^3");
         checkPolynomial(PolynomialsUtils.createChebyshevPolynomial(2), "-1 + 2 x^2");
         checkPolynomial(PolynomialsUtils.createChebyshevPolynomial(1), "x");
@@ -50,17 +53,17 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testChebyshevBounds() {
+    void testChebyshevBounds() {
         for (int k = 0; k < 12; ++k) {
             PolynomialFunction Tk = PolynomialsUtils.createChebyshevPolynomial(k);
             for (double x = -1; x <= 1; x += 0.02) {
-                Assertions.assertTrue(FastMath.abs(Tk.value(x)) < (1 + 1e-12), k + " " + Tk.value(x));
+                assertTrue(FastMath.abs(Tk.value(x)) < (1 + 1e-12), k + " " + Tk.value(x));
             }
         }
     }
 
     @Test
-    public void testChebyshevDifferentials() {
+    void testChebyshevDifferentials() {
         for (int k = 0; k < 12; ++k) {
 
             PolynomialFunction Tk0 = PolynomialsUtils.createChebyshevPolynomial(k);
@@ -81,7 +84,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testChebyshevOrthogonality() {
+    void testChebyshevOrthogonality() {
         UnivariateFunction weight = new UnivariateFunction() {
             @Override
             public double value(double x) {
@@ -98,7 +101,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testFirstHermitePolynomials() {
+    void testFirstHermitePolynomials() {
         checkPolynomial(PolynomialsUtils.createHermitePolynomial(3), "-12 x + 8 x^3");
         checkPolynomial(PolynomialsUtils.createHermitePolynomial(2), "-2 + 4 x^2");
         checkPolynomial(PolynomialsUtils.createHermitePolynomial(1), "2 x");
@@ -112,7 +115,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testHermiteDifferentials() {
+    void testHermiteDifferentials() {
         for (int k = 0; k < 12; ++k) {
 
             PolynomialFunction Hk0 = PolynomialsUtils.createHermitePolynomial(k);
@@ -133,7 +136,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testHermiteOrthogonality() {
+    void testHermiteOrthogonality() {
         UnivariateFunction weight = new UnivariateFunction() {
             @Override
             public double value(double x) {
@@ -150,7 +153,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testFirstLaguerrePolynomials() {
+    void testFirstLaguerrePolynomials() {
         checkPolynomial(PolynomialsUtils.createLaguerrePolynomial(3), 6l, "6 - 18 x + 9 x^2 - x^3");
         checkPolynomial(PolynomialsUtils.createLaguerrePolynomial(2), 2l, "2 - 4 x + x^2");
         checkPolynomial(PolynomialsUtils.createLaguerrePolynomial(1), 1l, "1 - x");
@@ -170,7 +173,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testLaguerreDifferentials() {
+    void testLaguerreDifferentials() {
         for (int k = 0; k < 12; ++k) {
 
             PolynomialFunction Lk0 = PolynomialsUtils.createLaguerrePolynomial(k);
@@ -191,7 +194,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testLaguerreOrthogonality() {
+    void testLaguerreOrthogonality() {
         UnivariateFunction weight = new UnivariateFunction() {
             @Override
             public double value(double x) {
@@ -208,7 +211,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testFirstLegendrePolynomials() {
+    void testFirstLegendrePolynomials() {
         checkPolynomial(PolynomialsUtils.createLegendrePolynomial(3),  2l, "-3 x + 5 x^3");
         checkPolynomial(PolynomialsUtils.createLegendrePolynomial(2),  2l, "-1 + 3 x^2");
         checkPolynomial(PolynomialsUtils.createLegendrePolynomial(1),  1l, "x");
@@ -222,7 +225,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testLegendreDifferentials() {
+    void testLegendreDifferentials() {
         for (int k = 0; k < 12; ++k) {
 
             PolynomialFunction Pk0 = PolynomialsUtils.createLegendrePolynomial(k);
@@ -243,7 +246,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testLegendreOrthogonality() {
+    void testLegendreOrthogonality() {
         UnivariateFunction weight = new UnivariateFunction() {
             @Override
             public double value(double x) {
@@ -260,7 +263,7 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testHighDegreeLegendre() {
+    void testHighDegreeLegendre() {
         PolynomialsUtils.createLegendrePolynomial(40);
         double[] l40 = PolynomialsUtils.createLegendrePolynomial(40).getCoefficients();
         double denominator = 274877906944d;
@@ -275,15 +278,15 @@ public class PolynomialsUtilsTest {
         for (int i = 0; i < l40.length; ++i) {
             if (i % 2 == 0) {
                 double ci = numerators[i / 2] / denominator;
-                Assertions.assertEquals(ci, l40[i], FastMath.abs(ci) * 1e-15);
+                assertEquals(ci, l40[i], FastMath.abs(ci) * 1e-15);
             } else {
-                Assertions.assertEquals(0, l40[i], 0);
+                assertEquals(0, l40[i], 0);
             }
         }
     }
 
     @Test
-    public void testJacobiLegendre() {
+    void testJacobiLegendre() {
         for (int i = 0; i < 10; ++i) {
             PolynomialFunction legendre = PolynomialsUtils.createLegendrePolynomial(i);
             PolynomialFunction jacobi   = PolynomialsUtils.createJacobiPolynomial(i, 0, 0);
@@ -292,20 +295,20 @@ public class PolynomialsUtilsTest {
     }
 
     @Test
-    public void testJacobiEvaluationAt1() {
+    void testJacobiEvaluationAt1() {
         for (int v = 0; v < 10; ++v) {
             for (int w = 0; w < 10; ++w) {
                 for (int i = 0; i < 10; ++i) {
                     PolynomialFunction jacobi = PolynomialsUtils.createJacobiPolynomial(i, v, w);
                     double binomial = CombinatoricsUtils.binomialCoefficient(v + i, i);
-                    Assertions.assertTrue(Precision.equals(binomial, jacobi.value(1.0), 1));
+                    assertTrue(Precision.equals(binomial, jacobi.value(1.0), 1));
                 }
             }
         }
     }
 
     @Test
-    public void testJacobiOrthogonality() {
+    void testJacobiOrthogonality() {
         for (int v = 0; v < 5; ++v) {
             for (int w = v; w < 5; ++w) {
                 final int vv = v;
@@ -331,20 +334,20 @@ public class PolynomialsUtilsTest {
      * @since 3.1
      */
     @Test
-    public void testJacobiKeyCoverage() {
+    void testJacobiKeyCoverage() {
         
         final JacobiKey key = new JacobiKey(3, 4);
 
-        Assertions.assertFalse(key.equals(null));
-        Assertions.assertFalse(key.equals(new Object()));
-        Assertions.assertFalse(key.equals(new JacobiKey(3, 5)));
-        Assertions.assertFalse(key.equals(new JacobiKey(5, 4)));
-        Assertions.assertFalse(key.equals(new JacobiKey(5, 5)));
-        Assertions.assertTrue(key.equals(new JacobiKey(3, 4)));
+        assertNotEquals(null, key);
+        assertNotEquals(key, new Object());
+        assertNotEquals(key, new JacobiKey(3, 5));
+        assertNotEquals(key, new JacobiKey(5, 4));
+        assertNotEquals(key, new JacobiKey(5, 5));
+        assertEquals(key, new JacobiKey(3, 4));
     }
-    
+
     @Test
-    public void testShift() {
+    void testShift() {
         // f1(x) = 1 + x + 2 x^2
         PolynomialFunction f1x = new PolynomialFunction(new double[] { 1, 1, 2 });
 
@@ -375,16 +378,16 @@ public class PolynomialsUtilsTest {
 
     private void checkPolynomial(PolynomialFunction p, long denominator, String reference) {
         PolynomialFunction q = new PolynomialFunction(new double[] { denominator});
-        Assertions.assertEquals(reference, p.multiply(q).toString());
+        assertEquals(reference, p.multiply(q).toString());
     }
 
     private void checkPolynomial(PolynomialFunction p, String reference) {
-        Assertions.assertEquals(reference, p.toString());
+        assertEquals(reference, p.toString());
     }
 
     private void checkNullPolynomial(PolynomialFunction p) {
         for (double coefficient : p.getCoefficients()) {
-            Assertions.assertEquals(0, coefficient, 1e-13);
+            assertEquals(0, coefficient, 1e-13);
         }
     }
 
@@ -404,11 +407,11 @@ public class PolynomialsUtilsTest {
                 new IterativeLegendreGaussIntegrator(5, 1.0e-9, 1.0e-8, 2, 15).integrate(1000000, f, a, b);
         if (p1.degree() == p2.degree()) {
             // integral should be non-zero
-            Assertions.assertTrue(FastMath.abs(dotProduct) > nonZeroThreshold,
+            assertTrue(FastMath.abs(dotProduct) > nonZeroThreshold,
                               "I(" + p1.degree() + ", " + p2.degree() + ") = "+ dotProduct);
         } else {
             // integral should be zero
-            Assertions.assertEquals(0.0, FastMath.abs(dotProduct), zeroThreshold, "I(" + p1.degree() + ", " + p2.degree() + ") = "+ dotProduct);
+            assertEquals(0.0, FastMath.abs(dotProduct), zeroThreshold, "I(" + p1.degree() + ", " + p2.degree() + ") = "+ dotProduct);
         }
     }
 }

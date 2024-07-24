@@ -22,13 +22,15 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class AbstractSQPOptimizerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class AbstractSQPOptimizerTest {
 
     @Test
-    public void testLagrangianGradX() {
+    void testLagrangianGradX() {
         // GIVEN
         final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
         final TwiceDifferentiableFunction multivariateFunction = new RosenbrockFunction();
@@ -39,12 +41,12 @@ public class AbstractSQPOptimizerTest {
         final RealVector actualVector = testSQPOptimizer.lagrangianGradX(expectedVector, null,null, null);
         // THEN
         for (int i = 0; i < expectedVector.getDimension(); i++) {
-            Assertions.assertEquals(expectedVector.getEntry(i), actualVector.getEntry(i), 0);
+            assertEquals(expectedVector.getEntry(i), actualVector.getEntry(i), 0);
         }
     }
 
     @Test
-    public void testParseOptimizationData() {
+    void testParseOptimizationData() {
         // GIVEN
         final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
         final SQPOption expectedOptions = new SQPOption();
@@ -53,11 +55,11 @@ public class AbstractSQPOptimizerTest {
         // WHEN
         testSQPOptimizer.parseOptimizationData(objectiveFunction, expectedOptions);
         // THEN
-        Assertions.assertEquals(expectedOptions, testSQPOptimizer.getSettings());
+        assertEquals(expectedOptions, testSQPOptimizer.getSettings());
     }
 
     @Test
-    public void testParseOptimizationDataException() {
+    void testParseOptimizationDataException() {
         // GIVEN
         final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
         final EqualityConstraint equalityConstraint = new TestEqualityConstraints(100000);
@@ -66,15 +68,15 @@ public class AbstractSQPOptimizerTest {
         // WHEN
         try {
             testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
-            Assertions.fail();
+            fail();
         } catch (final MathIllegalArgumentException exception) {
-            Assertions.assertEquals("rank of constraints must be lesser than domain dimension, but 100,000 >= 2",
+            assertEquals("rank of constraints must be lesser than domain dimension, but 100,000 >= 2",
                     exception.getMessage());
         }
     }
 
     @Test
-    public void testParseOptimizationDataException2() {
+    void testParseOptimizationDataException2() {
         // GIVEN
         final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
         final EqualityConstraint equalityConstraint = new TestEqualityConstraints(0);
@@ -83,9 +85,9 @@ public class AbstractSQPOptimizerTest {
         // WHEN
         try {
             testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
-            Assertions.fail();
+            fail();
         } catch (final MathIllegalArgumentException exception) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NOT_ALLOWED.getSourceString(),
+            assertEquals(LocalizedCoreFormats.ZERO_NOT_ALLOWED.getSourceString(),
                     exception.getMessage());
         }
     }

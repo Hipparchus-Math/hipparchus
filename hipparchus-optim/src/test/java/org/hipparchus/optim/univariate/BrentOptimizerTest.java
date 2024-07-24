@@ -35,42 +35,45 @@ import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  */
-public final class BrentOptimizerTest {
+final class BrentOptimizerTest {
 
     @Test
-    public void testSinMin() {
+    void testSinMin() {
         UnivariateFunction f = new Sin();
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-10, 1e-14);
-        Assertions.assertEquals(3 * FastMath.PI / 2, optimizer.optimize(new MaxEval(200),
+        assertEquals(3 * FastMath.PI / 2, optimizer.optimize(new MaxEval(200),
                                                                     new UnivariateObjectiveFunction(f),
                                                                     GoalType.MINIMIZE,
                                                                     new SearchInterval(4, 5)).getPoint(), 1e-8);
-        Assertions.assertTrue(optimizer.getEvaluations() <= 50);
-        Assertions.assertEquals(200, optimizer.getMaxEvaluations());
-        Assertions.assertEquals(3 * FastMath.PI / 2, optimizer.optimize(new MaxEval(200),
+        assertTrue(optimizer.getEvaluations() <= 50);
+        assertEquals(200, optimizer.getMaxEvaluations());
+        assertEquals(3 * FastMath.PI / 2, optimizer.optimize(new MaxEval(200),
                                                                     new UnivariateObjectiveFunction(f),
                                                                     GoalType.MINIMIZE,
                                                                     new SearchInterval(1, 5)).getPoint(), 1e-8);
-        Assertions.assertTrue(optimizer.getEvaluations() <= 100);
-        Assertions.assertTrue(optimizer.getEvaluations() >= 15);
+        assertTrue(optimizer.getEvaluations() <= 100);
+        assertTrue(optimizer.getEvaluations() >= 15);
         try {
             optimizer.optimize(new MaxEval(10),
                                new UnivariateObjectiveFunction(f),
                                GoalType.MINIMIZE,
                                new SearchInterval(4, 5));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalStateException fee) {
             // expected
         }
     }
 
     @Test
-    public void testSinMinWithValueChecker() {
+    void testSinMinWithValueChecker() {
         final UnivariateFunction f = new Sin();
         final ConvergenceChecker<UnivariatePointValuePair> checker = new SimpleUnivariateValueChecker(1e-5, 1e-14);
         // The default stopping criterion of Brent's algorithm should not
@@ -81,11 +84,11 @@ public final class BrentOptimizerTest {
                                                                    new UnivariateObjectiveFunction(f),
                                                                    GoalType.MINIMIZE,
                                                                    new SearchInterval(4, 5));
-        Assertions.assertEquals(3 * FastMath.PI / 2, result.getPoint(), 1e-3);
+        assertEquals(3 * FastMath.PI / 2, result.getPoint(), 1e-3);
     }
 
     @Test
-    public void testBoundaries() {
+    void testBoundaries() {
         final double lower = -1.0;
         final double upper = +1.0;
         UnivariateFunction f = new UnivariateFunction() {
@@ -103,13 +106,13 @@ public final class BrentOptimizerTest {
             }
         };
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-10, 1e-14);
-        Assertions.assertEquals(lower,
+        assertEquals(lower,
                             optimizer.optimize(new MaxEval(100),
                                                new UnivariateObjectiveFunction(f),
                                                GoalType.MINIMIZE,
                                                new SearchInterval(lower, upper)).getPoint(),
                             1.0e-8);
-        Assertions.assertEquals(upper,
+        assertEquals(upper,
                             optimizer.optimize(new MaxEval(100),
                                                new UnivariateObjectiveFunction(f),
                                                GoalType.MAXIMIZE,
@@ -118,30 +121,30 @@ public final class BrentOptimizerTest {
     }
 
     @Test
-    public void testQuinticMin() {
+    void testQuinticMin() {
         // The function has local minima at -0.27195613 and 0.82221643.
         UnivariateFunction f = new QuinticFunction();
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-10, 1e-14);
-        Assertions.assertEquals(-0.27195613, optimizer.optimize(new MaxEval(200),
+        assertEquals(-0.27195613, optimizer.optimize(new MaxEval(200),
                                                             new UnivariateObjectiveFunction(f),
                                                             GoalType.MINIMIZE,
                                                             new SearchInterval(-0.3, -0.2)).getPoint(), 1.0e-8);
-        Assertions.assertEquals( 0.82221643, optimizer.optimize(new MaxEval(200),
+        assertEquals( 0.82221643, optimizer.optimize(new MaxEval(200),
                                                             new UnivariateObjectiveFunction(f),
                                                             GoalType.MINIMIZE,
                                                             new SearchInterval(0.3,  0.9)).getPoint(), 1.0e-8);
-        Assertions.assertTrue(optimizer.getEvaluations() <= 50);
+        assertTrue(optimizer.getEvaluations() <= 50);
 
         // search in a large interval
-        Assertions.assertEquals(-0.27195613, optimizer.optimize(new MaxEval(200),
+        assertEquals(-0.27195613, optimizer.optimize(new MaxEval(200),
                                                             new UnivariateObjectiveFunction(f),
                                                             GoalType.MINIMIZE,
                                                             new SearchInterval(-1.0, 0.2)).getPoint(), 1.0e-8);
-        Assertions.assertTrue(optimizer.getEvaluations() <= 50);
+        assertTrue(optimizer.getEvaluations() <= 50);
     }
 
     @Test
-    public void testQuinticMinStatistics() {
+    void testQuinticMinStatistics() {
         // The function has local minima at -0.27195613 and 0.82221643.
         UnivariateFunction f = new QuinticFunction();
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-11, 1e-14);
@@ -166,21 +169,21 @@ public final class BrentOptimizerTest {
 
         final double meanOptValue = stat[0].getMean();
         final double medianEval = stat[1].getMedian();
-        Assertions.assertTrue(meanOptValue > -0.2719561281);
-        Assertions.assertTrue(meanOptValue < -0.2719561280);
-        Assertions.assertEquals(23, (int) medianEval);
+        assertTrue(meanOptValue > -0.2719561281);
+        assertTrue(meanOptValue < -0.2719561280);
+        assertEquals(23, (int) medianEval);
 
         // MATH-1121: Ensure that the iteration counter is incremented.
-        Assertions.assertTrue(optimizer.getIterations() > 0);
+        assertTrue(optimizer.getIterations() > 0);
     }
 
     @Test
-    public void testQuinticMax() {
+    void testQuinticMax() {
         // The quintic function has zeros at 0, +-0.5 and +-1.
         // The function has a local maximum at 0.27195613.
         UnivariateFunction f = new QuinticFunction();
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-12, 1e-14);
-        Assertions.assertEquals(0.27195613, optimizer.optimize(new MaxEval(100),
+        assertEquals(0.27195613, optimizer.optimize(new MaxEval(100),
                                                            new UnivariateObjectiveFunction(f),
                                                            GoalType.MAXIMIZE,
                                                            new SearchInterval(0.2, 0.3)).getPoint(), 1e-8);
@@ -189,14 +192,14 @@ public final class BrentOptimizerTest {
                                new UnivariateObjectiveFunction(f),
                                GoalType.MAXIMIZE,
                                new SearchInterval(0.2, 0.3));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalStateException miee) {
             // expected
         }
     }
 
     @Test
-    public void testMinEndpoints() {
+    void testMinEndpoints() {
         UnivariateFunction f = new Sin();
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-8, 1e-14);
 
@@ -205,17 +208,17 @@ public final class BrentOptimizerTest {
                                            new UnivariateObjectiveFunction(f),
                                            GoalType.MINIMIZE,
                                            new SearchInterval(3 * FastMath.PI / 2, 5)).getPoint();
-        Assertions.assertEquals(3 * FastMath.PI / 2, result, 1e-6);
+        assertEquals(3 * FastMath.PI / 2, result, 1e-6);
 
         result = optimizer.optimize(new MaxEval(50),
                                     new UnivariateObjectiveFunction(f),
                                     GoalType.MINIMIZE,
                                     new SearchInterval(4, 3 * FastMath.PI / 2)).getPoint();
-        Assertions.assertEquals(3 * FastMath.PI / 2, result, 1e-6);
+        assertEquals(3 * FastMath.PI / 2, result, 1e-6);
     }
 
     @Test
-    public void testMath832() {
+    void testMath832() {
         final UnivariateFunction f = new UnivariateFunction() {
                 @Override
                 public double value(double x) {
@@ -235,7 +238,7 @@ public final class BrentOptimizerTest {
                                                  new SearchInterval(Double.MIN_VALUE,
                                                                     Double.MAX_VALUE)).getPoint();
 
-        Assertions.assertEquals(804.9355825, result, 1e-6);
+        assertEquals(804.9355825, result, 1e-6);
     }
 
     /**
@@ -244,7 +247,7 @@ public final class BrentOptimizerTest {
      * it happened to be the initial guess.
      */
     @Test
-    public void testKeepInitIfBest() {
+    void testKeepInitIfBest() {
         final double minSin = 3 * FastMath.PI / 2;
         final double offset = 1e-8;
         final double delta = 1e-7;
@@ -273,7 +276,7 @@ public final class BrentOptimizerTest {
 //         System.out.println("sol=" + sol + " f=" + f.value(sol));
 //         System.out.println("exp=" + expected + " f=" + f.value(expected));
 
-        Assertions.assertTrue(f.value(sol) <= f.value(expected), "Best point not reported");
+        assertTrue(f.value(sol) <= f.value(expected), "Best point not reported");
     }
 
     /**
@@ -282,7 +285,7 @@ public final class BrentOptimizerTest {
      * sometimes not report the best point it had found.
      */
     @Test
-    public void testMath855() {
+    void testMath855() {
         final double minSin = 3 * FastMath.PI / 2;
         final double offset = 1e-8;
         final double delta = 1e-7;
@@ -305,6 +308,6 @@ public final class BrentOptimizerTest {
         // System.out.println("sol=" + sol + " f=" + f.value(sol));
         // System.out.println("exp=" + expected + " f=" + f.value(expected));
 
-        Assertions.assertTrue(f.value(sol) <= f.value(expected), "Best point not reported");
+        assertTrue(f.value(sol) <= f.value(expected), "Best point not reported");
     }
 }

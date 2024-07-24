@@ -35,14 +35,17 @@ import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the {@link MatrixUtils} class.
@@ -82,157 +85,157 @@ public final class MatrixUtilsTest {
         {{new Fraction(0)},{new Fraction(4)},{new Fraction(6)}};
 
     @Test
-    public void testCreateRealMatrix() {
-        Assertions.assertEquals(new BlockRealMatrix(testData),
+    void testCreateRealMatrix() {
+        assertEquals(new BlockRealMatrix(testData),
                 MatrixUtils.createRealMatrix(testData));
         try {
             MatrixUtils.createRealMatrix(new double[][] {{1}, {1,2}});  // ragged
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createRealMatrix(new double[][] {{}, {}});  // no columns
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createRealMatrix(null);  // null
-            Assertions.fail("Expecting NullArgumentException");
+            fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testcreateFieldMatrix() {
-        Assertions.assertEquals(new Array2DRowFieldMatrix<Fraction>(asFraction(testData)),
+    void testcreateFieldMatrix() {
+        assertEquals(new Array2DRowFieldMatrix<Fraction>(asFraction(testData)),
                      MatrixUtils.createFieldMatrix(asFraction(testData)));
-        Assertions.assertEquals(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), fractionColMatrix),
+        assertEquals(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), fractionColMatrix),
                      MatrixUtils.createFieldMatrix(fractionColMatrix));
         try {
             MatrixUtils.createFieldMatrix(asFraction(new double[][] {{1}, {1,2}}));  // ragged
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createFieldMatrix(asFraction(new double[][] {{}, {}}));  // no columns
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createFieldMatrix((Fraction[][])null);  // null
-            Assertions.fail("Expecting NullArgumentException");
+            fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testCreateRealVector() {
+    void testCreateRealVector() {
         RealVector v1 = MatrixUtils.createRealVector(new double[] { 0.0, 1.0, 2.0, 3.0 });
-        Assertions.assertEquals(4, v1.getDimension());
+        assertEquals(4, v1.getDimension());
         for (int i = 0; i < v1.getDimension(); ++i) {
-            Assertions.assertEquals(i, v1.getEntry(i), 1.0e-15);
+            assertEquals(i, v1.getEntry(i), 1.0e-15);
         }
         RealVector v2 = MatrixUtils.createRealVector(7);
-        Assertions.assertEquals(7, v2.getDimension());
+        assertEquals(7, v2.getDimension());
         for (int i = 0; i < v2.getDimension(); ++i) {
-            Assertions.assertEquals(0.0, v2.getEntry(i), 1.0e-15);
+            assertEquals(0.0, v2.getEntry(i), 1.0e-15);
         }
     }
 
     @Test
-    public void testCreateFieldVector() {
+    void testCreateFieldVector() {
         FieldVector<Binary64> v1 = MatrixUtils.createFieldVector(new Binary64[] {
             new Binary64(0.0), new Binary64(1.0), new Binary64(2.0), new Binary64(3.0)
         });
-        Assertions.assertEquals(4, v1.getDimension());
+        assertEquals(4, v1.getDimension());
         for (int i = 0; i < v1.getDimension(); ++i) {
-            Assertions.assertEquals(i, v1.getEntry(i).getReal(), 1.0e-15);
+            assertEquals(i, v1.getEntry(i).getReal(), 1.0e-15);
         }
         FieldVector<Binary64> v2 = MatrixUtils.createFieldVector(Binary64Field.getInstance(), 7);
-        Assertions.assertEquals(7, v2.getDimension());
+        assertEquals(7, v2.getDimension());
         for (int i = 0; i < v2.getDimension(); ++i) {
-            Assertions.assertEquals(0.0, v2.getEntry(i).getReal(), 1.0e-15);
+            assertEquals(0.0, v2.getEntry(i).getReal(), 1.0e-15);
         }
     }
 
     @Test
-    public void testCreateRowRealMatrix() {
-        Assertions.assertEquals(MatrixUtils.createRowRealMatrix(row),
+    void testCreateRowRealMatrix() {
+        assertEquals(MatrixUtils.createRowRealMatrix(row),
                      new BlockRealMatrix(rowMatrix));
         try {
             MatrixUtils.createRowRealMatrix(new double[] {});  // empty
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createRowRealMatrix(null);  // null
-            Assertions.fail("Expecting NullArgumentException");
+            fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testCreateRowFieldMatrix() {
-        Assertions.assertEquals(MatrixUtils.createRowFieldMatrix(asFraction(row)),
+    void testCreateRowFieldMatrix() {
+        assertEquals(MatrixUtils.createRowFieldMatrix(asFraction(row)),
                      new Array2DRowFieldMatrix<Fraction>(asFraction(rowMatrix)));
-        Assertions.assertEquals(MatrixUtils.createRowFieldMatrix(fractionRow),
+        assertEquals(MatrixUtils.createRowFieldMatrix(fractionRow),
                      new Array2DRowFieldMatrix<Fraction>(fractionRowMatrix));
         try {
             MatrixUtils.createRowFieldMatrix(new Fraction[] {});  // empty
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createRowFieldMatrix((Fraction[]) null);  // null
-            Assertions.fail("Expecting NullArgumentException");
+            fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testCreateColumnRealMatrix() {
-        Assertions.assertEquals(MatrixUtils.createColumnRealMatrix(col),
+    void testCreateColumnRealMatrix() {
+        assertEquals(MatrixUtils.createColumnRealMatrix(col),
                      new BlockRealMatrix(colMatrix));
         try {
             MatrixUtils.createColumnRealMatrix(new double[] {});  // empty
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createColumnRealMatrix(null);  // null
-            Assertions.fail("Expecting NullArgumentException");
+            fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testCreateColumnFieldMatrix() {
-        Assertions.assertEquals(MatrixUtils.createColumnFieldMatrix(asFraction(col)),
+    void testCreateColumnFieldMatrix() {
+        assertEquals(MatrixUtils.createColumnFieldMatrix(asFraction(col)),
                      new Array2DRowFieldMatrix<Fraction>(asFraction(colMatrix)));
-        Assertions.assertEquals(MatrixUtils.createColumnFieldMatrix(fractionCol),
+        assertEquals(MatrixUtils.createColumnFieldMatrix(fractionCol),
                      new Array2DRowFieldMatrix<Fraction>(fractionColMatrix));
 
         try {
             MatrixUtils.createColumnFieldMatrix(new Fraction[] {});  // empty
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MatrixUtils.createColumnFieldMatrix((Fraction[]) null);  // null
-            Assertions.fail("Expecting NullArgumentException");
+            fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
@@ -245,22 +248,22 @@ public final class MatrixUtilsTest {
         for (int i = 0; i < m.getRowDimension(); i++) {
             for (int j =0; j < m.getColumnDimension(); j++) {
                 if (i == j) {
-                    Assertions.assertEquals(1d, m.getEntry(i, j), 0);
+                    assertEquals(1d, m.getEntry(i, j), 0);
                 } else {
-                    Assertions.assertEquals(0d, m.getEntry(i, j), 0);
+                    assertEquals(0d, m.getEntry(i, j), 0);
                 }
             }
         }
     }
 
     @Test
-    public void testCreateIdentityMatrix() {
+    void testCreateIdentityMatrix() {
         checkIdentityMatrix(MatrixUtils.createRealIdentityMatrix(3));
         checkIdentityMatrix(MatrixUtils.createRealIdentityMatrix(2));
         checkIdentityMatrix(MatrixUtils.createRealIdentityMatrix(1));
         try {
             MatrixUtils.createRealIdentityMatrix(0);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -273,29 +276,29 @@ public final class MatrixUtilsTest {
         for (int i = 0; i < m.getRowDimension(); i++) {
             for (int j =0; j < m.getColumnDimension(); j++) {
                 if (i == j) {
-                    Assertions.assertEquals(Fraction.ONE, m.getEntry(i, j));
+                    assertEquals(Fraction.ONE, m.getEntry(i, j));
                 } else {
-                    Assertions.assertEquals(Fraction.ZERO, m.getEntry(i, j));
+                    assertEquals(Fraction.ZERO, m.getEntry(i, j));
                 }
             }
         }
     }
 
     @Test
-    public void testcreateFieldIdentityMatrix() {
+    void testcreateFieldIdentityMatrix() {
         checkIdentityFieldMatrix(MatrixUtils.createFieldIdentityMatrix(FractionField.getInstance(), 3));
         checkIdentityFieldMatrix(MatrixUtils.createFieldIdentityMatrix(FractionField.getInstance(), 2));
         checkIdentityFieldMatrix(MatrixUtils.createFieldIdentityMatrix(FractionField.getInstance(), 1));
         try {
             MatrixUtils.createRealIdentityMatrix(0);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testBigFractionConverter() {
+    void testBigFractionConverter() {
         BigFraction[][] bfData = {
                 { new BigFraction(1), new BigFraction(2), new BigFraction(3) },
                 { new BigFraction(2), new BigFraction(5), new BigFraction(3) },
@@ -304,11 +307,11 @@ public final class MatrixUtilsTest {
         FieldMatrix<BigFraction> m = new Array2DRowFieldMatrix<BigFraction>(bfData, false);
         RealMatrix converted = MatrixUtils.bigFractionMatrixToRealMatrix(m);
         RealMatrix reference = new Array2DRowRealMatrix(testData, false);
-        Assertions.assertEquals(0.0, converted.subtract(reference).getNorm1(), 0.0);
+        assertEquals(0.0, converted.subtract(reference).getNorm1(), 0.0);
     }
 
     @Test
-    public void testFractionConverter() {
+    void testFractionConverter() {
         Fraction[][] fData = {
                 { new Fraction(1), new Fraction(2), new Fraction(3) },
                 { new Fraction(2), new Fraction(5), new Fraction(3) },
@@ -317,7 +320,7 @@ public final class MatrixUtilsTest {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(fData, false);
         RealMatrix converted = MatrixUtils.fractionMatrixToRealMatrix(m);
         RealMatrix reference = new Array2DRowRealMatrix(testData, false);
-        Assertions.assertEquals(0.0, converted.subtract(reference).getNorm1(), 0.0);
+        assertEquals(0.0, converted.subtract(reference).getNorm1(), 0.0);
     }
 
     public static Fraction[][] asFraction(double[][] data) {
@@ -332,7 +335,7 @@ public final class MatrixUtilsTest {
                 d[i] = dI;
             }
         } catch (MathIllegalStateException fce) {
-            Assertions.fail(fce.getMessage());
+            fail(fce.getMessage());
         }
         return d;
     }
@@ -344,19 +347,19 @@ public final class MatrixUtilsTest {
                 d[i] = new Fraction(data[i]);
             }
         } catch (MathIllegalStateException fce) {
-            Assertions.fail(fce.getMessage());
+            fail(fce.getMessage());
         }
         return d;
     }
 
     @Test
-    public void testSolveLowerTriangularSystem(){
+    void testSolveLowerTriangularSystem(){
         RealMatrix rm = new Array2DRowRealMatrix(
                 new double[][] { {2,0,0,0 }, { 1,1,0,0 }, { 3,3,3,0 }, { 3,3,3,4 } },
                        false);
         RealVector b = new ArrayRealVector(new double[] { 2,3,4,8 }, false);
         MatrixUtils.solveLowerTriangularSystem(rm, b);
-        UnitTestUtils.assertEquals( new double[]{1,2,-1.66666666666667, 1.0}  , b.toArray() , 1.0e-12);
+        UnitTestUtils.customAssertEquals(new double[]{ 1, 2, -1.66666666666667, 1.0}  , b.toArray() , 1.0e-12);
     }
 
 
@@ -364,13 +367,13 @@ public final class MatrixUtilsTest {
      * Taken from R manual http://stat.ethz.ch/R-manual/R-patched/library/base/html/backsolve.html
      */
     @Test
-    public void testSolveUpperTriangularSystem(){
+    void testSolveUpperTriangularSystem(){
         RealMatrix rm = new Array2DRowRealMatrix(
                 new double[][] { {1,2,3 }, { 0,1,1 }, { 0,0,2 } },
                        false);
         RealVector b = new ArrayRealVector(new double[] { 8,4,2 }, false);
         MatrixUtils.solveUpperTriangularSystem(rm, b);
-        UnitTestUtils.assertEquals( new double[]{-1,3,1}  , b.toArray() , 1.0e-12);
+        UnitTestUtils.customAssertEquals(new double[]{ -1, 3, 1}  , b.toArray() , 1.0e-12);
     }
 
     /**
@@ -379,7 +382,7 @@ public final class MatrixUtilsTest {
      * performance-wise) than the direct inversion of the whole matrix.
      */
     @Test
-    public void testBlockInverse() {
+    void testBlockInverse() {
         final double[][] data = {
             { -1, 0, 123, 4 },
             { -56, 78.9, -0.1, -23.4 },
@@ -400,9 +403,9 @@ public final class MatrixUtilsTest {
                 for (int j = 0; j < len; j++) {
                     final double entry = id.getEntry(i, j);
                     if (i == j) {
-                        Assertions.assertEquals(1, entry, tol, "[" + i + "][" + j + "]");
+                        assertEquals(1, entry, tol, "[" + i + "][" + j + "]");
                     } else {
-                        Assertions.assertEquals(0, entry, tol, "[" + i + "][" + j + "]");
+                        assertEquals(0, entry, tol, "[" + i + "][" + j + "]");
                     }
                 }
             }
@@ -410,7 +413,7 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testBlockInverseNonInvertible() {
+    void testBlockInverseNonInvertible() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final double[][] data = {
                 {-1, 0, 123, 4},
@@ -424,7 +427,7 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testIsSymmetric() {
+    void testIsSymmetric() {
         final double eps = Math.ulp(1d);
 
         final double[][] dataSym = {
@@ -432,18 +435,18 @@ public final class MatrixUtilsTest {
             { 2, 2, 5 },
             { 3, 5, 6 },
         };
-        Assertions.assertTrue(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataSym), eps));
+        assertTrue(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataSym), eps));
 
         final double[][] dataNonSym = {
             { 1, 2, -3 },
             { 2, 2, 5 },
             { 3, 5, 6 },
         };
-        Assertions.assertFalse(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataNonSym), eps));
+        assertFalse(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataNonSym), eps));
     }
 
     @Test
-    public void testIsSymmetricTolerance() {
+    void testIsSymmetricTolerance() {
         final double eps = 1e-4;
 
         final double[][] dataSym1 = {
@@ -451,30 +454,30 @@ public final class MatrixUtilsTest {
             { 1,   1, 1       },
             { 1.0, 1, 1       },
         };
-        Assertions.assertTrue(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataSym1), eps));
+        assertTrue(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataSym1), eps));
         final double[][] dataSym2 = {
             { 1,   1, 0.99990 },
             { 1,   1, 1       },
             { 1.0, 1, 1       },
         };
-        Assertions.assertTrue(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataSym2), eps));
+        assertTrue(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataSym2), eps));
 
         final double[][] dataNonSym1 = {
             { 1,   1, 1.00011 },
             { 1,   1, 1       },
             { 1.0, 1, 1       },
         };
-        Assertions.assertFalse(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataNonSym1), eps));
+        assertFalse(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataNonSym1), eps));
         final double[][] dataNonSym2 = {
             { 1,   1, 0.99989 },
             { 1,   1, 1       },
             { 1.0, 1, 1       },
         };
-        Assertions.assertFalse(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataNonSym2), eps));
+        assertFalse(MatrixUtils.isSymmetric(MatrixUtils.createRealMatrix(dataNonSym2), eps));
     }
 
     @Test
-    public void testCheckSymmetric1() {
+    void testCheckSymmetric1() {
         final double[][] dataSym = {
             { 1, 2, 3 },
             { 2, 2, 5 },
@@ -484,7 +487,7 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testCheckSymmetric2() {
+    void testCheckSymmetric2() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final double[][] dataNonSym = {
                 {1, 2, -3},
@@ -496,7 +499,7 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testInverseSingular() {
+    void testInverseSingular() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             RealMatrix m = MatrixUtils.createRealMatrix(testData3x3Singular);
             MatrixUtils.inverse(m);
@@ -504,7 +507,7 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testInverseNonSquare() {
+    void testInverseNonSquare() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             RealMatrix m = MatrixUtils.createRealMatrix(testData3x4);
             MatrixUtils.inverse(m);
@@ -512,28 +515,28 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testInverseDiagonalMatrix() {
+    void testInverseDiagonalMatrix() {
         final double[] data = { 1, 2, 3 };
         final RealMatrix m = new DiagonalMatrix(data);
         final RealMatrix inverse = MatrixUtils.inverse(m);
 
         final RealMatrix result = m.multiply(inverse);
-        UnitTestUtils.assertEquals("MatrixUtils.inverse() returns wrong result",
-                MatrixUtils.createRealIdentityMatrix(data.length), result, Math.ulp(1d));
+        UnitTestUtils.customAssertEquals("MatrixUtils.inverse() returns wrong result",
+                                         MatrixUtils.createRealIdentityMatrix(data.length), result, Math.ulp(1d));
     }
 
     @Test
-    public void testInverseRealMatrix() {
+    void testInverseRealMatrix() {
         RealMatrix m = MatrixUtils.createRealMatrix(testData);
         final RealMatrix inverse = MatrixUtils.inverse(m);
 
         final RealMatrix result = m.multiply(inverse);
-        UnitTestUtils.assertEquals("MatrixUtils.inverse() returns wrong result",
-                MatrixUtils.createRealIdentityMatrix(testData.length), result, 1e-12);
+        UnitTestUtils.customAssertEquals("MatrixUtils.inverse() returns wrong result",
+                                         MatrixUtils.createRealIdentityMatrix(testData.length), result, 1e-12);
     }
 
     @Test
-    public void testMatrixExponentialNonSquare() {
+    void testMatrixExponentialNonSquare() {
         double[][] exponentArr = {
                 {0.0001, 0.001},
                 {0.001, -0.0001},
@@ -543,14 +546,14 @@ public final class MatrixUtilsTest {
 
         try {
             MatrixUtils.matrixExponential(exponent);  // ragged
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testMatrixExponential3() {
+    void testMatrixExponential3() {
         double[][] exponentArr = {
                 {0.0001, 0.001},
                 {0.001, -0.0001}
@@ -563,13 +566,13 @@ public final class MatrixUtilsTest {
         };
         RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
 
-        UnitTestUtils.assertEquals("matrixExponential pade3 incorrect result",
-                expectedResult, MatrixUtils.matrixExponential(exponent), 32.0 * Math.ulp(1.0));
+        UnitTestUtils.customAssertEquals("matrixExponential pade3 incorrect result",
+                                         expectedResult, MatrixUtils.matrixExponential(exponent), 32.0 * Math.ulp(1.0));
     }
 
 
     @Test
-    public void testMatrixExponential5() {
+    void testMatrixExponential5() {
         double[][] exponentArr = {
                 {0.1, 0.1},
                 {0.001, -0.1}
@@ -582,12 +585,12 @@ public final class MatrixUtilsTest {
         };
         RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
 
-        UnitTestUtils.assertEquals("matrixExponential pade5 incorrect result",
-                expectedResult, MatrixUtils.matrixExponential(exponent), 2.0 * Math.ulp(1.0));
+        UnitTestUtils.customAssertEquals("matrixExponential pade5 incorrect result",
+                                         expectedResult, MatrixUtils.matrixExponential(exponent), 2.0 * Math.ulp(1.0));
     }
 
     @Test
-    public void testMatrixExponential7() {
+    void testMatrixExponential7() {
         double[][] exponentArr = {
                 {0.5, 0.1},
                 {0.001, -0.5}
@@ -600,12 +603,12 @@ public final class MatrixUtilsTest {
         };
         RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
 
-        UnitTestUtils.assertEquals("matrixExponential pade7 incorrect result",
-                expectedResult, MatrixUtils.matrixExponential(exponent), 32.0 * Math.ulp(1.0));
+        UnitTestUtils.customAssertEquals("matrixExponential pade7 incorrect result",
+                                         expectedResult, MatrixUtils.matrixExponential(exponent), 32.0 * Math.ulp(1.0));
     }
 
     @Test
-    public void testMatrixExponential9() {
+    void testMatrixExponential9() {
         double[][] exponentArr = {
                 {1.8, 0.3},
                 {0.001, -0.9}
@@ -618,12 +621,12 @@ public final class MatrixUtilsTest {
         };
         RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
 
-        UnitTestUtils.assertEquals("matrixExponential pade9 incorrect result",
-                expectedResult, MatrixUtils.matrixExponential(exponent), 16.0 * Math.ulp(1.0));
+        UnitTestUtils.customAssertEquals("matrixExponential pade9 incorrect result",
+                                         expectedResult, MatrixUtils.matrixExponential(exponent), 16.0 * Math.ulp(1.0));
     }
 
     @Test
-    public void testMatrixExponential13() {
+    void testMatrixExponential13() {
         double[][] exponentArr1 = {
                 {3.4, 1.2},
                 {0.001, -0.9}
@@ -636,8 +639,8 @@ public final class MatrixUtilsTest {
         };
         RealMatrix expectedResult1 = MatrixUtils.createRealMatrix(expectedResultArr1);
 
-        UnitTestUtils.assertEquals("matrixExponential pade13-1 incorrect result",
-                expectedResult1, MatrixUtils.matrixExponential(exponent1), 16.0 * Math.ulp(30.0));
+        UnitTestUtils.customAssertEquals("matrixExponential pade13-1 incorrect result",
+                                         expectedResult1, MatrixUtils.matrixExponential(exponent1), 16.0 * Math.ulp(30.0));
 
 
         double[][] exponentArr2 = {
@@ -652,8 +655,8 @@ public final class MatrixUtilsTest {
         };
         RealMatrix expectedResult2 = MatrixUtils.createRealMatrix(expectedResultArr2);
 
-        UnitTestUtils.assertEquals("matrixExponential pade13-2 incorrect result",
-                expectedResult2, MatrixUtils.matrixExponential(exponent2), 65536.0 * Math.ulp(1e8));
+        UnitTestUtils.customAssertEquals("matrixExponential pade13-2 incorrect result",
+                                         expectedResult2, MatrixUtils.matrixExponential(exponent2), 65536.0 * Math.ulp(1e8));
 
 
         double[][] exponentArr3 = {
@@ -668,19 +671,19 @@ public final class MatrixUtilsTest {
         };
         RealMatrix expectedResult3 = MatrixUtils.createRealMatrix(expectedResultArr3);
 
-        UnitTestUtils.assertEquals("matrixExponential pade13-3 incorrect result",
-                expectedResult3, MatrixUtils.matrixExponential(exponent3), 4096.0 * Math.ulp(1.0));
+        UnitTestUtils.customAssertEquals("matrixExponential pade13-3 incorrect result",
+                                         expectedResult3, MatrixUtils.matrixExponential(exponent3), 4096.0 * Math.ulp(1.0));
     }
 
     @Test
-    public void testOrthonormalize1() {
+    void testOrthonormalize1() {
 
         final List<RealVector> basis =
                         MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] {  1, 2, 2 }),
                                                                  new ArrayRealVector(new double[] { -1, 0, 2 }),
                                                                  new ArrayRealVector(new double[] {  0, 0, 1 })),
                                                    Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
-        Assertions.assertEquals(3, basis.size());
+        assertEquals(3, basis.size());
         checkBasis(basis);
         checkVector(basis.get(0),  1.0 / 3.0,  2.0 / 3.0, 2.0 / 3.0);
         checkVector(basis.get(1), -2.0 / 3.0, -1.0 / 3.0, 2.0 / 3.0);
@@ -689,14 +692,14 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testOrthonormalize2() {
+    void testOrthonormalize2() {
 
         final List<RealVector> basis =
                         MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 3, 1 }),
                                                                  new ArrayRealVector(new double[] { 2, 2 })),
                                                    Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
         final double s10 = FastMath.sqrt(10);
-        Assertions.assertEquals(2, basis.size());
+        assertEquals(2, basis.size());
         checkBasis(basis);
         checkVector(basis.get(0),  3 / s10,  1 / s10);
         checkVector(basis.get(1), -1 / s10,  3 / s10);
@@ -704,7 +707,7 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testOrthonormalize3() {
+    void testOrthonormalize3() {
 
         final double small = 1.0e-12;
         final List<RealVector> basis =
@@ -712,7 +715,7 @@ public final class MatrixUtilsTest {
                                                                  new ArrayRealVector(new double[] { 1, small, 0     }),
                                                                  new ArrayRealVector(new double[] { 1, 0,     small })),
                                                    Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
-        Assertions.assertEquals(3, basis.size());
+        assertEquals(3, basis.size());
         checkBasis(basis);
         checkVector(basis.get(0), 1,  small, small);
         checkVector(basis.get(1), 0,  0,     -1   );
@@ -721,14 +724,14 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testOrthonormalizeIncompleteBasis() {
+    void testOrthonormalizeIncompleteBasis() {
 
         final double small = 1.0e-12;
         final List<RealVector> basis =
                         MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 1, small, small }),
                                                                  new ArrayRealVector(new double[] { 1, small, 0     })),
                                                    Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
-        Assertions.assertEquals(2, basis.size());
+        assertEquals(2, basis.size());
         checkBasis(basis);
         checkVector(basis.get(0), 1,  small, small);
         checkVector(basis.get(1), 0,  0,     -1   );
@@ -736,96 +739,96 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testOrthonormalizeDependent() {
+    void testOrthonormalizeDependent() {
         final double small = 1.0e-12;
         try {
             MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 1, small, small }),
                                                      new ArrayRealVector(new double[] { 1, small, small })),
                                        Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
         }
     }
 
     @Test
-    public void testOrthonormalizeDependentGenerateException() {
+    void testOrthonormalizeDependentGenerateException() {
         try {
             MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 2, 3, 0 }),
                                                      new ArrayRealVector(new double[] { 2, 7, 0 }),
                                                      new ArrayRealVector(new double[] { 4, 5, 0 }),
                                                      new ArrayRealVector(new double[] { 0, 0, 1 })),
                                        7 * Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
         }
 
     }
 
     @Test
-    public void testOrthonormalizeDependentAddZeroNorm() {
+    void testOrthonormalizeDependentAddZeroNorm() {
         List<RealVector> basis = MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 2, 3, 0 }),
                                                                           new ArrayRealVector(new double[] { 2, 7, 0 }),
                                                                           new ArrayRealVector(new double[] { 4, 5, 0 }),
                                                                           new ArrayRealVector(new double[] { 0, 0, 1 })),
                                                             7 * Precision.EPSILON, DependentVectorsHandler.ADD_ZERO_VECTOR);
-        Assertions.assertEquals(4, basis.size());
-        Assertions.assertEquals(0, basis.get(2).getEntry(0), 1.0e-15);
-        Assertions.assertEquals(0, basis.get(2).getEntry(1), 1.0e-15);
-        Assertions.assertEquals(0, basis.get(2).getEntry(2), 1.0e-15);
+        assertEquals(4, basis.size());
+        assertEquals(0, basis.get(2).getEntry(0), 1.0e-15);
+        assertEquals(0, basis.get(2).getEntry(1), 1.0e-15);
+        assertEquals(0, basis.get(2).getEntry(2), 1.0e-15);
     }
 
     @Test
-    public void testOrthonormalizeDependentReduceToSpan() {
+    void testOrthonormalizeDependentReduceToSpan() {
         List<RealVector> basis = MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 2, 3, 0 }),
                                                                           new ArrayRealVector(new double[] { 2, 7, 0 }),
                                                                           new ArrayRealVector(new double[] { 4, 5, 0 }),
                                                                           new ArrayRealVector(new double[] { 0, 0, 1 })),
                                                             7 * Precision.EPSILON, DependentVectorsHandler.REDUCE_BASE_TO_SPAN);
-        Assertions.assertEquals(3, basis.size());
-        Assertions.assertEquals(0, basis.get(2).getEntry(0), 1.0e-15);
-        Assertions.assertEquals(0, basis.get(2).getEntry(1), 1.0e-15);
-        Assertions.assertEquals(1, basis.get(2).getEntry(2), 1.0e-15);
+        assertEquals(3, basis.size());
+        assertEquals(0, basis.get(2).getEntry(0), 1.0e-15);
+        assertEquals(0, basis.get(2).getEntry(1), 1.0e-15);
+        assertEquals(1, basis.get(2).getEntry(2), 1.0e-15);
     }
 
     @Test
-    public void testFieldOrthonormalize1() {
+    void testFieldOrthonormalize1() {
         doTestOrthonormalize1(Binary64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalize2() {
+    void testFieldOrthonormalize2() {
         doTestOrthonormalize2(Binary64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalize3() {
+    void testFieldOrthonormalize3() {
         doTestOrthonormalize3(Binary64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalizeIncompleteBasis() {
+    void testFieldOrthonormalizeIncompleteBasis() {
         doTestOrthonormalizeIncompleteBasis(Binary64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalizeDependent() {
+    void testFieldOrthonormalizeDependent() {
         doTestOrthonormalizeDependent(Binary64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalizeDependentGenerateException() {
+    void testFieldOrthonormalizeDependentGenerateException() {
         doTestOrthonormalizeDependentGenerateException(Binary64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalizeDependentAddZeroNorm() {
+    void testFieldOrthonormalizeDependentAddZeroNorm() {
         doTestOrthonormalizeDependentAddZeroNorm(Binary64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalizeDependentReduceToSpan() {
+    void testFieldOrthonormalizeDependentReduceToSpan() {
         doTestOrthonormalizeDependentReduceToSpan(Binary64Field.getInstance());
     }
 
@@ -838,7 +841,7 @@ public final class MatrixUtilsTest {
                                                                  convert(field, new ArrayRealVector(new double[] {  0, 0, 1 }))),
                                                    field.getZero().newInstance(Precision.EPSILON),
                                                    DependentVectorsHandler.GENERATE_EXCEPTION);
-        Assertions.assertEquals(3, basis.size());
+        assertEquals(3, basis.size());
         checkBasis(field, basis);
         checkVector(basis.get(0),  1.0 / 3.0,  2.0 / 3.0, 2.0 / 3.0);
         checkVector(basis.get(1), -2.0 / 3.0, -1.0 / 3.0, 2.0 / 3.0);
@@ -855,7 +858,7 @@ public final class MatrixUtilsTest {
                                                    field.getZero().newInstance(Precision.EPSILON),
                                                    DependentVectorsHandler.GENERATE_EXCEPTION);
         final double s10 = FastMath.sqrt(10);
-        Assertions.assertEquals(2, basis.size());
+        assertEquals(2, basis.size());
         checkBasis(field, basis);
         checkVector(basis.get(0),  3 / s10,  1 / s10);
         checkVector(basis.get(1), -1 / s10,  3 / s10);
@@ -872,7 +875,7 @@ public final class MatrixUtilsTest {
                                                                  convert(field, new ArrayRealVector(new double[] { 1, 0,     small }))),
                                                    field.getZero().newInstance(Precision.EPSILON),
                                                    DependentVectorsHandler.GENERATE_EXCEPTION);
-        Assertions.assertEquals(3, basis.size());
+        assertEquals(3, basis.size());
         checkBasis(field, basis);
         checkVector(basis.get(0), 1,  small, small);
         checkVector(basis.get(1), 0,  0,     -1   );
@@ -889,7 +892,7 @@ public final class MatrixUtilsTest {
                                                                  convert(field, new ArrayRealVector(new double[] { 1, small, 0     }))),
                                                    field.getZero().newInstance(Precision.EPSILON),
                                                    DependentVectorsHandler.GENERATE_EXCEPTION);
-        Assertions.assertEquals(2, basis.size());
+        assertEquals(2, basis.size());
         checkBasis(field, basis);
         checkVector(basis.get(0), 1,  small, small);
         checkVector(basis.get(1), 0,  0,     -1   );
@@ -904,9 +907,9 @@ public final class MatrixUtilsTest {
                                                      convert(field, new ArrayRealVector(new double[] { 1, small, small }))),
                                        field.getZero().newInstance(Precision.EPSILON),
                                        DependentVectorsHandler.GENERATE_EXCEPTION);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
         }
     }
 
@@ -919,9 +922,9 @@ public final class MatrixUtilsTest {
                                                      convert(field, new ArrayRealVector(new double[] { 0, 0, 1 }))),
                                        field.getZero().newInstance(7 * Precision.EPSILON),
                                        DependentVectorsHandler.GENERATE_EXCEPTION);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
         }
     }
 
@@ -933,10 +936,10 @@ public final class MatrixUtilsTest {
                                                                               convert(field, new ArrayRealVector(new double[] { 0, 0, 1 }))),
                                                                 field.getZero().newInstance(7 * Precision.EPSILON),
                                                                 DependentVectorsHandler.ADD_ZERO_VECTOR);
-       Assertions.assertEquals(4, basis.size());
-       Assertions.assertEquals(0, basis.get(2).getEntry(0).getReal(), 1.0e-15);
-       Assertions.assertEquals(0, basis.get(2).getEntry(1).getReal(), 1.0e-15);
-       Assertions.assertEquals(0, basis.get(2).getEntry(2).getReal(), 1.0e-15);
+       assertEquals(4, basis.size());
+       assertEquals(0, basis.get(2).getEntry(0).getReal(), 1.0e-15);
+       assertEquals(0, basis.get(2).getEntry(1).getReal(), 1.0e-15);
+       assertEquals(0, basis.get(2).getEntry(2).getReal(), 1.0e-15);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestOrthonormalizeDependentReduceToSpan(final Field<T> field) {
@@ -947,38 +950,38 @@ public final class MatrixUtilsTest {
                                                                               convert(field, new ArrayRealVector(new double[] { 0, 0, 1 }))),
                                                                 field.getZero().newInstance(7 * Precision.EPSILON),
                                                                 DependentVectorsHandler.REDUCE_BASE_TO_SPAN);
-        Assertions.assertEquals(3, basis.size());
-        Assertions.assertEquals(0, basis.get(2).getEntry(0).getReal(), 1.0e-15);
-        Assertions.assertEquals(0, basis.get(2).getEntry(1).getReal(), 1.0e-15);
-        Assertions.assertEquals(1, basis.get(2).getEntry(2).getReal(), 1.0e-15);
+        assertEquals(3, basis.size());
+        assertEquals(0, basis.get(2).getEntry(0).getReal(), 1.0e-15);
+        assertEquals(0, basis.get(2).getEntry(1).getReal(), 1.0e-15);
+        assertEquals(1, basis.get(2).getEntry(2).getReal(), 1.0e-15);
     }
 
     private void checkVector(final RealVector v, double... p) {
-        Assertions.assertEquals(p.length, v.getDimension());
+        assertEquals(p.length, v.getDimension());
         for (int i = 0; i < p.length; ++i) {
-            Assertions.assertEquals(p[i], v.getEntry(i), 1.0e-15);
+            assertEquals(p[i], v.getEntry(i), 1.0e-15);
         }
     }
 
     private void checkBasis(final List<RealVector> basis) {
         for (int i = 0; i < basis.size(); ++i) {
             for (int j = i; j < basis.size(); ++j) {
-                Assertions.assertEquals(i == j ? 1.0 : 0.0, basis.get(i).dotProduct(basis.get(j)), 1.0e-12);
+                assertEquals(i == j ? 1.0 : 0.0, basis.get(i).dotProduct(basis.get(j)), 1.0e-12);
             }
         }        
     }
 
     private <T extends CalculusFieldElement<T>> void checkVector(final FieldVector<T> v, double... p) {
-        Assertions.assertEquals(p.length, v.getDimension());
+        assertEquals(p.length, v.getDimension());
         for (int i = 0; i < p.length; ++i) {
-            Assertions.assertEquals(p[i], v.getEntry(i).getReal(), 1.0e-15);
+            assertEquals(p[i], v.getEntry(i).getReal(), 1.0e-15);
         }
     }
 
     private <T extends CalculusFieldElement<T>> void checkBasis(final Field<T> field, final List<FieldVector<T>> basis) {
         for (int i = 0; i < basis.size(); ++i) {
             for (int j = i; j < basis.size(); ++j) {
-                Assertions.assertEquals(i == j ? 1.0 : 0.0, basis.get(i).dotProduct(basis.get(j)).getReal(), 1.0e-12);
+                assertEquals(i == j ? 1.0 : 0.0, basis.get(i).dotProduct(basis.get(j)).getReal(), 1.0e-12);
             }
         }        
     }

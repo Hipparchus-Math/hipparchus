@@ -23,7 +23,7 @@ import org.hipparchus.Field;
 import org.hipparchus.util.Binary64Field;
 import org.junit.jupiter.api.Test;
 
-public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
+class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, final double minStep, final double maxStep,

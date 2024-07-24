@@ -23,11 +23,12 @@
 package org.hipparchus.dfp;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DfpMathTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class DfpMathTest {
 
     private DfpField factory;
     private Dfp pinf;
@@ -36,7 +37,7 @@ public class DfpMathTest {
     private Dfp qnan;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Some basic setup.  Define some constants and clear the status flags
         factory = new DfpField(20);
         pinf = factory.newDfp("1").divide(factory.newDfp("0"));
@@ -51,7 +52,7 @@ public class DfpMathTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         pinf = null;
         ninf = null;
         nan  = null;
@@ -74,13 +75,13 @@ public class DfpMathTest {
         b = (b && x.getField().getIEEEFlags() == flags);
 
         if (!b)
-            Assertions.assertTrue(b, "assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags());
+            assertTrue(b, "assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags());
 
         x.getField().clearIEEEFlags();
     }
 
     @Test
-    public void testPow()
+    void testPow()
     {
         // Test special cases  exponent of zero
         test(DfpMath.pow(factory.newDfp("0"), factory.newDfp("0")),
@@ -477,7 +478,7 @@ public class DfpMathTest {
     }
 
     @Test
-    public void testSin()
+    void testSin()
     {
         test(DfpMath.sin(pinf),
              nan,

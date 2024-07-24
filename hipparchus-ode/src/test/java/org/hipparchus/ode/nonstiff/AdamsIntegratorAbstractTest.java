@@ -44,8 +44,11 @@ import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AdamsIntegratorAbstractTest {
 
@@ -63,18 +66,18 @@ public abstract class AdamsIntegratorAbstractTest {
     protected void doNbPointsTest() {
         try {
             createIntegrator(1, 1.0e-3, 1.0e+3, 1.0e-15, 1.0e-15);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+            assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
                                 miae.getSpecifier());
         }
         try {
             double[] vecAbsoluteTolerance = { 1.0e-15, 1.0e-16 };
             double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
             createIntegrator(1, 1.0e-3, 1.0e+3, vecAbsoluteTolerance, vecRelativeTolerance);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+            assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
                                 miae.getSpecifier());
         }
     }
@@ -109,21 +112,21 @@ public abstract class AdamsIntegratorAbstractTest {
 
             MultistepIntegrator integ = createIntegrator(4, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
             int orderCorrection = integ instanceof AdamsBashforthIntegrator ? 0 : 1;
-            Assertions.assertEquals(FastMath.pow(2.0, 1.0 / (4 + orderCorrection)), integ.getMaxGrowth(), 1.0e-10);
-            Assertions.assertEquals(0.2, integ.getMinReduction(), 1.0e-10);
-            Assertions.assertEquals(4, integ.getNSteps());
-            Assertions.assertEquals(0.9, integ.getSafety(), 1.0e-10);
-             Assertions.assertTrue(integ.getStarterIntegrator() instanceof DormandPrince853Integrator);
+            assertEquals(FastMath.pow(2.0, 1.0 / (4 + orderCorrection)), integ.getMaxGrowth(), 1.0e-10);
+            assertEquals(0.2, integ.getMinReduction(), 1.0e-10);
+            assertEquals(4, integ.getNSteps());
+            assertEquals(0.9, integ.getSafety(), 1.0e-10);
+             assertTrue(integ.getStarterIntegrator() instanceof DormandPrince853Integrator);
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 
-            Assertions.assertTrue(handler.getMaximalValueError() > ratioMin * scalAbsoluteTolerance);
-            Assertions.assertTrue(handler.getMaximalValueError() < ratioMax * scalAbsoluteTolerance);
+            assertTrue(handler.getMaximalValueError() > ratioMin * scalAbsoluteTolerance);
+            assertTrue(handler.getMaximalValueError() < ratioMax * scalAbsoluteTolerance);
 
             int calls = pb.getCalls();
-            Assertions.assertEquals(integ.getEvaluations(), calls);
-            Assertions.assertTrue(calls <= previousCalls);
+            assertEquals(integ.getEvaluations(), calls);
+            assertTrue(calls <= previousCalls);
             previousCalls = calls;
 
         }
@@ -197,10 +200,10 @@ public abstract class AdamsIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assertions.assertEquals(0.0, handler.getLastError(), epsilonLast);
-        Assertions.assertEquals(0.0, handler.getMaximalValueError(), epsilonMaxValue);
-        Assertions.assertEquals(0, handler.getMaximalTimeError(), epsilonMaxTime);
-        Assertions.assertEquals(name, integ.getName());
+        assertEquals(0.0, handler.getLastError(), epsilonLast);
+        assertEquals(0.0, handler.getMaximalValueError(), epsilonMaxValue);
+        assertEquals(0, handler.getMaximalTimeError(), epsilonMaxTime);
+        assertEquals(name, integ.getName());
     }
 
     @Test
@@ -246,9 +249,9 @@ public abstract class AdamsIntegratorAbstractTest {
             integ.addStepHandler(handler);
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
             if (nSteps < nLimit) {
-                Assertions.assertTrue(handler.getMaximalValueError() > epsilonBad);
+                assertTrue(handler.getMaximalValueError() > epsilonBad);
             } else {
-                Assertions.assertTrue(handler.getMaximalValueError() < epsilonGood);
+                assertTrue(handler.getMaximalValueError() < epsilonGood);
             }
         }
 
@@ -266,10 +269,10 @@ public abstract class AdamsIntegratorAbstractTest {
                     return new double[] { FastMath.log(t) };
                 }
             }, new ODEState(10.0, new double[] { 1.0 }), -1.0);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
-            Assertions.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            Assertions.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
         }
     }
 
@@ -319,11 +322,11 @@ public abstract class AdamsIntegratorAbstractTest {
                     double tCurr = interpolator.getCurrentState().getTime();
                     double t     = (tPrev * (10 - i) + tCurr * i) / 10;
                     ODEStateAndDerivative state = interpolator.getInterpolatedState(t);
-                    Assertions.assertEquals(2, state.getPrimaryStateDimension());
-                    Assertions.assertEquals(1, state.getNumberOfSecondaryStates());
-                    Assertions.assertEquals(2, state.getSecondaryStateDimension(0));
-                    Assertions.assertEquals(1, state.getSecondaryStateDimension(1));
-                    Assertions.assertEquals(3, state.getCompleteStateDimension());
+                    assertEquals(2, state.getPrimaryStateDimension());
+                    assertEquals(1, state.getNumberOfSecondaryStates());
+                    assertEquals(2, state.getSecondaryStateDimension(0));
+                    assertEquals(1, state.getSecondaryStateDimension(1));
+                    assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
                                           FastMath.abs(FastMath.sin(t) - state.getPrimaryState()[0]));
                     max[0] = FastMath.max(max[0],
@@ -340,9 +343,9 @@ public abstract class AdamsIntegratorAbstractTest {
 
         ODEStateAndDerivative finalState =
                         integrator.integrate(expandable, initialState, 10.0);
-        Assertions.assertEquals(10.0, finalState.getTime(), 1.0e-12);
-        Assertions.assertEquals(0, max[0], epsilonSinCos);
-        Assertions.assertEquals(0, max[1], epsilonLinear);
+        assertEquals(10.0, finalState.getTime(), 1.0e-12);
+        assertEquals(0, max[0], epsilonSinCos);
+        assertEquals(0, max[1], epsilonLinear);
 
     }
 

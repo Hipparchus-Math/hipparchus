@@ -25,9 +25,11 @@ import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Abstract base class for {@link IntegerDistribution} tests.
@@ -158,7 +160,7 @@ public abstract class IntegerDistributionAbstractTest {
      */
     protected void verifyDensities() {
         for (int i = 0; i < densityTestPoints.length; i++) {
-            Assertions.assertEquals(densityTestValues[i],
+            assertEquals(densityTestValues[i],
                     distribution.probability(densityTestPoints[i]), getTolerance(), "Incorrect density value returned for " + densityTestPoints[i]);
         }
     }
@@ -170,7 +172,7 @@ public abstract class IntegerDistributionAbstractTest {
     protected void verifyLogDensities() {
         for (int i = 0; i < densityTestPoints.length; i++) {
             // FIXME: when logProbability methods are added to IntegerDistribution in 4.0, remove cast below
-            Assertions.assertEquals(logDensityTestValues[i],
+            assertEquals(logDensityTestValues[i],
                     ((AbstractIntegerDistribution) distribution).logProbability(densityTestPoints[i]), tolerance, "Incorrect log density value returned for " + densityTestPoints[i]);
         }
     }
@@ -181,7 +183,7 @@ public abstract class IntegerDistributionAbstractTest {
      */
     protected void verifyCumulativeProbabilities() {
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
-            Assertions.assertEquals(cumulativeTestValues[i],
+            assertEquals(cumulativeTestValues[i],
                     distribution.cumulativeProbability(cumulativeTestPoints[i]), getTolerance(), "Incorrect cumulative probability value returned for " + cumulativeTestPoints[i]);
         }
     }
@@ -193,7 +195,7 @@ public abstract class IntegerDistributionAbstractTest {
      */
     protected void verifyInverseCumulativeProbabilities() {
         for (int i = 0; i < inverseCumulativeTestPoints.length; i++) {
-            Assertions.assertEquals(inverseCumulativeTestValues[i],
+            assertEquals(inverseCumulativeTestValues[i],
                     distribution.inverseCumulativeProbability(inverseCumulativeTestPoints[i]),
                     "Incorrect inverse cumulative probability value returned for "
                     + inverseCumulativeTestPoints[i]);
@@ -241,14 +243,14 @@ public abstract class IntegerDistributionAbstractTest {
     @Test
     public void testConsistencyAtSupportBounds() {
         final int lower = distribution.getSupportLowerBound();
-        Assertions.assertEquals(0.0, distribution.cumulativeProbability(lower - 1), 0.0, "Cumulative probability mmust be 0 below support lower bound.");
-        Assertions.assertEquals(distribution.probability(lower), distribution.cumulativeProbability(lower), getTolerance(), "Cumulative probability of support lower bound must be equal to probability mass at this point.");
-        Assertions.assertEquals(lower, distribution.inverseCumulativeProbability(0.0), "Inverse cumulative probability of 0 must be equal to support lower bound.");
+        assertEquals(0.0, distribution.cumulativeProbability(lower - 1), 0.0, "Cumulative probability mmust be 0 below support lower bound.");
+        assertEquals(distribution.probability(lower), distribution.cumulativeProbability(lower), getTolerance(), "Cumulative probability of support lower bound must be equal to probability mass at this point.");
+        assertEquals(lower, distribution.inverseCumulativeProbability(0.0), "Inverse cumulative probability of 0 must be equal to support lower bound.");
 
         final int upper = distribution.getSupportUpperBound();
         if (upper != Integer.MAX_VALUE)
-            Assertions.assertEquals(1.0, distribution.cumulativeProbability(upper), 0.0, "Cumulative probability of support upper bound must be equal to 1.");
-        Assertions.assertEquals(upper, distribution.inverseCumulativeProbability(1.0), "Inverse cumulative probability of 1 must be equal to support upper bound.");
+            assertEquals(1.0, distribution.cumulativeProbability(upper), 0.0, "Cumulative probability of support upper bound must be equal to 1.");
+        assertEquals(upper, distribution.inverseCumulativeProbability(1.0), "Inverse cumulative probability of 1 must be equal to support upper bound.");
     }
 
     /**
@@ -258,19 +260,19 @@ public abstract class IntegerDistributionAbstractTest {
     public void testIllegalArguments() {
         try {
             distribution.probability(1, 0);
-            Assertions.fail("Expecting MathIllegalArgumentException for bad cumulativeProbability interval");
+            fail("Expecting MathIllegalArgumentException for bad cumulativeProbability interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             distribution.inverseCumulativeProbability(-1);
-            Assertions.fail("Expecting MathIllegalArgumentException for p = -1");
+            fail("Expecting MathIllegalArgumentException for p = -1");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             distribution.inverseCumulativeProbability(2);
-            Assertions.fail("Expecting MathIllegalArgumentException for p = 2");
+            fail("Expecting MathIllegalArgumentException for p = 2");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

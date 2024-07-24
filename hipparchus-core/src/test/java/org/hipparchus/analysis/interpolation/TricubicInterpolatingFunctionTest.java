@@ -27,18 +27,22 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for the bicubic function.
  */
-public final class TricubicInterpolatingFunctionTest {
+final class TricubicInterpolatingFunctionTest {
     /**
      * Test preconditions.
      */
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         double[] xval = new double[] {3, 4, 5, 6.5};
         double[] yval = new double[] {-4, -3, -1, 2.5};
         double[] zval = new double[] {-12, -8, -5.5, -3, 0, 2.5};
@@ -53,7 +57,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(new double[0], yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -61,7 +65,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, new double[0], zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -69,7 +73,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, new double[0],
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -77,7 +81,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     new double[0][][], fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -85,7 +89,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     new double[1][0][], fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -95,7 +99,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(wxval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -104,7 +108,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, wyval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -113,7 +117,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, wzval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -122,7 +126,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     wfval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -130,7 +134,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, wfval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -138,7 +142,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, wfval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -146,7 +150,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, wfval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -154,7 +158,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     wfval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -162,7 +166,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, wfval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -170,7 +174,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, wfval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -178,7 +182,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, wfval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -187,7 +191,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     wfval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -195,7 +199,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, wfval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -203,7 +207,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, wfval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -211,7 +215,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, wfval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -219,7 +223,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     wfval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -227,7 +231,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, wfval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -235,7 +239,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, wfval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -243,7 +247,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, wfval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -252,7 +256,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     wfval, fval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -260,7 +264,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, wfval, fval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -268,7 +272,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, wfval, fval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -276,7 +280,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, wfval,
                                                     fval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -284,7 +288,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     wfval, fval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -292,7 +296,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, wfval, fval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -300,7 +304,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, wfval, fval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -308,7 +312,7 @@ public final class TricubicInterpolatingFunctionTest {
             tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, wfval);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -417,7 +421,7 @@ public final class TricubicInterpolatingFunctionTest {
                     currentZ = zValues[k];
                     expected = f.value(currentX, currentY, currentZ);
                     actual = interpolation.value(currentX, currentY, currentZ);
-                    Assertions.assertTrue(Precision.equals(expected, actual, onDataMaxAbsoluteTolerance),
+                    assertTrue(Precision.equals(expected, actual, onDataMaxAbsoluteTolerance),
                                       "On data point: " + expected + " != " + actual);
                 }
             }
@@ -442,35 +446,35 @@ public final class TricubicInterpolatingFunctionTest {
                                    + " " + (expected - actual));
             }
 
-            Assertions.assertEquals(0, relativeError, maxRelativeTolerance);
+            assertEquals(0, relativeError, maxRelativeTolerance);
         }
 
         final double meanError = sumError / numberOfSamples;
-        Assertions.assertEquals(0, meanError, meanRelativeTolerance);
+        assertEquals(0, meanError, meanRelativeTolerance);
 
         for (double inf : new double[] { Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY }) {
-            Assertions.assertFalse(interpolation.isValidPoint(inf, 0.5 * (minimumY + maximumY), 0.5 * (minimumZ + maximumZ)));
-            Assertions.assertFalse(interpolation.isValidPoint(0.5 * (minimumX + maximumX), inf, 0.5 * (minimumZ + maximumZ)));
-            Assertions.assertFalse(interpolation.isValidPoint(0.5 * (minimumX + maximumX), 0.5 * (minimumY + maximumY), inf));
+            assertFalse(interpolation.isValidPoint(inf, 0.5 * (minimumY + maximumY), 0.5 * (minimumZ + maximumZ)));
+            assertFalse(interpolation.isValidPoint(0.5 * (minimumX + maximumX), inf, 0.5 * (minimumZ + maximumZ)));
+            assertFalse(interpolation.isValidPoint(0.5 * (minimumX + maximumX), 0.5 * (minimumY + maximumY), inf));
             try {
                 interpolation.value(inf, 0.5 * (minimumY + maximumY), 0.5 * (minimumZ + maximumZ));
-                Assertions.fail("an exception should have been thrown");
+                fail("an exception should have been thrown");
             } catch (MathIllegalArgumentException miae) {
-                Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+                assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
             }
 
             try {
                 interpolation.value(0.5 * (minimumX + maximumX), inf, 0.5 * (minimumZ + maximumZ));
-                Assertions.fail("an exception should have been thrown");
+                fail("an exception should have been thrown");
             } catch (MathIllegalArgumentException miae) {
-                Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+                assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
             }
 
             try {
                 interpolation.value(0.5 * (minimumX + maximumX), 0.5 * (minimumY + maximumY), inf);
-                Assertions.fail("an exception should have been thrown");
+                fail("an exception should have been thrown");
             } catch (MathIllegalArgumentException miae) {
-                Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+                assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
             }
         }
 
@@ -483,7 +487,7 @@ public final class TricubicInterpolatingFunctionTest {
      * </p>
      */
     @Test
-    public void testPlane() {
+    void testPlane() {
         final TrivariateFunction f = new TrivariateFunction() {
                 @Override
                 public double value(double x, double y, double z) {
@@ -545,7 +549,7 @@ public final class TricubicInterpolatingFunctionTest {
      * </p>
      */
     @Test
-    public void testQuadric() {
+    void testQuadric() {
         final TrivariateFunction f = new TrivariateFunction() {
                 @Override
                 public double value(double x, double y, double z) {
@@ -629,7 +633,7 @@ public final class TricubicInterpolatingFunctionTest {
      * with a = 5, &omega; = 0.3, k<sub>x</sub> = 0.8, k<sub>y</sub> = 1.
      */
     @Test
-    public void testWave() {
+    void testWave() {
         final double a = 5;
         final double omega = 0.3;
         final double kx = 0.8;

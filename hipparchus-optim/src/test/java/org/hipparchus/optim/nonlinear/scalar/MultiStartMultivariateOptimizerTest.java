@@ -35,12 +35,14 @@ import org.hipparchus.random.GaussianRandomGenerator;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomVectorGenerator;
 import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class MultiStartMultivariateOptimizerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class MultiStartMultivariateOptimizerTest {
     @Test
-    public void testCircleFitting() {
+    void testCircleFitting() {
         CircleScalar circle = new CircleScalar();
         circle.addPoint( 30.0,  68.0);
         circle.addPoint( 50.0,  -6.0);
@@ -68,28 +70,28 @@ public class MultiStartMultivariateOptimizerTest {
                                  circle.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 98.680, 47.345 }));
-        Assertions.assertEquals(1000, optimizer.getMaxEvaluations());
+        assertEquals(1000, optimizer.getMaxEvaluations());
         PointValuePair[] optima = optimizer.getOptima();
-        Assertions.assertEquals(nbStarts, optima.length);
+        assertEquals(nbStarts, optima.length);
         for (PointValuePair o : optima) {
             // we check the results of all intermediate restarts here (there are 10 such results)
             Vector2D center = new Vector2D(o.getPointRef()[0], o.getPointRef()[1]);
-            Assertions.assertTrue(69.9592 < circle.getRadius(center));
-            Assertions.assertTrue(69.9602 > circle.getRadius(center));
-            Assertions.assertTrue(96.0745 < center.getX());
-            Assertions.assertTrue(96.0762 > center.getX());
-            Assertions.assertTrue(48.1344 < center.getY());
-            Assertions.assertTrue(48.1354 > center.getY());
+            assertTrue(69.9592 < circle.getRadius(center));
+            assertTrue(69.9602 > circle.getRadius(center));
+            assertTrue(96.0745 < center.getX());
+            assertTrue(96.0762 > center.getX());
+            assertTrue(48.1344 < center.getY());
+            assertTrue(48.1354 > center.getY());
         }
 
-        Assertions.assertTrue(optimizer.getEvaluations() > 850);
-        Assertions.assertTrue(optimizer.getEvaluations() < 900);
+        assertTrue(optimizer.getEvaluations() > 850);
+        assertTrue(optimizer.getEvaluations() < 900);
 
-        Assertions.assertEquals(3.1267527, optimum.getValue(), 1e-8);
+        assertEquals(3.1267527, optimum.getValue(), 1e-8);
     }
 
     @Test
-    public void testRosenbrock() {
+    void testRosenbrock() {
         Rosenbrock rosenbrock = new Rosenbrock();
         SimplexOptimizer underlying
             = new SimplexOptimizer(new SimpleValueChecker(-1, 1e-3));
@@ -111,12 +113,12 @@ public class MultiStartMultivariateOptimizerTest {
                                  GoalType.MINIMIZE,
                                  simplex,
                                  new InitialGuess(new double[] { -1.2, 1.0 }));
-        Assertions.assertEquals(nbStarts, optimizer.getOptima().length);
+        assertEquals(nbStarts, optimizer.getOptima().length);
 
-        Assertions.assertEquals(rosenbrock.getCount(), optimizer.getEvaluations());
-        Assertions.assertTrue(optimizer.getEvaluations() > 900);
-        Assertions.assertTrue(optimizer.getEvaluations() < 1200);
-        Assertions.assertTrue(optimum.getValue() < 5e-5);
+        assertEquals(rosenbrock.getCount(), optimizer.getEvaluations());
+        assertTrue(optimizer.getEvaluations() > 900);
+        assertTrue(optimizer.getEvaluations() < 1200);
+        assertTrue(optimum.getValue() < 5e-5);
     }
 
     private static class Rosenbrock implements MultivariateFunction {

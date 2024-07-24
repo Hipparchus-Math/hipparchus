@@ -23,8 +23,12 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the GTest class.
@@ -34,12 +38,12 @@ import org.junit.jupiter.api.Test;
  * Maryland.
  *
  */
-public class GTestTest {
+class GTestTest {
 
     protected GTest testStatistic = new GTest();
 
     @Test
-    public void testGTestGoodnesOfFit1() throws Exception {
+    void testGTestGoodnesOfFit1() throws Exception {
         final double[] exp = new double[]{
             3d, 1d
         };
@@ -48,15 +52,15 @@ public class GTestTest {
             423, 133
         };
 
-        Assertions.assertEquals(0.348721, testStatistic.g(exp, obs), 1E-6, "G test statistic");
+        assertEquals(0.348721, testStatistic.g(exp, obs), 1E-6, "G test statistic");
         final double p_gtgf = testStatistic.gTest(exp, obs);
-        Assertions.assertEquals(0.55483, p_gtgf, 1E-5, "g-Test p-value");
+        assertEquals(0.55483, p_gtgf, 1E-5, "g-Test p-value");
 
-        Assertions.assertFalse(testStatistic.gTest(exp, obs, 0.05));
+        assertFalse(testStatistic.gTest(exp, obs, 0.05));
     }
 
     @Test
-    public void testGTestGoodnesOfFit2() throws Exception {
+    void testGTestGoodnesOfFit2() throws Exception {
         final double[] exp = new double[]{
             0.54d, 0.40d, 0.05d, 0.01d
         };
@@ -64,15 +68,15 @@ public class GTestTest {
         final long[] obs = new long[]{
             70, 79, 3, 4
         };
-        Assertions.assertEquals(13.144799, testStatistic.g(exp, obs), 1E-6, "G test statistic");
+        assertEquals(13.144799, testStatistic.g(exp, obs), 1E-6, "G test statistic");
         final double p_gtgf = testStatistic.gTest(exp, obs);
-        Assertions.assertEquals(0.004333, p_gtgf, 1E-5, "g-Test p-value");
+        assertEquals(0.004333, p_gtgf, 1E-5, "g-Test p-value");
 
-        Assertions.assertTrue(testStatistic.gTest(exp, obs, 0.05));
+        assertTrue(testStatistic.gTest(exp, obs, 0.05));
     }
 
     @Test
-    public void testGTestGoodnesOfFit3() throws Exception {
+    void testGTestGoodnesOfFit3() throws Exception {
         final double[] exp = new double[]{
             0.167d, 0.483d, 0.350d
         };
@@ -81,16 +85,16 @@ public class GTestTest {
             14, 21, 25
         };
 
-        Assertions.assertEquals(4.5554, testStatistic.g(exp, obs), 1E-4, "G test statistic");
+        assertEquals(4.5554, testStatistic.g(exp, obs), 1E-4, "G test statistic");
         // Intrinisic (Hardy-Weinberg proportions) P-Value should be 0.033
         final double p_gtgf = testStatistic.gTestIntrinsic(exp, obs);
-        Assertions.assertEquals(0.0328, p_gtgf, 1E-4, "g-Test p-value");
+        assertEquals(0.0328, p_gtgf, 1E-4, "g-Test p-value");
 
-        Assertions.assertFalse(testStatistic.gTest(exp, obs, 0.05));
+        assertFalse(testStatistic.gTest(exp, obs, 0.05));
     }
 
     @Test
-    public void testGTestIndependance1() throws Exception {
+    void testGTestIndependance1() throws Exception {
         final long[] obs1 = new long[]{
             268, 199, 42
         };
@@ -101,15 +105,15 @@ public class GTestTest {
 
         final double g = testStatistic.gDataSetsComparison(obs1, obs2);
 
-        Assertions.assertEquals(7.3008170, g, 1E-6, "G test statistic");
+        assertEquals(7.3008170, g, 1E-6, "G test statistic");
         final double p_gti = testStatistic.gTestDataSetsComparison(obs1, obs2);
 
-        Assertions.assertEquals(0.0259805, p_gti, 1E-6, "g-Test p-value");
-        Assertions.assertTrue(testStatistic.gTestDataSetsComparison(obs1, obs2, 0.05));
+        assertEquals(0.0259805, p_gti, 1E-6, "g-Test p-value");
+        assertTrue(testStatistic.gTestDataSetsComparison(obs1, obs2, 0.05));
     }
 
     @Test
-    public void testGTestIndependance2() throws Exception {
+    void testGTestIndependance2() throws Exception {
         final long[] obs1 = new long[]{
             127, 99, 264
         };
@@ -120,15 +124,15 @@ public class GTestTest {
 
         final double g = testStatistic.gDataSetsComparison(obs1, obs2);
 
-        Assertions.assertEquals(6.227288, g, 1E-6, "G test statistic");
+        assertEquals(6.227288, g, 1E-6, "G test statistic");
         final double p_gti = testStatistic.gTestDataSetsComparison(obs1, obs2);
 
-        Assertions.assertEquals(0.04443, p_gti, 1E-5, "g-Test p-value");
-        Assertions.assertTrue(testStatistic.gTestDataSetsComparison(obs1, obs2, 0.05));
+        assertEquals(0.04443, p_gti, 1E-5, "g-Test p-value");
+        assertTrue(testStatistic.gTestDataSetsComparison(obs1, obs2, 0.05));
     }
 
     @Test
-    public void testGTestIndependance3() throws Exception {
+    void testGTestIndependance3() throws Exception {
         final long[] obs1 = new long[]{
             190, 149
         };
@@ -138,21 +142,21 @@ public class GTestTest {
         };
 
         final double g = testStatistic.gDataSetsComparison(obs1, obs2);
-        Assertions.assertEquals(2.8187, g, 1E-4, "G test statistic");
+        assertEquals(2.8187, g, 1E-4, "G test statistic");
         final double p_gti = testStatistic.gTestDataSetsComparison(obs1, obs2);
-        Assertions.assertEquals(0.09317325, p_gti, 1E-6, "g-Test p-value");
+        assertEquals(0.09317325, p_gti, 1E-6, "g-Test p-value");
 
-        Assertions.assertFalse(testStatistic.gTestDataSetsComparison(obs1, obs2, 0.05));
+        assertFalse(testStatistic.gTestDataSetsComparison(obs1, obs2, 0.05));
     }
 
     @Test
-    public void testGTestSetsComparisonBadCounts() {
+    void testGTestSetsComparisonBadCounts() {
         long[] observed1 = {10, -1, 12, 10, 15};
         long[] observed2 = {15, 10, 10, 15, 5};
         try {
             testStatistic.gTestDataSetsComparison(
                     observed1, observed2);
-            Assertions.fail("Expecting MathIllegalArgumentException - negative count");
+            fail("Expecting MathIllegalArgumentException - negative count");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -161,7 +165,7 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed3, observed4);
-            Assertions.fail("Expecting MathIllegalArgumentException - double 0's");
+            fail("Expecting MathIllegalArgumentException - double 0's");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -170,117 +174,117 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed5, observed6);
-            Assertions.fail("Expecting MathIllegalArgumentException - vanishing counts");
+            fail("Expecting MathIllegalArgumentException - vanishing counts");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testUnmatchedArrays() {
+    void testUnmatchedArrays() {
         final long[] observed = { 0, 1, 2, 3 };
         final double[] expected = { 1, 1, 2 };
         final long[] observed2 = {3, 4};
         try {
             testStatistic.gTest(expected, observed);
-            Assertions.fail("arrays have different lengths, MathIllegalArgumentException expected");
+            fail("arrays have different lengths, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2);
-            Assertions.fail("arrays have different lengths, MathIllegalArgumentException expected");
+            fail("arrays have different lengths, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testNegativeObservedCounts() {
+    void testNegativeObservedCounts() {
         final long[] observed = { 0, 1, 2, -3 };
         final double[] expected = { 1, 1, 2, 3};
         final long[] observed2 = {3, 4, 5, 0};
         try {
             testStatistic.gTest(expected, observed);
-            Assertions.fail("negative observed count, MathIllegalArgumentException expected");
+            fail("negative observed count, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2);
-            Assertions.fail("negative observed count, MathIllegalArgumentException expected");
+            fail("negative observed count, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testZeroExpectedCounts() {
+    void testZeroExpectedCounts() {
         final long[] observed = { 0, 1, 2, -3 };
         final double[] expected = { 1, 0, 2, 3};
         try {
             testStatistic.gTest(expected, observed);
-            Assertions.fail("zero expected count, MathIllegalArgumentException expected");
+            fail("zero expected count, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testBadAlpha() {
+    void testBadAlpha() {
         final long[] observed = { 0, 1, 2, 3 };
         final double[] expected = { 1, 2, 2, 3};
         final long[] observed2 = { 0, 2, 2, 3 };
         try {
             testStatistic.gTest(expected, observed, 0.8);
-            Assertions.fail("zero expected count, MathIllegalArgumentException expected");
+            fail("zero expected count, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2, -0.5);
-            Assertions.fail("zero expected count, MathIllegalArgumentException expected");
+            fail("zero expected count, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testScaling() {
+    void testScaling() {
       final long[] observed = {9, 11, 10, 8, 12};
       final double[] expected1 = {10, 10, 10, 10, 10};
       final double[] expected2 = {1000, 1000, 1000, 1000, 1000};
       final double[] expected3 = {1, 1, 1, 1, 1};
       final double tol = 1E-15;
-      Assertions.assertEquals(
+      assertEquals(
               testStatistic.gTest(expected1, observed),
               testStatistic.gTest(expected2, observed),
               tol);
-      Assertions.assertEquals(
+      assertEquals(
               testStatistic.gTest(expected1, observed),
               testStatistic.gTest(expected3, observed),
               tol);
     }
 
     @Test
-    public void testRootLogLikelihood() {
+    void testRootLogLikelihood() {
         // positive where k11 is bigger than expected.
-        Assertions.assertTrue(testStatistic.rootLogLikelihoodRatio(904, 21060, 1144, 283012) > 0.0);
+        assertTrue(testStatistic.rootLogLikelihoodRatio(904, 21060, 1144, 283012) > 0.0);
 
         // negative because k11 is lower than expected
-        Assertions.assertTrue(testStatistic.rootLogLikelihoodRatio(36, 21928, 60280, 623876) < 0.0);
+        assertTrue(testStatistic.rootLogLikelihoodRatio(36, 21928, 60280, 623876) < 0.0);
 
-        Assertions.assertEquals(FastMath.sqrt(2.772589), testStatistic.rootLogLikelihoodRatio(1, 0, 0, 1), 0.000001);
-        Assertions.assertEquals(-FastMath.sqrt(2.772589), testStatistic.rootLogLikelihoodRatio(0, 1, 1, 0), 0.000001);
-        Assertions.assertEquals(FastMath.sqrt(27.72589), testStatistic.rootLogLikelihoodRatio(10, 0, 0, 10), 0.00001);
+        assertEquals(FastMath.sqrt(2.772589), testStatistic.rootLogLikelihoodRatio(1, 0, 0, 1), 0.000001);
+        assertEquals(-FastMath.sqrt(2.772589), testStatistic.rootLogLikelihoodRatio(0, 1, 1, 0), 0.000001);
+        assertEquals(FastMath.sqrt(27.72589), testStatistic.rootLogLikelihoodRatio(10, 0, 0, 10), 0.00001);
 
-        Assertions.assertEquals(FastMath.sqrt(39.33052), testStatistic.rootLogLikelihoodRatio(5, 1995, 0, 100000), 0.00001);
-        Assertions.assertEquals(-FastMath.sqrt(39.33052), testStatistic.rootLogLikelihoodRatio(0, 100000, 5, 1995), 0.00001);
+        assertEquals(FastMath.sqrt(39.33052), testStatistic.rootLogLikelihoodRatio(5, 1995, 0, 100000), 0.00001);
+        assertEquals(-FastMath.sqrt(39.33052), testStatistic.rootLogLikelihoodRatio(0, 100000, 5, 1995), 0.00001);
 
-        Assertions.assertEquals(FastMath.sqrt(4730.737), testStatistic.rootLogLikelihoodRatio(1000, 1995, 1000, 100000), 0.001);
-        Assertions.assertEquals(-FastMath.sqrt(4730.737), testStatistic.rootLogLikelihoodRatio(1000, 100000, 1000, 1995), 0.001);
+        assertEquals(FastMath.sqrt(4730.737), testStatistic.rootLogLikelihoodRatio(1000, 1995, 1000, 100000), 0.001);
+        assertEquals(-FastMath.sqrt(4730.737), testStatistic.rootLogLikelihoodRatio(1000, 100000, 1000, 1995), 0.001);
 
-        Assertions.assertEquals(FastMath.sqrt(5734.343), testStatistic.rootLogLikelihoodRatio(1000, 1000, 1000, 100000), 0.001);
-        Assertions.assertEquals(FastMath.sqrt(5714.932), testStatistic.rootLogLikelihoodRatio(1000, 1000, 1000, 99000), 0.001);
+        assertEquals(FastMath.sqrt(5734.343), testStatistic.rootLogLikelihoodRatio(1000, 1000, 1000, 100000), 0.001);
+        assertEquals(FastMath.sqrt(5714.932), testStatistic.rootLogLikelihoodRatio(1000, 1000, 1000, 99000), 0.001);
     }
 }

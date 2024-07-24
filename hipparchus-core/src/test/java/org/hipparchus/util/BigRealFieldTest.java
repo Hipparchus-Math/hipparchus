@@ -23,47 +23,50 @@ package org.hipparchus.util;
 
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BigRealFieldTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class BigRealFieldTest {
 
     @Test
-    public void testZero() {
-        Assertions.assertEquals(BigReal.ZERO, BigRealField.getInstance().getZero());
+    void testZero() {
+        assertEquals(BigReal.ZERO, BigRealField.getInstance().getZero());
     }
 
     @Test
-    public void testOne() {
-        Assertions.assertEquals(BigReal.ONE, BigRealField.getInstance().getOne());
+    void testOne() {
+        assertEquals(BigReal.ONE, BigRealField.getInstance().getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testMap() {
+    void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
             map.put(new BigReal(i).getField(), 0);
         }
         // there should be only one field for all values
-        Assertions.assertEquals(1, map.size());
-        Assertions.assertEquals(BigRealField.getInstance(), map.entrySet().iterator().next().getKey());
-        Assertions.assertNotEquals(BigRealField.getInstance(), Binary64Field.getInstance());
+        assertEquals(1, map.size());
+        assertEquals(BigRealField.getInstance(), map.entrySet().iterator().next().getKey());
+        assertNotEquals(BigRealField.getInstance(), Binary64Field.getInstance());
     }
 
     @Test
-    public void testRunTImeClass() {
-        Assertions.assertEquals(BigReal.class, BigRealField.getInstance().getRuntimeClass());
+    void testRunTImeClass() {
+        assertEquals(BigReal.class, BigRealField.getInstance().getRuntimeClass());
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         // deserializing the singleton should give the singleton itself back
         BigRealField field = BigRealField.getInstance();
-        Assertions.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 
 }

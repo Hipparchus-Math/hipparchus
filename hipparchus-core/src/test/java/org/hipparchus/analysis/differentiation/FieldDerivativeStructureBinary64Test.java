@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for class {@link FieldDerivativeStructure} on {@link Binary64}.
  */
-public class FieldDerivativeStructureBinary64Test extends FieldDerivativeStructureAbstractTest<Binary64> {
+class FieldDerivativeStructureBinary64Test extends FieldDerivativeStructureAbstractTest<Binary64> {
 
     @Override
     protected Field<Binary64> getField() {

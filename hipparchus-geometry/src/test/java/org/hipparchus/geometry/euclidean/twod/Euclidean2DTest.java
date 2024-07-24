@@ -24,26 +24,28 @@ package org.hipparchus.geometry.euclidean.twod;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class Euclidean2DTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class Euclidean2DTest {
 
     @Test
-    public void testDimension() {
-        Assertions.assertEquals(2, Euclidean2D.getInstance().getDimension());
+    void testDimension() {
+        assertEquals(2, Euclidean2D.getInstance().getDimension());
     }
 
     @Test
-    public void testSubSpace() {
-        Assertions.assertTrue(Euclidean1D.getInstance() == Euclidean2D.getInstance().getSubSpace());
+    void testSubSpace() {
+        assertTrue(Euclidean1D.getInstance() == Euclidean2D.getInstance().getSubSpace());
     }
 
     @Test
-    public void testSerialization() {
+    void testSerialization() {
         Space e2 = Euclidean2D.getInstance();
         Space deserialized = (Space) UnitTestUtils.serializeAndRecover(e2);
-        Assertions.assertTrue(e2 == deserialized);
+        assertTrue(e2 == deserialized);
     }
 
 }

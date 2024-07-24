@@ -24,11 +24,12 @@ package org.hipparchus.distribution.continuous;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for ExponentialDistribution.
@@ -76,67 +77,67 @@ public class ExponentialDistributionTest extends RealDistributionAbstractTest {
     //------------ Additional tests -------------------------------------------
 
     @Test
-    public void testCumulativeProbabilityExtremes() {
+    void testCumulativeProbabilityExtremes() {
         setCumulativeTestPoints(new double[] {-2, 0});
         setCumulativeTestValues(new double[] {0, 0});
         verifyCumulativeProbabilities();
     }
 
     @Test
-    public void testInverseCumulativeProbabilityExtremes() {
+    void testInverseCumulativeProbabilityExtremes() {
          setInverseCumulativeTestPoints(new double[] {0, 1});
          setInverseCumulativeTestValues(new double[] {0, Double.POSITIVE_INFINITY});
          verifyInverseCumulativeProbabilities();
     }
 
     @Test
-    public void testCumulativeProbability2() {
+    void testCumulativeProbability2() {
         double actual = getDistribution().probability(0.25, 0.75);
-        Assertions.assertEquals(0.0905214, actual, 10e-4);
+        assertEquals(0.0905214, actual, 10e-4);
     }
 
     @Test
-    public void testDensity() {
+    void testDensity() {
         ExponentialDistribution d1 = new ExponentialDistribution(1);
-        Assertions.assertTrue(Precision.equals(0.0, d1.density(-1e-9), 1));
-        Assertions.assertTrue(Precision.equals(1.0, d1.density(0.0), 1));
-        Assertions.assertTrue(Precision.equals(0.0, d1.density(1000.0), 1));
-        Assertions.assertTrue(Precision.equals(FastMath.exp(-1), d1.density(1.0), 1));
-        Assertions.assertTrue(Precision.equals(FastMath.exp(-2), d1.density(2.0), 1));
+        assertTrue(Precision.equals(0.0, d1.density(-1e-9), 1));
+        assertTrue(Precision.equals(1.0, d1.density(0.0), 1));
+        assertTrue(Precision.equals(0.0, d1.density(1000.0), 1));
+        assertTrue(Precision.equals(FastMath.exp(-1), d1.density(1.0), 1));
+        assertTrue(Precision.equals(FastMath.exp(-2), d1.density(2.0), 1));
 
         ExponentialDistribution d2 = new ExponentialDistribution(3);
-        Assertions.assertTrue(Precision.equals(1/3.0, d2.density(0.0), 1));
+        assertTrue(Precision.equals(1/3.0, d2.density(0.0), 1));
         // computed using  print(dexp(1, rate=1/3), digits=10) in R 2.5
-        Assertions.assertEquals(0.2388437702, d2.density(1.0), 1e-8);
+        assertEquals(0.2388437702, d2.density(1.0), 1e-8);
 
         // computed using  print(dexp(2, rate=1/3), digits=10) in R 2.5
-        Assertions.assertEquals(0.1711390397, d2.density(2.0), 1e-8);
+        assertEquals(0.1711390397, d2.density(2.0), 1e-8);
     }
 
     @Test
-    public void testMeanAccessors() {
+    void testMeanAccessors() {
         ExponentialDistribution distribution = (ExponentialDistribution) getDistribution();
-        Assertions.assertEquals(5d, distribution.getMean(), Double.MIN_VALUE);
+        assertEquals(5d, distribution.getMean(), Double.MIN_VALUE);
     }
 
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new ExponentialDistribution(0);
         });
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         ExponentialDistribution dist;
 
         dist = new ExponentialDistribution(11d);
-        Assertions.assertEquals(11d, dist.getNumericalMean(), tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), 11d * 11d, tol);
+        assertEquals(11d, dist.getNumericalMean(), tol);
+        assertEquals(dist.getNumericalVariance(), 11d * 11d, tol);
 
         dist = new ExponentialDistribution(10.5d);
-        Assertions.assertEquals(10.5d, dist.getNumericalMean(), tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), 10.5d * 10.5d, tol);
+        assertEquals(10.5d, dist.getNumericalMean(), tol);
+        assertEquals(dist.getNumericalVariance(), 10.5d * 10.5d, tol);
     }
 }

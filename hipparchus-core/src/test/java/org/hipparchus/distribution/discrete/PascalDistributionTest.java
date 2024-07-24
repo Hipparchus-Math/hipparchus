@@ -22,9 +22,10 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for PascalDistribution.
@@ -94,7 +95,7 @@ public class PascalDistributionTest extends IntegerDistributionAbstractTest {
 
     /** Test degenerate case p = 0   */
     @Test
-    public void testDegenerate0() {
+    void testDegenerate0() {
         setDistribution(new PascalDistribution(5, 0.0d));
         setCumulativeTestPoints(new int[] {-1, 0, 1, 5, 10 });
         setCumulativeTestValues(new double[] {0d, 0d, 0d, 0d, 0d});
@@ -109,7 +110,7 @@ public class PascalDistributionTest extends IntegerDistributionAbstractTest {
 
     /** Test degenerate case p = 1   */
     @Test
-    public void testDegenerate1() {
+    void testDegenerate1() {
         setDistribution(new PascalDistribution(5, 1.0d));
         setCumulativeTestPoints(new int[] {-1, 0, 1, 2, 5, 10 });
         setCumulativeTestValues(new double[] {0d, 1d, 1d, 1d, 1d, 1d});
@@ -123,16 +124,16 @@ public class PascalDistributionTest extends IntegerDistributionAbstractTest {
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         PascalDistribution dist;
 
         dist = new PascalDistribution(10, 0.5);
-        Assertions.assertEquals(dist.getNumericalMean(), ( 10d * 0.5d ) / 0.5d, tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), ( 10d * 0.5d ) / (0.5d * 0.5d), tol);
+        assertEquals(dist.getNumericalMean(), ( 10d * 0.5d ) / 0.5d, tol);
+        assertEquals(dist.getNumericalVariance(), ( 10d * 0.5d ) / (0.5d * 0.5d), tol);
 
         dist = new PascalDistribution(25, 0.7);
-        Assertions.assertEquals(dist.getNumericalMean(), ( 25d * 0.3d ) / 0.7d, tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), ( 25d * 0.3d ) / (0.7d * 0.7d), tol);
+        assertEquals(dist.getNumericalMean(), ( 25d * 0.3d ) / 0.7d, tol);
+        assertEquals(dist.getNumericalVariance(), ( 25d * 0.3d ) / (0.7d * 0.7d), tol);
     }
 }

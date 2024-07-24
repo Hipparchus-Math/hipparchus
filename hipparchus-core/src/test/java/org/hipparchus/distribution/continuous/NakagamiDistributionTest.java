@@ -22,8 +22,10 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for NakagamiDistribution.
@@ -31,18 +33,18 @@ import org.junit.jupiter.api.Test;
 public class NakagamiDistributionTest extends RealDistributionAbstractTest {
 
     @Test
-    public void testParameters() {
+    void testParameters() {
         NakagamiDistribution d = makeDistribution();
-        Assertions.assertEquals(0.5, d.getShape(), Precision.EPSILON);
-        Assertions.assertEquals(1, d.getScale(), Precision.EPSILON);
+        assertEquals(0.5, d.getShape(), Precision.EPSILON);
+        assertEquals(1, d.getScale(), Precision.EPSILON);
     }
 
     @Test
-    public void testSupport() {
+    void testSupport() {
         NakagamiDistribution d = makeDistribution();
-        Assertions.assertEquals(0, d.getSupportLowerBound(), Precision.EPSILON);
-        Assertions.assertTrue(Double.isInfinite(d.getSupportUpperBound()));
-        Assertions.assertTrue(d.isSupportConnected());
+        assertEquals(0, d.getSupportLowerBound(), Precision.EPSILON);
+        assertTrue(Double.isInfinite(d.getSupportUpperBound()));
+        assertTrue(d.isSupportConnected());
     }
 
     @Override

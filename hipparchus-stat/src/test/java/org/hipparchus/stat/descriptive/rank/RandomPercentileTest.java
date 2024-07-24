@@ -74,7 +74,7 @@ public class RandomPercentileTest extends
      * are incremented
      */
     @Test
-    public void testCopyConsistencyWithInitialMostElements() {
+    void testCopyConsistencyWithInitialMostElements() {
 
         StorelessUnivariateStatistic master = getUnivariateStatistic();
         StorelessUnivariateStatistic replica = null;
@@ -103,7 +103,7 @@ public class RandomPercentileTest extends
      * elements are incremented
      */
     @Test
-    public void testCopyConsistencyWithInitialFirstFewElements() {
+    void testCopyConsistencyWithInitialFirstFewElements() {
 
         StorelessUnivariateStatistic master = getUnivariateStatistic();
         StorelessUnivariateStatistic replica = null;
@@ -129,7 +129,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testPercentileSmallSample() {
+    void testPercentileSmallSample() {
         double[] d = new double[] { 1, 3, 2, 4 };
         final RandomPercentile randomPercentile = new RandomPercentile();
         randomPercentile.incrementAll(d);
@@ -144,7 +144,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testNonPositiveEpsilon() {
+    void testNonPositiveEpsilon() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] d =
                 new double[]{95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
@@ -156,7 +156,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testNISTExample() {
+    void testNISTExample() {
         double[] d =
                 new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
                         95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
@@ -167,13 +167,13 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void test5() {
+    void test5() {
         RandomPercentile percentile = new RandomPercentile();
         assertEquals(this.percentile5, percentile.evaluate(5, testArray), 0.0001);
     }
-     
+
     @Test
-    public void testSingleton() {
+    void testSingleton() {
         RandomPercentile percentile = new RandomPercentile();
         double[] singletonArray = new double[] { 1d };
         assertEquals(1d, percentile.evaluate(singletonArray), 0);
@@ -187,7 +187,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         RandomPercentile percentile = new RandomPercentile();
         double[] specialValues = new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
         assertEquals(2d, percentile.evaluate(specialValues), 0);
@@ -206,17 +206,17 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testAggregateSmallSamplesA() {
+    void testAggregateSmallSamplesA() {
         doTestAggregateSmallSamples(0.5, 11.0);
     }
 
     @Test
-    public void testAggregateSmallSamplesB() {
+    void testAggregateSmallSamplesB() {
         doTestAggregateSmallSamples(0.1, 7.0);
     }
 
     @Test
-    public void testAggregateSmallSamplesC() {
+    void testAggregateSmallSamplesC() {
         doTestAggregateSmallSamples(0.01, 7.0);
     }
 
@@ -241,7 +241,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testBufferConsumeLevel0() throws Exception {
+    void testBufferConsumeLevel0() throws Exception {
         final int len = testArray.length;
         final double[] sorted = Arrays.copyOf(testArray, len);
         Arrays.sort(sorted);
@@ -249,14 +249,14 @@ public class RandomPercentileTest extends
         for (int i = 0; i < len; i++) {
             buffer.consume(testArray[i]);
         }
-        UnitTestUtils.assertEquals(sorted, buffer.getData(), Double.MIN_VALUE);
+        UnitTestUtils.customAssertEquals(sorted, buffer.getData(), Double.MIN_VALUE);
         assertFalse(buffer.hasCapacity());
         assertEquals(StatUtils.min(testArray),buffer.min(), Double.MIN_VALUE);
         assertEquals(StatUtils.max(testArray),buffer.max(), Double.MIN_VALUE);
     }
 
     @Test
-    public void testBufferSampling() throws Exception {
+    void testBufferSampling() throws Exception {
         // Capacity = 10, level = 2 - should take 1 out of each block of 4 values from the stream
         BufferMock buffer = new BufferMock(10, 2, randomGenerator);
         for (int i = 0; i < 40; i++) {
@@ -277,7 +277,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testBufferMergeWith() throws Exception {
+    void testBufferMergeWith() throws Exception {
         // Create 2 level 0 buffers of size 20
         BufferMock buffer1 = new BufferMock(20, 0, randomGenerator);
         BufferMock buffer2 = new BufferMock(20, 0, randomGenerator);
@@ -318,7 +318,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testBufferMergeInto() throws Exception {
+    void testBufferMergeInto() throws Exception {
         BufferMock buffer1 = new BufferMock(20, 0, randomGenerator);
         BufferMock buffer2 = new BufferMock(20, 2, randomGenerator);
 
@@ -430,18 +430,18 @@ public class RandomPercentileTest extends
             final double[] data = getData();
             final double[] copy = Arrays.copyOf(data, data.length);
             Arrays.sort(copy);
-            UnitTestUtils.assertEquals(data, copy, Double.MIN_VALUE);
+            UnitTestUtils.customAssertEquals(data, copy, Double.MIN_VALUE);
         }
 
     }
 
     @Test
-    public void testArrayExample() {
+    void testArrayExample() {
         assertEquals(this.percentile95, new RandomPercentile().evaluate(95d,testArray), getTolerance());
     }
 
     @Test
-    public void testReduceSmallDataSet() {
+    void testReduceSmallDataSet() {
         final RandomDataGenerator random = new RandomDataGenerator(1000);
         final long n = 1000;
         double[] combined = new double[10000];
@@ -467,7 +467,7 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void testReduceLargeDataSet() {
+    void testReduceLargeDataSet() {
         final RandomDataGenerator random = new RandomDataGenerator(1000);
         final long n = 1000000;
         final RandomGenerator randomGenerator = new RandomDataGenerator(1000);
@@ -512,7 +512,7 @@ public class RandomPercentileTest extends
         }
     }
 
-    private void assertValues(Double a, Double b, double delta) {
+    private void customAssertValues(Double a, Double b, double delta) {
         if (Double.isNaN(a)) {
             assertTrue(Double.isNaN(a), "" + b + " is not NaN.");
         } else if (Double.isInfinite(a)) {
@@ -577,7 +577,7 @@ public class RandomPercentileTest extends
         }
 
         Double referenceValue = p2.evaluate(dall);
-        assertValues(random.getResult(percentile), referenceValue, delta);
+        customAssertValues(random.getResult(percentile), referenceValue, delta);
     }
 
     private void doCalculatePercentile(double percentile, double[] test, double delta) {
@@ -593,14 +593,14 @@ public class RandomPercentileTest extends
          */
         Double referenceValue = p2.evaluate(test);
         if (test.length < LARGE) {
-            assertValues(randomEstimated.getResult(percentile), referenceValue, delta);
+            customAssertValues(randomEstimated.getResult(percentile), referenceValue, delta);
         } else {
             checkQuantileError(test,randomEstimated.getResult(percentile), percentile / 100, delta, referenceValue);
         }
     }
 
     @Test
-    public void testCannedDataSet() {
+    void testCannedDataSet() {
         Integer[] seedInput =
                 new Integer[] { 283, 285, 298, 304, 310, 31, 319, 32, 33, 339,
                         342, 348, 350, 354, 354, 357, 36, 36, 369, 37, 37, 375,
@@ -616,76 +616,76 @@ public class RandomPercentileTest extends
     }
 
     @Test
-    public void test99Percentile() {
+    void test99Percentile() {
         Double[] test = randomTestData(100, 10000);
         doCalculatePercentile(0.99d, test);
     }
 
     @Test
-    public void test90Percentile() {
+    void test90Percentile() {
         Double[] test = randomTestData(100, 10000);
         doCalculatePercentile(0.90d, test);
     }
 
     @Test
-    public void test20Percentile() {
+    void test20Percentile() {
         Double[] test = randomTestData(100, 100000);
         doCalculatePercentile(0.20d, test);
     }
 
     @Test
-    public void test5Percentile() {
+    void test5Percentile() {
         Double[] test = randomTestData(50, 990000);
         doCalculatePercentile(0.50d, test);
     }
 
     @Test
-    public void test99PercentileHighValues() {
+    void test99PercentileHighValues() {
         Double[] test = randomTestData(100000, 10000);
         doCalculatePercentile(0.99d, test);
     }
 
     @Test
-    public void test90PercentileHighValues() {
+    void test90PercentileHighValues() {
         Double[] test = randomTestData(100000, 100000);
         doCalculatePercentile(0.90d, test);
     }
 
     @Test
-    public void test20PercentileHighValues() {
+    void test20PercentileHighValues() {
         Double[] test = randomTestData(100000, 100000);
         doCalculatePercentile(0.20d, test);
     }
 
     @Test
-    public void test5PercentileHighValues() {
+    void test5PercentileHighValues() {
         Double[] test = randomTestData(100000, 100000);
         doCalculatePercentile(0.05d, test);
     }
 
     @Test
-    public void test0PercentileValuesWithFewerThan5Values() {
+    void test0PercentileValuesWithFewerThan5Values() {
         double[] test = { 1d, 2d, 3d, 4d };
         RandomPercentile p = new RandomPercentile();
         assertEquals(1d, p.evaluate(0d,test), 0);
     }
-    
+
     @Test
-    public void testMaxValuesRetained() {
+    void testMaxValuesRetained() {
         assertEquals(546795, RandomPercentile.maxValuesRetained(RandomPercentile.DEFAULT_EPSILON));
         assertEquals(34727, RandomPercentile.maxValuesRetained(1E-3));
         assertEquals(2064, RandomPercentile.maxValuesRetained(1E-2));
     }
-    
+
     @Test
-    public void testMaxValuesRetained0Epsilon() {
+    void testMaxValuesRetained0Epsilon() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             RandomPercentile.maxValuesRetained(0);
         });
     }
-    
+
     @Test
-    public void testMaxValuesRetained1Epsilon() {
+    void testMaxValuesRetained1Epsilon() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             RandomPercentile.maxValuesRetained(1);
         });
@@ -737,7 +737,7 @@ public class RandomPercentileTest extends
      * Test Various Dist
      */
     @Test
-    public void testDistribution() {
+    void testDistribution() {
         doDistributionTest(new NormalDistribution(4000, 50));
         doDistributionTest(new LogNormalDistribution(4000, 50));
         doDistributionTest(new ExponentialDistribution(4000));
@@ -748,7 +748,7 @@ public class RandomPercentileTest extends
      * Large sample streaming tests.
      */
     @Test
-    public void testDistributionStreaming() {
+    void testDistributionStreaming() {
         checkQuartiles(new NormalDistribution(), 1000000, 5E-4);
         checkQuartiles(new ExponentialDistribution(1), 600000, 5E-4);
         checkQuartiles(new GammaDistribution(4d,2d), 600000, 5E-4);
@@ -758,7 +758,7 @@ public class RandomPercentileTest extends
      * Verify no sequential bias even when buffer size is small.
      */
     @Test
-    public void testSequentialData() {
+    void testSequentialData() {
         final long seed = 1000;
         double epsilon = 1e-4;
         for (int j = 0; j < 3; j++) {

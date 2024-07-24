@@ -27,17 +27,21 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.IterationEvent;
 import org.hipparchus.util.IterationListener;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class ConjugateGradientTest {
+class ConjugateGradientTest {
 
     @Test
-    public void testNonSquareOperator() {
+    void testNonSquareOperator() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 3);
             final IterativeLinearSolver solver;
@@ -49,7 +53,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testDimensionMismatchRightHandSide() {
+    void testDimensionMismatchRightHandSide() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
             final IterativeLinearSolver solver;
@@ -61,7 +65,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testDimensionMismatchSolution() {
+    void testDimensionMismatchSolution() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
             final IterativeLinearSolver solver;
@@ -73,7 +77,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testNonPositiveDefiniteLinearOperator() {
+    void testNonPositiveDefiniteLinearOperator() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
             a.setEntry(0, 0, -1.);
@@ -91,7 +95,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testUnpreconditionedSolution() {
+    void testUnpreconditionedSolution() {
         final int n = 5;
         final int maxIterations = 100;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -108,13 +112,13 @@ public class ConjugateGradientTest {
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-10 * FastMath.abs(expected);
                 final String msg = String.format("entry[%d][%d]", i, j);
-                Assertions.assertEquals(expected, actual, delta, msg);
+                assertEquals(expected, actual, delta, msg);
             }
         }
     }
 
     @Test
-    public void testUnpreconditionedInPlaceSolutionWithInitialGuess() {
+    void testUnpreconditionedInPlaceSolutionWithInitialGuess() {
         final int n = 5;
         final int maxIterations = 100;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -128,19 +132,19 @@ public class ConjugateGradientTest {
             final RealVector x0 = new ArrayRealVector(n);
             x0.set(1.);
             final RealVector x = solver.solveInPlace(a, b, x0);
-            Assertions.assertSame(x0, x, "x should be a reference to x0");
+            assertSame(x0, x, "x should be a reference to x0");
             for (int i = 0; i < n; i++) {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-10 * FastMath.abs(expected);
                 final String msg = String.format("entry[%d][%d)", i, j);
-                Assertions.assertEquals(expected, actual, delta, msg);
+                assertEquals(expected, actual, delta, msg);
             }
         }
     }
 
     @Test
-    public void testUnpreconditionedSolutionWithInitialGuess() {
+    void testUnpreconditionedSolutionWithInitialGuess() {
         final int n = 5;
         final int maxIterations = 100;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -154,14 +158,14 @@ public class ConjugateGradientTest {
             final RealVector x0 = new ArrayRealVector(n);
             x0.set(1.);
             final RealVector x = solver.solve(a, b, x0);
-            Assertions.assertNotSame(x0, x, "x should not be a reference to x0");
+            assertNotSame(x0, x, "x should not be a reference to x0");
             for (int i = 0; i < n; i++) {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-10 * FastMath.abs(expected);
                 final String msg = String.format("entry[%d][%d]", i, j);
-                Assertions.assertEquals(expected, actual, delta, msg);
-                Assertions.assertEquals(1., x0.getEntry(i), Math.ulp(1.), msg);
+                assertEquals(expected, actual, delta, msg);
+                assertEquals(1., x0.getEntry(i), Math.ulp(1.), msg);
             }
         }
     }
@@ -173,7 +177,7 @@ public class ConjugateGradientTest {
      * Therefore, in the present test, the number of iterations is limited.
      */
     @Test
-    public void testUnpreconditionedResidual() {
+    void testUnpreconditionedResidual() {
         final int n = 10;
         final int maxIterations = n;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -222,17 +226,16 @@ public class ConjugateGradientTest {
                     final double delta = 1E-6 * FastMath.abs(expected);
                     final String msg = String
                         .format("column %d, residual %d", i, j);
-                    Assertions.assertEquals(expected, actual, delta, msg);
+                    assertEquals(expected, actual, delta, msg);
                 }
             }
-            Assertions
-                .assertTrue(caught,
+            assertTrue(caught,
                             "MathIllegalStateException should have been caught");
         }
     }
 
     @Test
-    public void testNonSquarePreconditioner() {
+    void testNonSquarePreconditioner() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
             final RealLinearOperator m = new RealLinearOperator() {
@@ -260,7 +263,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testMismatchedOperatorDimensions() {
+    void testMismatchedOperatorDimensions() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
             final RealLinearOperator m = new RealLinearOperator() {
@@ -288,7 +291,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testNonPositiveDefinitePreconditioner() {
+    void testNonPositiveDefinitePreconditioner() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
             a.setEntry(0, 0, 1d);
@@ -325,7 +328,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testPreconditionedSolution() {
+    void testPreconditionedSolution() {
         final int n = 8;
         final int maxIterations = 100;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -343,13 +346,13 @@ public class ConjugateGradientTest {
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
                 final String msg = String.format("coefficient (%d, %d)", i, j);
-                Assertions.assertEquals(expected, actual, delta, msg);
+                assertEquals(expected, actual, delta, msg);
             }
         }
     }
 
     @Test
-    public void testPreconditionedResidual() {
+    void testPreconditionedResidual() {
         final int n = 10;
         final int maxIterations = n;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -399,15 +402,15 @@ public class ConjugateGradientTest {
                     final double expected = r.getEntry(i);
                     final double delta = 1E-6 * FastMath.abs(expected);
                     final String msg = String.format("column %d, residual %d", i, j);
-                    Assertions.assertEquals(expected, actual, delta, msg);
+                    assertEquals(expected, actual, delta, msg);
                 }
             }
-            Assertions.assertTrue(caught, "MathIllegalStateException should have been caught");
+            assertTrue(caught, "MathIllegalStateException should have been caught");
         }
     }
 
     @Test
-    public void testPreconditionedSolution2() {
+    void testPreconditionedSolution2() {
         final int n = 100;
         final int maxIterations = 100000;
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(n, n);
@@ -441,19 +444,19 @@ public class ConjugateGradientTest {
             final int npcg = pcg.getIterationManager().getIterations();
             final int ncg = cg.getIterationManager().getIterations();
             msg = String.format(pattern, npcg, ncg);
-            Assertions.assertTrue(npcg < ncg, msg);
+            assertTrue(npcg < ncg, msg);
             for (int i = 0; i < n; i++) {
                 msg = String.format("row %d, column %d", i, j);
                 final double expected = x.getEntry(i);
                 final double actual = px.getEntry(i);
                 final double delta = 1E-6 * FastMath.abs(expected);
-                Assertions.assertEquals(expected, actual, delta, msg);
+                assertEquals(expected, actual, delta, msg);
             }
         }
     }
 
     @Test
-    public void testEventManagement() {
+    void testEventManagement() {
         final int n = 5;
         final int maxIterations = 100;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -471,19 +474,19 @@ public class ConjugateGradientTest {
                 evt = (IterativeLinearSolverEvent) e;
                 try {
                     evt.getResidual().set(0.0);
-                    Assertions.fail("r is modifiable");
+                    fail("r is modifiable");
                 } catch (MathRuntimeException exc){
                     // Expected behavior
                 }
                 try {
                     evt.getRightHandSideVector().set(0.0);
-                    Assertions.fail("b is modifiable");
+                    fail("b is modifiable");
                 } catch (MathRuntimeException exc){
                     // Expected behavior
                 }
                 try {
                     evt.getSolution().set(0.0);
-                    Assertions.fail("x is modifiable");
+                    fail("x is modifiable");
                 } catch (MathRuntimeException exc){
                     // Expected behavior
                 }
@@ -496,13 +499,13 @@ public class ConjugateGradientTest {
 
             public void iterationPerformed(final IterationEvent e) {
                 ++count[2];
-                Assertions.assertEquals(count[2], e.getIterations() - 1, "iteration performed");
+                assertEquals(count[2], e.getIterations() - 1, "iteration performed");
                 doTestVectorsAreUnmodifiable(e);
             }
 
             public void iterationStarted(final IterationEvent e) {
                 ++count[1];
-                Assertions.assertEquals(count[1], e.getIterations() - 1, "iteration started");
+                assertEquals(count[1], e.getIterations() - 1, "iteration started");
                 doTestVectorsAreUnmodifiable(e);
             }
 
@@ -520,14 +523,14 @@ public class ConjugateGradientTest {
             b.setEntry(j, 1.);
             solver.solve(a, b);
             String msg = String.format("column %d (initialization)", j);
-            Assertions.assertEquals(1, count[0], msg);
+            assertEquals(1, count[0], msg);
             msg = String.format("column %d (finalization)", j);
-            Assertions.assertEquals(1, count[3], msg);
+            assertEquals(1, count[3], msg);
         }
     }
 
     @Test
-    public void testUnpreconditionedNormOfResidual() {
+    void testUnpreconditionedNormOfResidual() {
         final int n = 5;
         final int maxIterations = 100;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -541,7 +544,7 @@ public class ConjugateGradientTest {
                 final RealVector b = evt.getRightHandSideVector();
                 final RealVector r = b.subtract(a.operate(x));
                 final double rnorm = r.getNorm();
-                Assertions.assertEquals(rnorm, evt.getNormOfResidual(),
+                assertEquals(rnorm, evt.getNormOfResidual(),
                     FastMath.max(1E-5 * rnorm, 1E-10),
                     "iteration performed (residual)");
             }
@@ -573,7 +576,7 @@ public class ConjugateGradientTest {
     }
 
     @Test
-    public void testPreconditionedNormOfResidual() {
+    void testPreconditionedNormOfResidual() {
         final int n = 5;
         final int maxIterations = 100;
         final RealLinearOperator a = new HilbertMatrix(n);
@@ -588,7 +591,7 @@ public class ConjugateGradientTest {
                 final RealVector b = evt.getRightHandSideVector();
                 final RealVector r = b.subtract(a.operate(x));
                 final double rnorm = r.getNorm();
-                Assertions.assertEquals(rnorm, evt.getNormOfResidual(),
+                assertEquals(rnorm, evt.getNormOfResidual(),
                     FastMath.max(1E-5 * rnorm, 1E-10),
                     "iteration performed (residual)");
             }

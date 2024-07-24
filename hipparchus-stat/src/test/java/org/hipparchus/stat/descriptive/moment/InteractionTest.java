@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Test class for use of external moments.
  */
-public class InteractionTest {
+class InteractionTest {
 
     protected double mean = 12.40454545454550;
     protected double var = 10.00235930735930;
@@ -44,7 +44,7 @@ public class InteractionTest {
     };
 
     @Test
-    public void testInteraction() {
+    void testInteraction() {
 
         FourthMoment m4 = new FourthMoment();
         Mean m = new Mean(m4);

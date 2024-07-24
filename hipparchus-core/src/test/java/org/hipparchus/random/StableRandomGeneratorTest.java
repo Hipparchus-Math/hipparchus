@@ -24,15 +24,17 @@ package org.hipparchus.random;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * The class <code>StableRandomGeneratorTest</code> contains tests for the class
  * {@link StableRandomGenerator}
  *
  */
-public class StableRandomGeneratorTest {
+class StableRandomGeneratorTest {
 
     private RandomGenerator rg = new Well19937c(100);
     private final static int sampleSize = 10000;
@@ -44,36 +46,36 @@ public class StableRandomGeneratorTest {
      * TODO: verify that tolerance this wide is really OK
      */
     @Test
-    public void testNextDouble() {
+    void testNextDouble() {
         StableRandomGenerator generator = new StableRandomGenerator(rg, 1.3,
                 0.1);
         double[] sample = new double[2 * sampleSize];
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assertions.assertEquals(0.0, UnitTestUtils.mean(sample), 0.3);
+        assertEquals(0.0, UnitTestUtils.mean(sample), 0.3);
     }
 
     /**
      * If alpha = 2, than it must be Gaussian distribution
      */
     @Test
-    public void testGaussianCase() {
+    void testGaussianCase() {
         StableRandomGenerator generator = new StableRandomGenerator(rg, 2d, 0.0);
 
         double[] sample = new double[sampleSize];
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assertions.assertEquals(0.0, UnitTestUtils.mean(sample), 0.02);
-        Assertions.assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
+        assertEquals(0.0, UnitTestUtils.mean(sample), 0.02);
+        assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
     }
 
     /**
      * If alpha = 1, than it must be Cauchy distribution
      */
     @Test
-    public void testCauchyCase() {
+    void testCauchyCase() {
         StableRandomGenerator generator = new StableRandomGenerator(rg, 1d, 0.0);
 
         final double[] values = new double[sampleSize];
@@ -83,53 +85,53 @@ public class StableRandomGeneratorTest {
 
         // Standard Cauchy distribution should have zero median and mode
         double median = UnitTestUtils.median(values);
-        Assertions.assertEquals(0.0, median, 0.2);
+        assertEquals(0.0, median, 0.2);
     }
 
     /**
      * Input parameter range tests
      */
     @Test
-    public void testAlphaRangeBelowZero() {
+    void testAlphaRangeBelowZero() {
         try {
             new StableRandomGenerator(rg, -1.0, 0.0);
-            Assertions.fail("Expected MathIllegalArgumentException");
+            fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
-            Assertions.assertEquals(-1.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
+            assertEquals(-1.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 
     @Test
-    public void testAlphaRangeAboveTwo() {
+    void testAlphaRangeAboveTwo() {
         try {
             new StableRandomGenerator(rg, 3.0, 0.0);
-            Assertions.fail("Expected MathIllegalArgumentException");
+            fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
-            Assertions.assertEquals(3.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
+            assertEquals(3.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 
     @Test
-    public void testBetaRangeBelowMinusOne() {
+    void testBetaRangeBelowMinusOne() {
         try {
             new StableRandomGenerator(rg, 1.0, -2.0);
-            Assertions.fail("Expected MathIllegalArgumentException");
+            fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
-            Assertions.assertEquals(-2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
+            assertEquals(-2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 
     @Test
-    public void testBetaRangeAboveOne() {
+    void testBetaRangeAboveOne() {
         try {
             new StableRandomGenerator(rg, 1.0, 2.0);
-            Assertions.fail("Expected MathIllegalArgumentException");
+            fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
-            Assertions.assertEquals(2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
+            assertEquals(2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 }

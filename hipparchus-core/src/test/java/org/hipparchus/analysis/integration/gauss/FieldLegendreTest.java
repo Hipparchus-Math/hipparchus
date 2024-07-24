@@ -26,39 +26,41 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test of the {@link FieldLegendreRuleFactory}.
  *
  */
-public class FieldLegendreTest {
+class FieldLegendreTest {
     private static final FieldGaussIntegratorFactory<Binary64> factory = new FieldGaussIntegratorFactory<>(Binary64Field.getInstance());
 
     @Test
-    public void testTooLArgeNumberOfPoints() {
+    void testTooLArgeNumberOfPoints() {
         try {
             factory.legendre(10000, new Binary64(0), new Binary64(Math.PI / 2));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
-            Assertions.assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testCos() {
+    void testCos() {
         final FieldGaussIntegrator<Binary64> integrator = factory.legendre(7, new Binary64(0), new Binary64(Math.PI / 2));
         final double s = integrator.integrate(x -> FastMath.cos(x)).getReal();
         // System.out.println("s=" + s + " e=" + 1);
-        Assertions.assertEquals(1, s, Math.ulp(1d));
+        assertEquals(1, s, Math.ulp(1d));
     }
 
 
     @Test
-    public void testInverse() {
+    void testInverse() {
 
         final Binary64 lo = new Binary64(12.34);
         final Binary64 hi = new Binary64(456.78);
@@ -67,6 +69,6 @@ public class FieldLegendreTest {
         final double s = integrator.integrate(x -> x.reciprocal()).getReal();
         final double expected = FastMath.log(hi).subtract(FastMath.log(lo)).getReal();
         // System.out.println("s=" + s + " e=" + expected);
-        Assertions.assertEquals(expected, s, 1e-14);
+        assertEquals(expected, s, 1e-14);
     }
 }

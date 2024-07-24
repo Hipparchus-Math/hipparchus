@@ -25,11 +25,12 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public abstract class MultipleLinearRegressionAbstractTest {
@@ -50,26 +51,26 @@ public abstract class MultipleLinearRegressionAbstractTest {
     @Test
     public void canEstimateRegressionParameters(){
         double[] beta = regression.estimateRegressionParameters();
-        Assertions.assertEquals(getNumberOfRegressors(), beta.length);
+        assertEquals(getNumberOfRegressors(), beta.length);
     }
 
     @Test
     public void canEstimateResiduals(){
         double[] e = regression.estimateResiduals();
-        Assertions.assertEquals(getSampleSize(), e.length);
+        assertEquals(getSampleSize(), e.length);
     }
 
     @Test
     public void canEstimateRegressionParametersVariance(){
         double[][] variance = regression.estimateRegressionParametersVariance();
-        Assertions.assertEquals(getNumberOfRegressors(), variance.length);
+        assertEquals(getNumberOfRegressors(), variance.length);
     }
 
     @Test
     public void canEstimateRegressandVariance(){
         if (getSampleSize() > getNumberOfRegressors()) {
             double variance = regression.estimateRegressandVariance();
-            Assertions.assertTrue(variance > 0.0);
+            assertTrue(variance > 0.0);
         }
     }
 
@@ -98,8 +99,8 @@ public abstract class MultipleLinearRegressionAbstractTest {
         RealVector flatY = regression.getY().copy();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assertions.assertEquals(flatX, regression.getX());
-        Assertions.assertEquals(flatY, regression.getY());
+        assertEquals(flatX, regression.getX());
+        assertEquals(flatY, regression.getY());
 
         // No intercept
         regression.setNoIntercept(true);
@@ -108,8 +109,8 @@ public abstract class MultipleLinearRegressionAbstractTest {
         flatY = regression.getY().copy();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assertions.assertEquals(flatX, regression.getX());
-        Assertions.assertEquals(flatY, regression.getY());
+        assertEquals(flatX, regression.getX());
+        assertEquals(flatY, regression.getY());
     }
 
     @Test

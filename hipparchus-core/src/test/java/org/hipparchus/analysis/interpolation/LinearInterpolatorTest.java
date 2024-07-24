@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test the LinearInterpolator.
  */
-public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
+class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
 
     protected UnivariateInterpolator buildDoubleInterpolator() {
         return new LinearInterpolator();
@@ -45,7 +45,7 @@ public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
     }
 
     @Test
-    public void testInterpolateLinear() {
+    void testInterpolateLinear() {
         double[] x = { 0.0, 0.5, 1.0 };
         double[] y = { 0.0, 0.5, 0.0 };
         UnivariateInterpolator i = buildDoubleInterpolator();
@@ -55,13 +55,13 @@ public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
         // Verify coefficients using analytical values
         PolynomialFunction[] polynomials = ((PolynomialSplineFunction) f).getPolynomials();
         double[] target = {y[0], 1d};
-        UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
+        UnitTestUtils.customAssertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
         target = new double[]{y[1], -1d};
-        UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
+        UnitTestUtils.customAssertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
     }
 
     @Test
-    public void testInterpolateLinearD64() {
+    void testInterpolateLinearD64() {
         Binary64[] x = buildD64(0.0, 0.5, 1.0);
         Binary64[] y = buildD64(0.0, 0.5, 0.0);
         FieldUnivariateInterpolator i = buildFieldInterpolator();

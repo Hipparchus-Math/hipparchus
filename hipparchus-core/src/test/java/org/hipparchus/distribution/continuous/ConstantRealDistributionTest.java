@@ -81,7 +81,7 @@ public class ConstantRealDistributionTest extends RealDistributionAbstractTest {
     //--- Additional test cases -----------------------------------------------
 
     @Test
-    public void testMeanVariance() {
+    void testMeanVariance() {
         ConstantRealDistribution dist;
 
         dist = new ConstantRealDistribution(-1);

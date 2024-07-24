@@ -25,24 +25,25 @@ import org.hipparchus.special.Gamma;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test of the {@link FieldLaguerreRuleFactory}.
  */
-public class FieldLaguerreTest {
+class FieldLaguerreTest {
     private static final FieldGaussIntegratorFactory<Binary64> factory = new FieldGaussIntegratorFactory<>(Binary64Field.getInstance());
 
     @Test
-    public void testGamma() {
+    void testGamma() {
         final double tol = 1e-13;
 
         for (int i = 2; i < 10; i += 1) {
             final double t = i;
             final FieldGaussIntegrator<Binary64> integrator = factory.laguerre(7);
             final double s = integrator.integrate(x -> FastMath.pow(x, t - 1)).getReal();
-            Assertions.assertEquals(1d, Gamma.gamma(t) / s, tol);
+            assertEquals(1d, Gamma.gamma(t) / s, tol);
         }
     }
 }

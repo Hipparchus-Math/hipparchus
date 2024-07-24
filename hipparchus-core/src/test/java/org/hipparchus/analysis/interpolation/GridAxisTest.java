@@ -20,29 +20,32 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-public class GridAxisTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class GridAxisTest {
 
     @Test
-    public void testLinearAscending() {
+    void testLinearAscending() {
         for (int n = 2; n < 12; ++n) {
             checkAscending(createLinear(25, n));
         }
     }
 
     @Test
-    public void testLinearDescending() {
+    void testLinearDescending() {
         for (int n = 2; n < 12; ++n) {
             checkDescending(createLinear(25, n));
         }
     }
 
     @Test
-    public void testLinearRandomAccess() {
+    void testLinearRandomAccess() {
         final RandomGenerator random = new Well1024a(0x967ab81207d7b2f4l);
         for (int n = 2; n < 12; ++n) {
             checkRandomAccess(random, createLinear(25, n));
@@ -50,21 +53,21 @@ public class GridAxisTest {
     }
 
     @Test
-    public void testQuadraticAscending() {
+    void testQuadraticAscending() {
         for (int n = 2; n < 12; ++n) {
             checkAscending(createQuadratic(25, n));
         }
     }
 
     @Test
-    public void testQuadraticDescending() {
+    void testQuadraticDescending() {
         for (int n = 2; n < 12; ++n) {
             checkDescending(createQuadratic(25, n));
         }
     }
 
     @Test
-    public void testQuadraticRandomAccess() {
+    void testQuadraticRandomAccess() {
         final RandomGenerator random = new Well1024a(0x80fc3b30a2da4549l);
         for (int n = 2; n < 12; ++n) {
             checkRandomAccess(random, createQuadratic(25, n));
@@ -72,7 +75,7 @@ public class GridAxisTest {
     }
 
     @Test
-    public void testIrregularAscending() {
+    void testIrregularAscending() {
         final RandomGenerator random = new Well1024a(0x66133fa03616fbc9l);
         for (int n = 2; n < 12; ++n) {
             checkAscending(createIrregular(random, 25, n));
@@ -80,7 +83,7 @@ public class GridAxisTest {
     }
 
     @Test
-    public void testIrregularDescending() {
+    void testIrregularDescending() {
         final RandomGenerator random = new Well1024a(0x72404bbdc66bc2c7l);
         for (int n = 2; n < 12; ++n) {
             checkDescending(createIrregular(random, 25, n));
@@ -88,7 +91,7 @@ public class GridAxisTest {
     }
 
     @Test
-    public void testIrregularRandomAccess() {
+    void testIrregularRandomAccess() {
         final RandomGenerator random = new Well1024a(0x254fbf2a8207e0f6l);
         for (int n = 2; n < 12; ++n) {
             checkRandomAccess(random, createIrregular(random, 25, n));
@@ -96,42 +99,42 @@ public class GridAxisTest {
     }
 
     @Test
-    public void testTooSmallGrid() {
+    void testTooSmallGrid() {
         try {
             new GridAxis(new double[3], 4);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.INSUFFICIENT_DIMENSION, miae.getSpecifier());
-            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(4, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.INSUFFICIENT_DIMENSION, miae.getSpecifier());
+            assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(4, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testDuplicate() {
+    void testDuplicate() {
         try {
             new GridAxis(new double[] { 0.0, 1.0, 2.0, 2.0, 3.0 }, 2);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
-            Assertions.assertEquals(2.0, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
-            Assertions.assertEquals(2.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
-            Assertions.assertEquals(3,   ((Integer) miae.getParts()[2]).intValue());
-            Assertions.assertEquals(2,   ((Integer) miae.getParts()[3]).intValue());
+            assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
+            assertEquals(2.0, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
+            assertEquals(2.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
+            assertEquals(3,   ((Integer) miae.getParts()[2]).intValue());
+            assertEquals(2,   ((Integer) miae.getParts()[3]).intValue());
         }
     }
 
     @Test
-    public void testUnsorted() {
+    void testUnsorted() {
         try {
             new GridAxis(new double[] { 0.0, 1.0, 0.5, 2.0, 3.0 }, 2);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
-            Assertions.assertEquals(0.5, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
-            Assertions.assertEquals(1.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
-            Assertions.assertEquals(2,   ((Integer) miae.getParts()[2]).intValue());
-            Assertions.assertEquals(1,   ((Integer) miae.getParts()[3]).intValue());
+            assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
+            assertEquals(0.5, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
+            assertEquals(1.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
+            assertEquals(2,   ((Integer) miae.getParts()[2]).intValue());
+            assertEquals(1,   ((Integer) miae.getParts()[3]).intValue());
         }
     }
 
@@ -162,9 +165,9 @@ public class GridAxisTest {
 
     private GridAxis create(final double[] gridData, final int n) {
         final GridAxis gridAxis = new GridAxis(gridData, n);
-        Assertions.assertEquals(n, gridAxis.getN());
+        assertEquals(n, gridAxis.getN());
         for (int i = 0; i < 5; ++i) {
-            Assertions.assertEquals(gridData[i], gridAxis.node(i), 1.0e-15);
+            assertEquals(gridData[i], gridAxis.node(i), 1.0e-15);
         }
         return gridAxis;
     }
@@ -199,28 +202,28 @@ public class GridAxisTest {
         final int o = (n - 1) / 2;
         final int p = n / 2;
         final int i = gridAxis.interpolationIndex(t);
-        Assertions.assertTrue(i >= 0);
-        Assertions.assertTrue(i + n - 1 < s);
+        assertTrue(i >= 0);
+        assertTrue(i + n - 1 < s);
         if (t < gridAxis.node(0)) {
             // extrapolating below grid
-            Assertions.assertEquals(0, i);
+            assertEquals(0, i);
         } else if (t < gridAxis.node(s - 1)) {
 
             // interpolating within the grid
             // the nodes should surround the test value
-            Assertions.assertTrue(gridAxis.node(i) <= t);
-            Assertions.assertTrue(gridAxis.node(i + n - 1) > t);
+            assertTrue(gridAxis.node(i) <= t);
+            assertTrue(gridAxis.node(i + n - 1) > t);
 
             if (t >= gridAxis.node(o) && t <  gridAxis.node(s - p)) {
                 // interpolation in the part of the grid where balancing is possible
                 // the central nodes should surround the test value
-                Assertions.assertTrue(gridAxis.node(i + o)     <= t);
-                Assertions.assertTrue(gridAxis.node(i + o + 1) >  t);
+                assertTrue(gridAxis.node(i + o)     <= t);
+                assertTrue(gridAxis.node(i + o + 1) >  t);
             }
 
         } else {
             // extrapolating above grid
-            Assertions.assertEquals(s - n, i);
+            assertEquals(s - n, i);
         }
     }
 

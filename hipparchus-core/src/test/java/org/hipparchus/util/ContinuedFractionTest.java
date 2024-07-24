@@ -22,18 +22,18 @@
 package org.hipparchus.util;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for ContinuedFraction.
  */
-public class ContinuedFractionTest {
+class ContinuedFractionTest {
 
     @Test
-    public void testGoldenRatio() throws Exception {
+    void testGoldenRatio() throws Exception {
         ContinuedFraction cf = new ContinuedFraction() {
 
             @Override
@@ -48,11 +48,11 @@ public class ContinuedFractionTest {
         };
 
         double gr = cf.evaluate(0.0, 10e-9);
-        Assertions.assertEquals(1.61803399, gr, 10e-9);
+        assertEquals(1.61803399, gr, 10e-9);
     }
 
     @Test
-    public void testNonConvergentContinuedFraction() {
+    void testNonConvergentContinuedFraction() {
         assertThrows(MathIllegalStateException.class, () -> {
             ContinuedFraction cf = new ContinuedFraction() {
 
@@ -73,7 +73,7 @@ public class ContinuedFractionTest {
     }
 
     @Test
-    public void testInfinityDivergence() {
+    void testInfinityDivergence() {
         assertThrows(MathIllegalStateException.class, () -> {
             ContinuedFraction cf = new ContinuedFraction() {
 

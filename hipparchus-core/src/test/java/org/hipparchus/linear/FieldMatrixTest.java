@@ -19,13 +19,14 @@ package org.hipparchus.linear;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FieldMatrixTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class FieldMatrixTest {
 
     @Test
-    public void testDefaultMultiplyTransposed() {
+    void testDefaultMultiplyTransposed() {
         FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
         FieldMatrix<Binary64> b = createMatrix(new double[][] { {4d, -5d, 6d} });
         FieldMatrix<Binary64> abTRef = a.multiplyTransposed(b);
@@ -35,13 +36,13 @@ public class FieldMatrixTest {
         FieldMatrix<Binary64> diff = abT.subtract(abTRef);
         for (int i = 0; i < diff.getRowDimension(); ++i) {
             for (int j = 0; j < diff.getColumnDimension(); ++j) {
-                Assertions.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
+                assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
             }
         }
     }
 
     @Test
-    public void testDefaultTransposeMultiply() {
+    void testDefaultTransposeMultiply() {
         FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
         FieldMatrix<Binary64> b = createMatrix(new double[][] { {4d}, {-5d}, {6d} });
         FieldMatrix<Binary64> aTbRef = a.transposeMultiply(b);
@@ -51,20 +52,20 @@ public class FieldMatrixTest {
         FieldMatrix<Binary64> diff = aTb.subtract(aTbRef);
         for (int i = 0; i < diff.getRowDimension(); ++i) {
             for (int j = 0; j < diff.getColumnDimension(); ++j) {
-                Assertions.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
+                assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
             }
         }
     }
 
     @Test
-    public void testDefaultMap() {
+    void testDefaultMap() {
         FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
         FieldMatrix<Binary64> result = a.add(a.map(x -> x.negate()));
         result.walkInOptimizedOrder(new FieldMatrixPreservingVisitor<Binary64>() {
             
             @Override
             public void visit(int row, int column, Binary64 value) {
-                Assertions.assertEquals(0.0, value.getReal(), 1.0e-10);
+                assertEquals(0.0, value.getReal(), 1.0e-10);
             }
             
             @Override
@@ -80,7 +81,7 @@ public class FieldMatrixTest {
     }
 
     @Test
-    public void testArithmeticalBlending() {
+    void testArithmeticalBlending() {
         // Given
         final Field<Binary64> field = Binary64Field.getInstance();
 
@@ -102,10 +103,10 @@ public class FieldMatrixTest {
         final FieldMatrix<Binary64> blendedMatrix = matrix1.blendArithmeticallyWith(matrix2, blendingValue);
 
         // Then
-        Assertions.assertEquals(1.65 , blendedMatrix.getEntry(0,0).getReal(), 1.0e-15);
-        Assertions.assertEquals(3.3  , blendedMatrix.getEntry(0,1).getReal(), 1.0e-15);
-        Assertions.assertEquals(6.9  , blendedMatrix.getEntry(1,0).getReal(), 1.0e-15);
-        Assertions.assertEquals(11.8 , blendedMatrix.getEntry(1,1).getReal(), 1.0e-15);
+        assertEquals(1.65 , blendedMatrix.getEntry(0,0).getReal(), 1.0e-15);
+        assertEquals(3.3  , blendedMatrix.getEntry(0,1).getReal(), 1.0e-15);
+        assertEquals(6.9  , blendedMatrix.getEntry(1,0).getReal(), 1.0e-15);
+        assertEquals(11.8 , blendedMatrix.getEntry(1,1).getReal(), 1.0e-15);
     }
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf

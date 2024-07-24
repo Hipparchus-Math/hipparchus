@@ -23,106 +23,108 @@ package org.hipparchus.util;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathRuntimeException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BigRealTest {
+class BigRealTest {
 
     @Test
-    public void testConstructor() {
-        Assertions.assertEquals(1.625,
+    void testConstructor() {
+        assertEquals(1.625,
                             new BigReal(new BigDecimal("1.625")).doubleValue(),
                             1.0e-15);
-        Assertions.assertEquals(-5.0,
+        assertEquals(-5.0,
                             new BigReal(new BigInteger("-5")).doubleValue(),
                             1.0e-15);
-        Assertions.assertEquals(-5.0, new BigReal(new BigInteger("-5"),
+        assertEquals(-5.0, new BigReal(new BigInteger("-5"),
                                               MathContext.DECIMAL64)
             .doubleValue(), 1.0e-15);
-        Assertions
-            .assertEquals(0.125,
+        assertEquals(0.125,
                           new BigReal(new BigInteger("125"), 3).doubleValue(),
                           1.0e-15);
-        Assertions.assertEquals(0.125, new BigReal(new BigInteger("125"), 3,
+        assertEquals(0.125, new BigReal(new BigInteger("125"), 3,
                                                MathContext.DECIMAL64)
             .doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal(new char[] {
+        assertEquals(1.625, new BigReal(new char[] {
             '1', '.', '6', '2', '5'
         }).doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal(new char[] {
+        assertEquals(1.625, new BigReal(new char[] {
             'A', 'A', '1', '.', '6', '2', '5', '9'
         }, 2, 5).doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal(new char[] {
+        assertEquals(1.625, new BigReal(new char[] {
             'A', 'A', '1', '.', '6', '2', '5', '9'
         }, 2, 5, MathContext.DECIMAL64).doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal(new char[] {
+        assertEquals(1.625, new BigReal(new char[] {
             '1', '.', '6', '2', '5'
         }, MathContext.DECIMAL64).doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal(1.625).doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal(1.625, MathContext.DECIMAL64)
+        assertEquals(1.625, new BigReal(1.625).doubleValue(), 1.0e-15);
+        assertEquals(1.625, new BigReal(1.625, MathContext.DECIMAL64)
             .doubleValue(), 1.0e-15);
-        Assertions.assertEquals(-5.0, new BigReal(-5).doubleValue(), 1.0e-15);
-        Assertions.assertEquals(-5.0, new BigReal(-5, MathContext.DECIMAL64)
+        assertEquals(-5.0, new BigReal(-5).doubleValue(), 1.0e-15);
+        assertEquals(-5.0, new BigReal(-5, MathContext.DECIMAL64)
             .doubleValue(), 1.0e-15);
-        Assertions.assertEquals(-5.0, new BigReal(-5l).doubleValue(), 1.0e-15);
-        Assertions.assertEquals(-5.0, new BigReal(-5l, MathContext.DECIMAL64)
+        assertEquals(-5.0, new BigReal(-5l).doubleValue(), 1.0e-15);
+        assertEquals(-5.0, new BigReal(-5l, MathContext.DECIMAL64)
             .doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal("1.625").doubleValue(), 1.0e-15);
-        Assertions.assertEquals(1.625, new BigReal("1.625", MathContext.DECIMAL64)
+        assertEquals(1.625, new BigReal("1.625").doubleValue(), 1.0e-15);
+        assertEquals(1.625, new BigReal("1.625", MathContext.DECIMAL64)
             .doubleValue(), 1.0e-15);
     }
 
     @Test
-    public void testCompareTo() {
+    void testCompareTo() {
         BigReal first = new BigReal(1.0 / 2.0);
         BigReal second = new BigReal(1.0 / 3.0);
         BigReal third = new BigReal(1.0 / 2.0);
 
-        Assertions.assertEquals(0, first.compareTo(first));
-        Assertions.assertEquals(0, first.compareTo(third));
-        Assertions.assertEquals(1, first.compareTo(second));
-        Assertions.assertEquals(-1, second.compareTo(first));
+        assertEquals(0, first.compareTo(first));
+        assertEquals(0, first.compareTo(third));
+        assertEquals(1, first.compareTo(second));
+        assertEquals(-1, second.compareTo(first));
 
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         BigReal a = new BigReal("1.2345678");
         BigReal b = new BigReal("8.7654321");
-        Assertions.assertEquals(9.9999999, a.add(b).doubleValue(), 1.0e-15);
+        assertEquals(9.9999999, a.add(b).doubleValue(), 1.0e-15);
     }
 
     @Test
-    public void testSubtract() {
+    void testSubtract() {
         BigReal a = new BigReal("1.2345678");
         BigReal b = new BigReal("8.7654321");
-        Assertions.assertEquals(-7.5308643, a.subtract(b).doubleValue(), 1.0e-15);
+        assertEquals(-7.5308643, a.subtract(b).doubleValue(), 1.0e-15);
     }
 
     @Test
-    public void testNegate() {
+    void testNegate() {
         BigReal a = new BigReal("1.2345678");
         BigReal zero = new BigReal("0.0000000");
-        Assertions.assertEquals(a.negate().add(a), zero);
-        Assertions.assertEquals(a.add(a.negate()), zero);
-        Assertions.assertEquals(zero, zero.negate());
+        assertEquals(a.negate().add(a), zero);
+        assertEquals(a.add(a.negate()), zero);
+        assertEquals(zero, zero.negate());
     }
 
     @Test
-    public void testDivide() {
+    void testDivide() {
         BigReal a = new BigReal("1.0000000000");
         BigReal b = new BigReal("0.0009765625");
-        Assertions.assertEquals(1024.0, a.divide(b).doubleValue(), 1.0e-15);
+        assertEquals(1024.0, a.divide(b).doubleValue(), 1.0e-15);
     }
 
     @Test
-    public void testDivisionByZero() {
+    void testDivisionByZero() {
         assertThrows(MathRuntimeException.class, () -> {
             final BigReal a = BigReal.ONE;
             final BigReal b = BigReal.ZERO;
@@ -131,71 +133,71 @@ public class BigRealTest {
     }
 
     @Test
-    public void testReciprocal() {
+    void testReciprocal() {
         BigReal a = new BigReal("1.2345678");
         double eps = FastMath.pow(10., -a.getScale());
         BigReal one = new BigReal("1.0000000");
         BigReal b = a.reciprocal();
         BigReal r = one.subtract(a.multiply(b));
-        Assertions.assertTrue(FastMath.abs(r.doubleValue()) <= eps);
+        assertTrue(FastMath.abs(r.doubleValue()) <= eps);
         r = one.subtract(b.multiply(a));
-        Assertions.assertTrue(FastMath.abs(r.doubleValue()) <= eps);
+        assertTrue(FastMath.abs(r.doubleValue()) <= eps);
     }
 
     @Test
-    public void testReciprocalOfZero() {
+    void testReciprocalOfZero() {
         assertThrows(MathRuntimeException.class, () -> {
             BigReal.ZERO.reciprocal();
         });
     }
 
     @Test
-    public void testMultiply() {
+    void testMultiply() {
         BigReal a = new BigReal("1024.0");
         BigReal b = new BigReal("0.0009765625");
-        Assertions.assertEquals(1.0, a.multiply(b).doubleValue(), 1.0e-15);
+        assertEquals(1.0, a.multiply(b).doubleValue(), 1.0e-15);
         int n = 1024;
-        Assertions.assertEquals(1.0, b.multiply(n).doubleValue(), 1.0e-15);
+        assertEquals(1.0, b.multiply(n).doubleValue(), 1.0e-15);
     }
 
     @Test
-    public void testDoubleValue() {
-        Assertions.assertEquals(0.5, new BigReal(0.5).doubleValue(), 1.0e-15);
+    void testDoubleValue() {
+        assertEquals(0.5, new BigReal(0.5).doubleValue(), 1.0e-15);
     }
 
     @Test
-    public void testBigDecimalValue() {
+    void testBigDecimalValue() {
         BigDecimal pi = new BigDecimal(
                                        "3.1415926535897932384626433832795028841971693993751");
-        Assertions.assertEquals(pi, new BigReal(pi).bigDecimalValue());
-        Assertions.assertEquals(new BigDecimal(0.5),
+        assertEquals(pi, new BigReal(pi).bigDecimalValue());
+        assertEquals(new BigDecimal(0.5),
                             new BigReal(1.0 / 2.0).bigDecimalValue());
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testEqualsAndHashCode() {
+    void testEqualsAndHashCode() {
         BigReal zero = new BigReal(0.0);
         BigReal nullReal = null;
-        Assertions.assertEquals(zero, zero);
-        Assertions.assertNotEquals(zero, nullReal);
-        Assertions.assertNotEquals(zero, Double.valueOf(0));
+        assertEquals(zero, zero);
+        assertNotEquals(zero, nullReal);
+        assertNotEquals(zero, Double.valueOf(0));
         BigReal zero2 = new BigReal(0.0);
-        Assertions.assertEquals(zero, zero2);
-        Assertions.assertEquals(zero.hashCode(), zero2.hashCode());
+        assertEquals(zero, zero2);
+        assertEquals(zero.hashCode(), zero2.hashCode());
         BigReal one = new BigReal(1.0);
-        Assertions.assertFalse((one.equals(zero) || zero.equals(one)));
-        Assertions.assertEquals(BigReal.ONE, one);
+        assertFalse((one.equals(zero) || zero.equals(one)));
+        assertEquals(BigReal.ONE, one);
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         BigReal[] Reals = {
             new BigReal(3.0), BigReal.ONE, BigReal.ZERO, new BigReal(17),
             new BigReal(FastMath.PI), new BigReal(-2.5)
         };
         for (BigReal Real : Reals) {
-            Assertions.assertEquals(Real, UnitTestUtils.serializeAndRecover(Real));
+            assertEquals(Real, UnitTestUtils.serializeAndRecover(Real));
         }
     }
 }

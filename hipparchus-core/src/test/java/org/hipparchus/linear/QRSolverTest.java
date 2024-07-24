@@ -23,12 +23,16 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-public class QRSolverTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class QRSolverTest {
     double[][] testData3x3NonSingular = {
             { 12, -51,   4 },
             {  6, 167, -68 },
@@ -56,37 +60,37 @@ public class QRSolverTest {
 
     /** test rank */
     @Test
-    public void testRank() {
+    void testRank() {
         DecompositionSolver solver =
             new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3NonSingular)).getSolver();
-        Assertions.assertTrue(solver.isNonSingular());
+        assertTrue(solver.isNonSingular());
 
         solver = new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular)).getSolver();
-        Assertions.assertFalse(solver.isNonSingular());
+        assertFalse(solver.isNonSingular());
 
         solver = new QRDecomposition(MatrixUtils.createRealMatrix(testData3x4)).getSolver();
-        Assertions.assertTrue(solver.isNonSingular());
+        assertTrue(solver.isNonSingular());
 
         solver = new QRDecomposition(MatrixUtils.createRealMatrix(testData4x3)).getSolver();
-        Assertions.assertTrue(solver.isNonSingular());
+        assertTrue(solver.isNonSingular());
 
     }
 
     /** test solve dimension errors */
     @Test
-    public void testSolveDimensionErrors() {
+    void testSolveDimensionErrors() {
         DecompositionSolver solver =
             new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3NonSingular)).getSolver();
         RealMatrix b = MatrixUtils.createRealMatrix(new double[2][2]);
         try {
             solver.solve(b);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
@@ -94,19 +98,19 @@ public class QRSolverTest {
 
     /** test solve rank errors */
     @Test
-    public void testSolveRankErrors() {
+    void testSolveRankErrors() {
         DecompositionSolver solver =
             new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular)).getSolver();
         RealMatrix b = MatrixUtils.createRealMatrix(new double[3][2]);
         try {
             solver.solve(b);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
@@ -114,7 +118,7 @@ public class QRSolverTest {
 
     /** test solve */
     @Test
-    public void testSolve() {
+    void testSolve() {
         QRDecomposition decomposition =
             new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3NonSingular));
         DecompositionSolver solver = decomposition.getSolver();
@@ -126,13 +130,13 @@ public class QRSolverTest {
         });
 
         // using RealMatrix
-        Assertions.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), 2.1e-16 * xRef.getNorm1());
+        assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), 2.1e-16 * xRef.getNorm1());
 
         // using ArrayRealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
             final RealVector x = solver.solve(b.getColumnVector(i));
             final double error = x.subtract(xRef.getColumnVector(i)).getNorm();
-            Assertions.assertEquals(0, error, 3.0e-16 * xRef.getColumnVector(i).getNorm());
+            assertEquals(0, error, 3.0e-16 * xRef.getColumnVector(i).getNorm());
         }
 
         // using RealVector with an alternate implementation
@@ -141,13 +145,13 @@ public class QRSolverTest {
                 new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(i));
             final RealVector x = solver.solve(v);
             final double error = x.subtract(xRef.getColumnVector(i)).getNorm();
-            Assertions.assertEquals(0, error, 3.0e-16 * xRef.getColumnVector(i).getNorm());
+            assertEquals(0, error, 3.0e-16 * xRef.getColumnVector(i).getNorm());
         }
 
     }
 
     @Test
-    public void testOverdetermined() {
+    void testOverdetermined() {
         final Random r    = new Random(5559252868205245l);
         int          p    = (7 * BlockRealMatrix.BLOCK_SIZE) / 4;
         int          q    = (5 * BlockRealMatrix.BLOCK_SIZE) / 4;
@@ -166,12 +170,12 @@ public class QRSolverTest {
 
         // despite perturbation, the least square solution should be pretty good
         RealMatrix x = new QRDecomposition(a).getSolver().solve(b);
-        Assertions.assertEquals(0, x.subtract(xRef).getNorm1(), 0.01 * noise * p * q);
+        assertEquals(0, x.subtract(xRef).getNorm1(), 0.01 * noise * p * q);
 
     }
 
     @Test
-    public void testUnderdetermined() {
+    void testUnderdetermined() {
         final Random r    = new Random(42185006424567123l);
         int          p    = (5 * BlockRealMatrix.BLOCK_SIZE) / 4;
         int          q    = (7 * BlockRealMatrix.BLOCK_SIZE) / 4;
@@ -181,10 +185,10 @@ public class QRSolverTest {
         RealMatrix   x = new QRDecomposition(a).getSolver().solve(b);
 
         // too many equations, the system cannot be solved at all
-        Assertions.assertTrue(x.subtract(xRef).getNorm1() / (p * q) > 0.01);
+        assertTrue(x.subtract(xRef).getNorm1() / (p * q) > 0.01);
 
         // the last unknown should have been set to 0
-        Assertions.assertEquals(0.0, x.getSubMatrix(p, q - 1, 0, x.getColumnDimension() - 1).getNorm1(), 0);
+        assertEquals(0.0, x.getSubMatrix(p, q - 1, 0, x.getColumnDimension() - 1).getNorm1(), 0);
     }
 
     private RealMatrix createTestMatrix(final Random r, final int rows, final int columns) {

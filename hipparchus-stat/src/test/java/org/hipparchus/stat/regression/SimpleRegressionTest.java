@@ -25,10 +25,15 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.ISAACRandom;
 import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -36,7 +41,7 @@ import java.util.Random;
  *
  */
 
-public final class SimpleRegressionTest {
+final class SimpleRegressionTest {
 
     /*
      * NIST "Norris" refernce data set from
@@ -122,7 +127,7 @@ public final class SimpleRegressionTest {
      * SimpleRegression objects created from the combined data.
      */
     @Test
-    public void testAppend() {
+    void testAppend() {
         check(false);
         check(true);
     }
@@ -150,7 +155,7 @@ public final class SimpleRegressionTest {
                 whole.addData(x, y);
             }
             parts.append(sub);
-            Assertions.assertTrue(equals(parts, whole, 1E-6));
+            assertTrue(equals(parts, whole, 1E-6));
         }
     }
 
@@ -213,7 +218,7 @@ public final class SimpleRegressionTest {
     }
 
     @Test
-    public void testRegressIfaceMethod(){
+    void testRegressIfaceMethod(){
         final SimpleRegression regression = new SimpleRegression(true);
         final UpdatingMultipleLinearRegression iface = regression;
         final SimpleRegression regressionNoint = new SimpleRegression( false );
@@ -226,37 +231,37 @@ public final class SimpleRegressionTest {
 
         //should not be null
         final RegressionResults fullReg = iface.regress( );
-        Assertions.assertNotNull(fullReg);
-        Assertions.assertEquals(regression.getIntercept(), fullReg.getParameterEstimate(0), 1.0e-16, "intercept");
-        Assertions.assertEquals(regression.getInterceptStdErr(), fullReg.getStdErrorOfEstimate(0),1.0E-16,"intercept std err");
-        Assertions.assertEquals(regression.getSlope(), fullReg.getParameterEstimate(1), 1.0e-16, "slope");
-        Assertions.assertEquals(regression.getSlopeStdErr(), fullReg.getStdErrorOfEstimate(1),1.0E-16,"slope std err");
-        Assertions.assertEquals(regression.getN(), fullReg.getN(), "number of observations");
-        Assertions.assertEquals(regression.getRSquare(), fullReg.getRSquared(), 1.0E-16, "r-square");
-        Assertions.assertEquals(regression.getRegressionSumSquares(), fullReg.getRegressionSumSquares() ,1.0E-16,"SSR");
-        Assertions.assertEquals(regression.getMeanSquareError(), fullReg.getMeanSquareError() ,1.0E-16,"MSE");
-        Assertions.assertEquals(regression.getSumSquaredErrors(), fullReg.getErrorSumSquares() ,1.0E-16,"SSE");
+        assertNotNull(fullReg);
+        assertEquals(regression.getIntercept(), fullReg.getParameterEstimate(0), 1.0e-16, "intercept");
+        assertEquals(regression.getInterceptStdErr(), fullReg.getStdErrorOfEstimate(0),1.0E-16,"intercept std err");
+        assertEquals(regression.getSlope(), fullReg.getParameterEstimate(1), 1.0e-16, "slope");
+        assertEquals(regression.getSlopeStdErr(), fullReg.getStdErrorOfEstimate(1),1.0E-16,"slope std err");
+        assertEquals(regression.getN(), fullReg.getN(), "number of observations");
+        assertEquals(regression.getRSquare(), fullReg.getRSquared(), 1.0E-16, "r-square");
+        assertEquals(regression.getRegressionSumSquares(), fullReg.getRegressionSumSquares() ,1.0E-16,"SSR");
+        assertEquals(regression.getMeanSquareError(), fullReg.getMeanSquareError() ,1.0E-16,"MSE");
+        assertEquals(regression.getSumSquaredErrors(), fullReg.getErrorSumSquares() ,1.0E-16,"SSE");
 
 
         final RegressionResults noInt   = iface.regress( new int[]{1} );
-        Assertions.assertNotNull(noInt);
-        Assertions.assertEquals(regressionNoint.getSlope(), noInt.getParameterEstimate(0), 1.0e-12, "slope");
-        Assertions.assertEquals(regressionNoint.getSlopeStdErr(), noInt.getStdErrorOfEstimate(0),1.0E-16,"slope std err");
-        Assertions.assertEquals(regressionNoint.getN(), noInt.getN(), "number of observations");
-        Assertions.assertEquals(regressionNoint.getRSquare(), noInt.getRSquared(), 1.0E-16, "r-square");
-        Assertions.assertEquals(regressionNoint.getRegressionSumSquares(), noInt.getRegressionSumSquares() ,1.0E-8,"SSR");
-        Assertions.assertEquals(regressionNoint.getMeanSquareError(), noInt.getMeanSquareError() ,1.0E-16,"MSE");
-        Assertions.assertEquals(regressionNoint.getSumSquaredErrors(), noInt.getErrorSumSquares() ,1.0E-16,"SSE");
+        assertNotNull(noInt);
+        assertEquals(regressionNoint.getSlope(), noInt.getParameterEstimate(0), 1.0e-12, "slope");
+        assertEquals(regressionNoint.getSlopeStdErr(), noInt.getStdErrorOfEstimate(0),1.0E-16,"slope std err");
+        assertEquals(regressionNoint.getN(), noInt.getN(), "number of observations");
+        assertEquals(regressionNoint.getRSquare(), noInt.getRSquared(), 1.0E-16, "r-square");
+        assertEquals(regressionNoint.getRegressionSumSquares(), noInt.getRegressionSumSquares() ,1.0E-8,"SSR");
+        assertEquals(regressionNoint.getMeanSquareError(), noInt.getMeanSquareError() ,1.0E-16,"MSE");
+        assertEquals(regressionNoint.getSumSquaredErrors(), noInt.getErrorSumSquares() ,1.0E-16,"SSE");
 
         final RegressionResults onlyInt = iface.regress( new int[]{0} );
-        Assertions.assertNotNull(onlyInt);
-        Assertions.assertEquals(regressionIntOnly.getSlope(), onlyInt.getParameterEstimate(0), 1.0e-12, "slope");
-        Assertions.assertEquals(regressionIntOnly.getSlopeStdErr(), onlyInt.getStdErrorOfEstimate(0),1.0E-12,"slope std err");
-        Assertions.assertEquals(regressionIntOnly.getN(), onlyInt.getN(), "number of observations");
-        Assertions.assertEquals(regressionIntOnly.getRSquare(), onlyInt.getRSquared(), 1.0E-14, "r-square");
-        Assertions.assertEquals(regressionIntOnly.getSumSquaredErrors(), onlyInt.getErrorSumSquares() ,1.0E-8,"SSE");
-        Assertions.assertEquals(regressionIntOnly.getRegressionSumSquares(), onlyInt.getRegressionSumSquares() ,1.0E-8,"SSR");
-        Assertions.assertEquals(regressionIntOnly.getMeanSquareError(), onlyInt.getMeanSquareError() ,1.0E-8,"MSE");
+        assertNotNull(onlyInt);
+        assertEquals(regressionIntOnly.getSlope(), onlyInt.getParameterEstimate(0), 1.0e-12, "slope");
+        assertEquals(regressionIntOnly.getSlopeStdErr(), onlyInt.getStdErrorOfEstimate(0),1.0E-12,"slope std err");
+        assertEquals(regressionIntOnly.getN(), onlyInt.getN(), "number of observations");
+        assertEquals(regressionIntOnly.getRSquare(), onlyInt.getRSquared(), 1.0E-14, "r-square");
+        assertEquals(regressionIntOnly.getSumSquaredErrors(), onlyInt.getErrorSumSquares() ,1.0E-8,"SSE");
+        assertEquals(regressionIntOnly.getRegressionSumSquares(), onlyInt.getRegressionSumSquares() ,1.0E-8,"SSR");
+        assertEquals(regressionIntOnly.getMeanSquareError(), onlyInt.getMeanSquareError() ,1.0E-8,"MSE");
 
     }
 
@@ -264,7 +269,7 @@ public final class SimpleRegressionTest {
      * Verify that regress generates exceptions as advertised for bad model specifications.
      */
     @Test
-    public void testRegressExceptions() {
+    void testRegressExceptions() {
         // No intercept
         final SimpleRegression noIntRegression = new SimpleRegression(false);
         noIntRegression.addData(noint2[0][1], noint2[0][0]);
@@ -272,25 +277,25 @@ public final class SimpleRegressionTest {
         noIntRegression.addData(noint2[2][1], noint2[2][0]);
         try { // null array
             noIntRegression.regress(null);
-            Assertions.fail("Expecting MathIllegalArgumentException for null array");
+            fail("Expecting MathIllegalArgumentException for null array");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // empty array
             noIntRegression.regress(new int[] {});
-            Assertions.fail("Expecting MathIllegalArgumentException for empty array");
+            fail("Expecting MathIllegalArgumentException for empty array");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // more than 1 regressor
             noIntRegression.regress(new int[] {0, 1});
-            Assertions.fail("Expecting MathIllegalArgumentException - too many regressors");
+            fail("Expecting MathIllegalArgumentException - too many regressors");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // invalid regressor
             noIntRegression.regress(new int[] {1});
-            Assertions.fail("Expecting MathIllegalArgumentException - invalid regression");
+            fail("Expecting MathIllegalArgumentException - invalid regression");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -302,165 +307,165 @@ public final class SimpleRegressionTest {
         regression.addData(noint2[2][1], noint2[2][0]);
         try { // null array
             regression.regress(null);
-            Assertions.fail("Expecting MathIllegalArgumentException for null array");
+            fail("Expecting MathIllegalArgumentException for null array");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // empty array
             regression.regress(new int[] {});
-            Assertions.fail("Expecting MathIllegalArgumentException for empty array");
+            fail("Expecting MathIllegalArgumentException for empty array");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // more than 2 regressors
             regression.regress(new int[] {0, 1, 2});
-            Assertions.fail("Expecting MathIllegalArgumentException - too many regressors");
+            fail("Expecting MathIllegalArgumentException - too many regressors");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // wrong order
             regression.regress(new int[] {1,0});
-            Assertions.fail("Expecting MathIllegalArgumentException - invalid regression");
+            fail("Expecting MathIllegalArgumentException - invalid regression");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // out of range
             regression.regress(new int[] {3,4});
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // out of range
             regression.regress(new int[] {0,2});
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // out of range
             regression.regress(new int[] {2});
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }
 
     @Test
-    public void testNoInterceot_noint2(){
+    void testNoInterceot_noint2(){
          SimpleRegression regression = new SimpleRegression(false);
          regression.addData(noint2[0][1], noint2[0][0]);
          regression.addData(noint2[1][1], noint2[1][0]);
          regression.addData(noint2[2][1], noint2[2][0]);
-         Assertions.assertEquals(0, regression.getIntercept(), 0, "intercept");
-         Assertions.assertEquals(0.727272727272727,
+         assertEquals(0, regression.getIntercept(), 0, "intercept");
+         assertEquals(0.727272727272727,
                  regression.getSlope(), 10E-12, "slope");
-         Assertions.assertEquals(0.420827318078432E-01,
+         assertEquals(0.420827318078432E-01,
                 regression.getSlopeStdErr(),10E-12,"slope std err");
-        Assertions.assertEquals(3, regression.getN(), "number of observations");
-        Assertions.assertEquals(0.993348115299335,
+        assertEquals(3, regression.getN(), "number of observations");
+        assertEquals(0.993348115299335,
             regression.getRSquare(), 10E-12, "r-square");
-        Assertions.assertEquals(40.7272727272727,
+        assertEquals(40.7272727272727,
             regression.getRegressionSumSquares(), 10E-9, "SSR");
-        Assertions.assertEquals(0.136363636363636,
+        assertEquals(0.136363636363636,
             regression.getMeanSquareError(), 10E-10, "MSE");
-        Assertions.assertEquals(0.272727272727273,
+        assertEquals(0.272727272727273,
             regression.getSumSquaredErrors(),10E-9,"SSE");
     }
 
     @Test
-    public void testNoIntercept_noint1(){
+    void testNoIntercept_noint1(){
         SimpleRegression regression = new SimpleRegression(false);
         for (int i = 0; i < noint1.length; i++) {
             regression.addData(noint1[i][1], noint1[i][0]);
         }
-        Assertions.assertEquals(0, regression.getIntercept(), 0, "intercept");
-        Assertions.assertEquals(2.07438016528926, regression.getSlope(), 10E-12, "slope");
-        Assertions.assertEquals(0.165289256198347E-01,
+        assertEquals(0, regression.getIntercept(), 0, "intercept");
+        assertEquals(2.07438016528926, regression.getSlope(), 10E-12, "slope");
+        assertEquals(0.165289256198347E-01,
                 regression.getSlopeStdErr(),10E-12,"slope std err");
-        Assertions.assertEquals(11, regression.getN(), "number of observations");
-        Assertions.assertEquals(0.999365492298663,
+        assertEquals(11, regression.getN(), "number of observations");
+        assertEquals(0.999365492298663,
             regression.getRSquare(), 10E-12, "r-square");
-        Assertions.assertEquals(200457.727272727,
+        assertEquals(200457.727272727,
             regression.getRegressionSumSquares(), 10E-9, "SSR");
-        Assertions.assertEquals(12.7272727272727,
+        assertEquals(12.7272727272727,
             regression.getMeanSquareError(), 10E-10, "MSE");
-        Assertions.assertEquals(127.272727272727,
+        assertEquals(127.272727272727,
             regression.getSumSquaredErrors(),10E-9,"SSE");
 
     }
 
     @Test
-    public void testNorris() {
+    void testNorris() {
         SimpleRegression regression = new SimpleRegression();
         for (int i = 0; i < data.length; i++) {
             regression.addData(data[i][1], data[i][0]);
         }
         // Tests against certified values from
         // http://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Norris.dat
-        Assertions.assertEquals(1.00211681802045, regression.getSlope(), 10E-12, "slope");
-        Assertions.assertEquals(0.429796848199937E-03,
+        assertEquals(1.00211681802045, regression.getSlope(), 10E-12, "slope");
+        assertEquals(0.429796848199937E-03,
                 regression.getSlopeStdErr(),10E-12,"slope std err");
-        Assertions.assertEquals(36, regression.getN(), "number of observations");
-        Assertions.assertEquals( -0.262323073774029,
+        assertEquals(36, regression.getN(), "number of observations");
+        assertEquals( -0.262323073774029,
             regression.getIntercept(),10E-12,"intercept");
-        Assertions.assertEquals(0.232818234301152,
+        assertEquals(0.232818234301152,
             regression.getInterceptStdErr(),10E-12,"std err intercept");
-        Assertions.assertEquals(0.999993745883712,
+        assertEquals(0.999993745883712,
             regression.getRSquare(), 10E-12, "r-square");
-        Assertions.assertEquals(4255954.13232369,
+        assertEquals(4255954.13232369,
             regression.getRegressionSumSquares(), 10E-9, "SSR");
-        Assertions.assertEquals(0.782864662630069,
+        assertEquals(0.782864662630069,
             regression.getMeanSquareError(), 10E-10, "MSE");
-        Assertions.assertEquals(26.6173985294224,
+        assertEquals(26.6173985294224,
             regression.getSumSquaredErrors(),10E-9,"SSE");
         // ------------  End certified data tests
 
-        Assertions.assertEquals( -0.262323073774029,
+        assertEquals( -0.262323073774029,
             regression.predict(0), 10E-12, "predict(0)");
-        Assertions.assertEquals(1.00211681802045 - 0.262323073774029,
+        assertEquals(1.00211681802045 - 0.262323073774029,
             regression.predict(1), 10E-12, "predict(1)");
     }
 
     @Test
-    public void testCorr() {
+    void testCorr() {
         SimpleRegression regression = new SimpleRegression();
         regression.addData(corrData);
-        Assertions.assertEquals(17, regression.getN(), "number of observations");
-        Assertions.assertEquals(.896123, regression.getRSquare(), 10E-6, "r-square");
-        Assertions.assertEquals(-0.94663767742, regression.getR(), 1E-10, "r");
+        assertEquals(17, regression.getN(), "number of observations");
+        assertEquals(.896123, regression.getRSquare(), 10E-6, "r-square");
+        assertEquals(-0.94663767742, regression.getR(), 1E-10, "r");
     }
 
     @Test
-    public void testNaNs() {
+    void testNaNs() {
         SimpleRegression regression = new SimpleRegression();
-        Assertions.assertTrue(Double.isNaN(regression.getIntercept()), "intercept not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getSlope()), "slope not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getSlopeStdErr()), "slope std err not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getInterceptStdErr()), "intercept std err not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getMeanSquareError()), "MSE not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getR()), "e not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getRSquare()), "r-square not NaN");
-        Assertions.assertTrue( Double.isNaN(regression.getRegressionSumSquares()), "RSS not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getSumSquaredErrors()),"SSE not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getTotalSumSquares()), "SSTO not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.predict(0)), "predict not NaN");
+        assertTrue(Double.isNaN(regression.getIntercept()), "intercept not NaN");
+        assertTrue(Double.isNaN(regression.getSlope()), "slope not NaN");
+        assertTrue(Double.isNaN(regression.getSlopeStdErr()), "slope std err not NaN");
+        assertTrue(Double.isNaN(regression.getInterceptStdErr()), "intercept std err not NaN");
+        assertTrue(Double.isNaN(regression.getMeanSquareError()), "MSE not NaN");
+        assertTrue(Double.isNaN(regression.getR()), "e not NaN");
+        assertTrue(Double.isNaN(regression.getRSquare()), "r-square not NaN");
+        assertTrue( Double.isNaN(regression.getRegressionSumSquares()), "RSS not NaN");
+        assertTrue(Double.isNaN(regression.getSumSquaredErrors()),"SSE not NaN");
+        assertTrue(Double.isNaN(regression.getTotalSumSquares()), "SSTO not NaN");
+        assertTrue(Double.isNaN(regression.predict(0)), "predict not NaN");
 
         regression.addData(1, 2);
         regression.addData(1, 3);
 
         // No x variation, so these should still blow...
-        Assertions.assertTrue(Double.isNaN(regression.getIntercept()), "intercept not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getSlope()), "slope not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getSlopeStdErr()), "slope std err not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getInterceptStdErr()), "intercept std err not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getMeanSquareError()), "MSE not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getR()), "e not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getRSquare()), "r-square not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getRegressionSumSquares()), "RSS not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getSumSquaredErrors()), "SSE not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.predict(0)), "predict not NaN");
+        assertTrue(Double.isNaN(regression.getIntercept()), "intercept not NaN");
+        assertTrue(Double.isNaN(regression.getSlope()), "slope not NaN");
+        assertTrue(Double.isNaN(regression.getSlopeStdErr()), "slope std err not NaN");
+        assertTrue(Double.isNaN(regression.getInterceptStdErr()), "intercept std err not NaN");
+        assertTrue(Double.isNaN(regression.getMeanSquareError()), "MSE not NaN");
+        assertTrue(Double.isNaN(regression.getR()), "e not NaN");
+        assertTrue(Double.isNaN(regression.getRSquare()), "r-square not NaN");
+        assertTrue(Double.isNaN(regression.getRegressionSumSquares()), "RSS not NaN");
+        assertTrue(Double.isNaN(regression.getSumSquaredErrors()), "SSE not NaN");
+        assertTrue(Double.isNaN(regression.predict(0)), "predict not NaN");
 
         // but SSTO should be OK
-        Assertions.assertFalse(Double.isNaN(regression.getTotalSumSquares()), "SSTO NaN");
+        assertFalse(Double.isNaN(regression.getTotalSumSquares()), "SSTO NaN");
 
         regression = new SimpleRegression();
 
@@ -468,73 +473,73 @@ public final class SimpleRegressionTest {
         regression.addData(3, 3);
 
         // All should be OK except MSE, s(b0), s(b1) which need one more df
-        Assertions.assertFalse(Double.isNaN(regression.getIntercept()), "interceptNaN");
-        Assertions.assertFalse(Double.isNaN(regression.getSlope()), "slope NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getSlopeStdErr()), "slope std err not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getInterceptStdErr()), "intercept std err not NaN");
-        Assertions.assertTrue(Double.isNaN(regression.getMeanSquareError()), "MSE not NaN");
-        Assertions.assertFalse(Double.isNaN(regression.getR()), "r NaN");
-        Assertions.assertFalse(Double.isNaN(regression.getRSquare()), "r-square NaN");
-        Assertions.assertFalse(Double.isNaN(regression.getRegressionSumSquares()), "RSS NaN");
-        Assertions.assertFalse(Double.isNaN(regression.getSumSquaredErrors()), "SSE NaN");
-        Assertions.assertFalse(Double.isNaN(regression.getTotalSumSquares()), "SSTO NaN");
-        Assertions.assertFalse(Double.isNaN(regression.predict(0)), "predict NaN");
+        assertFalse(Double.isNaN(regression.getIntercept()), "interceptNaN");
+        assertFalse(Double.isNaN(regression.getSlope()), "slope NaN");
+        assertTrue(Double.isNaN(regression.getSlopeStdErr()), "slope std err not NaN");
+        assertTrue(Double.isNaN(regression.getInterceptStdErr()), "intercept std err not NaN");
+        assertTrue(Double.isNaN(regression.getMeanSquareError()), "MSE not NaN");
+        assertFalse(Double.isNaN(regression.getR()), "r NaN");
+        assertFalse(Double.isNaN(regression.getRSquare()), "r-square NaN");
+        assertFalse(Double.isNaN(regression.getRegressionSumSquares()), "RSS NaN");
+        assertFalse(Double.isNaN(regression.getSumSquaredErrors()), "SSE NaN");
+        assertFalse(Double.isNaN(regression.getTotalSumSquares()), "SSTO NaN");
+        assertFalse(Double.isNaN(regression.predict(0)), "predict NaN");
 
         regression.addData(1, 4);
 
         // MSE, MSE, s(b0), s(b1) should all be OK now
-        Assertions.assertFalse(Double.isNaN(regression.getMeanSquareError()), "MSE NaN");
-        Assertions.assertFalse(Double.isNaN(regression.getSlopeStdErr()), "slope std err NaN");
-        Assertions.assertFalse(Double.isNaN(regression.getInterceptStdErr()), "intercept std err NaN");
+        assertFalse(Double.isNaN(regression.getMeanSquareError()), "MSE NaN");
+        assertFalse(Double.isNaN(regression.getSlopeStdErr()), "slope std err NaN");
+        assertFalse(Double.isNaN(regression.getInterceptStdErr()), "intercept std err NaN");
     }
 
     @Test
-    public void testClear() {
+    void testClear() {
         SimpleRegression regression = new SimpleRegression();
         regression.addData(corrData);
-        Assertions.assertEquals(17, regression.getN(), "number of observations");
+        assertEquals(17, regression.getN(), "number of observations");
         regression.clear();
-        Assertions.assertEquals(0, regression.getN(), "number of observations");
+        assertEquals(0, regression.getN(), "number of observations");
         regression.addData(corrData);
-        Assertions.assertEquals(.896123, regression.getRSquare(), 10E-6, "r-square");
+        assertEquals(.896123, regression.getRSquare(), 10E-6, "r-square");
         regression.addData(data);
-        Assertions.assertEquals(53, regression.getN(), "number of observations");
+        assertEquals(53, regression.getN(), "number of observations");
     }
 
     @Test
-    public void testInference() {
+    void testInference() {
         //----------  verified against R, version 1.8.1 -----
         // infData
         SimpleRegression regression = new SimpleRegression();
         regression.addData(infData);
-        Assertions.assertEquals(0.011448491,
+        assertEquals(0.011448491,
                 regression.getSlopeStdErr(), 1E-10, "slope std err");
-        Assertions.assertEquals(0.286036932,
+        assertEquals(0.286036932,
                 regression.getInterceptStdErr(),1E-8,"std err intercept");
-        Assertions.assertEquals(4.596e-07,
+        assertEquals(4.596e-07,
                 regression.getSignificance(),1E-8,"significance");
-        Assertions.assertEquals(0.0270713794287,
+        assertEquals(0.0270713794287,
                 regression.getSlopeConfidenceInterval(),1E-8,"slope conf interval half-width");
         // infData2
         regression = new SimpleRegression();
         regression.addData(infData2);
-        Assertions.assertEquals(1.07260253,
+        assertEquals(1.07260253,
                 regression.getSlopeStdErr(), 1E-8, "slope std err");
-        Assertions.assertEquals(4.17718672,
+        assertEquals(4.17718672,
                 regression.getInterceptStdErr(),1E-8,"std err intercept");
-        Assertions.assertEquals(0.261829133982,
+        assertEquals(0.261829133982,
                 regression.getSignificance(),1E-11,"significance");
-        Assertions.assertEquals(2.97802204827,
+        assertEquals(2.97802204827,
                 regression.getSlopeConfidenceInterval(),1E-8,"slope conf interval half-width");
         //------------- End R-verified tests -------------------------------
 
         //FIXME: get a real example to test against with alpha = .01
-        Assertions.assertTrue(regression.getSlopeConfidenceInterval() < regression.getSlopeConfidenceInterval(0.01),
+        assertTrue(regression.getSlopeConfidenceInterval() < regression.getSlopeConfidenceInterval(0.01),
                 "tighter means wider");
 
         try {
             regression.getSlopeConfidenceInterval(1);
-            Assertions.fail("expecting MathIllegalArgumentException for alpha = 1");
+            fail("expecting MathIllegalArgumentException for alpha = 1");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -542,42 +547,42 @@ public final class SimpleRegressionTest {
     }
 
     @Test
-    public void testPerfect() {
+    void testPerfect() {
         SimpleRegression regression = new SimpleRegression();
         int n = 100;
         for (int i = 0; i < n; i++) {
             regression.addData(((double) i) / (n - 1), i);
         }
-        Assertions.assertEquals(0.0, regression.getSignificance(), 1.0e-5);
-        Assertions.assertTrue(regression.getSlope() > 0.0);
-        Assertions.assertTrue(regression.getSumSquaredErrors() >= 0.0);
+        assertEquals(0.0, regression.getSignificance(), 1.0e-5);
+        assertTrue(regression.getSlope() > 0.0);
+        assertTrue(regression.getSumSquaredErrors() >= 0.0);
     }
 
     @Test
-    public void testPerfect2() {
+    void testPerfect2() {
         SimpleRegression regression = new SimpleRegression();
         regression.addData(0, 0);
         regression.addData(1, 1);
         regression.addData(2, 2);
-        Assertions.assertEquals(0.0, regression.getSlopeStdErr(), 0.0);
-        Assertions.assertEquals(0.0, regression.getSignificance(), Double.MIN_VALUE);
-        Assertions.assertEquals(1, regression.getRSquare(), Double.MIN_VALUE);
+        assertEquals(0.0, regression.getSlopeStdErr(), 0.0);
+        assertEquals(0.0, regression.getSignificance(), Double.MIN_VALUE);
+        assertEquals(1, regression.getRSquare(), Double.MIN_VALUE);
     }
 
     @Test
-    public void testPerfectNegative() {
+    void testPerfectNegative() {
         SimpleRegression regression = new SimpleRegression();
         int n = 100;
         for (int i = 0; i < n; i++) {
             regression.addData(- ((double) i) / (n - 1), i);
         }
 
-        Assertions.assertEquals(0.0, regression.getSignificance(), 1.0e-5);
-        Assertions.assertTrue(regression.getSlope() < 0.0);
+        assertEquals(0.0, regression.getSignificance(), 1.0e-5);
+        assertTrue(regression.getSlope() < 0.0);
     }
 
     @Test
-    public void testRandom() {
+    void testRandom() {
         SimpleRegression regression = new SimpleRegression();
         Random random = new Random(1);
         int n = 100;
@@ -585,222 +590,222 @@ public final class SimpleRegressionTest {
             regression.addData(((double) i) / (n - 1), random.nextDouble());
         }
 
-        Assertions.assertTrue( 0.0 < regression.getSignificance()
+        assertTrue( 0.0 < regression.getSignificance()
                     && regression.getSignificance() < 1.0);
     }
 
 
     // Jira MATH-85 = Bugzilla 39432
     @Test
-    public void testSSENonNegative() {
+    void testSSENonNegative() {
         double[] y = { 8915.102, 8919.302, 8923.502 };
         double[] x = { 1.107178495E2, 1.107264895E2, 1.107351295E2 };
         SimpleRegression reg = new SimpleRegression();
         for (int i = 0; i < x.length; i++) {
             reg.addData(x[i], y[i]);
         }
-        Assertions.assertTrue(reg.getSumSquaredErrors() >= 0.0);
+        assertTrue(reg.getSumSquaredErrors() >= 0.0);
     }
 
     // Test remove X,Y (single observation)
     @Test
-    public void testRemoveXY() {
+    void testRemoveXY() {
         // Create regression with inference data then remove to test
         SimpleRegression regression = new SimpleRegression();
-        Assertions.assertTrue(regression.hasIntercept());
+        assertTrue(regression.hasIntercept());
         regression.addData(infData);
         regression.removeData(removeX, removeY);
         regression.addData(removeX, removeY);
         // Use the inference assertions to make sure that everything worked
-        Assertions.assertEquals(0.011448491,
+        assertEquals(0.011448491,
                 regression.getSlopeStdErr(), 1E-10, "slope std err");
-        Assertions.assertEquals(0.286036932,
+        assertEquals(0.286036932,
                 regression.getInterceptStdErr(),1E-8,"std err intercept");
-        Assertions.assertEquals(4.596e-07,
+        assertEquals(4.596e-07,
                 regression.getSignificance(),1E-8,"significance");
-        Assertions.assertEquals(0.0270713794287,
+        assertEquals(0.0270713794287,
                 regression.getSlopeConfidenceInterval(),1E-8,"slope conf interval half-width");
      }
 
     // Test remove single observation in array
     @Test
-    public void testRemoveSingle() {
+    void testRemoveSingle() {
         // Create regression with inference data then remove to test
         SimpleRegression regression = new SimpleRegression();
-        Assertions.assertTrue(regression.hasIntercept());
+        assertTrue(regression.hasIntercept());
         regression.addData(infData);
         regression.removeData(removeSingle);
         regression.addData(removeSingle);
         // Use the inference assertions to make sure that everything worked
-        Assertions.assertEquals(0.011448491,
+        assertEquals(0.011448491,
                 regression.getSlopeStdErr(), 1E-10, "slope std err");
-        Assertions.assertEquals(0.286036932,
+        assertEquals(0.286036932,
                 regression.getInterceptStdErr(),1E-8,"std err intercept");
-        Assertions.assertEquals(4.596e-07,
+        assertEquals(4.596e-07,
                 regression.getSignificance(),1E-8,"significance");
-        Assertions.assertEquals(0.0270713794287,
+        assertEquals(0.0270713794287,
                 regression.getSlopeConfidenceInterval(),1E-8,"slope conf interval half-width");
      }
 
     // Test remove multiple observations
     @Test
-    public void testRemoveMultiple() {
+    void testRemoveMultiple() {
         // Create regression with inference data then remove to test
         SimpleRegression regression = new SimpleRegression();
-        Assertions.assertTrue(regression.hasIntercept());
+        assertTrue(regression.hasIntercept());
         regression.addData(infData);
         regression.removeData(removeMultiple);
         regression.addData(removeMultiple);
         // Use the inference assertions to make sure that everything worked
-        Assertions.assertEquals(0.011448491,
+        assertEquals(0.011448491,
                 regression.getSlopeStdErr(), 1E-10, "slope std err");
-        Assertions.assertEquals(0.286036932,
+        assertEquals(0.286036932,
                 regression.getInterceptStdErr(),1E-8,"std err intercept");
-        Assertions.assertEquals(4.596e-07,
+        assertEquals(4.596e-07,
                 regression.getSignificance(),1E-8,"significance");
-        Assertions.assertEquals(0.0270713794287,
+        assertEquals(0.0270713794287,
                 regression.getSlopeConfidenceInterval(),1E-8,"slope conf interval half-width");
      }
 
     // Test remove multiple observations
     @Test
-    public void testRemoveMultipleNoIntercept() {
+    void testRemoveMultipleNoIntercept() {
         // Create regression with inference data then remove to test
         SimpleRegression regression = new SimpleRegression(false);
-        Assertions.assertFalse(regression.hasIntercept());
-        Assertions.assertEquals(0.0, regression.getIntercept(), 1.0e-15);
+        assertFalse(regression.hasIntercept());
+        assertEquals(0.0, regression.getIntercept(), 1.0e-15);
         regression.addData(infData);
-        Assertions.assertEquals(0.30593, regression.predict(1.25), 1.0e-5);
+        assertEquals(0.30593, regression.predict(1.25), 1.0e-5);
         regression.removeData(removeMultiple);
         regression.addData(removeMultiple);
         // Use the inference assertions to make sure that everything worked
-        Assertions.assertEquals(0.0103629732,
+        assertEquals(0.0103629732,
                 regression.getSlopeStdErr(), 1E-10, "slope std err");
-        Assertions.assertTrue(Double.isNaN(regression.getInterceptStdErr()), "std err intercept");
-        Assertions.assertEquals(6.199e-08,
+        assertTrue(Double.isNaN(regression.getInterceptStdErr()), "std err intercept");
+        assertEquals(6.199e-08,
                 regression.getSignificance(),1E-10,"significance");
-        Assertions.assertEquals(0.02450454,
+        assertEquals(0.02450454,
                 regression.getSlopeConfidenceInterval(),1E-8,"slope conf interval half-width");
      }
 
     // Remove observation when empty
     @Test
-    public void testRemoveObsFromEmpty() {
+    void testRemoveObsFromEmpty() {
         SimpleRegression regression = new SimpleRegression();
         regression.removeData(removeX, removeY);
-        Assertions.assertEquals(0, regression.getN());
+        assertEquals(0, regression.getN());
     }
 
     // Remove single observation to empty
     @Test
-    public void testRemoveObsFromSingle() {
+    void testRemoveObsFromSingle() {
         SimpleRegression regression = new SimpleRegression();
         regression.addData(removeX, removeY);
         regression.removeData(removeX, removeY);
-        Assertions.assertEquals(0, regression.getN());
+        assertEquals(0, regression.getN());
     }
 
     // Remove multiple observations to empty
     @Test
-    public void testRemoveMultipleToEmpty() {
+    void testRemoveMultipleToEmpty() {
         SimpleRegression regression = new SimpleRegression();
         regression.addData(removeMultiple);
         regression.removeData(removeMultiple);
-        Assertions.assertEquals(0, regression.getN());
+        assertEquals(0, regression.getN());
     }
 
     // Remove multiple observations past empty (i.e. size of array > n)
     @Test
-    public void testRemoveMultiplePastEmpty() {
+    void testRemoveMultiplePastEmpty() {
         SimpleRegression regression = new SimpleRegression();
         regression.addData(removeX, removeY);
         regression.removeData(removeMultiple);
-        Assertions.assertEquals(0, regression.getN());
+        assertEquals(0, regression.getN());
     }
 
     @Test
-    public void testWrongDimensions() {
+    void testWrongDimensions() {
         try {
             new SimpleRegression().addData(new double[1][1]);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
+            assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
         }
         try {
             new SimpleRegression().addObservation(null, 0.0);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
+            assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
         }
         try {
             new SimpleRegression().addObservation(new double[0], 0.0);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
+            assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
         }
         try {
             new SimpleRegression().addObservations(new double[][] { null, null }, new double[2]);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS, miae.getSpecifier());
+            assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS, miae.getSpecifier());
         }
         try {
             new SimpleRegression().addObservations(new double[][] { new double[0], new double[0] }, new double[2]);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS, miae.getSpecifier());
+            assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS, miae.getSpecifier());
         }
     }
 
     @Test
-    public void testFewPoints() {
+    void testFewPoints() {
         SimpleRegression sr = new SimpleRegression();
         sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
-        Assertions.assertEquals(1, sr.getN());
-        Assertions.assertTrue(Double.isNaN(sr.getXSumSquares()));
+        assertEquals(1, sr.getN());
+        assertTrue(Double.isNaN(sr.getXSumSquares()));
         sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
-        Assertions.assertEquals(2, sr.getN());
-        Assertions.assertFalse(Double.isNaN(sr.getXSumSquares()));
-        Assertions.assertTrue(Double.isNaN(sr.getSlopeConfidenceInterval()));
-        Assertions.assertTrue(Double.isNaN(sr.getSignificance()));
+        assertEquals(2, sr.getN());
+        assertFalse(Double.isNaN(sr.getXSumSquares()));
+        assertTrue(Double.isNaN(sr.getSlopeConfidenceInterval()));
+        assertTrue(Double.isNaN(sr.getSignificance()));
         try {
             sr.regress();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION, miae.getSpecifier());
+            assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION, miae.getSpecifier());
         }
         sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
         RegressionResults results = sr.regress();
-        Assertions.assertTrue(Double.isNaN(results.getParameterEstimate(1)));
+        assertTrue(Double.isNaN(results.getParameterEstimate(1)));
         results = sr.regress(new int[] { 1 });
-        Assertions.assertEquals(1.0, results.getParameterEstimate(0), 1.0e-15);
+        assertEquals(1.0, results.getParameterEstimate(0), 1.0e-15);
         sr.addObservations(new double[][] { new double[] { 2.0, 2.5 }}, new double[] { 2.0 });
         results = sr.regress();
-        Assertions.assertFalse(Double.isNaN(results.getParameterEstimate(1)));
+        assertFalse(Double.isNaN(results.getParameterEstimate(1)));
         sr.addObservations(new double[][] { new double[] { Double.NaN, Double.NaN }}, new double[] { Double.NaN });
         results = sr.regress(new int[] { 1 });
-        Assertions.assertTrue(Double.isNaN(results.getParameterEstimate(0)));
+        assertTrue(Double.isNaN(results.getParameterEstimate(0)));
 
     }
 
     @Test
-    public void testFewPointsWithoutIntercept() {
+    void testFewPointsWithoutIntercept() {
         SimpleRegression sr = new SimpleRegression(false);
         sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
-        Assertions.assertEquals(1, sr.getN());
-        Assertions.assertTrue(Double.isNaN(sr.getXSumSquares()));
+        assertEquals(1, sr.getN());
+        assertTrue(Double.isNaN(sr.getXSumSquares()));
         try {
             sr.regress();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION, miae.getSpecifier());
+            assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION, miae.getSpecifier());
         }
         sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
         RegressionResults results = sr.regress();
-        Assertions.assertFalse(Double.isNaN(results.getParameterEstimate(0)));
+        assertFalse(Double.isNaN(results.getParameterEstimate(0)));
         sr.addObservations(new double[][] { new double[] { Double.NaN, 1.0 }}, new double[] { 2.0 });
         results = sr.regress();
-        Assertions.assertTrue(Double.isNaN(results.getParameterEstimate(0)));
+        assertTrue(Double.isNaN(results.getParameterEstimate(0)));
     }
 
 }

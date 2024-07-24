@@ -38,7 +38,6 @@ import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
 import org.hipparchus.random.UniformRandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -46,12 +45,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class PolygonsSetTest {
+class PolygonsSetTest {
 
     @Test
-    public void testSimplyConnected() {
+    void testSimplyConnected() {
         Vector2D[][] vertices = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D(36.0, 22.0),
@@ -67,7 +72,7 @@ public class PolygonsSetTest {
             }
         };
         PolygonsSet set = buildSet(vertices);
-        Assertions.assertEquals(Region.Location.OUTSIDE, set.checkPoint(new Vector2D(50.0, 30.0)));
+        assertEquals(Region.Location.OUTSIDE, set.checkPoint(new Vector2D(50.0, 30.0)));
         checkPoints(Region.Location.INSIDE, set, new Vector2D[] {
             new Vector2D(30.0, 15.0),
             new Vector2D(15.0, 20.0),
@@ -92,20 +97,20 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testBox() {
+    void testBox() {
         PolygonsSet box = new PolygonsSet(0, 2, -1, 1, 1.0e-10);
-        Assertions.assertEquals(4.0, box.getSize(), 1.0e-10);
-        Assertions.assertEquals(8.0, box.getBoundarySize(), 1.0e-10);
+        assertEquals(4.0, box.getSize(), 1.0e-10);
+        assertEquals(8.0, box.getBoundarySize(), 1.0e-10);
     }
 
     @Test
-    public void testInfinite() {
+    void testInfinite() {
         PolygonsSet box = new PolygonsSet(new BSPTree<Euclidean2D>(Boolean.TRUE), 1.0e-10);
-        Assertions.assertTrue(Double.isInfinite(box.getSize()));
+        assertTrue(Double.isInfinite(box.getSize()));
     }
 
     @Test
-    public void testStair() {
+    void testStair() {
         Vector2D[][] vertices = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.0, 0.0),
@@ -125,20 +130,20 @@ public class PolygonsSetTest {
         PolygonsSet set = buildSet(vertices);
         checkVertices(set.getVertices(), vertices);
 
-        Assertions.assertEquals(1.1 + 0.95 * FastMath.sqrt(2.0), set.getSize(), 1.0e-10);
+        assertEquals(1.1 + 0.95 * FastMath.sqrt(2.0), set.getSize(), 1.0e-10);
 
     }
 
     @Test
-    public void testEmpty() {
+    void testEmpty() {
         PolygonsSet empty = (PolygonsSet) new RegionFactory<Euclidean2D>().getComplement(new PolygonsSet(1.0e-10));
-        Assertions.assertTrue(empty.isEmpty());
-        Assertions.assertEquals(0, empty.getVertices().length);
-        Assertions.assertEquals(0.0, empty.getBoundarySize(), 1.0e-10);
-        Assertions.assertEquals(0.0, empty.getSize(), 1.0e-10);
+        assertTrue(empty.isEmpty());
+        assertEquals(0, empty.getVertices().length);
+        assertEquals(0.0, empty.getBoundarySize(), 1.0e-10);
+        assertEquals(0.0, empty.getSize(), 1.0e-10);
         for (double y = -1; y < 1; y += 0.1) {
             for (double x = -1; x < 1; x += 0.1) {
-                Assertions.assertEquals(Double.POSITIVE_INFINITY,
+                assertEquals(Double.POSITIVE_INFINITY,
                                     empty.projectToBoundary(new Vector2D(x, y)).getOffset(),
                                     1.0e-10);
             }
@@ -146,15 +151,15 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testFull() {
+    void testFull() {
         PolygonsSet empty = new PolygonsSet(1.0e-10);
-        Assertions.assertFalse(empty.isEmpty());
-        Assertions.assertEquals(0, empty.getVertices().length);
-        Assertions.assertEquals(0.0, empty.getBoundarySize(), 1.0e-10);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, empty.getSize(), 1.0e-10);
+        assertFalse(empty.isEmpty());
+        assertEquals(0, empty.getVertices().length);
+        assertEquals(0.0, empty.getBoundarySize(), 1.0e-10);
+        assertEquals(Double.POSITIVE_INFINITY, empty.getSize(), 1.0e-10);
         for (double y = -1; y < 1; y += 0.1) {
             for (double x = -1; x < 1; x += 0.1) {
-                Assertions.assertEquals(Double.NEGATIVE_INFINITY,
+                assertEquals(Double.NEGATIVE_INFINITY,
                                     empty.projectToBoundary(new Vector2D(x, y)).getOffset(),
                                     1.0e-10);
             }
@@ -162,7 +167,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testHole() {
+    void testHole() {
         Vector2D[][] vertices = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D(0.0, 0.0),
@@ -207,32 +212,32 @@ public class PolygonsSetTest {
         for (double x = -0.999; x < 3.999; x += 0.11) {
             Vector2D v = new Vector2D(x, x + 0.5);
             BoundaryProjection<Euclidean2D> projection = set.projectToBoundary(v);
-            Assertions.assertTrue(projection.getOriginal() == v);
+            assertTrue(projection.getOriginal() == v);
             Vector2D p = (Vector2D) projection.getProjected();
             if (x < -0.5) {
-                Assertions.assertEquals(0.0,      p.getX(), 1.0e-10);
-                Assertions.assertEquals(0.0,      p.getY(), 1.0e-10);
-                Assertions.assertEquals(+v.distance(Vector2D.ZERO), projection.getOffset(), 1.0e-10);
+                assertEquals(0.0,      p.getX(), 1.0e-10);
+                assertEquals(0.0,      p.getY(), 1.0e-10);
+                assertEquals(+v.distance(Vector2D.ZERO), projection.getOffset(), 1.0e-10);
             } else if (x < 0.5) {
-                Assertions.assertEquals(0.0,      p.getX(), 1.0e-10);
-                Assertions.assertEquals(v.getY(), p.getY(), 1.0e-10);
-                Assertions.assertEquals(-v.getX(), projection.getOffset(), 1.0e-10);
+                assertEquals(0.0,      p.getX(), 1.0e-10);
+                assertEquals(v.getY(), p.getY(), 1.0e-10);
+                assertEquals(-v.getX(), projection.getOffset(), 1.0e-10);
             } else if (x < 1.25) {
-                Assertions.assertEquals(1.0,      p.getX(), 1.0e-10);
-                Assertions.assertEquals(v.getY(), p.getY(), 1.0e-10);
-                Assertions.assertEquals(v.getX() - 1.0, projection.getOffset(), 1.0e-10);
+                assertEquals(1.0,      p.getX(), 1.0e-10);
+                assertEquals(v.getY(), p.getY(), 1.0e-10);
+                assertEquals(v.getX() - 1.0, projection.getOffset(), 1.0e-10);
             } else if (x < 2.0) {
-                Assertions.assertEquals(v.getX(), p.getX(), 1.0e-10);
-                Assertions.assertEquals(2.0,      p.getY(), 1.0e-10);
-                Assertions.assertEquals(2.0 - v.getY(), projection.getOffset(), 1.0e-10);
+                assertEquals(v.getX(), p.getX(), 1.0e-10);
+                assertEquals(2.0,      p.getY(), 1.0e-10);
+                assertEquals(2.0 - v.getY(), projection.getOffset(), 1.0e-10);
             } else if (x < 3.0) {
-                Assertions.assertEquals(v.getX(), p.getX(), 1.0e-10);
-                Assertions.assertEquals(3.0,      p.getY(), 1.0e-10);
-                Assertions.assertEquals(v.getY() - 3.0, projection.getOffset(), 1.0e-10);
+                assertEquals(v.getX(), p.getX(), 1.0e-10);
+                assertEquals(3.0,      p.getY(), 1.0e-10);
+                assertEquals(v.getY() - 3.0, projection.getOffset(), 1.0e-10);
             } else {
-                Assertions.assertEquals(3.0,      p.getX(), 1.0e-10);
-                Assertions.assertEquals(3.0,      p.getY(), 1.0e-10);
-                Assertions.assertEquals(+v.distance(new Vector2D(3, 3)), projection.getOffset(), 1.0e-10);
+                assertEquals(3.0,      p.getX(), 1.0e-10);
+                assertEquals(3.0,      p.getY(), 1.0e-10);
+                assertEquals(+v.distance(new Vector2D(3, 3)), projection.getOffset(), 1.0e-10);
             }
 
         }
@@ -240,7 +245,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testDisjointPolygons() {
+    void testDisjointPolygons() {
         Vector2D[][] vertices = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D(0.0, 1.0),
@@ -253,7 +258,7 @@ public class PolygonsSetTest {
             }
         };
         PolygonsSet set = buildSet(vertices);
-        Assertions.assertEquals(Region.Location.INSIDE, set.checkPoint(new Vector2D(1.0, 1.5)));
+        assertEquals(Region.Location.INSIDE, set.checkPoint(new Vector2D(1.0, 1.5)));
         checkPoints(Region.Location.INSIDE, set, new Vector2D[] {
             new Vector2D(1.0, 1.5),
             new Vector2D(4.5, 0.8)
@@ -273,7 +278,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testOppositeHyperplanes() {
+    void testOppositeHyperplanes() {
         Vector2D[][] vertices = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D(1.0, 0.0),
@@ -289,7 +294,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testSingularPoint() {
+    void testSingularPoint() {
         Vector2D[][] vertices = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.0,  0.0),
@@ -307,7 +312,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testLineIntersection() {
+    void testLineIntersection() {
         Vector2D[][] vertices = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.0,  0.0),
@@ -325,38 +330,38 @@ public class PolygonsSetTest {
         Line l1 = new Line(new Vector2D(-1.5, 0.0), FastMath.PI / 4, 1.0e-10);
         SubLine s1 = (SubLine) set.intersection(l1.wholeHyperplane());
         List<Interval> i1 = ((IntervalsSet) s1.getRemainingRegion()).asList();
-        Assertions.assertEquals(2, i1.size());
+        assertEquals(2, i1.size());
         Interval v10 = i1.get(0);
         Vector2D p10Lower = l1.toSpace(new Vector1D(v10.getInf()));
-        Assertions.assertEquals(0.0, p10Lower.getX(), 1.0e-10);
-        Assertions.assertEquals(1.5, p10Lower.getY(), 1.0e-10);
+        assertEquals(0.0, p10Lower.getX(), 1.0e-10);
+        assertEquals(1.5, p10Lower.getY(), 1.0e-10);
         Vector2D p10Upper = l1.toSpace(new Vector1D(v10.getSup()));
-        Assertions.assertEquals(0.5, p10Upper.getX(), 1.0e-10);
-        Assertions.assertEquals(2.0, p10Upper.getY(), 1.0e-10);
+        assertEquals(0.5, p10Upper.getX(), 1.0e-10);
+        assertEquals(2.0, p10Upper.getY(), 1.0e-10);
         Interval v11 = i1.get(1);
         Vector2D p11Lower = l1.toSpace(new Vector1D(v11.getInf()));
-        Assertions.assertEquals(1.0, p11Lower.getX(), 1.0e-10);
-        Assertions.assertEquals(2.5, p11Lower.getY(), 1.0e-10);
+        assertEquals(1.0, p11Lower.getX(), 1.0e-10);
+        assertEquals(2.5, p11Lower.getY(), 1.0e-10);
         Vector2D p11Upper = l1.toSpace(new Vector1D(v11.getSup()));
-        Assertions.assertEquals(1.5, p11Upper.getX(), 1.0e-10);
-        Assertions.assertEquals(3.0, p11Upper.getY(), 1.0e-10);
+        assertEquals(1.5, p11Upper.getX(), 1.0e-10);
+        assertEquals(3.0, p11Upper.getY(), 1.0e-10);
 
         Line l2 = new Line(new Vector2D(-1.0, 2.0), 0, 1.0e-10);
         SubLine s2 = (SubLine) set.intersection(l2.wholeHyperplane());
         List<Interval> i2 = ((IntervalsSet) s2.getRemainingRegion()).asList();
-        Assertions.assertEquals(1, i2.size());
+        assertEquals(1, i2.size());
         Interval v20 = i2.get(0);
         Vector2D p20Lower = l2.toSpace(new Vector1D(v20.getInf()));
-        Assertions.assertEquals(1.0, p20Lower.getX(), 1.0e-10);
-        Assertions.assertEquals(2.0, p20Lower.getY(), 1.0e-10);
+        assertEquals(1.0, p20Lower.getX(), 1.0e-10);
+        assertEquals(2.0, p20Lower.getY(), 1.0e-10);
         Vector2D p20Upper = l2.toSpace(new Vector1D(v20.getSup()));
-        Assertions.assertEquals(3.0, p20Upper.getX(), 1.0e-10);
-        Assertions.assertEquals(2.0, p20Upper.getY(), 1.0e-10);
+        assertEquals(3.0, p20Upper.getX(), 1.0e-10);
+        assertEquals(2.0, p20Upper.getY(), 1.0e-10);
 
     }
 
     @Test
-    public void testUnlimitedSubHyperplane() {
+    void testUnlimitedSubHyperplane() {
         Vector2D[][] vertices1 = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D(0.0, 0.0),
@@ -395,7 +400,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testUnion() {
+    void testUnion() {
         Vector2D[][] vertices1 = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.0,  0.0),
@@ -459,7 +464,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testIntersection() {
+    void testIntersection() {
         Vector2D[][] vertices1 = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.0,  0.0),
@@ -508,7 +513,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testXor() {
+    void testXor() {
         Vector2D[][] vertices1 = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.0,  0.0),
@@ -579,7 +584,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testDifference() {
+    void testDifference() {
         Vector2D[][] vertices1 = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.0,  0.0),
@@ -642,7 +647,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testEmptyDifference() {
+    void testEmptyDifference() {
         Vector2D[][] vertices1 = new Vector2D[][] {
             new Vector2D[] {
                 new Vector2D( 0.5, 3.5),
@@ -661,11 +666,11 @@ public class PolygonsSetTest {
             }
         };
         PolygonsSet set2 = buildSet(vertices2);
-        Assertions.assertTrue(new RegionFactory<Euclidean2D>().difference(set1.copySelf(), set2.copySelf()).isEmpty());
+        assertTrue(new RegionFactory<Euclidean2D>().difference(set1.copySelf(), set2.copySelf()).isEmpty());
     }
 
     @Test
-    public void testChoppedHexagon() {
+    void testChoppedHexagon() {
         double pi6   = FastMath.PI / 6.0;
         double sqrt3 = FastMath.sqrt(3.0);
         SubLine[] hyp = {
@@ -695,14 +700,14 @@ public class PolygonsSetTest {
                                                      set.getTree(false).split(splitter).getPlus(),
                                                      new BSPTree<Euclidean2D>(Boolean.FALSE), null),
                             1.0e-10);
-        Assertions.assertEquals(Region.Location.OUTSIDE,
+        assertEquals(Region.Location.OUTSIDE,
                             slice.checkPoint(new Vector2D(0.1, 0.5)));
-        Assertions.assertEquals(11.0 / 3.0, slice.getBoundarySize(), 1.0e-10);
+        assertEquals(11.0 / 3.0, slice.getBoundarySize(), 1.0e-10);
 
     }
 
     @Test
-    public void testConcentric() {
+    void testConcentric() {
         double h = FastMath.sqrt(3.0) / 2.0;
         Vector2D[][] vertices1 = new Vector2D[][] {
             new Vector2D[] {
@@ -728,11 +733,11 @@ public class PolygonsSetTest {
             }
         };
         PolygonsSet set2 = buildSet(vertices2);
-        Assertions.assertTrue(set2.contains(set1));
+        assertTrue(set2.contains(set1));
     }
 
     @Test
-    public void testBug20040520() {
+    void testBug20040520() {
         BSPTree<Euclidean2D> a0 =
             new BSPTree<Euclidean2D>(buildSegment(new Vector2D(0.85, -0.05),
                                                   new Vector2D(0.90, -0.10)),
@@ -860,7 +865,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testBug20041003() {
+    void testBug20041003() {
 
         Line[] l = {
             new Line(new Vector2D(0.0, 0.625000007541172),
@@ -903,20 +908,20 @@ public class PolygonsSetTest {
                                      null);
 
         PolygonsSet set = new PolygonsSet(node4, 1.0e-10);
-        Assertions.assertEquals(0, set.getVertices().length);
+        assertEquals(0, set.getVertices().length);
 
     }
 
     @Test
-    public void testSqueezedHexa() {
+    void testSqueezedHexa() {
         PolygonsSet set = new PolygonsSet(1.0e-10,
                                           new Vector2D(-6, -4), new Vector2D(-8, -8), new Vector2D(  8, -8),
                                           new Vector2D( 6, -4), new Vector2D(10,  4), new Vector2D(-10,  4));
-        Assertions.assertEquals(Location.OUTSIDE, set.checkPoint(new Vector2D(0, 6)));
+        assertEquals(Location.OUTSIDE, set.checkPoint(new Vector2D(0, 6)));
     }
 
     @Test
-    public void testIssue880Simplified() {
+    void testIssue880Simplified() {
 
         Vector2D[] vertices1 = new Vector2D[] {
             new Vector2D( 90.13595870833188,  38.33604606376991),
@@ -929,13 +934,13 @@ public class PolygonsSetTest {
             new Vector2D( 90.09081378927135,  38.375193883266434)
         };
         PolygonsSet set1 = new PolygonsSet(1.0e-10, vertices1);
-        Assertions.assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.12,  38.32)));
-        Assertions.assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.135, 38.355)));
+        assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.12,  38.32)));
+        assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.135, 38.355)));
 
     }
 
     @Test
-    public void testIssue880Complete() {
+    void testIssue880Complete() {
         Vector2D[] vertices1 = new Vector2D[] {
                 new Vector2D( 90.08714908223715,  38.370299337260235),
                 new Vector2D( 90.08709517675004,  38.3702895991413),
@@ -1009,12 +1014,12 @@ public class PolygonsSetTest {
                 new Vector2D( 90.09081378927135,  38.375193883266434)
         };
         PolygonsSet set1 = new PolygonsSet(1.0e-8, vertices1);
-        Assertions.assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.0905,  38.3755)));
-        Assertions.assertEquals(Location.INSIDE,  set1.checkPoint(new Vector2D(90.09084, 38.3755)));
-        Assertions.assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.0913,  38.3755)));
-        Assertions.assertEquals(Location.INSIDE,  set1.checkPoint(new Vector2D(90.1042,  38.3739)));
-        Assertions.assertEquals(Location.INSIDE,  set1.checkPoint(new Vector2D(90.1111,  38.3673)));
-        Assertions.assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.0959,  38.3457)));
+        assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.0905,  38.3755)));
+        assertEquals(Location.INSIDE,  set1.checkPoint(new Vector2D(90.09084, 38.3755)));
+        assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.0913,  38.3755)));
+        assertEquals(Location.INSIDE,  set1.checkPoint(new Vector2D(90.1042,  38.3739)));
+        assertEquals(Location.INSIDE,  set1.checkPoint(new Vector2D(90.1111,  38.3673)));
+        assertEquals(Location.OUTSIDE, set1.checkPoint(new Vector2D(90.0959,  38.3457)));
 
         Vector2D[] vertices2 = new Vector2D[] {
                 new Vector2D( 90.13067558880044,  38.36977255037573),
@@ -1086,34 +1091,34 @@ public class PolygonsSetTest {
                                                         set2.copySelf());
 
         Vector2D[][] vertices = set.getVertices();
-        Assertions.assertTrue(vertices[0][0] != null);
-        Assertions.assertEquals(1, vertices.length);
+        assertTrue(vertices[0][0] != null);
+        assertEquals(1, vertices.length);
     }
 
     @Test
-    public void testTooThinBox() {
-        Assertions.assertEquals(0.0,
+    void testTooThinBox() {
+        assertEquals(0.0,
                             new PolygonsSet(0.0, 0.0, 0.0, 10.3206397147574, 1.0e-10).getSize(),
                             1.0e-10);
     }
 
     @Test
-    public void testWrongUsage() {
+    void testWrongUsage() {
         // the following is a wrong usage of the constructor.
         // as explained in the javadoc, the failure is NOT detected at construction
         // time but occurs later on
         PolygonsSet ps = new PolygonsSet(new BSPTree<Euclidean2D>(), 1.0e-10);
-        Assertions.assertNotNull(ps);
+        assertNotNull(ps);
         try {
             ps.getSize();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (NullPointerException npe) {
             // this is expected
         }
     }
 
     @Test
-    public void testIssue1162() {
+    void testIssue1162() {
         PolygonsSet p = new PolygonsSet(1.0e-10,
                                                 new Vector2D(4.267199999996532, -11.928637756014894),
                                                 new Vector2D(4.267200000026445, -14.12360595809307),
@@ -1127,12 +1132,12 @@ public class PolygonsSetTest {
                                                 new Vector2D(4.267200000030211,      -27.785625665247778),
                                                 new Vector2D(4.267200000030211,      -11.933116461089332));
 
-        Assertions.assertFalse(p.contains(w));
+        assertFalse(p.contains(w));
 
     }
 
     @Test
-    public void testThinRectangle() {
+    void testThinRectangle() {
 
         RegionFactory<Euclidean2D> factory = new RegionFactory<Euclidean2D>();
         Vector2D pA = new Vector2D(0.0,        1.0);
@@ -1148,9 +1153,9 @@ public class PolygonsSetTest {
             new Line(pD, pA, 1.0 / 256)
         };
         Region<Euclidean2D> accuratePolygon = factory.buildConvex(h1);
-        Assertions.assertEquals(1.0 / 64.0, accuratePolygon.getSize(), 1.0e-10);
-        Assertions.assertTrue(Double.isInfinite(new RegionFactory<Euclidean2D>().getComplement(accuratePolygon).getSize()));
-        Assertions.assertEquals(2 * (1.0 + 1.0 / 64.0), accuratePolygon.getBoundarySize(), 1.0e-10);
+        assertEquals(1.0 / 64.0, accuratePolygon.getSize(), 1.0e-10);
+        assertTrue(Double.isInfinite(new RegionFactory<Euclidean2D>().getComplement(accuratePolygon).getSize()));
+        assertEquals(2 * (1.0 + 1.0 / 64.0), accuratePolygon.getBoundarySize(), 1.0e-10);
 
         // if tolerance is larger than rectangle width, the rectangle degenerates
         // as of 3.3, its two long edges cannot be distinguished anymore and this part of the test did fail
@@ -1162,13 +1167,13 @@ public class PolygonsSetTest {
             new Line(pD, pA, 1.0 / 16)
         };
         Region<Euclidean2D> degeneratedPolygon = factory.buildConvex(h2);
-        Assertions.assertEquals(0.0, degeneratedPolygon.getSize(), 1.0e-10);
-        Assertions.assertTrue(degeneratedPolygon.isEmpty());
+        assertEquals(0.0, degeneratedPolygon.getSize(), 1.0e-10);
+        assertTrue(degeneratedPolygon.isEmpty());
 
     }
 
     @Test
-    public void testInconsistentHyperplanes() {
+    void testInconsistentHyperplanes() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double tolerance = 1.0e-10;
             new RegionFactory<Euclidean2D>().buildConvex(new Line(new Vector2D(0, 0), new Vector2D(0, 1), tolerance),
@@ -1177,7 +1182,7 @@ public class PolygonsSetTest {
     }
 
     @Test
-    public void testBoundarySimplification() {
+    void testBoundarySimplification() {
 
         // a simple square will result in a 4 cuts and 5 leafs tree
         PolygonsSet square = new PolygonsSet(1.0e-10,
@@ -1186,12 +1191,12 @@ public class PolygonsSetTest {
                                              new Vector2D(1, 1),
                                              new Vector2D(0, 1));
         Vector2D[][] squareBoundary = square.getVertices();
-        Assertions.assertEquals(1, squareBoundary.length);
-        Assertions.assertEquals(4, squareBoundary[0].length);
+        assertEquals(1, squareBoundary.length);
+        assertEquals(4, squareBoundary[0].length);
         Counter squareCount = new Counter();
         squareCount.count(square);
-        Assertions.assertEquals(4, squareCount.getInternalNodes());
-        Assertions.assertEquals(5, squareCount.getLeafNodes());
+        assertEquals(4, squareCount.getInternalNodes());
+        assertEquals(5, squareCount.getLeafNodes());
 
         // splitting the square in two halves increases the BSP tree
         // with 3 more cuts and 3 more leaf nodes
@@ -1200,20 +1205,20 @@ public class PolygonsSetTest {
                                                   square.getTolerance());
         Counter splitSquareCount = new Counter();
         splitSquareCount.count(splitSquare);
-        Assertions.assertEquals(squareCount.getInternalNodes() + 3, splitSquareCount.getInternalNodes());
-        Assertions.assertEquals(squareCount.getLeafNodes()     + 3, splitSquareCount.getLeafNodes());
+        assertEquals(squareCount.getInternalNodes() + 3, splitSquareCount.getInternalNodes());
+        assertEquals(squareCount.getLeafNodes()     + 3, splitSquareCount.getLeafNodes());
 
         // the number of vertices should not change, as the intermediate vertices
         // at (0.0, 0.5) and (1.0, 0.5) induced by the top level horizontal split
         // should be removed during the boundary extraction process
         Vector2D[][] splitBoundary = splitSquare.getVertices();
-        Assertions.assertEquals(1, splitBoundary.length);
-        Assertions.assertEquals(4, splitBoundary[0].length);
+        assertEquals(1, splitBoundary.length);
+        assertEquals(4, splitBoundary[0].length);
 
     }
 
     @Test
-    public void testOppositeEdges() {
+    void testOppositeEdges() {
         PolygonsSet polygon = new PolygonsSet(1.0e-6,
                                               new Vector2D(+1, -2),
                                               new Vector2D(+1,  0),
@@ -1221,12 +1226,12 @@ public class PolygonsSetTest {
                                               new Vector2D(-1, +2),
                                               new Vector2D(-1,  0),
                                               new Vector2D(-2,  0));
-        Assertions.assertEquals(6.0, polygon.getSize(), 1.0e-10);
-        Assertions.assertEquals(2.0 * FastMath.sqrt(13.0) + 6.0, polygon.getBoundarySize(), 1.0e-10);
+        assertEquals(6.0, polygon.getSize(), 1.0e-10);
+        assertEquals(2.0 * FastMath.sqrt(13.0) + 6.0, polygon.getBoundarySize(), 1.0e-10);
     }
 
     @Test
-    public void testInfiniteQuadrant() {
+    void testInfiniteQuadrant() {
         final double tolerance = 1.0e-10;
         BSPTree<Euclidean2D> bsp = new BSPTree<>();
         bsp.insertCut(new Line(Vector2D.ZERO, 0.0, tolerance));
@@ -1235,11 +1240,11 @@ public class PolygonsSetTest {
         bsp.getMinus().getPlus().setAttribute(Boolean.FALSE);
         bsp.getMinus().getMinus().setAttribute(Boolean.TRUE);
         PolygonsSet polygons = new PolygonsSet(bsp, tolerance);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, polygons.getSize(), 1.0e-10);
+        assertEquals(Double.POSITIVE_INFINITY, polygons.getSize(), 1.0e-10);
     }
 
     @Test
-    public void testZigZagBoundaryOversampledIssue46() {
+    void testZigZagBoundaryOversampledIssue46() {
         final double tol = 1.0e-4;
         // sample region, non-convex, not too big, not too small
         final List<Vector2D> vertices = Arrays.asList(
@@ -1276,22 +1281,22 @@ public class PolygonsSetTest {
         }
         // create zone from high resolution boundary
         PolygonsSet zone = new PolygonsSet(tol, points.toArray(new Vector2D[0]));
-        Assertions.assertEquals(expected.getSize(), zone.getSize(), tol);
-        Assertions.assertEquals(0, expected.getBarycenter().distance(zone.getBarycenter()), tol);
-        Assertions.assertEquals(Location.INSIDE, zone.checkPoint(zone.getBarycenter()), "" + expected.getBarycenter() +  zone.getBarycenter());
+        assertEquals(expected.getSize(), zone.getSize(), tol);
+        assertEquals(0, expected.getBarycenter().distance(zone.getBarycenter()), tol);
+        assertEquals(Location.INSIDE, zone.checkPoint(zone.getBarycenter()), "" + expected.getBarycenter() +  zone.getBarycenter());
         // extra tolerance at corners due to SPS tolerance being a hyperplaneThickness
         // a factor of 3.1 corresponds to a edge intersection angle of ~19 degrees
         final double cornerTol = 3.1 * tol;
         for (Vector2D vertex : vertices) {
             // check original points are on the boundary
-            Assertions.assertEquals(Location.BOUNDARY, zone.checkPoint(vertex), "" + vertex);
+            assertEquals(Location.BOUNDARY, zone.checkPoint(vertex), "" + vertex);
             double offset = FastMath.abs(zone.projectToBoundary(vertex).getOffset());
-            Assertions.assertEquals(0, offset, cornerTol, "" + vertex + " offset: " + offset);
+            assertEquals(0, offset, cornerTol, "" + vertex + " offset: " + offset);
         }
     }
 
     @Test
-    public void testPositiveQuadrantByVerticesDetailIssue46() {
+    void testPositiveQuadrantByVerticesDetailIssue46() {
         double tol = 0.01;
         Line x = new Line(Vector2D.ZERO, new Vector2D(1, 0), tol);
         Line y = new Line(Vector2D.ZERO, new Vector2D(0, 1), tol);
@@ -1327,32 +1332,32 @@ public class PolygonsSetTest {
             if ((v.getX() > tol) && (v.getY() > tol) && (v.getX() < 1 - tol) && (v.getY() < 1 - tol)) {
                 if ((v.getX() > 2 * tol) && (v.getY() > 2 * tol) && (v.getX() < 1 - 2 * tol) && (v.getY() < 1 - 2 * tol)) {
                     // certainly inside
-                    Assertions.assertEquals(Location.INSIDE, actual, "" + v);
+                    assertEquals(Location.INSIDE, actual, "" + v);
                 } else {
                     // may be inside or boundary
-                    Assertions.assertNotEquals(Location.OUTSIDE, actual, "" + v);
+                    assertNotEquals(Location.OUTSIDE, actual, "" + v);
                 }
             } else if ((v.getX() < 0) || (v.getY() < 0) || (v.getX() > 1) || (v.getY() > 1)) {
                 if ((v.getX() < -tol) || (v.getY() < -tol) || (v.getX() > 1 + tol) || (v.getY() > 1 + tol)) {
                     // certainly outside
-                    Assertions.assertEquals(Location.OUTSIDE, actual);
+                    assertEquals(Location.OUTSIDE, actual);
                 } else {
                     // may be outside or boundary
-                    Assertions.assertNotEquals(Location.INSIDE, actual);
+                    assertNotEquals(Location.INSIDE, actual);
                 }
             } else {
                 // certainly boundary
-                Assertions.assertEquals(Location.BOUNDARY, actual);
+                assertEquals(Location.BOUNDARY, actual);
             }
         }
         // all input points are on the boundary
         for (Vector2D point : points) {
-            Assertions.assertEquals(Location.BOUNDARY, set.checkPoint(point), "" + point);
+            assertEquals(Location.BOUNDARY, set.checkPoint(point), "" + point);
         }
     }
 
     @Test
-    public void testOversampledCircleIssue64() {
+    void testOversampledCircleIssue64() {
         // setup
         double tol = 1e-2;
         double length = FastMath.PI * 2;
@@ -1368,12 +1373,12 @@ public class PolygonsSetTest {
         PolygonsSet set = new PolygonsSet(tol, points.toArray(new Vector2D[0]));
 
         // verify
-        Assertions.assertEquals(FastMath.PI, set.getSize(), tol);
-        Assertions.assertEquals(0, set.getBarycenter().distance(Vector2D.ZERO), tol);
+        assertEquals(FastMath.PI, set.getSize(), tol);
+        assertEquals(0, set.getBarycenter().distance(Vector2D.ZERO), tol);
         // each segment is shorter than boundary, so error builds up
-        Assertions.assertEquals(set.getBoundarySize(), length, 2 * tol);
+        assertEquals(set.getBoundarySize(), length, 2 * tol);
         for (Vector2D point : points) {
-            Assertions.assertEquals(Location.BOUNDARY, set.checkPoint(point));
+            assertEquals(Location.BOUNDARY, set.checkPoint(point));
         }
     }
 
@@ -1447,7 +1452,7 @@ public class PolygonsSetTest {
     private void checkPoints(Region.Location expected, PolygonsSet set,
                              Vector2D[] points) {
         for (int i = 0; i < points.length; ++i) {
-            Assertions.assertEquals(expected, set.checkPoint(points[i]));
+            assertEquals(expected, set.checkPoint(points[i]));
         }
     }
 
@@ -1482,7 +1487,7 @@ public class PolygonsSetTest {
                         inSegment = checkInSegment(p, loop[l], loop[(l + 1) % length], 1.0e-10);
                     }
                 }
-                Assertions.assertTrue(inSegment);
+                assertTrue(inSegment);
             }
         }
 
@@ -1496,7 +1501,7 @@ public class PolygonsSetTest {
                                        min);
                     }
                 }
-                Assertions.assertEquals(0.0, min, 1.0e-10);
+                assertEquals(0.0, min, 1.0e-10);
             }
         }
 

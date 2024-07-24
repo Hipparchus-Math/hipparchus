@@ -20,50 +20,52 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class JacobiThetaTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class JacobiThetaTest {
 
     @Test
-    public void testNoConvergence() {
-        Assertions.assertTrue(new JacobiTheta(Double.NaN).values(Complex.ZERO).theta1().isNaN());
+    void testNoConvergence() {
+        assertTrue(new JacobiTheta(Double.NaN).values(Complex.ZERO).theta1().isNaN());
     }
 
     @Test
-    public void testRealZero() {
+    void testRealZero() {
         final double           k      = 0.675;
         final double           m      = k * k;
         final double           q      = LegendreEllipticIntegral.nome(m);
         final double           t3Ref  = 1 + 2 * (q + FastMath.pow(q, 4) + FastMath.pow(q, 9) + FastMath.pow(q, 16));
         final double           theta3 = new JacobiTheta(q).values(Complex.ZERO).theta3().getRealPart();
-        Assertions.assertEquals(t3Ref, theta3, 1.0e-12);
+        assertEquals(t3Ref, theta3, 1.0e-12);
     }
 
     @Test
-    public void testWolframAlpha() {
+    void testWolframAlpha() {
         final Theta theta = new JacobiTheta(0.25).values(new Complex(2, 1));
-        Assertions.assertEquals( 2.21896723745108057500, theta.theta1().getRealPart(),      1.0e-15);
-        Assertions.assertEquals(-1.56332891301806559779, theta.theta1().getImaginaryPart(), 1.0e-15);
-        Assertions.assertEquals(-0.07520617984531674751, theta.theta2().getRealPart(),      1.0e-15);
-        Assertions.assertEquals(-1.24993491278546664559, theta.theta2().getImaginaryPart(), 1.0e-15);
-        Assertions.assertEquals(-0.25931139474579522847, theta.theta3().getRealPart(),      1.0e-15);
-        Assertions.assertEquals( 1.16230083178353441578, theta.theta3().getImaginaryPart(), 1.0e-15);
-        Assertions.assertEquals( 2.19722649038852886551, theta.theta4().getRealPart(),      1.0e-15);
-        Assertions.assertEquals(-1.58416769196278632848, theta.theta4().getImaginaryPart(), 1.0e-15);
+        assertEquals( 2.21896723745108057500, theta.theta1().getRealPart(),      1.0e-15);
+        assertEquals(-1.56332891301806559779, theta.theta1().getImaginaryPart(), 1.0e-15);
+        assertEquals(-0.07520617984531674751, theta.theta2().getRealPart(),      1.0e-15);
+        assertEquals(-1.24993491278546664559, theta.theta2().getImaginaryPart(), 1.0e-15);
+        assertEquals(-0.25931139474579522847, theta.theta3().getRealPart(),      1.0e-15);
+        assertEquals( 1.16230083178353441578, theta.theta3().getImaginaryPart(), 1.0e-15);
+        assertEquals( 2.19722649038852886551, theta.theta4().getRealPart(),      1.0e-15);
+        assertEquals(-1.58416769196278632848, theta.theta4().getImaginaryPart(), 1.0e-15);
     }
 
     @Test
-    public void testQuarterPeriod() {
+    void testQuarterPeriod() {
         final double           k      = 0.675;
         final double           m      = k * k;
         final double           q      = LegendreEllipticIntegral.nome(m);
         final double           theta3 = new JacobiTheta(q).values(Complex.ZERO).theta3().getRealPart();
-        Assertions.assertEquals(LegendreEllipticIntegral.bigK(m), MathUtils.SEMI_PI * theta3 * theta3, 1.0e-12);
+        assertEquals(LegendreEllipticIntegral.bigK(m), MathUtils.SEMI_PI * theta3 * theta3, 1.0e-12);
     }
 
     @Test
-    public void testEllipticFunctions() {
+    void testEllipticFunctions() {
 
         final double      z      = 1.3;
         final double      k      = 0.675;
@@ -88,12 +90,12 @@ public class JacobiThetaTest {
         final double tz2 = thetaZ.theta2().getRealPart();
         final double tz3 = thetaZ.theta3().getRealPart();
         final double tz4 = thetaZ.theta4().getRealPart();
-        Assertions.assertEquals(valuesN.sn(), t03 * tz1       / (t02 * tz4),       1.0e-15);
-        Assertions.assertEquals(valuesN.cn(), t04 * tz2       / (t02 * tz4),       1.0e-15);
-        Assertions.assertEquals(valuesN.dn(), t04 * tz3       / (t03 * tz4),       1.0e-15);
-        Assertions.assertEquals(valuesD.sd(), t03 * t03 * tz1 / (t02 * t04 * tz3), 1.0e-15);
-        Assertions.assertEquals(valuesD.cd(), t03 * tz2       / (t02 * tz3),       1.0e-15);
-        Assertions.assertEquals(valuesC.sc(), t03 * tz1       / (t04 * tz2),       1.0e-15);
+        assertEquals(valuesN.sn(), t03 * tz1       / (t02 * tz4),       1.0e-15);
+        assertEquals(valuesN.cn(), t04 * tz2       / (t02 * tz4),       1.0e-15);
+        assertEquals(valuesN.dn(), t04 * tz3       / (t03 * tz4),       1.0e-15);
+        assertEquals(valuesD.sd(), t03 * t03 * tz1 / (t02 * t04 * tz3), 1.0e-15);
+        assertEquals(valuesD.cd(), t03 * tz2       / (t02 * tz3),       1.0e-15);
+        assertEquals(valuesC.sc(), t03 * tz1       / (t04 * tz2),       1.0e-15);
 
     }
 

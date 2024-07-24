@@ -82,7 +82,7 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
     //---------------------------- Additional test cases -------------------------
 
     @Test
-    public void testInverseCumulativeProbabilityExtremes() {
+    void testInverseCumulativeProbabilityExtremes() {
         setInverseCumulativeTestPoints(new double[] {0.0, 1.0});
         setInverseCumulativeTestValues(
                 new double[] {Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY});
@@ -90,19 +90,19 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testMedian() {
+    void testMedian() {
         CauchyDistribution distribution = (CauchyDistribution) getDistribution();
         assertEquals(1.2, distribution.getMedian(), 0.0);
     }
 
     @Test
-    public void testScale() {
+    void testScale() {
         CauchyDistribution distribution = (CauchyDistribution) getDistribution();
         assertEquals(2.1, distribution.getScale(), 0.0);
     }
 
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         try {
             new CauchyDistribution(0, 0);
             fail("Cannot have zero scale");
@@ -118,7 +118,7 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         CauchyDistribution dist;
 
         dist = new CauchyDistribution(10.2, 0.15);

@@ -32,9 +32,9 @@ import java.util.Random;
 /**
  * Test for class {@link SimpleCurveFitter}.
  */
-public class SimpleCurveFitterTest {
+class SimpleCurveFitterTest {
     @Test
-    public void testPolynomialFit() {
+    void testPolynomialFit() {
         final Random randomizer = new Random(53882150042L);
         final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(64925784252L);
 
@@ -55,6 +55,6 @@ public class SimpleCurveFitterTest {
                                        new double[] { -1e20, 3e15, -5e25 });
         final double[] best = fitter.fit(obs.toList());
 
-        UnitTestUtils.assertEquals("best != coeff", coeff, best, 2e-2);
+        UnitTestUtils.customAssertEquals("best != coeff", coeff, best, 2e-2);
     }
 }

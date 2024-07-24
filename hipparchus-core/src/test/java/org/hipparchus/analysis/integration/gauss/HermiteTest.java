@@ -23,18 +23,19 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test of the {@link HermiteRuleFactory}.
  *
  */
-public class HermiteTest {
+class HermiteTest {
     private static final GaussIntegratorFactory factory = new GaussIntegratorFactory();
 
     @Test
-    public void testNormalDistribution() {
+    void testNormalDistribution() {
         final double oneOverSqrtPi = 1 / FastMath.sqrt(Math.PI);
 
         // By defintion, Gauss-Hermite quadrature readily provides the
@@ -56,11 +57,11 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = 1;
-        Assertions.assertEquals(expected, result, FastMath.ulp(expected));
+        assertEquals(expected, result, FastMath.ulp(expected));
     }
 
     @Test
-    public void testNormalMean() {
+    void testNormalMean() {
         final double sqrtTwo = FastMath.sqrt(2);
         final double oneOverSqrtPi = 1 / FastMath.sqrt(Math.PI);
 
@@ -83,11 +84,11 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = mu;
-        Assertions.assertEquals(expected, result, 5 * FastMath.ulp(expected));
+        assertEquals(expected, result, 5 * FastMath.ulp(expected));
     }
 
     @Test
-    public void testNormalVariance() {
+    void testNormalVariance() {
         final double twoOverSqrtPi = 2 / FastMath.sqrt(Math.PI);
 
         final double sigma = 987.654321;
@@ -109,6 +110,6 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = sigma2;
-        Assertions.assertEquals(expected, result, 10 * FastMath.ulp(expected));
+        assertEquals(expected, result, 10 * FastMath.ulp(expected));
     }
 }

@@ -69,10 +69,10 @@ public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstr
 
     @ParameterizedTest
     @MethodSource("getParameters")
-    public void testAllMonomials(int numberOfPoints,
-                                 int maxDegree,
-                                 double eps,
-                                 double numUlps) {
+    void testAllMonomials(int numberOfPoints,
+        int maxDegree,
+        double eps,
+        double numUlps) {
         super.testAllMonomials(factory.legendreHighPrecision(numberOfPoints),
                                maxDegree, eps, numUlps);
     }

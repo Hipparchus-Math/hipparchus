@@ -25,85 +25,88 @@ import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DiskGeneratorTest {
+
+class DiskGeneratorTest {
 
     @Test
-    public void testSupport0Point() {
+    void testSupport0Point() {
         List<Vector2D> support = Arrays.asList(new Vector2D[0]);
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
-        Assertions.assertTrue(disk.getRadius() < 0);
-        Assertions.assertEquals(0, disk.getSupportSize());
-        Assertions.assertEquals(0, disk.getSupport().length);
+        assertTrue(disk.getRadius() < 0);
+        assertEquals(0, disk.getSupportSize());
+        assertEquals(0, disk.getSupport().length);
     }
 
     @Test
-    public void testSupport1Point() {
+    void testSupport1Point() {
         List<Vector2D> support = Arrays.asList(new Vector2D(1, 2));
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
-        Assertions.assertEquals(0.0, disk.getRadius(), 1.0e-10);
-        Assertions.assertTrue(disk.contains(support.get(0)));
-        Assertions.assertTrue(disk.contains(support.get(0), 0.5));
-        Assertions.assertFalse(disk.contains(new Vector2D(support.get(0).getX() + 0.1,
+        assertEquals(0.0, disk.getRadius(), 1.0e-10);
+        assertTrue(disk.contains(support.get(0)));
+        assertTrue(disk.contains(support.get(0), 0.5));
+        assertFalse(disk.contains(new Vector2D(support.get(0).getX() + 0.1,
                                                       support.get(0).getY() - 0.1),
                                          0.001));
-        Assertions.assertTrue(disk.contains(new Vector2D(support.get(0).getX() + 0.1,
+        assertTrue(disk.contains(new Vector2D(support.get(0).getX() + 0.1,
                                                      support.get(0).getY() - 0.1),
                                         0.5));
-        Assertions.assertEquals(0, support.get(0).distance(disk.getCenter()), 1.0e-10);
-        Assertions.assertEquals(1, disk.getSupportSize());
-        Assertions.assertTrue(support.get(0) == disk.getSupport()[0]);
+        assertEquals(0, support.get(0).distance(disk.getCenter()), 1.0e-10);
+        assertEquals(1, disk.getSupportSize());
+        assertTrue(support.get(0) == disk.getSupport()[0]);
     }
 
     @Test
-    public void testSupport2Points() {
+    void testSupport2Points() {
         List<Vector2D> support = Arrays.asList(new Vector2D(1, 0),
                                                new Vector2D(3, 0));
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
-        Assertions.assertEquals(1.0, disk.getRadius(), 1.0e-10);
+        assertEquals(1.0, disk.getRadius(), 1.0e-10);
         int i = 0;
         for (Vector2D v : support) {
-            Assertions.assertTrue(disk.contains(v));
-            Assertions.assertEquals(1.0, v.distance(disk.getCenter()), 1.0e-10);
-            Assertions.assertTrue(v == disk.getSupport()[i++]);
+            assertTrue(disk.contains(v));
+            assertEquals(1.0, v.distance(disk.getCenter()), 1.0e-10);
+            assertTrue(v == disk.getSupport()[i++]);
         }
-        Assertions.assertTrue(disk.contains(new Vector2D(2, 0.9)));
-        Assertions.assertFalse(disk.contains(Vector2D.ZERO));
-        Assertions.assertEquals(0.0, new Vector2D(2, 0).distance(disk.getCenter()), 1.0e-10);
-        Assertions.assertEquals(2, disk.getSupportSize());
+        assertTrue(disk.contains(new Vector2D(2, 0.9)));
+        assertFalse(disk.contains(Vector2D.ZERO));
+        assertEquals(0.0, new Vector2D(2, 0).distance(disk.getCenter()), 1.0e-10);
+        assertEquals(2, disk.getSupportSize());
     }
 
     @Test
-    public void testSupport3Points() {
+    void testSupport3Points() {
         List<Vector2D> support = Arrays.asList(new Vector2D(1, 0),
                                                new Vector2D(3, 0),
                                                new Vector2D(2, 2));
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
-        Assertions.assertEquals(5.0 / 4.0, disk.getRadius(), 1.0e-10);
+        assertEquals(5.0 / 4.0, disk.getRadius(), 1.0e-10);
         int i = 0;
         for (Vector2D v : support) {
-            Assertions.assertTrue(disk.contains(v));
-            Assertions.assertEquals(5.0 / 4.0, v.distance(disk.getCenter()), 1.0e-10);
-            Assertions.assertTrue(v == disk.getSupport()[i++]);
+            assertTrue(disk.contains(v));
+            assertEquals(5.0 / 4.0, v.distance(disk.getCenter()), 1.0e-10);
+            assertTrue(v == disk.getSupport()[i++]);
         }
-        Assertions.assertTrue(disk.contains(new Vector2D(2, 0.9)));
-        Assertions.assertFalse(disk.contains(new Vector2D(0.9,  0)));
-        Assertions.assertFalse(disk.contains(new Vector2D(3.1,  0)));
-        Assertions.assertTrue(disk.contains(new Vector2D(2.0, -0.499)));
-        Assertions.assertFalse(disk.contains(new Vector2D(2.0, -0.501)));
-        Assertions.assertEquals(0.0, new Vector2D(2.0, 3.0 / 4.0).distance(disk.getCenter()), 1.0e-10);
-        Assertions.assertEquals(3, disk.getSupportSize());
+        assertTrue(disk.contains(new Vector2D(2, 0.9)));
+        assertFalse(disk.contains(new Vector2D(0.9,  0)));
+        assertFalse(disk.contains(new Vector2D(3.1,  0)));
+        assertTrue(disk.contains(new Vector2D(2.0, -0.499)));
+        assertFalse(disk.contains(new Vector2D(2.0, -0.501)));
+        assertEquals(0.0, new Vector2D(2.0, 3.0 / 4.0).distance(disk.getCenter()), 1.0e-10);
+        assertEquals(3, disk.getSupportSize());
     }
 
     @Test
-    public void testRandom() {
+    void testRandom() {
         final RandomGenerator random = new Well1024a(0x12faa818373ffe90l);
         final UnitSphereRandomVectorGenerator sr = new UnitSphereRandomVectorGenerator(2, random);
         for (int i = 0; i < 500; ++i) {
@@ -115,8 +118,8 @@ public class DiskGeneratorTest {
                 support.add(new Vector2D(1.0, refCenter, refRadius, new Vector2D(sr.nextVector())));
             }
             EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
-            Assertions.assertEquals(0.0, refCenter.distance(disk.getCenter()), 3e-9 * refRadius);
-            Assertions.assertEquals(refRadius, disk.getRadius(), 7e-10 * refRadius);
+            assertEquals(0.0, refCenter.distance(disk.getCenter()), 3e-9 * refRadius);
+            assertEquals(refRadius, disk.getRadius(), 7e-10 * refRadius);
         }
 
     }

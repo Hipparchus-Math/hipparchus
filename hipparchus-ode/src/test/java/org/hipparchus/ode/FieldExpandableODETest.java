@@ -27,23 +27,24 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class FieldExpandableODETest {
+class FieldExpandableODETest {
 
     @Test
-    public void testOnlyMainEquation() {
+    void testOnlyMainEquation() {
         doTestOnlyMainEquation(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestOnlyMainEquation(final Field<T> field) {
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
-        Assertions.assertEquals(main.getDimension(), equation.getMapper().getTotalDimension());
-        Assertions.assertEquals(1, equation.getMapper().getNumberOfEquations());
+        assertEquals(main.getDimension(), equation.getMapper().getTotalDimension());
+        assertEquals(1, equation.getMapper().getNumberOfEquations());
         T t0 = field.getZero().add(10);
         T t  = field.getZero().add(100);
         T[] complete    = MathArrays.buildArray(field, equation.getMapper().getTotalDimension());
@@ -53,19 +54,19 @@ public class FieldExpandableODETest {
         T[] completeDot = equation.computeDerivatives(t0, complete);
         equation.init(equation.getMapper().mapStateAndDerivative(t0, complete, completeDot), t);
         FieldODEStateAndDerivative<T> state = equation.getMapper().mapStateAndDerivative(t0, complete, completeDot);
-        Assertions.assertEquals(0, state.getNumberOfSecondaryStates());
+        assertEquals(0, state.getNumberOfSecondaryStates());
         T[] mainState    = state.getPrimaryState();
         T[] mainStateDot = state.getPrimaryDerivative();
-        Assertions.assertEquals(main.getDimension(), mainState.length);
+        assertEquals(main.getDimension(), mainState.length);
         for (int i = 0; i < main.getDimension(); ++i) {
-            Assertions.assertEquals(i, mainState[i].getReal(),   1.0e-15);
-            Assertions.assertEquals(i, mainStateDot[i].getReal(), 1.0e-15);
-            Assertions.assertEquals(i, completeDot[i].getReal(),  1.0e-15);
+            assertEquals(i, mainState[i].getReal(),   1.0e-15);
+            assertEquals(i, mainStateDot[i].getReal(), 1.0e-15);
+            assertEquals(i, completeDot[i].getReal(),  1.0e-15);
         }
     }
 
     @Test
-    public void testPrimaryAndSecondary() {
+    void testPrimaryAndSecondary() {
         doTestPrimaryAndSecondary(Binary64Field.getInstance());
     }
 
@@ -77,11 +78,11 @@ public class FieldExpandableODETest {
         int i1 = equation.addSecondaryEquations(secondary1);
         FieldSecondaryODE<T> secondary2 = new Linear<T>(field, 5, main.getDimension() + secondary1.getDimension());
         int i2 = equation.addSecondaryEquations(secondary2);
-        Assertions.assertEquals(main.getDimension() + secondary1.getDimension() + secondary2.getDimension(),
+        assertEquals(main.getDimension() + secondary1.getDimension() + secondary2.getDimension(),
                             equation.getMapper().getTotalDimension());
-        Assertions.assertEquals(3, equation.getMapper().getNumberOfEquations());
-        Assertions.assertEquals(1, i1);
-        Assertions.assertEquals(2, i2);
+        assertEquals(3, equation.getMapper().getNumberOfEquations());
+        assertEquals(1, i1);
+        assertEquals(2, i2);
 
         T t0 = field.getZero().add(10);
         T t  = field.getZero().add(100);
@@ -94,35 +95,35 @@ public class FieldExpandableODETest {
 
         T[] mainState    = equation.getMapper().extractEquationData(0,  complete);
         T[] mainStateDot = equation.getMapper().extractEquationData(0,  completeDot);
-        Assertions.assertEquals(main.getDimension(), mainState.length);
+        assertEquals(main.getDimension(), mainState.length);
         for (int i = 0; i < main.getDimension(); ++i) {
-            Assertions.assertEquals(i, mainState[i].getReal(),   1.0e-15);
-            Assertions.assertEquals(i, mainStateDot[i].getReal(), 1.0e-15);
-            Assertions.assertEquals(i, completeDot[i].getReal(),  1.0e-15);
+            assertEquals(i, mainState[i].getReal(),   1.0e-15);
+            assertEquals(i, mainStateDot[i].getReal(), 1.0e-15);
+            assertEquals(i, completeDot[i].getReal(),  1.0e-15);
         }
 
         T[] secondaryState1    = equation.getMapper().extractEquationData(i1,  complete);
         T[] secondaryState1Dot = equation.getMapper().extractEquationData(i1,  completeDot);
-        Assertions.assertEquals(secondary1.getDimension(), secondaryState1.length);
+        assertEquals(secondary1.getDimension(), secondaryState1.length);
         for (int i = 0; i < secondary1.getDimension(); ++i) {
-            Assertions.assertEquals(i + main.getDimension(), secondaryState1[i].getReal(),   1.0e-15);
-            Assertions.assertEquals(-i, secondaryState1Dot[i].getReal(), 1.0e-15);
-            Assertions.assertEquals(-i, completeDot[i + main.getDimension()].getReal(),  1.0e-15);
+            assertEquals(i + main.getDimension(), secondaryState1[i].getReal(),   1.0e-15);
+            assertEquals(-i, secondaryState1Dot[i].getReal(), 1.0e-15);
+            assertEquals(-i, completeDot[i + main.getDimension()].getReal(),  1.0e-15);
         }
 
         T[] secondaryState2    = equation.getMapper().extractEquationData(i2,  complete);
         T[] secondaryState2Dot = equation.getMapper().extractEquationData(i2,  completeDot);
-        Assertions.assertEquals(secondary2.getDimension(), secondaryState2.length);
+        assertEquals(secondary2.getDimension(), secondaryState2.length);
         for (int i = 0; i < secondary2.getDimension(); ++i) {
-            Assertions.assertEquals(i + main.getDimension() + secondary1.getDimension(), secondaryState2[i].getReal(),   1.0e-15);
-            Assertions.assertEquals(-i, secondaryState2Dot[i].getReal(), 1.0e-15);
-            Assertions.assertEquals(-i, completeDot[i + main.getDimension() + secondary1.getDimension()].getReal(),  1.0e-15);
+            assertEquals(i + main.getDimension() + secondary1.getDimension(), secondaryState2[i].getReal(),   1.0e-15);
+            assertEquals(-i, secondaryState2Dot[i].getReal(), 1.0e-15);
+            assertEquals(-i, completeDot[i + main.getDimension() + secondary1.getDimension()].getReal(),  1.0e-15);
         }
 
     }
 
     @Test
-    public void testMap() {
+    void testMap() {
         doTestMap(Binary64Field.getInstance());
     }
 
@@ -134,11 +135,11 @@ public class FieldExpandableODETest {
         int i1 = equation.addSecondaryEquations(secondary1);
         FieldSecondaryODE<T> secondary2 = new Linear<T>(field, 5, main.getDimension() + secondary1.getDimension());
         int i2 = equation.addSecondaryEquations(secondary2);
-        Assertions.assertEquals(main.getDimension() + secondary1.getDimension() + secondary2.getDimension(),
+        assertEquals(main.getDimension() + secondary1.getDimension() + secondary2.getDimension(),
                             equation.getMapper().getTotalDimension());
-        Assertions.assertEquals(3, equation.getMapper().getNumberOfEquations());
-        Assertions.assertEquals(1, i1);
-        Assertions.assertEquals(2, i2);
+        assertEquals(3, equation.getMapper().getNumberOfEquations());
+        assertEquals(1, i1);
+        assertEquals(2, i2);
 
         T t0 = field.getZero().add(10);
         T t  = field.getZero().add(100);
@@ -151,65 +152,65 @@ public class FieldExpandableODETest {
 
         try {
             equation.getMapper().mapStateAndDerivative(t0, MathArrays.buildArray(field, complete.length + 1), completeDot);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException dme) {
             // expected
         }
         try {
             equation.getMapper().mapStateAndDerivative(t0, complete, MathArrays.buildArray(field, completeDot.length + 1));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException dme) {
             // expected
         }
         FieldODEStateAndDerivative<T> state = equation.getMapper().mapStateAndDerivative(t0, complete, completeDot);
-        Assertions.assertEquals(2, state.getNumberOfSecondaryStates());
-        Assertions.assertEquals(main.getDimension(),       state.getSecondaryStateDimension(0));
-        Assertions.assertEquals(secondary1.getDimension(), state.getSecondaryStateDimension(i1));
-        Assertions.assertEquals(secondary2.getDimension(), state.getSecondaryStateDimension(i2));
+        assertEquals(2, state.getNumberOfSecondaryStates());
+        assertEquals(main.getDimension(),       state.getSecondaryStateDimension(0));
+        assertEquals(secondary1.getDimension(), state.getSecondaryStateDimension(i1));
+        assertEquals(secondary2.getDimension(), state.getSecondaryStateDimension(i2));
 
         T[] mainState             = state.getPrimaryState();
         T[] mainStateDot          = state.getPrimaryDerivative();
         T[] mainStateAlternate    = state.getSecondaryState(0);
         T[] mainStateDotAlternate = state.getSecondaryDerivative(0);
-        Assertions.assertEquals(main.getDimension(), mainState.length);
+        assertEquals(main.getDimension(), mainState.length);
         for (int i = 0; i < main.getDimension(); ++i) {
-            Assertions.assertEquals(i, mainState[i].getReal(),             1.0e-15);
-            Assertions.assertEquals(i, mainStateDot[i].getReal(),          1.0e-15);
-            Assertions.assertEquals(i, mainStateAlternate[i].getReal(),    1.0e-15);
-            Assertions.assertEquals(i, mainStateDotAlternate[i].getReal(), 1.0e-15);
-            Assertions.assertEquals(i, completeDot[i].getReal(),           1.0e-15);
+            assertEquals(i, mainState[i].getReal(),             1.0e-15);
+            assertEquals(i, mainStateDot[i].getReal(),          1.0e-15);
+            assertEquals(i, mainStateAlternate[i].getReal(),    1.0e-15);
+            assertEquals(i, mainStateDotAlternate[i].getReal(), 1.0e-15);
+            assertEquals(i, completeDot[i].getReal(),           1.0e-15);
         }
 
         T[] secondaryState1    = state.getSecondaryState(i1);
         T[] secondaryState1Dot = state.getSecondaryDerivative(i1);
-        Assertions.assertEquals(secondary1.getDimension(), secondaryState1.length);
+        assertEquals(secondary1.getDimension(), secondaryState1.length);
         for (int i = 0; i < secondary1.getDimension(); ++i) {
-            Assertions.assertEquals(i + main.getDimension(), secondaryState1[i].getReal(),   1.0e-15);
-            Assertions.assertEquals(-i, secondaryState1Dot[i].getReal(), 1.0e-15);
-            Assertions.assertEquals(-i, completeDot[i + main.getDimension()].getReal(),  1.0e-15);
+            assertEquals(i + main.getDimension(), secondaryState1[i].getReal(),   1.0e-15);
+            assertEquals(-i, secondaryState1Dot[i].getReal(), 1.0e-15);
+            assertEquals(-i, completeDot[i + main.getDimension()].getReal(),  1.0e-15);
         }
 
         T[] secondaryState2    = state.getSecondaryState(i2);
         T[] secondaryState2Dot = state.getSecondaryDerivative(i2);
-        Assertions.assertEquals(secondary2.getDimension(), secondaryState2.length);
+        assertEquals(secondary2.getDimension(), secondaryState2.length);
         for (int i = 0; i < secondary2.getDimension(); ++i) {
-            Assertions.assertEquals(i + main.getDimension() + secondary1.getDimension(), secondaryState2[i].getReal(),   1.0e-15);
-            Assertions.assertEquals(-i, secondaryState2Dot[i].getReal(), 1.0e-15);
-            Assertions.assertEquals(-i, completeDot[i + main.getDimension() + secondary1.getDimension()].getReal(),  1.0e-15);
+            assertEquals(i + main.getDimension() + secondary1.getDimension(), secondaryState2[i].getReal(),   1.0e-15);
+            assertEquals(-i, secondaryState2Dot[i].getReal(), 1.0e-15);
+            assertEquals(-i, completeDot[i + main.getDimension() + secondary1.getDimension()].getReal(),  1.0e-15);
         }
 
         T[] remappedState = state.getCompleteState();
         T[] remappedDerivative = state.getCompleteDerivative();
-        Assertions.assertEquals(equation.getMapper().getTotalDimension(), remappedState.length);
-        Assertions.assertEquals(equation.getMapper().getTotalDimension(), remappedDerivative.length);
+        assertEquals(equation.getMapper().getTotalDimension(), remappedState.length);
+        assertEquals(equation.getMapper().getTotalDimension(), remappedDerivative.length);
         for (int i = 0; i < remappedState.length; ++i) {
-            Assertions.assertEquals(complete[i].getReal(),    remappedState[i].getReal(),      1.0e-15);
-            Assertions.assertEquals(completeDot[i].getReal(), remappedDerivative[i].getReal(), 1.0e-15);
+            assertEquals(complete[i].getReal(),    remappedState[i].getReal(),      1.0e-15);
+            assertEquals(completeDot[i].getReal(), remappedDerivative[i].getReal(), 1.0e-15);
         }
     }
 
     @Test
-    public void testExtractDimensionMismatch() {
+    void testExtractDimensionMismatch() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             doTestExtractDimensionMismatch(Binary64Field.getInstance());
         });
@@ -227,7 +228,7 @@ public class FieldExpandableODETest {
     }
 
     @Test
-    public void testInsertTooShortComplete() {
+    void testInsertTooShortComplete() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             doTestInsertTooShortComplete(Binary64Field.getInstance());
         });
@@ -246,7 +247,7 @@ public class FieldExpandableODETest {
     }
 
     @Test
-    public void testInsertWrongEquationData() {
+    void testInsertWrongEquationData() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             doTestInsertWrongEquationData(Binary64Field.getInstance());
         });
@@ -265,7 +266,7 @@ public class FieldExpandableODETest {
     }
 
     @Test
-    public void testNegativeIndex() {
+    void testNegativeIndex() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             doTestNegativeIndex(Binary64Field.getInstance());
         });
@@ -281,7 +282,7 @@ public class FieldExpandableODETest {
     }
 
     @Test
-    public void testTooLargeIndex() {
+    void testTooLargeIndex() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             doTestTooLargeIndex(Binary64Field.getInstance());
         });
@@ -314,11 +315,11 @@ public class FieldExpandableODETest {
         }
 
         public void init(final T t0, final T[] y0, final T finalTime) {
-            Assertions.assertEquals(dimension, y0.length);
-            Assertions.assertEquals(10.0,  t0.getReal(), 1.0e-15);
-            Assertions.assertEquals(100.0, finalTime.getReal(), 1.0e-15);
+            assertEquals(dimension, y0.length);
+            assertEquals(10.0,  t0.getReal(), 1.0e-15);
+            assertEquals(100.0, finalTime.getReal(), 1.0e-15);
             for (int i = 0; i < y0.length; ++i) {
-                Assertions.assertEquals(i, y0[i].getReal(), 1.0e-15);
+                assertEquals(i, y0[i].getReal(), 1.0e-15);
             }
         }
 
@@ -331,14 +332,14 @@ public class FieldExpandableODETest {
         }
 
         public void init(final T t0, final T[] primary0, final T[] secondary0, final T finalTime) {
-            Assertions.assertEquals(dimension, secondary0.length);
-            Assertions.assertEquals(10.0,  t0.getReal(), 1.0e-15);
-            Assertions.assertEquals(100.0, finalTime.getReal(), 1.0e-15);
+            assertEquals(dimension, secondary0.length);
+            assertEquals(10.0,  t0.getReal(), 1.0e-15);
+            assertEquals(100.0, finalTime.getReal(), 1.0e-15);
             for (int i = 0; i < primary0.length; ++i) {
-                Assertions.assertEquals(i, primary0[i].getReal(), 1.0e-15);
+                assertEquals(i, primary0[i].getReal(), 1.0e-15);
             }
             for (int i = 0; i < secondary0.length; ++i) {
-                Assertions.assertEquals(start + i, secondary0[i].getReal(), 1.0e-15);
+                assertEquals(start + i, secondary0[i].getReal(), 1.0e-15);
             }
         }
 

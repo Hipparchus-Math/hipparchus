@@ -23,187 +23,190 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class FunctionsWithFastMathVersionTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class FunctionsWithFastMathVersionTest {
 
     @Test
-    public void testAcos() {
+    void testAcos() {
         doTestF0(new Acos(), -1.25, -0.25, 0.0, 0.25, 1.25);
         doTestFn(new Acos(), -1.25, -0.25, 0.0, 0.25, 1.25);
         doTestF1(new Acos(), -1.25, -0.25, 0.0, 0.25, 1.25);
     }
 
     @Test
-    public void testAcosH() {
+    void testAcosH() {
         doTestF0(new Acosh(), -10.0, -5.0, -0.5, 0.5, 5.0, 10.0);
         doTestFn(new Acosh(), -10.0, -5.0, -0.5, 0.5, 5.0, 10.0);
         doTestF1(new Acosh(), -10.0, -5.0, -0.5, 0.5, 5.0, 10.0);
     }
 
     @Test
-    public void testAsin() {
+    void testAsin() {
         doTestF0(new Asin(), -1.25, -0.25, 0.0, 0.25, 1.25);
         doTestFn(new Asin(), -1.25, -0.25, 0.0, 0.25, 1.25);
         doTestF1(new Asin(), -1.25, -0.25, 0.0, 0.25, 1.25);
     }
 
     @Test
-    public void testAsinh() {
+    void testAsinh() {
         doTestF0(new Asinh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Asinh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Asinh(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testAtan() {
+    void testAtan() {
         doTestF0(new Atan(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Atan(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Atan(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testAtanh() {
+    void testAtanh() {
         doTestF0(new Atanh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Atanh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Atanh(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testCbrt() {
+    void testCbrt() {
         doTestF0(new Cbrt(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Cbrt(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Cbrt(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testCeil() {
+    void testCeil() {
         doTestF0(new Ceil(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Ceil(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Ceil(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testCos() {
+    void testCos() {
         doTestF0(new Cos(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Cos(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Cos(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testCosh() {
+    void testCosh() {
         doTestF0(new Cosh(), -10.0, -1.25, -0.5, 0.0, 0.5, 1.25, 10.0);
         doTestFn(new Cosh(), -10.0, -1.25, -0.5, 0.0, 0.5, 1.25, 10.0);
         doTestF1(new Cosh(), -10.0, -1.25, -0.5, 0.0, 0.5, 1.25, 10.0);
     }
 
     @Test
-    public void testExp() {
+    void testExp() {
         doTestF0(new Exp(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Exp(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Exp(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testExpm1() {
+    void testExpm1() {
         doTestF0(new Expm1(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Expm1(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Expm1(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testFloor() {
+    void testFloor() {
         doTestF0(new Floor(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Floor(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Floor(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testLog() {
+    void testLog() {
         doTestF0(new Log(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Log(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Log(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testLog10() {
+    void testLog10() {
         doTestF0(new Log10(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Log10(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Log10(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testLog1p() {
+    void testLog1p() {
         doTestF0(new Log1p(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Log1p(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Log1p(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testRint() {
+    void testRint() {
         doTestF0(new Rint(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Rint(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Rint(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testSin() {
+    void testSin() {
         doTestF0(new Sin(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Sin(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Sin(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testSinh() {
+    void testSinh() {
         doTestF0(new Sinh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Sinh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Sinh(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testSqrt() {
+    void testSqrt() {
         doTestF0(new Sqrt(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Sqrt(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Sqrt(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testTan() {
+    void testTan() {
         doTestF0(new Tan(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Tan(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Tan(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testTanh() {
+    void testTanh() {
         doTestF0(new Tanh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Tanh(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestF1(new Tanh(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testUlp() {
+    void testUlp() {
         doTestF0(new Ulp(), -10.0, -1.25, 0.0, 1.25, 10.0);
     }
 
     @Test
-    public void testAtan2() {
+    void testAtan2() {
         final double[] d = { Double.NEGATIVE_INFINITY, -13.4, -0.4, 0.0, 0.4, 13.4, Double.POSITIVE_INFINITY, Double.NaN};
         for (double x : d) {
             for (double y : d) {
                 double aRef = FastMath.atan2(y, x);
                 double a    = new Atan2().value(y, x);
                 if (Double.isNaN(aRef)) {
-                    Assertions.assertTrue(Double.isNaN(a));
+                    assertTrue(Double.isNaN(a));
                 } else if (Double.isInfinite(aRef)) {
-                    Assertions.assertTrue(Double.isInfinite(a));
-                    Assertions.assertTrue(a * aRef > 0.0);
+                    assertTrue(Double.isInfinite(a));
+                    assertTrue(a * aRef > 0.0);
                 } else {
-                    Assertions.assertEquals(aRef, a, FastMath.ulp(aRef));
+                    assertEquals(aRef, a, FastMath.ulp(aRef));
                 }
             }
         }
@@ -219,7 +222,7 @@ public class FunctionsWithFastMathVersionTest {
             checkF0Equality(f, fastMathVersion, Double.POSITIVE_INFINITY);
             checkF0Equality(f, fastMathVersion, Double.NaN);
         } catch (NoSuchMethodException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 
@@ -228,15 +231,15 @@ public class FunctionsWithFastMathVersionTest {
             double yRef = ((Double) ref.invoke(null, x)).doubleValue();
             double y    = f.value(x);
             if (Double.isNaN(yRef)) {
-                Assertions.assertTrue(Double.isNaN(y));
+                assertTrue(Double.isNaN(y));
             } else if (Double.isInfinite(yRef)) {
-                Assertions.assertTrue(Double.isInfinite(y));
-                Assertions.assertTrue(y * yRef > 0.0);
+                assertTrue(Double.isInfinite(y));
+                assertTrue(y * yRef > 0.0);
             } else {
-                Assertions.assertEquals(yRef, y, FastMath.ulp(yRef));
+                assertEquals(yRef, y, FastMath.ulp(yRef));
             }
         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 
@@ -251,7 +254,7 @@ public class FunctionsWithFastMathVersionTest {
             checkFnEqualities(f, fastMathVersion, Double.POSITIVE_INFINITY);
             checkFnEqualities(f, fastMathVersion, Double.NaN);
         } catch (NoSuchMethodException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 
@@ -263,16 +266,16 @@ public class FunctionsWithFastMathVersionTest {
             DerivativeStructure y       = f.value(xDS);
             for (int order = 0; order < factory.getCompiler().getOrder(); ++order) {
                 if (Double.isNaN(yRef.getPartialDerivative(order))) {
-                    Assertions.assertTrue(Double.isNaN(y.getPartialDerivative(order)));
+                    assertTrue(Double.isNaN(y.getPartialDerivative(order)));
                 } else if (Double.isInfinite(yRef.getPartialDerivative(order))) {
-                    Assertions.assertTrue(Double.isInfinite(y.getPartialDerivative(order)));
-                    Assertions.assertTrue(y.getPartialDerivative(order) * yRef.getPartialDerivative(order) > 0.0);
+                    assertTrue(Double.isInfinite(y.getPartialDerivative(order)));
+                    assertTrue(y.getPartialDerivative(order) * yRef.getPartialDerivative(order) > 0.0);
                 } else {
-                    Assertions.assertEquals(yRef.getPartialDerivative(order), y.getPartialDerivative(order), FastMath.ulp(yRef.getPartialDerivative(order)));
+                    assertEquals(yRef.getPartialDerivative(order), y.getPartialDerivative(order), FastMath.ulp(yRef.getPartialDerivative(order)));
                 }
             }
         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 
@@ -287,7 +290,7 @@ public class FunctionsWithFastMathVersionTest {
             checkF1Equalities(f, fastMathVersion, Double.POSITIVE_INFINITY);
             checkF1Equalities(f, fastMathVersion, Double.NaN);
         } catch (NoSuchMethodException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 
@@ -297,15 +300,15 @@ public class FunctionsWithFastMathVersionTest {
             Gradient yRef    = (Gradient) ref.invoke(null, xDS);
             Gradient y       = f.value(xDS);
             if (Double.isNaN(yRef.getPartialDerivative(0))) {
-                Assertions.assertTrue(Double.isNaN(y.getPartialDerivative(0)));
+                assertTrue(Double.isNaN(y.getPartialDerivative(0)));
             } else if (Double.isInfinite(yRef.getPartialDerivative(0))) {
-                Assertions.assertTrue(Double.isInfinite(y.getPartialDerivative(0)));
-                Assertions.assertTrue(y.getPartialDerivative(0) * yRef.getPartialDerivative(0) > 0.0);
+                assertTrue(Double.isInfinite(y.getPartialDerivative(0)));
+                assertTrue(y.getPartialDerivative(0) * yRef.getPartialDerivative(0) > 0.0);
             } else {
-                Assertions.assertEquals(yRef.getPartialDerivative(0), y.getPartialDerivative(0), FastMath.ulp(yRef.getPartialDerivative(0)));
+                assertEquals(yRef.getPartialDerivative(0), y.getPartialDerivative(0), FastMath.ulp(yRef.getPartialDerivative(0)));
             }
         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 

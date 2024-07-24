@@ -29,14 +29,17 @@ import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class MultiStartUnivariateOptimizerTest {
+class MultiStartUnivariateOptimizerTest {
     @Test
-    public void testMissingMaxEval() {
+    void testMissingMaxEval() {
         assertThrows(MathIllegalStateException.class, () -> {
             UnivariateOptimizer underlying = new BrentOptimizer(1e-10, 1e-14);
             JDKRandomGenerator g = new JDKRandomGenerator();
@@ -47,8 +50,9 @@ public class MultiStartUnivariateOptimizerTest {
                 new SearchInterval(-1, 1));
         });
     }
+
     @Test
-    public void testMissingSearchInterval() {
+    void testMissingSearchInterval() {
         assertThrows(MathIllegalStateException.class, () -> {
             UnivariateOptimizer underlying = new BrentOptimizer(1e-10, 1e-14);
             JDKRandomGenerator g = new JDKRandomGenerator();
@@ -61,7 +65,7 @@ public class MultiStartUnivariateOptimizerTest {
     }
 
     @Test
-    public void testSinMin() {
+    void testSinMin() {
         UnivariateFunction f = new Sin();
         UnivariateOptimizer underlying = new BrentOptimizer(1e-10, 1e-14);
         JDKRandomGenerator g = new JDKRandomGenerator();
@@ -74,16 +78,16 @@ public class MultiStartUnivariateOptimizerTest {
         UnivariatePointValuePair[] optima = optimizer.getOptima();
         for (int i = 1; i < optima.length; ++i) {
             double d = (optima[i].getPoint() - optima[i-1].getPoint()) / (2 * FastMath.PI);
-            Assertions.assertTrue(FastMath.abs(d - FastMath.rint(d)) < 1.0e-8);
-            Assertions.assertEquals(-1.0, f.value(optima[i].getPoint()), 1.0e-10);
-            Assertions.assertEquals(f.value(optima[i].getPoint()), optima[i].getValue(), 1.0e-10);
+            assertTrue(FastMath.abs(d - FastMath.rint(d)) < 1.0e-8);
+            assertEquals(-1.0, f.value(optima[i].getPoint()), 1.0e-10);
+            assertEquals(f.value(optima[i].getPoint()), optima[i].getValue(), 1.0e-10);
         }
-        Assertions.assertTrue(optimizer.getEvaluations() > 200);
-        Assertions.assertTrue(optimizer.getEvaluations() < 300);
+        assertTrue(optimizer.getEvaluations() > 200);
+        assertTrue(optimizer.getEvaluations() < 300);
     }
 
     @Test
-    public void testQuinticMin() {
+    void testQuinticMin() {
         // The quintic function has zeros at 0, +-0.5 and +-1.
         // The function has extrema (first derivative is zero) at 0.27195613 and 0.82221643,
         UnivariateFunction f = new QuinticFunction();
@@ -97,19 +101,19 @@ public class MultiStartUnivariateOptimizerTest {
                                  new UnivariateObjectiveFunction(f),
                                  GoalType.MINIMIZE,
                                  new SearchInterval(-0.3, -0.2));
-        Assertions.assertEquals(-0.27195613, optimum.getPoint(), 1e-9);
-        Assertions.assertEquals(-0.0443342695, optimum.getValue(), 1e-9);
+        assertEquals(-0.27195613, optimum.getPoint(), 1e-9);
+        assertEquals(-0.0443342695, optimum.getValue(), 1e-9);
 
         UnivariatePointValuePair[] optima = optimizer.getOptima();
         for (int i = 0; i < optima.length; ++i) {
-            Assertions.assertEquals(f.value(optima[i].getPoint()), optima[i].getValue(), 1e-9);
+            assertEquals(f.value(optima[i].getPoint()), optima[i].getValue(), 1e-9);
         }
-        Assertions.assertTrue(optimizer.getEvaluations() >= 50);
-        Assertions.assertTrue(optimizer.getEvaluations() <= 100);
+        assertTrue(optimizer.getEvaluations() >= 50);
+        assertTrue(optimizer.getEvaluations() <= 100);
     }
 
     @Test
-    public void testBadFunction() {
+    void testBadFunction() {
         UnivariateFunction f = new UnivariateFunction() {
                 public double value(double x) {
                     if (x < 0) {
@@ -128,13 +132,13 @@ public class MultiStartUnivariateOptimizerTest {
                                new UnivariateObjectiveFunction(f),
                                GoalType.MINIMIZE,
                                new SearchInterval(-0.3, -0.2));
-            Assertions.fail();
+            fail();
         } catch (LocalException e) {
             // Expected.
         }
 
         // Ensure that the exception was thrown because no optimum was found.
-        Assertions.assertNull(optimizer.getOptima()[0]);
+        assertNull(optimizer.getOptima()[0]);
     }
 
     private static class LocalException extends RuntimeException {

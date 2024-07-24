@@ -25,18 +25,19 @@ import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test of the {@link HermiteRuleFactory}.
  *
  */
-public class FieldHermiteTest {
+class FieldHermiteTest {
     private static final FieldGaussIntegratorFactory<Binary64> factory = new FieldGaussIntegratorFactory<>(Binary64Field.getInstance());
 
     @Test
-    public void testNormalDistribution() {
+    void testNormalDistribution() {
         final Binary64 oneOverSqrtPi = new Binary64(1 / FastMath.sqrt(Math.PI));
 
         // By defintion, Gauss-Hermite quadrature readily provides the
@@ -54,11 +55,11 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = 1;
-        Assertions.assertEquals(expected, result, FastMath.ulp(expected));
+        assertEquals(expected, result, FastMath.ulp(expected));
     }
 
     @Test
-    public void testNormalMean() {
+    void testNormalMean() {
         final Binary64 sqrtTwo = new Binary64(FastMath.sqrt(2));
         final Binary64 oneOverSqrtPi = new Binary64(1 / FastMath.sqrt(Math.PI));
 
@@ -78,11 +79,11 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = mu.getReal();
-        Assertions.assertEquals(expected, result, 5 * FastMath.ulp(expected));
+        assertEquals(expected, result, 5 * FastMath.ulp(expected));
     }
 
     @Test
-    public void testNormalVariance() {
+    void testNormalVariance() {
         final Binary64 twoOverSqrtPi = new Binary64(2 / FastMath.sqrt(Math.PI));
 
         final Binary64 sigma = new Binary64(987.654321);
@@ -101,6 +102,6 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = sigma2.getReal();
-        Assertions.assertEquals(expected, result, 10 * FastMath.ulp(expected));
+        assertEquals(expected, result, 10 * FastMath.ulp(expected));
     }
 }

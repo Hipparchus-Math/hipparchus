@@ -22,7 +22,6 @@
 package org.hipparchus.util;
 
 import org.hipparchus.exception.MathRuntimeException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -33,6 +32,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test to compare FastMath results against StrictMath results for boundary values.
@@ -88,7 +90,7 @@ public class FastMathStrictComparisonTest {
 
     @MethodSource("data")
     @ParameterizedTest
-    public void test1(Method m, Method f, Type[] types, Object[][] data) throws Exception {
+    void test1(Method m, Method f, Type[] types, Object[][] data) throws Exception {
         initFastMathStrictComparisonTest(m, f, types, data);
         setupMethodCall(mathMethod, fastMethod, types, valueArrays);
     }
@@ -156,7 +158,7 @@ public class FastMathStrictComparisonTest {
         String message = sb.toString();
         final boolean fatal = true;
         if (fatal) {
-            Assertions.fail(message);
+            fail(message);
         } else {
             System.out.println(message);
         }
@@ -178,7 +180,7 @@ public class FastMathStrictComparisonTest {
                 actual = ite.getCause();
             }
             if (expected instanceof ArithmeticException) {
-                Assertions.assertEquals(MathRuntimeException.class, actual.getClass());
+                assertEquals(MathRuntimeException.class, actual.getClass());
             } else  if (!expected.equals(actual)) {
                 reportFailedResults(mathMethod, params, expected, actual, entries);
             }
@@ -196,7 +198,7 @@ public class FastMathStrictComparisonTest {
             }
             System.out.println();
             e.printStackTrace();
-            Assertions.fail(mathMethod+" "+e);
+            fail(mathMethod+" "+e);
         }
     }
 

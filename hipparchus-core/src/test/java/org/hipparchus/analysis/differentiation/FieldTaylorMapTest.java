@@ -25,83 +25,85 @@ import org.hipparchus.linear.FieldQRDecomposer;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Test for class {@linkFieldTaylorMap<T>}.
  */
-public class FieldTaylorMapTest {
+class FieldTaylorMapTest {
 
     @Test
-    public void testNullPoint() {
+    void testNullPoint() {
         doTestNullPoint(Binary64Field.getInstance());
     }
 
     @Test
-    public void testDim0Point() {
+    void testDim0Point() {
         doTestDim0Point(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNullFunctions() {
+    void testNullFunctions() {
         doTestNullFunctions(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNoFunctions() {
+    void testNoFunctions() {
         doTestNoFunctions(Binary64Field.getInstance());
     }
 
     @Test
-    public void testIncompatiblePointAndFunctions() {
+    void testIncompatiblePointAndFunctions() {
         doTestIncompatiblePointAndFunctions(Binary64Field.getInstance());
     }
 
     @Test
-    public void testIncompatible() {
+    void testIncompatible() {
         doTestIncompatible(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNbParameters() {
+    void testNbParameters() {
         doTestNbParameters(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNbFunctions() {
+    void testNbFunctions() {
         doTestNbFunctions(Binary64Field.getInstance());
     }
 
     @Test
-    public void testIdentity() {
+    void testIdentity() {
         doTestIdentity(Binary64Field.getInstance());
     }
 
     @Test
-    public void testValue() {
+    void testValue() {
         doTestValue(Binary64Field.getInstance());
     }
 
     @Test
-    public void testCompose() {
+    void testCompose() {
         doTestCompose(Binary64Field.getInstance());
     }
 
     @Test
-    public void testInvertNonSquare() {
+    void testInvertNonSquare() {
         doTestInvertNonSquare(Binary64Field.getInstance());
     }
 
     @Test
-    public void testInvertMonoDimensional() {
+    void testInvertMonoDimensional() {
         doTestInvertMonoDimensional(Binary64Field.getInstance());
     }
 
     @Test
-    public void testInvertBiDimensional() {
+    void testInvertBiDimensional() {
         doTestInvertBiDimensional(Binary64Field.getInstance());
     }
 
@@ -109,10 +111,10 @@ public class FieldTaylorMapTest {
     private <T extends CalculusFieldElement<T>> void doTestNullPoint(final Field<T> field) {
         try {
             new FieldTaylorMap<>(null, (FieldDerivativeStructure<T>[]) Array.newInstance(FieldDerivativeStructure.class, 2));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
@@ -120,20 +122,20 @@ public class FieldTaylorMapTest {
     private <T extends CalculusFieldElement<T>> void doTestDim0Point(final Field<T> field) {
         try {
             new FieldTaylorMap<>(MathArrays.buildArray(field, 0), (FieldDerivativeStructure<T>[]) Array.newInstance(FieldDerivativeStructure.class, 2));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNullFunctions(final Field<T> field) {
         try {
             new FieldTaylorMap<>(MathArrays.buildArray(field, 2), null);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
@@ -141,10 +143,10 @@ public class FieldTaylorMapTest {
     private <T extends CalculusFieldElement<T>> void doTestNoFunctions(final Field<T> field) {
         try {
             new FieldTaylorMap<>(MathArrays.buildArray(field, 2), (FieldDerivativeStructure<T>[]) Array.newInstance(FieldDerivativeStructure.class, 0));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
@@ -158,11 +160,11 @@ public class FieldTaylorMapTest {
         }
         try {
             new FieldTaylorMap<>(MathArrays.buildArray(field, functions.length - 1), functions);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(6, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(6, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -180,11 +182,11 @@ public class FieldTaylorMapTest {
                                           constant(1.0);
         try {
             new FieldTaylorMap<>(MathArrays.buildArray(field, functions.length), functions);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(6, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(5, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(6, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(5, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -198,7 +200,7 @@ public class FieldTaylorMapTest {
         for (int i = 0; i < functions.length; ++i) {
             functions[i] = factory.constant(0);
         }
-        Assertions.assertEquals(nbParameters,
+        assertEquals(nbParameters,
                             new FieldTaylorMap<>(MathArrays.buildArray(field, nbParameters), functions).getFreeParameters());
     }
 
@@ -212,7 +214,7 @@ public class FieldTaylorMapTest {
         for (int i = 0; i < functions.length; ++i) {
             functions[i] = factory.constant(0);
         }
-        Assertions.assertEquals(nbFunctions,
+        assertEquals(nbFunctions,
                             new FieldTaylorMap<>(MathArrays.buildArray(field, nbParameters), functions).getNbFunctions());
     }
 
@@ -222,14 +224,14 @@ public class FieldTaylorMapTest {
 
             final FieldDerivativeStructure<T> mi = map.getFunction(i);
 
-            Assertions.assertEquals(0.0, mi.getValue().getReal(), 1.0e-15);
+            assertEquals(0.0, mi.getValue().getReal(), 1.0e-15);
 
             int[] orders = new int[7];
             orders[i] = 1;
             int expectedOne = mi.getFactory().getCompiler().getPartialDerivativeIndex(orders);
 
             for (int j = 0; j < mi.getFactory().getCompiler().getSize(); ++j) {
-                Assertions.assertEquals(j == expectedOne ? 1.0 : 0.0, mi.getAllDerivatives()[j].getReal(), 1.0e-15);
+                assertEquals(j == expectedOne ? 1.0 : 0.0, mi.getAllDerivatives()[j].getReal(), 1.0e-15);
             }
 
         }
@@ -255,10 +257,10 @@ public class FieldTaylorMapTest {
             final T dp0T = field.getZero().newInstance(dp0);
             for (double dp1 = -0.1; dp1 < 0.1; dp1 += 0.01) {
                 final T dp1T = field.getZero().newInstance(dp1);
-                Assertions.assertEquals(f0.taylor(dp0, dp1).getReal(), map.value(dp0, dp1)[0].getReal(),   1.0e-15);
-                Assertions.assertEquals(f1.taylor(dp0, dp1).getReal(), map.value(dp0, dp1)[1].getReal(),   1.0e-15);
-                Assertions.assertEquals(f0.taylor(dp0, dp1).getReal(), map.value(dp0T, dp1T)[0].getReal(), 1.0e-15);
-                Assertions.assertEquals(f1.taylor(dp0, dp1).getReal(), map.value(dp0T, dp1T)[1].getReal(), 1.0e-15);
+                assertEquals(f0.taylor(dp0, dp1).getReal(), map.value(dp0, dp1)[0].getReal(),   1.0e-15);
+                assertEquals(f1.taylor(dp0, dp1).getReal(), map.value(dp0, dp1)[1].getReal(),   1.0e-15);
+                assertEquals(f0.taylor(dp0, dp1).getReal(), map.value(dp0T, dp1T)[0].getReal(), 1.0e-15);
+                assertEquals(f1.taylor(dp0, dp1).getReal(), map.value(dp0T, dp1T)[1].getReal(), 1.0e-15);
             }
         }
 
@@ -300,55 +302,55 @@ public class FieldTaylorMapTest {
 
         for (double dp0 = -0.1; dp0 < 0.1; dp0 += 0.01) {
             for (double dp1 = -0.1; dp1 < 0.1; dp1 += 0.01) {
-                Assertions.assertEquals(g0.taylor(dp0, dp1).add(g1.taylor(dp0, dp1)).getReal(),
+                assertEquals(g0.taylor(dp0, dp1).add(g1.taylor(dp0, dp1)).getReal(),
                                     composed.value(dp0, dp1)[0].getReal(),
                                     1.0e-15);
-                Assertions.assertEquals(g0.taylor(dp0, dp1).subtract(g1.taylor(dp0, dp1)).add(g2.taylor(dp0, dp1)).getReal(),
+                assertEquals(g0.taylor(dp0, dp1).subtract(g1.taylor(dp0, dp1)).add(g2.taylor(dp0, dp1)).getReal(),
                                     composed.value(dp0, dp1)[1].getReal(),
                                     1.0e-15);
             }
         }
 
-        Assertions.assertEquals(p0.getValue().getReal(), mapG.getPoint()[0].getReal(),     1.0e-15);
-        Assertions.assertEquals(p1.getValue().getReal(), mapG.getPoint()[1].getReal(),     1.0e-15);
-        Assertions.assertEquals(g0.getValue().getReal(), mapF.getPoint()[0].getReal(),     1.0e-15);
-        Assertions.assertEquals(g1.getValue().getReal(), mapF.getPoint()[1].getReal(),     1.0e-15);
-        Assertions.assertEquals(g2.getValue().getReal(), mapF.getPoint()[2].getReal(),     1.0e-15);
-        Assertions.assertEquals(p0.getValue().getReal(), composed.getPoint()[0].getReal(), 1.0e-15);
-        Assertions.assertEquals(p1.getValue().getReal(), composed.getPoint()[1].getReal(), 1.0e-15);
+        assertEquals(p0.getValue().getReal(), mapG.getPoint()[0].getReal(),     1.0e-15);
+        assertEquals(p1.getValue().getReal(), mapG.getPoint()[1].getReal(),     1.0e-15);
+        assertEquals(g0.getValue().getReal(), mapF.getPoint()[0].getReal(),     1.0e-15);
+        assertEquals(g1.getValue().getReal(), mapF.getPoint()[1].getReal(),     1.0e-15);
+        assertEquals(g2.getValue().getReal(), mapF.getPoint()[2].getReal(),     1.0e-15);
+        assertEquals(p0.getValue().getReal(), composed.getPoint()[0].getReal(), 1.0e-15);
+        assertEquals(p1.getValue().getReal(), composed.getPoint()[1].getReal(), 1.0e-15);
 
         // the partial derivatives of f are only (∂f/∂g₀, ∂f/∂g₁, ∂f/∂g₂)
-        Assertions.assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(0, 1, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals(-1.0, mapF.getFunction(1).getPartialDerivative(0, 1, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(0, 0, 1).getReal(), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(0, 1, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 1).getReal(), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
+        assertEquals(-1.0, mapF.getFunction(1).getPartialDerivative(0, 1, 0).getReal(), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(0, 0, 1).getReal(), 1.0e-15);
 
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(2, 0, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 1, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 0, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 2, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 1, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 2).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(2, 0, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 1, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 0, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 2, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 1, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 0, 2).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(2, 0, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 1, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 0, 1).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 2, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 1, 1).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 2).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(2, 0, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 1, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 0, 1).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 2, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 1, 1).getReal(), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 0, 2).getReal(), 1.0e-15);
 
         // the partial derivatives of the composed map are (∂f/∂p₀, ∂f/∂p₁)
-        Assertions.assertEquals(FastMath.cos(p0.getValue()).getReal() + 1.0,                           composed.getFunction(0).getPartialDerivative(1, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals(+1.0,                                                                  composed.getFunction(0).getPartialDerivative(0, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals(FastMath.cos(p0.getValue()).getReal() - 1.0 + p1.getValue().getReal(), composed.getFunction(1).getPartialDerivative(1, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals(-1.0 + p0.getValue().getReal(),                                        composed.getFunction(1).getPartialDerivative(0, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals(-FastMath.sin(p0.getValue()).getReal(),                                composed.getFunction(0).getPartialDerivative(2, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0,                                                                  composed.getFunction(0).getPartialDerivative(1, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0,                                                                  composed.getFunction(0).getPartialDerivative(0, 2).getReal(), 1.0e-15);
-        Assertions.assertEquals(-FastMath.sin(p0.getValue()).getReal(),                                composed.getFunction(1).getPartialDerivative(2, 0).getReal(), 1.0e-15);
-        Assertions.assertEquals(+1.0,                                                                  composed.getFunction(1).getPartialDerivative(1, 1).getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0,                                                                  composed.getFunction(1).getPartialDerivative(0, 2).getReal(), 1.0e-15);
+        assertEquals(FastMath.cos(p0.getValue()).getReal() + 1.0,                           composed.getFunction(0).getPartialDerivative(1, 0).getReal(), 1.0e-15);
+        assertEquals(+1.0,                                                                  composed.getFunction(0).getPartialDerivative(0, 1).getReal(), 1.0e-15);
+        assertEquals(FastMath.cos(p0.getValue()).getReal() - 1.0 + p1.getValue().getReal(), composed.getFunction(1).getPartialDerivative(1, 0).getReal(), 1.0e-15);
+        assertEquals(-1.0 + p0.getValue().getReal(),                                        composed.getFunction(1).getPartialDerivative(0, 1).getReal(), 1.0e-15);
+        assertEquals(-FastMath.sin(p0.getValue()).getReal(),                                composed.getFunction(0).getPartialDerivative(2, 0).getReal(), 1.0e-15);
+        assertEquals( 0.0,                                                                  composed.getFunction(0).getPartialDerivative(1, 1).getReal(), 1.0e-15);
+        assertEquals( 0.0,                                                                  composed.getFunction(0).getPartialDerivative(0, 2).getReal(), 1.0e-15);
+        assertEquals(-FastMath.sin(p0.getValue()).getReal(),                                composed.getFunction(1).getPartialDerivative(2, 0).getReal(), 1.0e-15);
+        assertEquals(+1.0,                                                                  composed.getFunction(1).getPartialDerivative(1, 1).getReal(), 1.0e-15);
+        assertEquals( 0.0,                                                                  composed.getFunction(1).getPartialDerivative(0, 2).getReal(), 1.0e-15);
 
     }
 
@@ -365,15 +367,15 @@ public class FieldTaylorMapTest {
         f[1] = p1;
         f[2] = p0.add(p1);
         final FieldTaylorMap<T> nonSquare = new FieldTaylorMap<>(p, f);
-        Assertions.assertEquals(2, nonSquare.getFreeParameters());
-        Assertions.assertEquals(3, nonSquare.getNbFunctions());
+        assertEquals(2, nonSquare.getFreeParameters());
+        assertEquals(3, nonSquare.getNbFunctions());
         try {
             nonSquare.invert(new FieldQRDecomposer<>(field.getZero().newInstance(1.0e-10)));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 

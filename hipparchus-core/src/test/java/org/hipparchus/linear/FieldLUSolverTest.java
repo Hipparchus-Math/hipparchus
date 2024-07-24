@@ -25,8 +25,12 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class FieldLUSolverTest {
     private int[][] testData = {
@@ -68,35 +72,35 @@ public class FieldLUSolverTest {
 
     /** test singular */
     @Test
-    public void testSingular() {
+    void testSingular() {
         FieldDecompositionSolver<Fraction> solver;
         solver = new FieldLUDecomposition<Fraction>(createFractionMatrix(testData))
             .getSolver();
-        Assertions.assertTrue(solver.isNonSingular());
+        assertTrue(solver.isNonSingular());
         solver = new FieldLUDecomposition<Fraction>(createFractionMatrix(singular))
             .getSolver();
-        Assertions.assertFalse(solver.isNonSingular());
+        assertFalse(solver.isNonSingular());
         solver = new FieldLUDecomposition<Fraction>(createFractionMatrix(bigSingular))
             .getSolver();
-        Assertions.assertFalse(solver.isNonSingular());
+        assertFalse(solver.isNonSingular());
     }
 
     /** test solve dimension errors */
     @Test
-    public void testSolveDimensionErrors() {
+    void testSolveDimensionErrors() {
         FieldDecompositionSolver<Fraction> solver;
         solver = new FieldLUDecomposition<Fraction>(createFractionMatrix(testData))
             .getSolver();
         FieldMatrix<Fraction> b = createFractionMatrix(new int[2][2]);
         try {
             solver.solve(b);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
@@ -104,20 +108,20 @@ public class FieldLUSolverTest {
 
     /** test solve singularity errors */
     @Test
-    public void testSolveSingularityErrors() {
+    void testSolveSingularityErrors() {
         FieldDecompositionSolver<Fraction> solver;
         solver = new FieldLUDecomposition<Fraction>(createFractionMatrix(singular))
             .getSolver();
         FieldMatrix<Fraction> b = createFractionMatrix(new int[2][2]);
         try {
             solver.solve(b);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
@@ -125,7 +129,7 @@ public class FieldLUSolverTest {
 
     /** test solve */
     @Test
-    public void testSolve() {
+    void testSolve() {
         FieldDecompositionSolver<Fraction> solver;
         solver = new FieldLUDecomposition<Fraction>(createFractionMatrix(testData))
             .getSolver();
@@ -140,7 +144,7 @@ public class FieldLUSolverTest {
         FieldMatrix<Fraction> x = solver.solve(b);
         for (int i = 0; i < x.getRowDimension(); i++){
             for (int j = 0; j < x.getColumnDimension(); j++){
-                Assertions.assertEquals(xRef.getEntry(i, j), x.getEntry(i, j), "(" + i + ", " + j + ")");
+                assertEquals(xRef.getEntry(i, j), x.getEntry(i, j), "(" + i + ", " + j + ")");
             }
         }
 
@@ -148,7 +152,7 @@ public class FieldLUSolverTest {
         for (int j = 0; j < b.getColumnDimension(); j++) {
             final FieldVector<Fraction> xj = solver.solve(b.getColumnVector(j));
             for (int i = 0; i < xj.getDimension(); i++){
-                Assertions.assertEquals(xRef.getEntry(i, j), xj.getEntry(i), "(" + i + ", " + j + ")");
+                assertEquals(xRef.getEntry(i, j), xj.getEntry(i), "(" + i + ", " + j + ")");
             }
         }
 
@@ -159,18 +163,18 @@ public class FieldLUSolverTest {
                                                  b.getColumn(j));
             final FieldVector<Fraction> xj = solver.solve(bj);
             for (int i = 0; i < xj.getDimension(); i++) {
-                Assertions.assertEquals(xRef.getEntry(i, j), xj.getEntry(i), "(" + i + ", " + j + ")");
+                assertEquals(xRef.getEntry(i, j), xj.getEntry(i), "(" + i + ", " + j + ")");
             }
         }
     }
 
     /** test determinant */
     @Test
-    public void testDeterminant() {
-        Assertions.assertEquals( -1, getDeterminant(createFractionMatrix(testData)), 1E-15);
-        Assertions.assertEquals(-10, getDeterminant(createFractionMatrix(luData)), 1E-14);
-        Assertions.assertEquals(  0, getDeterminant(createFractionMatrix(singular)), 1E-15);
-        Assertions.assertEquals(  0, getDeterminant(createFractionMatrix(bigSingular)), 1E-15);
+    void testDeterminant() {
+        assertEquals( -1, getDeterminant(createFractionMatrix(testData)), 1E-15);
+        assertEquals(-10, getDeterminant(createFractionMatrix(luData)), 1E-14);
+        assertEquals(  0, getDeterminant(createFractionMatrix(singular)), 1E-15);
+        assertEquals(  0, getDeterminant(createFractionMatrix(bigSingular)), 1E-15);
     }
 
     private double getDeterminant(final FieldMatrix<Fraction> m) {

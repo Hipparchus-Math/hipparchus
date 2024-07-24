@@ -23,16 +23,18 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the MannWhitneyUTest class.
  */
 
-public class MannWhitneyUTestTest {
+class MannWhitneyUTestTest {
 
     protected MannWhitneyUTest testStatistic = new MannWhitneyUTest();
 
@@ -55,7 +57,7 @@ public class MannWhitneyUTestTest {
      */
 
     @Test
-    public void testMannWhitneyUSimple() {
+    void testMannWhitneyUSimple() {
         /*
          * Target values computed using R version 3.4.4.
          */
@@ -66,15 +68,15 @@ public class MannWhitneyUTestTest {
             20, 11, 17, 12
         };
 
-        Assertions.assertEquals(3, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.11134688653,
+        assertEquals(3, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.11134688653,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-5);
-        Assertions.assertEquals(0.11111111111,
+        assertEquals(0.11111111111,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-5);
     }
 
     @Test
-    public void testDisjoint() {
+    void testDisjoint() {
         /*
          * Target values computed using R version 3.4.4.
          */
@@ -84,16 +86,16 @@ public class MannWhitneyUTestTest {
         final double[] y = {
             6, 7, 8, 9, 10, 11
         };
-        Assertions.assertEquals(0, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.0081131172656,
+        assertEquals(0, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.0081131172656,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-5);
-        Assertions.assertEquals(0.004329004329,
+        assertEquals(0.004329004329,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-5);
 
     }
 
     @Test
-    public void testMannWhitneyUInputValidation() {
+    void testMannWhitneyUInputValidation() {
         /*
          * Samples must be present, i.e. length > 0
          */
@@ -101,8 +103,7 @@ public class MannWhitneyUTestTest {
             testStatistic.mannWhitneyUTest(new double[] {}, new double[] {
                 1.0
             });
-            Assertions
-                .fail("x does not contain samples (exact), MathIllegalArgumentException expected");
+            fail("x does not contain samples (exact), MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -111,8 +112,7 @@ public class MannWhitneyUTestTest {
             testStatistic.mannWhitneyUTest(new double[] {
                 1.0
             }, new double[] {});
-            Assertions
-                .fail("y does not contain samples (exact), MathIllegalArgumentException expected");
+            fail("y does not contain samples (exact), MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -122,16 +122,14 @@ public class MannWhitneyUTestTest {
          */
         try {
             testStatistic.mannWhitneyUTest(null, null);
-            Assertions
-                .fail("x and y is null (exact), NullArgumentException expected");
+            fail("x and y is null (exact), NullArgumentException expected");
         } catch (NullArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.mannWhitneyUTest(null, null);
-            Assertions
-                .fail("x and y is null (asymptotic), NullArgumentException expected");
+            fail("x and y is null (asymptotic), NullArgumentException expected");
         } catch (NullArgumentException ex) {
             // expected
         }
@@ -143,7 +141,7 @@ public class MannWhitneyUTestTest {
             testStatistic.mannWhitneyUTest(null, new double[] {
                 1.0
             });
-            Assertions.fail("x is null (exact), NullArgumentException expected");
+            fail("x is null (exact), NullArgumentException expected");
         } catch (NullArgumentException ex) {
             // expected
         }
@@ -152,14 +150,14 @@ public class MannWhitneyUTestTest {
             testStatistic.mannWhitneyUTest(new double[] {
                 1.0
             }, null);
-            Assertions.fail("y is null (exact), NullArgumentException expected");
+            fail("y is null (exact), NullArgumentException expected");
         } catch (NullArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testLargeDatasetExact() {
+    void testLargeDatasetExact() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -170,18 +168,18 @@ public class MannWhitneyUTestTest {
             15, 32, 38, 5, 6, 29.1, 31, 73, 88, 70, 50, 60, 93, 112, 190
         };
 
-        Assertions.assertEquals(59, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.027925057353,
+        assertEquals(59, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.027925057353,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
-        Assertions.assertEquals(0.02635404434,
+        assertEquals(0.02635404434,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-9);
         // Should default to exact test
-        Assertions.assertEquals(0.02635404434, testStatistic.mannWhitneyUTest(x, y),
+        assertEquals(0.02635404434, testStatistic.mannWhitneyUTest(x, y),
                             1e-9);
     }
 
     @Test
-    public void testDatasetTooLargeForExact() {
+    void testDatasetTooLargeForExact() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -194,18 +192,18 @@ public class MannWhitneyUTestTest {
             201, 202, 203, 204, 205, 207, 209, 210, 212
         };
 
-        Assertions.assertEquals(204, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.023177956065,
+        assertEquals(204, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.023177956065,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
         // Should default to normal approximation
-        Assertions.assertEquals(0.023177956065,
+        assertEquals(0.023177956065,
                             testStatistic.mannWhitneyUTest(x, y), 1e-9);
-        Assertions.assertEquals(0.022259264963,
+        assertEquals(0.022259264963,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-9);
     }
 
     @Test
-    public void testExactHiP() {
+    void testExactHiP() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -215,16 +213,16 @@ public class MannWhitneyUTestTest {
         final double[] y = {
             1, 3, 5, 7, 9, 11, 13, 15, 17, 19
         };
-        Assertions.assertEquals(45, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.7337299957,
+        assertEquals(45, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.7337299957,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
-        Assertions.assertEquals(0.73936435082,
+        assertEquals(0.73936435082,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-9);
 
     }
 
     @Test
-    public void testExactLarge() {
+    void testExactLarge() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -236,15 +234,15 @@ public class MannWhitneyUTestTest {
             1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35,
             37, 39, 43, 45, 49, 51, 55, 61, 63, 65, 67, 69
         };
-        Assertions.assertEquals(441, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.73459710599,
+        assertEquals(441, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.73459710599,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
-        Assertions.assertEquals(0.73642668965,
+        assertEquals(0.73642668965,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-9);
     }
 
     @Test
-    public void testExactVerySmall() {
+    void testExactVerySmall() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -254,31 +252,31 @@ public class MannWhitneyUTestTest {
         final double[] y = {
             1.5, 2.5
         };
-        Assertions.assertEquals(1, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.66666666667,
+        assertEquals(1, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.66666666667,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-9);
-        Assertions.assertEquals(0.6985353583,
+        assertEquals(0.6985353583,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
 
     }
 
     @Test
-    public void testExactDegenerate() {
+    void testExactDegenerate() {
         final double[] x = {
             1
         };
         final double[] y = {
             1.5
         };
-        Assertions.assertEquals(0, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(1.0,
+        assertEquals(0, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(1.0,
                             testStatistic.mannWhitneyUTest(x, y, true), 1e-9);
-        Assertions.assertEquals(1.0,
+        assertEquals(1.0,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
     }
 
     @Test
-    public void testApproximateWithTies() {
+    void testApproximateWithTies() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -293,14 +291,14 @@ public class MannWhitneyUTestTest {
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
-        Assertions.assertEquals(50.5, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.77784391371,
+        assertEquals(50.5, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.77784391371,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
 
     }
 
     @Test
-    public void testApproximateWithTies2() {
+    void testApproximateWithTies2() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -316,14 +314,14 @@ public class MannWhitneyUTestTest {
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
-        Assertions.assertEquals(142, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(0.72874565042,
+        assertEquals(142, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(0.72874565042,
                             testStatistic.mannWhitneyUTest(x, y, false), 1e-9);
 
     }
 
     @Test
-    public void testIdenticalArrays() {
+    void testIdenticalArrays() {
         /**
          * Expected values computed using R 3.4.4
          */
@@ -338,14 +336,14 @@ public class MannWhitneyUTestTest {
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
-        Assertions.assertEquals(50, testStatistic.mannWhitneyU(x, y), 1e-10);
-        Assertions.assertEquals(1.0, testStatistic.mannWhitneyUTest(x, y, false),
+        assertEquals(50, testStatistic.mannWhitneyU(x, y), 1e-10);
+        assertEquals(1.0, testStatistic.mannWhitneyUTest(x, y, false),
                             1e-10);
 
     }
 
     @Test
-    public void testExactThrowsOnTies() {
+    void testExactThrowsOnTies() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final double[] x = {
                 1, 5, 7
@@ -358,7 +356,7 @@ public class MannWhitneyUTestTest {
     }
 
     @Test
-    public void testBigDataSet() {
+    void testBigDataSet() {
         double[] d1 = new double[1500];
         double[] d2 = new double[1500];
         for (int i = 0; i < 1500; i++) {
@@ -366,11 +364,11 @@ public class MannWhitneyUTestTest {
             d2[i] = 2 * i + 1;
         }
         double result = testStatistic.mannWhitneyUTest(d1, d2);
-        Assertions.assertTrue(result > 0.1);
+        assertTrue(result > 0.1);
     }
 
     @Test
-    public void testBigDataSetOverflow() {
+    void testBigDataSetOverflow() {
         // MATH-1145
         double[] d1 = new double[110000];
         double[] d2 = new double[110000];
@@ -378,7 +376,7 @@ public class MannWhitneyUTestTest {
             d1[i] = i;
             d2[i] = i;
         }
-        Assertions.assertEquals(1.0, testStatistic.mannWhitneyUTest(d1, d2, false),
+        assertEquals(1.0, testStatistic.mannWhitneyUTest(d1, d2, false),
                             1E-7);
     }
 }

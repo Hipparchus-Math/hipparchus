@@ -26,8 +26,11 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.correlation.PearsonsCorrelation;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * MillerUpdatingRegression tests.
@@ -52,14 +55,14 @@ public class MillerUpdatingRegressionTest {
      * Test of hasIntercept method, of class MillerUpdatingRegression.
      */
     @Test
-    public void testHasIntercept() {
+    void testHasIntercept() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(10, false);
         if (instance.hasIntercept()) {
-            Assertions.fail("Should not have intercept");
+            fail("Should not have intercept");
         }
         instance = new MillerUpdatingRegression(10, true);
         if (!instance.hasIntercept()) {
-            Assertions.fail("Should have intercept");
+            fail("Should have intercept");
         }
     }
 
@@ -67,7 +70,7 @@ public class MillerUpdatingRegressionTest {
      * Test of getN method, of class MillerUpdatingRegression.
      */
     @Test
-    public void testAddObsGetNClear() {
+    void testAddObsGetNClear() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(3, true);
         double[][] xAll = new double[airdata[0].length][];
         double[] y = new double[airdata[0].length];
@@ -80,37 +83,37 @@ public class MillerUpdatingRegressionTest {
         }
         instance.addObservations(xAll, y);
         if (instance.getN() != xAll.length) {
-            Assertions.fail("Number of observations not correct in bulk addition");
+            fail("Number of observations not correct in bulk addition");
         }
         instance.clear();
         for (int i = 0; i < xAll.length; i++) {
             instance.addObservation(xAll[i], y[i]);
         }
         if (instance.getN() != xAll.length) {
-            Assertions.fail("Number of observations not correct in drip addition");
+            fail("Number of observations not correct in drip addition");
         }
         return;
     }
 
     @Test
-    public void testNegativeTestAddObs() {
+    void testNegativeTestAddObs() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(3, true);
         try {
             instance.addObservation(new double[]{1.0}, 0.0);
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         } catch (MathIllegalArgumentException iae) {
         } catch (Exception e) {
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         }
         try {
             instance.addObservation(new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}, 0.0);
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         } catch (MathIllegalArgumentException iae) {
         } catch (Exception e) {
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         }
         MillerUpdatingRegression finalInstance = instance;
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             finalInstance.addObservation(new double[]{ 1.0, 1.0, 1.0}, 0.0);
         }, "Should throw MathIllegalArgumentException");
 
@@ -118,36 +121,36 @@ public class MillerUpdatingRegressionTest {
         instance = new MillerUpdatingRegression(3, false);
         try {
             instance.addObservation(new double[]{1.0}, 0.0);
-            Assertions.fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
+            fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
         } catch (MathIllegalArgumentException iae) {
         } catch (Exception e) {
-            Assertions.fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
+            fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
         }
         try {
             instance.addObservation(new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}, 0.0);
-            Assertions.fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
+            fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
         } catch (MathIllegalArgumentException iae) {
         } catch (Exception e) {
-            Assertions.fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
+            fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
         }
         MillerUpdatingRegression finalInstance1 = instance;
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             finalInstance1.addObservation(new double[]{ 1.0, 1.0, 1.0}, 0.0);
         }, "Should throw MathIllegalArgumentException [NOINTERCEPT]");
     }
 
     @Test
-    public void testNegativeTestAddMultipleObs() {
+    void testNegativeTestAddMultipleObs() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(3, true);
         try {
             double[][] tst = {{1.0, 1.0, 1.0}, {1.20, 2.0, 2.1}};
             double[] y = {1.0};
             instance.addObservations(tst, y);
 
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         } catch (MathIllegalArgumentException iae) {
         } catch (Exception e) {
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         }
 
         try {
@@ -155,10 +158,10 @@ public class MillerUpdatingRegressionTest {
             double[] y = {1.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
             instance.addObservations(tst, y);
 
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         } catch (MathIllegalArgumentException iae) {
         } catch (Exception e) {
-            Assertions.fail("Should throw MathIllegalArgumentException");
+            fail("Should throw MathIllegalArgumentException");
         }
     }
 
@@ -166,7 +169,7 @@ public class MillerUpdatingRegressionTest {
      * This test concerns a known data set
      */
     @Test
-    public void testRegressAirlineConstantExternal() {
+    void testRegressAirlineConstantExternal() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(4, false);
         double[][] x = new double[airdata[0].length][];
         double[] y = new double[airdata[0].length];
@@ -180,24 +183,24 @@ public class MillerUpdatingRegressionTest {
         }
 
         instance.addObservations(x, y);
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             RegressionResults result = instance.regress();
-            Assertions.assertNotNull(result, "The test case is a prototype.");
-            UnitTestUtils.assertEquals(
+            assertNotNull(result, "The test case is a prototype.");
+            UnitTestUtils.customAssertEquals(
                 new double[]{9.5169, 0.8827, 0.4540, -1.6275},
                 result.getParameterEstimates(), 1e-4);
 
 
-            UnitTestUtils.assertEquals(
+            UnitTestUtils.customAssertEquals(
                 new double[]{.2292445, .0132545, .0203042, .345302},
                 result.getStdErrorOfEstimates(), 1.0e-4);
 
-            UnitTestUtils.assertEquals(0.01552839, result.getMeanSquareError(), 1.0e-8);
+            UnitTestUtils.customAssertEquals(0.01552839, result.getMeanSquareError(), 1.0e-8);
         }, "Should not throw exception but does");
     }
 
     @Test
-    public void testRegressAirlineConstantInternal() {
+    void testRegressAirlineConstantInternal() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(3, true);
         double[][] x = new double[airdata[0].length][];
         double[] y = new double[airdata[0].length];
@@ -210,25 +213,25 @@ public class MillerUpdatingRegressionTest {
         }
 
         instance.addObservations(x, y);
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             RegressionResults result = instance.regress();
-            Assertions.assertNotNull(result, "The test case is a prototype.");
-            UnitTestUtils.assertEquals(
+            assertNotNull(result, "The test case is a prototype.");
+            UnitTestUtils.customAssertEquals(
                 new double[]{9.5169, 0.8827, 0.4540, -1.6275},
                 result.getParameterEstimates(), 1e-4);
 
 
-            UnitTestUtils.assertEquals(
+            UnitTestUtils.customAssertEquals(
                 new double[]{.2292445, .0132545, .0203042, .345302},
                 result.getStdErrorOfEstimates(), 1.0e-4);
 
-            UnitTestUtils.assertEquals(0.9883, result.getRSquared(), 1.0e-4);
-            UnitTestUtils.assertEquals(0.01552839, result.getMeanSquareError(), 1.0e-8);
+            UnitTestUtils.customAssertEquals(0.9883, result.getRSquared(), 1.0e-4);
+            UnitTestUtils.customAssertEquals(0.01552839, result.getMeanSquareError(), 1.0e-8);
         }, "Should not throw exception but does");
     }
 
     @Test
-    public void testFilippelli() {
+    void testFilippelli() {
         double[] data = new double[]{
             0.8116, -6.860120914,
             0.9072, -4.324130045,
@@ -342,8 +345,8 @@ public class MillerUpdatingRegressionTest {
         }
         RegressionResults result = model.regress();
         double[] betaHat = result.getParameterEstimates();
-        UnitTestUtils.assertEquals(betaHat,
-                new double[]{
+        UnitTestUtils.customAssertEquals(betaHat,
+                                         new double[]{
                     -1467.48961422980,
                     -2772.17959193342,
                     -2316.37108160893,
@@ -358,8 +361,8 @@ public class MillerUpdatingRegressionTest {
                 }, 1E-5); //
 //
         double[] se = result.getStdErrorOfEstimates();
-        UnitTestUtils.assertEquals(se,
-                new double[]{
+        UnitTestUtils.customAssertEquals(se,
+                                         new double[]{
                     298.084530995537,
                     559.779865474950,
                     466.477572127796,
@@ -373,14 +376,14 @@ public class MillerUpdatingRegressionTest {
                     0.896632837373868E-05
                 }, 1E-5); //
 
-        UnitTestUtils.assertEquals(0.996727416185620, result.getRSquared(), 1.0e-8);
-        UnitTestUtils.assertEquals(0.112091743968020E-04, result.getMeanSquareError(), 1.0e-10);
-        UnitTestUtils.assertEquals(0.795851382172941E-03, result.getErrorSumSquares(), 1.0e-10);
+        UnitTestUtils.customAssertEquals(0.996727416185620, result.getRSquared(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(0.112091743968020E-04, result.getMeanSquareError(), 1.0e-10);
+        UnitTestUtils.customAssertEquals(0.795851382172941E-03, result.getErrorSumSquares(), 1.0e-10);
 
     }
 
     @Test
-    public void testWampler1() {
+    void testWampler1() {
         double[] data = new double[]{
             1, 0,
             6, 1,
@@ -419,28 +422,28 @@ public class MillerUpdatingRegressionTest {
         }
         RegressionResults result = model.regress();
         double[] betaHat = result.getParameterEstimates();
-        UnitTestUtils.assertEquals(betaHat,
-                new double[]{1.0,
+        UnitTestUtils.customAssertEquals(betaHat,
+                                         new double[]{1.0,
                     1.0, 1.0,
                     1.0, 1.0,
                     1.0}, 1E-8); //
 //
         double[] se = result.getStdErrorOfEstimates();
-        UnitTestUtils.assertEquals(se,
-                new double[]{0.0,
+        UnitTestUtils.customAssertEquals(se,
+                                         new double[]{0.0,
                     0.0, 0.0,
                     0.0, 0.0,
                     0.0}, 1E-8); //
 
-        UnitTestUtils.assertEquals(1.0, result.getRSquared(), 1.0e-10);
-        UnitTestUtils.assertEquals(0, result.getMeanSquareError(), 1.0e-7);
-        UnitTestUtils.assertEquals(0.00, result.getErrorSumSquares(), 1.0e-6);
+        UnitTestUtils.customAssertEquals(1.0, result.getRSquared(), 1.0e-10);
+        UnitTestUtils.customAssertEquals(0, result.getMeanSquareError(), 1.0e-7);
+        UnitTestUtils.customAssertEquals(0.00, result.getErrorSumSquares(), 1.0e-6);
 
         return;
     }
 
     @Test
-    public void testWampler2() {
+    void testWampler2() {
         double[] data = new double[]{
             1.00000, 0,
             1.11111, 1,
@@ -479,27 +482,27 @@ public class MillerUpdatingRegressionTest {
         }
         RegressionResults result = model.regress();
         double[] betaHat = result.getParameterEstimates();
-        UnitTestUtils.assertEquals(betaHat,
-                new double[]{1.0,
+        UnitTestUtils.customAssertEquals(betaHat,
+                                         new double[]{1.0,
                     1.0e-1, 1.0e-2,
                     1.0e-3, 1.0e-4,
                     1.0e-5}, 1E-8); //
 //
         double[] se = result.getStdErrorOfEstimates();
-        UnitTestUtils.assertEquals(se,
-                new double[]{0.0,
+        UnitTestUtils.customAssertEquals(se,
+                                         new double[]{0.0,
                     0.0, 0.0,
                     0.0, 0.0,
                     0.0}, 1E-8); //
 
-        UnitTestUtils.assertEquals(1.0, result.getRSquared(), 1.0e-10);
-        UnitTestUtils.assertEquals(0, result.getMeanSquareError(), 1.0e-7);
-        UnitTestUtils.assertEquals(0.00, result.getErrorSumSquares(), 1.0e-6);
+        UnitTestUtils.customAssertEquals(1.0, result.getRSquared(), 1.0e-10);
+        UnitTestUtils.customAssertEquals(0, result.getMeanSquareError(), 1.0e-7);
+        UnitTestUtils.customAssertEquals(0.00, result.getErrorSumSquares(), 1.0e-6);
         return;
     }
 
     @Test
-    public void testWampler3() {
+    void testWampler3() {
         double[] data = new double[]{
             760, 0,
             -2042, 1,
@@ -537,21 +540,21 @@ public class MillerUpdatingRegressionTest {
         }
         RegressionResults result = model.regress();
         double[] betaHat = result.getParameterEstimates();
-        UnitTestUtils.assertEquals(betaHat,
-                new double[]{1.0,
+        UnitTestUtils.customAssertEquals(betaHat,
+                                         new double[]{1.0,
                     1.0, 1.0,
                     1.0, 1.0,
                     1.0}, 1E-8); //
         double[] se = result.getStdErrorOfEstimates();
-        UnitTestUtils.assertEquals(se,
-                new double[]{2152.32624678170,
+        UnitTestUtils.customAssertEquals(se,
+                                         new double[]{2152.32624678170,
                     2363.55173469681, 779.343524331583,
                     101.475507550350, 5.64566512170752,
                     0.112324854679312}, 1E-8); //
 
-        UnitTestUtils.assertEquals(.999995559025820, result.getRSquared(), 1.0e-10);
-        UnitTestUtils.assertEquals(5570284.53333333, result.getMeanSquareError(), 1.0e-7);
-        UnitTestUtils.assertEquals(83554268.0000000, result.getErrorSumSquares(), 1.0e-6);
+        UnitTestUtils.customAssertEquals(.999995559025820, result.getRSquared(), 1.0e-10);
+        UnitTestUtils.customAssertEquals(5570284.53333333, result.getMeanSquareError(), 1.0e-7);
+        UnitTestUtils.customAssertEquals(83554268.0000000, result.getErrorSumSquares(), 1.0e-6);
         return;
     }
 
@@ -594,22 +597,22 @@ public class MillerUpdatingRegressionTest {
         }
         RegressionResults result = model.regress();
         double[] betaHat = result.getParameterEstimates();
-        UnitTestUtils.assertEquals(betaHat,
-                new double[]{1.0,
+        UnitTestUtils.customAssertEquals(betaHat,
+                                         new double[]{1.0,
                     1.0, 1.0,
                     1.0, 1.0,
                     1.0}, 1E-8); //
 //
         double[] se = result.getStdErrorOfEstimates();
-        UnitTestUtils.assertEquals(se,
-                new double[]{215232.624678170,
+        UnitTestUtils.customAssertEquals(se,
+                                         new double[]{215232.624678170,
                     236355.173469681, 77934.3524331583,
                     10147.5507550350, 564.566512170752,
                     11.2324854679312}, 1E-8); //
 
-        UnitTestUtils.assertEquals(.957478440825662, result.getRSquared(), 1.0e-10);
-        UnitTestUtils.assertEquals(55702845333.3333, result.getMeanSquareError(), 1.0e-4);
-        UnitTestUtils.assertEquals(835542680000.000, result.getErrorSumSquares(), 1.0e-3);
+        UnitTestUtils.customAssertEquals(.957478440825662, result.getRSquared(), 1.0e-10);
+        UnitTestUtils.customAssertEquals(55702845333.3333, result.getMeanSquareError(), 1.0e-4);
+        UnitTestUtils.customAssertEquals(835542680000.000, result.getErrorSumSquares(), 1.0e-3);
 
         return;
     }
@@ -625,7 +628,7 @@ public class MillerUpdatingRegressionTest {
      * <a href="https://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat">Longley dataset</a>
      */
     @Test
-    public void testLongly() {
+    void testLongly() {
         // Y values are first, then independent vars
         // Each row is one observation
         double[] design = new double[]{
@@ -663,25 +666,25 @@ public class MillerUpdatingRegressionTest {
         // Check expected beta values from NIST
         RegressionResults result = model.regress();
         double[] betaHat = result.getParameterEstimates();
-        UnitTestUtils.assertEquals(betaHat,
-                new double[]{-3482258.63459582, 15.0618722713733,
+        UnitTestUtils.customAssertEquals(betaHat,
+                                         new double[]{-3482258.63459582, 15.0618722713733,
                     -0.358191792925910E-01, -2.02022980381683,
                     -1.03322686717359, -0.511041056535807E-01,
                     1829.15146461355}, 1E-8); //
 
         // Check standard errors from NIST
         double[] errors = result.getStdErrorOfEstimates();
-        UnitTestUtils.assertEquals(new double[]{890420.383607373,
-                    84.9149257747669,
-                    0.334910077722432E-01,
-                    0.488399681651699,
-                    0.214274163161675,
-                    0.226073200069370,
-                    455.478499142212}, errors, 1E-6);
+        UnitTestUtils.customAssertEquals(new double[]{ 890420.383607373,
+                                                       84.9149257747669,
+                                                       0.334910077722432E-01,
+                                                       0.488399681651699,
+                                                       0.214274163161675,
+                                                       0.226073200069370,
+                                                       455.478499142212}, errors, 1E-6);
 //
         // Check R-Square statistics against R
-        UnitTestUtils.assertEquals(0.995479004577296, result.getRSquared(), 1E-12);
-        UnitTestUtils.assertEquals(0.992465007628826, result.getAdjustedRSquared(), 1E-12);
+        UnitTestUtils.customAssertEquals(0.995479004577296, result.getRSquared(), 1E-12);
+        UnitTestUtils.customAssertEquals(0.992465007628826, result.getAdjustedRSquared(), 1E-12);
 //
 //
 //        // Estimate model without intercept
@@ -695,21 +698,21 @@ public class MillerUpdatingRegressionTest {
         // Check expected beta values from R
         result = model.regress();
         betaHat = result.getParameterEstimates();
-        UnitTestUtils.assertEquals(betaHat,
-                new double[]{-52.99357013868291, 0.07107319907358,
+        UnitTestUtils.customAssertEquals(betaHat,
+                                         new double[]{-52.99357013868291, 0.07107319907358,
                     -0.42346585566399, -0.57256866841929,
                     -0.41420358884978, 48.41786562001326}, 1E-11);
 //
         // Check standard errors from R
         errors = result.getStdErrorOfEstimates();
-        UnitTestUtils.assertEquals(new double[]{129.54486693117232, 0.03016640003786,
-                    0.41773654056612, 0.27899087467676, 0.32128496193363,
-                    17.68948737819961}, errors, 1E-11);
+        UnitTestUtils.customAssertEquals(new double[]{ 129.54486693117232, 0.03016640003786,
+                                                       0.41773654056612, 0.27899087467676, 0.32128496193363,
+                                                       17.68948737819961}, errors, 1E-11);
 //
 
 //        // Check R-Square statistics against R
-        UnitTestUtils.assertEquals(0.9999670130706, result.getRSquared(), 1E-12);
-        UnitTestUtils.assertEquals(0.999947220913, result.getAdjustedRSquared(), 1E-12);
+        UnitTestUtils.customAssertEquals(0.9999670130706, result.getRSquared(), 1E-12);
+        UnitTestUtils.customAssertEquals(0.999947220913, result.getAdjustedRSquared(), 1E-12);
 
     }
 
@@ -754,7 +757,7 @@ public class MillerUpdatingRegressionTest {
 //    }
 
     @Test
-    public void testOneRedundantColumn() {
+    void testOneRedundantColumn() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(4, false);
         MillerUpdatingRegression instance2 = new MillerUpdatingRegression(5, false);
         double[][] x = new double[airdata[0].length][];
@@ -779,11 +782,11 @@ public class MillerUpdatingRegressionTest {
 
         instance.addObservations(x, y);
         RegressionResults result = instance.regress();
-        Assertions.assertNotNull(result, "Could not estimate initial regression");
+        assertNotNull(result, "Could not estimate initial regression");
 
         instance2.addObservations(x2, y);
         RegressionResults resultRedundant = instance2.regress();
-        Assertions.assertNotNull(resultRedundant, "Could not estimate redundant regression");
+        assertNotNull(resultRedundant, "Could not estimate redundant regression");
         double[] beta = result.getParameterEstimates();
         double[] betar = resultRedundant.getParameterEstimates();
         double[] se = result.getStdErrorOfEstimates();
@@ -791,29 +794,29 @@ public class MillerUpdatingRegressionTest {
 
         for (int i = 0; i < beta.length; i++) {
             if (FastMath.abs(beta[i] - betar[i]) > 1.0e-8) {
-                Assertions.fail("Parameters not correctly estimated");
+                fail("Parameters not correctly estimated");
             }
             if (FastMath.abs(se[i] - ser[i]) > 1.0e-8) {
-                Assertions.fail("Standard errors not correctly estimated");
+                fail("Standard errors not correctly estimated");
             }
             for (int j = 0; j < i; j++) {
                 if (FastMath.abs(result.getCovarianceOfParameters(i, j)
                         - resultRedundant.getCovarianceOfParameters(i, j)) > 1.0e-8) {
-                    Assertions.fail("Variance Covariance not correct");
+                    fail("Variance Covariance not correct");
                 }
             }
         }
 
 
-        UnitTestUtils.assertEquals(result.getAdjustedRSquared(), resultRedundant.getAdjustedRSquared(), 1.0e-8);
-        UnitTestUtils.assertEquals(result.getErrorSumSquares(), resultRedundant.getErrorSumSquares(), 1.0e-8);
-        UnitTestUtils.assertEquals(result.getMeanSquareError(), resultRedundant.getMeanSquareError(), 1.0e-8);
-        UnitTestUtils.assertEquals(result.getRSquared(), resultRedundant.getRSquared(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getAdjustedRSquared(), resultRedundant.getAdjustedRSquared(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getErrorSumSquares(), resultRedundant.getErrorSumSquares(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getMeanSquareError(), resultRedundant.getMeanSquareError(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getRSquared(), resultRedundant.getRSquared(), 1.0e-8);
         return;
     }
 
     @Test
-    public void testThreeRedundantColumn() {
+    void testThreeRedundantColumn() {
 
         MillerUpdatingRegression instance = new MillerUpdatingRegression(4, false);
         MillerUpdatingRegression instance2 = new MillerUpdatingRegression(7, false);
@@ -841,94 +844,94 @@ public class MillerUpdatingRegressionTest {
 
         instance.addObservations(x, y);
         RegressionResults result = instance.regress();
-        Assertions.assertNotNull(result, "Could not estimate initial regression");
+        assertNotNull(result, "Could not estimate initial regression");
 
         instance2.addObservations(x2, y);
         RegressionResults resultRedundant = instance2.regress();
-        Assertions.assertNotNull(resultRedundant, "Could not estimate redundant regression");
+        assertNotNull(resultRedundant, "Could not estimate redundant regression");
         double[] beta = result.getParameterEstimates();
         double[] betar = resultRedundant.getParameterEstimates();
         double[] se = result.getStdErrorOfEstimates();
         double[] ser = resultRedundant.getStdErrorOfEstimates();
 
         if (FastMath.abs(beta[0] - betar[0]) > 1.0e-8) {
-            Assertions.fail("Parameters not correct after reorder (0,3)");
+            fail("Parameters not correct after reorder (0,3)");
         }
         if (FastMath.abs(beta[1] - betar[2]) > 1.0e-8) {
-            Assertions.fail("Parameters not correct after reorder (1,2)");
+            fail("Parameters not correct after reorder (1,2)");
         }
         if (FastMath.abs(beta[2] - betar[3]) > 1.0e-8) {
-            Assertions.fail("Parameters not correct after reorder (2,1)");
+            fail("Parameters not correct after reorder (2,1)");
         }
         if (FastMath.abs(beta[3] - betar[5]) > 1.0e-8) {
-            Assertions.fail("Parameters not correct after reorder (3,0)");
+            fail("Parameters not correct after reorder (3,0)");
         }
 
         if (FastMath.abs(se[0] - ser[0]) > 1.0e-8) {
-            Assertions.fail("Se not correct after reorder (0,3)");
+            fail("Se not correct after reorder (0,3)");
         }
         if (FastMath.abs(se[1] - ser[2]) > 1.0e-8) {
-            Assertions.fail("Se not correct after reorder (1,2)");
+            fail("Se not correct after reorder (1,2)");
         }
         if (FastMath.abs(se[2] - ser[3]) > 1.0e-8) {
-            Assertions.fail("Se not correct after reorder (2,1)");
+            fail("Se not correct after reorder (2,1)");
         }
         if (FastMath.abs(se[3] - ser[5]) > 1.0e-8) {
-            Assertions.fail("Se not correct after reorder (3,0)");
+            fail("Se not correct after reorder (3,0)");
         }
 
         if (FastMath.abs(result.getCovarianceOfParameters(0, 0)
                 - resultRedundant.getCovarianceOfParameters(0, 0)) > 1.0e-8) {
-            Assertions.fail("VCV not correct after reorder (0,0)");
+            fail("VCV not correct after reorder (0,0)");
         }
         if (FastMath.abs(result.getCovarianceOfParameters(0, 1)
                 - resultRedundant.getCovarianceOfParameters(0, 2)) > 1.0e-8) {
-            Assertions.fail("VCV not correct after reorder (0,1)<->(0,2)");
+            fail("VCV not correct after reorder (0,1)<->(0,2)");
         }
         if (FastMath.abs(result.getCovarianceOfParameters(0, 2)
                 - resultRedundant.getCovarianceOfParameters(0, 3)) > 1.0e-8) {
-            Assertions.fail("VCV not correct after reorder (0,2)<->(0,1)");
+            fail("VCV not correct after reorder (0,2)<->(0,1)");
         }
         if (FastMath.abs(result.getCovarianceOfParameters(0, 3)
                 - resultRedundant.getCovarianceOfParameters(0, 5)) > 1.0e-8) {
-            Assertions.fail("VCV not correct after reorder (0,3)<->(0,3)");
+            fail("VCV not correct after reorder (0,3)<->(0,3)");
         }
         if (FastMath.abs(result.getCovarianceOfParameters(1, 0)
                 - resultRedundant.getCovarianceOfParameters(2, 0)) > 1.0e-8) {
-            Assertions.fail("VCV not correct after reorder (1,0)<->(2,0)");
+            fail("VCV not correct after reorder (1,0)<->(2,0)");
         }
         if (FastMath.abs(result.getCovarianceOfParameters(1, 1)
                 - resultRedundant.getCovarianceOfParameters(2, 2)) > 1.0e-8) {
-            Assertions.fail("VCV not correct  (1,1)<->(2,1)");
+            fail("VCV not correct  (1,1)<->(2,1)");
         }
         if (FastMath.abs(result.getCovarianceOfParameters(1, 2)
                 - resultRedundant.getCovarianceOfParameters(2, 3)) > 1.0e-8) {
-            Assertions.fail("VCV not correct  (1,2)<->(2,2)");
+            fail("VCV not correct  (1,2)<->(2,2)");
         }
 
         if (FastMath.abs(result.getCovarianceOfParameters(2, 0)
                 - resultRedundant.getCovarianceOfParameters(3, 0)) > 1.0e-8) {
-            Assertions.fail("VCV not correct  (2,0)<->(1,0)");
+            fail("VCV not correct  (2,0)<->(1,0)");
         }
         if (FastMath.abs(result.getCovarianceOfParameters(2, 1)
                 - resultRedundant.getCovarianceOfParameters(3, 2)) > 1.0e-8) {
-            Assertions.fail("VCV not correct  (2,1)<->(1,2)");
+            fail("VCV not correct  (2,1)<->(1,2)");
         }
 
         if (FastMath.abs(result.getCovarianceOfParameters(3, 3)
                 - resultRedundant.getCovarianceOfParameters(5, 5)) > 1.0e-8) {
-            Assertions.fail("VCV not correct  (3,3)<->(3,2)");
+            fail("VCV not correct  (3,3)<->(3,2)");
         }
 
-        UnitTestUtils.assertEquals(result.getAdjustedRSquared(), resultRedundant.getAdjustedRSquared(), 1.0e-8);
-        UnitTestUtils.assertEquals(result.getErrorSumSquares(), resultRedundant.getErrorSumSquares(), 1.0e-8);
-        UnitTestUtils.assertEquals(result.getMeanSquareError(), resultRedundant.getMeanSquareError(), 1.0e-8);
-        UnitTestUtils.assertEquals(result.getRSquared(), resultRedundant.getRSquared(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getAdjustedRSquared(), resultRedundant.getAdjustedRSquared(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getErrorSumSquares(), resultRedundant.getErrorSumSquares(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getMeanSquareError(), resultRedundant.getMeanSquareError(), 1.0e-8);
+        UnitTestUtils.customAssertEquals(result.getRSquared(), resultRedundant.getRSquared(), 1.0e-8);
         return;
     }
 
     @Test
-    public void testPCorr() {
+    void testPCorr() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(4, false);
         double[][] x = new double[airdata[0].length][];
         double[] y = new double[airdata[0].length];
@@ -969,14 +972,14 @@ public class MillerUpdatingRegressionTest {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < i; j++) {
                 if (FastMath.abs(pc[idx] - cp[off] / (diag[i] * diag[j])) > 1.0e-8) {
-                    Assertions.fail("Failed cross products... i = " + i + " j = " + j);
+                    fail("Failed cross products... i = " + i + " j = " + j);
                 }
                 ++idx;
                 ++off;
             }
             ++off;
             if (FastMath.abs(pc[i+off2] - yxcorr[ i] / (FastMath.sqrt(sumysq) * diag[i])) > 1.0e-8) {
-                Assertions.fail("Assertions.failed cross product i = " + i + " y");
+                fail("Assertions.failed cross product i = " + i + " y");
             }
         }
         double[] pc2 = instance.getPartialCorrelations(1);
@@ -986,20 +989,20 @@ public class MillerUpdatingRegressionTest {
         for (int i = 1; i < 4; i++) {
             for (int j = 1; j < i; j++) {
                 if (FastMath.abs(pc2[idx] - corr.getEntry(j, i)) > 1.0e-8) {
-                    Assertions.fail("Failed cross products... i = " + i + " j = " + j);
+                    fail("Failed cross products... i = " + i + " j = " + j);
                 }
                 ++idx;
             }
         }
         double[] pc3 = instance.getPartialCorrelations(2);
         if (pc3 == null) {
-            Assertions.fail("Should not be null");
+            fail("Should not be null");
         }
         return;
     }
 
     @Test
-    public void testHdiag() {
+    void testHdiag() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(4, false);
         double[][] x = new double[airdata[0].length][];
         double[] y = new double[airdata[0].length];
@@ -1018,12 +1021,13 @@ public class MillerUpdatingRegressionTest {
 
         RealMatrix rm = ols.calculateHat();
         for (int i = 0; i < x.length; i++) {
-            UnitTestUtils.assertEquals(instance.getDiagonalOfHatMatrix(x[i]), rm.getEntry(i, i), 1.0e-8);
+            UnitTestUtils.customAssertEquals(instance.getDiagonalOfHatMatrix(x[i]), rm.getEntry(i, i), 1.0e-8);
         }
         return;
     }
+
     @Test
-    public void testHdiagConstant() {
+    void testHdiagConstant() {
         MillerUpdatingRegression instance = new MillerUpdatingRegression(3, true);
         double[][] x = new double[airdata[0].length][];
         double[] y = new double[airdata[0].length];
@@ -1041,14 +1045,14 @@ public class MillerUpdatingRegressionTest {
 
         RealMatrix rm = ols.calculateHat();
         for (int i = 0; i < x.length; i++) {
-            UnitTestUtils.assertEquals(instance.getDiagonalOfHatMatrix(x[i]), rm.getEntry(i, i), 1.0e-8);
+            UnitTestUtils.customAssertEquals(instance.getDiagonalOfHatMatrix(x[i]), rm.getEntry(i, i), 1.0e-8);
         }
         return;
     }
 
 
     @Test
-    public void testSubsetRegression() {
+    void testSubsetRegression() {
 
         MillerUpdatingRegression instance = new MillerUpdatingRegression(3, true);
         MillerUpdatingRegression redRegression = new MillerUpdatingRegression(2, true);
@@ -1074,8 +1078,8 @@ public class MillerUpdatingRegressionTest {
         RegressionResults resultsInstance = instance.regress( new int[]{0,1,2} );
         RegressionResults resultsReduced = redRegression.regress();
 
-        UnitTestUtils.assertEquals(resultsInstance.getParameterEstimates(), resultsReduced.getParameterEstimates(), 1.0e-12);
-        UnitTestUtils.assertEquals(resultsInstance.getStdErrorOfEstimates(), resultsReduced.getStdErrorOfEstimates(), 1.0e-12);
+        UnitTestUtils.customAssertEquals(resultsInstance.getParameterEstimates(), resultsReduced.getParameterEstimates(), 1.0e-12);
+        UnitTestUtils.customAssertEquals(resultsInstance.getStdErrorOfEstimates(), resultsReduced.getStdErrorOfEstimates(), 1.0e-12);
     }
 
 

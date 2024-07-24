@@ -31,29 +31,29 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for class {@link GradientFunction}.
  */
-public class GradientFunctionTest {
+class GradientFunctionTest {
 
     @Test
-    public void test2DDistance() {
+    void test2DDistance() {
         EuclideanDistance f = new EuclideanDistance();
         GradientFunction g = new GradientFunction(f);
         for (double x = -10; x < 10; x += 0.5) {
             for (double y = -10; y < 10; y += 0.5) {
                 double[] point = new double[] { x, y };
-                UnitTestUtils.assertEquals(f.gradient(point), g.value(point), 1.0e-15);
+                UnitTestUtils.customAssertEquals(f.gradient(point), g.value(point), 1.0e-15);
             }
         }
     }
 
     @Test
-    public void test3DDistance() {
+    void test3DDistance() {
         EuclideanDistance f = new EuclideanDistance();
         GradientFunction g = new GradientFunction(f);
         for (double x = -10; x < 10; x += 0.5) {
             for (double y = -10; y < 10; y += 0.5) {
                 for (double z = -10; z < 10; z += 0.5) {
                     double[] point = new double[] { x, y, z };
-                    UnitTestUtils.assertEquals(f.gradient(point), g.value(point), 1.0e-15);
+                    UnitTestUtils.customAssertEquals(f.gradient(point), g.value(point), 1.0e-15);
                 }
             }
         }

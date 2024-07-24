@@ -24,17 +24,18 @@ package org.hipparchus.analysis.integration.gauss;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test of the {@link LaguerreRuleFactory}.
  */
-public class LaguerreTest {
+class LaguerreTest {
     private static final GaussIntegratorFactory factory = new GaussIntegratorFactory();
 
     @Test
-    public void testGamma() {
+    void testGamma() {
         final double tol = 1e-13;
 
         for (int i = 2; i < 10; i += 1) {
@@ -49,7 +50,7 @@ public class LaguerreTest {
 
             final GaussIntegrator integrator = factory.laguerre(7);
             final double s = integrator.integrate(f);
-            Assertions.assertEquals(1d, Gamma.gamma(t) / s, tol);
+            assertEquals(1d, Gamma.gamma(t) / s, tol);
         }
     }
 }

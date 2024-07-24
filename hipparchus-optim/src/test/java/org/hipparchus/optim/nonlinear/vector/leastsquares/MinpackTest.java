@@ -28,10 +28,13 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -40,7 +43,7 @@ import java.util.Arrays;
  * The redistribution policy for MINPACK is available <a
  * href="http://www.netlib.org/minpack/disclaimer">here</a>, for
  * convenience, it is reproduced below.</p>
-
+ 
  * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
  * <tr><td>
  *    Minpack Copyright Notice (1999) University of Chicago.
@@ -88,17 +91,17 @@ import java.util.Arrays;
  *     POSSIBILITY OF SUCH LOSS OR DAMAGES.</strong></li>
  * <ol></td></tr>
  * </table>
-
+ 
  * @author Argonne National Laboratory. MINPACK project. March 1980 (original fortran minpack tests)
  * @author Burton S. Garbow (original fortran minpack tests)
  * @author Kenneth E. Hillstrom (original fortran minpack tests)
  * @author Jorge J. More (original fortran minpack tests)
  * @author Luc Maisonobe (non-minpack tests and minpack tests Java translation)
  */
-public class MinpackTest {
+class MinpackTest {
 
     @Test
-    public void testMinpackLinearFullRank() {
+    void testMinpackLinearFullRank() {
         minpackTest(new LinearFullRankFunction(10, 5, 1.0,
                                                5.0, 2.23606797749979), false);
         minpackTest(new LinearFullRankFunction(50, 5, 1.0,
@@ -106,7 +109,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackLinearRank1() {
+    void testMinpackLinearRank1() {
         minpackTest(new LinearRank1Function(10, 5, 1.0,
                                             291.521868819476, 1.4638501094228), false);
         minpackTest(new LinearRank1Function(50, 5, 1.0,
@@ -114,13 +117,13 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackLinearRank1ZeroColsAndRows() {
+    void testMinpackLinearRank1ZeroColsAndRows() {
         minpackTest(new LinearRank1ZeroColsAndRowsFunction(10, 5, 1.0), false);
         minpackTest(new LinearRank1ZeroColsAndRowsFunction(50, 5, 1.0), false);
     }
 
     @Test
-    public void testMinpackRosenbrok() {
+    void testMinpackRosenbrok() {
         minpackTest(new RosenbrockFunction(new double[] { -1.2, 1.0 },
                                            FastMath.sqrt(24.2)), false);
         minpackTest(new RosenbrockFunction(new double[] { -12.0, 10.0 },
@@ -130,7 +133,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackHelicalValley() {
+    void testMinpackHelicalValley() {
         minpackTest(new HelicalValleyFunction(new double[] { -1.0, 0.0, 0.0 },
                                               50.0), false);
         minpackTest(new HelicalValleyFunction(new double[] { -10.0, 0.0, 0.0 },
@@ -140,7 +143,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackPowellSingular() {
+    void testMinpackPowellSingular() {
         minpackTest(new PowellSingularFunction(new double[] { 3.0, -1.0, 0.0, 1.0 },
                                                14.6628782986152), false);
         minpackTest(new PowellSingularFunction(new double[] { 30.0, -10.0, 0.0, 10.0 },
@@ -150,7 +153,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackFreudensteinRoth() {
+    void testMinpackFreudensteinRoth() {
         minpackTest(new FreudensteinRothFunction(new double[] { 0.5, -2.0 },
                                                  20.0124960961895, 6.99887517584575,
                                                  new double[] {
@@ -172,7 +175,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackBard() {
+    void testMinpackBard() {
         minpackTest(new BardFunction(1.0, 6.45613629515967, 0.0906359603390466,
                                      new double[] {
                                          0.0824105765758334,
@@ -194,7 +197,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackKowalikOsborne() {
+    void testMinpackKowalikOsborne() {
         minpackTest(new KowalikOsborneFunction(new double[] { 0.25, 0.39, 0.415, 0.39 },
                                                0.0728915102882945,
                                                0.017535837721129,
@@ -225,7 +228,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackMeyer() {
+    void testMinpackMeyer() {
         minpackTest(new MeyerFunction(new double[] { 0.02, 4000.0, 250.0 },
                                       41153.4665543031, 9.37794514651874,
                                       new double[] {
@@ -243,7 +246,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackWatson() {
+    void testMinpackWatson() {
         minpackTest(new WatsonFunction(6, 0.0,
                                        5.47722557505166, 0.0478295939097601,
                                        new double[] {
@@ -325,13 +328,13 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackBox3Dimensional() {
+    void testMinpackBox3Dimensional() {
         minpackTest(new Box3DimensionalFunction(10, new double[] { 0.0, 10.0, 20.0 },
                                                 32.1115837449572), false);
     }
 
     @Test
-    public void testMinpackJennrichSampson() {
+    void testMinpackJennrichSampson() {
         minpackTest(new JennrichSampsonFunction(10, new double[] { 0.3, 0.4 },
                                                 64.5856498144943, 11.1517793413499,
                                                 new double[] {
@@ -341,7 +344,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackBrownDennis() {
+    void testMinpackBrownDennis() {
         minpackTest(new BrownDennisFunction(20,
                                             new double[] { 25.0, 5.0, -5.0, -1.0 },
                                             2815.43839161816, 292.954288244866,
@@ -366,7 +369,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackChebyquad() {
+    void testMinpackChebyquad() {
         minpackTest(new ChebyquadFunction(1, 8, 1.0,
                                           1.88623796907732, 1.88623796907732,
                                           new double[] { 0.5 }), false);
@@ -405,7 +408,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackBrownAlmostLinear() {
+    void testMinpackBrownAlmostLinear() {
         minpackTest(new BrownAlmostLinearFunction(10, 0.5,
                                                   16.5302162063499, 0.0,
                                                   new double[] {
@@ -474,7 +477,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackOsborne1() {
+    void testMinpackOsborne1() {
         minpackTest(new Osborne1Function(new double[] { 0.5, 1.5, -1.0, 0.01, 0.02, },
                                          0.937564021037838, 0.00739249260904843,
                                          new double[] {
@@ -485,7 +488,7 @@ public class MinpackTest {
     }
 
     @Test
-    public void testMinpackOsborne2() {
+    void testMinpackOsborne2() {
         minpackTest(new Osborne2Function(new double[] {
                     1.3, 0.65, 0.65, 0.7, 0.6,
                     3.0, 5.0, 7.0, 2.0, 4.5, 5.5
@@ -521,11 +524,11 @@ public class MinpackTest {
 
         try {
             final Optimum optimum = optimizer.optimize(problem);
-            Assertions.assertFalse(exceptionExpected);
+            assertFalse(exceptionExpected);
             function.checkTheoreticalMinCost(optimum.getRMS());
             function.checkTheoreticalMinParams(optimum.getPoint().toArray());
         } catch (MathIllegalStateException e) {
-            Assertions.assertTrue(exceptionExpected);
+            assertTrue(exceptionExpected);
         }
     }
 
@@ -582,7 +585,7 @@ public class MinpackTest {
 
         public void checkTheoreticalMinCost(double rms) {
             double threshold = costAccuracy * (1.0 + theoreticalMinCost);
-            Assertions.assertEquals(theoreticalMinCost, FastMath.sqrt(m) * rms, threshold);
+            assertEquals(theoreticalMinCost, FastMath.sqrt(m) * rms, threshold);
         }
 
         public void checkTheoreticalMinParams(double[] params) {
@@ -590,7 +593,7 @@ public class MinpackTest {
                 for (int i = 0; i < theoreticalMinParams.length; ++i) {
                     double mi = theoreticalMinParams[i];
                     double vi = params[i];
-                    Assertions.assertEquals(mi, vi, paramsAccuracy * (1.0 + FastMath.abs(mi)));
+                    assertEquals(mi, vi, paramsAccuracy * (1.0 + FastMath.abs(mi)));
                 }
             }
         }

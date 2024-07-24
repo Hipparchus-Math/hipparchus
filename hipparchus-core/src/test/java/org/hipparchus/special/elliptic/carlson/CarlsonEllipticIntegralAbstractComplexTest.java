@@ -21,8 +21,10 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends CalculusFieldElement<T>> {
 
@@ -35,12 +37,12 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
     protected abstract T rG(T x, T y, T z);
 
     private void check(double expectedReal, double expectedImaginary, T result, double tol) {
-        Assertions.assertEquals(0, buildComplex(expectedReal, expectedImaginary).subtract(result).norm(), tol);
+        assertEquals(0, buildComplex(expectedReal, expectedImaginary).subtract(result).norm(), tol);
     }
 
     @Test
     public void testNoConvergenceRf() {
-        Assertions.assertTrue(rF(buildComplex(1), buildComplex(2), buildComplex(Double.NaN)).isNaN());
+        assertTrue(rF(buildComplex(1), buildComplex(2), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -95,13 +97,13 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             T rfL    = rF(x.add(lambda), y.add(lambda), lambda);
             T rfM    = rF(x.add(mu),     y.add(mu),     mu);
             T rf0    = rF(x,             y,             buildComplex(0));
-            Assertions.assertEquals(0.0, rfL.add(rfM).subtract(rf0).norm(), 2.0e-14);
+            assertEquals(0.0, rfL.add(rfM).subtract(rf0).norm(), 2.0e-14);
         }
     }
 
     @Test
     public void testNoConvergenceRc() {
-      Assertions.assertTrue(rC(buildComplex(1), buildComplex(Double.NaN)).isNaN());
+      assertTrue(rC(buildComplex(1), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -137,7 +139,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             T rcL    = rC(lambda,          x.add(lambda));
             T rcM    = rC(mu,              x.add(mu));
             T rc0    = rC(buildComplex(0), x);
-            Assertions.assertEquals(0.0, rcL.add(rcM).subtract(rc0).norm(), 3.0e-14);
+            assertEquals(0.0, rcL.add(rcM).subtract(rc0).norm(), 3.0e-14);
         }
     }
 
@@ -151,13 +153,13 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
                                           6 * random.nextDouble() - 3);
             final T rf = rF(x, y, y);
             final T rc = rC(x, y);
-            Assertions.assertEquals(0.0, rf.subtract(rc).norm(), 4.0e-15);
+            assertEquals(0.0, rf.subtract(rc).norm(), 4.0e-15);
         }
     }
 
     @Test
     public void testNoConvergenceRj() {
-        Assertions.assertTrue(rJ(buildComplex(1), buildComplex(1), buildComplex(1), buildComplex(Double.NaN)).isNaN());
+        assertTrue(rJ(buildComplex(1), buildComplex(1), buildComplex(1), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -210,13 +212,13 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             T rjM    = rJ(x.add(mu),     y.add(mu),     mu,              p.add(mu));
             T rj0    = rJ(x,             y,             buildComplex(0), p);
             T rc     = rC(a, b);
-            Assertions.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 3.0e-13);
+            assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 3.0e-13);
         }
     }
 
     @Test
     public void testNoConvergenceRd() {
-       Assertions.assertTrue(rD(buildComplex(1), buildComplex(1), buildComplex(Double.NaN)).isNaN());
+       assertTrue(rD(buildComplex(1), buildComplex(1), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -254,7 +256,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             T rdM    = rD(mu,              x.add(mu),     y.add(mu));
             T rd0    = rD(buildComplex(0), x,             y);
             T frac   = y.multiply(x.add(y).add(lambda).add(mu).sqrt()).reciprocal().multiply(3);
-            Assertions.assertEquals(0.0, rdL.add(rdM).subtract(rd0.subtract(frac)).norm(), 9.0e-12);
+            assertEquals(0.0, rdL.add(rdM).subtract(rd0.subtract(frac)).norm(), 9.0e-12);
         }
     }
 
@@ -281,11 +283,11 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             if (lhs.subtract(rhsGlobal).norm() > 1.0e-3) {
                 ++countWrongRoot;
                 // when the wrong root is selected, the result is really bad
-                Assertions.assertTrue(lhs.subtract(rhsGlobal).norm() > 0.1);
+                assertTrue(lhs.subtract(rhsGlobal).norm() > 0.1);
             }
-            Assertions.assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 1.0e-10);
+            assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 1.0e-10);
         }
-        Assertions.assertTrue(countWrongRoot > 3300);
+        assertTrue(countWrongRoot > 3300);
     }
 
     @Test
@@ -311,11 +313,11 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             if (lhs.subtract(rhsGlobal).norm() > 1.0e-3) {
                 ++countWrongRoot;
                 // when the wrong root is selected, the result is really bad
-                Assertions.assertTrue(lhs.subtract(rhsGlobal).norm() > 3.0);
+                assertTrue(lhs.subtract(rhsGlobal).norm() > 3.0);
             }
-            Assertions.assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 2.0e-11);
+            assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 2.0e-11);
         }
-        Assertions.assertTrue(countWrongRoot > 3300);
+        assertTrue(countWrongRoot > 3300);
     }
 
     @Test
@@ -348,7 +350,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             T x = buildComplex(random.nextDouble() * 3);
             T y = buildComplex(random.nextDouble() * 3);
             T z = buildComplex(random.nextDouble() * 3);
-            Assertions.assertEquals(0.0, rG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-15);
+            assertEquals(0.0, rG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-15);
         }
     }
 
@@ -361,15 +363,15 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
         T z = buildComplex( 0.9375,  0.25);
 
         // on this side, all implementations match
-        Assertions.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.1e-16);
-        Assertions.assertEquals(0.0, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(),     2.0e-16);
+        assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.1e-16);
+        assertEquals(0.0, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(),     2.0e-16);
 
         // slightly shift x, so xy/z imaginary part changes sign
         // the selected square root also changes dramatically sign so implementation becomes wrong
         // xy/z ≈ -0.566379 + 2.807 10⁻⁸ i ⇒ √(xy/z) ≈ 1.865 10⁻⁸ + 0.752582 i
         x = buildComplex(FastMath.scalb(7744999, -24), -0.5625);
-        Assertions.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.5e-16);
-        Assertions.assertEquals(0.75258, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 1.0e-5);
+        assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.5e-16);
+        assertEquals(0.75258, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 1.0e-5);
 
     }
 

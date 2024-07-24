@@ -26,21 +26,23 @@ import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Test cases for Kendall's Tau rank correlation.
  */
-public class KendallsCorrelationTest extends PearsonsCorrelationTest {
+class KendallsCorrelationTest extends PearsonsCorrelationTest {
 
     private KendallsCorrelation correlation;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         correlation = new KendallsCorrelation();
     }
 
@@ -63,14 +65,14 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
                 0.9666666666666666, 0.4666666666666666, 0.05, 1, 0.9999999999999999, 0.8999999999999999,
                 0.9833333333333333, 0.9666666666666666, 0.4666666666666666, 0.05, 0.9999999999999999, 1
         };
-        UnitTestUtils.assertEquals("Kendall's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
+        UnitTestUtils.customAssertEquals("Kendall's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
     }
 
     /**
      * Test R swiss fertility dataset.
      */
     @Test
-    public void testSwiss() {
+    void testSwiss() {
         RealMatrix matrix = createRealMatrix(swissData, 47, 5);
         KendallsCorrelation corrInstance = new KendallsCorrelation(matrix);
         RealMatrix correlationMatrix = corrInstance.getCorrelationMatrix();
@@ -81,11 +83,11 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
                 -0.3306111613580587, -0.4761645631778491, 0.528943683925829, 1, -0.08479652265379604,
                 0.2453703703703704, 0.2054604569820847, -0.3212755391722673, -0.08479652265379604, 1
         };
-        UnitTestUtils.assertEquals("Kendall's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
+        UnitTestUtils.customAssertEquals("Kendall's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
     }
 
     @Test
-    public void testSimpleOrdered() {
+    void testSimpleOrdered() {
         final int length = 10;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
@@ -93,11 +95,11 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
             xArray[i] = i;
             yArray[i] = i;
         }
-        Assertions.assertEquals(1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
+        assertEquals(1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
     }
 
     @Test
-    public void testSimpleReversed() {
+    void testSimpleReversed() {
         final int length = 10;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
@@ -105,11 +107,11 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
             xArray[length - i - 1] = i;
             yArray[i] = i;
         }
-        Assertions.assertEquals(-1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
+        assertEquals(-1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
     }
 
     @Test
-    public void testSimpleOrderedPowerOf2() {
+    void testSimpleOrderedPowerOf2() {
         final int length = 16;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
@@ -117,11 +119,11 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
             xArray[i] = i;
             yArray[i] = i;
         }
-        Assertions.assertEquals(1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
+        assertEquals(1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
     }
 
     @Test
-    public void testSimpleReversedPowerOf2() {
+    void testSimpleReversedPowerOf2() {
         final int length = 16;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
@@ -129,11 +131,11 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
             xArray[length - i - 1] = i;
             yArray[i] = i;
         }
-        Assertions.assertEquals(-1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
+        assertEquals(-1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
     }
 
     @Test
-    public void testSimpleJumble() {
+    void testSimpleJumble() {
         //                                     A    B    C    D
         final double[] xArray = new double[] {1.0, 2.0, 3.0, 4.0};
         final double[] yArray = new double[] {1.0, 3.0, 2.0, 4.0};
@@ -141,13 +143,13 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
         // 6 pairs: (A,B) (A,C) (A,D) (B,C) (B,D) (C,D)
         // (B,C) is discordant, the other 5 are concordant
 
-        Assertions.assertEquals((5 - 1) / (double) 6,
+        assertEquals((5 - 1) / (double) 6,
                 correlation.correlation(xArray, yArray),
                 Double.MIN_VALUE);
     }
 
     @Test
-    public void testBalancedJumble() {
+    void testBalancedJumble() {
         //                                     A    B    C    D
         final double[] xArray = new double[] {1.0, 2.0, 3.0, 4.0};
         final double[] yArray = new double[] {1.0, 4.0, 3.0, 2.0};
@@ -155,13 +157,13 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
         // 6 pairs: (A,B) (A,C) (A,D) (B,C) (B,D) (C,D)
         // (A,B) (A,C), (A,D) are concordant, the other 3 are discordant
 
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                 correlation.correlation(xArray, yArray),
                 Double.MIN_VALUE);
     }
 
     @Test
-    public void testOrderedTies() {
+    void testOrderedTies() {
         final int length = 10;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
@@ -172,57 +174,57 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
         // 5 pairs of points that are tied in both values.
         // 16 + 12 + 8 + 4 = 40 concordant
         // (40 - 0) / Math.sqrt((45 - 5) * (45 - 5)) = 1
-        Assertions.assertEquals(1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
+        assertEquals(1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
     }
 
 
     @Test
-    public void testAllTiesInBoth() {
+    void testAllTiesInBoth() {
         final int length = 10;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
-        Assertions.assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
+        assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
     }
 
     @Test
-    public void testAllTiesInX() {
+    void testAllTiesInX() {
         final int length = 10;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
         for (int i = 0; i < length; i++) {
             xArray[i] = i;
         }
-        Assertions.assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
+        assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
     }
 
     @Test
-    public void testAllTiesInY() {
+    void testAllTiesInY() {
         final int length = 10;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
         for (int i = 0; i < length; i++) {
             yArray[i] = i;
         }
-        Assertions.assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
+        assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
     }
 
     @Test
-    public void testSingleElement() {
+    void testSingleElement() {
         final int length = 1;
         final double[] xArray = new double[length];
         final double[] yArray = new double[length];
-        Assertions.assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
+        assertEquals(Double.NaN, correlation.correlation(xArray, yArray), 0);
     }
 
     @Test
-    public void testTwoElements() {
+    void testTwoElements() {
         final double[] xArray = new double[] {2.0, 1.0};
         final double[] yArray = new double[] {1.0, 2.0};
-        Assertions.assertEquals(-1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
+        assertEquals(-1.0, correlation.correlation(xArray, yArray), Double.MIN_VALUE);
     }
 
     @Test
-    public void test2dDoubleArray() {
+    void test2dDoubleArray() {
         final double[][] input = new double[][] {
                 new double[] {2.0, 1.0, 2.0},
                 new double[] {1.0, 2.0, 1.0},
@@ -234,13 +236,13 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
                 new double[] {1.0 / 3.0, 1.0, 1.0 / 3.0},
                 new double[] {1.0, 1.0 / 3.0, 1.0}};
 
-        Assertions.assertEquals(correlation.computeCorrelationMatrix(input),
+        assertEquals(correlation.computeCorrelationMatrix(input),
                 new BlockRealMatrix(expected));
 
     }
 
     @Test
-    public void testBlockMatrix() {
+    void testBlockMatrix() {
         final double[][] input = new double[][] {
                 new double[] {2.0, 1.0, 2.0},
                 new double[] {1.0, 2.0, 1.0},
@@ -252,22 +254,22 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
                 new double[] {1.0 / 3.0, 1.0, 1.0 / 3.0},
                 new double[] {1.0, 1.0 / 3.0, 1.0}};
 
-        Assertions.assertEquals(
+        assertEquals(
                 correlation.computeCorrelationMatrix(new BlockRealMatrix(input)),
                 new BlockRealMatrix(expected));
     }
 
     @Test
-    public void testLargeArray() {
+    void testLargeArray() {
         // test integer overflow detected in MATH-1068
         double[] xArray = new double[100000];
         Arrays.fill(xArray, 0, 2500, 1.0);
 
-        Assertions.assertEquals(1.0, correlation.correlation(xArray, xArray), 1e-6);
+        assertEquals(1.0, correlation.correlation(xArray, xArray), 1e-6);
     }
 
     @Test
-    public void testMath1277() {
+    void testMath1277() {
         // example that led to a correlation coefficient outside of [-1, 1]
         // due to a bug reported in MATH-1277
         RandomGenerator rng = new Well1024a(0);
@@ -280,6 +282,6 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
             yArray[i] =  rng.nextDouble();
         }
         double coefficient = correlation.correlation(xArray, yArray);
-        Assertions.assertTrue(1.0 >= coefficient && -1.0 <= coefficient);
+        assertTrue(1.0 >= coefficient && -1.0 <= coefficient);
     }
 }

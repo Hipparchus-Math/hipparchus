@@ -21,13 +21,14 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for the AgrestiCoullInterval.
  */
-public class AgrestiCoullIntervalTest extends BinomialProportionAbstractTest {
+class AgrestiCoullIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
     protected BinomialProportionMethod getBinomialProportionMethod() {
@@ -35,10 +36,10 @@ public class AgrestiCoullIntervalTest extends BinomialProportionAbstractTest {
     }
 
     @Test
-    public void testStandardInterval() {
+    void testStandardInterval() {
         ConfidenceInterval confidenceInterval = createStandardTestInterval();
-        Assertions.assertEquals(0.07993521, confidenceInterval.getLowerBound(), 1E-5);
-        Assertions.assertEquals(0.1243704, confidenceInterval.getUpperBound(), 1E-5);
+        assertEquals(0.07993521, confidenceInterval.getLowerBound(), 1E-5);
+        assertEquals(0.1243704, confidenceInterval.getUpperBound(), 1E-5);
     }
 
 }

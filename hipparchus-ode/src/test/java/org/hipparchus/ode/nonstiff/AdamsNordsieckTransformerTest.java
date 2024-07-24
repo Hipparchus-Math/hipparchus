@@ -21,25 +21,26 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class AdamsNordsieckTransformerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class AdamsNordsieckTransformerTest {
 
     @Test
-    public void testPolynomialExtraDerivative() {
+    void testPolynomialExtraDerivative() {
         checkNordsieckStart(new PolynomialFunction(new double[] { 6, 5, 4, 3, 2, 1 }),
                             5, 0.0, 0.125, 3.2e-16);
     }
 
     @Test
-    public void testPolynomialRegular() {
+    void testPolynomialRegular() {
         checkNordsieckStart(new PolynomialFunction(new double[] { 6, 5, 4, 3, 2, 1 }),
                             4, 0.0, 0.125, 3.1e-16);
     }
 
     @Test
-    public void testPolynomialMissingLastDerivative() {
+    void testPolynomialMissingLastDerivative() {
         // this test intentionally uses not enough start points,
         // the Nordsieck vector is therefore not expected to match the exact scaled derivatives
         checkNordsieckStart(new PolynomialFunction(new double[] { 6, 5, 4, 3, 2, 1 }),
@@ -47,7 +48,7 @@ public class AdamsNordsieckTransformerTest {
     }
 
     @Test
-    public void testTransformExact() {
+    void testTransformExact() {
         // a 5 steps transformer handles a degree 5 polynomial exactly
         // the Nordsieck vector holds the full information about the function
         // transforming the vector from t0 to t0+h or recomputing it from scratch
@@ -56,7 +57,7 @@ public class AdamsNordsieckTransformerTest {
     }
 
     @Test
-    public void testTransformInexact() {
+    void testTransformInexact() {
         // a 4 steps transformer cannot handle a degree 5 polynomial exactly
         // the Nordsieck vector lacks some high degree information about the function
         // transforming the vector from t0 to t0+h or recomputing it from scratch
@@ -71,12 +72,12 @@ public class AdamsNordsieckTransformerTest {
         PolynomialFunction derivative = polynomial.polynomialDerivative();
         final Array2DRowRealMatrix nordsieck = start(transformer, nbSteps, t0, h, polynomial, derivative);
 
-        Assertions.assertEquals(nbSteps - 1, nordsieck.getRowDimension());
+        assertEquals(nbSteps - 1, nordsieck.getRowDimension());
         double coeff = h;
         for (int i = 0; i < nordsieck.getRowDimension(); ++i) {
             coeff *= h / (i + 2);
             derivative = derivative.polynomialDerivative();
-            Assertions.assertEquals(derivative.value(t0) * coeff, nordsieck.getEntry(i, 0), epsilon);
+            assertEquals(derivative.value(t0) * coeff, nordsieck.getEntry(i, 0), epsilon);
         }
 
     }
@@ -95,7 +96,7 @@ public class AdamsNordsieckTransformerTest {
                                                      n1);
         final Array2DRowRealMatrix n2 = start(transformer, nbSteps, t0 + h, h, polynomial, derivative);
 
-        Assertions.assertEquals(expectedError, n2.subtract(n1).getNorm1(), expectedError * 0.001);
+        assertEquals(expectedError, n2.subtract(n1).getNorm1(), expectedError * 0.001);
 
     }
 

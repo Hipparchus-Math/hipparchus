@@ -22,193 +22,196 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  */
-public class ErfTest {
+class ErfTest {
     final Field<Binary64> field = Binary64Field.getInstance();
     final Binary64 zero = field.getZero();
     final Binary64 one = field.getOne();
 
     @Test
-    public void testErf0() {
+    void testErf0() {
         double actual = Erf.erf(0.0);
         double expected = 0.0;
-        Assertions.assertEquals(expected, actual, 1.0e-15);
-        Assertions.assertEquals(1 - expected, Erf.erfc(0.0), 1.0e-15);
+        assertEquals(expected, actual, 1.0e-15);
+        assertEquals(1 - expected, Erf.erfc(0.0), 1.0e-15);
     }
 
     @Test
-    public void testErf0Field() {
+    void testErf0Field() {
         Binary64 actual   = Erf.erf(zero);
         Binary64 expected = zero;
-        Assertions.assertEquals(zero.getReal(), actual.getReal(), 1.0e-15);
-        Assertions.assertEquals(one.subtract(expected).getReal(), Erf.erfc(zero).getReal(), 1.0e-15);
+        assertEquals(zero.getReal(), actual.getReal(), 1.0e-15);
+        assertEquals(one.subtract(expected).getReal(), Erf.erfc(zero).getReal(), 1.0e-15);
     }
 
     @Test
-    public void testErf1960() {
+    void testErf1960() {
         double x = 1.960 / FastMath.sqrt(2.0);
         double actual = Erf.erf(x);
         double expected = 0.95;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - actual, Erf.erfc(x), 1.0e-15);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - actual, Erf.erfc(x), 1.0e-15);
 
         actual = Erf.erf(-x);
         expected = -expected;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - actual, Erf.erfc(-x), 1.0e-15);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - actual, Erf.erfc(-x), 1.0e-15);
     }
 
     @Test
-    public void testErf1960Field() {
+    void testErf1960Field() {
         Binary64 x = one.multiply(1.960).divide(FastMath.sqrt(2.0));
         Binary64 actual = Erf.erf(x);
         Binary64 expected = one.multiply(0.95);
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
 
         actual = Erf.erf(x.negate());
         expected = expected.negate();
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
     }
 
     @Test
-    public void testErf2576() {
+    void testErf2576() {
         double x = 2.576 / FastMath.sqrt(2.0);
         double actual = Erf.erf(x);
         double expected = 0.99;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - actual, Erf.erfc(x), 1e-15);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - actual, Erf.erfc(x), 1e-15);
 
         actual = Erf.erf(-x);
         expected = -expected;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - actual, Erf.erfc(-x), 1.0e-15);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - actual, Erf.erfc(-x), 1.0e-15);
     }
 
     @Test
-    public void testErf2576Field() {
+    void testErf2576Field() {
         Binary64 x = one.multiply(2.576).divide(FastMath.sqrt(2.0));
         Binary64 actual = Erf.erf(x);
         Binary64 expected = one.multiply(0.99);
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
 
         actual = Erf.erf(x.negate());
         expected = expected.negate();
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
     }
 
     @Test
-    public void testErf2807() {
+    void testErf2807() {
         double x = 2.807 / FastMath.sqrt(2.0);
         double actual = Erf.erf(x);
         double expected = 0.995;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - actual, Erf.erfc(x), 1.0e-15);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - actual, Erf.erfc(x), 1.0e-15);
 
         actual = Erf.erf(-x);
         expected = -expected;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - actual, Erf.erfc(-x), 1.0e-15);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - actual, Erf.erfc(-x), 1.0e-15);
     }
 
     @Test
-    public void testErf2807Field() {
+    void testErf2807Field() {
         Binary64 x = one.multiply(2.807).divide(FastMath.sqrt(2.0));
         Binary64 actual = Erf.erf(x);
         Binary64 expected = one.multiply(0.995);
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
 
         actual = Erf.erf(x.negate());
         expected = expected.negate();
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
     }
 
     @Test
-    public void testErf3291() {
+    void testErf3291() {
         double x = 3.291 / FastMath.sqrt(2.0);
         double actual = Erf.erf(x);
         double expected = 0.999;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - expected, Erf.erfc(x), 1.0e-5);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - expected, Erf.erfc(x), 1.0e-5);
 
         actual = Erf.erf(-x);
         expected = -expected;
-        Assertions.assertEquals(expected, actual, 1.0e-5);
-        Assertions.assertEquals(1 - expected, Erf.erfc(-x), 1.0e-5);
+        assertEquals(expected, actual, 1.0e-5);
+        assertEquals(1 - expected, Erf.erfc(-x), 1.0e-5);
     }
 
     @Test
-    public void testErf3291Field() {
+    void testErf3291Field() {
         Binary64 x = one.multiply(3.291).divide(FastMath.sqrt(2.0));
         Binary64 actual = Erf.erf(x);
         Binary64 expected = one.multiply(0.999);
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
 
         actual = Erf.erf(x.negate());
         expected = expected.negate();
-        Assertions.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
-        Assertions.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
+        assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
     }
 
     /**
      * MATH-301, MATH-456
      */
     @Test
-    public void testLargeValues() {
+    void testLargeValues() {
         for (int i = 1; i < 200; i*=10) {
             double result = Erf.erf(i);
-            Assertions.assertFalse(Double.isNaN(result));
-            Assertions.assertTrue(result > 0 && result <= 1);
+            assertFalse(Double.isNaN(result));
+            assertTrue(result > 0 && result <= 1);
             result = Erf.erf(-i);
-            Assertions.assertFalse(Double.isNaN(result));
-            Assertions.assertTrue(result >= -1 && result < 0);
+            assertFalse(Double.isNaN(result));
+            assertTrue(result >= -1 && result < 0);
             result = Erf.erfc(i);
-            Assertions.assertFalse(Double.isNaN(result));
-            Assertions.assertTrue(result >= 0 && result < 1);
+            assertFalse(Double.isNaN(result));
+            assertTrue(result >= 0 && result < 1);
             result = Erf.erfc(-i);
-            Assertions.assertFalse(Double.isNaN(result));
-            Assertions.assertTrue(result >= 1 && result <= 2);
+            assertFalse(Double.isNaN(result));
+            assertTrue(result >= 1 && result <= 2);
         }
-        Assertions.assertEquals(-1, Erf.erf(Double.NEGATIVE_INFINITY), 0);
-        Assertions.assertEquals(1, Erf.erf(Double.POSITIVE_INFINITY), 0);
-        Assertions.assertEquals(2, Erf.erfc(Double.NEGATIVE_INFINITY), 0);
-        Assertions.assertEquals(0, Erf.erfc(Double.POSITIVE_INFINITY), 0);
+        assertEquals(-1, Erf.erf(Double.NEGATIVE_INFINITY), 0);
+        assertEquals(1, Erf.erf(Double.POSITIVE_INFINITY), 0);
+        assertEquals(2, Erf.erfc(Double.NEGATIVE_INFINITY), 0);
+        assertEquals(0, Erf.erfc(Double.POSITIVE_INFINITY), 0);
     }
 
     /**
      * MATH-301, MATH-456
      */
     @Test
-    public void testLargeValuesField() {
+    void testLargeValuesField() {
         for (int i = 1; i < 200; i*=10) {
             final Binary64 iField = new Binary64(i);
             Binary64 result = Erf.erf(iField);
-            Assertions.assertFalse(result.isNaN());
-            Assertions.assertTrue(result.getReal() > 0 && result.getReal() <= 1);
+            assertFalse(result.isNaN());
+            assertTrue(result.getReal() > 0 && result.getReal() <= 1);
             result = Erf.erf(iField.negate());
-            Assertions.assertFalse(result.isNaN());
-            Assertions.assertTrue(result.getReal() >= -1 && result.getReal() < 0);
+            assertFalse(result.isNaN());
+            assertTrue(result.getReal() >= -1 && result.getReal() < 0);
             result = Erf.erfc(iField);
-            Assertions.assertFalse(result.isNaN());
-            Assertions.assertTrue(result.getReal() >= 0 && result.getReal() < 1);
+            assertFalse(result.isNaN());
+            assertTrue(result.getReal() >= 0 && result.getReal() < 1);
             result = Erf.erfc(iField.negate());
-            Assertions.assertFalse(result.isNaN());
-            Assertions.assertTrue(result.getReal() >= 1 && result.getReal() <= 2);
+            assertFalse(result.isNaN());
+            assertTrue(result.getReal() >= 1 && result.getReal() <= 2);
         }
-        Assertions.assertEquals(one.negate().getReal(), Erf.erf(new Binary64(Double.NEGATIVE_INFINITY)).getReal(), 0);
-        Assertions.assertEquals(one.getReal(), Erf.erf(new Binary64(Double.POSITIVE_INFINITY)).getReal(), 0);
-        Assertions.assertEquals(one.multiply(2).getReal(), new Binary64(Erf.erfc(Double.NEGATIVE_INFINITY)).getReal(), 0);
-        Assertions.assertEquals(zero.getReal(), Erf.erfc(new Binary64(Double.POSITIVE_INFINITY)).getReal(), 0);
+        assertEquals(one.negate().getReal(), Erf.erf(new Binary64(Double.NEGATIVE_INFINITY)).getReal(), 0);
+        assertEquals(one.getReal(), Erf.erf(new Binary64(Double.POSITIVE_INFINITY)).getReal(), 0);
+        assertEquals(one.multiply(2).getReal(), new Binary64(Erf.erfc(Double.NEGATIVE_INFINITY)).getReal(), 0);
+        assertEquals(zero.getReal(), Erf.erfc(new Binary64(Double.POSITIVE_INFINITY)).getReal(), 0);
     }
 
     /**
@@ -216,7 +219,7 @@ public class ErfTest {
      * erfl (extended precision erf).
      */
     @Test
-    public void testErfGnu() {
+    void testErfGnu() {
         final double tol = 1E-15;
         final double[] gnuValues = new double[] {-1, -1, -1, -1, -1,
         -1, -1, -1, -0.99999999999999997848,
@@ -230,7 +233,7 @@ public class ErfTest {
          1,  1,  1,  1};
         double x = -10d;
         for (int i = 0; i < 41; i++) {
-            Assertions.assertEquals(gnuValues[i], Erf.erf(x), tol);
+            assertEquals(gnuValues[i], Erf.erf(x), tol);
             x += 0.5d;
         }
     }
@@ -240,7 +243,7 @@ public class ErfTest {
      * erfl (extended precision erf).
      */
     @Test
-    public void testErfGnuField() {
+    void testErfGnuField() {
         final double tol = 1E-15;
         final Binary64[] gnuValues = new Binary64[] {one.negate(), one.negate(), one.negate(), one.negate(), one.negate(),
         one.negate(), one.negate(), one.negate(), new Binary64(-0.99999999999999997848),
@@ -254,7 +257,7 @@ public class ErfTest {
          one,  one,  one,  one};
         Binary64 x = one.multiply(-10d);
         for (int i = 0; i < 41; i++) {
-            Assertions.assertEquals(gnuValues[i].getReal(), Erf.erf(x).getReal(), tol);
+            assertEquals(gnuValues[i].getReal(), Erf.erf(x).getReal(), tol);
             x = x.add(0.5d);
         }
     }
@@ -264,7 +267,7 @@ public class ErfTest {
      * erfcl (extended precision erfc).
      */
     @Test
-    public void testErfcGnu() {
+    void testErfcGnu() {
         final double tol = 1E-15;
         final double[] gnuValues = new double[] { 2,  2,  2,  2,  2,
         2,  2,  2, 1.9999999999999999785,
@@ -278,7 +281,7 @@ public class ErfTest {
         2.7623240713337714448E-33, 4.1370317465138102353E-37, 3.7692144856548799402E-41, 2.0884875837625447567E-45};
         double x = -10d;
         for (int i = 0; i < 41; i++) {
-            Assertions.assertEquals(gnuValues[i], Erf.erfc(x), tol);
+            assertEquals(gnuValues[i], Erf.erfc(x), tol);
             x += 0.5d;
         }
     }
@@ -288,7 +291,7 @@ public class ErfTest {
      * erfcl (extended precision erfc).
      */
     @Test
-    public void testErfcGnuField() {
+    void testErfcGnuField() {
         final double tol = 1E-15;
         final Binary64[] gnuValues = new Binary64[] { new Binary64(2),  new Binary64(2),  new Binary64(2),  new Binary64(2),  new Binary64(2),
         new Binary64(2),  new Binary64(2),  new Binary64(2), new Binary64(1.9999999999999999785),
@@ -302,7 +305,7 @@ public class ErfTest {
         new Binary64(2.7623240713337714448E-33), new Binary64(4.1370317465138102353E-37), new Binary64(3.7692144856548799402E-41),new Binary64( 2.0884875837625447567E-45)};
         Binary64 x = new Binary64(-10d);
         for (int i = 0; i < 41; i++) {
-            Assertions.assertEquals(gnuValues[i].getReal(), Erf.erfc(x).getReal(), tol);
+            assertEquals(gnuValues[i].getReal(), Erf.erfc(x).getReal(), tol);
             x = x.add(0.5d);
         }
     }
@@ -313,7 +316,7 @@ public class ErfTest {
      * http//www.jstatsoft.org/v11/a05/paper
      */
     @Test
-    public void testErfcMaple() {
+    void testErfcMaple() {
         double[][] ref = new double[][]
                         {{0.1, 4.60172162722971e-01},
                          {1.2, 1.15069670221708e-01},
@@ -334,8 +337,8 @@ public class ErfTest {
         };
         for (int i = 0; i < 15; i++) {
             final double result = 0.5*Erf.erfc(ref[i][0]/FastMath.sqrt(2));
-            Assertions.assertEquals(ref[i][1], result, 1E-15);
-            UnitTestUtils.assertRelativelyEquals(ref[i][1], result, 1E-13);
+            assertEquals(ref[i][1], result, 1E-15);
+            UnitTestUtils.customAssertRelativelyEquals(ref[i][1], result, 1E-13);
         }
     }
 
@@ -345,7 +348,7 @@ public class ErfTest {
      * http//www.jstatsoft.org/v11/a05/paper
      */
     @Test
-    public void testErfcMapleField() {
+    void testErfcMapleField() {
         Binary64[][] ref = new Binary64[][]
                 {{new Binary64(0.1), new Binary64(4.60172162722971e-01)},
                  {new Binary64(1.2), new Binary64(1.15069670221708e-01)},
@@ -366,8 +369,8 @@ public class ErfTest {
                 };
         for (int i = 0; i < 15; i++) {
             final Binary64 result = Erf.erfc(ref[i][0].divide(FastMath.sqrt(2))).multiply(0.5);
-            Assertions.assertEquals(ref[i][1].getReal(), result.getReal(), 1E-15);
-            UnitTestUtils.assertRelativelyEquals(ref[i][1].getReal(), result.getReal(), 1E-13);
+            assertEquals(ref[i][1].getReal(), result.getReal(), 1E-15);
+            UnitTestUtils.customAssertRelativelyEquals(ref[i][1].getReal(), result.getReal(), 1E-13);
         }
     }
 
@@ -376,15 +379,15 @@ public class ErfTest {
      * obtained from Erf.erf(double) and Erf.erfc(double).
      */
     @Test
-    public void testTwoArgumentErf() {
+    void testTwoArgumentErf() {
         double[] xi = new double[]{-2.0, -1.0, -0.9, -0.1, 0.0, 0.1, 0.9, 1.0, 2.0};
         for(double x1 : xi) {
             for(double x2 : xi) {
                 double a = Erf.erf(x1, x2);
                 double b = Erf.erf(x2) - Erf.erf(x1);
                 double c = Erf.erfc(x1) - Erf.erfc(x2);
-                Assertions.assertEquals(a, b, 1E-15);
-                Assertions.assertEquals(a, c, 1E-15);
+                assertEquals(a, b, 1E-15);
+                assertEquals(a, c, 1E-15);
             }
         }
     }
@@ -394,108 +397,108 @@ public class ErfTest {
      * obtained from Erf.erf(double) and Erf.erfc(double).
      */
     @Test
-    public void testTwoArgumentErfField() {
+    void testTwoArgumentErfField() {
         Binary64[] xi = new Binary64[]{new Binary64(-2.0), new Binary64(-1.0), new Binary64(-0.9), new Binary64(-0.1), new Binary64(0.0), new Binary64(0.1), new Binary64(0.9), new Binary64(1.0), new Binary64(2.0)};
         for(Binary64 x1 : xi) {
             for(Binary64 x2 : xi) {
                 Binary64 a = Erf.erf(x1, x2);
                 Binary64 b = Erf.erf(x2).subtract(Erf.erf(x1));
                 Binary64 c = Erf.erfc(x1).subtract(Erf.erfc(x2));
-                Assertions.assertEquals(a.getReal(), b.getReal(), 1E-15);
-                Assertions.assertEquals(a.getReal(), c.getReal(), 1E-15);
+                assertEquals(a.getReal(), b.getReal(), 1E-15);
+                assertEquals(a.getReal(), c.getReal(), 1E-15);
             }
         }
     }
 
     @Test
-    public void testErfInvNaN() {
-        Assertions.assertTrue(Double.isNaN(Erf.erfInv(-1.001)));
-        Assertions.assertTrue(Double.isNaN(Erf.erfInv(+1.001)));
+    void testErfInvNaN() {
+        assertTrue(Double.isNaN(Erf.erfInv(-1.001)));
+        assertTrue(Double.isNaN(Erf.erfInv(+1.001)));
     }
 
     @Test
-    public void testErfInvNaNField() {
-        Assertions.assertTrue((Erf.erfInv(new Binary64(-1.001))).isNaN());
-        Assertions.assertTrue(Erf.erfInv(new Binary64(+1.001)).isNaN());
+    void testErfInvNaNField() {
+        assertTrue((Erf.erfInv(new Binary64(-1.001))).isNaN());
+        assertTrue(Erf.erfInv(new Binary64(+1.001)).isNaN());
     }
 
     @Test
-    public void testErfInvInfinite() {
-        Assertions.assertTrue(Double.isInfinite(Erf.erfInv(-1)));
-        Assertions.assertTrue(Erf.erfInv(-1) < 0);
-        Assertions.assertTrue(Double.isInfinite(Erf.erfInv(+1)));
-        Assertions.assertTrue(Erf.erfInv(+1) > 0);
+    void testErfInvInfinite() {
+        assertTrue(Double.isInfinite(Erf.erfInv(-1)));
+        assertTrue(Erf.erfInv(-1) < 0);
+        assertTrue(Double.isInfinite(Erf.erfInv(+1)));
+        assertTrue(Erf.erfInv(+1) > 0);
     }
 
     @Test
-    public void testErfInvInfiniteField() {
-        Assertions.assertTrue(Double.isInfinite(Erf.erfInv(-1)));
-        Assertions.assertTrue(Erf.erfInv(-1) < 0);
-        Assertions.assertTrue(Double.isInfinite(Erf.erfInv(+1)));
-        Assertions.assertTrue(Erf.erfInv(+1) > 0);
+    void testErfInvInfiniteField() {
+        assertTrue(Double.isInfinite(Erf.erfInv(-1)));
+        assertTrue(Erf.erfInv(-1) < 0);
+        assertTrue(Double.isInfinite(Erf.erfInv(+1)));
+        assertTrue(Erf.erfInv(+1) > 0);
     }
 
     @Test
-    public void testErfInv() {
+    void testErfInv() {
         for (double x = -5.9; x < 5.9; x += 0.01) {
             final double y = Erf.erf(x);
             final double dydx = 2 * FastMath.exp(-x * x) / FastMath.sqrt(FastMath.PI);
-            Assertions.assertEquals(x, Erf.erfInv(y), 1.0e-15 / dydx);
+            assertEquals(x, Erf.erfInv(y), 1.0e-15 / dydx);
         }
     }
 
     @Test
-    public void testErfInvField() {
+    void testErfInvField() {
         for (Binary64 x = new Binary64(-5.9); x.getReal() < 5.9; x = x.add(0.01)) {
             final Binary64 y = Erf.erf(x);
             final Binary64 dydx = x.square().negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
-            Assertions.assertEquals(x.getReal(), Erf.erfInv(y).getReal(), 1.0e-15 / dydx.getReal());
+            assertEquals(x.getReal(), Erf.erfInv(y).getReal(), 1.0e-15 / dydx.getReal());
         }
     }
 
     @Test
-    public void testErfcInvNaN() {
-        Assertions.assertTrue(Double.isNaN(Erf.erfcInv(-0.001)));
-        Assertions.assertTrue(Double.isNaN(Erf.erfcInv(+2.001)));
+    void testErfcInvNaN() {
+        assertTrue(Double.isNaN(Erf.erfcInv(-0.001)));
+        assertTrue(Double.isNaN(Erf.erfcInv(+2.001)));
     }
 
     @Test
-    public void testErfcInvNaNField() {
-        Assertions.assertTrue(Erf.erfcInv(new Binary64(-0.001)).isNaN());
-        Assertions.assertTrue(Erf.erfcInv(new Binary64(+2.001)).isNaN());
+    void testErfcInvNaNField() {
+        assertTrue(Erf.erfcInv(new Binary64(-0.001)).isNaN());
+        assertTrue(Erf.erfcInv(new Binary64(+2.001)).isNaN());
     }
 
     @Test
-    public void testErfcInvInfinite() {
-        Assertions.assertTrue(Double.isInfinite(Erf.erfcInv(-0)));
-        Assertions.assertTrue(Erf.erfcInv( 0) > 0);
-        Assertions.assertTrue(Double.isInfinite(Erf.erfcInv(+2)));
-        Assertions.assertTrue(Erf.erfcInv(+2) < 0);
+    void testErfcInvInfinite() {
+        assertTrue(Double.isInfinite(Erf.erfcInv(-0)));
+        assertTrue(Erf.erfcInv( 0) > 0);
+        assertTrue(Double.isInfinite(Erf.erfcInv(+2)));
+        assertTrue(Erf.erfcInv(+2) < 0);
     }
 
     @Test
-    public void testErfcInvInfiniteField() {
-        Assertions.assertTrue(Erf.erfcInv(new Binary64(-0)).isInfinite());
-        Assertions.assertTrue(Erf.erfcInv( zero).getReal() > 0);
-        Assertions.assertTrue(Erf.erfcInv(new Binary64(+2)).isInfinite());
-        Assertions.assertTrue(Erf.erfcInv(new Binary64(+2)).getReal() < 0);
+    void testErfcInvInfiniteField() {
+        assertTrue(Erf.erfcInv(new Binary64(-0)).isInfinite());
+        assertTrue(Erf.erfcInv( zero).getReal() > 0);
+        assertTrue(Erf.erfcInv(new Binary64(+2)).isInfinite());
+        assertTrue(Erf.erfcInv(new Binary64(+2)).getReal() < 0);
     }
 
     @Test
-    public void testErfcInv() {
+    void testErfcInv() {
         for (double x = -5.85; x < 5.9; x += 0.01) {
             final double y = Erf.erfc(x);
             final double dydxAbs = 2 * FastMath.exp(-x * x) / FastMath.sqrt(FastMath.PI);
-            Assertions.assertEquals(x, Erf.erfcInv(y), 1.0e-15 / dydxAbs);
+            assertEquals(x, Erf.erfcInv(y), 1.0e-15 / dydxAbs);
         }
     }
 
     @Test
-    public void testErfcInvField() {
+    void testErfcInvField() {
         for (Binary64 x = new Binary64(-5.85); x.getReal() < 5.9; x = x.add(0.01)) {
             final Binary64 y = Erf.erfc(x);
             final Binary64 dydxAbs = x.square().negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
-            Assertions.assertEquals(x.getReal(), Erf.erfcInv(y).getReal(), 1.0e-15 / dydxAbs.getReal());
+            assertEquals(x.getReal(), Erf.erfcInv(y).getReal(), 1.0e-15 / dydxAbs.getReal());
         }
     }
 }

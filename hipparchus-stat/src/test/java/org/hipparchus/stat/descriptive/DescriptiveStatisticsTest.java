@@ -65,7 +65,7 @@ public class DescriptiveStatisticsTest {
 
     /** test stats */
     @Test
-    public void testStats() {
+    void testStats() {
         DescriptiveStatistics u = createDescriptiveStatistics();
         assertEquals(0, u.getN(), tolerance, "total count");
         double one = 1;
@@ -90,7 +90,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testConsume() {
+    void testConsume() {
         DescriptiveStatistics u = createDescriptiveStatistics();
         assertEquals(0, u.getN(), tolerance, "total count");
 
@@ -111,7 +111,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testCopy() {
+    void testCopy() {
         DescriptiveStatistics stats = createDescriptiveStatistics();
         stats.addValue(1);
         stats.addValue(3);
@@ -121,7 +121,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testWindowSize() {
+    void testWindowSize() {
         DescriptiveStatistics stats = createDescriptiveStatistics();
         stats.setWindowSize(300);
         for (int i = 0; i < 100; ++i) {
@@ -144,7 +144,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testGetValues() {
+    void testGetValues() {
         DescriptiveStatistics stats = createDescriptiveStatistics();
         for (int i = 100; i > 0; --i) {
             stats.addValue(i);
@@ -163,7 +163,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testQuadraticMean() {
+    void testQuadraticMean() {
         final double[] values = { 1.2, 3.4, 5.6, 7.89 };
         final DescriptiveStatistics stats = new DescriptiveStatistics(values);
 
@@ -179,7 +179,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         DescriptiveStatistics stats = createDescriptiveStatistics();
         stats.addValue(1);
         stats.addValue(2);
@@ -199,7 +199,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testPercentile() {
+    void testPercentile() {
         DescriptiveStatistics stats = createDescriptiveStatistics();
 
         stats.addValue(1);
@@ -209,7 +209,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void test20090720() {
+    void test20090720() {
         DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics(100);
         for (int i = 0; i < 161; i++) {
             descriptiveStatistics.addValue(1.2);
@@ -220,7 +220,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testRemoval() {
+    void testRemoval() {
         final DescriptiveStatistics dstat = createDescriptiveStatistics();
 
         checkRemoval(dstat, 1, 6.0, 0.0, Double.NaN);
@@ -231,7 +231,7 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testSummaryConsistency() {
+    void testSummaryConsistency() {
         final int windowSize = 5;
         final DescriptiveStatistics dstats = new DescriptiveStatistics(windowSize);
         final StreamingStatistics sstats = new StreamingStatistics();
@@ -243,28 +243,28 @@ public class DescriptiveStatisticsTest {
             for (int j = 0; j < values.length; j++) {
                 sstats.addValue(values[j]);
             }
-            UnitTestUtils.assertEquals(dstats.getMean(), sstats.getMean(), tol);
-            UnitTestUtils.assertEquals(new Mean().evaluate(values), dstats.getMean(), tol);
-            UnitTestUtils.assertEquals(dstats.getMax(), sstats.getMax(), tol);
-            UnitTestUtils.assertEquals(new Max().evaluate(values), dstats.getMax(), tol);
-            UnitTestUtils.assertEquals(dstats.getGeometricMean(), sstats.getGeometricMean(), tol);
-            UnitTestUtils.assertEquals(new GeometricMean().evaluate(values), dstats.getGeometricMean(), tol);
-            UnitTestUtils.assertEquals(dstats.getMin(), sstats.getMin(), tol);
-            UnitTestUtils.assertEquals(new Min().evaluate(values), dstats.getMin(), tol);
-            UnitTestUtils.assertEquals(dstats.getStandardDeviation(), sstats.getStandardDeviation(), tol);
-            UnitTestUtils.assertEquals(dstats.getVariance(), sstats.getVariance(), tol);
-            UnitTestUtils.assertEquals(new Variance().evaluate(values), dstats.getVariance(), tol);
-            UnitTestUtils.assertEquals(dstats.getSum(), sstats.getSum(), tol);
-            UnitTestUtils.assertEquals(new Sum().evaluate(values), dstats.getSum(), tol);
-            UnitTestUtils.assertEquals(dstats.getSumOfSquares(), sstats.getSumOfSquares(), tol);
-            UnitTestUtils.assertEquals(new SumOfSquares().evaluate(values), dstats.getSumOfSquares(), tol);
-            UnitTestUtils.assertEquals(dstats.getPopulationVariance(), sstats.getPopulationVariance(), tol);
-            UnitTestUtils.assertEquals(new Variance(false).evaluate(values), dstats.getPopulationVariance(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getMean(), sstats.getMean(), tol);
+            UnitTestUtils.customAssertEquals(new Mean().evaluate(values), dstats.getMean(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getMax(), sstats.getMax(), tol);
+            UnitTestUtils.customAssertEquals(new Max().evaluate(values), dstats.getMax(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getGeometricMean(), sstats.getGeometricMean(), tol);
+            UnitTestUtils.customAssertEquals(new GeometricMean().evaluate(values), dstats.getGeometricMean(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getMin(), sstats.getMin(), tol);
+            UnitTestUtils.customAssertEquals(new Min().evaluate(values), dstats.getMin(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getStandardDeviation(), sstats.getStandardDeviation(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getVariance(), sstats.getVariance(), tol);
+            UnitTestUtils.customAssertEquals(new Variance().evaluate(values), dstats.getVariance(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getSum(), sstats.getSum(), tol);
+            UnitTestUtils.customAssertEquals(new Sum().evaluate(values), dstats.getSum(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getSumOfSquares(), sstats.getSumOfSquares(), tol);
+            UnitTestUtils.customAssertEquals(new SumOfSquares().evaluate(values), dstats.getSumOfSquares(), tol);
+            UnitTestUtils.customAssertEquals(dstats.getPopulationVariance(), sstats.getPopulationVariance(), tol);
+            UnitTestUtils.customAssertEquals(new Variance(false).evaluate(values), dstats.getPopulationVariance(), tol);
         }
     }
 
     @Test
-    public void testMath1129(){
+    void testMath1129(){
         final double[] data = new double[] {
             -0.012086732064244697,
             -0.24975668704012527,

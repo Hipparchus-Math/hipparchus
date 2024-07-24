@@ -46,7 +46,7 @@ public class SkewnessTest extends StorelessUnivariateStatisticAbstractTest{
      * Make sure Double.NaN is returned iff n &lt; 3
      */
     @Test
-    public void testNaN() {
+    void testNaN() {
         Skewness skew = getUnivariateStatistic();
         assertTrue(Double.isNaN(skew.getResult()));
         skew.increment(1d);

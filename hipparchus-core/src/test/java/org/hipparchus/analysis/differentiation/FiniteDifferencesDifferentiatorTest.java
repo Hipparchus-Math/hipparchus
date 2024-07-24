@@ -33,42 +33,43 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test for class {@link FiniteDifferencesDifferentiator}.
  */
-public class FiniteDifferencesDifferentiatorTest {
+class FiniteDifferencesDifferentiatorTest {
 
     @Test
-    public void testWrongNumberOfPoints() {
+    void testWrongNumberOfPoints() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new FiniteDifferencesDifferentiator(1, 1.0);
         });
     }
 
     @Test
-    public void testWrongStepSize() {
+    void testWrongStepSize() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new FiniteDifferencesDifferentiator(3, 0.0);
         });
     }
 
     @Test
-    public void testSerialization() {
+    void testSerialization() {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(3, 1.0e-3);
         FiniteDifferencesDifferentiator recovered =
                 (FiniteDifferencesDifferentiator) UnitTestUtils.serializeAndRecover(differentiator);
-        Assertions.assertEquals(differentiator.getNbPoints(), recovered.getNbPoints());
-        Assertions.assertEquals(differentiator.getStepSize(), recovered.getStepSize(), 1.0e-15);
+        assertEquals(differentiator.getNbPoints(), recovered.getNbPoints());
+        assertEquals(differentiator.getStepSize(), recovered.getStepSize(), 1.0e-15);
     }
 
     @Test
-    public void testConstant() {
+    void testConstant() {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(5, 0.01);
         UnivariateDifferentiableFunction f =
@@ -81,14 +82,14 @@ public class FiniteDifferencesDifferentiatorTest {
         DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
             DerivativeStructure y = f.value(factory.variable(0, x));
-            Assertions.assertEquals(42.0, y.getValue(), 1.0e-15);
-            Assertions.assertEquals( 0.0, y.getPartialDerivative(1), 1.0e-15);
-            Assertions.assertEquals( 0.0, y.getPartialDerivative(2), 1.0e-15);
+            assertEquals(42.0, y.getValue(), 1.0e-15);
+            assertEquals( 0.0, y.getPartialDerivative(1), 1.0e-15);
+            assertEquals( 0.0, y.getPartialDerivative(2), 1.0e-15);
         }
     }
 
     @Test
-    public void testLinear() {
+    void testLinear() {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(5, 0.01);
         UnivariateDifferentiableFunction f =
@@ -101,14 +102,14 @@ public class FiniteDifferencesDifferentiatorTest {
         DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
             DerivativeStructure y = f.value(factory.variable(0, x));
-            Assertions.assertEquals(2 - 3 * x, y.getValue(), 2.0e-15, "" + (2 - 3 * x - y.getValue()));
-            Assertions.assertEquals(-3.0, y.getPartialDerivative(1), 4.0e-13);
-            Assertions.assertEquals( 0.0, y.getPartialDerivative(2), 9.0e-11);
+            assertEquals(2 - 3 * x, y.getValue(), 2.0e-15, "" + (2 - 3 * x - y.getValue()));
+            assertEquals(-3.0, y.getPartialDerivative(1), 4.0e-13);
+            assertEquals( 0.0, y.getPartialDerivative(2), 9.0e-11);
         }
     }
 
     @Test
-    public void testGaussian() {
+    void testGaussian() {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(9, 0.02);
         UnivariateDifferentiableFunction gaussian = new Gaussian(1.0, 2.0);
@@ -123,7 +124,7 @@ public class FiniteDifferencesDifferentiatorTest {
             DerivativeStructure dsX  = factory.variable(0, x);
             DerivativeStructure yRef = gaussian.value(dsX);
             DerivativeStructure y    = f.value(dsX);
-            Assertions.assertEquals(f.value(dsX.getValue()), f.value(dsX).getValue(), 1.0e-15);
+            assertEquals(f.value(dsX.getValue()), f.value(dsX).getValue(), 1.0e-15);
             for (int order = 0; order <= yRef.getOrder(); ++order) {
                 maxError[order] = FastMath.max(maxError[order],
                                         FastMath.abs(yRef.getPartialDerivative(order) -
@@ -131,12 +132,12 @@ public class FiniteDifferencesDifferentiatorTest {
             }
         }
         for (int i = 0; i < maxError.length; ++i) {
-            Assertions.assertEquals(expectedError[i], maxError[i], 0.01 * expectedError[i]);
+            assertEquals(expectedError[i], maxError[i], 0.01 * expectedError[i]);
         }
     }
 
     @Test
-    public void testStepSizeUnstability() {
+    void testStepSizeUnstability() {
         UnivariateDifferentiableFunction quintic = new QuinticFunction();
         UnivariateDifferentiableFunction goodStep =
                 new FiniteDifferencesDifferentiator(7, 0.25).differentiate(quintic);
@@ -173,14 +174,14 @@ public class FiniteDifferencesDifferentiatorTest {
         };
 
         for (int i = 0; i < maxErrorGood.length; ++i) {
-            Assertions.assertEquals(expectedGood[i], maxErrorGood[i], 0.01 * expectedGood[i]);
-            Assertions.assertEquals(expectedBad[i],  maxErrorBad[i],  0.01 * expectedBad[i]);
+            assertEquals(expectedGood[i], maxErrorGood[i], 0.01 * expectedGood[i]);
+            assertEquals(expectedBad[i],  maxErrorBad[i],  0.01 * expectedBad[i]);
         }
 
     }
 
     @Test
-    public void testWrongOrder() {
+    void testWrongOrder() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             UnivariateDifferentiableFunction f =
                 new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateFunction() {
@@ -196,7 +197,7 @@ public class FiniteDifferencesDifferentiatorTest {
     }
 
     @Test
-    public void testWrongOrderVector() {
+    void testWrongOrderVector() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             UnivariateDifferentiableVectorFunction f =
                 new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateVectorFunction() {
@@ -212,7 +213,7 @@ public class FiniteDifferencesDifferentiatorTest {
     }
 
     @Test
-    public void testWrongOrderMatrix() {
+    void testWrongOrderMatrix() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             UnivariateDifferentiableMatrixFunction f =
                 new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateMatrixFunction() {
@@ -228,14 +229,14 @@ public class FiniteDifferencesDifferentiatorTest {
     }
 
     @Test
-    public void testTooLargeStep() {
+    void testTooLargeStep() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new FiniteDifferencesDifferentiator(3, 2.5, 0.0, 1.0);
         });
     }
 
     @Test
-    public void testBounds() {
+    void testBounds() {
 
         final double slope = 2.5;
         UnivariateFunction f = new UnivariateFunction() {
@@ -265,38 +266,38 @@ public class FiniteDifferencesDifferentiatorTest {
             // here, we did not set the bounds, so the differences are evaluated out of domain
             // using f(-0.05), f(0.05), f(0.15)
             missingBounds.value(tLow);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException nse) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_TOO_SMALL, nse.getSpecifier());
-            Assertions.assertEquals(-0.05, ((Double) nse.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(LocalizedCoreFormats.NUMBER_TOO_SMALL, nse.getSpecifier());
+            assertEquals(-0.05, ((Double) nse.getParts()[0]).doubleValue(), 1.0e-10);
         } catch (Exception e) {
-            Assertions.fail("wrong exception caught: " + e.getClass().getName());
+            fail("wrong exception caught: " + e.getClass().getName());
         }
 
         try {
             // here, we did not set the bounds, so the differences are evaluated out of domain
             // using f(0.85), f(0.95), f(1.05)
             missingBounds.value(tHigh);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException nle) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, nle.getSpecifier());
-            Assertions.assertEquals(1.05, ((Double) nle.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, nle.getSpecifier());
+            assertEquals(1.05, ((Double) nle.getParts()[0]).doubleValue(), 1.0e-10);
         } catch (Exception e) {
-            Assertions.fail("wrong exception caught: " + e.getClass().getName());
+            fail("wrong exception caught: " + e.getClass().getName());
         }
 
         // here, we did set the bounds, so evaluations are done within domain
         // using f(0.0), f(0.1), f(0.2)
-        Assertions.assertEquals(slope, properlyBounded.value(tLow).getPartialDerivative(1), 1.0e-10);
+        assertEquals(slope, properlyBounded.value(tLow).getPartialDerivative(1), 1.0e-10);
 
         // here, we did set the bounds, so evaluations are done within domain
         // using f(0.8), f(0.9), f(1.0)
-        Assertions.assertEquals(slope, properlyBounded.value(tHigh).getPartialDerivative(1), 1.0e-10);
+        assertEquals(slope, properlyBounded.value(tHigh).getPartialDerivative(1), 1.0e-10);
 
     }
 
     @Test
-    public void testBoundedSqrt() {
+    void testBoundedSqrt() {
 
         UnivariateFunctionDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(9, 1.0 / 32, 0.0, Double.POSITIVE_INFINITY);
@@ -310,16 +311,16 @@ public class FiniteDifferencesDifferentiatorTest {
         // we are able to compute derivative near 0, but the accuracy is much poorer there
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure t001 = factory.variable(0, 0.01);
-        Assertions.assertEquals(0.5 / FastMath.sqrt(t001.getValue()), sqrt.value(t001).getPartialDerivative(1), 1.6);
+        assertEquals(0.5 / FastMath.sqrt(t001.getValue()), sqrt.value(t001).getPartialDerivative(1), 1.6);
         DerivativeStructure t01 = factory.variable(0, 0.1);
-        Assertions.assertEquals(0.5 / FastMath.sqrt(t01.getValue()), sqrt.value(t01).getPartialDerivative(1), 7.0e-3);
+        assertEquals(0.5 / FastMath.sqrt(t01.getValue()), sqrt.value(t01).getPartialDerivative(1), 7.0e-3);
         DerivativeStructure t03 = factory.variable(0, 0.3);
-        Assertions.assertEquals(0.5 / FastMath.sqrt(t03.getValue()), sqrt.value(t03).getPartialDerivative(1), 2.1e-7);
+        assertEquals(0.5 / FastMath.sqrt(t03.getValue()), sqrt.value(t03).getPartialDerivative(1), 2.1e-7);
 
     }
 
     @Test
-    public void testVectorFunction() {
+    void testVectorFunction() {
 
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(7, 0.01);
@@ -341,22 +342,22 @@ public class FiniteDifferencesDifferentiatorTest {
             double sin = FastMath.sin(x);
             double[] f1 = f.value(dsX.getValue());
             DerivativeStructure[] f2 = f.value(dsX);
-            Assertions.assertEquals(f1.length, f2.length);
+            assertEquals(f1.length, f2.length);
             for (int i = 0; i < f1.length; ++i) {
-                Assertions.assertEquals(f1[i], f2[i].getValue(), 1.0e-15);
+                assertEquals(f1[i], f2[i].getValue(), 1.0e-15);
             }
-            Assertions.assertEquals( cos, y[0].getValue(), 7.0e-16);
-            Assertions.assertEquals( sin, y[1].getValue(), 7.0e-16);
-            Assertions.assertEquals(-sin, y[0].getPartialDerivative(1), 6.0e-14);
-            Assertions.assertEquals( cos, y[1].getPartialDerivative(1), 6.0e-14);
-            Assertions.assertEquals(-cos, y[0].getPartialDerivative(2), 2.0e-11);
-            Assertions.assertEquals(-sin, y[1].getPartialDerivative(2), 2.0e-11);
+            assertEquals( cos, y[0].getValue(), 7.0e-16);
+            assertEquals( sin, y[1].getValue(), 7.0e-16);
+            assertEquals(-sin, y[0].getPartialDerivative(1), 6.0e-14);
+            assertEquals( cos, y[1].getPartialDerivative(1), 6.0e-14);
+            assertEquals(-cos, y[0].getPartialDerivative(2), 2.0e-11);
+            assertEquals(-sin, y[1].getPartialDerivative(2), 2.0e-11);
         }
 
     }
 
     @Test
-    public void testMatrixFunction() {
+    void testMatrixFunction() {
 
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(7, 0.01);
@@ -383,31 +384,31 @@ public class FiniteDifferencesDifferentiatorTest {
             double sinh = FastMath.sinh(x);
             double[][] f1 = f.value(dsX.getValue());
             DerivativeStructure[][] f2 = f.value(dsX);
-            Assertions.assertEquals(f1.length, f2.length);
+            assertEquals(f1.length, f2.length);
             for (int i = 0; i < f1.length; ++i) {
-                Assertions.assertEquals(f1[i].length, f2[i].length);
+                assertEquals(f1[i].length, f2[i].length);
                 for (int j = 0; j < f1[i].length; ++j) {
-                    Assertions.assertEquals(f1[i][j], f2[i][j].getValue(), 1.0e-15);
+                    assertEquals(f1[i][j], f2[i][j].getValue(), 1.0e-15);
                 }
             }
-            Assertions.assertEquals(cos,   y[0][0].getValue(), 7.0e-18);
-            Assertions.assertEquals(sin,   y[0][1].getValue(), 6.0e-17);
-            Assertions.assertEquals(cosh,  y[1][0].getValue(), 3.0e-16);
-            Assertions.assertEquals(sinh,  y[1][1].getValue(), 3.0e-16);
-            Assertions.assertEquals(-sin,  y[0][0].getPartialDerivative(1), 2.0e-14);
-            Assertions.assertEquals( cos,  y[0][1].getPartialDerivative(1), 2.0e-14);
-            Assertions.assertEquals( sinh, y[1][0].getPartialDerivative(1), 3.0e-14);
-            Assertions.assertEquals( cosh, y[1][1].getPartialDerivative(1), 3.0e-14);
-            Assertions.assertEquals(-cos,  y[0][0].getPartialDerivative(2), 3.0e-12);
-            Assertions.assertEquals(-sin,  y[0][1].getPartialDerivative(2), 3.0e-12);
-            Assertions.assertEquals( cosh, y[1][0].getPartialDerivative(2), 6.0e-12);
-            Assertions.assertEquals( sinh, y[1][1].getPartialDerivative(2), 6.0e-12);
+            assertEquals(cos,   y[0][0].getValue(), 7.0e-18);
+            assertEquals(sin,   y[0][1].getValue(), 6.0e-17);
+            assertEquals(cosh,  y[1][0].getValue(), 3.0e-16);
+            assertEquals(sinh,  y[1][1].getValue(), 3.0e-16);
+            assertEquals(-sin,  y[0][0].getPartialDerivative(1), 2.0e-14);
+            assertEquals( cos,  y[0][1].getPartialDerivative(1), 2.0e-14);
+            assertEquals( sinh, y[1][0].getPartialDerivative(1), 3.0e-14);
+            assertEquals( cosh, y[1][1].getPartialDerivative(1), 3.0e-14);
+            assertEquals(-cos,  y[0][0].getPartialDerivative(2), 3.0e-12);
+            assertEquals(-sin,  y[0][1].getPartialDerivative(2), 3.0e-12);
+            assertEquals( cosh, y[1][0].getPartialDerivative(2), 6.0e-12);
+            assertEquals( sinh, y[1][1].getPartialDerivative(2), 6.0e-12);
         }
 
     }
 
     @Test
-    public void testSeveralFreeParameters() {
+    void testSeveralFreeParameters() {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(5, 0.001);
         UnivariateDifferentiableFunction sine = new Sin();
@@ -437,7 +438,7 @@ public class FiniteDifferencesDifferentiatorTest {
            }
        }
        for (int i = 0; i < maxError.length; ++i) {
-           Assertions.assertEquals(expectedError[i], maxError[i], 0.01 * expectedError[i]);
+           assertEquals(expectedError[i], maxError[i], 0.01 * expectedError[i]);
        }
     }
 

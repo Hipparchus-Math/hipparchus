@@ -25,16 +25,20 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Binary64;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests the PolynomialSplineFunction implementation.
  *
  */
-public class PolynomialSplineFunctionTest {
+class PolynomialSplineFunctionTest {
 
     /** Error tolerance for tests */
     protected double tolerance = 1.0e-12;
@@ -64,37 +68,37 @@ public class PolynomialSplineFunctionTest {
 
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         PolynomialSplineFunction spline =
             new PolynomialSplineFunction(knots, polynomials);
-        Assertions.assertTrue(Arrays.equals(knots, spline.getKnots()));
-        Assertions.assertEquals(1d, spline.getPolynomials()[0].getCoefficients()[2], 0);
-        Assertions.assertEquals(3, spline.getN());
+        assertTrue(Arrays.equals(knots, spline.getKnots()));
+        assertEquals(1d, spline.getPolynomials()[0].getCoefficients()[2], 0);
+        assertEquals(3, spline.getN());
 
         try { // too few knots
             new PolynomialSplineFunction(new double[] {0}, polynomials);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try { // too many knots
             new PolynomialSplineFunction(new double[] {0,1,2,3,4}, polynomials);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try { // knots not increasing
             new PolynomialSplineFunction(new double[] {0,1, 3, 2}, polynomials);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testValues() {
+    void testValues() {
         PolynomialSplineFunction spline =
             new PolynomialSplineFunction(knots, polynomials);
         PolynomialSplineFunction dSpline = spline.polynomialSplineDerivative();
@@ -109,33 +113,33 @@ public class PolynomialSplineFunctionTest {
         for (int i = 0; i < 10; i++) {
            x+=0.25;
            index = findKnot(knots, x);
-           Assertions.assertEquals(polynomials[index].value(x - knots[index]), spline.value(x), tolerance, "spline function evaluation failed for x=" + x);
-           Assertions.assertEquals(dp.value(x - knots[index]), dSpline.value(x), tolerance, "spline derivative evaluation failed for x=" + x);
+           assertEquals(polynomials[index].value(x - knots[index]), spline.value(x), tolerance, "spline function evaluation failed for x=" + x);
+           assertEquals(dp.value(x - knots[index]), dSpline.value(x), tolerance, "spline derivative evaluation failed for x=" + x);
         }
 
         // knot points -- centering should zero arguments
         for (int i = 0; i < 3; i++) {
-            Assertions.assertEquals(polynomials[i].value(0), spline.value(knots[i]), tolerance, "spline function evaluation failed for knot=" + knots[i]);
-            Assertions.assertEquals(dp.value(0), dSpline.value(new Binary64(knots[i])).getReal(), tolerance, "spline function evaluation failed for knot=" + knots[i]);
+            assertEquals(polynomials[i].value(0), spline.value(knots[i]), tolerance, "spline function evaluation failed for knot=" + knots[i]);
+            assertEquals(dp.value(0), dSpline.value(new Binary64(knots[i])).getReal(), tolerance, "spline function evaluation failed for knot=" + knots[i]);
         }
 
         try { //outside of domain -- under min
             x = spline.value(-1.5);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try { //outside of domain -- over max
             x = spline.value(2.5);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testIsValidPoint() {
+    void testIsValidPoint() {
         final PolynomialSplineFunction spline =
             new PolynomialSplineFunction(knots, polynomials);
         final double xMin = knots[0];
@@ -144,28 +148,28 @@ public class PolynomialSplineFunctionTest {
         double x;
 
         x = xMin;
-        Assertions.assertTrue(spline.isValidPoint(x));
+        assertTrue(spline.isValidPoint(x));
         // Ensure that no exception is thrown.
         spline.value(x);
 
         x = xMax;
-        Assertions.assertTrue(spline.isValidPoint(x));
+        assertTrue(spline.isValidPoint(x));
         // Ensure that no exception is thrown.
         spline.value(x);
 
         final double xRange = xMax - xMin;
         x = xMin + xRange / 3.4;
-        Assertions.assertTrue(spline.isValidPoint(x));
+        assertTrue(spline.isValidPoint(x));
         // Ensure that no exception is thrown.
         spline.value(x);
 
         final double small = 1e-8;
         x = xMin - small;
-        Assertions.assertFalse(spline.isValidPoint(x));
+        assertFalse(spline.isValidPoint(x));
         // Ensure that an exception would have been thrown.
         try {
             spline.value(x);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException expected) {}
     }
 

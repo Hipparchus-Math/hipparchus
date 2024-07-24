@@ -27,7 +27,6 @@ import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -35,29 +34,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class WelzlEncloser3DTest {
+
+class WelzlEncloser3DTest {
 
     @Test
-    public void testNullList() {
+    void testNullList() {
         SphereGenerator generator = new SphereGenerator();
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
                 new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, generator);
         EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(null);
-        Assertions.assertTrue(ball.getRadius() < 0);
+        assertTrue(ball.getRadius() < 0);
     }
 
     @Test
-    public void testNoPoints() {
+    void testNoPoints() {
         SphereGenerator generator = new SphereGenerator();
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
                 new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, generator);
         EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(new ArrayList<Vector3D>());
-        Assertions.assertTrue(ball.getRadius() < 0);
+        assertTrue(ball.getRadius() < 0);
     }
 
     @Test
-    public void testReducingBall() {
+    void testReducingBall() {
         List<Vector3D> list =
                 Arrays.asList(new Vector3D(-7.140397329568118, -16.571661242582177,  11.714458961735405),
                               new Vector3D(-7.137986707455888, -16.570767323375720,  11.708602108715928),
@@ -73,11 +76,11 @@ public class WelzlEncloser3DTest {
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
                 new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, new SphereGenerator());
         EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(list);
-        Assertions.assertTrue(ball.getRadius() > 0);
+        assertTrue(ball.getRadius() > 0);
     }
 
     @Test
-    public void testInfiniteLoop() {
+    void testInfiniteLoop() {
         // this test used to generate an infinite loop
         List<Vector3D> list =
                 Arrays.asList(new Vector3D( -0.89227075512164380,  -2.89317694645713900,  14.84572323743355500),
@@ -102,11 +105,11 @@ public class WelzlEncloser3DTest {
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
                 new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, new SphereGenerator());
         EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(list);
-        Assertions.assertTrue(ball.getRadius() > 0);
+        assertTrue(ball.getRadius() > 0);
     }
 
     @Test
-    public void testLargeSamples() throws IOException {
+    void testLargeSamples() throws IOException {
         RandomGenerator random = new Well1024a(0x35ddecfc78131e1dl);
         final UnitSphereRandomVectorGenerator sr = new UnitSphereRandomVectorGenerator(3, random);
         for (int k = 0; k < 50; ++k) {
@@ -130,7 +133,7 @@ public class WelzlEncloser3DTest {
     }
 
     @Test
-    public void testIssue20Generator() {
+    void testIssue20Generator() {
 
         final SupportBallGenerator<Euclidean3D, Vector3D> generator = new SphereGenerator();
         final Vector3D p1 = new Vector3D(0.9987716667, 0.0350821284, 0.0349914572);
@@ -139,20 +142,20 @@ public class WelzlEncloser3DTest {
         EnclosingBall<Euclidean3D, Vector3D> s24  = generator.ballOnSupport(Arrays.asList(p2, p4));
         EnclosingBall<Euclidean3D, Vector3D> s142 = generator.ballOnSupport(Arrays.asList(p1, p4, p2));
 
-        Assertions.assertFalse(s24.contains(p1));
-        Assertions.assertTrue(s24.contains(p2));
-        Assertions.assertTrue(s24.contains(p4));
+        assertFalse(s24.contains(p1));
+        assertTrue(s24.contains(p2));
+        assertTrue(s24.contains(p4));
 
-        Assertions.assertTrue(s142.contains(p1));
-        Assertions.assertTrue(s142.contains(p4));
-        Assertions.assertTrue(s142.contains(p2));
+        assertTrue(s142.contains(p1));
+        assertTrue(s142.contains(p4));
+        assertTrue(s142.contains(p2));
 
-        Assertions.assertTrue(s142.getRadius() >= s24.getRadius());
+        assertTrue(s142.getRadius() >= s24.getRadius());
 
     }
 
     @Test
-    public void testIssue20Encloser() {
+    void testIssue20Encloser() {
         final WelzlEncloser<Euclidean3D, Vector3D> encloser =
                         new WelzlEncloser<Euclidean3D, Vector3D>(1e-14, new SphereGenerator());
         List<Vector3D> points = new ArrayList<Vector3D>();
@@ -162,9 +165,9 @@ public class WelzlEncloser3DTest {
         points.add(new Vector3D(0.9987938115, -0.0346825853, -0.0347568755));
         points.add(new Vector3D(0.9987798601, 0.0350739383, -0.0347650673));
         EnclosingBall<Euclidean3D, Vector3D> enclosing3D = encloser.enclose(points);
-        Assertions.assertEquals(0.04932531217754311, enclosing3D.getRadius(), 1.0e-15);
+        assertEquals(0.04932531217754311, enclosing3D.getRadius(), 1.0e-15);
         for (final Vector3D p : points) {
-            Assertions.assertTrue(enclosing3D.contains(p));
+            assertTrue(enclosing3D.contains(p));
         }
     }
 
@@ -173,7 +176,7 @@ public class WelzlEncloser3DTest {
         EnclosingBall<Euclidean3D, Vector3D> sphere = checkSphere(points);
 
         // compare computed sphere with bounding sphere
-        Assertions.assertTrue(sphere.getRadius() <= refRadius);
+        assertTrue(sphere.getRadius() <= refRadius);
 
         // check removing any point of the support Sphere fails to enclose the point
         for (int i = 0; i < sphere.getSupportSize(); ++i) {
@@ -192,7 +195,7 @@ public class WelzlEncloser3DTest {
                     foundOutside = true;
                 }
             }
-            Assertions.assertTrue(foundOutside);
+            assertTrue(foundOutside);
         }
 
     }
@@ -205,7 +208,7 @@ public class WelzlEncloser3DTest {
 
         // all points are enclosed
         for (Vector3D v : points) {
-            Assertions.assertTrue(Sphere.contains(v, 1.0e-10));
+            assertTrue(Sphere.contains(v, 1.0e-10));
         }
 
         for (Vector3D v : points) {
@@ -217,7 +220,7 @@ public class WelzlEncloser3DTest {
             }
             if (inSupport) {
                 // points on the support should be outside of reduced ball
-                Assertions.assertFalse(Sphere.contains(v, -0.001));
+                assertFalse(Sphere.contains(v, -0.001));
             }
         }
 

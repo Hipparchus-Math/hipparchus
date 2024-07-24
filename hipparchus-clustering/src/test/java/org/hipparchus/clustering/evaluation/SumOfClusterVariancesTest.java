@@ -22,30 +22,30 @@
 
 package org.hipparchus.clustering.evaluation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hipparchus.clustering.Cluster;
 import org.hipparchus.clustering.DoublePoint;
 import org.hipparchus.clustering.distance.EuclideanDistance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class SumOfClusterVariancesTest {
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class SumOfClusterVariancesTest {
 
     private ClusterEvaluator<DoublePoint> evaluator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         evaluator = new SumOfClusterVariances<DoublePoint>(new EuclideanDistance());
     }
 
     @Test
-    public void testScore() {
+    void testScore() {
         final DoublePoint[] points1 = new DoublePoint[] {
                 new DoublePoint(new double[] { 1 }),
                 new DoublePoint(new double[] { 2 }),
@@ -78,7 +78,7 @@ public class SumOfClusterVariancesTest {
     }
 
     @Test
-    public void testOrdering() {
+    void testOrdering() {
         assertTrue(evaluator.isBetterScore(10, 20));
         assertFalse(evaluator.isBetterScore(20, 1));
     }

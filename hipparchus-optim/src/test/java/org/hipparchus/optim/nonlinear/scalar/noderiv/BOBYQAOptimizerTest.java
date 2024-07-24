@@ -31,23 +31,23 @@ import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for {@link BOBYQAOptimizer}.
  */
-public class BOBYQAOptimizerTest {
+class BOBYQAOptimizerTest {
 
     static final int DIM = 13;
 
     @Test
-    public void testInitOutOfBounds() {
+    void testInitOutOfBounds() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, 3);
             double[][] boundaries = boundaries(DIM, -1, 2);
@@ -58,7 +58,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testBoundariesDimensionMismatch() {
+    void testBoundariesDimensionMismatch() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, 0.5);
             double[][] boundaries = boundaries(DIM + 1, -1, 2);
@@ -69,7 +69,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testProblemDimensionTooSmall() {
+    void testProblemDimensionTooSmall() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(1, 0.5);
             doTest(new Rosen(), startPoint, null,
@@ -79,7 +79,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testMaxEvaluations() {
+    void testMaxEvaluations() {
         assertThrows(MathIllegalStateException.class, () -> {
             final int lowMaxEval = 2;
             double[] startPoint = point(DIM, 0.1);
@@ -91,7 +91,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testRosen() {
+    void testRosen() {
         double[] startPoint = point(DIM,0.1);
         double[][] boundaries = null;
         PointValuePair expected = new PointValuePair(point(DIM,1.0),0.0);
@@ -101,7 +101,7 @@ public class BOBYQAOptimizerTest {
      }
 
     @Test
-    public void testMaximize() {
+    void testMaximize() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected = new PointValuePair(point(DIM,0.0),1.0);
@@ -116,7 +116,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testEllipse() {
+    void testEllipse() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -127,7 +127,7 @@ public class BOBYQAOptimizerTest {
      }
 
     @Test
-    public void testElliRotated() {
+    void testElliRotated() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -138,7 +138,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testCigar() {
+    void testCigar() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -149,7 +149,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testTwoAxes() {
+    void testTwoAxes() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -160,7 +160,7 @@ public class BOBYQAOptimizerTest {
      }
 
     @Test
-    public void testCigTab() {
+    void testCigTab() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -171,7 +171,7 @@ public class BOBYQAOptimizerTest {
      }
 
     @Test
-    public void testSphere() {
+    void testSphere() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -182,7 +182,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testTablet() {
+    void testTablet() {
         double[] startPoint = point(DIM,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -193,7 +193,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testDiffPow() {
+    void testDiffPow() {
         double[] startPoint = point(DIM/2,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -204,7 +204,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testSsDiffPow() {
+    void testSsDiffPow() {
         double[] startPoint = point(DIM/2,1.0);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -215,7 +215,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testAckley() {
+    void testAckley() {
         double[] startPoint = point(DIM,0.1);
         double[][] boundaries = null;
         PointValuePair expected =
@@ -226,7 +226,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testRastrigin() {
+    void testRastrigin() {
         double[] startPoint = point(DIM,1.0);
 
         double[][] boundaries = null;
@@ -238,7 +238,7 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testConstrainedRosen() {
+    void testConstrainedRosen() {
         double[] startPoint = point(DIM,0.1);
 
         double[][] boundaries = boundaries(DIM,-1,2);
@@ -323,9 +323,9 @@ public class BOBYQAOptimizerTest {
 //              + optim.getEvaluations() + " f(");
 //        for (double x: result.getPoint())  System.out.print(x + " ");
 //        System.out.println(") = " +  result.getValue());
-        Assertions.assertEquals(expected.getValue(), result.getValue(), fTol, assertMsg);
+        assertEquals(expected.getValue(), result.getValue(), fTol, assertMsg);
         for (int i = 0; i < dim; i++) {
-            Assertions.assertEquals(expected.getPoint()[i],
+            assertEquals(expected.getPoint()[i],
                                 result.getPoint()[i], pointTol);
         }
 

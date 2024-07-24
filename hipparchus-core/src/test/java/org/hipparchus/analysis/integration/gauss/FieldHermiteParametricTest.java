@@ -90,8 +90,8 @@ public class FieldHermiteParametricTest extends FieldGaussianQuadratureAbstractT
 
     @ParameterizedTest
     @MethodSource("getParameters")
-    public void testAllMonomials(int numberOfPoints, int maxDegree, double eps,
-                                 double numUlps) {
+    void testAllMonomials(int numberOfPoints, int maxDegree, double eps,
+        double numUlps) {
         super.testAllMonomials(factory.hermite(numberOfPoints), maxDegree, eps,
                                numUlps);
     }

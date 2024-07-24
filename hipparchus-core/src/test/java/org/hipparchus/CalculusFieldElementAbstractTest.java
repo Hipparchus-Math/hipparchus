@@ -29,10 +29,12 @@ import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.DoubleFunction;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldElement<T>> {
 
@@ -46,7 +48,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
         // WHEN
         final T actualZero = expectedZero.newInstance(realZero);
         // THEN
-        Assertions.assertEquals(expectedZero.getReal(), actualZero.getReal(), 0.);
+        assertEquals(expectedZero.getReal(), actualZero.getReal(), 0.);
     }
 
     @Test
@@ -191,8 +193,8 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     @Test
     public void testSinCosNaN() {
         FieldSinCos<T> sinCos = build(Double.NaN).sinCos();
-        Assertions.assertTrue(sinCos.sin().isNaN());
-        Assertions.assertTrue(sinCos.cos().isNaN());
+        assertTrue(sinCos.sin().isNaN());
+        assertTrue(sinCos.cos().isNaN());
     }
 
     @Test
@@ -296,8 +298,8 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     @Test
     public void testSinhCoshNaN() {
         FieldSinhCosh<T> sinhCosh = build(Double.NaN).sinhCosh();
-        Assertions.assertTrue(sinhCosh.sinh().isNaN());
-        Assertions.assertTrue(sinhCosh.cosh().isNaN());
+        assertTrue(sinhCosh.sinh().isNaN());
+        assertTrue(sinhCosh.cosh().isNaN());
     }
 
     @Test
@@ -339,16 +341,16 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testHypotSpecialCases() {
-        Assertions.assertTrue(Double.isNaN(build(Double.NaN).hypot(build(0)).getReal()));
-        Assertions.assertTrue(Double.isNaN(build(0).hypot(build(Double.NaN)).getReal()));
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(Double.POSITIVE_INFINITY).hypot(build(0)).getReal(), 1.0);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(Double.NEGATIVE_INFINITY).hypot(build(0)).getReal(), 1.0);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(Double.POSITIVE_INFINITY).hypot(build(Double.NaN)).getReal(), 1.0);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(Double.NEGATIVE_INFINITY).hypot(build(Double.NaN)).getReal(), 1.0);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(0).hypot(build(Double.POSITIVE_INFINITY)).getReal(), 1.0);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(0).hypot(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(Double.NaN).hypot(build(Double.POSITIVE_INFINITY)).getReal(), 1.0);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, build(Double.NaN).hypot(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0);
+        assertTrue(Double.isNaN(build(Double.NaN).hypot(build(0)).getReal()));
+        assertTrue(Double.isNaN(build(0).hypot(build(Double.NaN)).getReal()));
+        assertEquals(Double.POSITIVE_INFINITY, build(Double.POSITIVE_INFINITY).hypot(build(0)).getReal(), 1.0);
+        assertEquals(Double.POSITIVE_INFINITY, build(Double.NEGATIVE_INFINITY).hypot(build(0)).getReal(), 1.0);
+        assertEquals(Double.POSITIVE_INFINITY, build(Double.POSITIVE_INFINITY).hypot(build(Double.NaN)).getReal(), 1.0);
+        assertEquals(Double.POSITIVE_INFINITY, build(Double.NEGATIVE_INFINITY).hypot(build(Double.NaN)).getReal(), 1.0);
+        assertEquals(Double.POSITIVE_INFINITY, build(0).hypot(build(Double.POSITIVE_INFINITY)).getReal(), 1.0);
+        assertEquals(Double.POSITIVE_INFINITY, build(0).hypot(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0);
+        assertEquals(Double.POSITIVE_INFINITY, build(Double.NaN).hypot(build(Double.POSITIVE_INFINITY)).getReal(), 1.0);
+        assertEquals(Double.POSITIVE_INFINITY, build(Double.NaN).hypot(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0);
     }
 
     @Test
@@ -443,7 +445,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
         final RandomGenerator random = new Well19937a(0x36d4f8862421e0e4l);
         for (int i = -300; i < 300; ++i) {
             final double x = FastMath.scalb(2.0 * random.nextDouble() - 1.0, i);
-            Assertions.assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
+            assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
         }
     }
 
@@ -507,78 +509,78 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     @Test
     public void testCopySignSpecialField() {
 
-        Assertions.assertEquals(-2.0, build(-2.0).copySign(build(-5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-2.0, build(+2.0).copySign(build(-5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(build(+5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(+2.0).copySign(build(+5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-2.0, build(-2.0).copySign(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(-2.0, build(+2.0).copySign(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(build(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(+2.0, build(+2.0).copySign(build(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(build(Double.NaN)).getReal(),               1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(build(Double.NaN)).getReal(),               1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(build(-Double.NaN)).getReal(),              1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(build(-Double.NaN)).getReal(),              1.0e-10);
-        Assertions.assertEquals(-2.0, build(-2.0).copySign(build(-0.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-2.0, build(+2.0).copySign(build(-0.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(build(+0.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(+2.0).copySign(build(+0.0)).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(-2.0).copySign(build(-5.0)).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(+2.0).copySign(build(-5.0)).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(build(+5.0)).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(+2.0).copySign(build(+5.0)).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(-2.0).copySign(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(-2.0, build(+2.0).copySign(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(build(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(+2.0, build(+2.0).copySign(build(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(build(Double.NaN)).getReal(),               1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(build(Double.NaN)).getReal(),               1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(build(-Double.NaN)).getReal(),              1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(build(-Double.NaN)).getReal(),              1.0e-10);
+        assertEquals(-2.0, build(-2.0).copySign(build(-0.0)).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(+2.0).copySign(build(-0.0)).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(build(+0.0)).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(+2.0).copySign(build(+0.0)).getReal(),                     1.0e-10);
 
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(build(-5.0))).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(build(-5.0))).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(+5.0))).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(build(+5.0))).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.NEGATIVE_INFINITY))).getReal(), 1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(build(Double.NEGATIVE_INFINITY))).getReal(), 1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.POSITIVE_INFINITY))).getReal(), 1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(build(Double.POSITIVE_INFINITY))).getReal(), 1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.NaN))).getReal(),               1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.NaN))).getReal(),               1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(-Double.NaN))).getReal(),              1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(-Double.NaN))).getReal(),              1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(build(-0.0))).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(build(-0.0))).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(+0.0))).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(build(+0.0))).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(build(-5.0))).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(build(-5.0))).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(+5.0))).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(build(+5.0))).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.NEGATIVE_INFINITY))).getReal(), 1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(build(Double.NEGATIVE_INFINITY))).getReal(), 1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.POSITIVE_INFINITY))).getReal(), 1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(build(Double.POSITIVE_INFINITY))).getReal(), 1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.NaN))).getReal(),               1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(Double.NaN))).getReal(),               1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(-Double.NaN))).getReal(),              1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(-Double.NaN))).getReal(),              1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(build(-0.0))).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(build(-0.0))).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(build(+0.0))).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(build(+0.0))).getReal(),                     1.0e-10);
 
     }
 
     @Test
     public void testCopySignSpecialDouble() {
 
-        Assertions.assertEquals(-2.0, build(-2.0).copySign(-5.0).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-2.0, build(+2.0).copySign(-5.0).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(+5.0).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(+2.0).copySign(+5.0).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-2.0, build(-2.0).copySign(Double.NEGATIVE_INFINITY).getReal(), 1.0e-10);
-        Assertions.assertEquals(-2.0, build(+2.0).copySign(Double.NEGATIVE_INFINITY).getReal(), 1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(Double.POSITIVE_INFINITY).getReal(), 1.0e-10);
-        Assertions.assertEquals(+2.0, build(+2.0).copySign(Double.POSITIVE_INFINITY).getReal(), 1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(Double.NaN).getReal(),               1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(Double.NaN).getReal(),               1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(-Double.NaN).getReal(),              1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(-Double.NaN).getReal(),              1.0e-10);
-        Assertions.assertEquals(-2.0, build(-2.0).copySign(-0.0).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-2.0, build(+2.0).copySign(-0.0).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(-2.0).copySign(+0.0).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+2.0, build(+2.0).copySign(+0.0).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(-2.0).copySign(-5.0).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(+2.0).copySign(-5.0).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(+5.0).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(+2.0).copySign(+5.0).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(-2.0).copySign(Double.NEGATIVE_INFINITY).getReal(), 1.0e-10);
+        assertEquals(-2.0, build(+2.0).copySign(Double.NEGATIVE_INFINITY).getReal(), 1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(Double.POSITIVE_INFINITY).getReal(), 1.0e-10);
+        assertEquals(+2.0, build(+2.0).copySign(Double.POSITIVE_INFINITY).getReal(), 1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(Double.NaN).getReal(),               1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(Double.NaN).getReal(),               1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(-Double.NaN).getReal(),              1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(-Double.NaN).getReal(),              1.0e-10);
+        assertEquals(-2.0, build(-2.0).copySign(-0.0).getReal(),                     1.0e-10);
+        assertEquals(-2.0, build(+2.0).copySign(-0.0).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(-2.0).copySign(+0.0).getReal(),                     1.0e-10);
+        assertEquals(+2.0, build(+2.0).copySign(+0.0).getReal(),                     1.0e-10);
 
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(-5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(-5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(+5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(+5.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(Double.NaN)).getReal(),               1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(Double.NaN)).getReal(),               1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(-Double.NaN)).getReal(),              1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(-Double.NaN)).getReal(),              1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(-0.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(-0.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(+0.0)).getReal(),                     1.0e-10);
-        Assertions.assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(+0.0)).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(-5.0)).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(-5.0)).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(+5.0)).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(+5.0)).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(Double.NEGATIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(Double.POSITIVE_INFINITY)).getReal(), 1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(Double.NaN)).getReal(),               1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(Double.NaN)).getReal(),               1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(-Double.NaN)).getReal(),              1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(-Double.NaN)).getReal(),              1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(-0.0).copySign(-0.0)).getReal(),                     1.0e-10);
+        assertEquals(-3.0, build(+3.0).copySign(build(+0.0).copySign(-0.0)).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(-0.0).copySign(+0.0)).getReal(),                     1.0e-10);
+        assertEquals(+3.0, build(+3.0).copySign(build(+0.0).copySign(+0.0)).getReal(),                     1.0e-10);
 
     }
 
@@ -611,11 +613,11 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
         final T abSumArray  = a[0].linearCombination(a, b);
         final T abNaive     = a[0].multiply(b[0]).add(a[1].multiply(b[1])).add(a[2].multiply(b[2]));
 
-        Assertions.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 0);
+        assertEquals(abSumInline.getReal(), abSumArray.getReal(), 0);
         final double reference = -65271563724949.90625;
-        Assertions.assertEquals(reference, abSumInline.getReal(),
+        assertEquals(reference, abSumInline.getReal(),
                             toleranceLinearCombination * FastMath.abs(reference));
-        Assertions.assertEquals(relativeErrorNaiveImplementation * FastMath.abs(reference),
+        assertEquals(relativeErrorNaiveImplementation * FastMath.abs(reference),
                             FastMath.abs(abNaive.subtract(reference).getReal()),
                             1.0e-3 * relativeErrorNaiveImplementation * FastMath.abs(reference));
 
@@ -742,15 +744,15 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     @Test
     public void testRound() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
-            Assertions.assertEquals(FastMath.round(x), build(x).round());
+            assertEquals(FastMath.round(x), build(x).round());
         }
     }
 
     protected void checkRelative(double expected, T obtained) {
         if (Double.isNaN(expected)) {
-            Assertions.assertEquals(expected, obtained.getReal());
+            assertEquals(expected, obtained.getReal());
         } else {
-            Assertions.assertEquals(expected, obtained.getReal(),
+            assertEquals(expected, obtained.getReal(),
                                     1.0e-15 * (1 + FastMath.abs(expected)));
         }
     }

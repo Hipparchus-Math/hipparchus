@@ -21,13 +21,14 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for the WilsonScoreInterval.
  */
-public class WilsonScoreIntervalTest extends BinomialProportionAbstractTest {
+class WilsonScoreIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
     protected BinomialProportionMethod getBinomialProportionMethod() {
@@ -35,10 +36,10 @@ public class WilsonScoreIntervalTest extends BinomialProportionAbstractTest {
     }
 
     @Test
-    public void testStandardInterval() {
+    void testStandardInterval() {
         ConfidenceInterval confidenceInterval = createStandardTestInterval();
-        Assertions.assertEquals(0.08003919, confidenceInterval.getLowerBound(), 1E-5);
-        Assertions.assertEquals(0.1242664, confidenceInterval.getUpperBound(), 1E-5);
+        assertEquals(0.08003919, confidenceInterval.getLowerBound(), 1E-5);
+        assertEquals(0.1242664, confidenceInterval.getUpperBound(), 1E-5);
     }
 
 }

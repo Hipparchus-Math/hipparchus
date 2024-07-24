@@ -28,16 +28,18 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for Spearman's rank correlation
  *
  */
-public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
+class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
 
     /**
      * Test Longley dataset against R.
@@ -58,14 +60,14 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
                 0.976470588235294, 0.997058823529412, 0.9941176470588236, 0.685294117647059, 0.2264705882352941, 1, 1,
                 0.976470588235294, 0.997058823529412, 0.9941176470588236, 0.685294117647059, 0.2264705882352941, 1, 1
         };
-        UnitTestUtils.assertEquals("Spearman's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
+        UnitTestUtils.customAssertEquals("Spearman's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
     }
 
     /**
      * Test R swiss fertility dataset.
      */
     @Test
-    public void testSwiss() {
+    void testSwiss() {
         RealMatrix matrix = createRealMatrix(swissData, 47, 5);
         SpearmansCorrelation corrInstance = new SpearmansCorrelation(matrix);
         RealMatrix correlationMatrix = corrInstance.getCorrelationMatrix();
@@ -76,7 +78,7 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
                -0.443257690360988, -0.650463814145816, 0.674603831406147, 1, -0.1444163088302244,
                 0.4136455623012432, 0.2886878090882852, -0.4750575257171745, -0.1444163088302244, 1
         };
-        UnitTestUtils.assertEquals("Spearman's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
+        UnitTestUtils.customAssertEquals("Spearman's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
     }
 
     /**
@@ -87,7 +89,7 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
     public void testConstant() {
         double[] noVariance = new double[] {1, 1, 1, 1};
         double[] values = new double[] {1, 2, 3, 4};
-        Assertions.assertTrue(Double.isNaN(new SpearmansCorrelation().correlation(noVariance, values)));
+        assertTrue(Double.isNaN(new SpearmansCorrelation().correlation(noVariance, values)));
     }
 
     /**
@@ -100,14 +102,14 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
         double[] two = new double[] {2};
         try {
             new SpearmansCorrelation().correlation(one, two);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         RealMatrix matrix = new BlockRealMatrix(new double[][] {{0},{1}});
         try {
             new SpearmansCorrelation(matrix);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -121,14 +123,14 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
         double[][] data = matrix.getData();
         double[] x = matrix.getColumn(0);
         double[] y = matrix.getColumn(1);
-        Assertions.assertEquals(new SpearmansCorrelation().correlation(x, y),
+        assertEquals(new SpearmansCorrelation().correlation(x, y),
                 corrInstance.getCorrelationMatrix().getEntry(0, 1), Double.MIN_VALUE);
-        UnitTestUtils.assertEquals("Correlation matrix", corrInstance.getCorrelationMatrix(),
-                new SpearmansCorrelation().computeCorrelationMatrix(data), Double.MIN_VALUE);
+        UnitTestUtils.customAssertEquals("Correlation matrix", corrInstance.getCorrelationMatrix(),
+                                         new SpearmansCorrelation().computeCorrelationMatrix(data), Double.MIN_VALUE);
     }
 
     @Test
-    public void testMath891Array() {
+    void testMath891Array() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             // NaNStrategy.REMOVED is not supported since 4.0
             final double[] xArray = new double[]{Double.NaN, 1.9, 2, 100, 3};
@@ -137,12 +139,12 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
             NaturalRanking ranking = new NaturalRanking(NaNStrategy.REMOVED);
             SpearmansCorrelation spearman = new SpearmansCorrelation(ranking);
 
-            Assertions.assertEquals(0.5, spearman.correlation(xArray, yArray), Double.MIN_VALUE);
+            assertEquals(0.5, spearman.correlation(xArray, yArray), Double.MIN_VALUE);
         });
     }
 
     @Test
-    public void testMath891Matrix() {
+    void testMath891Matrix() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             // NaNStrategy.REMOVED is not supported since 4.0
             final double[] xArray = new double[]{Double.NaN, 1.9, 2, 100, 3};
@@ -158,7 +160,7 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
             NaturalRanking ranking = new NaturalRanking(NaNStrategy.REMOVED);
             SpearmansCorrelation spearman = new SpearmansCorrelation(matrix, ranking);
 
-            Assertions.assertEquals(0.5, spearman.getCorrelationMatrix().getEntry(0, 1), Double.MIN_VALUE);
+            assertEquals(0.5, spearman.getCorrelationMatrix().getEntry(0, 1), Double.MIN_VALUE);
         });
     }
 

@@ -21,26 +21,27 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class DerivativeTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class DerivativeTest {
 
     private static final double TOLERANCE = 1e-10;
 
     @Test
-    public void testGetReal() {
+    void testGetReal() {
         // GIVEN
         final double expectedOperation = 0.5;
         final TestDerivative testDerivative = new TestDerivative(expectedOperation);
         // WHEN
         final double actualOperation = testDerivative.getReal();
         // THEN
-        Assertions.assertEquals(expectedOperation, actualOperation, 0.);
+        assertEquals(expectedOperation, actualOperation, 0.);
     }
 
     @Test
-    public void testAddDouble() {
+    void testAddDouble() {
         // GIVEN
         final double value = 0.5;
         final TestDerivative testDerivative = new TestDerivative(value);
@@ -49,11 +50,11 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative.add(scalar);
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(value + scalar);
-        Assertions.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
     }
 
     @Test
-    public void testSubtractDouble() {
+    void testSubtractDouble() {
         // GIVEN
         final double value = 0.5;
         final TestDerivative testDerivative = new TestDerivative(value);
@@ -62,11 +63,11 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative.subtract(scalar);
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(value - scalar);
-        Assertions.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
     }
 
     @Test
-    public void testLog10() {
+    void testLog10() {
         // GIVEN
         final double value = 0.5;
         final TestDerivative testDerivative = new TestDerivative(value);
@@ -74,11 +75,11 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative.log10();
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(FastMath.log10(value));
-        Assertions.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
     }
 
     @Test
-    public void testPow() {
+    void testPow() {
         // GIVEN
         final double value1 = 2.;
         final double value2 = 3.;
@@ -88,11 +89,11 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative1.pow(testDerivative2);
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(FastMath.pow(value1, value2));
-        Assertions.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
     }
 
     @Test
-    public void testCosh() {
+    void testCosh() {
         // GIVEN
         final double value = 0.5;
         final TestDerivative testDerivative = new TestDerivative(value);
@@ -100,11 +101,11 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative.cosh();
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(FastMath.cosh(value));
-        Assertions.assertEquals(expectedOperation, actualOperation);
+        assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
-    public void testSinh() {
+    void testSinh() {
         // GIVEN
         final double value = 0.5;
         final TestDerivative testDerivative = new TestDerivative(value);
@@ -112,11 +113,11 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative.sinh();
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(FastMath.sinh(value));
-        Assertions.assertEquals(expectedOperation, actualOperation);
+        assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
-    public void testAcos() {
+    void testAcos() {
         // GIVEN
         final double value = 0.5;
         final TestDerivative testDerivative = new TestDerivative(value);
@@ -124,7 +125,7 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative.acos();
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(FastMath.acos(value));
-        Assertions.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
+        assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
     }
 
     static class TestDerivative implements Derivative<TestDerivative> {

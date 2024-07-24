@@ -17,13 +17,13 @@
 
 package org.hipparchus.stat.descriptive.vector;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class VectorialStorelessStatisticTest {
     private double[][] points;
@@ -43,7 +43,7 @@ public class VectorialStorelessStatisticTest {
     }
 
     @Test
-    public void testMismatch() {
+    void testMismatch() {
         try {
             createStatistic(8).increment(new double[5]);
             fail("an exception should have been thrown");
@@ -54,7 +54,7 @@ public class VectorialStorelessStatisticTest {
     }
 
     @Test
-    public void testSimplistic() {
+    void testSimplistic() {
         VectorialStorelessStatistic stat = createStatistic(2);
         stat.increment(new double[] {-1.0,  1.0});
         stat.increment(new double[] { 1.0, -1.0});
@@ -64,7 +64,7 @@ public class VectorialStorelessStatisticTest {
     }
 
     @Test
-    public void testBasicStats() {
+    void testBasicStats() {
 
         VectorialStorelessStatistic stat = createStatistic(points[0].length);
         for (int i = 0; i < points.length; ++i) {
@@ -82,7 +82,7 @@ public class VectorialStorelessStatisticTest {
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         VectorialStorelessStatistic stat = createStatistic(points[0].length);
         for (int i = 0; i < points.length; ++i) {
             stat.increment(points[i]);

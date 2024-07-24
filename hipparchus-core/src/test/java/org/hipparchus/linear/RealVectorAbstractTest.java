@@ -49,7 +49,6 @@ import org.hipparchus.analysis.function.Ulp;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -57,7 +56,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class RealVectorAbstractTest {
 
@@ -188,10 +194,10 @@ public abstract class RealVectorAbstractTest {
     public void testGetDimension() {
         final double x = getPreferredEntryValue();
         final double[] data1 = {x, x, x, x};
-        Assertions.assertEquals(data1.length, create(data1).getDimension());
+        assertEquals(data1.length, create(data1).getDimension());
         final double y = x + 1;
         final double[] data2 = {y, y, y, y};
-        Assertions.assertEquals(data2.length, create(data2).getDimension());
+        assertEquals(data2.length, create(data2).getDimension());
     }
 
     @Test
@@ -200,7 +206,7 @@ public abstract class RealVectorAbstractTest {
         final double[] data = {x, 1d, 2d, x, x};
         final RealVector v = create(data);
         for (int i = 0; i < data.length; i++) {
-            Assertions.assertEquals(data[i], v.getEntry(i), 0d, "entry " + i);
+            assertEquals(data[i], v.getEntry(i), 0d, "entry " + i);
         }
     }
 
@@ -233,7 +239,7 @@ public abstract class RealVectorAbstractTest {
             final double newValue = oldValue + 1d;
             expected[i] = newValue;
             actual.setEntry(i, newValue);
-            UnitTestUtils.assertEquals("while setting entry #" + i, expected,
+            UnitTestUtils.customAssertEquals("while setting entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -247,7 +253,7 @@ public abstract class RealVectorAbstractTest {
             final double newValue = x;
             expected[i] = newValue;
             actual.setEntry(i, newValue);
-            UnitTestUtils.assertEquals("while setting entry #" + i, expected,
+            UnitTestUtils.customAssertEquals("while setting entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -284,7 +290,7 @@ public abstract class RealVectorAbstractTest {
             final double oldValue = data1[i];
             expected[i] += increment;
             actual.addToEntry(i, increment);
-            UnitTestUtils.assertEquals("while incrementing entry #" + i, expected,
+            UnitTestUtils.customAssertEquals("while incrementing entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -298,7 +304,7 @@ public abstract class RealVectorAbstractTest {
             increment = x - oldValue;
             expected[i] = x;
             actual.addToEntry(i, increment);
-            UnitTestUtils.assertEquals("while incrementing entry #" + i, expected,
+            UnitTestUtils.customAssertEquals("while incrementing entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -325,14 +331,14 @@ public abstract class RealVectorAbstractTest {
         final int n1 = v1.getDimension();
         final int n2 = v2.getDimension();
         final RealVector v = v1.append(v2);
-        Assertions.assertEquals(n1 + n2, v.getDimension(), message);
+        assertEquals(n1 + n2, v.getDimension(), message);
         for (int i = 0; i < n1; i++) {
             final String msg = message + ", entry #" + i;
-            Assertions.assertEquals(v1.getEntry(i), v.getEntry(i), delta, msg);
+            assertEquals(v1.getEntry(i), v.getEntry(i), delta, msg);
         }
         for (int i = 0; i < n2; i++) {
             final String msg = message + ", entry #" + (n1 + i);
-            Assertions.assertEquals(v2.getEntry(i), v.getEntry(n1 + i), delta, msg);
+            assertEquals(v2.getEntry(i), v.getEntry(n1 + i), delta, msg);
         }
     }
 
@@ -351,13 +357,13 @@ public abstract class RealVectorAbstractTest {
 
         final int n = v.getDimension();
         final RealVector w = v.append(d);
-        Assertions.assertEquals(n + 1, w.getDimension(), message);
+        assertEquals(n + 1, w.getDimension(), message);
         for (int i = 0; i < n; i++) {
             final String msg = message + ", entry #" + i;
-            Assertions.assertEquals(v.getEntry(i), w.getEntry(i), delta, msg);
+            assertEquals(v.getEntry(i), w.getEntry(i), delta, msg);
         }
         final String msg = message + ", entry #" + n;
-        Assertions.assertEquals(d, w.getEntry(n), delta, msg);
+        assertEquals(d, w.getEntry(n), delta, msg);
     }
 
     @Test
@@ -378,7 +384,7 @@ public abstract class RealVectorAbstractTest {
         final RealVector actual = create(data).getSubVector(index, n);
         final double[] expected = new double[n];
         System.arraycopy(data, index, expected, 0, n);
-        UnitTestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.customAssertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -425,7 +431,7 @@ public abstract class RealVectorAbstractTest {
         for (int i = 0; i < sub.length; i++){
             expected[index + i] = sub[i];
         }
-        UnitTestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.customAssertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -440,7 +446,7 @@ public abstract class RealVectorAbstractTest {
         for (int i = 0; i < sub.length; i++){
             expected[index + i] = sub[i];
         }
-        UnitTestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.customAssertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -468,20 +474,20 @@ public abstract class RealVectorAbstractTest {
     public void testIsNaN() {
         final RealVector v = create(new double[] {0, 1, 2});
 
-        Assertions.assertFalse(v.isNaN());
+        assertFalse(v.isNaN());
         v.setEntry(1, Double.NaN);
-        Assertions.assertTrue(v.isNaN());
+        assertTrue(v.isNaN());
     }
 
     @Test
     public void testIsInfinite() {
         final RealVector v = create(new double[] { 0, 1, 2 });
 
-        Assertions.assertFalse(v.isInfinite());
+        assertFalse(v.isInfinite());
         v.setEntry(0, Double.POSITIVE_INFINITY);
-        Assertions.assertTrue(v.isInfinite());
+        assertTrue(v.isInfinite());
         v.setEntry(1, Double.NaN);
-        Assertions.assertFalse(v.isInfinite());
+        assertFalse(v.isInfinite());
     }
 
     protected void doTestEbeBinaryOperation(final BinaryOperation op, final boolean mixed, boolean ignoreSpecial) {
@@ -537,7 +543,7 @@ public abstract class RealVectorAbstractTest {
             boolean isSpecial = Double.isNaN(expected[i]) || Double.isInfinite(expected[i]);
             if (!(isSpecial && ignoreSpecial)) {
                 final String msg = "entry #"+i+", left = "+data1[i]+", right = " + data2[i];
-                Assertions.assertEquals(expected[i], actual.getEntry(i), 0.0, msg);
+                assertEquals(expected[i], actual.getEntry(i), 0.0, msg);
             }
         }
     }
@@ -648,7 +654,7 @@ public abstract class RealVectorAbstractTest {
             expected += delta * delta;
         }
         expected = FastMath.sqrt(expected);
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
     }
 
     @Test
@@ -679,7 +685,7 @@ public abstract class RealVectorAbstractTest {
             expected += data[i] * data[i];
         }
         expected = FastMath.sqrt(expected);
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
     }
 
     private void doTestGetL1Distance(final boolean mixed) {
@@ -699,7 +705,7 @@ public abstract class RealVectorAbstractTest {
             final double delta = data2[i] - data1[i];
             expected += FastMath.abs(delta);
         }
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
     }
 
     @Test
@@ -729,7 +735,7 @@ public abstract class RealVectorAbstractTest {
         for (int i = 0; i < data.length; i++) {
             expected += FastMath.abs(data[i]);
         }
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
 
     }
 
@@ -750,7 +756,7 @@ public abstract class RealVectorAbstractTest {
             final double delta = data2[i] - data1[i];
             expected = FastMath.max(expected, FastMath.abs(delta));
         }
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
     }
 
     @Test
@@ -780,7 +786,7 @@ public abstract class RealVectorAbstractTest {
         for (int i = 0; i < data.length; i++) {
             expected = FastMath.max(expected, FastMath.abs(data[i]));
         }
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
 
     }
 
@@ -843,7 +849,7 @@ public abstract class RealVectorAbstractTest {
                         throw new AssertionError("unexpected value");
                 }
             }
-            UnitTestUtils.assertEquals(Double.toString(d), expected, actual, 0d);
+            UnitTestUtils.customAssertEquals(Double.toString(d), expected, actual, 0d);
         }
     }
 
@@ -905,11 +911,11 @@ public abstract class RealVectorAbstractTest {
         final RealVector actual;
         if (inPlace) {
             actual = v.mapToSelf(f);
-            Assertions.assertSame(v, actual);
+            assertSame(v, actual);
         } else {
             actual = v.map(f);
         }
-        UnitTestUtils.assertEquals(f.getClass().getSimpleName(), expected, actual, 1E-16);
+        UnitTestUtils.customAssertEquals(f.getClass().getSimpleName(), expected, actual, 1E-16);
     }
 
     protected UnivariateFunction[] createFunctions() {
@@ -953,15 +959,15 @@ public abstract class RealVectorAbstractTest {
             v = create(dataV);
         }
         final RealMatrix uv = u.outerProduct(v);
-        Assertions.assertEquals(dataU.length, uv
+        assertEquals(dataU.length, uv
             .getRowDimension(), "number of rows");
-        Assertions.assertEquals(dataV.length, uv
+        assertEquals(dataV.length, uv
             .getColumnDimension(), "number of columns");
         for (int i = 0; i < dataU.length; i++) {
             for (int j = 0; j < dataV.length; j++) {
                 final double expected = dataU[i] * dataV[j];
                 final double actual = uv.getEntry(i, j);
-                Assertions.assertEquals(expected, actual, 0d, dataU[i] + " * " + dataV[j]);
+                assertEquals(expected, actual, 0d, dataU[i] + " * " + dataV[j]);
             }
         }
     }
@@ -1003,7 +1009,7 @@ public abstract class RealVectorAbstractTest {
             v2 = create(data2);
         }
         final RealVector actual = v1.projection(v2);
-        UnitTestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.customAssertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -1040,7 +1046,7 @@ public abstract class RealVectorAbstractTest {
             final RealVector v = create(values);
             v.set(expected);
             for (int j = 0; j < values.length; j++) {
-                Assertions.assertEquals(expected, v.getEntry(j), 0, "entry #" + j);
+                assertEquals(expected, v.getEntry(j), 0, "entry #" + j);
             }
         }
     }
@@ -1048,9 +1054,9 @@ public abstract class RealVectorAbstractTest {
     @Test
     public void testToArray() {
         final double[] data = create(values).toArray();
-        Assertions.assertNotSame(values, data);
+        assertNotSame(values, data);
         for (int i = 0; i < values.length; i++) {
-            Assertions.assertEquals(values[i], data[i], 0, "entry #" + i);
+            assertEquals(values[i], data[i], 0, "entry #" + i);
         }
     }
 
@@ -1075,9 +1081,9 @@ public abstract class RealVectorAbstractTest {
             actual = v;
         } else {
             actual = v.unitVector();
-            Assertions.assertNotSame(v, actual);
+            assertNotSame(v, actual);
         }
-        UnitTestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.customAssertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -1120,21 +1126,21 @@ public abstract class RealVectorAbstractTest {
         final RealVector v = create(values);
         final Iterator<RealVector.Entry> it = v.iterator();
         for (int i = 0; i < values.length; i++) {
-            Assertions.assertTrue(it.hasNext(), "entry #" + i);
+            assertTrue(it.hasNext(), "entry #" + i);
             final RealVector.Entry e = it.next();
-            Assertions.assertEquals(i, e.getIndex(), "");
-            Assertions.assertEquals(values[i], e.getValue(), 0d, "");
+            assertEquals(i, e.getIndex(), "");
+            assertEquals(values[i], e.getValue(), 0d, "");
             try {
                 it.remove();
-                Assertions.fail("MathRuntimeException should have been thrown");
+                fail("MathRuntimeException should have been thrown");
             } catch (MathRuntimeException exc) {
                 // Expected behavior
             }
         }
-        Assertions.assertFalse(it.hasNext());
+        assertFalse(it.hasNext());
         try {
             it.next();
-            Assertions.fail("NoSuchElementException should have been thrown");
+            fail("NoSuchElementException should have been thrown");
         } catch (NoSuchElementException e) {
             // Expected behavior
         }
@@ -1165,11 +1171,11 @@ public abstract class RealVectorAbstractTest {
                 if (inPlace) {
                     final RealVector v1bis = v1.copy();
                     actual = v1bis.combineToSelf(a1, a2, v2);
-                    Assertions.assertSame(v1bis, actual);
+                    assertSame(v1bis, actual);
                 } else {
                     actual = v1.combine(a1, a2, v2);
                 }
-                UnitTestUtils.assertEquals("a1 = " + a1 + ", a2 = " + a2, expected,
+                UnitTestUtils.customAssertEquals("a1 = " + a1 + ", a2 = " + a2, expected,
                     actual, 0.);
             }
         }
@@ -1242,8 +1248,8 @@ public abstract class RealVectorAbstractTest {
     public void testCopy() {
         final RealVector v = create(values);
         final RealVector w = v.copy();
-        Assertions.assertNotSame(v, w);
-        UnitTestUtils.assertEquals("", values, w, 0d);
+        assertNotSame(v, w);
+        UnitTestUtils.customAssertEquals("", values, w, 0d);
     }
 
     private void doTestDotProductRegularValues(final boolean mixed) {
@@ -1266,7 +1272,7 @@ public abstract class RealVectorAbstractTest {
             v2 = create(data2);
         }
         final double actual = v1.dotProduct(v2);
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
     }
 
     private void doTestDotProductSpecialValues(final boolean mixed) {
@@ -1287,7 +1293,7 @@ public abstract class RealVectorAbstractTest {
                 }
                 final double expected = data1[0] * data2[0];
                 final double actual = v1.dotProduct(v2);
-                Assertions.assertEquals(expected,
+                assertEquals(expected,
                     actual, 0d, data1[0] + " * " + data2[0]);
             }
         }
@@ -1359,7 +1365,7 @@ public abstract class RealVectorAbstractTest {
             v2 = create(data2);
         }
         final double actual = v1.cosine(v2);
-        Assertions.assertEquals(expected, actual, 0d, "");
+        assertEquals(expected, actual, 0d, "");
 
     }
 
@@ -1404,41 +1410,41 @@ public abstract class RealVectorAbstractTest {
     public void testEquals() {
         final RealVector v = create(new double[] { 0, 1, 2 });
 
-        Assertions.assertEquals(v, v);
-        Assertions.assertEquals(v, v.copy());
-        Assertions.assertNotEquals(null, v);
-        Assertions.assertNotEquals(v, v.getSubVector(0, v.getDimension() - 1));
-        Assertions.assertEquals(v, v.getSubVector(0, v.getDimension()));
+        assertEquals(v, v);
+        assertEquals(v, v.copy());
+        assertNotEquals(null, v);
+        assertNotEquals(v, v.getSubVector(0, v.getDimension() - 1));
+        assertEquals(v, v.getSubVector(0, v.getDimension()));
     }
 
     @Test
     public void testSerial()  {
         RealVector v = create(new double[] { 0, 1, 2 });
-        Assertions.assertEquals(v,UnitTestUtils.serializeAndRecover(v));
+        assertEquals(v,UnitTestUtils.serializeAndRecover(v));
     }
 
     @Test
     public void testMinMax() {
         final RealVector v1 = create(new double[] {0, -6, 4, 12, 7});
-        Assertions.assertEquals(1, v1.getMinIndex());
-        Assertions.assertEquals(-6, v1.getMinValue(), 1.0e-12);
-        Assertions.assertEquals(3, v1.getMaxIndex());
-        Assertions.assertEquals(12, v1.getMaxValue(), 1.0e-12);
+        assertEquals(1, v1.getMinIndex());
+        assertEquals(-6, v1.getMinValue(), 1.0e-12);
+        assertEquals(3, v1.getMaxIndex());
+        assertEquals(12, v1.getMaxValue(), 1.0e-12);
         final RealVector v2 = create(new double[] {Double.NaN, 3, Double.NaN, -2});
-        Assertions.assertEquals(3, v2.getMinIndex());
-        Assertions.assertEquals(-2, v2.getMinValue(), 1.0e-12);
-        Assertions.assertEquals(1, v2.getMaxIndex());
-        Assertions.assertEquals(3, v2.getMaxValue(), 1.0e-12);
+        assertEquals(3, v2.getMinIndex());
+        assertEquals(-2, v2.getMinValue(), 1.0e-12);
+        assertEquals(1, v2.getMaxIndex());
+        assertEquals(3, v2.getMaxValue(), 1.0e-12);
         final RealVector v3 = create(new double[] {Double.NaN, Double.NaN});
-        Assertions.assertEquals(-1, v3.getMinIndex());
-        Assertions.assertTrue(Double.isNaN(v3.getMinValue()));
-        Assertions.assertEquals(-1, v3.getMaxIndex());
-        Assertions.assertTrue(Double.isNaN(v3.getMaxValue()));
+        assertEquals(-1, v3.getMinIndex());
+        assertTrue(Double.isNaN(v3.getMinValue()));
+        assertEquals(-1, v3.getMaxIndex());
+        assertTrue(Double.isNaN(v3.getMaxValue()));
         final RealVector v4 = create(new double[0]);
-        Assertions.assertEquals(-1, v4.getMinIndex());
-        Assertions.assertTrue(Double.isNaN(v4.getMinValue()));
-        Assertions.assertEquals(-1, v4.getMaxIndex());
-        Assertions.assertTrue(Double.isNaN(v4.getMaxValue()));
+        assertEquals(-1, v4.getMinIndex());
+        assertTrue(Double.isNaN(v4.getMinValue()));
+        assertEquals(-1, v4.getMaxIndex());
+        assertTrue(Double.isNaN(v4.getMaxValue()));
     }
 
     /*
@@ -1459,17 +1465,17 @@ public abstract class RealVectorAbstractTest {
 
             @Override
             public void visit(final int actualIndex, final double actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
                 ++expectedIndex;
             }
 
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 expectedIndex = 0;
             }
 
@@ -1505,31 +1511,31 @@ public abstract class RealVectorAbstractTest {
         };
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -1551,17 +1557,17 @@ public abstract class RealVectorAbstractTest {
 
             @Override
             public void visit(final int actualIndex, final double actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
                 ++expectedIndex;
             }
 
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 expectedIndex = expectedStart;
             }
 
@@ -1587,22 +1593,22 @@ public abstract class RealVectorAbstractTest {
             @Override
             public void visit(final int actualIndex, final double actualValue) {
                 visited[actualIndex] = true;
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
             }
 
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 Arrays.fill(visited, false);
             }
 
             @Override
             public double end() {
                 for (int i = 0; i < data.length; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return 0.0;
@@ -1635,31 +1641,31 @@ public abstract class RealVectorAbstractTest {
         };
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -1680,23 +1686,23 @@ public abstract class RealVectorAbstractTest {
 
             @Override
             public void visit(final int actualIndex, final double actualValue) {
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
                 visited[actualIndex] = true;
             }
 
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 Arrays.fill(visited, true);
             }
 
             @Override
             public double end() {
                 for (int i = expectedStart; i <= expectedEnd; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return 0.0;
@@ -1719,8 +1725,8 @@ public abstract class RealVectorAbstractTest {
 
             @Override
             public double visit(final int actualIndex, final double actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
                 ++expectedIndex;
                 return actualIndex + actualValue;
             }
@@ -1728,9 +1734,9 @@ public abstract class RealVectorAbstractTest {
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 expectedIndex = 0;
             }
 
@@ -1741,7 +1747,7 @@ public abstract class RealVectorAbstractTest {
         };
         v.walkInDefaultOrder(visitor);
         for (int i = 0; i < data.length; i++) {
-            Assertions.assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
+            assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
         }
     }
 
@@ -1769,31 +1775,31 @@ public abstract class RealVectorAbstractTest {
         };
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -1815,8 +1821,8 @@ public abstract class RealVectorAbstractTest {
 
             @Override
             public double visit(final int actualIndex, final double actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
                 ++expectedIndex;
                 return actualIndex + actualValue;
             }
@@ -1824,9 +1830,9 @@ public abstract class RealVectorAbstractTest {
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 expectedIndex = expectedStart;
             }
 
@@ -1837,7 +1843,7 @@ public abstract class RealVectorAbstractTest {
         };
         v.walkInDefaultOrder(visitor, expectedStart, expectedEnd);
         for (int i = expectedStart; i <= expectedEnd; i++) {
-            Assertions.assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
+            assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
         }
     }
 
@@ -1855,23 +1861,23 @@ public abstract class RealVectorAbstractTest {
             @Override
             public double visit(final int actualIndex, final double actualValue) {
                 visited[actualIndex] = true;
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
                 return actualIndex + actualValue;
             }
 
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 Arrays.fill(visited, false);
             }
 
             @Override
             public double end() {
                 for (int i = 0; i < data.length; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return 0.0;
@@ -1879,7 +1885,7 @@ public abstract class RealVectorAbstractTest {
         };
         v.walkInOptimizedOrder(visitor);
         for (int i = 0; i < data.length; i++) {
-            Assertions.assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
+            assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
         }
     }
 
@@ -1907,31 +1913,31 @@ public abstract class RealVectorAbstractTest {
         };
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -1952,7 +1958,7 @@ public abstract class RealVectorAbstractTest {
 
             @Override
             public double visit(final int actualIndex, final double actualValue) {
-                Assertions.assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, 0d, Integer.toString(actualIndex));
                 visited[actualIndex] = true;
                 return actualIndex + actualValue;
             }
@@ -1960,16 +1966,16 @@ public abstract class RealVectorAbstractTest {
             @Override
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 Arrays.fill(visited, true);
             }
 
             @Override
             public double end() {
                 for (int i = expectedStart; i <= expectedEnd; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return 0.0;
@@ -1977,7 +1983,7 @@ public abstract class RealVectorAbstractTest {
         };
         v.walkInOptimizedOrder(visitor, expectedStart, expectedEnd);
         for (int i = expectedStart; i <= expectedEnd; i++) {
-            Assertions.assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
+            assertEquals(i + data[i], v.getEntry(i), 0.0, "entry " + i);
         }
     }
 

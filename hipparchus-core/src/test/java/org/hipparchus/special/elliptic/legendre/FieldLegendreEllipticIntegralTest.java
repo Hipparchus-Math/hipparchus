@@ -22,22 +22,24 @@ import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FieldLegendreEllipticIntegralTest {
 
     @Test
-    public void testNoConvergence() {
+    void testNoConvergence() {
         doTestNoConvergence(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(final Field<T> field) {
-        Assertions.assertTrue(LegendreEllipticIntegral.bigK(field.getZero().newInstance(Double.NaN)).isNaN());
+        assertTrue(LegendreEllipticIntegral.bigK(field.getZero().newInstance(Double.NaN)).isNaN());
     }
 
     @Test
-    public void testComplementary() {
+    void testComplementary() {
         doTestComplementary(Binary64Field.getInstance());
     }
 
@@ -45,18 +47,18 @@ public class FieldLegendreEllipticIntegralTest {
         for (double m = 0.01; m < 1; m += 0.01) {
             T k1 = LegendreEllipticIntegral.bigK(field.getZero().newInstance(m));
             T k2 = LegendreEllipticIntegral.bigKPrime(field.getZero().newInstance(1 - m));
-            Assertions.assertEquals(k1.getReal(), k2.getReal(), FastMath.ulp(k1).getReal());
+            assertEquals(k1.getReal(), k2.getReal(), FastMath.ulp(k1).getReal());
         }
     }
 
     @Test
-    public void testAbramowitzStegunExample3() {
+    void testAbramowitzStegunExample3() {
         doTestAbramowitzStegunExample3(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample3(final Field<T> field) {
         T k = LegendreEllipticIntegral.bigK(field.getZero().newInstance(80.0 / 81.0));
-        Assertions.assertEquals(3.591545001, k.getReal(), 2.0e-9);
+        assertEquals(3.591545001, k.getReal(), 2.0e-9);
     }
 
     public void testAbramowitzStegunExample4() {
@@ -64,34 +66,34 @@ public class FieldLegendreEllipticIntegralTest {
     }
 
     @Test
-    public void testAbramowitzStegunExample8() {
+    void testAbramowitzStegunExample8() {
         final double m    = 1.0 / 5.0;
         doTestBigF(Binary64Field.getInstance(), FastMath.acos(FastMath.sqrt(2) / 3.0), m, 1.115921, 1.0e-6);
         doTestBigF(Binary64Field.getInstance(), FastMath.acos(FastMath.sqrt(2) / 2.0), m, 0.800380, 1.0e-6);
     }
 
     @Test
-    public void testAbramowitzStegunExample9() {
+    void testAbramowitzStegunExample9() {
         final double m    = 1.0 / 2.0;
         doTestBigF(Binary64Field.getInstance(), MathUtils.SEMI_PI, m, 1.854075, 1.0e-6);
         doTestBigF(Binary64Field.getInstance(), FastMath.PI / 6.0, m, 0.535623, 1.0e-6);
     }
 
     @Test
-    public void testAbramowitzStegunExample10() {
+    void testAbramowitzStegunExample10() {
         final double m    = 4.0 / 5.0;
         doTestBigF(Binary64Field.getInstance(), FastMath.PI / 6.0, m, 0.543604, 1.0e-6);
     }
 
     @Test
-    public void testAbramowitzStegunExample14() {
+    void testAbramowitzStegunExample14() {
         final double k    = 3.0 / 5.0;
         doTestBigE(Binary64Field.getInstance(), FastMath.asin(FastMath.sqrt(5.0) / 3.0),          k * k, 0.80904, 1.0e-5);
         doTestBigE(Binary64Field.getInstance(), FastMath.asin(5.0 / (3.0 * FastMath.sqrt(17.0))), k * k, 0.41192, 1.0e-5);
     }
 
     @Test
-    public void testAbramowitzStegunTable175() {
+    void testAbramowitzStegunTable175() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(32));
         doTestBigF(Binary64Field.getInstance(), FastMath.toRadians(15), sinAlpha1 * sinAlpha1, 0.26263487, 1.0e-8);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(46));
@@ -99,7 +101,7 @@ public class FieldLegendreEllipticIntegralTest {
     }
 
     @Test
-    public void testAbramowitzStegunTable176() {
+    void testAbramowitzStegunTable176() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(64));
         doTestBigE(Binary64Field.getInstance(), FastMath.toRadians(25), sinAlpha1 * sinAlpha1, 0.42531712, 1.0e-8);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(76));
@@ -107,7 +109,7 @@ public class FieldLegendreEllipticIntegralTest {
     }
 
     @Test
-    public void testAbramowitzStegunTable179() {
+    void testAbramowitzStegunTable179() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(15));
         doTestBigPi(Binary64Field.getInstance(), FastMath.toRadians(75), 0.4, sinAlpha1 * sinAlpha1, 1.62298, 1.0e-5);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(60));
@@ -117,48 +119,48 @@ public class FieldLegendreEllipticIntegralTest {
     }
 
     @Test
-    public void testCompleteVsIncompleteF() {
+    void testCompleteVsIncompleteF() {
         doTestCompleteVsIncompleteF(Binary64Field.getInstance());
     }
 
     @Test
-    public void testCompleteVsIncompleteE() {
+    void testCompleteVsIncompleteE() {
         doTestCompleteVsIncompleteE(Binary64Field.getInstance());
     }
 
     @Test
-    public void testCompleteVsIncompleteD() {
+    void testCompleteVsIncompleteD() {
         doTestCompleteVsIncompleteD(Binary64Field.getInstance());
     }
 
     @Test
-    public void testCompleteVsIncompletePi() {
+    void testCompleteVsIncompletePi() {
         doTestCompleteVsIncompletePi(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNomeMediumParameter() {
+    void testNomeMediumParameter() {
         doTestNomeMediumParameter(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNomeSmallParameter() {
+    void testNomeSmallParameter() {
         doTestNomeSmallParameter(Binary64Field.getInstance());
     }
 
     @Test
-    public void testPrecomputedDelta() {
+    void testPrecomputedDelta() {
         doTestPrecomputedDelta(Binary64Field.getInstance());
     }
 
     @Test
-    public void testIntegralsSmallParameter() {
+    void testIntegralsSmallParameter() {
         doTestIntegralsSmallParameter(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestBigE(final Field<T> field, final double m,
                                                                 final double expected, final double tol) {
-        Assertions.assertEquals(expected,
+        assertEquals(expected,
                             LegendreEllipticIntegral.bigE(field.getZero().newInstance(m)).getReal(),
                             tol);
     }
@@ -166,7 +168,7 @@ public class FieldLegendreEllipticIntegralTest {
     private <T extends CalculusFieldElement<T>> void doTestBigE(final Field<T> field,
                                                                 final double phi, final double m,
                                                                 final double expected, final double tol) {
-        Assertions.assertEquals(expected,
+        assertEquals(expected,
                             LegendreEllipticIntegral.bigE(field.getZero().newInstance(phi),
                                                           field.getZero().newInstance(m)).getReal(),
                             tol);
@@ -175,7 +177,7 @@ public class FieldLegendreEllipticIntegralTest {
     private <T extends CalculusFieldElement<T>> void doTestBigF(final Field<T> field,
                                                                 final double phi, final double m,
                                                                 final double expected, final double tol) {
-        Assertions.assertEquals(expected,
+        assertEquals(expected,
                             LegendreEllipticIntegral.bigF(field.getZero().newInstance(phi),
                                                           field.getZero().newInstance(m)).getReal(),
                             tol);
@@ -184,7 +186,7 @@ public class FieldLegendreEllipticIntegralTest {
     private <T extends CalculusFieldElement<T>> void doTestBigPi(final Field<T> field,
                                                                  final double phi, final double alpha2, final double m,
                                                                  final double expected, final double tol) {
-        Assertions.assertEquals(expected,
+        assertEquals(expected,
                             LegendreEllipticIntegral.bigPi(field.getZero().newInstance(alpha2),
                                                            field.getZero().newInstance(phi),
                                                            field.getZero().newInstance(m)).getReal(),
@@ -196,7 +198,7 @@ public class FieldLegendreEllipticIntegralTest {
             double complete   = LegendreEllipticIntegral.bigK(field.getZero().newInstance(m)).getReal();
             double incomplete = LegendreEllipticIntegral.bigF(field.getZero().newInstance(MathUtils.SEMI_PI),
                                                               field.getZero().newInstance(m)).getReal();
-            Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
+            assertEquals(complete, incomplete, FastMath.ulp(complete));
         }
     }
 
@@ -205,7 +207,7 @@ public class FieldLegendreEllipticIntegralTest {
             double complete   = LegendreEllipticIntegral.bigE(field.getZero().newInstance(m)).getReal();
             double incomplete = LegendreEllipticIntegral.bigE(field.getZero().newInstance(MathUtils.SEMI_PI),
                                                               field.getZero().newInstance(m)).getReal();
-            Assertions.assertEquals(complete, incomplete, 4 * FastMath.ulp(complete));
+            assertEquals(complete, incomplete, 4 * FastMath.ulp(complete));
         }
     }
 
@@ -214,7 +216,7 @@ public class FieldLegendreEllipticIntegralTest {
             double complete   = LegendreEllipticIntegral.bigD(field.getZero().newInstance(m)).getReal();
             double incomplete = LegendreEllipticIntegral.bigD(field.getZero().newInstance(MathUtils.SEMI_PI),
                                                               field.getZero().newInstance(m)).getReal();
-            Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
+            assertEquals(complete, incomplete, FastMath.ulp(complete));
         }
     }
 
@@ -226,21 +228,21 @@ public class FieldLegendreEllipticIntegralTest {
                 double incomplete = LegendreEllipticIntegral.bigPi(field.getZero().newInstance(alpha2),
                                                                    field.getZero().newInstance(MathUtils.SEMI_PI),
                                                                    field.getZero().newInstance(m)).getReal();
-                Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
+                assertEquals(complete, incomplete, FastMath.ulp(complete));
             }
         }
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNomeMediumParameter(final Field<T> field) {
-        Assertions.assertEquals(0.0857957337021947665168, LegendreEllipticIntegral.nome(field.getZero().newInstance(0.75)).getReal(), 1.0e-15);
+        assertEquals(0.0857957337021947665168, LegendreEllipticIntegral.nome(field.getZero().newInstance(0.75)).getReal(), 1.0e-15);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNomeSmallParameter(final Field<T> field) {
-        Assertions.assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(field.getZero().newInstance(0.95e-16)).getReal(), 1.0e-22);
+        assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(field.getZero().newInstance(0.95e-16)).getReal(), 1.0e-22);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestIntegralsSmallParameter(final Field<T> field) {
-        Assertions.assertEquals(7.8539816428e-10,
+        assertEquals(7.8539816428e-10,
                             LegendreEllipticIntegral.bigK(field.getZero().newInstance(2.0e-9)).getReal() - MathUtils.SEMI_PI,
                             1.0e-15);
     }
@@ -251,7 +253,7 @@ public class FieldLegendreEllipticIntegralTest {
         T m   = field.getZero().newInstance(0.2);
         T phi = field.getZero().newInstance(1.2);
         T ref = field.getZero().newInstance(1.8264362537906997);
-        Assertions.assertEquals(0.0, LegendreEllipticIntegral.bigPi(n, phi, m).subtract(ref).getReal(), 1.0e-15);
+        assertEquals(0.0, LegendreEllipticIntegral.bigPi(n, phi, m).subtract(ref).getReal(), 1.0e-15);
 
         // no argument reduction and no precomputed delta
         final T csc     = phi.sin().reciprocal();
@@ -261,7 +263,7 @@ public class FieldLegendreEllipticIntegralTest {
         final T cMn     = csc2.subtract(n);
         final T pinphim = CarlsonEllipticIntegral.rF(cM1, cMm, csc2).
                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, csc2, cMn).multiply(n).divide(3));
-        Assertions.assertEquals(0.0, pinphim.subtract(ref).getReal(), 1.0e-15);
+        assertEquals(0.0, pinphim.subtract(ref).getReal(), 1.0e-15);
 
     }
 

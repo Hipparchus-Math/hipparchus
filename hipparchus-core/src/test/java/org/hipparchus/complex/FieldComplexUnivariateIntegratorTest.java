@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class FieldComplexUnivariateIntegratorTest {
+class FieldComplexUnivariateIntegratorTest {
 
     private FieldComplexUnivariateIntegrator<Binary64> integrator;
     private FieldComplex<Binary64> zero = FieldComplex.getZero(Binary64Field.getInstance());
@@ -38,24 +38,24 @@ public class FieldComplexUnivariateIntegratorTest {
     }
 
     @Test
-    public void testZero() {
+    void testZero() {
         final FieldComplex<Binary64> start = buildComplex(-1.75,   4.0);
         final FieldComplex<Binary64> end   = buildComplex( 1.5,  -12.0);
-        UnitTestUtils.assertEquals(zero,
-                                   integrator.integrate(1000, z -> zero, start, end),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(zero,
+                                         integrator.integrate(1000, z -> zero, start, end),
+                                         1.0e-15);
     }
 
     @Test
-    public void testIdentity() {
+    void testIdentity() {
         final FieldComplex<Binary64> end = buildComplex( 1.5, -12.0);
-        UnitTestUtils.assertEquals(end.multiply(end).multiply(0.5),
-                                   integrator.integrate(1000, z -> z, zero, end),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(end.multiply(end).multiply(0.5),
+                                         integrator.integrate(1000, z -> z, zero, end),
+                                         1.0e-15);
     }
 
     @Test
-    public void testPolynomialStraightPath() {
+    void testPolynomialStraightPath() {
         @SuppressWarnings("unchecked")
         final FieldPolynomialFunction<FieldComplex<Binary64>> polynomial =
                         new FieldPolynomialFunction<>(new FieldComplex[] {
@@ -63,14 +63,14 @@ public class FieldComplexUnivariateIntegratorTest {
                         });
         final FieldComplex<Binary64> start = buildComplex(-1.75,   4.0);
         final FieldComplex<Binary64> end   = buildComplex( 1.5,  -12.0);
-        UnitTestUtils.assertEquals(polynomial.integrate(start, end),
-                                   integrator.integrate(1000, polynomial, start, end),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(polynomial.integrate(start, end),
+                                         integrator.integrate(1000, polynomial, start, end),
+                                         1.0e-15);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testPolynomialPolylinePath() {
+    void testPolynomialPolylinePath() {
         final FieldPolynomialFunction<FieldComplex<Binary64>> polynomial =
                         new FieldPolynomialFunction<>(new FieldComplex[] {
                             buildComplex(1.25, 2.0), buildComplex(-3.25, 0.125), buildComplex(0.0, 3.0)
@@ -80,14 +80,14 @@ public class FieldComplexUnivariateIntegratorTest {
         final FieldComplex<Binary64> z2 = buildComplex( 6.00,  0.5);
         final FieldComplex<Binary64> z3 = buildComplex( 6.00, -6.5);
         final FieldComplex<Binary64> z4 = buildComplex( 1.5, -12.0);
-        UnitTestUtils.assertEquals(polynomial.integrate(z0, z4),
-                                   integrator.integrate(1000, polynomial, z0, z1, z2, z3, z4),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(polynomial.integrate(z0, z4),
+                                         integrator.integrate(1000, polynomial, z0, z1, z2, z3, z4),
+                                         1.0e-15);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testAroundPole() {
+    void testAroundPole() {
         final FieldComplex<Binary64> pole = buildComplex(-2.0, -1.0);
         final CalculusFieldUnivariateFunction<FieldComplex<Binary64>> f = z -> z.subtract(pole).reciprocal();
         final FieldComplex<Binary64> z0 = buildComplex( 1,  0);
@@ -99,14 +99,14 @@ public class FieldComplexUnivariateIntegratorTest {
         final FieldComplex<Binary64> z6 = buildComplex(-1, -4);
         final FieldComplex<Binary64> z7 = buildComplex( 1, -2);
         final FieldComplex<Binary64> z8 = buildComplex( 1,  0);
-        UnitTestUtils.assertEquals(buildComplex(0.0, MathUtils.TWO_PI),
-                                   integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(buildComplex(0.0, MathUtils.TWO_PI),
+                                         integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
+                                         1.0e-15);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testAroundRoot() {
+    void testAroundRoot() {
         final FieldComplex<Binary64> pole = buildComplex(-2.0, -1.0);
         final CalculusFieldUnivariateFunction<FieldComplex<Binary64>> f = z -> z.subtract(pole);
         final FieldComplex<Binary64> z0 = buildComplex( 1,  0);
@@ -118,13 +118,13 @@ public class FieldComplexUnivariateIntegratorTest {
         final FieldComplex<Binary64> z6 = buildComplex(-1, -4);
         final FieldComplex<Binary64> z7 = buildComplex( 1, -2);
         final FieldComplex<Binary64> z8 = buildComplex( 1,  0);
-        UnitTestUtils.assertEquals(zero,
-                                   integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
-                                   1.0e-15);
+        UnitTestUtils.customAssertEquals(zero,
+                                         integrator.integrate(1000, f, z0, z1, z2, z3, z4, z5, z6, z7, z8),
+                                         1.0e-15);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         integrator = new FieldComplexUnivariateIntegrator<>(new IterativeLegendreFieldGaussIntegrator<>(Binary64Field.getInstance(),
                                                                                                         24,
                                                                                                         1.0e-12,
@@ -132,7 +132,7 @@ public class FieldComplexUnivariateIntegratorTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         integrator = null;
     }
 

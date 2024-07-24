@@ -18,14 +18,15 @@
 package org.hipparchus.random;
 
 import org.hipparchus.UnitTestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UniformRandomGeneratorTest {
+
+class UniformRandomGeneratorTest {
 
     @Test
-    public void testMeanAndStandardDeviation() {
+    void testMeanAndStandardDeviation() {
         RandomGenerator rg = new JDKRandomGenerator();
         rg.setSeed(17399225432l);
         UniformRandomGenerator generator = new UniformRandomGenerator(rg);
@@ -33,8 +34,8 @@ public class UniformRandomGeneratorTest {
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assertions.assertEquals(0.0, UnitTestUtils.mean(sample), 0.07);
-        Assertions.assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
+        assertEquals(0.0, UnitTestUtils.mean(sample), 0.07);
+        assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
     }
 
 }

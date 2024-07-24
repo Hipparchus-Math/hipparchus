@@ -24,41 +24,43 @@ package org.hipparchus.complex;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FieldComplexFieldTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+class FieldComplexFieldTest {
 
     @Test
-    public void testZero() {
-        Assertions.assertEquals(new FieldComplex<>(Binary64.ZERO), FieldComplexField.getField(Binary64Field.getInstance()).getZero());
+    void testZero() {
+        assertEquals(new FieldComplex<>(Binary64.ZERO), FieldComplexField.getField(Binary64Field.getInstance()).getZero());
     }
 
     @Test
-    public void testOne() {
-        Assertions.assertEquals(new FieldComplex<>(Binary64.ONE), FieldComplexField.getField(Binary64Field.getInstance()).getOne());
+    void testOne() {
+        assertEquals(new FieldComplex<>(Binary64.ONE), FieldComplexField.getField(Binary64Field.getInstance()).getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testMap() {
+    void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
             map.put(new FieldComplex<>(new Binary64(i)).getField(), 0);
         }
         // there should be only one field for all values
         FieldComplexField<Binary64> field = FieldComplexField.getField(Binary64Field.getInstance());
-        Assertions.assertEquals(1, map.size());
-        Assertions.assertEquals(field, map.entrySet().iterator().next().getKey());
-        Assertions.assertNotEquals(field, Binary64Field.getInstance());
+        assertEquals(1, map.size());
+        assertEquals(field, map.entrySet().iterator().next().getKey());
+        assertNotEquals(field, Binary64Field.getInstance());
     }
 
     @Test
-    public void testRunTimeClass() {
-        Assertions.assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
+    void testRunTimeClass() {
+        assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
     }
 
 }

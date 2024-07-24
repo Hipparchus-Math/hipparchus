@@ -25,12 +25,13 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.RealVector.Entry;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for {@link RealVector}.
@@ -185,7 +186,7 @@ public class RealVectorTest extends RealVectorAbstractTest {
     }
 
     @Test
-    public void testSparseIterator() {
+    void testSparseIterator() {
         /*
          * For non-default values, use x + 1, x + 2, etc... to make sure that
          * these values are really different from x.
@@ -203,13 +204,13 @@ public class RealVectorTest extends RealVectorAbstractTest {
         };
         for (Iterator<Entry> it = v.sparseIterator(); it.hasNext(); i++) {
             e = it.next();
-            Assertions.assertEquals(nonDefault[i], e.getValue(), 0);
+            assertEquals(nonDefault[i], e.getValue(), 0);
         }
         double [] onlyOne = {x, x + 1d, x};
         v = create(onlyOne);
         for(Iterator<Entry> it = v.sparseIterator(); it.hasNext(); ) {
             e = it.next();
-            Assertions.assertEquals(onlyOne[1], e.getValue(), 0);
+            assertEquals(onlyOne[1], e.getValue(), 0);
         }
     }
 
@@ -232,9 +233,9 @@ public class RealVectorTest extends RealVectorAbstractTest {
     private void checkUnsupported(final Thunk t) {
         try {
             t.call();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
-            Assertions.assertEquals(LocalizedCoreFormats.UNSUPPORTED_OPERATION, mre.getSpecifier());
+            assertEquals(LocalizedCoreFormats.UNSUPPORTED_OPERATION, mre.getSpecifier());
         } catch (UnsupportedOperationException uoe) {
             // expected
         }

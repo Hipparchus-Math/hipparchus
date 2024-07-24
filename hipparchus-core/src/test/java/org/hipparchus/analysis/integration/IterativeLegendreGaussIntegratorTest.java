@@ -29,16 +29,19 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class IterativeLegendreGaussIntegratorTest {
+
+class IterativeLegendreGaussIntegratorTest {
 
     @Test
-    public void testSinFunction() {
+    void testSinFunction() {
         UnivariateFunction f = new Sin();
         BaseAbstractUnivariateIntegrator integrator
             = new IterativeLegendreGaussIntegrator(5, 1.0e-14, 1.0e-10, 2, 15);
@@ -48,17 +51,17 @@ public class IterativeLegendreGaussIntegratorTest {
         tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                              FastMath.abs(expected * integrator.getRelativeAccuracy()));
         result = integrator.integrate(10000, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = -FastMath.PI/3; max = 0; expected = -0.5;
         tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                 FastMath.abs(expected * integrator.getRelativeAccuracy()));
         result = integrator.integrate(10000, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
         UnivariateFunction f = new QuinticFunction();
         UnivariateIntegrator integrator =
                 new IterativeLegendreGaussIntegrator(3,
@@ -70,19 +73,19 @@ public class IterativeLegendreGaussIntegratorTest {
 
         min = 0; max = 1; expected = -1.0/48;
         result = integrator.integrate(10000, f, min, max);
-        Assertions.assertEquals(expected, result, 1.0e-16);
+        assertEquals(expected, result, 1.0e-16);
 
         min = 0; max = 0.5; expected = 11.0/768;
         result = integrator.integrate(10000, f, min, max);
-        Assertions.assertEquals(expected, result, 1.0e-16);
+        assertEquals(expected, result, 1.0e-16);
 
         min = -1; max = 4; expected = 2048/3.0 - 78 + 1.0/48;
         result = integrator.integrate(10000, f, min, max);
-        Assertions.assertEquals(expected, result, 1.0e-16);
+        assertEquals(expected, result, 1.0e-16);
     }
 
     @Test
-    public void testExactIntegration() {
+    void testExactIntegration() {
         Random random = new Random(86343623467878363l);
         for (int n = 2; n < 6; ++n) {
             IterativeLegendreGaussIntegrator integrator =
@@ -102,7 +105,7 @@ public class IterativeLegendreGaussIntegratorTest {
                     PolynomialFunction p = new PolynomialFunction(coeff);
                     double result    = integrator.integrate(10000, p, -5.0, 15.0);
                     double reference = exactIntegration(p, -5.0, 15.0);
-                    Assertions.assertEquals(reference, result, 1.0e-12 * (1.0 + FastMath.abs(reference)), n + " " + degree + " " + i);
+                    assertEquals(reference, result, 1.0e-12 * (1.0 + FastMath.abs(reference)), n + " " + degree + " " + i);
                 }
             }
 
@@ -111,7 +114,7 @@ public class IterativeLegendreGaussIntegratorTest {
 
     // Cf. MATH-995
     @Test
-    public void testNormalDistributionWithLargeSigma() {
+    void testNormalDistributionWithLargeSigma() {
         final double sigma = 1000;
         final double mean = 0;
         final double factor = 1 / (sigma * FastMath.sqrt(2 * FastMath.PI));
@@ -124,11 +127,11 @@ public class IterativeLegendreGaussIntegratorTest {
         final double a = -5000;
         final double b = 5000;
         final double s = integrator.integrate(50, normal, a, b);
-        Assertions.assertEquals(1, s, 1e-5);
+        assertEquals(1, s, 1e-5);
     }
 
     @Test
-    public void testIssue464() {
+    void testIssue464() {
         final double value = 0.2;
         UnivariateFunction f = new UnivariateFunction() {
             @Override
@@ -141,18 +144,18 @@ public class IterativeLegendreGaussIntegratorTest {
 
         // due to the discontinuity, integration implies *many* calls
         double maxX = 0.32462367623786328;
-        Assertions.assertEquals(maxX * value, gauss.integrate(Integer.MAX_VALUE, f, -10, maxX), 1.0e-7);
-        Assertions.assertTrue(gauss.getEvaluations() > 37000000);
-        Assertions.assertTrue(gauss.getIterations() < 30);
+        assertEquals(maxX * value, gauss.integrate(Integer.MAX_VALUE, f, -10, maxX), 1.0e-7);
+        assertTrue(gauss.getEvaluations() > 37000000);
+        assertTrue(gauss.getIterations() < 30);
 
         // setting up limits prevents such large number of calls
         try {
             gauss.integrate(1000, f, -10, maxX);
-            Assertions.fail("expected MathIllegalStateException");
+            fail("expected MathIllegalStateException");
         } catch (MathIllegalStateException tmee) {
             // expected
-            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
-            Assertions.assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
+            assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
         }
 
         // integrating on the two sides should be simpler
@@ -160,8 +163,8 @@ public class IterativeLegendreGaussIntegratorTest {
         int eval1   = gauss.getEvaluations();
         double sum2 = gauss.integrate(1000, f, 0, maxX);
         int eval2   = gauss.getEvaluations();
-        Assertions.assertEquals(maxX * value, sum1 + sum2, 1.0e-7);
-        Assertions.assertTrue(eval1 + eval2 < 200);
+        assertEquals(maxX * value, sum1 + sum2, 1.0e-7);
+        assertTrue(eval1 + eval2 < 200);
 
     }
 

@@ -27,62 +27,62 @@ import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for class {@link Sigmoid}.
  */
-public class SigmoidTest {
+class SigmoidTest {
     private final double EPS = Math.ulp(1d);
 
     @Test
-    public void testSomeValues() {
+    void testSomeValues() {
         final UnivariateFunction f = new Sigmoid();
 
-        Assertions.assertEquals(0.5, f.value(0), EPS);
-        Assertions.assertEquals(0, f.value(Double.NEGATIVE_INFINITY), EPS);
-        Assertions.assertEquals(1, f.value(Double.POSITIVE_INFINITY), EPS);
+        assertEquals(0.5, f.value(0), EPS);
+        assertEquals(0, f.value(Double.NEGATIVE_INFINITY), EPS);
+        assertEquals(1, f.value(Double.POSITIVE_INFINITY), EPS);
     }
 
     @Test
-    public void testDerivative() {
+    void testDerivative() {
         final Sigmoid f = new Sigmoid();
         final DerivativeStructure f0 = f.value(new DSFactory(1, 1).variable(0, 0.0));
 
-        Assertions.assertEquals(0.25, f0.getPartialDerivative(1), 0);
+        assertEquals(0.25, f0.getPartialDerivative(1), 0);
     }
 
     @Test
-    public void testDerivativesHighOrder() {
+    void testDerivativesHighOrder() {
         DerivativeStructure s = new Sigmoid(1, 3).value(new DSFactory(1, 5).variable(0, 1.2));
-        Assertions.assertEquals(2.5370495669980352859, s.getPartialDerivative(0), 5.0e-16);
-        Assertions.assertEquals(0.35578888129361140441, s.getPartialDerivative(1), 6.0e-17);
-        Assertions.assertEquals(-0.19107626464144938116,  s.getPartialDerivative(2), 6.0e-17);
-        Assertions.assertEquals(-0.02396830286286711696,  s.getPartialDerivative(3), 4.0e-17);
-        Assertions.assertEquals(0.21682059798981049049,   s.getPartialDerivative(4), 3.0e-17);
-        Assertions.assertEquals(-0.19186320234632658055,  s.getPartialDerivative(5), 2.0e-16);
+        assertEquals(2.5370495669980352859, s.getPartialDerivative(0), 5.0e-16);
+        assertEquals(0.35578888129361140441, s.getPartialDerivative(1), 6.0e-17);
+        assertEquals(-0.19107626464144938116,  s.getPartialDerivative(2), 6.0e-17);
+        assertEquals(-0.02396830286286711696,  s.getPartialDerivative(3), 4.0e-17);
+        assertEquals(0.21682059798981049049,   s.getPartialDerivative(4), 3.0e-17);
+        assertEquals(-0.19186320234632658055,  s.getPartialDerivative(5), 2.0e-16);
     }
 
     @Test
-    public void testDerivativeLargeArguments() {
+    void testDerivativeLargeArguments() {
         final Sigmoid f = new Sigmoid(1, 2);
 
         DSFactory factory = new DSFactory(1, 1);
-        Assertions.assertEquals(0, f.value(factory.variable(0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
-        Assertions.assertEquals(0, f.value(factory.variable(0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assertions.assertEquals(0, f.value(factory.variable(0, -1e50)).getPartialDerivative(1), 0);
-        Assertions.assertEquals(0, f.value(factory.variable(0, -1e3)).getPartialDerivative(1), 0);
-        Assertions.assertEquals(0, f.value(factory.variable(0, 1e3)).getPartialDerivative(1), 0);
-        Assertions.assertEquals(0, f.value(factory.variable(0, 1e50)).getPartialDerivative(1), 0);
-        Assertions.assertEquals(0, f.value(factory.variable(0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assertions.assertEquals(0, f.value(factory.variable(0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, -1e50)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, -1e3)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, 1e3)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, 1e50)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        assertEquals(0, f.value(factory.variable(0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
     }
 
     @Test
-    public void testParametricUsage1() {
+    void testParametricUsage1() {
         assertThrows(NullArgumentException.class, () -> {
             final Sigmoid.Parametric g = new Sigmoid.Parametric();
             g.value(0, null);
@@ -90,7 +90,7 @@ public class SigmoidTest {
     }
 
     @Test
-    public void testParametricUsage2() {
+    void testParametricUsage2() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Sigmoid.Parametric g = new Sigmoid.Parametric();
             g.value(0, new double[]{0});
@@ -98,7 +98,7 @@ public class SigmoidTest {
     }
 
     @Test
-    public void testParametricUsage3() {
+    void testParametricUsage3() {
         assertThrows(NullArgumentException.class, () -> {
             final Sigmoid.Parametric g = new Sigmoid.Parametric();
             g.gradient(0, null);
@@ -106,7 +106,7 @@ public class SigmoidTest {
     }
 
     @Test
-    public void testParametricUsage4() {
+    void testParametricUsage4() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final Sigmoid.Parametric g = new Sigmoid.Parametric();
             g.gradient(0, new double[]{0});
@@ -114,14 +114,14 @@ public class SigmoidTest {
     }
 
     @Test
-    public void testParametricValue() {
+    void testParametricValue() {
         final double lo = 2;
         final double hi = 3;
         final Sigmoid f = new Sigmoid(lo, hi);
 
         final Sigmoid.Parametric g = new Sigmoid.Parametric();
-        Assertions.assertEquals(f.value(-1), g.value(-1, new double[] {lo, hi}), 0);
-        Assertions.assertEquals(f.value(0), g.value(0, new double[] {lo, hi}), 0);
-        Assertions.assertEquals(f.value(2), g.value(2, new double[] {lo, hi}), 0);
+        assertEquals(f.value(-1), g.value(-1, new double[] {lo, hi}), 0);
+        assertEquals(f.value(0), g.value(0, new double[] {lo, hi}), 0);
+        assertEquals(f.value(2), g.value(2, new double[] {lo, hi}), 0);
     }
 }

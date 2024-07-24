@@ -30,14 +30,15 @@ import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StepNormalizerTest {
+
+class StepNormalizerTest {
 
     @Test
-    public void testBoundariesDefault() {
+    void testBoundariesDefault() {
         final TestProblemAbstract pb = new TestProblem3();
         final double range = pb.getFinalTime() - pb.getInitialTime();
         final double stepSize = range / 5.5;
@@ -47,7 +48,7 @@ public class StepNormalizerTest {
     }
 
     @Test
-    public void testBoundariesNeither() {
+    void testBoundariesNeither() {
         final TestProblemAbstract pb = new TestProblem3();
         final double range = pb.getFinalTime() - pb.getInitialTime();
         final double stepSize = range / 5.5;
@@ -57,7 +58,7 @@ public class StepNormalizerTest {
     }
 
     @Test
-    public void testBoundariesFirst() {
+    void testBoundariesFirst() {
         final TestProblemAbstract pb = new TestProblem3();
         final double range = pb.getFinalTime() - pb.getInitialTime();
         final double stepSize = range / 5.5;
@@ -67,7 +68,7 @@ public class StepNormalizerTest {
     }
 
     @Test
-    public void testBoundariesLast() {
+    void testBoundariesLast() {
         final TestProblemAbstract pb = new TestProblem3();
         final double range = pb.getFinalTime() - pb.getInitialTime();
         final double stepSize = range / 5.5;
@@ -77,7 +78,7 @@ public class StepNormalizerTest {
     }
 
     @Test
-    public void testBoundariesBoth() {
+    void testBoundariesBoth() {
         final TestProblemAbstract pb = new TestProblem3();
         final double range = pb.getFinalTime() - pb.getInitialTime();
         final double stepSize = range / 5.5;
@@ -87,7 +88,7 @@ public class StepNormalizerTest {
     }
 
     @Test
-    public void testBeforeEnd() {
+    void testBeforeEnd() {
         final TestProblemAbstract pb = new TestProblem3();
         final double range = pb.getFinalTime() - pb.getInitialTime();
         final double stepSize = range / 10.5;
@@ -97,25 +98,25 @@ public class StepNormalizerTest {
     }
 
     @Test
-    public void testModeForwardMultiples() {
+    void testModeForwardMultiples() {
         doTestStepsAtIntegerTimes(new TestProblem3(), StepNormalizerMode.MULTIPLES,
                                   2.0, 7.5, 2.5, 7.5, 4.0);
     }
 
     @Test
-    public void testModeForwardIncrement() {
+    void testModeForwardIncrement() {
         doTestStepsAtIntegerTimes(new TestProblem3(), StepNormalizerMode.INCREMENT,
                                   2.0, 7.5, 2.5, 7.5, 3.5);
     }
 
     @Test
-    public void testModeBackwardMultiples() {
+    void testModeBackwardMultiples() {
         doTestStepsAtIntegerTimes(new TestProblem3(), StepNormalizerMode.MULTIPLES,
                                   2.0, 2.5, 7.5, 2.5, 6.0);
     }
 
     @Test
-    public void testModeBackwardIncrement() {
+    void testModeBackwardIncrement() {
         doTestStepsAtIntegerTimes(new TestProblem3(), StepNormalizerMode.INCREMENT,
                                   2.0, 2.5, 7.5, 2.5, 6.5);
     }
@@ -133,8 +134,8 @@ public class StepNormalizerTest {
             integ.addStepHandler(new StepNormalizer(stepSize, checker, bounds));
         }
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
-        Assertions.assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
-        Assertions.assertEquals(expectedLast,  checker.lastTime,  1.0e-10);
+        assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
+        assertEquals(expectedLast,  checker.lastTime,  1.0e-10);
     }
 
     private void doTestStepsAtIntegerTimes(final TestProblemAbstract pb,
@@ -151,8 +152,8 @@ public class StepNormalizerTest {
             public int getDimension() { return 1; }
             public double[] computeDerivatives(double t, double[] y) { return y; }
         }, new ODEState(t0, new double[1]), t1);
-        Assertions.assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
-        Assertions.assertEquals(expectedLast, checker.lastTime,  1.0e-10);
+        assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
+        assertEquals(expectedLast, checker.lastTime,  1.0e-10);
     }
 
     private static class Checker implements ODEFixedStepHandler {

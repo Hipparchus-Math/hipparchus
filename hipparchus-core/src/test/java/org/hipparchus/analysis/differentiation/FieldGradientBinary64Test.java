@@ -19,13 +19,14 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for class {@link FieldGradient} on {@link Binary64}.
  */
-public class FieldGradientBinary64Test extends FieldGradientAbstractTest<Binary64> {
+class FieldGradientBinary64Test extends FieldGradientAbstractTest<Binary64> {
 
     @Override
     protected Binary64Field getValueField() {
@@ -34,7 +35,7 @@ public class FieldGradientBinary64Test extends FieldGradientAbstractTest<Binary6
 
     @Test
     public void testHashcode() {
-        Assertions.assertEquals(15728304, build(2, 1).hashCode());
+        assertEquals(15728304, build(2, 1).hashCode());
     }
 
     @Override

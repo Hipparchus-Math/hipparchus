@@ -24,7 +24,6 @@ package org.hipparchus.distribution.discrete;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.Pair;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -32,6 +31,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test class for {@link EnumeratedIntegerDistribution}.
@@ -59,46 +61,46 @@ public class EnumeratedIntegerDistributionTest {
      * exceptions for invalid data.
      */
     @Test
-    public void testExceptions() {
+    void testExceptions() {
         EnumeratedIntegerDistribution invalid = null;
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0});
-            Assertions.fail("Expected MathIllegalArgumentException");
+            fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, -1.0});
-            Assertions.fail("Expected MathIllegalArgumentException");
+            fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, 0.0});
-            Assertions.fail("Expected MathRuntimeException");
+            fail("Expected MathRuntimeException");
         } catch (MathRuntimeException e) {
         }
         try {
           new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.NaN});
-            Assertions.fail("Expected MathIllegalArgumentException");
+            fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
         }
         try {
         new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.POSITIVE_INFINITY});
-            Assertions.fail("Expected NotFiniteNumberException");
+            fail("Expected NotFiniteNumberException");
         } catch (MathIllegalArgumentException e) {
         }
-        Assertions.assertNull(invalid, "Expected non-initialized DiscreteRealDistribution");
+        assertNull(invalid, "Expected non-initialized DiscreteRealDistribution");
     }
 
     /**
      * Tests if the distribution returns proper probability values.
      */
     @Test
-    public void testProbability() {
+    void testProbability() {
         int[] points = new int[]{-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8};
         double[] results = new double[]{0, 0.2, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0};
         for (int p = 0; p < points.length; p++) {
             double probability = testDistribution.probability(points[p]);
-            Assertions.assertEquals(results[p], probability, 0.0);
+            assertEquals(results[p], probability, 0.0);
         }
     }
 
@@ -106,12 +108,12 @@ public class EnumeratedIntegerDistributionTest {
      * Tests if the distribution returns proper cumulative probability values.
      */
     @Test
-    public void testCumulativeProbability() {
+    void testCumulativeProbability() {
         int[] points = new int[]{-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8};
         double[] results = new double[]{0, 0.2, 0.2, 0.2, 0.2, 0.7, 0.7, 0.7, 0.7, 1.0, 1.0};
         for (int p = 0; p < points.length; p++) {
             double probability = testDistribution.cumulativeProbability(points[p]);
-            Assertions.assertEquals(results[p], probability, 1e-10);
+            assertEquals(results[p], probability, 1e-10);
         }
     }
 
@@ -119,44 +121,44 @@ public class EnumeratedIntegerDistributionTest {
      * Tests if the distribution returns proper mean value.
      */
     @Test
-    public void testGetNumericalMean() {
-        Assertions.assertEquals(3.4, testDistribution.getNumericalMean(), 1e-10);
+    void testGetNumericalMean() {
+        assertEquals(3.4, testDistribution.getNumericalMean(), 1e-10);
     }
 
     /**
      * Tests if the distribution returns proper variance.
      */
     @Test
-    public void testGetNumericalVariance() {
-        Assertions.assertEquals(7.84, testDistribution.getNumericalVariance(), 1e-10);
+    void testGetNumericalVariance() {
+        assertEquals(7.84, testDistribution.getNumericalVariance(), 1e-10);
     }
 
     /**
      * Tests if the distribution returns proper lower bound.
      */
     @Test
-    public void testGetSupportLowerBound() {
-        Assertions.assertEquals(-1, testDistribution.getSupportLowerBound());
+    void testGetSupportLowerBound() {
+        assertEquals(-1, testDistribution.getSupportLowerBound());
     }
 
     /**
      * Tests if the distribution returns proper upper bound.
      */
     @Test
-    public void testGetSupportUpperBound() {
-        Assertions.assertEquals(7, testDistribution.getSupportUpperBound());
+    void testGetSupportUpperBound() {
+        assertEquals(7, testDistribution.getSupportUpperBound());
     }
 
     /**
      * Tests if the distribution returns properly that the support is connected.
      */
     @Test
-    public void testIsSupportConnected() {
-        Assertions.assertTrue(testDistribution.isSupportConnected());
+    void testIsSupportConnected() {
+        assertTrue(testDistribution.isSupportConnected());
     }
 
     @Test
-    public void testCreateFromIntegers() {
+    void testCreateFromIntegers() {
         final int[] data = new int[] {0, 1, 1, 2, 2, 2};
         EnumeratedIntegerDistribution distribution = new EnumeratedIntegerDistribution(data);
         assertEquals(0.5, distribution.probability(2), 0);
@@ -164,7 +166,7 @@ public class EnumeratedIntegerDistributionTest {
     }
 
     @Test
-    public void testGetPmf() {
+    void testGetPmf() {
         final int[] values = new int[] {0,1,2,3,4};
         final double[] masses = new double[] {0.2, 0.2, 0.4, 0.1, 0.1};
         final EnumeratedIntegerDistribution distribution = new EnumeratedIntegerDistribution(values, masses);

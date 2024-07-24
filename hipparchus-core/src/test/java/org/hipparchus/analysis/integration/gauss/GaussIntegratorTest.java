@@ -24,46 +24,47 @@ package org.hipparchus.analysis.integration.gauss;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Constant;
 import org.hipparchus.util.Pair;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for {@link GaussIntegrator} class.
  *
  */
-public class GaussIntegratorTest {
+class GaussIntegratorTest {
     @Test
-    public void testGetWeights() {
+    void testGetWeights() {
         final double[] points = { 0, 1.2, 3.4 };
         final double[] weights = { 9.8, 7.6, 5.4 };
 
         final GaussIntegrator integrator
             = new GaussIntegrator(new Pair<double[], double[]>(points, weights));
 
-        Assertions.assertEquals(weights.length, integrator.getNumberOfPoints());
+        assertEquals(weights.length, integrator.getNumberOfPoints());
 
         for (int i = 0; i < integrator.getNumberOfPoints(); i++) {
-            Assertions.assertEquals(weights[i], integrator.getWeight(i), 0d);
+            assertEquals(weights[i], integrator.getWeight(i), 0d);
         }
     }
 
     @Test
-    public void testGetPoints() {
+    void testGetPoints() {
         final double[] points = { 0, 1.2, 3.4 };
         final double[] weights = { 9.8, 7.6, 5.4 };
 
         final GaussIntegrator integrator
             = new GaussIntegrator(new Pair<double[], double[]>(points, weights));
 
-        Assertions.assertEquals(points.length, integrator.getNumberOfPoints());
+        assertEquals(points.length, integrator.getNumberOfPoints());
 
         for (int i = 0; i < integrator.getNumberOfPoints(); i++) {
-            Assertions.assertEquals(points[i], integrator.getPoint(i), 0d);
+            assertEquals(points[i], integrator.getPoint(i), 0d);
         }
     }
 
     @Test
-    public void testIntegrate() {
+    void testIntegrate() {
         final double[] points = { 0, 1, 2, 3, 4, 5 };
         final double[] weights = { 1, 1, 1, 1, 1, 1 };
 
@@ -74,6 +75,6 @@ public class GaussIntegratorTest {
         final UnivariateFunction c = new Constant(val);
 
         final double s = integrator.integrate(c);
-        Assertions.assertEquals(points.length * val, s, 0d);
+        assertEquals(points.length * val, s, 0d);
     }
 }

@@ -26,7 +26,6 @@ import org.hipparchus.clustering.distance.EuclideanDistance;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,14 +34,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class KMeansPlusPlusClustererTest {
+class KMeansPlusPlusClustererTest {
 
     private RandomGenerator random;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         random = new JDKRandomGenerator();
         random.setSeed(1746432956321l);
     }
@@ -53,7 +54,7 @@ public class KMeansPlusPlusClustererTest {
      * Two points, one cluster, one iteration
      */
     @Test
-    public void testPerformClusterAnalysisDegenerate() {
+    void testPerformClusterAnalysisDegenerate() {
         KMeansPlusPlusClusterer<DoublePoint> transformer =
                 new KMeansPlusPlusClusterer<DoublePoint>(1, 1);
 
@@ -61,17 +62,17 @@ public class KMeansPlusPlusClustererTest {
                 new DoublePoint(new int[] { 1959, 325100 }),
                 new DoublePoint(new int[] { 1960, 373200 }), };
         List<? extends Cluster<DoublePoint>> clusters = transformer.cluster(Arrays.asList(points));
-        Assertions.assertEquals(1, clusters.size());
-        Assertions.assertEquals(2, (clusters.get(0).getPoints().size()));
+        assertEquals(1, clusters.size());
+        assertEquals(2, (clusters.get(0).getPoints().size()));
         DoublePoint pt1 = new DoublePoint(new int[] { 1959, 325100 });
         DoublePoint pt2 = new DoublePoint(new int[] { 1960, 373200 });
-        Assertions.assertTrue(clusters.get(0).getPoints().contains(pt1));
-        Assertions.assertTrue(clusters.get(0).getPoints().contains(pt2));
+        assertTrue(clusters.get(0).getPoints().contains(pt1));
+        assertTrue(clusters.get(0).getPoints().contains(pt2));
 
     }
 
     @Test
-    public void testCertainSpace() {
+    void testCertainSpace() {
         KMeansPlusPlusClusterer.EmptyClusterStrategy[] strategies = {
             KMeansPlusPlusClusterer.EmptyClusterStrategy.LARGEST_VARIANCE,
             KMeansPlusPlusClusterer.EmptyClusterStrategy.LARGEST_POINTS_NUMBER,
@@ -110,12 +111,12 @@ public class KMeansPlusPlusClustererTest {
                 List<? extends Cluster<DoublePoint>> clusters =
                         transformer.cluster(Arrays.asList(breakingPoints));
 
-                Assertions.assertEquals(n, clusters.size());
+                assertEquals(n, clusters.size());
                 int sum = 0;
                 for (Cluster<DoublePoint> cluster : clusters) {
                     sum += cluster.getPoints().size();
                 }
-                Assertions.assertEquals(numberOfVariables, sum);
+                assertEquals(numberOfVariables, sum);
             }
         }
 
@@ -138,7 +139,7 @@ public class KMeansPlusPlusClustererTest {
      * Test points that are very close together. See issue MATH-546.
      */
     @Test
-    public void testSmallDistances() {
+    void testSmallDistances() {
         // Create a bunch of CloseDoublePoints. Most are identical, but one is different by a
         // small distance.
         int[] repeatedArray = { 0 };
@@ -172,14 +173,14 @@ public class KMeansPlusPlusClustererTest {
                 uniquePointIsCenter = true;
             }
         }
-        Assertions.assertTrue(uniquePointIsCenter);
+        assertTrue(uniquePointIsCenter);
     }
 
     /**
      * 2 variables cannot be clustered into 3 clusters. See issue MATH-436.
      */
     @Test
-    public void testPerformClusterAnalysisToManyClusters() {
+    void testPerformClusterAnalysisToManyClusters() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             KMeansPlusPlusClusterer<DoublePoint> transformer =
                 new KMeansPlusPlusClusterer<DoublePoint>(3, 1, new EuclideanDistance(), random);

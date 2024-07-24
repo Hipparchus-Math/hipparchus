@@ -30,24 +30,28 @@ import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Test case for the {@link MicrosphereProjectionInterpolator
  * "microsphere projection"} interpolator.
  */
-public final class MicrosphereProjectionInterpolatorTest {
+final class MicrosphereProjectionInterpolatorTest {
     /**
      * Test of interpolator for a plane.
      * <p>
      * y = 2 x<sub>1</sub> - 3 x<sub>2</sub> + 5
      */
     @Test
-    public void testLinearFunction2D() {
+    void testLinearFunction2D() {
         MultivariateFunction f = new MultivariateFunction() {
             @Override
             public double value(double[] x) {
@@ -119,8 +123,8 @@ public final class MicrosphereProjectionInterpolatorTest {
         expected = f.value(c);
         result = p.value(c);
         result2D = p2D.value(c);
-        Assertions.assertEquals(expected, result2D, FastMath.ulp(1d), "on sample point (exact)");
-        Assertions.assertEquals(result2D, result, FastMath.ulp(1d), "on sample point (ND vs 2D)");
+        assertEquals(expected, result2D, FastMath.ulp(1d), "on sample point (exact)");
+        assertEquals(result2D, result, FastMath.ulp(1d), "on sample point (ND vs 2D)");
 
         // Interpolation.
         c[0] = 0.654321;
@@ -128,8 +132,8 @@ public final class MicrosphereProjectionInterpolatorTest {
         expected = f.value(c);
         result = p.value(c);
         result2D = p2D.value(c);
-        Assertions.assertEquals(expected, result2D, 1e-1, "interpolation (exact)");
-        Assertions.assertEquals(result2D, result, 1e-1, "interpolation (ND vs 2D)");
+        assertEquals(expected, result2D, 1e-1, "interpolation (exact)");
+        assertEquals(result2D, result, 1e-1, "interpolation (ND vs 2D)");
 
         // Extrapolation.
         c[0] = 0 - 1e-2;
@@ -137,22 +141,22 @@ public final class MicrosphereProjectionInterpolatorTest {
         expected = f.value(c);
         result = p.value(c);
         result2D = p2D.value(c);
-        Assertions.assertFalse(Double.isNaN(result));
-        Assertions.assertFalse(Double.isNaN(result2D));
-        Assertions.assertEquals(expected, result2D, 1e-1, "extrapolation (exact)");
-        Assertions.assertEquals(result2D, result, 1e-2, "extrapolation (ND vs 2D)");
+        assertFalse(Double.isNaN(result));
+        assertFalse(Double.isNaN(result2D));
+        assertEquals(expected, result2D, 1e-1, "extrapolation (exact)");
+        assertEquals(result2D, result, 1e-2, "extrapolation (ND vs 2D)");
 
         // Far away.
         c[0] = 20;
         c[1] = -30;
         result = p.value(c);
-        Assertions.assertTrue(Double.isNaN(result), result + " should be NaN");
+        assertTrue(Double.isNaN(result), result + " should be NaN");
         result2D = p2D.value(c);
-        Assertions.assertTrue(Double.isNaN(result2D), result2D + " should be NaN");
+        assertTrue(Double.isNaN(result2D), result2D + " should be NaN");
     }
-    
+
     @Test
-    public void testWrongDimensions() {
+    void testWrongDimensions() {
         checkWrongArguments(0, 1, 0.5, 0.0, 0.0,
                             LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED);
         checkWrongArguments(1, 0, 0.5, 0.0, 0.0,
@@ -169,25 +173,25 @@ public final class MicrosphereProjectionInterpolatorTest {
                                      LocalizedCoreFormats expected) {
         try {
             new InterpolatingMicrosphere(dimension, size, maxDarkFraction, darkThreshold, background, null);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(expected, miae.getSpecifier());
+            assertEquals(expected, miae.getSpecifier());
         }
     }
 
     @Test
-    public void testCopy() {
+    void testCopy() {
         UnitSphereRandomVectorGenerator random =
                         new UnitSphereRandomVectorGenerator(3, new Well19937a(0x265318ael));
         InterpolatingMicrosphere original = new InterpolatingMicrosphere(3, 30, 0.5, 0.2, 0.0, random);
         InterpolatingMicrosphere copy     = original.copy();
-        Assertions.assertFalse(original == copy);
-        Assertions.assertEquals(original.getDimension(), copy.getDimension());
-        Assertions.assertEquals(original.getSize(),      copy.getSize());
+        assertFalse(original == copy);
+        assertEquals(original.getDimension(), copy.getDimension());
+        assertEquals(original.getSize(),      copy.getSize());
     }
 
     @Test
-    public void testSizeLimit() {
+    void testSizeLimit() {
         UnitSphereRandomVectorGenerator random =
                         new UnitSphereRandomVectorGenerator(3, new Well19937a(0x453l));
         InterpolatingMicrosphere ims = new InterpolatingMicrosphere(3, 30, 0.5, 0.2, 0.0, random);
@@ -196,29 +200,29 @@ public final class MicrosphereProjectionInterpolatorTest {
             add.setAccessible(true);
             try {
                 add.invoke(ims, random.nextVector(), true);
-                Assertions.fail("an exception should have been thrown");
+                fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
                 MathIllegalStateException miae = (MathIllegalStateException) ite.getCause();
-                Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, miae.getSpecifier());
+                assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, miae.getSpecifier());
             }
         } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
     }
 
     @Test
-    public void testInconsistentDimensions() {
+    void testInconsistentDimensions() {
         final int d1 = 5;
         final int d2 = 3;
         try {
             UnitSphereRandomVectorGenerator random =
                             new UnitSphereRandomVectorGenerator(d1, new Well19937a(0x1l));
             new InterpolatingMicrosphere(d2, 30, 0.5, 0.2, 0.0, random);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(d1, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(d2, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(d1, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(d2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 

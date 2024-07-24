@@ -23,10 +23,11 @@ import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -60,14 +61,14 @@ public class SequentialGaussNewtonOptimizerWithQRTest
          */
         try {
             super.testMoreEstimatedParametersUnsorted();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException mise) {
-            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
-    
+
     @Test
-    public void testMaxEvaluations() throws Exception {
+    void testMaxEvaluations() throws Exception {
         try {
             CircleVectorial circle = new CircleVectorial();
             circle.addPoint( 30.0,  68.0);
@@ -84,9 +85,9 @@ public class SequentialGaussNewtonOptimizerWithQRTest
 
             defineOptimizer(null);
             optimizer.optimize(lsp);
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
+            assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
                                 e.getSpecifier());
         }
     }
@@ -102,7 +103,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
              */
             super.testHahn1();
         } catch (MathIllegalStateException mise) {
-            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 

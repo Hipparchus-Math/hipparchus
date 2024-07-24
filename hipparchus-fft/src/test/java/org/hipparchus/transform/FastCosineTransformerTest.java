@@ -28,12 +28,14 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for fast cosine transformer.
@@ -183,7 +185,7 @@ public final class FastCosineTransformerTest
     /** Test of parameters for the transformer. */
     @MethodSource("data")
     @ParameterizedTest
-    public void testParameters(final DctNormalization normalization)
+    void testParameters(final DctNormalization normalization)
         throws Exception {
         initFastCosineTransformerTest(normalization);
         UnivariateFunction f = new Sin();
@@ -193,21 +195,21 @@ public final class FastCosineTransformerTest
         try {
             // bad interval
             transformer.transform(f, 1, -1, 65, TransformType.FORWARD);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
+            fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad samples number
             transformer.transform(f, -1, 1, 1, TransformType.FORWARD);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad samples number");
+            fail("Expecting MathIllegalArgumentException - bad samples number");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad samples number
             transformer.transform(f, -1, 1, 64, TransformType.FORWARD);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad samples number");
+            fail("Expecting MathIllegalArgumentException - bad samples number");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -216,7 +218,7 @@ public final class FastCosineTransformerTest
     /** Test of transformer for the sine function. */
     @MethodSource("data")
     @ParameterizedTest
-    public void testSinFunction(final DctNormalization normalization) {
+    void testSinFunction(final DctNormalization normalization) {
         initFastCosineTransformerTest(normalization);
         UnivariateFunction f = new Sin();
         FastCosineTransformer transformer;
@@ -236,21 +238,21 @@ public final class FastCosineTransformerTest
         max = 2.0 * FastMath.PI * N / (N - 1);
         result = transformer.transform(f, min, max, N, TransformType.FORWARD);
         for (int i = 0; i < N; i++) {
-            Assertions.assertEquals(expected[i], result[i], tolerance);
+            assertEquals(expected[i], result[i], tolerance);
         }
 
         min = -FastMath.PI;
         max = FastMath.PI * (N + 1) / (N - 1);
         result = transformer.transform(f, min, max, N, TransformType.FORWARD);
         for (int i = 0; i < N; i++) {
-            Assertions.assertEquals(-expected[i], result[i], tolerance);
+            assertEquals(-expected[i], result[i], tolerance);
         }
     }
 
     /** Test of transformer for the ad hoc data. */
     @MethodSource("data")
     @ParameterizedTest
-    public void testAdHocData(final DctNormalization normalization) {
+    void testAdHocData(final DctNormalization normalization) {
         initFastCosineTransformerTest(normalization);
         FastCosineTransformer transformer;
         transformer = new FastCosineTransformer(DctNormalization.STANDARD_DCT_I);
@@ -269,12 +271,12 @@ public final class FastCosineTransformerTest
 
         result = transformer.transform(x, TransformType.FORWARD);
         for (int i = 0; i < result.length; i++) {
-            Assertions.assertEquals(y[i], result[i], tolerance);
+            assertEquals(y[i], result[i], tolerance);
         }
 
         result = transformer.transform(y, TransformType.INVERSE);
         for (int i = 0; i < result.length; i++) {
-            Assertions.assertEquals(x[i], result[i], tolerance);
+            assertEquals(x[i], result[i], tolerance);
         }
 
         TransformUtils.scaleArray(x, FastMath.sqrt(0.5 * (x.length - 1)));
@@ -282,12 +284,12 @@ public final class FastCosineTransformerTest
         transformer = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
         result = transformer.transform(y, TransformType.FORWARD);
         for (int i = 0; i < result.length; i++) {
-            Assertions.assertEquals(x[i], result[i], tolerance);
+            assertEquals(x[i], result[i], tolerance);
         }
 
         result = transformer.transform(x, TransformType.INVERSE);
         for (int i = 0; i < result.length; i++) {
-            Assertions.assertEquals(y[i], result[i], tolerance);
+            assertEquals(y[i], result[i], tolerance);
         }
     }
 }

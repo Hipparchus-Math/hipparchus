@@ -27,10 +27,11 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.LUDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -61,9 +62,9 @@ public class GaussNewtonOptimizerWithLUTest
              * Exception is expected with this optimizer
              */
             super.testMoreEstimatedParametersSimple();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
@@ -76,15 +77,15 @@ public class GaussNewtonOptimizerWithLUTest
              * Exception is expected with this optimizer
              */
             super.testMoreEstimatedParametersUnsorted();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
 
     @Test
-    public void testMaxEvaluations() throws Exception {
+    void testMaxEvaluations() throws Exception {
         try {
             CircleVectorial circle = new CircleVectorial();
             circle.addPoint( 30.0,  68.0);
@@ -101,9 +102,9 @@ public class GaussNewtonOptimizerWithLUTest
 
             optimizer.optimize(lsp);
 
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+            assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
         }
     }
 
@@ -115,9 +116,9 @@ public class GaussNewtonOptimizerWithLUTest
              * This test does not converge with this optimizer.
              */
             super.testCircleFittingBadInit();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
@@ -131,9 +132,9 @@ public class GaussNewtonOptimizerWithLUTest
              * optimizer. This should be inquired.
              */
             super.testHahn1();
-            fail(optimizer);
+            customFail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }

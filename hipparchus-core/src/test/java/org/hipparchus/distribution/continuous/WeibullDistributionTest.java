@@ -25,8 +25,10 @@ package org.hipparchus.distribution.continuous;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for WeibullDistribution.
@@ -65,17 +67,17 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
     //---------------------------- Additional test cases -------------------------
 
     @Test
-    public void testInverseCumulativeProbabilitySmallPAccuracy() {
+    void testInverseCumulativeProbabilitySmallPAccuracy() {
         WeibullDistribution dist = new WeibullDistribution(2, 3);
         double t = dist.inverseCumulativeProbability(1e-17);
         // Analytically, answer is solution to 1e-17 = 1-exp(-(x/3)^2)
         // x = sqrt(-9*log(1-1e-17))
         // If we're not careful, answer will be 0. Answer below is computed with care in Octave:
-        Assertions.assertEquals(9.48683298050514e-9, t, 1e-17);
+        assertEquals(9.48683298050514e-9, t, 1e-17);
     }
 
     @Test
-    public void testInverseCumulativeProbabilityExtremes() {
+    void testInverseCumulativeProbabilityExtremes() {
         setInverseCumulativeTestPoints(new double[] {0.0, 1.0});
         setInverseCumulativeTestValues(
                 new double[] {0.0, Double.POSITIVE_INFINITY});
@@ -83,44 +85,44 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testAlpha() {
+    void testAlpha() {
         WeibullDistribution dist = new WeibullDistribution(1, 2);
-        Assertions.assertEquals(1, dist.getShape(), 0);
+        assertEquals(1, dist.getShape(), 0);
         try {
             new WeibullDistribution(0, 2);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
     }
 
     @Test
-    public void testBeta() {
+    void testBeta() {
         WeibullDistribution dist = new WeibullDistribution(1, 2);
-        Assertions.assertEquals(2, dist.getScale(), 0);
+        assertEquals(2, dist.getScale(), 0);
         try {
             new WeibullDistribution(1, 0);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         WeibullDistribution dist;
 
         dist = new WeibullDistribution(2.5, 3.5);
         // In R: 3.5*gamma(1+(1/2.5)) (or emperically: mean(rweibull(10000, 2.5, 3.5)))
-        Assertions.assertEquals(dist.getNumericalMean(), 3.5 * FastMath.exp(Gamma.logGamma(1 + (1 / 2.5))), tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), (3.5 * 3.5) *
+        assertEquals(dist.getNumericalMean(), 3.5 * FastMath.exp(Gamma.logGamma(1 + (1 / 2.5))), tol);
+        assertEquals(dist.getNumericalVariance(), (3.5 * 3.5) *
                 FastMath.exp(Gamma.logGamma(1 + (2 / 2.5))) -
                 (dist.getNumericalMean() * dist.getNumericalMean()), tol);
 
         dist = new WeibullDistribution(10.4, 2.222);
-        Assertions.assertEquals(dist.getNumericalMean(), 2.222 * FastMath.exp(Gamma.logGamma(1 + (1 / 10.4))), tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), (2.222 * 2.222) *
+        assertEquals(dist.getNumericalMean(), 2.222 * FastMath.exp(Gamma.logGamma(1 + (1 / 10.4))), tol);
+        assertEquals(dist.getNumericalVariance(), (2.222 * 2.222) *
                 FastMath.exp(Gamma.logGamma(1 + (2 / 10.4))) -
                 (dist.getNumericalMean() * dist.getNumericalMean()), tol);
     }

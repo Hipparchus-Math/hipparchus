@@ -20,17 +20,18 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
 
     protected ConstraintOptimizer buildOptimizer() {
         return new SQPOptimizerS();
     }
 
     @Test
-    public void test2() {
+    void test2() {
         QuadraticFunction q = new QuadraticFunction(new double[][] { { 6.0, 2.0 }, { 2.0, 8.0 } },
                                                     new double[] { 5.0, 1.0 },
                                                     0.0);
@@ -54,7 +55,7 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
     }
 
     @Test
-    public void testHockShittkowski71() {
+    void testHockShittkowski71() {
         doTestProblem(new double[] { 1, 4.74293167, 3.82123882, 1.37939596 }, 1.0e-8,
                       new double[] { -0.16145839, 0.55229016, 1.08782965, 0, 0, 0, 0, 0, 0, 0 }, 1.1e-8,
                       17.01401698, 1.0e-8,
@@ -65,7 +66,7 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
     }
 
     @Test
-    public void testHockShittkowski72() {
+    void testHockShittkowski72() {
         doTestProblem(new double[] { 193.12529425, 180.14766487, 184.58883790, 168.82104861 }, 1.1e-8,
                       new double[] { 7693.73706410, 41453.54250351 }, 1.1e-8,
                       727.68284564, 1.0e-8,
@@ -75,7 +76,7 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
     }
 
     @Test
-    public void testHockShittkowski77() {
+    void testHockShittkowski77() {
         doTestProblem(new double[] { 1.16617194, 1.18211086, 1.38025671, 1.50603641, 0.61092012 }, 1.4e-8,
                       new double[] { 0.08553981, 0.03187858 }, 1.0e-8,
                       0.24150486, 1.0e-8,
@@ -85,7 +86,7 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
     }
 
     @Test
-    public void testHockShittkowski78() {
+    void testHockShittkowski78() {
         doTestProblem(new double[] { -1.71714365, 1.59570987, 1.82724583, 0.76364341, 0.76364341 }, 1.4e-8,
                       new double[] { -0.74445225, 0.70358075, -0.09680628 }, 1.0e-8,
                       -2.91970350, 1.0e-8,
@@ -95,7 +96,7 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
     }
 
     @Test
-    public void testRosenbrock() {
+    void testRosenbrock() {
         doTestProblem(new double[] { 1, 1 }, 1.5e-7,
                       new double[] { 0, 0, 0, 0, 0}, 1.0e-15,
                       0.0, 3.4e-15,
@@ -106,7 +107,7 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
     }
 
     @Test
-    public void testLowMaxLineSearchAndConvergenceCriterion0() {
+    void testLowMaxLineSearchAndConvergenceCriterion0() {
         // GIVEN
         final OptimizationData[] data = createOptimizationData();
         final SQPOption option = new SQPOption();
@@ -121,9 +122,9 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
 
         // THEN
         final double[] expectedSolution = new double[] { 1, 1 };
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                 MatrixUtils.createRealVector(expectedSolution).subtract(solution.getX()).getL1Norm(), 2.5e-5);
-        Assertions.assertEquals(8., solution.getValue(), 2e-4);
+        assertEquals(8., solution.getValue(), 2e-4);
     }
 
     private OptimizationData[] createOptimizationData() {

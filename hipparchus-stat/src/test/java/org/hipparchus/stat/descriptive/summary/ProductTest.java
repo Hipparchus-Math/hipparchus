@@ -54,7 +54,7 @@ public class ProductTest extends StorelessUnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         Product product = getUnivariateStatistic();
         assertEquals(1, product.getResult(), 0);
         product.increment(1);
@@ -70,7 +70,7 @@ public class ProductTest extends StorelessUnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testWeightedProduct() {
+    void testWeightedProduct() {
         Product product = new Product();
         assertEquals(expectedWeightedValue(),
                      product.evaluate(testArray, testWeightsArray, 0, testArray.length),getTolerance());

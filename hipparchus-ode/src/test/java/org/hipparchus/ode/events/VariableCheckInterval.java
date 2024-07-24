@@ -25,22 +25,23 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Tests for variable check interval.
  */
 public class VariableCheckInterval implements OrdinaryDifferentialEquation {
 
     @Test
-    public void testFixedInterval() {
+    void testFixedInterval() {
         double tZero = 7.0;
         double width = 0.25;
         doTest(tZero, width, s -> width / 25, 710);
     }
 
     @Test
-    public void testWidthAwareInterval() {
+    void testWidthAwareInterval() {
         double tZero = 7.0;
         double width = 0.25;
         doTest(tZero, width,
@@ -68,8 +69,8 @@ public class VariableCheckInterval implements OrdinaryDifferentialEquation {
         final ODEStateAndDerivative finalState =
                         integrator.integrate(this, new ODEState(t, y), tEnd);
         t = finalState.getTime();
-        Assertions.assertEquals(tZero, finalState.getTime(), e);
-        Assertions.assertEquals(expectedCalls, evt.count);
+        assertEquals(tZero, finalState.getTime(), e);
+        assertEquals(expectedCalls, evt.count);
      }
 
     /** {@inheritDoc} */

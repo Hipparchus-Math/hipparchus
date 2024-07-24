@@ -30,14 +30,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Evan Ward
  */
-public class MathRuntimeExceptionTest {
+class MathRuntimeExceptionTest {
 
     /**
      * Check that a helpful message and stack trace is still generated even when there is
      * an error while building the exception message.
      */
     @Test
-    public void testGetMessageError() {
+    void testGetMessageError() {
         // setup
         Object bad = new Object() {
             @Override
@@ -70,7 +70,7 @@ public class MathRuntimeExceptionTest {
 
     /** Check the bracketing exception message uses full precision. */
     @Test
-    public void testGetMessageDecimalFormat() {
+    void testGetMessageDecimalFormat() {
         // setup
         double a = FastMath.nextUp(1.0), b = FastMath.nextDown(1.0);
         double fa = -Double.MIN_NORMAL, fb = -12.345678901234567e-10;

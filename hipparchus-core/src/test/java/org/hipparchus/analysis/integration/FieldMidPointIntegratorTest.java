@@ -26,8 +26,11 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for midpoint integrator.
@@ -36,13 +39,13 @@ import org.junit.jupiter.api.Test;
  * takes 10 to 15 iterations for the integral to converge.
  *
  */
-public final class FieldMidPointIntegratorTest {
+final class FieldMidPointIntegratorTest {
 
     /**
      * Test of integrator for the sine function.
      */
     @Test
-    public void testLowAccuracy() {
+    void testLowAccuracy() {
         CalculusFieldUnivariateFunction<Binary64> f =
                         t -> t.subtract(1).multiply(t.subtract(0.5)).multiply(t).multiply(t.add(0.5)).multiply(t.add(1));
         FieldUnivariateIntegrator<Binary64> integrator = new FieldMidPointIntegrator<>(Binary64Field.getInstance(), 0.01, 1.0e-10, 2, 4);
@@ -52,9 +55,9 @@ public final class FieldMidPointIntegratorTest {
         double expected = -3697001.0 / 48.0;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(Integer.MAX_VALUE, f, min, max).getReal();
-        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        assertEquals(expected, result, tolerance);
 
     }
 
@@ -62,7 +65,7 @@ public final class FieldMidPointIntegratorTest {
      * Test of integrator for the sine function.
      */
     @Test
-    public void testSinFunction() {
+    void testSinFunction() {
         FieldUnivariateIntegrator<Binary64> integrator = new FieldMidPointIntegrator<>(Binary64Field.getInstance());
 
         Binary64 min = new Binary64(0);
@@ -70,18 +73,18 @@ public final class FieldMidPointIntegratorTest {
         double expected = 2;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(Integer.MAX_VALUE, x -> x.sin(), min, max).getReal();
-        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        assertEquals(expected, result, tolerance);
 
         min = new Binary64(-FastMath.PI/3);
         max = new Binary64(0);
         expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(Integer.MAX_VALUE, x -> x.sin(), min, max).getReal();
-        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        assertEquals(expected, result, tolerance);
 
     }
 
@@ -89,7 +92,7 @@ public final class FieldMidPointIntegratorTest {
      * Test of integrator for the quintic function.
      */
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
         CalculusFieldUnivariateFunction<Binary64> f =
                         t -> t.subtract(1).multiply(t.subtract(0.5)).multiply(t).multiply(t.add(0.5)).multiply(t.add(1));
         FieldUnivariateIntegrator<Binary64> integrator = new FieldMidPointIntegrator<>(Binary64Field.getInstance());
@@ -99,27 +102,27 @@ public final class FieldMidPointIntegratorTest {
         double expected = -1.0 / 48;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(Integer.MAX_VALUE, f, min, max).getReal();
-        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        assertEquals(expected, result, tolerance);
 
         min = new Binary64(0);
         max = new Binary64(0.5);
         expected = 11.0 / 768;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(Integer.MAX_VALUE, f, min, max).getReal();
-        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        assertEquals(expected, result, tolerance);
 
         min = new Binary64(-1);
         max = new Binary64(4);
         expected = 2048 / 3.0 - 78 + 1.0 / 48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(Integer.MAX_VALUE, f, min, max).getReal();
-        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        assertEquals(expected, result, tolerance);
 
     }
 
@@ -127,27 +130,27 @@ public final class FieldMidPointIntegratorTest {
      * Test of parameters for the integrator.
      */
     @Test
-    public void testParameters() {
+    void testParameters() {
 
         try {
             // bad interval
             new FieldMidPointIntegrator<>(Binary64Field.getInstance()).integrate(1000, x -> x.sin(),
                                                                                   new Binary64(1), new Binary64(-1));
-            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
+            fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new FieldMidPointIntegrator<>(Binary64Field.getInstance(), 5, 4);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new FieldMidPointIntegrator<>(Binary64Field.getInstance(), 10, 99);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

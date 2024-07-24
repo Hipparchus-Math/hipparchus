@@ -25,16 +25,19 @@ import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Test for class {@link FieldDerivativeStructure} on {@link Complex}.
  */
-public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructureAbstractTest<Complex> {
+class FieldDerivativeStructureComplexTest extends FieldDerivativeStructureAbstractTest<Complex> {
 
     @Override
     protected Field<Complex> getField() {
@@ -104,7 +107,7 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
                     for (int n = 0; n <= maxOrder; ++n) {
                         for (int m = 0; m <= maxOrder; ++m) {
                             if (n + m <= maxOrder) {
-                                Assertions.assertEquals(0, zero.getPartialDerivative(n, m).getReal(), epsilon[n + m]);
+                                assertEquals(0, zero.getPartialDerivative(n, m).getReal(), epsilon[n + m]);
                             }
                         }
                     }
@@ -116,10 +119,10 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
     @Override
     @Test
     public void testAtan2SpecialCases() {
-        Assertions.assertTrue(build(+0.0).atan2(build(+0.0)).isNaN());
-        Assertions.assertTrue(build(-0.0).atan2(build(+0.0)).isNaN());
-        Assertions.assertTrue(build(+0.0).atan2(build(-0.0)).isNaN());
-        Assertions.assertTrue(build(-0.0).atan2(build(-0.0)).isNaN());
+        assertTrue(build(+0.0).atan2(build(+0.0)).isNaN());
+        assertTrue(build(-0.0).atan2(build(+0.0)).isNaN());
+        assertTrue(build(+0.0).atan2(build(-0.0)).isNaN());
+        assertTrue(build(-0.0).atan2(build(-0.0)).isNaN());
     }
 
     @Test
@@ -128,19 +131,19 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
         final FDSFactory<Complex> factory = buildFactory(2, 2);
         FieldDerivativeStructure<Complex> pp =
                 FieldDerivativeStructure.atan2(factory.variable(1, buildScalar(+0.0)), factory.variable(1, buildScalar(+0.0)));
-        Assertions.assertTrue(pp.getValue().isNaN());
+        assertTrue(pp.getValue().isNaN());
 
         FieldDerivativeStructure<Complex> pn =
                 FieldDerivativeStructure.atan2(factory.variable(1, buildScalar(+0.0)), factory.variable(1, buildScalar(-0.0)));
-        Assertions.assertTrue(pn.getValue().isNaN());
+        assertTrue(pn.getValue().isNaN());
 
         FieldDerivativeStructure<Complex> np =
                 FieldDerivativeStructure.atan2(factory.variable(1, buildScalar(-0.0)), factory.variable(1, buildScalar(+0.0)));
-        Assertions.assertTrue(np.getValue().isNaN());
+        assertTrue(np.getValue().isNaN());
 
         FieldDerivativeStructure<Complex> nn =
                 FieldDerivativeStructure.atan2(factory.variable(1, buildScalar(-0.0)), factory.variable(1, buildScalar(-0.0)));
-        Assertions.assertTrue(nn.getValue().isNaN());
+        assertTrue(nn.getValue().isNaN());
 
     }
 
@@ -171,42 +174,42 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
 
             // negative base: -1^x can be evaluated for integers only, so value is sometimes OK, derivatives are always NaN
             FieldDerivativeStructure<Complex> negEvenInteger = FieldDerivativeStructure.pow(-2.0, factory.variable(0, 2.0));
-            Assertions.assertEquals(4.0, negEvenInteger.getReal(), 1.0e-15);
-            Assertions.assertTrue(Double.isNaN(negEvenInteger.getPartialDerivative(1, 0, 0).getReal()));
+            assertEquals(4.0, negEvenInteger.getReal(), 1.0e-15);
+            assertTrue(Double.isNaN(negEvenInteger.getPartialDerivative(1, 0, 0).getReal()));
             FieldDerivativeStructure<Complex> negOddInteger = FieldDerivativeStructure.pow(-2.0, factory.variable(0, 3.0));
-            Assertions.assertEquals(-8.0, negOddInteger.getReal(), 1.0e-15);
-            Assertions.assertTrue(Double.isNaN(negOddInteger.getPartialDerivative(1, 0, 0).getReal()));
+            assertEquals(-8.0, negOddInteger.getReal(), 1.0e-15);
+            assertTrue(Double.isNaN(negOddInteger.getPartialDerivative(1, 0, 0).getReal()));
             FieldDerivativeStructure<Complex> negNonInteger = FieldDerivativeStructure.pow(-2.0, factory.variable(0, 2.001));
-            Assertions.assertEquals(4.0027537969708465469, negNonInteger.getValue().getReal(), 2.0e-15);
-            Assertions.assertEquals(0.012575063293019489803, negNonInteger.getValue().getImaginary(), 2.0e-15);
-            Assertions.assertTrue(Double.isNaN(negNonInteger.getPartialDerivative(1, 0, 0).getReal()));
+            assertEquals(4.0027537969708465469, negNonInteger.getValue().getReal(), 2.0e-15);
+            assertEquals(0.012575063293019489803, negNonInteger.getValue().getImaginary(), 2.0e-15);
+            assertTrue(Double.isNaN(negNonInteger.getPartialDerivative(1, 0, 0).getReal()));
 
             FieldDerivativeStructure<Complex> zeroNeg = FieldDerivativeStructure.pow(0.0, factory.variable(0, -1.0));
-            Assertions.assertTrue(Double.isNaN(zeroNeg.getReal()));
-            Assertions.assertTrue(Double.isNaN(zeroNeg.getPartialDerivative(1, 0, 0).getReal()));
+            assertTrue(Double.isNaN(zeroNeg.getReal()));
+            assertTrue(Double.isNaN(zeroNeg.getPartialDerivative(1, 0, 0).getReal()));
             FieldDerivativeStructure<Complex> posNeg = FieldDerivativeStructure.pow(2.0, factory.variable(0, -2.0));
-            Assertions.assertEquals(1.0 / 4.0, posNeg.getReal(), 1.0e-15);
-            Assertions.assertEquals(FastMath.log(2.0) / 4.0, posNeg.getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
+            assertEquals(1.0 / 4.0, posNeg.getReal(), 1.0e-15);
+            assertEquals(FastMath.log(2.0) / 4.0, posNeg.getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
 
             // very special case: 0^0 where the power is a primitive
             FieldDerivativeStructure<Complex> zeroDsZeroDouble = factory.variable(0, 0.0).pow(0.0);
             boolean first = true;
             for (final Complex d : zeroDsZeroDouble.getAllDerivatives()) {
                 if (first) {
-                    Assertions.assertEquals(1.0, d.getReal(), Precision.EPSILON);
+                    assertEquals(1.0, d.getReal(), Precision.EPSILON);
                     first = false;
                 } else {
-                    Assertions.assertEquals(0.0, d.getReal(), Precision.SAFE_MIN);
+                    assertEquals(0.0, d.getReal(), Precision.SAFE_MIN);
                 }
             }
             FieldDerivativeStructure<Complex> zeroDsZeroInt = factory.variable(0, 0.0).pow(0);
             first = true;
             for (final Complex d : zeroDsZeroInt.getAllDerivatives()) {
                 if (first) {
-                    Assertions.assertEquals(1.0, d.getReal(), Precision.EPSILON);
+                    assertEquals(1.0, d.getReal(), Precision.EPSILON);
                     first = false;
                 } else {
-                    Assertions.assertEquals(0.0, d.getReal(), Precision.SAFE_MIN);
+                    assertEquals(0.0, d.getReal(), Precision.SAFE_MIN);
                 }
             }
 
@@ -216,7 +219,7 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
                 for (int i1 = 0; i1 <= maxOrder; ++i1) {
                     for (int i2 = 0; i2 <= maxOrder; ++i2) {
                         if (i0 + i1 + i2 <= maxOrder) {
-                            Assertions.assertEquals(0.0, u.getPartialDerivative(i0, i1, i2).getReal(), 1.0e-10);
+                            assertEquals(0.0, u.getPartialDerivative(i0, i1, i2).getReal(), 1.0e-10);
                         }
                     }
                 }
@@ -230,8 +233,8 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
     public void testLog10() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
             if (x <= 0) {
-                Assertions.assertTrue(Double.isNaN(FastMath.log10(x)));
-                Assertions.assertFalse(build(x).log10().getValue().isNaN());
+                assertTrue(Double.isNaN(FastMath.log10(x)));
+                assertFalse(build(x).log10().getValue().isNaN());
             } else {
                 checkRelative(FastMath.log10(x), build(x).log10());
             }
@@ -247,11 +250,11 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
                     // special case for Complex
                     final double doubleRoot = new Binary64(x).rootN(n).getReal();
                     if (n % 2 == 0) {
-                        Assertions.assertTrue(Double.isNaN(doubleRoot));
+                        assertTrue(Double.isNaN(doubleRoot));
                     } else {
-                        Assertions.assertTrue(doubleRoot < 0);
+                        assertTrue(doubleRoot < 0);
                     }
-                    Assertions.assertEquals(FastMath.PI / n, build(x).rootN(n).getValue().getArgument(), 1.0e-15);
+                    assertEquals(FastMath.PI / n, build(x).rootN(n).getValue().getArgument(), 1.0e-15);
                 } else {
                     checkRelative(FastMath.pow(x, 1.0 / n), build(x).rootN(n));
                 }
@@ -271,8 +274,8 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
         for (double x = -0.9; x < 0.9; x += 0.05) {
             if ( x < 0) {
                 // special case for Complex
-                Assertions.assertTrue(FastMath.cbrt(x) < 0);
-                Assertions.assertEquals(FastMath.PI / 3, build(x).cbrt().getValue().getArgument(), 1.0e-15);
+                assertTrue(FastMath.cbrt(x) < 0);
+                assertEquals(FastMath.PI / 3, build(x).cbrt().getValue().getArgument(), 1.0e-15);
             } else {
                 checkRelative(FastMath.cbrt(x), build(x).cbrt());
             }
@@ -280,19 +283,19 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
     }
 
     @Test
-    public void testCbrtComplex() {
+    void testCbrtComplex() {
         Complex z = new Complex(15, 2);
-        UnitTestUtils.assertEquals(z, z.square().multiply(z).cbrt(), 1.0e-14);
+        UnitTestUtils.customAssertEquals(z, z.square().multiply(z).cbrt(), 1.0e-14);
         Complex branchCutPlus = new Complex(-8.0, +0.0);
         Complex cbrtPlus = branchCutPlus.cbrt();
-        UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
-        Assertions.assertEquals(1.0, cbrtPlus.getReal(), 1.0e-15);
-        Assertions.assertEquals(FastMath.sqrt(3.0), cbrtPlus.getImaginary(), 1.0e-15);
+        UnitTestUtils.customAssertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
+        assertEquals(1.0, cbrtPlus.getReal(), 1.0e-15);
+        assertEquals(FastMath.sqrt(3.0), cbrtPlus.getImaginary(), 1.0e-15);
         Complex branchCutMinus = new Complex(-8.0, -0.0);
         Complex cbrtMinus = branchCutMinus.cbrt();
-        UnitTestUtils.assertEquals(branchCutMinus, cbrtMinus.multiply(cbrtMinus).multiply(cbrtMinus), 1.0e-14);
-        Assertions.assertEquals(1.0, cbrtMinus.getReal(), 1.0e-15);
-        Assertions.assertEquals(-FastMath.sqrt(3.0), cbrtMinus.getImaginary(), 1.0e-15);
+        UnitTestUtils.customAssertEquals(branchCutMinus, cbrtMinus.multiply(cbrtMinus).multiply(cbrtMinus), 1.0e-14);
+        assertEquals(1.0, cbrtMinus.getReal(), 1.0e-15);
+        assertEquals(-FastMath.sqrt(3.0), cbrtMinus.getImaginary(), 1.0e-15);
     }
 
     @Override
@@ -302,8 +305,8 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
             for (double y = 0.1; y < 4; y += 0.2) {
                 if ( x < 0) {
                     // special case for Complex
-                    Assertions.assertTrue(Double.isNaN(FastMath.pow(x, y)));
-                    Assertions.assertFalse(build(x).pow(build(y)).isNaN());
+                    assertTrue(Double.isNaN(FastMath.pow(x, y)));
+                    assertFalse(build(x).pow(build(y)).isNaN());
                 } else {
                     checkRelative(FastMath.pow(x, y), build(x).pow(build(y)));
                 }
@@ -318,8 +321,8 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
             for (double y = 0.1; y < 4; y += 0.2) {
                 if ( x < 0) {
                     // special case for Complex
-                    Assertions.assertTrue(Double.isNaN(FastMath.pow(x, y)));
-                    Assertions.assertFalse(build(x).pow(y).isNaN());
+                    assertTrue(Double.isNaN(FastMath.pow(x, y)));
+                    assertFalse(build(x).pow(y).isNaN());
                 } else {
                     checkRelative(FastMath.pow(x, y), build(x).pow(y));
                 }

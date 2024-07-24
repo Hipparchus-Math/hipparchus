@@ -24,17 +24,18 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
  * Test for class {@link JacobianFunction}.
  */
-public class JacobianFunctionTest {
+class JacobianFunctionTest {
 
     @Test
-    public void testSphere() {
+    void testSphere() {
         SphereMapping    f = new SphereMapping(10.0);
         JacobianFunction j = new JacobianFunction(f);
         for (double latitude = -1.5; latitude < 1.5; latitude += 0.1) {
@@ -42,9 +43,9 @@ public class JacobianFunctionTest {
                 double[] point = new double[] { latitude, longitude };
                 double[][] referenceJacobian  = f.jacobian(point);
                 double[][] testJacobian       = j.value(point);
-                Assertions.assertEquals(referenceJacobian.length, testJacobian.length);
+                assertEquals(referenceJacobian.length, testJacobian.length);
                 for (int i = 0; i < 3; ++i) {
-                    UnitTestUtils.assertEquals(referenceJacobian[i], testJacobian[i], 2.0e-15);
+                    UnitTestUtils.customAssertEquals(referenceJacobian[i], testJacobian[i], 2.0e-15);
                 }
             }
         }

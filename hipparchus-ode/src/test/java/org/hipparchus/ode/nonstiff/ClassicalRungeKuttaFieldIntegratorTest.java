@@ -23,7 +23,7 @@ import org.hipparchus.Field;
 import org.hipparchus.util.Binary64Field;
 import org.junit.jupiter.api.Test;
 
-public class ClassicalRungeKuttaFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
+class ClassicalRungeKuttaFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> RungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {

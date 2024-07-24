@@ -35,7 +35,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +47,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the EmpiricalDistribution class
@@ -69,7 +73,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         empiricalDistribution = new EmpiricalDistribution(100);
         url = getClass().getResource("testData.txt");
         final ArrayList<Double> list = new ArrayList<>();
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             empiricalDistribution2 = new EmpiricalDistribution(100);
             BufferedReader in =
                 new BufferedReader(new InputStreamReader(
@@ -92,7 +96,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
 
     // MATH-1279
     @Test
-    public void testPrecondition1() {
+    void testPrecondition1() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new EmpiricalDistribution(0);
         });
@@ -104,7 +108,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * the sample data file. Also verify that load is idempotent.
      */
     @Test
-    public void testLoad() throws Exception {
+    void testLoad() throws Exception {
         // Load from a URL
         empiricalDistribution.load(url);
         checkDistribution();
@@ -118,33 +122,33 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     private void checkDistribution() {
         // testData File has 10000 values, with mean ~ 5.0, std dev ~ 1
         // Make sure that loaded distribution matches this
-        Assertions.assertEquals(1000, empiricalDistribution.getSampleStats().getN(), 10E-7);
+        assertEquals(1000, empiricalDistribution.getSampleStats().getN(), 10E-7);
         //TODO: replace with statistical tests
-        Assertions.assertEquals(
+        assertEquals(
             5.069831575018909, empiricalDistribution.getSampleStats().getMean(), 10E-7);
-        Assertions.assertEquals(
+        assertEquals(
             1.0173699343977738, empiricalDistribution.getSampleStats().getStandardDeviation(), 10E-7);
     }
 
     @Test
-    public void testLoadURLError() throws IOException {
+    void testLoadURLError() throws IOException {
         try {
             URL existing = getClass().getResource("testData.txt");
             URL nonexistent = new URL(existing.toString() + "-nonexistent");
             empiricalDistribution.load(nonexistent);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (IOException ioe) {
             // expected
         }
     }
 
     @Test
-    public void testLoadFileError() throws IOException, URISyntaxException {
+    void testLoadFileError() throws IOException, URISyntaxException {
         try {
             File existing = new File(getClass().getResource("testData.txt").toURI());
             File nonexistent = new File(existing.getAbsolutePath() + "-nonexistent");
             empiricalDistribution.load(nonexistent);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (IOException ioe) {
             // expected
         }
@@ -157,20 +161,20 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * the sample data file.
      */
     @Test
-    public void testDoubleLoad() throws Exception {
+    void testDoubleLoad() throws Exception {
         empiricalDistribution2.load(dataArray);
         // testData File has 10000 values, with mean ~ 5.0, std dev ~ 1
         // Make sure that loaded distribution matches this
-        Assertions.assertEquals(1000, empiricalDistribution2.getSampleStats().getN(), 10E-7);
+        assertEquals(1000, empiricalDistribution2.getSampleStats().getN(), 10E-7);
         //TODO: replace with statistical tests
-        Assertions.assertEquals(
+        assertEquals(
             5.069831575018909, empiricalDistribution2.getSampleStats().getMean(), 10E-7);
-        Assertions.assertEquals(
+        assertEquals(
             1.0173699343977738, empiricalDistribution2.getSampleStats().getStandardDeviation(), 10E-7);
 
         double[] bounds = empiricalDistribution2.getGeneratorUpperBounds();
-        Assertions.assertEquals(100, bounds.length);
-        Assertions.assertEquals(1.0, bounds[99], 10e-12);
+        assertEquals(100, bounds.length);
+        assertEquals(1.0, bounds[99], 10e-12);
 
     }
 
@@ -180,7 +184,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
       * these tests will fail even if the code is working as designed.
       */
     @Test
-    public void testNext() throws Exception {
+    void testNext() throws Exception {
         tstGen(0.1);
         tstDoubleGen(0.1);
     }
@@ -190,11 +194,11 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
       * before loading empiricalDistribution.
      */
     @Test
-    public void testNexFail() {
+    void testNexFail() {
         try {
             empiricalDistribution.getNextValue();
             empiricalDistribution2.getNextValue();
-            Assertions.fail("Expecting MathIllegalStateException");
+            fail("Expecting MathIllegalStateException");
         } catch (MathIllegalStateException ex) {
             // expected
         }
@@ -204,7 +208,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * Make sure we can handle a grid size that is too fine
      */
     @Test
-    public void testGridTooFine() throws Exception {
+    void testGridTooFine() throws Exception {
         empiricalDistribution = new EmpiricalDistribution(1001);
         tstGen(0.1);
         empiricalDistribution2 = new EmpiricalDistribution(1001);
@@ -215,7 +219,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * How about too fat?
      */
     @Test
-    public void testGridTooFat() throws Exception {
+    void testGridTooFat() throws Exception {
         empiricalDistribution = new EmpiricalDistribution(1);
         tstGen(5); // ridiculous tolerance; but ridiculous grid size
                    // really just checking to make sure we do not bomb
@@ -227,13 +231,13 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * Test bin index overflow problem (BZ 36450)
      */
     @Test
-    public void testBinIndexOverflow() throws Exception {
+    void testBinIndexOverflow() throws Exception {
         double[] x = new double[] {9474.94326071674, 2080107.8865462579};
         new EmpiricalDistribution().load(x);
     }
 
     @Test
-    public void testSerialization() {
+    void testSerialization() {
         // Empty
         EmpiricalDistribution dist = new EmpiricalDistribution();
         EmpiricalDistribution dist2 = (EmpiricalDistribution) UnitTestUtils.serializeAndRecover(dist);
@@ -246,21 +250,21 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     }
 
     @Test
-    public void testLoadNullDoubleArray() {
+    void testLoadNullDoubleArray() {
         assertThrows(NullArgumentException.class, () -> {
             new EmpiricalDistribution().load((double[]) null);
         });
     }
 
     @Test
-    public void testLoadNullURL() throws Exception {
+    void testLoadNullURL() throws Exception {
         assertThrows(NullArgumentException.class, () -> {
             new EmpiricalDistribution().load((URL) null);
         });
     }
 
     @Test
-    public void testLoadNullFile() throws Exception {
+    void testLoadNullFile() throws Exception {
         assertThrows(NullArgumentException.class, () -> {
             new EmpiricalDistribution().load((File) null);
         });
@@ -270,19 +274,19 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * MATH-298
      */
     @Test
-    public void testGetBinUpperBounds() {
+    void testGetBinUpperBounds() {
         double[] testData = {0, 1, 1, 2, 3, 4, 4, 5, 6, 7, 8, 9, 10};
         EmpiricalDistribution dist = new EmpiricalDistribution(5);
         dist.load(testData);
         double[] expectedBinUpperBounds = {2, 4, 6, 8, 10};
         double[] expectedGeneratorUpperBounds = {4d/13d, 7d/13d, 9d/13d, 11d/13d, 1};
         double tol = 10E-12;
-        UnitTestUtils.assertEquals(expectedBinUpperBounds, dist.getUpperBounds(), tol);
-        UnitTestUtils.assertEquals(expectedGeneratorUpperBounds, dist.getGeneratorUpperBounds(), tol);
+        UnitTestUtils.customAssertEquals(expectedBinUpperBounds, dist.getUpperBounds(), tol);
+        UnitTestUtils.customAssertEquals(expectedGeneratorUpperBounds, dist.getGeneratorUpperBounds(), tol);
     }
 
     @Test
-    public void testReSeed() throws Exception {
+    void testReSeed() throws Exception {
         empiricalDistribution.load(url);
         empiricalDistribution.reSeed(100);
         final double [] values = new double[10];
@@ -291,19 +295,19 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         }
         empiricalDistribution.reSeed(100);
         for (int i = 0; i < 10; i++) {
-            Assertions.assertEquals(values[i],empiricalDistribution.getNextValue(), 0d);
+            assertEquals(values[i],empiricalDistribution.getNextValue(), 0d);
         }
     }
 
     private void verifySame(EmpiricalDistribution d1, EmpiricalDistribution d2) {
-        Assertions.assertEquals(d1.isLoaded(), d2.isLoaded());
-        Assertions.assertEquals(d1.getBinCount(), d2.getBinCount());
-        Assertions.assertEquals(d1.getSampleStats(), d2.getSampleStats());
+        assertEquals(d1.isLoaded(), d2.isLoaded());
+        assertEquals(d1.getBinCount(), d2.getBinCount());
+        assertEquals(d1.getSampleStats(), d2.getSampleStats());
         if (d1.isLoaded()) {
             for (int i = 0;  i < d1.getUpperBounds().length; i++) {
-                Assertions.assertEquals(d1.getUpperBounds()[i], d2.getUpperBounds()[i], 0);
+                assertEquals(d1.getUpperBounds()[i], d2.getUpperBounds()[i], 0);
             }
-            Assertions.assertEquals(d1.getBinStats(), d2.getBinStats());
+            assertEquals(d1.getBinStats(), d2.getBinStats());
         }
     }
 
@@ -314,8 +318,8 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         for (int i = 1; i < 1000; i++) {
             stats.addValue(empiricalDistribution.getNextValue());
         }
-        Assertions.assertEquals(5.069831575018909, stats.getMean(),tolerance,"mean");
-        Assertions.assertEquals(1.0173699343977738, stats.getStandardDeviation(),tolerance,"std dev");
+        assertEquals(5.069831575018909, stats.getMean(),tolerance,"mean");
+        assertEquals(1.0173699343977738, stats.getStandardDeviation(),tolerance,"std dev");
     }
 
     private void tstDoubleGen(double tolerance)throws Exception {
@@ -325,8 +329,8 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         for (int i = 1; i < 1000; i++) {
             stats.addValue(empiricalDistribution2.getNextValue());
         }
-        Assertions.assertEquals(5.069831575018909, stats.getMean(), tolerance, "mean");
-        Assertions.assertEquals(1.0173699343977738, stats.getStandardDeviation(), tolerance, "std dev");
+        assertEquals(5.069831575018909, stats.getMean(), tolerance, "mean");
+        assertEquals(1.0173699343977738, stats.getStandardDeviation(), tolerance, "std dev");
     }
 
     //  Setup for distribution tests
@@ -424,7 +428,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         final double[] lower = {0, 5, 1000, 5001, 9995};
         final double[] upper = {5, 12, 1030, 5010, 10000};
         for (int i = 1; i < 5; i++) {
-            Assertions.assertEquals(
+            assertEquals(
                     distribution.probability(
                             lower[i], upper[i]),
                             integrator.integrate(
@@ -438,7 +442,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * Verify that sampled values do not go outside of the range of the data.
      */
     @Test
-    public void testSampleValuesRange() {
+    void testSampleValuesRange() {
         // Concentrate values near the endpoints of (0, 1).
         // Unconstrained Gaussian kernel would generate values outside the interval.
         final double[] data = new double[100];
@@ -453,8 +457,8 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         dist.reseedRandomGenerator(1000);
         for (int i = 0; i < 1000; i++) {
             final double dev = dist.getNextValue();
-            Assertions.assertTrue(dev < 1);
-            Assertions.assertTrue(dev > 0);
+            assertTrue(dev < 1);
+            assertTrue(dev > 0);
         }
     }
 
@@ -462,19 +466,19 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      * MATH-1203, MATH-1208
      */
     @Test
-    public void testNoBinVariance() {
+    void testNoBinVariance() {
         final double[] data = {0, 0, 1, 1};
         EmpiricalDistribution dist = new EmpiricalDistribution(2);
         dist.load(data);
         dist.reseedRandomGenerator(1000);
         for (int i = 0; i < 1000; i++) {
             final double dev = dist.getNextValue();
-            Assertions.assertTrue(dev == 0 || dev == 1);
+            assertTrue(dev == 0 || dev == 1);
         }
-        Assertions.assertEquals(0.5, dist.cumulativeProbability(0), Double.MIN_VALUE);
-        Assertions.assertEquals(1.0, dist.cumulativeProbability(1), Double.MIN_VALUE);
-        Assertions.assertEquals(0.5, dist.cumulativeProbability(0.5), Double.MIN_VALUE);
-        Assertions.assertEquals(0.5, dist.cumulativeProbability(0.7), Double.MIN_VALUE);
+        assertEquals(0.5, dist.cumulativeProbability(0), Double.MIN_VALUE);
+        assertEquals(1.0, dist.cumulativeProbability(1), Double.MIN_VALUE);
+        assertEquals(0.5, dist.cumulativeProbability(0.5), Double.MIN_VALUE);
+        assertEquals(0.5, dist.cumulativeProbability(0.7), Double.MIN_VALUE);
     }
 
     /**
@@ -504,33 +508,33 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     }
 
     @Test
-    public void testKernelOverrideConstant() {
+    void testKernelOverrideConstant() {
         final EmpiricalDistribution dist = new ConstantKernelEmpiricalDistribution(5);
         final double[] data = {1d,2d,3d, 4d,5d,6d, 7d,8d,9d, 10d,11d,12d, 13d,14d,15d};
         dist.load(data);
         // Bin masses concentrated on 2, 5, 8, 11, 14 <- effectively discrete uniform distribution over these
         double[] values = {2d, 5d, 8d, 11d, 14d};
         for (int i = 0; i < 20; i++) {
-            Assertions.assertTrue(Arrays.binarySearch(values, dist.getNextValue()) >= 0);
+            assertTrue(Arrays.binarySearch(values, dist.getNextValue()) >= 0);
         }
         final double tol = 10E-12;
-        Assertions.assertEquals(0.0, dist.cumulativeProbability(1), tol);
-        Assertions.assertEquals(0.2, dist.cumulativeProbability(2), tol);
-        Assertions.assertEquals(0.6, dist.cumulativeProbability(10), tol);
-        Assertions.assertEquals(0.8, dist.cumulativeProbability(12), tol);
-        Assertions.assertEquals(0.8, dist.cumulativeProbability(13), tol);
-        Assertions.assertEquals(1.0, dist.cumulativeProbability(15), tol);
+        assertEquals(0.0, dist.cumulativeProbability(1), tol);
+        assertEquals(0.2, dist.cumulativeProbability(2), tol);
+        assertEquals(0.6, dist.cumulativeProbability(10), tol);
+        assertEquals(0.8, dist.cumulativeProbability(12), tol);
+        assertEquals(0.8, dist.cumulativeProbability(13), tol);
+        assertEquals(1.0, dist.cumulativeProbability(15), tol);
 
-        Assertions.assertEquals(2.0, dist.inverseCumulativeProbability(0.1), tol);
-        Assertions.assertEquals(2.0, dist.inverseCumulativeProbability(0.2), tol);
-        Assertions.assertEquals(5.0, dist.inverseCumulativeProbability(0.3), tol);
-        Assertions.assertEquals(5.0, dist.inverseCumulativeProbability(0.4), tol);
-        Assertions.assertEquals(8.0, dist.inverseCumulativeProbability(0.5), tol);
-        Assertions.assertEquals(8.0, dist.inverseCumulativeProbability(0.6), tol);
+        assertEquals(2.0, dist.inverseCumulativeProbability(0.1), tol);
+        assertEquals(2.0, dist.inverseCumulativeProbability(0.2), tol);
+        assertEquals(5.0, dist.inverseCumulativeProbability(0.3), tol);
+        assertEquals(5.0, dist.inverseCumulativeProbability(0.4), tol);
+        assertEquals(8.0, dist.inverseCumulativeProbability(0.5), tol);
+        assertEquals(8.0, dist.inverseCumulativeProbability(0.6), tol);
     }
 
     @Test
-    public void testKernelOverrideUniform() {
+    void testKernelOverrideUniform() {
         final EmpiricalDistribution dist = new UniformKernelEmpiricalDistribution(5);
         final double[] data = {1d,2d,3d, 4d,5d,6d, 7d,8d,9d, 10d,11d,12d, 13d,14d,15d};
         dist.load(data);
@@ -541,37 +545,37 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
             final double v = dist.getNextValue();
             // Make sure v is not in the excluded range between bins - that is (bounds[i], bounds[i] + 1)
             for (int j = 0; j < bounds.length; j++) {
-                Assertions.assertFalse(v > bounds[j] + tol && v < bounds[j] + 1 - tol);
+                assertFalse(v > bounds[j] + tol && v < bounds[j] + 1 - tol);
             }
         }
-        Assertions.assertEquals(0.0, dist.cumulativeProbability(1), tol);
-        Assertions.assertEquals(0.1, dist.cumulativeProbability(2), tol);
-        Assertions.assertEquals(0.6, dist.cumulativeProbability(10), tol);
-        Assertions.assertEquals(0.8, dist.cumulativeProbability(12), tol);
-        Assertions.assertEquals(0.8, dist.cumulativeProbability(13), tol);
-        Assertions.assertEquals(1.0, dist.cumulativeProbability(15), tol);
+        assertEquals(0.0, dist.cumulativeProbability(1), tol);
+        assertEquals(0.1, dist.cumulativeProbability(2), tol);
+        assertEquals(0.6, dist.cumulativeProbability(10), tol);
+        assertEquals(0.8, dist.cumulativeProbability(12), tol);
+        assertEquals(0.8, dist.cumulativeProbability(13), tol);
+        assertEquals(1.0, dist.cumulativeProbability(15), tol);
 
-        Assertions.assertEquals(2.0, dist.inverseCumulativeProbability(0.1), tol);
-        Assertions.assertEquals(3.0, dist.inverseCumulativeProbability(0.2), tol);
-        Assertions.assertEquals(5.0, dist.inverseCumulativeProbability(0.3), tol);
-        Assertions.assertEquals(6.0, dist.inverseCumulativeProbability(0.4), tol);
-        Assertions.assertEquals(8.0, dist.inverseCumulativeProbability(0.5), tol);
-        Assertions.assertEquals(9.0, dist.inverseCumulativeProbability(0.6), tol);
+        assertEquals(2.0, dist.inverseCumulativeProbability(0.1), tol);
+        assertEquals(3.0, dist.inverseCumulativeProbability(0.2), tol);
+        assertEquals(5.0, dist.inverseCumulativeProbability(0.3), tol);
+        assertEquals(6.0, dist.inverseCumulativeProbability(0.4), tol);
+        assertEquals(8.0, dist.inverseCumulativeProbability(0.5), tol);
+        assertEquals(9.0, dist.inverseCumulativeProbability(0.6), tol);
     }
 
     @Test
-    public void testEmptyBins() {
+    void testEmptyBins() {
         double[] data = new double[10];
         for (int i = 0; i < 10; ++i) {
             data[i] = i < 5 ? 0 : 1;
         }
         EmpiricalDistribution edist = new EmpiricalDistribution(100);
         edist.load(data);
-        Assertions.assertEquals(0.5, edist.cumulativeProbability(0), Double.MIN_VALUE);
-        Assertions.assertEquals(0.5, edist.cumulativeProbability(0.3), Double.MIN_VALUE);
-        Assertions.assertEquals(0.5, edist.cumulativeProbability(0.9), Double.MIN_VALUE);
-        Assertions.assertEquals(1, edist.cumulativeProbability(1), Double.MIN_VALUE);
-        Assertions.assertEquals(1, edist.cumulativeProbability(1.5), Double.MIN_VALUE);
+        assertEquals(0.5, edist.cumulativeProbability(0), Double.MIN_VALUE);
+        assertEquals(0.5, edist.cumulativeProbability(0.3), Double.MIN_VALUE);
+        assertEquals(0.5, edist.cumulativeProbability(0.9), Double.MIN_VALUE);
+        assertEquals(1, edist.cumulativeProbability(1), Double.MIN_VALUE);
+        assertEquals(1, edist.cumulativeProbability(1.5), Double.MIN_VALUE);
     }
 
 

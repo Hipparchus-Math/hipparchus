@@ -18,18 +18,18 @@ package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for ContinuedFraction.
  */
-public class FieldContinuedFractionTest {
+class FieldContinuedFractionTest {
 
     @Test
-    public void testGoldenRatio() {
+    void testGoldenRatio() {
         FieldContinuedFraction cf = new FieldContinuedFraction() {
 
             @Override
@@ -45,11 +45,11 @@ public class FieldContinuedFractionTest {
         };
 
         Binary64 gr = cf.evaluate(new Binary64(0.0), 10e-9);
-        Assertions.assertEquals(1.61803399, gr.getReal(), 10e-9);
+        assertEquals(1.61803399, gr.getReal(), 10e-9);
     }
 
     @Test
-    public void testNonConvergentContinuedFraction() {
+    void testNonConvergentContinuedFraction() {
         assertThrows(MathIllegalStateException.class, () -> {
             FieldContinuedFraction cf = new FieldContinuedFraction() {
 
@@ -70,7 +70,7 @@ public class FieldContinuedFractionTest {
     }
 
     @Test
-    public void testInfinityDivergence() {
+    void testInfinityDivergence() {
         assertThrows(MathIllegalStateException.class, () -> {
             FieldContinuedFraction cf = new FieldContinuedFraction() {
 

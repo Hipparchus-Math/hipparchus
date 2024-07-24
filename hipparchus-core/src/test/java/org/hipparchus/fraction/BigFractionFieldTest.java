@@ -23,27 +23,30 @@ package org.hipparchus.fraction;
 
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BigFractionFieldTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class BigFractionFieldTest {
 
     @Test
-    public void testZero() {
-        Assertions.assertEquals(BigFraction.ZERO, BigFractionField.getInstance().getZero());
+    void testZero() {
+        assertEquals(BigFraction.ZERO, BigFractionField.getInstance().getZero());
     }
 
     @Test
-    public void testOne() {
-        Assertions.assertEquals(BigFraction.ONE, BigFractionField.getInstance().getOne());
+    void testOne() {
+        assertEquals(BigFraction.ONE, BigFractionField.getInstance().getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testMap() {
+    void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
             for (int j = 1; j < 100; ++j) {
@@ -51,21 +54,21 @@ public class BigFractionFieldTest {
             }
         }
         // there should be only one field for all fractions
-        Assertions.assertEquals(1, map.size());
-        Assertions.assertEquals(BigFractionField.getInstance(), map.entrySet().iterator().next().getKey());
-        Assertions.assertNotEquals(BigFractionField.getInstance(), FractionField.getInstance());
+        assertEquals(1, map.size());
+        assertEquals(BigFractionField.getInstance(), map.entrySet().iterator().next().getKey());
+        assertNotEquals(BigFractionField.getInstance(), FractionField.getInstance());
     }
 
     @Test
-    public void testRunTImeClass() {
-        Assertions.assertEquals(BigFraction.class, BigFractionField.getInstance().getRuntimeClass());
+    void testRunTImeClass() {
+        assertEquals(BigFraction.class, BigFractionField.getInstance().getRuntimeClass());
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         // deserializing the singleton should give the singleton itself back
         BigFractionField field = BigFractionField.getInstance();
-        Assertions.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 
 }

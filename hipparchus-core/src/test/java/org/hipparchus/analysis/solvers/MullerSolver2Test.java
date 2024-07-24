@@ -27,8 +27,10 @@ import org.hipparchus.analysis.function.Expm1;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for {@link MullerSolver2 Muller} solver.
@@ -42,12 +44,12 @@ import org.junit.jupiter.api.Test;
  * Muller solver performs poorly.
  *
  */
-public final class MullerSolver2Test {
+final class MullerSolver2Test {
     /**
      * Test of solver for the sine function.
      */
     @Test
-    public void testSinFunction() {
+    void testSinFunction() {
         UnivariateFunction f = new Sin();
         UnivariateSolver solver = new MullerSolver2();
         double min, max, expected, result, tolerance;
@@ -56,20 +58,20 @@ public final class MullerSolver2Test {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = -1.0; max = 1.5; expected = 0.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
      * Test of solver for the quintic function.
      */
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
         UnivariateFunction f = new QuinticFunction();
         UnivariateSolver solver = new MullerSolver2();
         double min, max, expected, result, tolerance;
@@ -78,19 +80,19 @@ public final class MullerSolver2Test {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = 0.75; max = 1.5; expected = 1.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = -0.9; max = -0.2; expected = -0.5;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -99,7 +101,7 @@ public final class MullerSolver2Test {
      * It takes 25 to 50 iterations for the last two tests to converge.
      */
     @Test
-    public void testExpm1Function() {
+    void testExpm1Function() {
         UnivariateFunction f = new Expm1();
         UnivariateSolver solver = new MullerSolver2();
         double min, max, expected, result, tolerance;
@@ -108,40 +110,40 @@ public final class MullerSolver2Test {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = -20.0; max = 10.0; expected = 0.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
 
         min = -50.0; max = 100.0; expected = 0.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
      * Test of parameters for the solver.
      */
     @Test
-    public void testParameters() {
+    void testParameters() {
         UnivariateFunction f = new Sin();
         UnivariateSolver solver = new MullerSolver2();
 
         try {
             // bad interval
             solver.solve(100, f, 1, -1);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
+            fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // no bracketing
             solver.solve(100, f, 2, 3);
-            Assertions.fail("Expecting MathIllegalArgumentException - no bracketing");
+            fail("Expecting MathIllegalArgumentException - no bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

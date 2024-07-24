@@ -32,16 +32,16 @@ import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class AkimaSplineInterpolatorTest {
+class AkimaSplineInterpolatorTest {
 
     @Test
-    public void testIssueModifiedWeights() {
+    void testIssueModifiedWeights() {
         double[] x = {1, 2, 3, 4, 5, 6, 7, 8};
         double[] y = {-1, -1, -1, 0, 1, 1, 1, 1};
         UnivariateFunction original = new AkimaSplineInterpolator().interpolate(x, y);
@@ -49,36 +49,36 @@ public class AkimaSplineInterpolatorTest {
         for (double d = 1.01; d <=8; d += 0.02) {
             if (d < 2) {
                 // both method return constant
-                Assertions.assertEquals(-1.0, original.value(d), 1.0e-15);
-                Assertions.assertEquals(-1.0, modified.value(d), 1.0e-15);
+                assertEquals(-1.0, original.value(d), 1.0e-15);
+                assertEquals(-1.0, modified.value(d), 1.0e-15);
             } else if (d < 3) {
                 // original Akima overshoots here
-                Assertions.assertTrue(original.value(d) < -1);
-                Assertions.assertEquals(-1.0, modified.value(d), 1.0e-15);
+                assertTrue(original.value(d) < -1);
+                assertEquals(-1.0, modified.value(d), 1.0e-15);
             } else if (d < 4) {
                 // intermediate values for both, original being above modified
-                Assertions.assertTrue(original.value(d) > -1 && original.value(d) < 0);
-                Assertions.assertTrue(modified.value(d) > -1 && modified.value(d) < 0);
-                Assertions.assertTrue(original.value(d) > modified.value(d));
+                assertTrue(original.value(d) > -1 && original.value(d) < 0);
+                assertTrue(modified.value(d) > -1 && modified.value(d) < 0);
+                assertTrue(original.value(d) > modified.value(d));
             } else if (d < 5) {
                 // intermediate values for both, original being below modified
-                Assertions.assertTrue(original.value(d) < +1 && original.value(d) > 0);
-                Assertions.assertTrue(modified.value(d) < +1 && modified.value(d) > 0);
-                Assertions.assertTrue(original.value(d) < modified.value(d));
+                assertTrue(original.value(d) < +1 && original.value(d) > 0);
+                assertTrue(modified.value(d) < +1 && modified.value(d) > 0);
+                assertTrue(original.value(d) < modified.value(d));
             } else if (d < 6) {
                 // original Akima overshoots here
-                Assertions.assertTrue(original.value(d) > +1);
-                Assertions.assertEquals(+1.0, modified.value(d), 1.0e-15);
+                assertTrue(original.value(d) > +1);
+                assertEquals(+1.0, modified.value(d), 1.0e-15);
             } else {
                 // both method return constant
-                Assertions.assertEquals(+1.0, original.value(d), 1.0e-15);
-                Assertions.assertEquals(+1.0, modified.value(d), 1.0e-15);
+                assertEquals(+1.0, original.value(d), 1.0e-15);
+                assertEquals(+1.0, modified.value(d), 1.0e-15);
             }
         }
     }
 
     @Test
-    public void testIllegalArguments() {
+    void testIllegalArguments() {
             // Data set arrays of different size.
             UnivariateInterpolator i = new AkimaSplineInterpolator();
 
@@ -86,7 +86,7 @@ public class AkimaSplineInterpolatorTest {
             {
                 double[] yval = { 0.0, 1.0, 2.0, 3.0, 4.0 };
                 i.interpolate( null, yval );
-                Assertions.fail( "Failed to detect x null pointer" );
+                fail( "Failed to detect x null pointer" );
             }
             catch ( NullArgumentException iae )
             {
@@ -97,7 +97,7 @@ public class AkimaSplineInterpolatorTest {
         {
             double[] xval = { 0.0, 1.0, 2.0, 3.0, 4.0 };
             i.interpolate( xval, null );
-            Assertions.fail( "Failed to detect y null pointer" );
+            fail( "Failed to detect y null pointer" );
         }
         catch ( NullArgumentException iae )
         {
@@ -109,7 +109,7 @@ public class AkimaSplineInterpolatorTest {
             double[] xval = { 0.0, 1.0, 2.0, 3.0 };
             double[] yval = { 0.0, 1.0, 2.0, 3.0 };
             i.interpolate( xval, yval );
-            Assertions.fail( "Failed to detect insufficient data" );
+            fail( "Failed to detect insufficient data" );
         }
         catch ( MathIllegalArgumentException iae )
         {
@@ -121,7 +121,7 @@ public class AkimaSplineInterpolatorTest {
             double[] xval = { 0.0, 1.0, 2.0, 3.0, 4.0 };
             double[] yval = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
             i.interpolate( xval, yval );
-            Assertions.fail( "Failed to detect data set array with different sizes." );
+            fail( "Failed to detect data set array with different sizes." );
         }
         catch ( MathIllegalArgumentException iae )
         {
@@ -134,7 +134,7 @@ public class AkimaSplineInterpolatorTest {
             double[] xval = { 0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0 };
             double[] yval = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
             i.interpolate( xval, yval );
-            Assertions.fail( "Failed to detect unsorted arguments." );
+            fail( "Failed to detect unsorted arguments." );
         }
         catch ( MathIllegalArgumentException iae )
         {
@@ -143,7 +143,7 @@ public class AkimaSplineInterpolatorTest {
     }
 
     @Test
-    public void testIllegalArgumentsD64()
+    void testIllegalArgumentsD64()
     {
         // Data set arrays of different size.
         FieldUnivariateInterpolator i = new AkimaSplineInterpolator();
@@ -152,7 +152,7 @@ public class AkimaSplineInterpolatorTest {
         {
             Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( null, yval );
-            Assertions.fail( "Failed to detect x null pointer" );
+            fail( "Failed to detect x null pointer" );
         }
         catch ( NullArgumentException iae )
         {
@@ -163,7 +163,7 @@ public class AkimaSplineInterpolatorTest {
         {
             Binary64[] xval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( xval, null );
-            Assertions.fail( "Failed to detect y null pointer" );
+            fail( "Failed to detect y null pointer" );
         }
         catch ( NullArgumentException iae )
         {
@@ -175,7 +175,7 @@ public class AkimaSplineInterpolatorTest {
             Binary64[] xval = buildD64(0.0, 1.0, 2.0, 3.0);
             Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0);
             i.interpolate( xval, yval );
-            Assertions.fail( "Failed to detect insufficient data" );
+            fail( "Failed to detect insufficient data" );
         }
         catch ( MathIllegalArgumentException iae )
         {
@@ -187,7 +187,7 @@ public class AkimaSplineInterpolatorTest {
             Binary64[] xval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
             i.interpolate( xval, yval );
-            Assertions.fail( "Failed to detect data set array with different sizes." );
+            fail( "Failed to detect data set array with different sizes." );
         }
         catch ( MathIllegalArgumentException iae )
         {
@@ -200,7 +200,7 @@ public class AkimaSplineInterpolatorTest {
             Binary64[] xval = buildD64(0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0);
             Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
             i.interpolate( xval, yval );
-            Assertions.fail( "Failed to detect unsorted arguments." );
+            fail( "Failed to detect unsorted arguments." );
         }
         catch ( MathIllegalArgumentException iae )
         {
@@ -214,7 +214,7 @@ public class AkimaSplineInterpolatorTest {
      * of elements
      */
     @Test
-    public void testInterpolateLine()
+    void testInterpolateLine()
     {
         final int numberOfElements = 10;
         final double minimumX = -10;
@@ -235,7 +235,7 @@ public class AkimaSplineInterpolatorTest {
      * of elements
      */
     @Test
-    public void testInterpolateLineD64()
+    void testInterpolateLineD64()
     {
         final int numberOfElements = 10;
         final Binary64 minimumX = new Binary64(-10);
@@ -257,7 +257,7 @@ public class AkimaSplineInterpolatorTest {
      */
 
     @Test
-    public void testInterpolateParabola()
+    void testInterpolateParabola()
     {
         final int numberOfElements = 10;
         final double minimumX = -10;
@@ -279,7 +279,7 @@ public class AkimaSplineInterpolatorTest {
      */
 
     @Test
-    public void testInterpolateParabolaD64()
+    void testInterpolateParabolaD64()
     {
         final int numberOfElements = 10;
         final Binary64 minimumX = new Binary64(-10);
@@ -302,7 +302,7 @@ public class AkimaSplineInterpolatorTest {
      * the same span with the same number of elements
      */
     @Test
-    public void testInterpolateCubic()
+    void testInterpolateCubic()
     {
         final int numberOfElements = 10;
         final double minimumX = -3;
@@ -323,7 +323,7 @@ public class AkimaSplineInterpolatorTest {
      * the same span with the same number of elements
      */
     @Test
-    public void testInterpolateCubic64()
+    void testInterpolateCubic64()
     {
         final int numberOfElements = 10;
         final Binary64 minimumX = new Binary64(-3);

@@ -21,54 +21,58 @@ import org.hipparchus.complex.ComplexField;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ComplexEigenDecompositionTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class ComplexEigenDecompositionTest {
 
     @Test
-    public void testNonSquare() {
+    void testNonSquare() {
         try {
             new ComplexEigenDecomposition(MatrixUtils.createRealMatrix(2, 3), 1.0e-5, 1.0e-12, 1.0e-6);
-            Assertions.fail("an axception should have been thrown");
+            fail("an axception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, miae.getSpecifier());
         }
     }
 
     @Test
-    public void testRealEigenValues() {
+    void testRealEigenValues() {
         final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] { { 2, 0 }, { 0, 3 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(m);
-        Assertions.assertFalse(eigenDecomp.hasComplexEigenvalues());
+        assertFalse(eigenDecomp.hasComplexEigenvalues());
     }
 
     @Test
-    public void testGetEigenValues() {
+    void testGetEigenValues() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         Complex ev1 = eigenDecomp.getEigenvalues()[0];
         Complex ev2 = eigenDecomp.getEigenvalues()[1];
-        Assertions.assertEquals(new Complex(1, +2), ev1);
-        Assertions.assertEquals(new Complex(1, -2), ev2);
+        assertEquals(new Complex(1, +2), ev1);
+        assertEquals(new Complex(1, -2), ev2);
     }
 
     @Test
-    public void testHasComplexEigenValues() {
+    void testHasComplexEigenValues() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
-        Assertions.assertTrue(eigenDecomp.hasComplexEigenvalues());
+        assertTrue(eigenDecomp.hasComplexEigenvalues());
     }
 
     @Test
-    public void testGetDeterminant() {
+    void testGetDeterminant() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
-        Assertions.assertEquals(5, eigenDecomp.getDeterminant(), 1.0e-12);
+        assertEquals(5, eigenDecomp.getDeterminant(), 1.0e-12);
     }
 
     @Test
-    public void testGetEigenVectors() {
+    void testGetEigenVectors() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         checkScaledVector(eigenDecomp.getEigenvector(0), buildVector(new Complex(1), new Complex(1, -1)), 1.0e-15);
@@ -76,7 +80,7 @@ public class ComplexEigenDecompositionTest {
     }
 
     @Test
-    public void testEigenValuesAndVectors() {
+    void testEigenValuesAndVectors() {
         final RealMatrix aR = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         final ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(aR);
         final FieldMatrix<Complex> aC = toComplex(aR);
@@ -89,40 +93,40 @@ public class ComplexEigenDecompositionTest {
     }
 
     @Test
-    public void testGetV() {
+    void testGetV() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         FieldMatrix<Complex> V = eigenDecomp.getV();        
-        Assertions.assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(0, 1)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 0)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(0, 1)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 0)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).norm(), 1.0e-15);
     }
 
     @Test
-    public void testGetVT() {
+    void testGetVT() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         FieldMatrix<Complex> V = eigenDecomp.getVT();
-        Assertions.assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(1, 0)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(1).subtract(V.getEntry(0, 1)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(1, 0)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(1).subtract(V.getEntry(0, 1)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).norm(), 1.0e-15);
     }
 
     @Test
-    public void testGetD() {
+    void testGetD() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         FieldMatrix<Complex> D = eigenDecomp.getD();
-        Assertions.assertEquals(0.0, new Complex(1, +2).subtract(D.getEntry(0, 0)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, new Complex(1, -2).subtract(D.getEntry(1, 1)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(1, +2).subtract(D.getEntry(0, 0)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).norm(), 1.0e-15);
+        assertEquals(0.0, new Complex(1, -2).subtract(D.getEntry(1, 1)).norm(), 1.0e-15);
     }
 
     @Test
-    public void testEqualEigenvalues() {
+    void testEqualEigenvalues() {
 
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
             { 1.0, 0.0, 0.0 },
@@ -131,9 +135,9 @@ public class ComplexEigenDecompositionTest {
         });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
 
-        Assertions.assertEquals(3, eigenDecomp.getEigenvalues().length);
+        assertEquals(3, eigenDecomp.getEigenvalues().length);
         for (Complex z : eigenDecomp.getEigenvalues()) {
-            Assertions.assertEquals(Complex.ONE, z);
+            assertEquals(Complex.ONE, z);
         }
 
         checkScaledVector(buildVector(Complex.ONE,  Complex.ZERO, Complex.ZERO), eigenDecomp.getEigenvector(0), 1.0e-12);
@@ -143,7 +147,7 @@ public class ComplexEigenDecompositionTest {
     }
 
     @Test
-    public void testDefinition() {
+    void testDefinition() {
 
         final RealMatrix aR = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(aR);
@@ -166,7 +170,7 @@ public class ComplexEigenDecompositionTest {
     }
 
     @Test
-    public void testIssue249() {
+    void testIssue249() {
 
         // the characteristic polynomial of this matrix is (1-λ)³,
         // so the matrix has a single eigen value λ=1 and algebraic multiplicity 3.
@@ -184,10 +188,10 @@ public class ComplexEigenDecompositionTest {
                   ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK,
                   (c1, c2) -> Double.compare(c2.norm(), c1.norm()));
 
-        Assertions.assertEquals(3, ced.getEigenvalues().length);
-        Assertions.assertEquals(1.0, ced.getEigenvector(0).dotProduct(ced.getEigenvector(0)).norm(), 1.0e-15);
-        Assertions.assertEquals(1.0, ced.getEigenvector(1).dotProduct(ced.getEigenvector(1)).norm(), 1.0e-15);
-        Assertions.assertEquals(0.0, ced.getEigenvector(2).dotProduct(ced.getEigenvector(2)).norm(), 1.0e-15);
+        assertEquals(3, ced.getEigenvalues().length);
+        assertEquals(1.0, ced.getEigenvector(0).dotProduct(ced.getEigenvector(0)).norm(), 1.0e-15);
+        assertEquals(1.0, ced.getEigenvector(1).dotProduct(ced.getEigenvector(1)).norm(), 1.0e-15);
+        assertEquals(0.0, ced.getEigenvector(2).dotProduct(ced.getEigenvector(2)).norm(), 1.0e-15);
 
     }
 
@@ -211,7 +215,7 @@ public class ComplexEigenDecompositionTest {
 
     private void checkScaledVector(final FieldVector<Complex> v, final FieldVector<Complex> reference, final double tol) {
 
-        Assertions.assertEquals(reference.getDimension(), v.getDimension());
+        assertEquals(reference.getDimension(), v.getDimension());
 
         // find the global scaling factor, using the maximum reference component
         Complex scale = Complex.NaN;
@@ -230,19 +234,19 @@ public class ComplexEigenDecompositionTest {
             final Complex ri = reference.getEntry(i);
             final Complex vi = v.getEntry(i);
             final Complex si = vi.multiply(scale);
-            Assertions.assertEquals(ri.getReal(), si.getReal(), tol, "" + (ri.getReal() - si.getReal()));
-            Assertions.assertEquals(ri.getImaginary(), si.getImaginary(), tol, "" + (ri.getImaginary() - si.getImaginary()));
+            assertEquals(ri.getReal(), si.getReal(), tol, "" + (ri.getReal() - si.getReal()));
+            assertEquals(ri.getImaginary(), si.getImaginary(), tol, "" + (ri.getImaginary() - si.getImaginary()));
         }
 
     }
 
     private void checkMatrix(final FieldMatrix<Complex> m, final FieldMatrix<Complex> reference, final double tol) {
-        Assertions.assertEquals(reference.getRowDimension(), m.getRowDimension());
-        Assertions.assertEquals(reference.getColumnDimension(), m.getColumnDimension());
+        assertEquals(reference.getRowDimension(), m.getRowDimension());
+        assertEquals(reference.getColumnDimension(), m.getColumnDimension());
         for (int i = 0; i < reference.getRowDimension(); ++i) {
             for (int j = 0; j < reference.getColumnDimension(); ++j) {
-                Assertions.assertEquals(reference.getEntry(i, j).getReal(), m.getEntry(i, j).getReal(), tol, "" + (reference.getEntry(i, j).getReal() - m.getEntry(i, j).getReal()));
-                Assertions.assertEquals(reference.getEntry(i, j).getImaginary(), m.getEntry(i, j).getImaginary(), tol, "" + (reference.getEntry(i, j).getImaginary() - m.getEntry(i, j).getImaginary()));
+                assertEquals(reference.getEntry(i, j).getReal(), m.getEntry(i, j).getReal(), tol, "" + (reference.getEntry(i, j).getReal() - m.getEntry(i, j).getReal()));
+                assertEquals(reference.getEntry(i, j).getImaginary(), m.getEntry(i, j).getImaginary(), tol, "" + (reference.getEntry(i, j).getImaginary() - m.getEntry(i, j).getImaginary()));
             }
         }
     }

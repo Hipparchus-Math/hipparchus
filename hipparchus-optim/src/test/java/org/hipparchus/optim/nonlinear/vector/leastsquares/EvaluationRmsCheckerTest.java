@@ -20,15 +20,17 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /** Unit tests for {@link EvaluationRmsChecker}. */
-public class EvaluationRmsCheckerTest {
+class EvaluationRmsCheckerTest {
 
     /** check {@link ConvergenceChecker#converged(int, Object, Object)}. */
     @Test
-    public void testConverged() {
+    void testConverged() {
         //setup
         ConvergenceChecker<Evaluation> checker = new EvaluationRmsChecker(0.1, 1);
         Evaluation e200 = mockEvaluation(200);
@@ -36,13 +38,13 @@ public class EvaluationRmsCheckerTest {
 
         //action + verify
         //just matches rel tol
-        Assertions.assertTrue(checker.converged(0, e200, mockEvaluation(210)));
+        assertTrue(checker.converged(0, e200, mockEvaluation(210)));
         //just matches abs tol
-        Assertions.assertTrue(checker.converged(0, e1, mockEvaluation(1.9)));
+        assertTrue(checker.converged(0, e1, mockEvaluation(1.9)));
         //matches both
-        Assertions.assertTrue(checker.converged(0, e1, mockEvaluation(1.01)));
+        assertTrue(checker.converged(0, e1, mockEvaluation(1.01)));
         //matches neither
-        Assertions.assertFalse(checker.converged(0, e200, mockEvaluation(300)));
+        assertFalse(checker.converged(0, e200, mockEvaluation(300)));
     }
 
     /**

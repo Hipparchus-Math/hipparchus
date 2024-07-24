@@ -23,16 +23,21 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.VariationalEquation.MismatchedEquations;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class VariationalEquationTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class VariationalEquationTest {
 
     @Test
-    public void testLowAccuracyExternalDifferentiation()
+    void testLowAccuracyExternalDifferentiation()
         throws MathIllegalArgumentException, MathIllegalStateException {
         // this test does not really test VariationalEquation,
         // it only shows that WITHOUT this class, attempting to recover
@@ -57,14 +62,14 @@ public class VariationalEquationTest {
             residualsP0.addValue((yP[0] - y[0]) / hP - brusselator.dYdP0());
             residualsP1.addValue((yP[1] - y[1]) / hP - brusselator.dYdP1());
         }
-        Assertions.assertTrue((residualsP0.getMax() - residualsP0.getMin()) > 500);
-        Assertions.assertTrue(residualsP0.getStandardDeviation() > 30);
-        Assertions.assertTrue((residualsP1.getMax() - residualsP1.getMin()) > 700);
-        Assertions.assertTrue(residualsP1.getStandardDeviation() > 40);
+        assertTrue((residualsP0.getMax() - residualsP0.getMin()) > 500);
+        assertTrue(residualsP0.getStandardDeviation() > 30);
+        assertTrue((residualsP1.getMax() - residualsP1.getMin()) > 700);
+        assertTrue(residualsP1.getStandardDeviation() > 40);
     }
 
     @Test
-    public void testHighAccuracyExternalDifferentiation()
+    void testHighAccuracyExternalDifferentiation()
         throws MathIllegalArgumentException, MathIllegalStateException {
         ODEIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -81,44 +86,44 @@ public class VariationalEquationTest {
             residualsP0.addValue((yP[0] - y[0]) / hP - brusselator.dYdP0());
             residualsP1.addValue((yP[1] - y[1]) / hP - brusselator.dYdP1());
         }
-        Assertions.assertTrue((residualsP0.getMax() - residualsP0.getMin()) > 0.02);
-        Assertions.assertTrue((residualsP0.getMax() - residualsP0.getMin()) < 0.03);
-        Assertions.assertTrue(residualsP0.getStandardDeviation() > 0.003);
-        Assertions.assertTrue(residualsP0.getStandardDeviation() < 0.004);
-        Assertions.assertTrue((residualsP1.getMax() - residualsP1.getMin()) > 0.04);
-        Assertions.assertTrue((residualsP1.getMax() - residualsP1.getMin()) < 0.05);
-        Assertions.assertTrue(residualsP1.getStandardDeviation() > 0.007);
-        Assertions.assertTrue(residualsP1.getStandardDeviation() < 0.008);
+        assertTrue((residualsP0.getMax() - residualsP0.getMin()) > 0.02);
+        assertTrue((residualsP0.getMax() - residualsP0.getMin()) < 0.03);
+        assertTrue(residualsP0.getStandardDeviation() > 0.003);
+        assertTrue(residualsP0.getStandardDeviation() < 0.004);
+        assertTrue((residualsP1.getMax() - residualsP1.getMin()) > 0.04);
+        assertTrue((residualsP1.getMax() - residualsP1.getMin()) < 0.05);
+        assertTrue(residualsP1.getStandardDeviation() > 0.007);
+        assertTrue(residualsP1.getStandardDeviation() < 0.008);
     }
 
     @Test
-    public void testWrongParameterName() {
+    void testWrongParameterName() {
         final String name = "an-unknown-parameter";
         try {
             ParamBrusselator brusselator = new ParamBrusselator(2.9);
             brusselator.setParameter(name, 3.0);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException upe) {
-            Assertions.assertEquals(LocalizedODEFormats.UNKNOWN_PARAMETER, upe.getSpecifier());
-            Assertions.assertEquals(name, upe.getParts()[0]);
+            assertEquals(LocalizedODEFormats.UNKNOWN_PARAMETER, upe.getSpecifier());
+            assertEquals(name, upe.getParts()[0]);
         }
     }
 
     @Test
-    public void testMismatchedEquations() {
+    void testMismatchedEquations() {
         try {
             ExpandableODE efode = new ExpandableODE(new ParamBrusselator(2.9));
             ODEJacobiansProvider jode = new Brusselator(2.9);
             new VariationalEquation(efode, jode);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (VariationalEquation.MismatchedEquations upe) {
-            Assertions.assertEquals(LocalizedODEFormats.UNMATCHED_ODE_IN_EXPANDED_SET,
+            assertEquals(LocalizedODEFormats.UNMATCHED_ODE_IN_EXPANDED_SET,
                                 upe.getSpecifier());
         }
     }
 
     @Test
-    public void testDefaultMethods() {
+    void testDefaultMethods() {
         final String name = "name";
         ODEJacobiansProvider jode = new ODEJacobiansProvider() {
             public int getDimension() {
@@ -131,22 +136,22 @@ public class VariationalEquationTest {
                 return null;
             }
         };
-        Assertions.assertFalse(jode.isSupported(name));
-        Assertions.assertTrue(jode.getParametersNames().isEmpty());
+        assertFalse(jode.isSupported(name));
+        assertTrue(jode.getParametersNames().isEmpty());
         try {
             double t = 0.0;
             double[] y = new double[] { 0.0 };
             jode.computeParameterJacobian(t, y, jode.computeDerivatives(t, y), name);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedODEFormats.UNKNOWN_PARAMETER, miae.getSpecifier());
-            Assertions.assertSame(name, miae.getParts()[0]);
+            assertEquals(LocalizedODEFormats.UNKNOWN_PARAMETER, miae.getSpecifier());
+            assertSame(name, miae.getParts()[0]);
         }
     }
 
     @Test
-    public void testInternalDifferentiation()
-                    throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+    void testInternalDifferentiation()
+        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
         AbstractIntegrator integ =
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
@@ -175,14 +180,14 @@ public class VariationalEquationTest {
             residualsP0.addValue(dZdP[0] - brusselator.dYdP0());
             residualsP1.addValue(dZdP[1] - brusselator.dYdP1());
         }
-        Assertions.assertTrue((residualsP0.getMax() - residualsP0.getMin()) < 0.02);
-        Assertions.assertTrue(residualsP0.getStandardDeviation() < 0.003);
-        Assertions.assertTrue((residualsP1.getMax() - residualsP1.getMin()) < 0.05);
-        Assertions.assertTrue(residualsP1.getStandardDeviation() < 0.01);
+        assertTrue((residualsP0.getMax() - residualsP0.getMin()) < 0.02);
+        assertTrue(residualsP0.getStandardDeviation() < 0.003);
+        assertTrue((residualsP1.getMax() - residualsP1.getMin()) < 0.05);
+        assertTrue(residualsP1.getStandardDeviation() < 0.01);
     }
 
     @Test
-    public void testAnalyticalDifferentiation()
+    void testAnalyticalDifferentiation()
         throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
@@ -206,14 +211,14 @@ public class VariationalEquationTest {
             residualsP0.addValue(dZdP[0] - brusselator.dYdP0());
             residualsP1.addValue(dZdP[1] - brusselator.dYdP1());
         }
-        Assertions.assertTrue((residualsP0.getMax() - residualsP0.getMin()) < 0.014);
-        Assertions.assertTrue(residualsP0.getStandardDeviation() < 0.003);
-        Assertions.assertTrue((residualsP1.getMax() - residualsP1.getMin()) < 0.05);
-        Assertions.assertTrue(residualsP1.getStandardDeviation() < 0.01);
+        assertTrue((residualsP0.getMax() - residualsP0.getMin()) < 0.014);
+        assertTrue(residualsP0.getStandardDeviation() < 0.003);
+        assertTrue((residualsP1.getMax() - residualsP1.getMin()) < 0.05);
+        assertTrue(residualsP1.getStandardDeviation() < 0.01);
     }
 
     @Test
-    public void testFinalResult()
+    void testFinalResult()
         throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
 
         AbstractIntegrator integ =
@@ -235,31 +240,31 @@ public class VariationalEquationTest {
         final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, t);
         y = finalState.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
-            Assertions.assertEquals(circle.exactY(t)[i], y[i], 1.0e-9);
+            assertEquals(circle.exactY(t)[i], y[i], 1.0e-9);
         }
 
         double[][] dydy0 = jacob.extractMainSetJacobian(finalState);
         for (int i = 0; i < dydy0.length; ++i) {
             for (int j = 0; j < dydy0[i].length; ++j) {
-                Assertions.assertEquals(circle.exactDyDy0(t)[i][j], dydy0[i][j], 1.0e-9);
+                assertEquals(circle.exactDyDy0(t)[i][j], dydy0[i][j], 1.0e-9);
             }
         }
         double[] dydcx = jacob.extractParameterJacobian(finalState, Circle.CX);
         for (int i = 0; i < dydcx.length; ++i) {
-            Assertions.assertEquals(circle.exactDyDcx(t)[i], dydcx[i], 1.0e-7);
+            assertEquals(circle.exactDyDcx(t)[i], dydcx[i], 1.0e-7);
         }
         double[] dydcy = jacob.extractParameterJacobian(finalState, Circle.CY);
         for (int i = 0; i < dydcy.length; ++i) {
-            Assertions.assertEquals(circle.exactDyDcy(t)[i], dydcy[i], 1.0e-7);
+            assertEquals(circle.exactDyDcy(t)[i], dydcy[i], 1.0e-7);
         }
         double[] dydom = jacob.extractParameterJacobian(finalState, Circle.OMEGA);
         for (int i = 0; i < dydom.length; ++i) {
-            Assertions.assertEquals(circle.exactDyDom(t)[i], dydom[i], 1.0e-7);
+            assertEquals(circle.exactDyDom(t)[i], dydom[i], 1.0e-7);
         }
     }
 
     @Test
-    public void testParameterizable()
+    void testParameterizable()
         throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
 
         AbstractIntegrator integ =
@@ -288,24 +293,24 @@ public class VariationalEquationTest {
         final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, t);
         y = finalState.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
-            Assertions.assertEquals(pcircle.exactY(t)[i], y[i], 1.0e-9);
+            assertEquals(pcircle.exactY(t)[i], y[i], 1.0e-9);
         }
 
         double[][] dydy0 = jacob.extractMainSetJacobian(finalState);
         for (int i = 0; i < dydy0.length; ++i) {
             for (int j = 0; j < dydy0[i].length; ++j) {
-                Assertions.assertEquals(pcircle.exactDyDy0(t)[i][j], dydy0[i][j], 5.0e-4);
+                assertEquals(pcircle.exactDyDy0(t)[i][j], dydy0[i][j], 5.0e-4);
             }
         }
 
         double[] dydp0 = jacob.extractParameterJacobian(finalState, ParameterizedCircle.CX);
         for (int i = 0; i < dydp0.length; ++i) {
-            Assertions.assertEquals(pcircle.exactDyDcx(t)[i], dydp0[i], 5.0e-4);
+            assertEquals(pcircle.exactDyDcx(t)[i], dydp0[i], 5.0e-4);
         }
 
         double[] dydp1 =  jacob.extractParameterJacobian(finalState, ParameterizedCircle.OMEGA);
         for (int i = 0; i < dydp1.length; ++i) {
-            Assertions.assertEquals(pcircle.exactDyDom(t)[i], dydp1[i], 1.0e-2);
+            assertEquals(pcircle.exactDyDom(t)[i], dydp1[i], 1.0e-2);
         }
     }
 

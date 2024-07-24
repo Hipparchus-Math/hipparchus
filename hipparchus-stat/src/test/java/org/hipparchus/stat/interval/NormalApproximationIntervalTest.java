@@ -21,13 +21,14 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for the NormalApproximationInterval.
  */
-public class NormalApproximationIntervalTest extends BinomialProportionAbstractTest {
+class NormalApproximationIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
     protected BinomialProportionMethod getBinomialProportionMethod() {
@@ -35,10 +36,10 @@ public class NormalApproximationIntervalTest extends BinomialProportionAbstractT
     }
 
     @Test
-    public void testStandardInterval() {
+    void testStandardInterval() {
         ConfidenceInterval confidenceInterval = createStandardTestInterval();
-        Assertions.assertEquals(0.07793197, confidenceInterval.getLowerBound(), 1E-5);
-        Assertions.assertEquals(0.1220680, confidenceInterval.getUpperBound(), 1E-5);
+        assertEquals(0.07793197, confidenceInterval.getLowerBound(), 1E-5);
+        assertEquals(0.1220680, confidenceInterval.getUpperBound(), 1E-5);
     }
 
 }

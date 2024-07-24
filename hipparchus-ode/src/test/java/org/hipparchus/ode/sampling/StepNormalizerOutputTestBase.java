@@ -24,11 +24,12 @@ import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 /** Base class for step normalizer output tests. */
 public abstract class StepNormalizerOutputTestBase
@@ -238,7 +239,7 @@ public abstract class StepNormalizerOutputTestBase
         for(int i = 0; i < actual.length; i++) {
             actual[i] = output.get(i);
         }
-        Assertions.assertArrayEquals(expected, actual, 1e-5);
+        assertArrayEquals(expected, actual, 1e-5);
     }
 
     /** {@inheritDoc} */

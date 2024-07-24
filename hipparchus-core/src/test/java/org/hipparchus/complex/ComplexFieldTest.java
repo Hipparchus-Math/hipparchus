@@ -24,47 +24,50 @@ package org.hipparchus.complex;
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.util.Binary64Field;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ComplexFieldTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class ComplexFieldTest {
 
     @Test
-    public void testZero() {
-        Assertions.assertEquals(Complex.ZERO, ComplexField.getInstance().getZero());
+    void testZero() {
+        assertEquals(Complex.ZERO, ComplexField.getInstance().getZero());
     }
 
     @Test
-    public void testOne() {
-        Assertions.assertEquals(Complex.ONE, ComplexField.getInstance().getOne());
+    void testOne() {
+        assertEquals(Complex.ONE, ComplexField.getInstance().getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testMap() {
+    void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
             map.put(new Complex(i).getField(), 0);
         }
         // there should be only one field for all values
-        Assertions.assertEquals(1, map.size());
-        Assertions.assertEquals(ComplexField.getInstance(), map.entrySet().iterator().next().getKey());
-        Assertions.assertNotEquals(ComplexField.getInstance(), Binary64Field.getInstance());
+        assertEquals(1, map.size());
+        assertEquals(ComplexField.getInstance(), map.entrySet().iterator().next().getKey());
+        assertNotEquals(ComplexField.getInstance(), Binary64Field.getInstance());
     }
 
     @Test
-    public void testRunTimeClass() {
-        Assertions.assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
+    void testRunTimeClass() {
+        assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         // deserializing the singleton should give the singleton itself back
         ComplexField field = ComplexField.getInstance();
-        Assertions.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 
 }

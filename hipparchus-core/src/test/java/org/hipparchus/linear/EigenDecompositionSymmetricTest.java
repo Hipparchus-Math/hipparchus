@@ -28,14 +28,17 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class EigenDecompositionSymmetricTest {
 
@@ -43,16 +46,16 @@ public class EigenDecompositionSymmetricTest {
     private RealMatrix matrix;
 
     @Test
-    public void testDimension1() {
+    void testDimension1() {
         RealMatrix matrix =
             MatrixUtils.createRealMatrix(new double[][] { { 1.5 } });
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertEquals(1.5, ed.getEigenvalue(0), 1.0e-15);
+        assertEquals(1.5, ed.getEigenvalue(0), 1.0e-15);
     }
 
     @Test
-    public void testDimension2() {
+    void testDimension2() {
         RealMatrix matrix =
             MatrixUtils.createRealMatrix(new double[][] {
                     { 59.0, 12.0 },
@@ -60,12 +63,12 @@ public class EigenDecompositionSymmetricTest {
             });
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertEquals(75.0, ed.getEigenvalue(0), 1.0e-15);
-        Assertions.assertEquals(50.0, ed.getEigenvalue(1), 1.0e-15);
+        assertEquals(75.0, ed.getEigenvalue(0), 1.0e-15);
+        assertEquals(50.0, ed.getEigenvalue(1), 1.0e-15);
     }
 
     @Test
-    public void testDimension3() {
+    void testDimension3() {
         RealMatrix matrix =
             MatrixUtils.createRealMatrix(new double[][] {
                                    {  39632.0, -4824.0, -16560.0 },
@@ -74,13 +77,13 @@ public class EigenDecompositionSymmetricTest {
                                });
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertEquals(50000.0, ed.getEigenvalue(0), 3.0e-11);
-        Assertions.assertEquals(12500.0, ed.getEigenvalue(1), 3.0e-11);
-        Assertions.assertEquals( 3125.0, ed.getEigenvalue(2), 3.0e-11);
+        assertEquals(50000.0, ed.getEigenvalue(0), 3.0e-11);
+        assertEquals(12500.0, ed.getEigenvalue(1), 3.0e-11);
+        assertEquals( 3125.0, ed.getEigenvalue(2), 3.0e-11);
     }
 
     @Test
-    public void testDimension3MultipleRoot() {
+    void testDimension3MultipleRoot() {
         RealMatrix matrix =
             MatrixUtils.createRealMatrix(new double[][] {
                     {  5,   10,   15 },
@@ -89,15 +92,15 @@ public class EigenDecompositionSymmetricTest {
             });
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertEquals(70.0, ed.getEigenvalue(0), 3.0e-11);
-        Assertions.assertEquals(0.0,  ed.getEigenvalue(1), 3.0e-11);
-        Assertions.assertEquals(0.0,  ed.getEigenvalue(2), 3.0e-11);
-        Assertions.assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
-        Assertions.assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
+        assertEquals(70.0, ed.getEigenvalue(0), 3.0e-11);
+        assertEquals(0.0,  ed.getEigenvalue(1), 3.0e-11);
+        assertEquals(0.0,  ed.getEigenvalue(2), 3.0e-11);
+        assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
+        assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
     }
 
     @Test
-    public void testDimension4WithSplit() {
+    void testDimension4WithSplit() {
         RealMatrix matrix =
             MatrixUtils.createRealMatrix(new double[][] {
                                    {  0.784, -0.288,  0.000,  0.000 },
@@ -107,16 +110,16 @@ public class EigenDecompositionSymmetricTest {
                                });
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertEquals(1.0, ed.getEigenvalue(0), 1.0e-15);
-        Assertions.assertEquals(0.4, ed.getEigenvalue(1), 1.0e-15);
-        Assertions.assertEquals(0.2, ed.getEigenvalue(2), 1.0e-15);
-        Assertions.assertEquals(0.1, ed.getEigenvalue(3), 1.0e-15);
-        Assertions.assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
-        Assertions.assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
+        assertEquals(1.0, ed.getEigenvalue(0), 1.0e-15);
+        assertEquals(0.4, ed.getEigenvalue(1), 1.0e-15);
+        assertEquals(0.2, ed.getEigenvalue(2), 1.0e-15);
+        assertEquals(0.1, ed.getEigenvalue(3), 1.0e-15);
+        assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
+        assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
     }
 
     @Test
-    public void testDimension4WithoutSplit() {
+    void testDimension4WithoutSplit() {
         RealMatrix matrix =
             MatrixUtils.createRealMatrix(new double[][] {
                                    {  0.5608, -0.2016,  0.1152, -0.2976 },
@@ -126,16 +129,16 @@ public class EigenDecompositionSymmetricTest {
                                });
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertEquals(1.0, ed.getEigenvalue(0), 1.0e-15);
-        Assertions.assertEquals(0.4, ed.getEigenvalue(1), 1.0e-15);
-        Assertions.assertEquals(0.2, ed.getEigenvalue(2), 1.0e-15);
-        Assertions.assertEquals(0.1, ed.getEigenvalue(3), 1.0e-15);
-        Assertions.assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
-        Assertions.assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
+        assertEquals(1.0, ed.getEigenvalue(0), 1.0e-15);
+        assertEquals(0.4, ed.getEigenvalue(1), 1.0e-15);
+        assertEquals(0.2, ed.getEigenvalue(2), 1.0e-15);
+        assertEquals(0.1, ed.getEigenvalue(3), 1.0e-15);
+        assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
+        assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
     }
 
     @Test
-    public void testMath308() {
+    void testMath308() {
 
         double[] mainTridiagonal = {
             22.330154644539597, 46.65485522478641, 17.393672330044705, 54.46687435351116, 80.17800767709437
@@ -162,16 +165,16 @@ public class EigenDecompositionSymmetricTest {
 
         double[] eigenValues = decomposition.getEigenvalues();
         for (int i = 0; i < refEigenValues.length; ++i) {
-            Assertions.assertEquals(refEigenValues[i], eigenValues[i], 1.0e-5);
-            Assertions.assertEquals(0, refEigenVectors[i].subtract(decomposition.getEigenvector(i)).getNorm(), 2.0e-7);
+            assertEquals(refEigenValues[i], eigenValues[i], 1.0e-5);
+            assertEquals(0, refEigenVectors[i].subtract(decomposition.getEigenvector(i)).getNorm(), 2.0e-7);
         }
 
-        Assertions.assertEquals(mainTridiagonal.length, decomposition.getSolver().getRowDimension());
-        Assertions.assertEquals(mainTridiagonal.length, decomposition.getSolver().getColumnDimension());
+        assertEquals(mainTridiagonal.length, decomposition.getSolver().getRowDimension());
+        assertEquals(mainTridiagonal.length, decomposition.getSolver().getColumnDimension());
     }
 
     @Test
-    public void testMathpbx02() {
+    void testMathpbx02() {
 
         double[] mainTridiagonal = {
               7484.860960227216, 18405.28129035345, 13855.225609560746,
@@ -207,18 +210,18 @@ public class EigenDecompositionSymmetricTest {
 
         double[] eigenValues = decomposition.getEigenvalues();
         for (int i = 0; i < refEigenValues.length; ++i) {
-            Assertions.assertEquals(refEigenValues[i], eigenValues[i], 1.0e-3);
+            assertEquals(refEigenValues[i], eigenValues[i], 1.0e-3);
             if (refEigenVectors[i].dotProduct(decomposition.getEigenvector(i)) < 0) {
-                Assertions.assertEquals(0, refEigenVectors[i].add(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
+                assertEquals(0, refEigenVectors[i].add(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
             } else {
-                Assertions.assertEquals(0, refEigenVectors[i].subtract(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
+                assertEquals(0, refEigenVectors[i].subtract(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
             }
         }
 
     }
 
     @Test
-    public void testMathpbx03() {
+    void testMathpbx03() {
 
         double[] mainTridiagonal = {
             1809.0978259647177,3395.4763425956166,1832.1894584712693,3804.364873592377,
@@ -252,11 +255,11 @@ public class EigenDecompositionSymmetricTest {
 
         double[] eigenValues = decomposition.getEigenvalues();
         for (int i = 0; i < refEigenValues.length; ++i) {
-            Assertions.assertEquals(refEigenValues[i], eigenValues[i], 1.0e-4);
+            assertEquals(refEigenValues[i], eigenValues[i], 1.0e-4);
             if (refEigenVectors[i].dotProduct(decomposition.getEigenvector(i)) < 0) {
-                Assertions.assertEquals(0, refEigenVectors[i].add(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
+                assertEquals(0, refEigenVectors[i].add(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
             } else {
-                Assertions.assertEquals(0, refEigenVectors[i].subtract(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
+                assertEquals(0, refEigenVectors[i].subtract(decomposition.getEigenvector(i)).getNorm(), 1.0e-5);
             }
         }
 
@@ -264,7 +267,7 @@ public class EigenDecompositionSymmetricTest {
 
     /** test a matrix already in tridiagonal form. */
     @Test
-    public void testTridiagonal() {
+    void testTridiagonal() {
         Random r = new Random(4366663527842l);
         double[] ref = new double[30];
         for (int i = 0; i < ref.length; ++i) {
@@ -280,53 +283,53 @@ public class EigenDecompositionSymmetricTest {
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(t.getMainDiagonalRef(), t.getSecondaryDiagonalRef());
         double[] eigenValues = ed.getEigenvalues();
-        Assertions.assertEquals(ref.length, eigenValues.length);
+        assertEquals(ref.length, eigenValues.length);
         for (int i = 0; i < ref.length; ++i) {
-            Assertions.assertEquals(ref[ref.length - i - 1], eigenValues[i], 2.0e-14);
+            assertEquals(ref[ref.length - i - 1], eigenValues[i], 2.0e-14);
         }
 
     }
 
     @Test
-    public void testGitHubIssue30() {
+    void testGitHubIssue30() {
         RealMatrix m = MatrixUtils.createRealMatrix(new double[][] {
             { 23473.684554963584, 4273.093076392109 },
             { 4273.093076392048,  4462.13956661408  }
         });
         EigenDecompositionSymmetric ed = new EigenDecompositionSymmetric(m, 1.0e-13, true);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             ed.getV().multiply(ed.getD()).multiply(ed.getVT()).subtract(m).getNorm1(),
                             1.0e-10);
     }
 
     /** test dimensions */
     @Test
-    public void testDimensions() {
+    void testDimensions() {
         final int m = matrix.getRowDimension();
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertEquals(m, ed.getV().getRowDimension());
-        Assertions.assertEquals(m, ed.getV().getColumnDimension());
-        Assertions.assertEquals(m, ed.getD().getColumnDimension());
-        Assertions.assertEquals(m, ed.getD().getColumnDimension());
-        Assertions.assertEquals(m, ed.getVT().getRowDimension());
-        Assertions.assertEquals(m, ed.getVT().getColumnDimension());
+        assertEquals(m, ed.getV().getRowDimension());
+        assertEquals(m, ed.getV().getColumnDimension());
+        assertEquals(m, ed.getD().getColumnDimension());
+        assertEquals(m, ed.getD().getColumnDimension());
+        assertEquals(m, ed.getVT().getRowDimension());
+        assertEquals(m, ed.getVT().getColumnDimension());
     }
 
     /** test eigenvalues */
     @Test
-    public void testEigenvalues() {
+    void testEigenvalues() {
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
         double[] eigenValues = ed.getEigenvalues();
-        Assertions.assertEquals(refValues.length, eigenValues.length);
+        assertEquals(refValues.length, eigenValues.length);
         for (int i = 0; i < refValues.length; ++i) {
-            Assertions.assertEquals(refValues[i], eigenValues[i], 3.0e-15);
+            assertEquals(refValues[i], eigenValues[i], 3.0e-15);
         }
     }
 
     @Test
-    public void testSymmetric() {
+    void testSymmetric() {
         RealMatrix symmetric = MatrixUtils.createRealMatrix(new double[][] {
                 {4, 1, 1},
                 {1, 2, 3},
@@ -341,11 +344,11 @@ public class EigenDecompositionSymmetricTest {
         RealMatrix     vT = ed.getVT();
 
         double norm = v.multiply(d).multiply(vT).subtract(symmetric).getNorm1();
-        Assertions.assertEquals(0, norm, 6.0e-13);
+        assertEquals(0, norm, 6.0e-13);
     }
 
     @Test
-    public void testSquareRoot() {
+    void testSquareRoot() {
         final double[][] data = {
             { 33, 24,  7 },
             { 24, 57, 11 },
@@ -361,13 +364,13 @@ public class EigenDecompositionSymmetricTest {
         final int dim = data.length;
         for (int r = 0; r < dim; r++) {
             for (int c = 0; c < dim; c++) {
-                Assertions.assertEquals(data[r][c], m.getEntry(r, c), 1e-13, "m[" + r + "][" + c + "]");
+                assertEquals(data[r][c], m.getEntry(r, c), 1e-13, "m[" + r + "][" + c + "]");
             }
         }
     }
 
     @Test
-    public void testSquareRootNonSymmetric() {
+    void testSquareRootNonSymmetric() {
         assertThrows(MathRuntimeException.class, () -> {
             final double[][] data = {
                 {1, 2, 4},
@@ -382,7 +385,7 @@ public class EigenDecompositionSymmetricTest {
     }
 
     @Test
-    public void testSquareRootNonPositiveDefinite() {
+    void testSquareRootNonPositiveDefinite() {
         assertThrows(MathRuntimeException.class, () -> {
             final double[][] data = {
                 {1, 2, 4},
@@ -397,70 +400,70 @@ public class EigenDecompositionSymmetricTest {
     }
 
     @Test
-    public void testIsNonSingularTinyOutOfOrderEigenvalue() {
+    void testIsNonSingularTinyOutOfOrderEigenvalue() {
         try {
             new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(new double[][] {
                 { 1e-13, 0 },
                 { 1,     1 },
             }));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NON_SYMMETRIC_MATRIX, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.NON_SYMMETRIC_MATRIX, miae.getSpecifier());
         }
     }
 
     /** test eigenvectors */
     @Test
-    public void testEigenvectors() {
+    void testEigenvectors() {
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
         for (int i = 0; i < matrix.getRowDimension(); ++i) {
             double lambda = ed.getEigenvalue(i);
             RealVector v  = ed.getEigenvector(i);
             RealVector mV = matrix.operate(v);
-            Assertions.assertEquals(0, mV.subtract(v.mapMultiplyToSelf(lambda)).getNorm(), 1.0e-13);
+            assertEquals(0, mV.subtract(v.mapMultiplyToSelf(lambda)).getNorm(), 1.0e-13);
         }
     }
 
     /** test A = VDVt */
     @Test
-    public void testAEqualVDVt() {
+    void testAEqualVDVt() {
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
         RealMatrix     v  = ed.getV();
         DiagonalMatrix d  = ed.getD();
         RealMatrix     vT = ed.getVT();
         double norm = v.multiply(d).multiply(vT).subtract(matrix).getNorm1();
-        Assertions.assertEquals(0, norm, 6.0e-13);
+        assertEquals(0, norm, 6.0e-13);
     }
 
     /** test that V is orthogonal */
     @Test
-    public void testVOrthogonal() {
+    void testVOrthogonal() {
         RealMatrix v = new EigenDecompositionSymmetric(matrix).getV();
         RealMatrix vTv = v.transposeMultiply(v);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(vTv.getRowDimension());
-        Assertions.assertEquals(0, vTv.subtract(id).getNorm1(), 2.0e-13);
+        assertEquals(0, vTv.subtract(id).getNorm1(), 2.0e-13);
     }
 
     /** test diagonal matrix */
     @Test
-    public void testDiagonal() {
+    void testDiagonal() {
         double[] diagonal = new double[] { -3.0, -2.0, 2.0, 5.0 };
         RealMatrix m = MatrixUtils.createRealDiagonalMatrix(diagonal);
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(m);
-        Assertions.assertEquals(diagonal[0], ed.getEigenvalue(3), 2.0e-15);
-        Assertions.assertEquals(diagonal[1], ed.getEigenvalue(2), 2.0e-15);
-        Assertions.assertEquals(diagonal[2], ed.getEigenvalue(1), 2.0e-15);
-        Assertions.assertEquals(diagonal[3], ed.getEigenvalue(0), 2.0e-15);
+        assertEquals(diagonal[0], ed.getEigenvalue(3), 2.0e-15);
+        assertEquals(diagonal[1], ed.getEigenvalue(2), 2.0e-15);
+        assertEquals(diagonal[2], ed.getEigenvalue(1), 2.0e-15);
+        assertEquals(diagonal[3], ed.getEigenvalue(0), 2.0e-15);
     }
 
     /**
      * Matrix with eigenvalues {8, -1, -1}
      */
     @Test
-    public void testRepeatedEigenvalue() {
+    void testRepeatedEigenvalue() {
         RealMatrix repeated = MatrixUtils.createRealMatrix(new double[][] {
                 {3,  2,  4},
                 {2,  0,  2},
@@ -476,7 +479,7 @@ public class EigenDecompositionSymmetricTest {
      * Matrix with eigenvalues {2, 0, 12}
      */
     @Test
-    public void testDistinctEigenvalues() {
+    void testDistinctEigenvalues() {
         RealMatrix distinct = MatrixUtils.createRealMatrix(new double[][] {
                 {3, 1, -4},
                 {1, 3, -4},
@@ -494,7 +497,7 @@ public class EigenDecompositionSymmetricTest {
      * Verifies operation on indefinite matrix
      */
     @Test
-    public void testZeroDivide() {
+    void testZeroDivide() {
         RealMatrix indefinite = MatrixUtils.createRealMatrix(new double [][] {
                 { 0.0, 1.0, -1.0 },
                 { 1.0, 1.0, 0.0 },
@@ -516,7 +519,7 @@ public class EigenDecompositionSymmetricTest {
      * Matrix with eigenvalues {2e-100, 0, 12e-100}
      */
     @Test
-    public void testTinyValues() {
+    void testTinyValues() {
         final double tiny = 1e-100;
         RealMatrix distinct = MatrixUtils.createRealMatrix(new double[][] {
                 {3, 1, -4},
@@ -536,7 +539,7 @@ public class EigenDecompositionSymmetricTest {
      * Verifies that a custom epsilon value is used when testing for singular
      */
     @Test
-    public void testCustomEpsilon() {
+    void testCustomEpsilon() {
         RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][] {
             {  1.76208738E-13, -9.37625373E-13, -1.94760551E-12, -2.56572222E-11, -7.30093964E-11, -1.98340808E-09 },
             { -9.37625373E-13,  5.00812620E-12,  1.06017205E-11,  1.40431472E-10,  3.62452521E-10,  1.05830167E-08 },
@@ -547,34 +550,34 @@ public class EigenDecompositionSymmetricTest {
         });
 
         final EigenDecompositionSymmetric defaultEd = new EigenDecompositionSymmetric(matrix);
-        Assertions.assertFalse(defaultEd.getSolver().isNonSingular());
+        assertFalse(defaultEd.getSolver().isNonSingular());
 
         final double customEpsilon = 1e-20;
         final EigenDecompositionSymmetric customEd = new EigenDecompositionSymmetric(matrix, customEpsilon, false);
-        Assertions.assertTrue(customEd.getSolver().isNonSingular());
-        Assertions.assertEquals(customEpsilon, customEd.getEpsilon(), 1.0e-25);
+        assertTrue(customEd.getSolver().isNonSingular());
+        assertEquals(customEpsilon, customEd.getEpsilon(), 1.0e-25);
     }
 
     @Test
-    public void testSingular() {
+    void testSingular() {
         final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] { { 1, 0 }, { 0, 0 } });
         DecompositionSolver solver = new EigenDecompositionSymmetric(m).getSolver();
         try {
             solver.solve(new ArrayRealVector(new double[] { 1.0, 1.0 }));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
         }
         try {
             solver.solve(new Array2DRowRealMatrix(new double[][] { { 1.0, 1.0 }, { 1.0, 2.0 } }));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+            assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
         }
     }
 
     @Test
-    public void testIncreasingOrder() {
+    void testIncreasingOrder() {
 
         final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] {
             { 81.0, 63.0, 55.0, 49.0, 0.0, 0.0},
@@ -589,12 +592,12 @@ public class EigenDecompositionSymmetricTest {
                                                                          EigenDecompositionSymmetric.DEFAULT_EPSILON,
                                                                          false);
 
-        Assertions.assertEquals(  0.0,               ed.getD().getEntry(0, 0), 1.0e-14);
-        Assertions.assertEquals(  0.0,               ed.getD().getEntry(1, 1), 1.0e-14);
-        Assertions.assertEquals(  4.793253233672134, ed.getD().getEntry(2, 2), 1.0e-14);
-        Assertions.assertEquals(  7.429392849462756, ed.getD().getEntry(3, 3), 1.0e-14);
-        Assertions.assertEquals( 36.43053556404571,  ed.getD().getEntry(4, 4), 1.0e-14);
-        Assertions.assertEquals(279.34681835281935,  ed.getD().getEntry(5, 5), 1.0e-14);
+        assertEquals(  0.0,               ed.getD().getEntry(0, 0), 1.0e-14);
+        assertEquals(  0.0,               ed.getD().getEntry(1, 1), 1.0e-14);
+        assertEquals(  4.793253233672134, ed.getD().getEntry(2, 2), 1.0e-14);
+        assertEquals(  7.429392849462756, ed.getD().getEntry(3, 3), 1.0e-14);
+        assertEquals( 36.43053556404571,  ed.getD().getEntry(4, 4), 1.0e-14);
+        assertEquals(279.34681835281935,  ed.getD().getEntry(5, 5), 1.0e-14);
 
     }
 
@@ -607,8 +610,8 @@ public class EigenDecompositionSymmetricTest {
                                     EigenDecompositionSymmetric ed, double tolerance) {
         double[] observed = ed.getEigenvalues();
         for (int i = 0; i < observed.length; i++) {
-            Assertions.assertTrue(isIncludedValue(observed[i], targetValues, tolerance));
-            Assertions.assertTrue(isIncludedValue(targetValues[i], observed, tolerance));
+            assertTrue(isIncludedValue(observed[i], targetValues, tolerance));
+            assertTrue(isIncludedValue(targetValues[i], observed, tolerance));
         }
     }
 
@@ -637,7 +640,7 @@ public class EigenDecompositionSymmetricTest {
      */
     protected void checkEigenVector(double[] eigenVector,
                                     EigenDecompositionSymmetric ed, double tolerance) {
-        Assertions.assertTrue(isIncludedColumn(eigenVector, ed.getV(), tolerance));
+        assertTrue(isIncludedColumn(eigenVector, ed.getV(), tolerance));
     }
 
     /**
@@ -671,7 +674,7 @@ public class EigenDecompositionSymmetricTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         refValues = new double[] {
                 2.003, 2.002, 2.001, 1.001, 1.000, 0.001
         };
@@ -679,7 +682,7 @@ public class EigenDecompositionSymmetricTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         refValues = null;
         matrix    = null;
     }

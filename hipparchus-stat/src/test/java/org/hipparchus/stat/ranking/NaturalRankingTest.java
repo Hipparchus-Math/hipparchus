@@ -25,17 +25,17 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
  * Test cases for NaturalRanking class
  *
  */
-public class NaturalRankingTest {
+class NaturalRankingTest {
 
     private final double[] exampleData = { 20, 17, 30, 42.3, 17, 50,
             Double.NaN, Double.NEGATIVE_INFINITY, 17 };
@@ -46,174 +46,174 @@ public class NaturalRankingTest {
     private final double[] allSame = { 0, 0, 0, 0 };
 
     @Test
-    public void testDefault() { // Ties averaged, NaNs failed
+    void testDefault() { // Ties averaged, NaNs failed
         NaturalRanking ranking = new NaturalRanking();
         double[] ranks;
 
         try {
             ranks = ranking.rank(exampleData);
-            Assertions.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
+            fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         ranks = ranking.rank(tiesFirst);
         double[] correctRanks = new double[] { 1.5, 1.5, 4, 3, 5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesLast);
         correctRanks = new double[] { 3.5, 3.5, 2, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
 
         try {
             ranks = ranking.rank(multipleNaNs);
-            Assertions.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
+            fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         ranks = ranking.rank(multipleTies);
         correctRanks = new double[] { 3, 2, 4.5, 4.5, 6.5, 6.5, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(allSame);
         correctRanks = new double[] { 2.5, 2.5, 2.5, 2.5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
     }
 
     @Test
-    public void testNaNsMaximalTiesMinimum() {
+    void testNaNsMaximalTiesMinimum() {
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.MAXIMAL, TiesStrategy.MINIMUM);
         double[] ranks = ranking.rank(exampleData);
         double[] correctRanks = { 5, 2, 6, 7, 2, 8, 9, 1, 2 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesFirst);
         correctRanks = new double[] { 1, 1, 4, 3, 5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesLast);
         correctRanks = new double[] { 3, 3, 2, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleNaNs);
         correctRanks = new double[] { 1, 2, 3, 3 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleTies);
         correctRanks = new double[] { 3, 2, 4, 4, 6, 6, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(allSame);
         correctRanks = new double[] { 1, 1, 1, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
     }
 
     @Test
-    public void testNaNsRemovedTiesSequential() {
+    void testNaNsRemovedTiesSequential() {
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.REMOVED,
                 TiesStrategy.SEQUENTIAL);
         double[] ranks = ranking.rank(exampleData);
         double[] correctRanks = { 5, 2, 6, 7, 3, 8, 1, 4 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesFirst);
         correctRanks = new double[] { 1, 2, 4, 3, 5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesLast);
         correctRanks = new double[] { 3, 4, 2, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleNaNs);
         correctRanks = new double[] { 1, 2 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleTies);
         correctRanks = new double[] { 3, 2, 4, 5, 6, 7, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(allSame);
         correctRanks = new double[] { 1, 2, 3, 4 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
     }
 
     @Test
-    public void testNaNsMinimalTiesMaximum() {
+    void testNaNsMinimalTiesMaximum() {
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.MINIMAL,
                 TiesStrategy.MAXIMUM);
         double[] ranks = ranking.rank(exampleData);
         double[] correctRanks = { 6, 5, 7, 8, 5, 9, 2, 2, 5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesFirst);
         correctRanks = new double[] { 2, 2, 4, 3, 5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesLast);
         correctRanks = new double[] { 4, 4, 2, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleNaNs);
         correctRanks = new double[] { 3, 4, 2, 2 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleTies);
         correctRanks = new double[] { 3, 2, 5, 5, 7, 7, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(allSame);
         correctRanks = new double[] { 4, 4, 4, 4 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
     }
 
     @Test
-    public void testNaNsMinimalTiesAverage() {
+    void testNaNsMinimalTiesAverage() {
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.MINIMAL);
         double[] ranks = ranking.rank(exampleData);
         double[] correctRanks = { 6, 4, 7, 8, 4, 9, 1.5, 1.5, 4 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesFirst);
         correctRanks = new double[] { 1.5, 1.5, 4, 3, 5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesLast);
         correctRanks = new double[] { 3.5, 3.5, 2, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleNaNs);
         correctRanks = new double[] { 3, 4, 1.5, 1.5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleTies);
         correctRanks = new double[] { 3, 2, 4.5, 4.5, 6.5, 6.5, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranks = ranking.rank(allSame);
         correctRanks = new double[] { 2.5, 2.5, 2.5, 2.5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
     }
 
     @Test
-    public void testNaNsFixedTiesRandom() {
+    void testNaNsFixedTiesRandom() {
         RandomGenerator randomGenerator = new JDKRandomGenerator();
         randomGenerator.setSeed(1000);
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.FIXED,
                 randomGenerator);
         double[] ranks = ranking.rank(exampleData);
         double[][] correctRanks = { {5}, {2, 3, 4}, {6}, {7}, {2, 3, 4}, {8}, {Double.NaN}, {1}, {2, 3, 4} };
-        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesFirst);
         correctRanks = new double[][] { {1, 2}, {1, 2}, {4}, {3}, {5} };
-        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesLast);
         correctRanks = new double[][] { {3, 4}, {3, 4}, {2}, {1} };
-        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleNaNs);
-        UnitTestUtils.assertEquals(new double[] { 1, 2, Double.NaN, Double.NaN }, ranks, 0d);
+        UnitTestUtils.customAssertEquals(new double[] { 1, 2, Double.NaN, Double.NaN }, ranks, 0d);
         ranks = ranking.rank(multipleTies);
         correctRanks = new double[][] { {3}, {2}, {4, 5}, {4, 5}, {6, 7}, {6, 7}, {1} };
-        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(allSame);
         correctRanks = new double[][] { {1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4} };
-        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertContains(correctRanks, ranks, 0d);
     }
 
     @Test
-    public void testNaNsAndInfs() {
+    void testNaNsAndInfs() {
         double[] data = { 0, Double.POSITIVE_INFINITY, Double.NaN,
                 Double.NEGATIVE_INFINITY };
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.MAXIMAL);
         double[] ranks = ranking.rank(data);
         double[] correctRanks = new double[] { 2, 3.5, 3.5, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
         ranking = new NaturalRanking(NaNStrategy.MINIMAL);
         ranks = ranking.rank(data);
         correctRanks = new double[] { 3, 4, 1.5, 1.5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.customAssertEquals(correctRanks, ranks, 0d);
     }
 
     @Test
-    public void testNaNsFailed() {
+    void testNaNsFailed() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] data = {0, Double.POSITIVE_INFINITY, Double.NaN, Double.NEGATIVE_INFINITY};
             NaturalRanking ranking = new NaturalRanking(NaNStrategy.FAILED);
@@ -222,11 +222,11 @@ public class NaturalRankingTest {
     }
 
     @Test
-    public void testNoNaNsFailed() {
+    void testNoNaNsFailed() {
         double[] data = { 1, 2, 3, 4 };
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.FAILED);
         double[] ranks = ranking.rank(data);
-        UnitTestUtils.assertEquals(data, ranks, 0d);
+        UnitTestUtils.customAssertEquals(data, ranks, 0d);
     }
 
 }

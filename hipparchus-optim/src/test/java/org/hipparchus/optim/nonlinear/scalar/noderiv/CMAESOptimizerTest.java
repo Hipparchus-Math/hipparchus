@@ -31,14 +31,15 @@ import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.RetryingTest;
 
 import java.util.Arrays;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for {@link CMAESOptimizer}.
@@ -49,7 +50,7 @@ public class CMAESOptimizerTest {
     static final int LAMBDA = 4 + (int)(3.*FastMath.log(DIM));
 
     @Test
-    public void testInitOutofbounds1() {
+    void testInitOutofbounds1() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, 3);
             double[] insigma = point(DIM, 0.3);
@@ -61,8 +62,9 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
         });
     }
+
     @Test
-    public void testInitOutofbounds2() {
+    void testInitOutofbounds2() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, -2);
             double[] insigma = point(DIM, 0.3);
@@ -76,7 +78,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testBoundariesDimensionMismatch() {
+    void testBoundariesDimensionMismatch() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, 0.5);
             double[] insigma = point(DIM, 0.3);
@@ -90,7 +92,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testInputSigmaNegative() {
+    void testInputSigmaNegative() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, 0.5);
             double[] insigma = point(DIM, -0.5);
@@ -104,7 +106,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testInputSigmaOutOfRange() {
+    void testInputSigmaOutOfRange() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, 0.5);
             double[] insigma = point(DIM, 1.1);
@@ -118,7 +120,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testInputSigmaDimensionMismatch() {
+    void testInputSigmaDimensionMismatch() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] startPoint = point(DIM, 0.5);
             double[] insigma = point(DIM + 1, 0.5);
@@ -168,7 +170,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testEllipse() {
+    void testEllipse() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -183,7 +185,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testElliRotated() {
+    void testElliRotated() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -198,7 +200,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testCigar() {
+    void testCigar() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -213,7 +215,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testCigarWithBoundaries() {
+    void testCigarWithBoundaries() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = boundaries(DIM, -1e100, Double.POSITIVE_INFINITY);
@@ -228,7 +230,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testTwoAxes() {
+    void testTwoAxes() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -243,7 +245,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testCigTab() {
+    void testCigTab() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.3);
         double[][] boundaries = null;
@@ -258,7 +260,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testSphere() {
+    void testSphere() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -273,7 +275,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testTablet() {
+    void testTablet() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -288,7 +290,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testDiffPow() {
+    void testDiffPow() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -303,7 +305,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testSsDiffPow() {
+    void testSsDiffPow() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -318,7 +320,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testAckley() {
+    void testAckley() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,1.0);
         double[][] boundaries = null;
@@ -333,7 +335,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testRastrigin() {
+    void testRastrigin() {
         double[] startPoint = point(DIM,0.1);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -348,7 +350,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testConstrainedRosen() {
+    void testConstrainedRosen() {
         double[] startPoint = point(DIM, 0.1);
         double[] insigma = point(DIM, 0.1);
         double[][] boundaries = boundaries(DIM, -1, 2);
@@ -363,7 +365,7 @@ public class CMAESOptimizerTest {
     }
 
     @Test
-    public void testDiagonalRosen() {
+    void testDiagonalRosen() {
         double[] startPoint = point(DIM,0.1);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -375,7 +377,7 @@ public class CMAESOptimizerTest {
      }
 
     @Test
-    public void testMath864() {
+    void testMath864() {
         final CMAESOptimizer optimizer
             = new CMAESOptimizer(30000, 0, true, 10,
                                  0, new MersenneTwister(), false, null);
@@ -398,7 +400,7 @@ public class CMAESOptimizerTest {
                                                    new CMAESOptimizer.Sigma(sigma),
                                                    new InitialGuess(start),
                                                    new SimpleBounds(lower, upper)).getPoint();
-        Assertions.assertTrue(result[0] <= upper[0],
+        assertTrue(result[0] <= upper[0],
                           "Out of bounds (" + result[0] + " > " + upper[0] + ")");
     }
 
@@ -406,7 +408,7 @@ public class CMAESOptimizerTest {
      * Cf. MATH-867
      */
     @Test
-    public void testFitAccuracyDependsOnBoundary() {
+    void testFitAccuracyDependsOnBoundary() {
         final CMAESOptimizer optimizer
             = new CMAESOptimizer(30000, 0, true, 10,
                                  0, new MersenneTwister(), false, null);
@@ -461,8 +463,8 @@ public class CMAESOptimizerTest {
 
         // The two values currently differ by a substantial amount, indicating that
         // the bounds definition can prevent reaching the optimum.
-        Assertions.assertEquals(resNoBound, resNearLo, 1e-3);
-        Assertions.assertEquals(resNoBound, resNearHi, 1e-3);
+        assertEquals(resNoBound, resNearLo, 1e-3);
+        assertEquals(resNoBound, resNearHi, 1e-3);
     }
 
     /**
@@ -515,12 +517,12 @@ public class CMAESOptimizerTest {
                            new CMAESOptimizer.PopulationSize(lambda));
 
         // System.out.println("sol=" + Arrays.toString(result.getPoint()));
-        Assertions.assertEquals(expected.getValue(), result.getValue(), fTol);
+        assertEquals(expected.getValue(), result.getValue(), fTol);
         for (int i = 0; i < dim; i++) {
-            Assertions.assertEquals(expected.getPoint()[i], result.getPoint()[i], pointTol);
+            assertEquals(expected.getPoint()[i], result.getPoint()[i], pointTol);
         }
 
-        Assertions.assertTrue(optim.getIterations() > 0);
+        assertTrue(optim.getIterations() > 0);
     }
 
     private static double[] point(int n, double value) {

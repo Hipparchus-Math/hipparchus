@@ -49,7 +49,7 @@ public class SumTest extends StorelessUnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         Sum sum = getUnivariateStatistic();
         assertEquals(0, sum.getResult(), 0);
         sum.increment(1);
@@ -63,7 +63,7 @@ public class SumTest extends StorelessUnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testWeightedSum() {
+    void testWeightedSum() {
         Sum sum = new Sum();
         assertEquals(expectedWeightedValue(),
                      sum.evaluate(testArray, testWeightsArray, 0, testArray.length), getTolerance());

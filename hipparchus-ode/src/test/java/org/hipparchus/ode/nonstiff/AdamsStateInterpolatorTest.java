@@ -24,7 +24,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 import org.junit.jupiter.api.Test;
 
-public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
+class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
     @Override
     protected AbstractODEStateInterpolator

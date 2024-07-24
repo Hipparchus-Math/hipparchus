@@ -43,7 +43,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     private double semiVariance;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         // calculate the semivariance the same way as defined by
         // the SemiVariance class. This is not the same as calculating
         // the variance of the values that are below / above the cutoff.
@@ -66,7 +66,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testInsufficientData() {
+    void testInsufficientData() {
         SemiVariance sv = getUnivariateStatistic();
         try {
             sv.evaluate(null);
@@ -84,7 +84,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSingleDown() {
+    void testSingleDown() {
         SemiVariance sv = new SemiVariance();
         double[] values = { 50.0d };
         double singletest = sv.evaluate(values);
@@ -92,7 +92,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSingleUp() {
+    void testSingleUp() {
         SemiVariance sv = new SemiVariance(SemiVariance.UPSIDE_VARIANCE);
         double[] values = { 50.0d };
         double singletest = sv.evaluate(values);
@@ -100,7 +100,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSample() {
+    void testSample() {
         final double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         final int length = values.length;
         final double mean = StatUtils.mean(values); // 6.333...
@@ -119,7 +119,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testPopulation() {
+    void testPopulation() {
         double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         SemiVariance sv = new SemiVariance(false);
 
@@ -132,7 +132,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testNonMeanCutoffs() {
+    void testNonMeanCutoffs() {
         double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         SemiVariance sv = new SemiVariance(false); // Turn off bias correction - use df = length
 
@@ -150,7 +150,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
      * Check that the lower + upper semivariance against the mean sum to the variance.
      */
     @Test
-    public void testVarianceDecompMeanCutoff() {
+    void testVarianceDecompMeanCutoff() {
         double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         double variance = StatUtils.variance(values);
         SemiVariance sv = new SemiVariance(true); // Bias corrected
@@ -167,7 +167,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
      * divided by df = length - 1 (assuming bias-corrected).
      */
     @Test
-    public void testVarianceDecompNonMeanCutoff() {
+    void testVarianceDecompNonMeanCutoff() {
         double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         double target = 0;
         double totalSumOfSquares = UnitTestUtils.sumSquareDev(values, target);
@@ -180,7 +180,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testNoVariance() {
+    void testNoVariance() {
         final double[] values = {100d, 100d, 100d, 100d};
         SemiVariance sv = getUnivariateStatistic();
         assertEquals(0, sv.evaluate(values), 10E-12);

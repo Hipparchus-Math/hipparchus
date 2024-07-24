@@ -19,42 +19,43 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class BoundedConstraintTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class BoundedConstraintTest {
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // GIVEN
         final RealVector lowerBound = MatrixUtils.createRealVector(new double[] { -1. });
         final RealVector upperBound = MatrixUtils.createRealVector(new double[] { 1. });
         // WHEN
         final BoundedConstraint boundedConstraint = new TestBoundedConstraint(lowerBound, upperBound);
         // THEN
-        Assertions.assertEquals(lowerBound.getEntry(0), boundedConstraint.getLowerBound().getEntry(0), 0.);
-        Assertions.assertEquals(upperBound.getEntry(0), boundedConstraint.getUpperBound().getEntry(0), 0.);
+        assertEquals(lowerBound.getEntry(0), boundedConstraint.getLowerBound().getEntry(0), 0.);
+        assertEquals(upperBound.getEntry(0), boundedConstraint.getUpperBound().getEntry(0), 0.);
     }
 
     @Test
-    public void testConstructorNullLowerBound() {
+    void testConstructorNullLowerBound() {
         // GIVEN
         final RealVector upperBound = MatrixUtils.createRealVector(new double[1]);
         // WHEN
         final BoundedConstraint boundedConstraint = new TestBoundedConstraint(null, upperBound);
         // THEN
-        Assertions.assertEquals(boundedConstraint.getLowerBound().getDimension(),
+        assertEquals(boundedConstraint.getLowerBound().getDimension(),
                 boundedConstraint.getUpperBound().getDimension());
     }
 
     @Test
-    public void testConstructorNullUpperBound() {
+    void testConstructorNullUpperBound() {
         // GIVEN
         final RealVector lowerBound = MatrixUtils.createRealVector(new double[1]);
         // WHEN
         final BoundedConstraint boundedConstraint = new TestBoundedConstraint(lowerBound, null);
         // THEN
-        Assertions.assertEquals(boundedConstraint.getLowerBound().getDimension(),
+        assertEquals(boundedConstraint.getLowerBound().getDimension(),
                 boundedConstraint.getUpperBound().getDimension());
     }
 

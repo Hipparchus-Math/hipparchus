@@ -25,10 +25,11 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.ISAACRandom;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class StorelessCovarianceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class StorelessCovarianceTest {
 
     protected final double[] longleyData = new double[] {
             60323,83.0,234289,2356,1590,107608,1947,
@@ -119,23 +120,23 @@ public class StorelessCovarianceTest {
     };
 
     @Test
-    public void testLonglySimpleVar(){
+    void testLonglySimpleVar(){
         double rCov = 12333921.73333333246;
         StorelessBivariateCovariance cov = new StorelessBivariateCovariance();
         for(int i=0;i<longleyDataSimple.length;i++){
             cov.increment(longleyDataSimple[i][0],longleyDataSimple[i][0]);
         }
-        UnitTestUtils.assertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
+        UnitTestUtils.customAssertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
     }
 
     @Test
-    public void testLonglySimpleCov(){
+    void testLonglySimpleCov(){
         double rCov = 36796.660000;
         StorelessBivariateCovariance cov = new StorelessBivariateCovariance();
         for(int i=0;i<longleyDataSimple.length;i++){
             cov.increment(longleyDataSimple[i][0], longleyDataSimple[i][1]);
         }
-        UnitTestUtils.assertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
+        UnitTestUtils.customAssertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
     }
 
     /**
@@ -149,7 +150,7 @@ public class StorelessCovarianceTest {
      * <a href="https://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat">Longley dataset</a>
      */
     @Test
-    public void testLonglyByRow() {
+    void testLonglyByRow() {
         RealMatrix matrix = createRealMatrix(longleyData, 16, 7);
 
         double[] rData = new double[] {
@@ -176,7 +177,7 @@ public class StorelessCovarianceTest {
 
         RealMatrix covarianceMatrix = covMatrix.getCovarianceMatrix();
 
-        UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-7);
+        UnitTestUtils.customAssertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-7);
 
     }
 
@@ -185,7 +186,7 @@ public class StorelessCovarianceTest {
      * Data Source: R datasets package
      */
     @Test
-    public void testSwissFertilityByRow() {
+    void testSwissFertilityByRow() {
          RealMatrix matrix = createRealMatrix(swissData, 47, 5);
 
          double[] rData = new double[] {
@@ -203,14 +204,14 @@ public class StorelessCovarianceTest {
 
         RealMatrix covarianceMatrix = covMatrix.getCovarianceMatrix();
 
-        UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
+        UnitTestUtils.customAssertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
     }
 
     /**
      * Test symmetry of the covariance matrix
      */
     @Test
-    public void testSymmetry() {
+    void testSymmetry() {
         RealMatrix matrix = createRealMatrix(swissData, 47, 5);
 
         final int dimension = 5;
@@ -222,7 +223,7 @@ public class StorelessCovarianceTest {
         double[][] covMatrix = storelessCov.getData();
         for (int i = 0; i < dimension; i++) {
             for (int j = i; j < dimension; j++) {
-                Assertions.assertEquals(covMatrix[i][j], covMatrix[j][i], 10e-9);
+                assertEquals(covMatrix[i][j], covMatrix[j][i], 10e-9);
             }
         }
     }
@@ -233,7 +234,7 @@ public class StorelessCovarianceTest {
      * covariance of the combined sample showing both are equal.
      */
     @Test
-    public void testEquivalence() {
+    void testEquivalence() {
         int num_sets = 2;
         StorelessBivariateCovariance cov = new StorelessBivariateCovariance();// covariance of the superset
         StorelessBivariateCovariance chk = new StorelessBivariateCovariance();// check covariance made by appending covariance of subsets
@@ -250,7 +251,7 @@ public class StorelessCovarianceTest {
            chk.append(covs);
         }
 
-        UnitTestUtils.assertEquals("covariance subset test", chk.getResult(), cov.getResult(), 10E-7);
+        UnitTestUtils.customAssertEquals("covariance subset test", chk.getResult(), cov.getResult(), 10E-7);
     }
 
     protected RealMatrix createRealMatrix(double[] data, int nRows, int nCols) {

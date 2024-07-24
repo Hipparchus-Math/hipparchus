@@ -26,17 +26,18 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Test cases for {@link StatisticalSummary}.
  */
-public class StatisticalSummaryTest {
+class StatisticalSummaryTest {
 
     /**
      * Test aggregate function by randomly generating a dataset of 10-100 values
@@ -46,7 +47,7 @@ public class StatisticalSummaryTest {
      * over the full sample.
      */
     @Test
-    public void testAggregate() {
+    void testAggregate() {
 
         // Generate a random sample and random partition
         double[] totalSample = generateSample();
@@ -74,7 +75,7 @@ public class StatisticalSummaryTest {
 
         // Compare values
         StatisticalSummary aggregatedStats = StatisticalSummary.aggregate(aggregate);
-        assertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
+        customAssertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
     }
 
     /**
@@ -82,7 +83,7 @@ public class StatisticalSummaryTest {
      * {@link StatisticalSummary} instead.
      */
     @Test
-    public void testAggregateStatisticalSummary() {
+    void testAggregateStatisticalSummary() {
 
         // Generate a random sample and random partition
         double[] totalSample = generateSample();
@@ -110,11 +111,11 @@ public class StatisticalSummaryTest {
 
         // Compare values
         StatisticalSummary aggregatedStats = StatisticalSummary.aggregate(aggregate);
-        assertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
+        customAssertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
     }
 
     @Test
-    public void testAggregateDegenerate() {
+    void testAggregateDegenerate() {
         double[] totalSample = {1, 2, 3, 4, 5};
         double[][] subSamples = {{1}, {2}, {3}, {4}, {5}};
 
@@ -139,11 +140,11 @@ public class StatisticalSummaryTest {
 
         // Compare values
         StatisticalSummary aggregatedStats = StatisticalSummary.aggregate(aggregate);
-        assertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
+        customAssertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
     }
 
     @Test
-    public void testAggregateSpecialValues() {
+    void testAggregateSpecialValues() {
         double[] totalSample = {Double.POSITIVE_INFINITY, 2, 3, Double.NaN, 5};
         double[][] subSamples = {{Double.POSITIVE_INFINITY, 2}, {3}, {Double.NaN}, {5}};
 
@@ -168,7 +169,7 @@ public class StatisticalSummaryTest {
 
         // Compare values
         StatisticalSummary aggregatedStats = StatisticalSummary.aggregate(aggregate);
-        assertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
+        customAssertStatisticalSummaryEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
     }
 
     /**
@@ -176,16 +177,16 @@ public class StatisticalSummaryTest {
      * to delta, with NaNs, infinities returned in the same spots. For max, min, n, values
      * have to agree exactly, delta is used only for sum, mean, variance, std dev.
      */
-    protected static void assertStatisticalSummaryEquals(StatisticalSummary expected,
-                                                         StatisticalSummary observed,
-                                                         double delta) {
-        UnitTestUtils.assertEquals(expected.getMax(), observed.getMax(), 0);
-        UnitTestUtils.assertEquals(expected.getMin(), observed.getMin(), 0);
-        Assertions.assertEquals(expected.getN(), observed.getN());
-        UnitTestUtils.assertEquals(expected.getSum(), observed.getSum(), delta);
-        UnitTestUtils.assertEquals(expected.getMean(), observed.getMean(), delta);
-        UnitTestUtils.assertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);
-        UnitTestUtils.assertEquals(expected.getVariance(), observed.getVariance(), delta);
+    protected static void customAssertStatisticalSummaryEquals(StatisticalSummary expected,
+                                                               StatisticalSummary observed,
+                                                               double delta) {
+        UnitTestUtils.customAssertEquals(expected.getMax(), observed.getMax(), 0);
+        UnitTestUtils.customAssertEquals(expected.getMin(), observed.getMin(), 0);
+        assertEquals(expected.getN(), observed.getN());
+        UnitTestUtils.customAssertEquals(expected.getSum(), observed.getSum(), delta);
+        UnitTestUtils.customAssertEquals(expected.getMean(), observed.getMean(), delta);
+        UnitTestUtils.customAssertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);
+        UnitTestUtils.customAssertEquals(expected.getVariance(), observed.getVariance(), delta);
     }
 
     /**

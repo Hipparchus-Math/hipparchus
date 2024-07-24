@@ -26,96 +26,101 @@ import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class FieldVector2DTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class FieldVector2DTest {
 
     @Test
-    public void testConstructors() {
+    void testConstructors() {
         doTestConstructors(Binary64Field.getInstance());
     }
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         doTestConstants(Binary64Field.getInstance());
     }
 
     @Test
-    public void testToMethods() {
+    void testToMethods() {
         doTestToMethods(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNorms() {
+    void testNorms() {
         doTestNorms(Binary64Field.getInstance());
     }
 
     @Test
-    public void testDistances() {
+    void testDistances() {
         doTestDistances(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         doTestAdd(Binary64Field.getInstance());
     }
 
     @Test
-    public void testSubtract() {
+    void testSubtract() {
         doTestSubtract(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNormalize() {
+    void testNormalize() {
         doTestNormalize(Binary64Field.getInstance());
     }
 
     @Test
-    public void testAngle() {
+    void testAngle() {
         doTestAngle(Binary64Field.getInstance());
     }
 
     @Test
-    public void testNegate() {
+    void testNegate() {
         doTestNegate(Binary64Field.getInstance());
     }
 
     @Test
-    public void testScalarMultiply() {
+    void testScalarMultiply() {
         doTestScalarMultiply(Binary64Field.getInstance());
     }
 
     @Test
-    public void testIsNaN() {
+    void testIsNaN() {
         doTestIsNaN(Binary64Field.getInstance());
     }
 
     @Test
-    public void testIsInfinite() {
+    void testIsInfinite() {
         doTestIsInfinite(Binary64Field.getInstance());
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         doTestEquals(Binary64Field.getInstance());
     }
 
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         doTestHashCode(Binary64Field.getInstance());
     }
 
     @Test
-    public void testCrossProduct() {
+    void testCrossProduct() {
         doTestCrossProduct(Binary64Field.getInstance());
     }
 
     @Test
-    public void testOrientation() {
+    void testOrientation() {
         doTestOrientation(Binary64Field.getInstance());
     }
 
@@ -133,11 +138,11 @@ public class FieldVector2DTest {
         check(new FieldVector2D<>(a), 1.0, 0.0, 1.0e-15);
         try {
             new FieldVector2D<>(MathArrays.buildArray(field, 3));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
         check(new FieldVector2D<>(p20, new FieldVector2D<>(p25, m05)), 5.0, -1.0, 1.0e-15);
         check(new FieldVector2D<>(p20, new Vector2D(2.5, -0.5)), 5.0, -1.0, 1.0e-15);
@@ -176,43 +181,43 @@ public class FieldVector2DTest {
         check(FieldVector2D.getMinusJ(field),  0.0, -1.0, 1.0e-15);
         check(FieldVector2D.getPositiveInfinity(field), Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0e-15);
         check(FieldVector2D.getNegativeInfinity(field), Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 1.0e-15);
-        Assertions.assertTrue(Double.isNaN(FieldVector2D.getNaN(field).getX().getReal()));
-        Assertions.assertTrue(Double.isNaN(FieldVector2D.getNaN(field).getY().getReal()));
+        assertTrue(Double.isNaN(FieldVector2D.getNaN(field).getX().getReal()));
+        assertTrue(Double.isNaN(FieldVector2D.getNaN(field).getY().getReal()));
     }
 
     private <T extends CalculusFieldElement<T>> void doTestToMethods(final Field<T> field) {
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(2.5, -0.5));
-        Assertions.assertEquals( 2,   v.toArray().length);
-        Assertions.assertEquals( 2.5, v.toArray()[0].getReal(), 1.0e-15);
-        Assertions.assertEquals(-0.5, v.toArray()[1].getReal(), 1.0e-15);
-        Assertions.assertEquals(new Vector2D(2.5, -0.5), v.toVector2D());
-        Assertions.assertEquals("{2.5; -0.5}", v.toString().replaceAll(",", "."));
-        Assertions.assertEquals("{2,5; -0,5}", v.toString(NumberFormat.getInstance(Locale.FRENCH)));
+        assertEquals( 2,   v.toArray().length);
+        assertEquals( 2.5, v.toArray()[0].getReal(), 1.0e-15);
+        assertEquals(-0.5, v.toArray()[1].getReal(), 1.0e-15);
+        assertEquals(new Vector2D(2.5, -0.5), v.toVector2D());
+        assertEquals("{2.5; -0.5}", v.toString().replaceAll(",", "."));
+        assertEquals("{2,5; -0,5}", v.toString(NumberFormat.getInstance(Locale.FRENCH)));
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNorms(final Field<T> field) {
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(3.0, -4.0));
-        Assertions.assertEquals( 7.0, v.getNorm1().getReal(),   1.0e-15);
-        Assertions.assertEquals( 5.0, v.getNorm().getReal(),    1.0e-15);
-        Assertions.assertEquals(25.0, v.getNormSq().getReal(),  1.0e-15);
-        Assertions.assertEquals( 4.0, v.getNormInf().getReal(), 1.0e-15);
+        assertEquals( 7.0, v.getNorm1().getReal(),   1.0e-15);
+        assertEquals( 5.0, v.getNorm().getReal(),    1.0e-15);
+        assertEquals(25.0, v.getNormSq().getReal(),  1.0e-15);
+        assertEquals( 4.0, v.getNormInf().getReal(), 1.0e-15);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestDistances(final Field<T> field) {
         final FieldVector2D<T> u = new FieldVector2D<>(field, new Vector2D( 2.0, -2.0));
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(-1.0,  2.0));
-        Assertions.assertEquals( 7.0, FieldVector2D.distance1(u, v).getReal(),   1.0e-15);
-        Assertions.assertEquals( 5.0, FieldVector2D.distance(u, v).getReal(),    1.0e-15);
-        Assertions.assertEquals(25.0, FieldVector2D.distanceSq(u, v).getReal(),  1.0e-15);
-        Assertions.assertEquals( 4.0, FieldVector2D.distanceInf(u, v).getReal(), 1.0e-15);
-        Assertions.assertEquals( 7.0, FieldVector2D.distance1(u, v.toVector2D()).getReal(),   1.0e-15);
-        Assertions.assertEquals( 5.0, FieldVector2D.distance(u, v.toVector2D()).getReal(),    1.0e-15);
-        Assertions.assertEquals(25.0, FieldVector2D.distanceSq(u, v.toVector2D()).getReal(),  1.0e-15);
-        Assertions.assertEquals( 4.0, FieldVector2D.distanceInf(u, v.toVector2D()).getReal(), 1.0e-15);
-        Assertions.assertEquals( 7.0, FieldVector2D.distance1(u.toVector2D(), v).getReal(),   1.0e-15);
-        Assertions.assertEquals( 5.0, FieldVector2D.distance(u.toVector2D(), v).getReal(),    1.0e-15);
-        Assertions.assertEquals(25.0, FieldVector2D.distanceSq(u.toVector2D(), v).getReal(),  1.0e-15);
-        Assertions.assertEquals( 4.0, FieldVector2D.distanceInf(u.toVector2D(), v).getReal(), 1.0e-15);
+        assertEquals( 7.0, FieldVector2D.distance1(u, v).getReal(),   1.0e-15);
+        assertEquals( 5.0, FieldVector2D.distance(u, v).getReal(),    1.0e-15);
+        assertEquals(25.0, FieldVector2D.distanceSq(u, v).getReal(),  1.0e-15);
+        assertEquals( 4.0, FieldVector2D.distanceInf(u, v).getReal(), 1.0e-15);
+        assertEquals( 7.0, FieldVector2D.distance1(u, v.toVector2D()).getReal(),   1.0e-15);
+        assertEquals( 5.0, FieldVector2D.distance(u, v.toVector2D()).getReal(),    1.0e-15);
+        assertEquals(25.0, FieldVector2D.distanceSq(u, v.toVector2D()).getReal(),  1.0e-15);
+        assertEquals( 4.0, FieldVector2D.distanceInf(u, v.toVector2D()).getReal(), 1.0e-15);
+        assertEquals( 7.0, FieldVector2D.distance1(u.toVector2D(), v).getReal(),   1.0e-15);
+        assertEquals( 5.0, FieldVector2D.distance(u.toVector2D(), v).getReal(),    1.0e-15);
+        assertEquals(25.0, FieldVector2D.distanceSq(u.toVector2D(), v).getReal(),  1.0e-15);
+        assertEquals( 4.0, FieldVector2D.distanceInf(u.toVector2D(), v).getReal(), 1.0e-15);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAdd(final Field<T> field) {
@@ -240,9 +245,9 @@ public class FieldVector2DTest {
     private <T extends CalculusFieldElement<T>> void doTestNormalize(final Field<T> field) {
         try {
             FieldVector2D.getZero(field).normalize();
-            Assertions.fail("an exception should habe been thrown");
+            fail("an exception should habe been thrown");
         } catch (MathRuntimeException mre) {
-            Assertions.assertEquals(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR, mre.getSpecifier());
+            assertEquals(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR, mre.getSpecifier());
         }
         check(new FieldVector2D<>(field, new Vector2D(3, -4)).normalize(), 0.6, -0.8, 1.0e-15);
     }
@@ -250,69 +255,69 @@ public class FieldVector2DTest {
     private <T extends CalculusFieldElement<T>> void doTestAngle(final Field<T> field) {
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), FieldVector2D.getPlusI(field));
-            Assertions.fail("an exception should habe been thrown");
+            fail("an exception should habe been thrown");
         } catch (MathRuntimeException mre) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
+            assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
         final double alpha = 0.01;
         final SinCos sc = FastMath.sinCos(alpha);
-        Assertions.assertEquals(alpha,
+        assertEquals(alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.cos(), sc.sin())),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(FastMath.PI - alpha,
+        assertEquals(FastMath.PI - alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.cos(), sc.sin())),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(0.5 * FastMath.PI - alpha,
+        assertEquals(0.5 * FastMath.PI - alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.sin(), sc.cos())),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(0.5 * FastMath.PI + alpha,
+        assertEquals(0.5 * FastMath.PI + alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.sin(), sc.cos())),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), Vector2D.PLUS_I);
-            Assertions.fail("an exception should habe been thrown");
+            fail("an exception should habe been thrown");
         } catch (MathRuntimeException mre) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
+            assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
-        Assertions.assertEquals(alpha,
+        assertEquals(alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.cos(), sc.sin())),
                                                 Vector2D.PLUS_I).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(FastMath.PI - alpha,
+        assertEquals(FastMath.PI - alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.cos(), sc.sin())),
                                                 Vector2D.PLUS_I).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(0.5 * FastMath.PI - alpha,
+        assertEquals(0.5 * FastMath.PI - alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.sin(), sc.cos())),
                                                 Vector2D.PLUS_I).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(0.5 * FastMath.PI + alpha,
+        assertEquals(0.5 * FastMath.PI + alpha,
                             FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.sin(), sc.cos())),
                                                 Vector2D.PLUS_I).getReal(),
                             1.0e-15);
         try {
             FieldVector2D.angle(Vector2D.ZERO, FieldVector2D.getPlusI(field));
-            Assertions.fail("an exception should habe been thrown");
+            fail("an exception should habe been thrown");
         } catch (MathRuntimeException mre) {
-            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
+            assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
-        Assertions.assertEquals(alpha,
+        assertEquals(alpha,
                             FieldVector2D.angle(new Vector2D(sc.cos(), sc.sin()),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(FastMath.PI - alpha,
+        assertEquals(FastMath.PI - alpha,
                             FieldVector2D.angle(new Vector2D(-sc.cos(), sc.sin()),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(0.5 * FastMath.PI - alpha,
+        assertEquals(0.5 * FastMath.PI - alpha,
                             FieldVector2D.angle(new Vector2D(sc.sin(), sc.cos()),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(0.5 * FastMath.PI + alpha,
+        assertEquals(0.5 * FastMath.PI + alpha,
                             FieldVector2D.angle(new Vector2D(-sc.sin(), sc.cos()),
                                                 FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
@@ -329,24 +334,24 @@ public class FieldVector2DTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestIsNaN(final Field<T> field) {
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NaN, 0.0)).isNaN());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.NaN)).isNaN());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NaN, Double.NaN)).isNaN());
-        Assertions.assertTrue(FieldVector2D.getNaN(field).isNaN());
-        Assertions.assertFalse(new FieldVector2D<>(field, new Vector2D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)).isNaN());
-        Assertions.assertFalse(FieldVector2D.getMinusI(field).isNaN());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NaN, 0.0)).isNaN());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.NaN)).isNaN());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NaN, Double.NaN)).isNaN());
+        assertTrue(FieldVector2D.getNaN(field).isNaN());
+        assertFalse(new FieldVector2D<>(field, new Vector2D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)).isNaN());
+        assertFalse(FieldVector2D.getMinusI(field).isNaN());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestIsInfinite(final Field<T> field) {
-        Assertions.assertFalse(new FieldVector2D<>(field, new Vector2D(Double.NaN, 0.0)).isInfinite());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.POSITIVE_INFINITY, 0.0)).isInfinite());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.POSITIVE_INFINITY)).isInfinite());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)).isInfinite());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NEGATIVE_INFINITY, 0.0)).isInfinite());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.NEGATIVE_INFINITY)).isInfinite());
-        Assertions.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY)).isInfinite());
-        Assertions.assertFalse(FieldVector2D.getNaN(field).isInfinite());
-        Assertions.assertFalse(FieldVector2D.getMinusI(field).isInfinite());
+        assertFalse(new FieldVector2D<>(field, new Vector2D(Double.NaN, 0.0)).isInfinite());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(Double.POSITIVE_INFINITY, 0.0)).isInfinite());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.POSITIVE_INFINITY)).isInfinite());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)).isInfinite());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NEGATIVE_INFINITY, 0.0)).isInfinite());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.NEGATIVE_INFINITY)).isInfinite());
+        assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY)).isInfinite());
+        assertFalse(FieldVector2D.getNaN(field).isInfinite());
+        assertFalse(FieldVector2D.getMinusI(field).isInfinite());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestEquals(final Field<T> field) {
@@ -354,20 +359,20 @@ public class FieldVector2DTest {
         final FieldVector2D<T> u2 = new FieldVector2D<>(field, Vector2D.MINUS_I.negate());
         final FieldVector2D<T> v1 = new FieldVector2D<>(field, new Vector2D(1.0, 0.001));
         final FieldVector2D<T> v2 = new FieldVector2D<>(field, new Vector2D(0.001, 1.0));
-        Assertions.assertEquals(u1, u1);
-        Assertions.assertEquals(u1, u2);
-        Assertions.assertNotEquals(u1, v1);
-        Assertions.assertNotEquals(u1, v2);
-        Assertions.assertNotEquals(Vector2D.PLUS_I, u1);
-        Assertions.assertEquals(Vector2D.PLUS_I, u1.toVector2D());
-        Assertions.assertEquals(new FieldVector2D<>(Double.NaN, u1), FieldVector2D.getNaN(field));
-        Assertions.assertNotEquals(u1, FieldVector2D.getNaN(field));
-        Assertions.assertNotEquals(FieldVector2D.getNaN(field), v2);
+        assertEquals(u1, u1);
+        assertEquals(u1, u2);
+        assertNotEquals(u1, v1);
+        assertNotEquals(u1, v2);
+        assertNotEquals(Vector2D.PLUS_I, u1);
+        assertEquals(Vector2D.PLUS_I, u1.toVector2D());
+        assertEquals(new FieldVector2D<>(Double.NaN, u1), FieldVector2D.getNaN(field));
+        assertNotEquals(u1, FieldVector2D.getNaN(field));
+        assertNotEquals(FieldVector2D.getNaN(field), v2);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestHashCode(final Field<T> field) {
-        Assertions.assertEquals(542, FieldVector2D.getNaN(field).hashCode());
-        Assertions.assertEquals(1325400064, new FieldVector2D<>(field, new Vector2D(1.5, -0.5)).hashCode());
+        assertEquals(542, FieldVector2D.getNaN(field).hashCode());
+        assertEquals(1325400064, new FieldVector2D<>(field, new Vector2D(1.5, -0.5)).hashCode());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestCrossProduct(final Field<T> field) {
@@ -377,29 +382,29 @@ public class FieldVector2DTest {
         FieldVector2D<T> p2 = new FieldVector2D<>(field, new Vector2D(2, 2));
 
         FieldVector2D<T> p3 = new FieldVector2D<>(field, new Vector2D(3, 3));
-        Assertions.assertEquals(0.0, p3.crossProduct(p1, p2).getReal(), epsilon);
+        assertEquals(0.0, p3.crossProduct(p1, p2).getReal(), epsilon);
 
         FieldVector2D<T> p4 = new FieldVector2D<>(field, new Vector2D(1, 2));
-        Assertions.assertEquals(1.0, p4.crossProduct(p1, p2).getReal(), epsilon);
+        assertEquals(1.0, p4.crossProduct(p1, p2).getReal(), epsilon);
 
         FieldVector2D<T> p5 = new FieldVector2D<>(field, new Vector2D(2, 1));
-        Assertions.assertEquals(-1.0, p5.crossProduct(p1, p2).getReal(), epsilon);
-        Assertions.assertEquals(-1.0, p5.crossProduct(p1.toVector2D(), p2.toVector2D()).getReal(), epsilon);
+        assertEquals(-1.0, p5.crossProduct(p1, p2).getReal(), epsilon);
+        assertEquals(-1.0, p5.crossProduct(p1.toVector2D(), p2.toVector2D()).getReal(), epsilon);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestOrientation(final Field<T> field) {
-        Assertions.assertTrue(FieldVector2D.orientation(new FieldVector2D<>(field, new Vector2D(0, 0)),
+        assertTrue(FieldVector2D.orientation(new FieldVector2D<>(field, new Vector2D(0, 0)),
                                                     new FieldVector2D<>(field, new Vector2D(1, 0)),
                                                     new FieldVector2D<>(field, new Vector2D(1, 1))).getReal() > 0);
-        Assertions.assertTrue(FieldVector2D.orientation(new FieldVector2D<>(field, new Vector2D(1, 0)),
+        assertTrue(FieldVector2D.orientation(new FieldVector2D<>(field, new Vector2D(1, 0)),
                                                     new FieldVector2D<>(field, new Vector2D(0, 0)),
                                                     new FieldVector2D<>(field, new Vector2D(1, 1))).getReal() < 0);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             FieldVector2D.orientation(new FieldVector2D<>(field, new Vector2D(0, 0)),
                                                       new FieldVector2D<>(field, new Vector2D(1, 0)),
                                                       new FieldVector2D<>(field, new Vector2D(1, 0))).getReal(),
                             1.0e-15);
-        Assertions.assertEquals(0.0,
+        assertEquals(0.0,
                             FieldVector2D.orientation(new FieldVector2D<>(field, new Vector2D(0, 0)),
                                                       new FieldVector2D<>(field, new Vector2D(1, 0)),
                                                       new FieldVector2D<>(field, new Vector2D(2, 0))).getReal(),
@@ -408,8 +413,8 @@ public class FieldVector2DTest {
 
     private <T extends CalculusFieldElement<T>> void check(final FieldVector2D<T> v,
                                                        final double x, final double y, final double tol) {
-        Assertions.assertEquals(x, v.getX().getReal(), tol);
-        Assertions.assertEquals(y, v.getY().getReal(), tol);
+        assertEquals(x, v.getX().getReal(), tol);
+        assertEquals(y, v.getY().getReal(), tol);
     }
 
 }

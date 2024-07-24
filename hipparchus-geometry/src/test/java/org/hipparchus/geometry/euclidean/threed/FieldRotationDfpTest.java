@@ -33,16 +33,19 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-public class FieldRotationDfpTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class FieldRotationDfpTest {
 
     @Test
-    public void testIssue304Cardan() {
+    void testIssue304Cardan() {
         for (final RotationConvention convention : RotationConvention.values()) {
             for (final RotationOrder order : Arrays.asList(RotationOrder.XYZ,
                                                            RotationOrder.XZY,
@@ -55,24 +58,24 @@ public class FieldRotationDfpTest {
                 FieldRotation<Dfp> singularPlus =
                     new FieldRotation<>(order, convention,
                                         field.getZero(), field.getPi().multiply(0.5), field.getZero().newInstance(0.125));
-                Assertions.assertEquals(0.0, singularPlus.getAngles(order, convention)[0].getReal(), 1.0e-20);
-                Assertions.assertEquals(MathUtils.SEMI_PI, singularPlus.getAngles(order, convention)[1].getReal(), 1.0e-20);
-                Assertions.assertEquals(0.125, singularPlus.getAngles(order, convention)[2].getReal(), 1.0e-20);
+                assertEquals(0.0, singularPlus.getAngles(order, convention)[0].getReal(), 1.0e-20);
+                assertEquals(MathUtils.SEMI_PI, singularPlus.getAngles(order, convention)[1].getReal(), 1.0e-20);
+                assertEquals(0.125, singularPlus.getAngles(order, convention)[2].getReal(), 1.0e-20);
 
                 // second singularity
                 FieldRotation<Dfp> singularMinus =
                     new FieldRotation<>(order, convention,
                                         field.getZero(), field.getPi().multiply(-0.5), field.getZero().newInstance(0.125));
-                Assertions.assertEquals(0.0, singularMinus.getAngles(order, convention)[0].getReal(), 1.0e-20);
-                Assertions.assertEquals(-MathUtils.SEMI_PI, singularMinus.getAngles(order, convention)[1].getReal(), 1.0e-20);
-                Assertions.assertEquals(0.125, singularMinus.getAngles(order, convention)[2].getReal(), 1.0e-20);
+                assertEquals(0.0, singularMinus.getAngles(order, convention)[0].getReal(), 1.0e-20);
+                assertEquals(-MathUtils.SEMI_PI, singularMinus.getAngles(order, convention)[1].getReal(), 1.0e-20);
+                assertEquals(0.125, singularMinus.getAngles(order, convention)[2].getReal(), 1.0e-20);
 
             }
         }
     }
 
     @Test
-    public void testIssue304Euler() {
+    void testIssue304Euler() {
         for (final RotationConvention convention : RotationConvention.values()) {
             for (final RotationOrder order : Arrays.asList(RotationOrder.XYX,
                                                            RotationOrder.XZX,
@@ -85,24 +88,24 @@ public class FieldRotationDfpTest {
                 FieldRotation<Dfp> singularZero =
                     new FieldRotation<>(order, convention,
                                         field.getZero().newInstance(0.125), field.getZero(), field.getZero() );
-                Assertions.assertEquals(0.125, singularZero.getAngles(order, convention)[0].getReal(), 1.0e-20);
-                Assertions.assertEquals(0.0, singularZero.getAngles(order, convention)[1].getReal(), 1.0e-20);
-                Assertions.assertEquals(0.0, singularZero.getAngles(order, convention)[2].getReal(), 1.0e-20);
+                assertEquals(0.125, singularZero.getAngles(order, convention)[0].getReal(), 1.0e-20);
+                assertEquals(0.0, singularZero.getAngles(order, convention)[1].getReal(), 1.0e-20);
+                assertEquals(0.0, singularZero.getAngles(order, convention)[2].getReal(), 1.0e-20);
 
                 // second singularity
                 FieldRotation<Dfp> singularPi =
                     new FieldRotation<>(order, convention,
                                         field.getZero().newInstance(0.125), field.getPi(), field.getZero());
-                Assertions.assertEquals(0.125, singularPi.getAngles(order, convention)[0].getReal(), 1.0e-20);
-                Assertions.assertEquals(FastMath.PI, singularPi.getAngles(order, convention)[1].getReal(), 1.0e-20);
-                Assertions.assertEquals(0.0, singularPi.getAngles(order, convention)[2].getReal(), 1.0e-20);
+                assertEquals(0.125, singularPi.getAngles(order, convention)[0].getReal(), 1.0e-20);
+                assertEquals(FastMath.PI, singularPi.getAngles(order, convention)[1].getReal(), 1.0e-20);
+                assertEquals(0.0, singularPi.getAngles(order, convention)[2].getReal(), 1.0e-20);
 
             }
         }
     }
 
     @Test
-    public void testIdentity() {
+    void testIdentity() {
 
         FieldRotation<Dfp> r = createRotation(1, 0, 0, 0, false);
         checkVector(r.applyTo(createVector(1, 0, 0)), createVector(1, 0, 0));
@@ -131,7 +134,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testAxisAngleVectorOperator() throws MathIllegalArgumentException {
+    void testAxisAngleVectorOperator() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r = new FieldRotation<>(createAxis(10, 10, 10),
                                                    createAngle(2 * FastMath.PI / 3) ,
@@ -148,9 +151,9 @@ public class FieldRotationDfpTest {
             new FieldRotation<>(createAxis(0, 0, 0),
                                 createAngle(2 * FastMath.PI / 3),
                                 RotationConvention.VECTOR_OPERATOR);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assertions.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
+            assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
         }
 
         r = new FieldRotation<>(createAxis(0, 0, 1),
@@ -173,7 +176,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testAxisAngleFrameTransform() throws MathIllegalArgumentException {
+    void testAxisAngleFrameTransform() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r = new FieldRotation<>(createAxis(10, 10, 10),
                                                    createAngle(2 * FastMath.PI / 3) ,
@@ -190,9 +193,9 @@ public class FieldRotationDfpTest {
             new FieldRotation<>(createAxis(0, 0, 0),
                                 createAngle(2 * FastMath.PI / 3),
                                 RotationConvention.FRAME_TRANSFORM);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assertions.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
+            assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
         }
 
         r = new FieldRotation<>(createAxis(0, 0, 1),
@@ -215,7 +218,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testRevert() {
+    void testRevert() {
         double a = 0.001;
         double b = 0.36;
         double c = 0.48;
@@ -226,15 +229,15 @@ public class FieldRotationDfpTest {
         checkRotationDS(rrT, 1, 0, 0, 0);
         FieldRotation<Dfp> rTr = reverted.applyTo(r);
         checkRotationDS(rTr, 1, 0, 0, 0);
-        Assertions.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
-        Assertions.assertEquals(-1,
+        assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
+        assertEquals(-1,
                             FieldVector3D.dotProduct(r.getAxis(RotationConvention.VECTOR_OPERATOR),
                                                      reverted.getAxis(RotationConvention.VECTOR_OPERATOR)).getReal(),
                             1.0e-15);
     }
 
     @Test
-    public void testRevertVectorOperator() {
+    void testRevertVectorOperator() {
         double a = 0.001;
         double b = 0.36;
         double c = 0.48;
@@ -245,15 +248,15 @@ public class FieldRotationDfpTest {
         checkRotationDS(rrT, 1, 0, 0, 0);
         FieldRotation<Dfp> rTr = reverted.compose(r, RotationConvention.VECTOR_OPERATOR);
         checkRotationDS(rTr, 1, 0, 0, 0);
-        Assertions.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
-        Assertions.assertEquals(-1,
+        assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
+        assertEquals(-1,
                             FieldVector3D.dotProduct(r.getAxis(RotationConvention.VECTOR_OPERATOR),
                                                      reverted.getAxis(RotationConvention.VECTOR_OPERATOR)).getReal(),
                             1.0e-15);
     }
 
     @Test
-    public void testRevertFrameTransform() {
+    void testRevertFrameTransform() {
         double a = 0.001;
         double b = 0.36;
         double c = 0.48;
@@ -264,15 +267,15 @@ public class FieldRotationDfpTest {
         checkRotationDS(rrT, 1, 0, 0, 0);
         FieldRotation<Dfp> rTr = reverted.compose(r, RotationConvention.FRAME_TRANSFORM);
         checkRotationDS(rTr, 1, 0, 0, 0);
-        Assertions.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
-        Assertions.assertEquals(-1,
+        assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
+        assertEquals(-1,
                             FieldVector3D.dotProduct(r.getAxis(RotationConvention.FRAME_TRANSFORM),
                                                      reverted.getAxis(RotationConvention.FRAME_TRANSFORM)).getReal(),
                             1.0e-15);
     }
 
     @Test
-    public void testVectorOnePair() throws MathRuntimeException {
+    void testVectorOnePair() throws MathRuntimeException {
 
         FieldVector3D<Dfp> u = createVector(3, 2, 1);
         FieldVector3D<Dfp> v = createVector(-4, 2, 2);
@@ -283,7 +286,7 @@ public class FieldRotationDfpTest {
 
         try {
             new FieldRotation<>(u, createVector(0, 0, 0));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException e) {
             // expected behavior
         }
@@ -291,7 +294,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testVectorTwoPairs() throws MathRuntimeException {
+    void testVectorTwoPairs() throws MathRuntimeException {
 
         FieldVector3D<Dfp> u1 = createVector(3, 0, 0);
         FieldVector3D<Dfp> u2 = createVector(0, 5, 0);
@@ -323,7 +326,7 @@ public class FieldRotationDfpTest {
 
         try {
             new FieldRotation<>(u1, u2, createVector(0, 0, 0), v2);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException e) {
             // expected behavior
         }
@@ -331,15 +334,15 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testMatrix()
-            throws MathIllegalArgumentException {
+    void testMatrix()
+        throws MathIllegalArgumentException {
 
         try {
             createRotation(new double[][] {
                 { 0.0, 1.0, 0.0 },
                 { 1.0, 0.0, 0.0 }
             }, 1.0e-7);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -350,7 +353,7 @@ public class FieldRotationDfpTest {
                 {  0.821760, -0.184320,  0.539200 },
                 { -0.354816,  0.574912,  0.737280 }
             }, 1.0e-7);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -361,7 +364,7 @@ public class FieldRotationDfpTest {
                 { -0.4,  0.6,  0.7 },
                 {  0.8, -0.2,  0.5 }
             }, 1.0e-15);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -418,25 +421,25 @@ public class FieldRotationDfpTest {
         double d21 = m2[2][1] - m3[2][1].getReal();
         double d22 = m2[2][2] - m3[2][2].getReal();
 
-        Assertions.assertTrue(FastMath.abs(d00) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d01) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d02) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d10) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d11) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d12) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d20) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d21) < 6.0e-6);
-        Assertions.assertTrue(FastMath.abs(d22) < 6.0e-6);
+        assertTrue(FastMath.abs(d00) < 6.0e-6);
+        assertTrue(FastMath.abs(d01) < 6.0e-6);
+        assertTrue(FastMath.abs(d02) < 6.0e-6);
+        assertTrue(FastMath.abs(d10) < 6.0e-6);
+        assertTrue(FastMath.abs(d11) < 6.0e-6);
+        assertTrue(FastMath.abs(d12) < 6.0e-6);
+        assertTrue(FastMath.abs(d20) < 6.0e-6);
+        assertTrue(FastMath.abs(d21) < 6.0e-6);
+        assertTrue(FastMath.abs(d22) < 6.0e-6);
 
-        Assertions.assertTrue(FastMath.abs(d00) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d01) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d02) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d10) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d11) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d12) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d20) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d21) > 4.0e-7);
-        Assertions.assertTrue(FastMath.abs(d22) > 4.0e-7);
+        assertTrue(FastMath.abs(d00) > 4.0e-7);
+        assertTrue(FastMath.abs(d01) > 4.0e-7);
+        assertTrue(FastMath.abs(d02) > 4.0e-7);
+        assertTrue(FastMath.abs(d10) > 4.0e-7);
+        assertTrue(FastMath.abs(d11) > 4.0e-7);
+        assertTrue(FastMath.abs(d12) > 4.0e-7);
+        assertTrue(FastMath.abs(d20) > 4.0e-7);
+        assertTrue(FastMath.abs(d21) > 4.0e-7);
+        assertTrue(FastMath.abs(d22) > 4.0e-7);
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -444,9 +447,9 @@ public class FieldRotationDfpTest {
                                m3[i][1].getReal() * m3[j][1].getReal() +
                                m3[i][2].getReal() * m3[j][2].getReal();
                 if (i == j) {
-                    Assertions.assertTrue(FastMath.abs(m3tm3 - 1.0) < 1.0e-10);
+                    assertTrue(FastMath.abs(m3tm3 - 1.0) < 1.0e-10);
                 } else {
-                    Assertions.assertTrue(FastMath.abs(m3tm3) < 1.0e-10);
+                    assertTrue(FastMath.abs(m3tm3) < 1.0e-10);
                 }
             }
         }
@@ -469,7 +472,7 @@ public class FieldRotationDfpTest {
                 { 0.0, 1.0, 0.0 },
                 { 1.0, 0.0, 0.0 } };
             r = createRotation(m5, 1.0e-7);
-            Assertions.fail("got " + r + ", should have caught an exception");
+            fail("got " + r + ", should have caught an exception");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -477,7 +480,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testAngles()
+    void testAngles()
         throws MathIllegalStateException {
 
         DfpField field = new DfpField(15);
@@ -533,7 +536,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testSingularities() {
+    void testSingularities() {
 
         DfpField field = new DfpField(20);
         for (RotationConvention convention : RotationConvention.values()) {
@@ -553,7 +556,7 @@ public class FieldRotationDfpTest {
                                                                field.newDfp(0.1),
                                                                field.newDfp(singularCardanAngle[j]),
                                                                field.newDfp(0.3));
-                    Assertions.assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1].getReal(), 4.5e-16);
+                    assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1].getReal(), 4.5e-16);
                 }
             }
 
@@ -570,7 +573,7 @@ public class FieldRotationDfpTest {
                                                                field.newDfp(0.1),
                                                                field.newDfp(singularEulerAngle[j]),
                                                                field.newDfp(0.3));
-                    Assertions.assertEquals(singularEulerAngle[j], r.getAngles(EulerOrders[i], convention)[1].getReal(), 1.0e-24);
+                    assertEquals(singularEulerAngle[j], r.getAngles(EulerOrders[i], convention)[1].getReal(), 1.0e-24);
                 }
             }
 
@@ -578,7 +581,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testQuaternion() throws MathIllegalArgumentException {
+    void testQuaternion() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r1 = new FieldRotation<>(createVector(2, -3, 5),
                                                     createAngle(1.7),
@@ -604,7 +607,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testApplyToRotation() throws MathIllegalArgumentException {
+    void testApplyToRotation() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r1       = new FieldRotation<>(createVector(2, -3, 5),
                                                           createAngle(1.7),
@@ -632,7 +635,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testComposeVectorOperator() throws MathIllegalArgumentException {
+    void testComposeVectorOperator() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r1       = new FieldRotation<>(createVector(2, -3, 5),
                                                           createAngle(1.7),
@@ -661,7 +664,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testComposeFrameTransform() throws MathIllegalArgumentException {
+    void testComposeFrameTransform() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r1       = new FieldRotation<>(createVector(2, -3, 5),
                                                           createAngle(1.7),
@@ -677,7 +680,7 @@ public class FieldRotationDfpTest {
                                                       false),
                                                  RotationConvention.FRAME_TRANSFORM);
         FieldRotation<Dfp> r4 = r1.compose(r2, RotationConvention.VECTOR_OPERATOR);
-        Assertions.assertEquals(0.0, FieldRotation.distance(r3, r4).getReal(), 1.0e-15);
+        assertEquals(0.0, FieldRotation.distance(r3, r4).getReal(), 1.0e-15);
 
         for (double x = -0.9; x < 0.9; x += 0.2) {
             for (double y = -0.9; y < 0.9; y += 0.2) {
@@ -692,7 +695,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testApplyInverseToRotation() throws MathIllegalArgumentException {
+    void testApplyInverseToRotation() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r1 = new FieldRotation<>(createVector(2, -3, 5),
                                                     createAngle(1.7),
@@ -720,7 +723,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testComposeInverseVectorOperator() throws MathIllegalArgumentException {
+    void testComposeInverseVectorOperator() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r1 = new FieldRotation<>(createVector(2, -3, 5),
                                                     createAngle(1.7),
@@ -749,7 +752,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testComposeInverseFrameTransform() throws MathIllegalArgumentException {
+    void testComposeInverseFrameTransform() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r1 = new FieldRotation<>(createVector(2, -3, 5),
                                                     createAngle(1.7),
@@ -765,7 +768,7 @@ public class FieldRotationDfpTest {
                                                              false),
                                                         RotationConvention.FRAME_TRANSFORM);
         FieldRotation<Dfp> r4 = r1.revert().composeInverse(r2.revert(), RotationConvention.VECTOR_OPERATOR);
-        Assertions.assertEquals(0.0, FieldRotation.distance(r3, r4).getReal(), 1.0e-15);
+        assertEquals(0.0, FieldRotation.distance(r3, r4).getReal(), 1.0e-15);
 
         for (double x = -0.9; x < 0.9; x += 0.2) {
             for (double y = -0.9; y < 0.9; y += 0.2) {
@@ -780,7 +783,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testDoubleVectors() throws MathIllegalArgumentException {
+    void testDoubleVectors() throws MathIllegalArgumentException {
 
         Well1024a random = new Well1024a(0x180b41cfeeffaf67L);
         UnitSphereRandomVectorGenerator g = new UnitSphereRandomVectorGenerator(3, random);
@@ -815,7 +818,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testDoubleRotations() throws MathIllegalArgumentException {
+    void testDoubleRotations() throws MathIllegalArgumentException {
 
         DfpField field = new DfpField(20);
         Well1024a random = new Well1024a(0x180b41cfeeffaf67L);
@@ -859,7 +862,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testArray() throws MathIllegalArgumentException {
+    void testArray() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r = new FieldRotation<>(createAxis(2, -3, 5),
                                                    createAngle(1.7),
@@ -872,13 +875,13 @@ public class FieldRotationDfpTest {
                     FieldVector3D<Dfp> v = r.applyTo(u);
                     Dfp[] out = new Dfp[3];
                     r.applyTo(new Dfp[] { u.getX(), u.getY(), u.getZ() }, out);
-                    Assertions.assertEquals(v.getX().getReal(), out[0].getReal(), 1.0e-10);
-                    Assertions.assertEquals(v.getY().getReal(), out[1].getReal(), 1.0e-10);
-                    Assertions.assertEquals(v.getZ().getReal(), out[2].getReal(), 1.0e-10);
+                    assertEquals(v.getX().getReal(), out[0].getReal(), 1.0e-10);
+                    assertEquals(v.getY().getReal(), out[1].getReal(), 1.0e-10);
+                    assertEquals(v.getZ().getReal(), out[2].getReal(), 1.0e-10);
                     r.applyInverseTo(out, out);
-                    Assertions.assertEquals(u.getX().getReal(), out[0].getReal(), 1.0e-10);
-                    Assertions.assertEquals(u.getY().getReal(), out[1].getReal(), 1.0e-10);
-                    Assertions.assertEquals(u.getZ().getReal(), out[2].getReal(), 1.0e-10);
+                    assertEquals(u.getX().getReal(), out[0].getReal(), 1.0e-10);
+                    assertEquals(u.getY().getReal(), out[1].getReal(), 1.0e-10);
+                    assertEquals(u.getZ().getReal(), out[2].getReal(), 1.0e-10);
                 }
             }
         }
@@ -886,7 +889,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testApplyInverseTo() throws MathIllegalArgumentException {
+    void testApplyInverseTo() throws MathIllegalArgumentException {
 
         Dfp[] in      = new Dfp[3];
         Dfp[] out     = new Dfp[3];
@@ -907,9 +910,9 @@ public class FieldRotationDfpTest {
                 in[2] = u.getZ();
                 r.applyTo(in, out);
                 r.applyInverseTo(out, rebuilt);
-                Assertions.assertEquals(in[0].getReal(), rebuilt[0].getReal(), 1.0e-12);
-                Assertions.assertEquals(in[1].getReal(), rebuilt[1].getReal(), 1.0e-12);
-                Assertions.assertEquals(in[2].getReal(), rebuilt[2].getReal(), 1.0e-12);
+                assertEquals(in[0].getReal(), rebuilt[0].getReal(), 1.0e-12);
+                assertEquals(in[1].getReal(), rebuilt[1].getReal(), 1.0e-12);
+                assertEquals(in[2].getReal(), rebuilt[2].getReal(), 1.0e-12);
             }
         }
 
@@ -938,7 +941,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testIssue639() throws MathRuntimeException{
+    void testIssue639() throws MathRuntimeException{
         FieldVector3D<Dfp> u1 = createVector(-1321008684645961.0 /  268435456.0,
                                    -5774608829631843.0 /  268435456.0,
                                    -3822921525525679.0 / 4294967296.0);
@@ -946,14 +949,14 @@ public class FieldRotationDfpTest {
                                    -2275058564560979.0 /    1048576.0,
                                    4423475992255071.0 /      65536.0);
         FieldRotation<Dfp> rot = new FieldRotation<>(u1, u2, createVector(1, 0, 0),createVector(0, 0, 1));
-        Assertions.assertEquals( 0.6228370359608200639829222, rot.getQ0().getReal(), 1.0e-15);
-        Assertions.assertEquals( 0.0257707621456498790029987, rot.getQ1().getReal(), 1.0e-15);
-        Assertions.assertEquals(-0.0000000002503012255839931, rot.getQ2().getReal(), 1.0e-15);
-        Assertions.assertEquals(-0.7819270390861109450724902, rot.getQ3().getReal(), 1.0e-15);
+        assertEquals( 0.6228370359608200639829222, rot.getQ0().getReal(), 1.0e-15);
+        assertEquals( 0.0257707621456498790029987, rot.getQ1().getReal(), 1.0e-15);
+        assertEquals(-0.0000000002503012255839931, rot.getQ2().getReal(), 1.0e-15);
+        assertEquals(-0.7819270390861109450724902, rot.getQ3().getReal(), 1.0e-15);
     }
 
     @Test
-    public void testIssue801() throws MathRuntimeException {
+    void testIssue801() throws MathRuntimeException {
         FieldVector3D<Dfp> u1 = createVector(0.9999988431610581, -0.0015210774290851095, 0.0);
         FieldVector3D<Dfp> u2 = createVector(0.0, 0.0, 1.0);
 
@@ -965,19 +968,19 @@ public class FieldRotationDfpTest {
                     quat.getQ1().getReal() * quat.getQ1().getReal() +
                     quat.getQ2().getReal() * quat.getQ2().getReal() +
                     quat.getQ3().getReal() * quat.getQ3().getReal();
-        Assertions.assertEquals(1.0, q2, 1.0e-14);
-        Assertions.assertEquals(0.0, FieldVector3D.angle(v1, quat.applyTo(u1)).getReal(), 1.0e-14);
-        Assertions.assertEquals(0.0, FieldVector3D.angle(v2, quat.applyTo(u2)).getReal(), 1.0e-14);
+        assertEquals(1.0, q2, 1.0e-14);
+        assertEquals(0.0, FieldVector3D.angle(v1, quat.applyTo(u1)).getReal(), 1.0e-14);
+        assertEquals(0.0, FieldVector3D.angle(v2, quat.applyTo(u2)).getReal(), 1.0e-14);
 
     }
 
     private void checkAngle(Dfp a1, double a2) {
-        Assertions.assertEquals(a1.getReal(), MathUtils.normalizeAngle(a2, a1.getReal()), 1.0e-10);
+        assertEquals(a1.getReal(), MathUtils.normalizeAngle(a2, a1.getReal()), 1.0e-10);
     }
 
     private void checkRotationDS(FieldRotation<Dfp> r, double q0, double q1, double q2, double q3) {
         FieldRotation<Dfp> rPrime = createRotation(q0, q1, q2, q3, false);
-        Assertions.assertEquals(0, FieldRotation.distance(r, rPrime).getReal(), 1.0e-12);
+        assertEquals(0, FieldRotation.distance(r, rPrime).getReal(), 1.0e-12);
     }
 
     private FieldRotation<Dfp> createRotation(double q0, double q1, double q2, double q3,
@@ -1012,18 +1015,18 @@ public class FieldRotationDfpTest {
     }
 
     private void checkVector(FieldVector3D<Dfp> u, FieldVector3D<Dfp> v) {
-        Assertions.assertEquals(u.getX().getReal(), v.getX().getReal(), 1.0e-12);
-        Assertions.assertEquals(u.getY().getReal(), v.getY().getReal(), 1.0e-12);
-        Assertions.assertEquals(u.getZ().getReal(), v.getZ().getReal(), 1.0e-12);
+        assertEquals(u.getX().getReal(), v.getX().getReal(), 1.0e-12);
+        assertEquals(u.getY().getReal(), v.getY().getReal(), 1.0e-12);
+        assertEquals(u.getZ().getReal(), v.getZ().getReal(), 1.0e-12);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         field = new DfpField(20);
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         field = null;
     }
 

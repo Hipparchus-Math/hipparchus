@@ -26,78 +26,79 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  */
-public final class BisectionSolverTest {
+final class BisectionSolverTest {
     @Test
-    public void testSinZero() {
+    void testSinZero() {
         UnivariateFunction f = new Sin();
         double result;
 
         BisectionSolver solver = new BisectionSolver();
         result = solver.solve(100, f, 3, 4);
-        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 1, 4);
-        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
     }
 
     @Test
-    public void testQuinticZero() {
+    void testQuinticZero() {
         UnivariateFunction f = new QuinticFunction();
         double result;
 
         BisectionSolver solver = new BisectionSolver();
         result = solver.solve(100, f, -0.2, 0.2);
-        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
+        assertEquals(0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, -0.1, 0.3);
-        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
+        assertEquals(0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, -0.3, 0.45);
-        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
+        assertEquals(0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.3, 0.7);
-        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        assertEquals(0.5, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.2, 0.6);
-        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        assertEquals(0.5, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.05, 0.95);
-        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        assertEquals(0.5, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.85, 1.25);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.8, 1.2);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.85, 1.75);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.55, 1.45);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 0.85, 5);
-        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        assertEquals(1.0, result, solver.getAbsoluteAccuracy());
 
-        Assertions.assertTrue(solver.getEvaluations() > 0);
+        assertTrue(solver.getEvaluations() > 0);
     }
 
     @Test
-    public void testMath369() {
+    void testMath369() {
         UnivariateFunction f = new Sin();
         BisectionSolver solver = new BisectionSolver();
-        Assertions.assertEquals(FastMath.PI, solver.solve(100, f, 3.0, 3.2, 3.1), solver.getAbsoluteAccuracy());
+        assertEquals(FastMath.PI, solver.solve(100, f, 3.0, 3.2, 3.1), solver.getAbsoluteAccuracy());
     }
 
     @Test
-    public void testHipparchusGithub40() {
+    void testHipparchusGithub40() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new BisectionSolver().solve(100, x -> Math.cos(x) + 2, 0.0, 5.0);
         });

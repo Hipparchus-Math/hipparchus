@@ -44,7 +44,7 @@ public class SumSqTest extends StorelessUnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         SumOfSquares sumSq = getUnivariateStatistic();
         assertEquals(0, sumSq.getResult(), 0);
         sumSq.increment(2d);

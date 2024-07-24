@@ -22,15 +22,15 @@
 package org.hipparchus.special;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @version $Id$
  */
-public class BesselJTest {
+class BesselJTest {
 
     /**
      * Reference data for the {@link BesselJ#value(double, double)} function. This data
@@ -756,7 +756,7 @@ public class BesselJTest {
     };
 
     @Test
-    public void testBesselJ() {
+    void testBesselJ() {
         final double tol = 1e-15;
 
         for (int i = 0; i < BESSEL_J_REF.length; i++) {
@@ -767,19 +767,19 @@ public class BesselJTest {
             final double actual = BesselJ.value(order, x);
 
             String msg = "" + order + " @ " + x;
-            Assertions.assertEquals(expected, actual, tol, msg);
+            assertEquals(expected, actual, tol, msg);
         }
     }
 
     @Test
-    public void testIAEBadOrder() {
+    void testIAEBadOrder() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             BesselJ.value(-1, 1);
         });
     }
 
     @Test
-    public void testIAEBadArgument() {
+    void testIAEBadArgument() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             BesselJ.value(1, 100000);
         });

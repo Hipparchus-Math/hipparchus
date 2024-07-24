@@ -31,11 +31,12 @@ import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Tests for overlapping state events. Also tests an event function that does
  * not converge to zero, but does have values of opposite sign around its root.
@@ -58,7 +59,7 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
      * ODEEventDetector.g(stateAndDerivative)}.
      */
     @Test
-    public void testOverlappingEvents0()
+    void testOverlappingEvents0()
         throws MathIllegalArgumentException, MathIllegalStateException {
         test(0);
     }
@@ -69,7 +70,7 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
      *      * ODEEventDetector.g(stateAndDerivative)}.
      */
     @Test
-    public void testOverlappingEvents1()
+    void testOverlappingEvents1()
         throws MathIllegalArgumentException, MathIllegalStateException {
         test(1);
     }
@@ -110,13 +111,13 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
                 //System.out.println("Event 2 @ t=" + t);
             }
         }
-        Assertions.assertEquals(EVENT_TIMES1.length, events1.size());
-        Assertions.assertEquals(EVENT_TIMES2.length, events2.size());
+        assertEquals(EVENT_TIMES1.length, events1.size());
+        assertEquals(EVENT_TIMES2.length, events2.size());
         for(int i = 0; i < EVENT_TIMES1.length; i++) {
-            Assertions.assertEquals(EVENT_TIMES1[i], events1.get(i), 1e-7);
+            assertEquals(EVENT_TIMES1[i], events1.get(i), 1e-7);
         }
         for(int i = 0; i < EVENT_TIMES2.length; i++) {
-            Assertions.assertEquals(EVENT_TIMES2[i], events2.get(i), 1e-7);
+            assertEquals(EVENT_TIMES2[i], events2.get(i), 1e-7);
         }
         //System.out.println();
     }

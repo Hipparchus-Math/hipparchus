@@ -22,9 +22,13 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for FDistribution.
@@ -71,90 +75,90 @@ public class FDistributionTest extends RealDistributionAbstractTest {
     //---------------------------- Additional test cases -------------------------
 
     @Test
-    public void testCumulativeProbabilityExtremes() {
+    void testCumulativeProbabilityExtremes() {
         setCumulativeTestPoints(new double[] {-2, 0});
         setCumulativeTestValues(new double[] {0, 0});
         verifyCumulativeProbabilities();
     }
 
     @Test
-    public void testInverseCumulativeProbabilityExtremes() {
+    void testInverseCumulativeProbabilityExtremes() {
         setInverseCumulativeTestPoints(new double[] {0, 1});
         setInverseCumulativeTestValues(new double[] {0, Double.POSITIVE_INFINITY});
         verifyInverseCumulativeProbabilities();
     }
 
     @Test
-    public void testDfAccessors() {
+    void testDfAccessors() {
         FDistribution dist = (FDistribution) getDistribution();
-        Assertions.assertEquals(5d, dist.getNumeratorDegreesOfFreedom(), Double.MIN_VALUE);
-        Assertions.assertEquals(6d, dist.getDenominatorDegreesOfFreedom(), Double.MIN_VALUE);
+        assertEquals(5d, dist.getNumeratorDegreesOfFreedom(), Double.MIN_VALUE);
+        assertEquals(6d, dist.getDenominatorDegreesOfFreedom(), Double.MIN_VALUE);
     }
 
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         try {
             new FDistribution(0, 1);
-            Assertions.fail("Expecting MathIllegalArgumentException for df = 0");
+            fail("Expecting MathIllegalArgumentException for df = 0");
         } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new FDistribution(1, 0);
-            Assertions.fail("Expecting MathIllegalArgumentException for df = 0");
+            fail("Expecting MathIllegalArgumentException for df = 0");
         } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
     }
 
     @Test
-    public void testLargeDegreesOfFreedom() {
+    void testLargeDegreesOfFreedom() {
         FDistribution fd = new FDistribution(100000, 100000);
         double p = fd.cumulativeProbability(.999);
         double x = fd.inverseCumulativeProbability(p);
-        Assertions.assertEquals(.999, x, 1.0e-5);
+        assertEquals(.999, x, 1.0e-5);
     }
 
     @Test
-    public void testSmallDegreesOfFreedom() {
+    void testSmallDegreesOfFreedom() {
         FDistribution fd = new FDistribution(1, 1);
         double p = fd.cumulativeProbability(0.975);
         double x = fd.inverseCumulativeProbability(p);
-        Assertions.assertEquals(0.975, x, 1.0e-5);
+        assertEquals(0.975, x, 1.0e-5);
 
         fd = new FDistribution(1, 2);
         p = fd.cumulativeProbability(0.975);
         x = fd.inverseCumulativeProbability(p);
-        Assertions.assertEquals(0.975, x, 1.0e-5);
+        assertEquals(0.975, x, 1.0e-5);
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         FDistribution dist;
 
         dist = new FDistribution(1, 2);
-        Assertions.assertTrue(Double.isNaN(dist.getNumericalMean()));
-        Assertions.assertTrue(Double.isNaN(dist.getNumericalVariance()));
+        assertTrue(Double.isNaN(dist.getNumericalMean()));
+        assertTrue(Double.isNaN(dist.getNumericalVariance()));
 
         dist = new FDistribution(1, 3);
-        Assertions.assertEquals(dist.getNumericalMean(), 3d / (3d - 2d), tol);
-        Assertions.assertTrue(Double.isNaN(dist.getNumericalVariance()));
+        assertEquals(dist.getNumericalMean(), 3d / (3d - 2d), tol);
+        assertTrue(Double.isNaN(dist.getNumericalVariance()));
 
         dist = new FDistribution(1, 5);
-        Assertions.assertEquals(dist.getNumericalMean(), 5d / (5d - 2d), tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), (2d * 5d * 5d * 4d) / 9d, tol);
+        assertEquals(dist.getNumericalMean(), 5d / (5d - 2d), tol);
+        assertEquals(dist.getNumericalVariance(), (2d * 5d * 5d * 4d) / 9d, tol);
     }
 
     @Test
-    public void testMath785() {
+    void testMath785() {
         // this test was failing due to inaccurate results from ContinuedFraction.
 
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             double prob = 0.01;
             FDistribution f = new FDistribution(200000, 200000);
             double result = f.inverseCumulativeProbability(prob);
-            Assertions.assertTrue(result < 1.0);
+            assertTrue(result < 1.0);
         }, "Failing to calculate inverse cumulative probability");
     }
 }

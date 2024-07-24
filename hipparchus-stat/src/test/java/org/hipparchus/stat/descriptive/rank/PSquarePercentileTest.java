@@ -86,7 +86,7 @@ public class PSquarePercentileTest extends
      * are incremented
      */
     @Test
-    public void testCopyConsistencyWithInitialMostElements() {
+    void testCopyConsistencyWithInitialMostElements() {
 
         StorelessUnivariateStatistic master = getUnivariateStatistic();
         StorelessUnivariateStatistic replica = null;
@@ -115,7 +115,7 @@ public class PSquarePercentileTest extends
      * elements are incremented
      */
     @Test
-    public void testCopyConsistencyWithInitialFirstFewElements() {
+    void testCopyConsistencyWithInitialFirstFewElements() {
 
         StorelessUnivariateStatistic master = getUnivariateStatistic();
         StorelessUnivariateStatistic replica = null;
@@ -141,7 +141,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testNullListInMarkers() {
+    void testNullListInMarkers() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             // In case of null list Markers cannot be instantiated..is getting verified
             // new Markers(null, 0, PSquarePercentile.newEstimator());
@@ -151,7 +151,7 @@ public class PSquarePercentileTest extends
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testMiscellaniousFunctionsInMarkers() {
+    void testMiscellaniousFunctionsInMarkers() {
         double p = 0.5;
         PSquareMarkers markers =
                 PSquarePercentile.newMarkers(
@@ -180,7 +180,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testMarkersOORLow() {
+    void testMarkersOORLow() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             PSquarePercentile.newMarkers(
                 Arrays.asList(new Double[]{0.02, 1.18, 9.15, 21.91, 38.62}), 0.5).estimate(0);
@@ -188,7 +188,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testMarkersOORHigh() {
+    void testMarkersOORHigh() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             PSquarePercentile.newMarkers(
                 Arrays.asList(new Double[]{0.02, 1.18, 9.15, 21.91, 38.62}), 0.5).estimate(5);
@@ -196,7 +196,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testMarkers2() {
+    void testMarkers2() {
         double p = 0.5;
         PSquareMarkers markers =
                 PSquarePercentile.newMarkers(
@@ -214,7 +214,7 @@ public class PSquarePercentileTest extends
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testHashCodeInMarkers() {
+    void testHashCodeInMarkers() {
         PSquarePercentile p = new PSquarePercentile(95);
         PSquarePercentile p2 = new PSquarePercentile(95);
         Set<PSquarePercentile> s = new HashSet<>();
@@ -280,7 +280,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testMarkersWithLowerIndex() {
+    void testMarkersWithLowerIndex() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(
@@ -295,7 +295,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testMarkersWithHigherIndex() {
+    void testMarkersWithHigherIndex() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(
@@ -310,7 +310,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testMarkerHeightWithLowerIndex() {
+    void testMarkerHeightWithLowerIndex() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(
@@ -322,7 +322,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testMarkerHeightWithHigherIndex() {
+    void testMarkerHeightWithHigherIndex() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(
@@ -335,7 +335,7 @@ public class PSquarePercentileTest extends
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testPSquaredEqualsAndMin() {
+    void testPSquaredEqualsAndMin() {
         PSquarePercentile ptile = new PSquarePercentile(0);
         assertEquals(ptile, ptile);
         assertNotEquals(null, ptile);
@@ -353,7 +353,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testString() {
+    void testString() {
         PSquarePercentile ptile = new PSquarePercentile(95);
         assertNotNull(ptile.toString());
         ptile.increment(1);
@@ -366,7 +366,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testHighPercentile() {
+    void testHighPercentile() {
         double[] d = new double[] { 1, 2, 3 };
         PSquarePercentile p = new PSquarePercentile(75.0);
         assertEquals(2, p.evaluate(d), 1.0e-5);
@@ -375,14 +375,14 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testLowPercentile() {
+    void testLowPercentile() {
         double[] d = new double[] { 0, 1 };
         PSquarePercentile p = new PSquarePercentile(25.0);
         assertEquals(0d, p.evaluate(d), Double.MIN_VALUE);
     }
 
     @Test
-    public void testPercentile() {
+    void testPercentile() {
         double[] d = new double[] { 1, 3, 2, 4 };
         PSquarePercentile p = new PSquarePercentile(30d);
         assertEquals(1.0, p.evaluate(d), 1.0e-5);
@@ -395,14 +395,14 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testInitial() {
+    void testInitial() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             PSquarePercentile.newMarkers(new ArrayList<Double>(), 0.5);
         });
     }
 
     @Test
-    public void testNegativeInvalidValues() {
+    void testNegativeInvalidValues() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] d =
                 new double[]{95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
@@ -414,7 +414,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testPositiveInvalidValues() {
+    void testPositiveInvalidValues() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] d =
                 new double[]{95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
@@ -426,7 +426,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testNISTExample() {
+    void testNISTExample() {
         double[] d =
                 new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
                         95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
@@ -437,13 +437,13 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void test5() {
+    void test5() {
         PSquarePercentile percentile = new PSquarePercentile(5d);
         assertEquals(this.percentile5, percentile.evaluate(testArray), 1.0); // changed the accuracy to 1 instead of tolerance
     }
 
     @Test
-    public void testNull() {
+    void testNull() {
         assertThrows(NullArgumentException.class, () -> {
             PSquarePercentile percentile = new PSquarePercentile(50d);
             double[] nullArray = null;
@@ -452,14 +452,14 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testEmpty() {
+    void testEmpty() {
         PSquarePercentile percentile = new PSquarePercentile(50d);
         double[] emptyArray = new double[] {};
         assertTrue(Double.isNaN(percentile.evaluate(emptyArray)));
     }
 
     @Test
-    public void testSingleton() {
+    void testSingleton() {
         PSquarePercentile percentile = new PSquarePercentile(50d);
         double[] singletonArray = new double[] { 1d };
         assertEquals(1d, percentile.evaluate(singletonArray), 0);
@@ -473,7 +473,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         PSquarePercentile percentile = new PSquarePercentile(50d);
         double[] specialValues = new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
         assertEquals(2d, percentile.evaluate(specialValues), 0);
@@ -494,12 +494,12 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testArrayExample() {
+    void testArrayExample() {
         assertEquals(expectedValue(), new PSquarePercentile(95d).evaluate(testArray), getTolerance());
     }
 
     @Test
-    public void testSetQuantile() {
+    void testSetQuantile() {
         PSquarePercentile percentile = new PSquarePercentile(10d);
 
         percentile = new PSquarePercentile(100); // OK
@@ -527,7 +527,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testAccept() {
+    void testAccept() {
         PSquarePercentile psquared = new PSquarePercentile(0.99);
         assertTrue(Double.isNaN(psquared.getResult()));
         Double[] test = randomTestData(100, 10000);
@@ -538,7 +538,7 @@ public class PSquarePercentileTest extends
         }
     }
 
-    private void assertValues(Double a, Double b, double delta) {
+    private void customAssertValues(Double a, Double b, double delta) {
         if (Double.isNaN(a)) {
             assertTrue(Double.isNaN(a), "" + b + " is not NaN.");
         } else {
@@ -568,7 +568,7 @@ public class PSquarePercentileTest extends
         }
 
         Double referenceValue = p2.evaluate(dall);
-        assertValues(psquared.getResult(), referenceValue, delta);
+        customAssertValues(psquared.getResult(), referenceValue, delta);
     }
 
     private void doCalculatePercentile(double percentile, double[] test, double delta) {
@@ -583,11 +583,11 @@ public class PSquarePercentileTest extends
          * test.length; i++) dall[i] = test[i];
          */
         Double referenceValue = p2.evaluate(test);
-        assertValues(psquared.getResult(), referenceValue, delta);
+        customAssertValues(psquared.getResult(), referenceValue, delta);
     }
 
     @Test
-    public void testCannedDataSet() {
+    void testCannedDataSet() {
         // test.unoverride("dump");
         Integer[] seedInput =
                 new Integer[] { 283, 285, 298, 304, 310, 31, 319, 32, 33, 339,
@@ -605,55 +605,55 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void test99Percentile() {
+    void test99Percentile() {
         Double[] test = randomTestData(100, 10000);
         doCalculatePercentile(0.99d, test);
     }
 
     @Test
-    public void test90Percentile() {
+    void test90Percentile() {
         Double[] test = randomTestData(100, 10000);
         doCalculatePercentile(0.90d, test);
     }
 
     @Test
-    public void test20Percentile() {
+    void test20Percentile() {
         Double[] test = randomTestData(100, 100000);
         doCalculatePercentile(0.20d, test);
     }
 
     @Test
-    public void test5Percentile() {
+    void test5Percentile() {
         Double[] test = randomTestData(50, 990000);
         doCalculatePercentile(0.50d, test);
     }
 
     @Test
-    public void test99PercentileHighValues() {
+    void test99PercentileHighValues() {
         Double[] test = randomTestData(100000, 10000);
         doCalculatePercentile(0.99d, test);
     }
 
     @Test
-    public void test90PercentileHighValues() {
+    void test90PercentileHighValues() {
         Double[] test = randomTestData(100000, 100000);
         doCalculatePercentile(0.90d, test);
     }
 
     @Test
-    public void test20PercentileHighValues() {
+    void test20PercentileHighValues() {
         Double[] test = randomTestData(100000, 100000);
         doCalculatePercentile(0.20d, test);
     }
 
     @Test
-    public void test5PercentileHighValues() {
+    void test5PercentileHighValues() {
         Double[] test = randomTestData(100000, 100000);
         doCalculatePercentile(0.05d, test);
     }
 
     @Test
-    public void test0PercentileValuesWithFewerThan5Values() {
+    void test0PercentileValuesWithFewerThan5Values() {
         double[] test = { 1d, 2d, 3d, 4d };
         PSquarePercentile p = new PSquarePercentile(0d);
         assertEquals(1d, p.evaluate(test), 0);
@@ -661,7 +661,7 @@ public class PSquarePercentileTest extends
     }
 
     @Test
-    public void testPSQuaredEvalFuncWithPapersExampleData() throws IOException {
+    void testPSQuaredEvalFuncWithPapersExampleData() throws IOException {
 
         // This data as input is considered from
         // http://www.cs.wustl.edu/~jain/papers/ftp/psqr.pdf
@@ -743,7 +743,7 @@ public class PSquarePercentileTest extends
      * Test Various Dist
      */
     @Test
-    public void testDistribution() {
+    void testDistribution() {
         doDistributionTest(new NormalDistribution(4000, 50));
         doDistributionTest(new LogNormalDistribution(4000, 50));
         // doDistributionTest((new ExponentialDistribution(4000));

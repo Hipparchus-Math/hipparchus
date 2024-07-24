@@ -31,19 +31,22 @@ import org.hipparchus.dfp.DfpMath;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test case for {@link FieldBracketingNthOrderBrentSolver bracketing n<sup>th</sup> order Brent} solver.
  *
  */
-public final class FieldBracketingNthOrderBrentSolverTest {
+final class FieldBracketingNthOrderBrentSolverTest {
 
     @Test
-    public void testInsufficientOrder3() {
-        Assertions.assertThrows(MathIllegalArgumentException.class, () -> {
+    void testInsufficientOrder3() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
             new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy,
                                                         absoluteAccuracy,
                                                         functionValueAccuracy,
@@ -52,15 +55,15 @@ public final class FieldBracketingNthOrderBrentSolverTest {
     }
 
     @Test
-    public void testConstructorOK() {
+    void testConstructorOK() {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
                 new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
                                                             functionValueAccuracy, 2);
-        Assertions.assertEquals(2, solver.getMaximalOrder());
+        assertEquals(2, solver.getMaximalOrder());
     }
 
     @Test
-    public void testConvergenceOnFunctionAccuracy() {
+    void testConvergenceOnFunctionAccuracy() {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
                 new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
                                                             field.newDfp(1.0e-20), 20);
@@ -78,18 +81,18 @@ public final class FieldBracketingNthOrderBrentSolverTest {
 
         Dfp result = solver.solve(20, f.toCalculusFieldUnivariateFunction(field), field.newDfp(0.2), field.newDfp(0.9),
                                   field.newDfp(0.4), AllowedSolution.BELOW_SIDE);
-        Assertions.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
-        Assertions.assertTrue(f.value(result).negativeOrNull());
-        Assertions.assertTrue(result.subtract(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).positiveOrNull());
+        assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
+        assertTrue(f.value(result).negativeOrNull());
+        assertTrue(result.subtract(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).positiveOrNull());
         result = solver.solve(20, f.toCalculusFieldUnivariateFunction(field), field.newDfp(-0.9), field.newDfp(-0.2),
                               field.newDfp(-0.4), AllowedSolution.ABOVE_SIDE);
-        Assertions.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
-        Assertions.assertTrue(f.value(result).positiveOrNull());
-        Assertions.assertTrue(result.add(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).negativeOrNull());
+        assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
+        assertTrue(f.value(result).positiveOrNull());
+        assertTrue(result.add(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).negativeOrNull());
     }
 
     @Test
-    public void testToleranceLessThanUlp() {
+    void testToleranceLessThanUlp() {
         // function that is never zero
         Dfp zero = field.getZero();
         Dfp one = field.getOne();
@@ -101,11 +104,11 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         // make sure it doesn't throw a maxIterations exception
         Dfp result = solver.solve(200, f, zero, zero.add(5.0), AllowedSolution.LEFT_SIDE);
         double difference = field.newDfp(2.1).subtract(result).abs().getReal();
-        Assertions.assertTrue( difference < FastMath.ulp(2.1), "difference: " + difference);
+        assertTrue( difference < FastMath.ulp(2.1), "difference: " + difference);
     }
 
     @Test
-    public void testNeta() {
+    void testNeta() {
 
         // the following test functions come from Beny Neta's paper:
         // "Several New Methods for solving Equations"
@@ -161,23 +164,23 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         Dfp yResult = f.value(xResult);
         switch (allowedSolution) {
         case ANY_SIDE :
-            Assertions.assertTrue(yResult.abs().lessThan(functionValueAccuracy.multiply(2)));
+            assertTrue(yResult.abs().lessThan(functionValueAccuracy.multiply(2)));
             break;
         case LEFT_SIDE : {
             boolean increasing = f.value(xResult).add(absoluteAccuracy).greaterThan(yResult);
-            Assertions.assertTrue(increasing ? yResult.negativeOrNull() : yResult.positiveOrNull());
+            assertTrue(increasing ? yResult.negativeOrNull() : yResult.positiveOrNull());
             break;
         }
         case RIGHT_SIDE : {
             boolean increasing = f.value(xResult).add(absoluteAccuracy).greaterThan(yResult);
-            Assertions.assertTrue(increasing ? yResult.positiveOrNull() : yResult.negativeOrNull());
+            assertTrue(increasing ? yResult.positiveOrNull() : yResult.negativeOrNull());
             break;
         }
         case BELOW_SIDE :
-            Assertions.assertTrue(yResult.negativeOrNull());
+            assertTrue(yResult.negativeOrNull());
             break;
         case ABOVE_SIDE :
-            Assertions.assertTrue(yResult.positiveOrNull());
+            assertTrue(yResult.positiveOrNull());
             break;
         default :
             // this should never happen
@@ -186,7 +189,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         field                 = new DfpField(50);
         absoluteAccuracy      = field.newDfp(1.0e-45);
         relativeAccuracy      = field.newDfp(1.0e-45);

@@ -22,10 +22,12 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CorrelatedRandomVectorGeneratorTest {
     private double[] mean;
@@ -63,12 +65,12 @@ public class CorrelatedRandomVectorGeneratorTest {
     }
 
     @Test
-    public void testRank() {
-        Assertions.assertEquals(2, generator.getRank());
+    void testRank() {
+        assertEquals(2, generator.getRank());
     }
 
     @Test
-    public void testMath226() {
+    void testMath226() {
         double[] mean = { 1, 1, 10, 1 };
         double[][] cov = {
                 { 1, 3, 2, 6 },
@@ -95,24 +97,24 @@ public class CorrelatedRandomVectorGeneratorTest {
             }
         }
         for (int j = 0; j < min.length; ++j) {
-            Assertions.assertTrue(max[j] - min[j] > 2.0);
+            assertTrue(max[j] - min[j] > 2.0);
         }
 
     }
 
     @Test
-    public void testRootMatrix() {
+    void testRootMatrix() {
         RealMatrix b = generator.getRootMatrix();
         RealMatrix bbt = b.multiplyTransposed(b);
         for (int i = 0; i < covariance.getRowDimension(); ++i) {
             for (int j = 0; j < covariance.getColumnDimension(); ++j) {
-                Assertions.assertEquals(covariance.getEntry(i, j), bbt.getEntry(i, j), 1.0e-12);
+                assertEquals(covariance.getEntry(i, j), bbt.getEntry(i, j), 1.0e-12);
             }
         }
     }
 
     @Test
-    public void testMeanAndCovariance() {
+    void testMeanAndCovariance() {
 
         final double[] meanStat = new double[mean.length];
         final RealMatrix matrix = new Array2DRowRealMatrix(5000, mean.length);
@@ -127,9 +129,9 @@ public class CorrelatedRandomVectorGeneratorTest {
 
         RealMatrix estimatedCovariance = UnitTestUtils.covarianceMatrix(matrix);
         for (int i = 0; i < meanStat.length; ++i) {
-            Assertions.assertEquals(mean[i], meanStat[i], 0.07);
+            assertEquals(mean[i], meanStat[i], 0.07);
             for (int j = 0; j <= i; ++j) {
-                Assertions.assertEquals(covariance.getEntry(i, j),
+                assertEquals(covariance.getEntry(i, j),
                                     estimatedCovariance.getEntry(i, j),
                                     0.1 * (1.0 + FastMath.abs(mean[i])) * (1.0 + FastMath.abs(mean[j])));
             }
@@ -138,7 +140,7 @@ public class CorrelatedRandomVectorGeneratorTest {
     }
 
     @Test
-    public void testSampleWithZeroCovariance() {
+    void testSampleWithZeroCovariance() {
         final double[][] covMatrix1 = new double[][]{
                 {0.013445532, 0.010394690, 0.009881156, 0.010499559},
                 {0.010394690, 0.023006616, 0.008196856, 0.010732709},
@@ -188,7 +190,7 @@ public class CorrelatedRandomVectorGeneratorTest {
 
         RealMatrix sampleCov = UnitTestUtils.covarianceMatrix(matrix);
         for (int r = 0; r < covMatrix.length; ++r) {
-            UnitTestUtils.assertEquals(covMatrix[r], sampleCov.getColumn(r), epsilon);
+            UnitTestUtils.customAssertEquals(covMatrix[r], sampleCov.getColumn(r), epsilon);
         }
 
     }

@@ -26,11 +26,13 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.Variance;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class CovarianceTest {
+
+class CovarianceTest {
 
     protected final double[] longleyData = new double[] {
             60323,83.0,234289,2356,1590,107608,1947,
@@ -113,7 +115,7 @@ public class CovarianceTest {
      * <a href="https://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat">Longley dataset</a>
      */
     @Test
-    public void testLongly() {
+    void testLongly() {
         RealMatrix matrix = createRealMatrix(longleyData, 16, 7);
         RealMatrix covarianceMatrix = new Covariance(matrix).getCovarianceMatrix();
         double[] rData = new double[] {
@@ -133,7 +135,7 @@ public class CovarianceTest {
          2973.033333333333, 1382.433333333333, 32917.40000000, 22.66666666666667
         };
 
-        UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-9);
+        UnitTestUtils.customAssertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-9);
 
     }
 
@@ -142,7 +144,7 @@ public class CovarianceTest {
      * Data Source: R datasets package
      */
     @Test
-    public void testSwissFertility() {
+    void testSwissFertility() {
          RealMatrix matrix = createRealMatrix(swissData, 47, 5);
          RealMatrix covarianceMatrix = new Covariance(matrix).getCovarianceMatrix();
          double[] rData = new double[] {
@@ -153,47 +155,47 @@ public class CovarianceTest {
             241.5632030527289, 379.9043755781684, -190.56061054579092, -61.6988297872340, 1739.2945371877890
          };
 
-         UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
+         UnitTestUtils.customAssertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
     }
 
     /**
      * Constant column
      */
     @Test
-    public void testConstant() {
+    void testConstant() {
         double[] noVariance = new double[] {1, 1, 1, 1};
         double[] values = new double[] {1, 2, 3, 4};
-        Assertions.assertEquals(0d, new Covariance().covariance(noVariance, values, true), Double.MIN_VALUE);
-        Assertions.assertEquals(0d, new Covariance().covariance(noVariance, noVariance, true), Double.MIN_VALUE);
+        assertEquals(0d, new Covariance().covariance(noVariance, values, true), Double.MIN_VALUE);
+        assertEquals(0d, new Covariance().covariance(noVariance, noVariance, true), Double.MIN_VALUE);
     }
 
     /**
      * One column
      */
     @Test
-    public void testOneColumn() {
+    void testOneColumn() {
         RealMatrix cov = new Covariance(new double[][] {{1}, {2}}, false).getCovarianceMatrix();
-        Assertions.assertEquals(1, cov.getRowDimension());
-        Assertions.assertEquals(1, cov.getColumnDimension());
-        Assertions.assertEquals(0.25, cov.getEntry(0, 0), 1.0e-15);
+        assertEquals(1, cov.getRowDimension());
+        assertEquals(1, cov.getColumnDimension());
+        assertEquals(0.25, cov.getEntry(0, 0), 1.0e-15);
     }
 
     /**
      * Insufficient data
      */
     @Test
-    public void testInsufficientData() {
+    void testInsufficientData() {
         double[] one = new double[] {1};
         double[] two = new double[] {2};
         try {
             new Covariance().covariance(one, two, false);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try {
             new Covariance(new double[][] {{},{}});
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -204,20 +206,20 @@ public class CovarianceTest {
      * column-by-column covariances
      */
     @Test
-    public void testConsistency() {
+    void testConsistency() {
         final RealMatrix matrix = createRealMatrix(swissData, 47, 5);
         final RealMatrix covarianceMatrix = new Covariance(matrix).getCovarianceMatrix();
 
         // Variances on the diagonal
         Variance variance = new Variance();
         for (int i = 0; i < 5; i++) {
-            Assertions.assertEquals(variance.evaluate(matrix.getColumn(i)), covarianceMatrix.getEntry(i,i), 10E-14);
+            assertEquals(variance.evaluate(matrix.getColumn(i)), covarianceMatrix.getEntry(i,i), 10E-14);
         }
 
         // Symmetry, column-consistency
-        Assertions.assertEquals(covarianceMatrix.getEntry(2, 3),
+        assertEquals(covarianceMatrix.getEntry(2, 3),
                 new Covariance().covariance(matrix.getColumn(2), matrix.getColumn(3), true), 10E-14);
-        Assertions.assertEquals(covarianceMatrix.getEntry(2, 3), covarianceMatrix.getEntry(3, 2), Double.MIN_VALUE);
+        assertEquals(covarianceMatrix.getEntry(2, 3), covarianceMatrix.getEntry(3, 2), Double.MIN_VALUE);
 
         // All columns same -> all entries = column variance
         RealMatrix repeatedColumns = new Array2DRowRealMatrix(47, 3);
@@ -228,20 +230,20 @@ public class CovarianceTest {
         double columnVariance = variance.evaluate(matrix.getColumn(0));
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Assertions.assertEquals(columnVariance, repeatedCovarianceMatrix.getEntry(i, j), 10E-14);
+                assertEquals(columnVariance, repeatedCovarianceMatrix.getEntry(i, j), 10E-14);
             }
         }
 
         // Check bias-correction defaults
         double[][] data = matrix.getData();
-        UnitTestUtils.assertEquals("Covariances",
-                covarianceMatrix, new Covariance().computeCovarianceMatrix(data),Double.MIN_VALUE);
-        UnitTestUtils.assertEquals("Covariances",
-                covarianceMatrix, new Covariance().computeCovarianceMatrix(data, true),Double.MIN_VALUE);
+        UnitTestUtils.customAssertEquals("Covariances",
+                                         covarianceMatrix, new Covariance().computeCovarianceMatrix(data), Double.MIN_VALUE);
+        UnitTestUtils.customAssertEquals("Covariances",
+                                         covarianceMatrix, new Covariance().computeCovarianceMatrix(data, true), Double.MIN_VALUE);
 
         double[] x = data[0];
         double[] y = data[1];
-        Assertions.assertEquals(new Covariance().covariance(x, y),
+        assertEquals(new Covariance().covariance(x, y),
                 new Covariance().covariance(x, y, true), Double.MIN_VALUE);
     }
 

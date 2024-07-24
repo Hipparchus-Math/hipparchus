@@ -23,18 +23,19 @@
 package org.hipparchus.dfp;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DfpDecTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class DfpDecTest {
 
     private DfpField field;
     private Dfp pinf;
     private Dfp ninf;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Some basic setup.  Define some constants and clear the status flags
         field = new DfpField(20);
         pinf = new DfpDec(field, 1).divide(new DfpDec(field, 0));
@@ -43,7 +44,7 @@ public class DfpDecTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         field = null;
         pinf    = null;
         ninf    = null;
@@ -64,13 +65,13 @@ public class DfpDecTest {
         b = (b && x.getField().getIEEEFlags() == flags);
 
         if (!b)
-            Assertions.assertTrue(b, "assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags());
+            assertTrue(b, "assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags());
 
         x.getField().clearIEEEFlags();
     }
 
     @Test
-    public void testRound()
+    void testRound()
     {
         field.setRoundingMode(DfpField.RoundingMode.ROUND_HALF_EVEN);
 
@@ -287,7 +288,7 @@ public class DfpDecTest {
     }
 
     @Test
-    public void testRoundDecimal10()
+    void testRoundDecimal10()
     {
         field.setRoundingMode(DfpField.RoundingMode.ROUND_HALF_EVEN);
 
@@ -504,7 +505,7 @@ public class DfpDecTest {
     }
 
     @Test
-    public void testNextAfter()
+    void testNextAfter()
     {
         test(new DfpDec(field, 1).nextAfter(pinf),
              new DfpDec(field, "1.0000000000000001"),

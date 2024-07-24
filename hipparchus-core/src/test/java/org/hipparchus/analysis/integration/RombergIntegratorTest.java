@@ -26,8 +26,11 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -38,13 +41,13 @@ import org.junit.jupiter.api.Test;
  * takes less than 5 iterations for the integral to converge.
  *
  */
-public final class RombergIntegratorTest {
+final class RombergIntegratorTest {
 
     /**
      * Test of integrator for the sine function.
      */
     @Test
-    public void testSinFunction() {
+    void testSinFunction() {
         UnivariateFunction f = new Sin();
         UnivariateIntegrator integrator = new RombergIntegrator();
         double min, max, expected, result, tolerance;
@@ -52,23 +55,23 @@ public final class RombergIntegratorTest {
         min = 0; max = FastMath.PI; expected = 2;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max);
-        Assertions.assertTrue(integrator.getEvaluations() < 50);
-        Assertions.assertTrue(integrator.getIterations()  < 10);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < 50);
+        assertTrue(integrator.getIterations()  < 10);
+        assertEquals(expected, result, tolerance);
 
         min = -FastMath.PI/3; max = 0; expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max);
-        Assertions.assertTrue(integrator.getEvaluations() < 50);
-        Assertions.assertTrue(integrator.getIterations()  < 10);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < 50);
+        assertTrue(integrator.getIterations()  < 10);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
      * Test of integrator for the quintic function.
      */
     @Test
-    public void testQuinticFunction() {
+    void testQuinticFunction() {
         UnivariateFunction f = new QuinticFunction();
         UnivariateIntegrator integrator = new RombergIntegrator();
         double min, max, expected, result, tolerance;
@@ -76,50 +79,50 @@ public final class RombergIntegratorTest {
         min = 0; max = 1; expected = -1.0/48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max);
-        Assertions.assertTrue(integrator.getEvaluations() < 10);
-        Assertions.assertTrue(integrator.getIterations()  < 5);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < 10);
+        assertTrue(integrator.getIterations()  < 5);
+        assertEquals(expected, result, tolerance);
 
         min = 0; max = 0.5; expected = 11.0/768;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max);
-        Assertions.assertTrue(integrator.getEvaluations() < 10);
-        Assertions.assertTrue(integrator.getIterations()  < 5);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < 10);
+        assertTrue(integrator.getIterations()  < 5);
+        assertEquals(expected, result, tolerance);
 
         min = -1; max = 4; expected = 2048/3.0 - 78 + 1.0/48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max);
-        Assertions.assertTrue(integrator.getEvaluations() < 10);
-        Assertions.assertTrue(integrator.getIterations()  < 5);
-        Assertions.assertEquals(expected, result, tolerance);
+        assertTrue(integrator.getEvaluations() < 10);
+        assertTrue(integrator.getIterations()  < 5);
+        assertEquals(expected, result, tolerance);
     }
 
     /**
      * Test of parameters for the integrator.
      */
     @Test
-    public void testParameters() {
+    void testParameters() {
         UnivariateFunction f = new Sin();
 
         try {
             // bad interval
             new RombergIntegrator().integrate(1000, f, 1, -1);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
+            fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new RombergIntegrator(5, 4);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new RombergIntegrator(10, 50);
-            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

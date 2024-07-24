@@ -40,7 +40,6 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -50,7 +49,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test for class {@link DerivativeStructure}.
@@ -63,42 +68,42 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testWrongVariableIndex() {
+    void testWrongVariableIndex() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new DSFactory(3, 1).variable(3, 1.0);
         });
     }
 
     @Test
-    public void testMissingOrders() {
+    void testMissingOrders() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(0, 1);
         });
     }
 
     @Test
-    public void testTooLargeOrder() {
+    void testTooLargeOrder() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(1, 1, 2);
         });
     }
 
     @Test
-    public void testVariableWithoutDerivative0() {
+    void testVariableWithoutDerivative0() {
         DerivativeStructure v = new DSFactory(1, 0).variable(0, 1.0);
-        Assertions.assertEquals(1.0, v.getValue(), 1.0e-15);
+        assertEquals(1.0, v.getValue(), 1.0e-15);
     }
 
     @Test
-    public void testVariableWithoutDerivative1() {
+    void testVariableWithoutDerivative1() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             DerivativeStructure v = new DSFactory(1, 0).variable(0, 1.0);
-            Assertions.assertEquals(1.0, v.getPartialDerivative(1), 1.0e-15);
+            assertEquals(1.0, v.getPartialDerivative(1), 1.0e-15);
         });
     }
 
     @Test
-    public void testVariable() {
+    void testVariable() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             checkF0F1(factory.variable(0, 1.0), 1.0, 1.0, 0.0, 0.0);
@@ -108,7 +113,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testConstant() {
+    void testConstant() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             checkF0F1(factory.constant(FastMath.PI), FastMath.PI, 0.0, 0.0, 0.0);
@@ -116,7 +121,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testPrimitiveAdd() {
+    void testPrimitiveAdd() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             checkF0F1(factory.variable(0, 1.0).add(5), 6.0, 1.0, 0.0, 0.0);
@@ -126,7 +131,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             DerivativeStructure x = factory.variable(0, 1.0);
@@ -138,7 +143,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testPrimitiveSubtract() {
+    void testPrimitiveSubtract() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             checkF0F1(factory.variable(0, 1.0).subtract(5), -4.0, 1.0, 0.0, 0.0);
@@ -148,7 +153,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSubtract() {
+    void testSubtract() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             DerivativeStructure x = factory.variable(0, 1.0);
@@ -160,7 +165,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testPrimitiveMultiply() {
+    void testPrimitiveMultiply() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             checkF0F1(factory.variable(0, 1.0).multiply(5),  5.0, 5.0, 0.0, 0.0);
@@ -170,7 +175,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testMultiply() {
+    void testMultiply() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             DerivativeStructure x = factory.variable(0, 1.0);
@@ -181,7 +186,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 for (int j = 0; j <= maxOrder; ++j) {
                     for (int k = 0; k <= maxOrder; ++k) {
                         if (i + j + k <= maxOrder) {
-                            Assertions.assertEquals((i == 0 ? x.getValue() : (i == 1 ? 1.0 : 0.0)) *
+                            assertEquals((i == 0 ? x.getValue() : (i == 1 ? 1.0 : 0.0)) *
                                                 (j == 0 ? y.getValue() : (j == 1 ? 1.0 : 0.0)) *
                                                 (k == 0 ? z.getValue() : (k == 1 ? 1.0 : 0.0)),
                                                 xyz.getPartialDerivative(i, j, k),
@@ -194,7 +199,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testNegate() {
+    void testNegate() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             checkF0F1(factory.variable(0, 1.0).negate(), -1.0, -1.0, 0.0, 0.0);
@@ -204,20 +209,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testReciprocal() {
+    void testReciprocal() {
         for (double x = 0.1; x < 1.2; x += 0.1) {
             DerivativeStructure r = new DSFactory(1, 6).variable(0, x).reciprocal();
-            Assertions.assertEquals(1 / x, r.getValue(), 1.0e-15);
+            assertEquals(1 / x, r.getValue(), 1.0e-15);
             for (int i = 1; i < r.getOrder(); ++i) {
                 double expected = ArithmeticUtils.pow(-1, i) * CombinatoricsUtils.factorial(i) /
                                   FastMath.pow(x, i + 1);
-                Assertions.assertEquals(expected, r.getPartialDerivative(i), 1.0e-15 * FastMath.abs(expected));
+                assertEquals(expected, r.getPartialDerivative(i), 1.0e-15 * FastMath.abs(expected));
             }
         }
     }
 
     @Test
-    public void testPow() {
+    void testPow() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             for (int n = 0; n < 10; ++n) {
@@ -251,7 +256,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testPowDoubleDS() {
+    void testPowDoubleDS() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
 
             DSFactory factory = new DSFactory(3, maxOrder);
@@ -276,28 +281,28 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
             // negative base: -1^x can be evaluated for integers only, so value is sometimes OK, derivatives are always NaN
             DerivativeStructure negEvenInteger = DerivativeStructure.pow(-2.0, factory.variable(0, 2.0));
-            Assertions.assertEquals(4.0, negEvenInteger.getValue(), 1.0e-15);
-            Assertions.assertTrue(Double.isNaN(negEvenInteger.getPartialDerivative(1, 0, 0)));
+            assertEquals(4.0, negEvenInteger.getValue(), 1.0e-15);
+            assertTrue(Double.isNaN(negEvenInteger.getPartialDerivative(1, 0, 0)));
             DerivativeStructure negOddInteger = DerivativeStructure.pow(-2.0, factory.variable(0, 3.0));
-            Assertions.assertEquals(-8.0, negOddInteger.getValue(), 1.0e-15);
-            Assertions.assertTrue(Double.isNaN(negOddInteger.getPartialDerivative(1, 0, 0)));
+            assertEquals(-8.0, negOddInteger.getValue(), 1.0e-15);
+            assertTrue(Double.isNaN(negOddInteger.getPartialDerivative(1, 0, 0)));
             DerivativeStructure negNonInteger = DerivativeStructure.pow(-2.0, factory.variable(0, 2.001));
-            Assertions.assertTrue(Double.isNaN(negNonInteger.getValue()));
-            Assertions.assertTrue(Double.isNaN(negNonInteger.getPartialDerivative(1, 0, 0)));
+            assertTrue(Double.isNaN(negNonInteger.getValue()));
+            assertTrue(Double.isNaN(negNonInteger.getPartialDerivative(1, 0, 0)));
 
             DerivativeStructure zeroNeg = DerivativeStructure.pow(0.0, factory.variable(0, -1.0));
-            Assertions.assertTrue(Double.isNaN(zeroNeg.getValue()));
-            Assertions.assertTrue(Double.isNaN(zeroNeg.getPartialDerivative(1, 0, 0)));
+            assertTrue(Double.isNaN(zeroNeg.getValue()));
+            assertTrue(Double.isNaN(zeroNeg.getPartialDerivative(1, 0, 0)));
             DerivativeStructure posNeg = DerivativeStructure.pow(2.0, factory.variable(0, -2.0));
-            Assertions.assertEquals(1.0 / 4.0, posNeg.getValue(), 1.0e-15);
-            Assertions.assertEquals(FastMath.log(2.0) / 4.0, posNeg.getPartialDerivative(1, 0, 0), 1.0e-15);
+            assertEquals(1.0 / 4.0, posNeg.getValue(), 1.0e-15);
+            assertEquals(FastMath.log(2.0) / 4.0, posNeg.getPartialDerivative(1, 0, 0), 1.0e-15);
 
             // very special case: a = 0 and power = 0
             DerivativeStructure zeroZero = DerivativeStructure.pow(0.0, factory.variable(0, 0.0));
 
             // this should be OK for simple first derivative with one variable only ...
-            Assertions.assertEquals(1.0, zeroZero.getValue(), 1.0e-15);
-            Assertions.assertEquals(Double.NEGATIVE_INFINITY, zeroZero.getPartialDerivative(1, 0, 0), 1.0e-15);
+            assertEquals(1.0, zeroZero.getValue(), 1.0e-15);
+            assertEquals(Double.NEGATIVE_INFINITY, zeroZero.getPartialDerivative(1, 0, 0), 1.0e-15);
 
             // the following checks show a LIMITATION of the current implementation
             // we have no way to tell x is a pure linear variable x = 0
@@ -320,8 +325,8 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             // if we knew x is really the x variable and not the identity
             // function applied to x, we would not have computed f'(g(x,y,z)) * dg(x,y,z)/dy
             // and we would have found that the result was 0 and not NaN
-            Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 1, 0)));
-            Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 0, 1)));
+            assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 1, 0)));
+            assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 0, 1)));
 
             // Function composition rule for second derivatives is:
             // d2[f(g(x))]/dx2 = f''(g(x)) * [g'(x)]^2 + f'(g(x)) * g''(x)
@@ -339,12 +344,12 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             // function applied to x, we would not have computed f'(g(x)) * g''(x)
             // and we would have found that the result was +infinity and not NaN
             if (maxOrder > 1) {
-                Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(2, 0, 0)));
-                Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 2, 0)));
-                Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 0, 2)));
-                Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(1, 1, 0)));
-                Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 1, 1)));
-                Assertions.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(1, 1, 0)));
+                assertTrue(Double.isNaN(zeroZero.getPartialDerivative(2, 0, 0)));
+                assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 2, 0)));
+                assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 0, 2)));
+                assertTrue(Double.isNaN(zeroZero.getPartialDerivative(1, 1, 0)));
+                assertTrue(Double.isNaN(zeroZero.getPartialDerivative(0, 1, 1)));
+                assertTrue(Double.isNaN(zeroZero.getPartialDerivative(1, 1, 0)));
             }
 
             // very special case: 0^0 where the power is a primitive
@@ -352,20 +357,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             boolean first = true;
             for (final double d : zeroDsZeroDouble.getAllDerivatives()) {
                 if (first) {
-                    Assertions.assertEquals(1.0, d, Precision.EPSILON);
+                    assertEquals(1.0, d, Precision.EPSILON);
                     first = false;
                 } else {
-                    Assertions.assertEquals(0.0, d, Precision.SAFE_MIN);
+                    assertEquals(0.0, d, Precision.SAFE_MIN);
                 }
             }
             DerivativeStructure zeroDsZeroInt = factory.variable(0, 0.0).pow(0);
             first = true;
             for (final double d : zeroDsZeroInt.getAllDerivatives()) {
                 if (first) {
-                    Assertions.assertEquals(1.0, d, Precision.EPSILON);
+                    assertEquals(1.0, d, Precision.EPSILON);
                     first = false;
                 } else {
-                    Assertions.assertEquals(0.0, d, Precision.SAFE_MIN);
+                    assertEquals(0.0, d, Precision.SAFE_MIN);
                 }
             }
 
@@ -375,7 +380,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 for (int i1 = 0; i1 <= maxOrder; ++i1) {
                     for (int i2 = 0; i2 <= maxOrder; ++i2) {
                         if (i0 + i1 + i2 <= maxOrder) {
-                            Assertions.assertEquals(0.0, u.getPartialDerivative(i0, i1, i2), 1.0e-10);
+                            assertEquals(0.0, u.getPartialDerivative(i0, i1, i2), 1.0e-10);
                         }
                     }
                 }
@@ -399,7 +404,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     for (int j = 0; j <= maxOrder; ++j) {
                         for (int k = 0; k <= maxOrder; ++k) {
                             if (i + j + k <= maxOrder) {
-                                Assertions.assertEquals((i == 0 ? x.getValue() : (i == 1 ? 1.0 : 0.0)) *
+                                assertEquals((i == 0 ? x.getValue() : (i == 1 ? 1.0 : 0.0)) *
                                                     (j == 0 ? y.getValue() : (j == 1 ? 1.0 : 0.0)) *
                                                     (k == 0 ? z.getValue() : (k == 1 ? 1.0 : 0.0)) *
                                                     s,
@@ -427,14 +432,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             DerivativeStructure ulp = xyz.ulp();
             boolean first = true;
             for (double d : ulp.getAllDerivatives()) {
-                Assertions.assertEquals(first ? FastMath.ulp(xyz.getValue()) : 0.0, d, 1.0e-15 * FastMath.ulp(xyz.getValue()));
+                assertEquals(first ? FastMath.ulp(xyz.getValue()) : 0.0, d, 1.0e-15 * FastMath.ulp(xyz.getValue()));
                 first = false;
             }
         }
     }
 
     @Test
-    public void testExpression() {
+    void testExpression() {
         DSFactory factory = new DSFactory(3, 5);
         double epsilon = 2.5e-13;
         for (double x = 0; x < 2; x += 0.2) {
@@ -457,30 +462,30 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                                                          -2, dsZ).add(dsX.linearCombination(8, dsZ.multiply(dsX),
                                                                                            -1, dsY).pow(3));
                     double f = x + 5 * x * y - 2 * z + FastMath.pow(8 * z * x - y, 3);
-                    Assertions.assertEquals(f, ds.getValue(),
+                    assertEquals(f, ds.getValue(),
                                         FastMath.abs(epsilon * f));
-                    Assertions.assertEquals(f, dsOther.getValue(),
+                    assertEquals(f, dsOther.getValue(),
                                         FastMath.abs(epsilon * f));
 
                     // df/dx = 1 + 5 y + 24 (8 z x - y)^2 z
                     double dfdx = 1 + 5 * y + 24 * z * FastMath.pow(8 * z * x - y, 2);
-                    Assertions.assertEquals(dfdx, ds.getPartialDerivative(1, 0, 0),
+                    assertEquals(dfdx, ds.getPartialDerivative(1, 0, 0),
                                         FastMath.abs(epsilon * dfdx));
-                    Assertions.assertEquals(dfdx, dsOther.getPartialDerivative(1, 0, 0),
+                    assertEquals(dfdx, dsOther.getPartialDerivative(1, 0, 0),
                                         FastMath.abs(epsilon * dfdx));
 
                     // df/dxdy = 5 + 48 z*(y - 8 z x)
                     double dfdxdy = 5 + 48 * z * (y - 8 * z * x);
-                    Assertions.assertEquals(dfdxdy, ds.getPartialDerivative(1, 1, 0),
+                    assertEquals(dfdxdy, ds.getPartialDerivative(1, 1, 0),
                                         FastMath.abs(epsilon * dfdxdy));
-                    Assertions.assertEquals(dfdxdy, dsOther.getPartialDerivative(1, 1, 0),
+                    assertEquals(dfdxdy, dsOther.getPartialDerivative(1, 1, 0),
                                         FastMath.abs(epsilon * dfdxdy));
 
                     // df/dxdydz = 48 (y - 16 z x)
                     double dfdxdydz = 48 * (y - 16 * z * x);
-                    Assertions.assertEquals(dfdxdydz, ds.getPartialDerivative(1, 1, 1),
+                    assertEquals(dfdxdydz, ds.getPartialDerivative(1, 1, 1),
                                         FastMath.abs(epsilon * dfdxdydz));
-                    Assertions.assertEquals(dfdxdydz, dsOther.getPartialDerivative(1, 1, 1),
+                    assertEquals(dfdxdydz, dsOther.getPartialDerivative(1, 1, 1),
                                         FastMath.abs(epsilon * dfdxdydz));
 
                 }
@@ -490,7 +495,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testCompositionOneVariableX() {
+    void testCompositionOneVariableX() {
         double epsilon = 1.0e-13;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -500,16 +505,16 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     DerivativeStructure dsY = factory.constant(y);
                     DerivativeStructure f = dsX.divide(dsY).sqrt();
                     double f0 = FastMath.sqrt(x / y);
-                    Assertions.assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
+                    assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
                     if (f.getOrder() > 0) {
                         double f1 = 1 / (2 * FastMath.sqrt(x * y));
-                        Assertions.assertEquals(f1, f.getPartialDerivative(1), FastMath.abs(epsilon * f1));
+                        assertEquals(f1, f.getPartialDerivative(1), FastMath.abs(epsilon * f1));
                         if (f.getOrder() > 1) {
                             double f2 = -f1 / (2 * x);
-                            Assertions.assertEquals(f2, f.getPartialDerivative(2), FastMath.abs(epsilon * f2));
+                            assertEquals(f2, f.getPartialDerivative(2), FastMath.abs(epsilon * f2));
                             if (f.getOrder() > 2) {
                                 double f3 = (f0 + x / (2 * y * f0)) / (4 * x * x * x);
-                                Assertions.assertEquals(f3, f.getPartialDerivative(3), FastMath.abs(epsilon * f3));
+                                assertEquals(f3, f.getPartialDerivative(3), FastMath.abs(epsilon * f3));
                             }
                         }
                     }
@@ -519,7 +524,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testTrigo() {
+    void testTrigo() {
         double epsilon = 2.0e-12;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
@@ -532,28 +537,28 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                         DerivativeStructure f = FastMath.sin(dsX.divide(FastMath.cos(dsY).add(FastMath.tan(dsZ))));
                         double a = FastMath.cos(y) + FastMath.tan(z);
                         double f0 = FastMath.sin(x / a);
-                        Assertions.assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
+                        assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
                         if (f.getOrder() > 0) {
                             double dfdx = FastMath.cos(x / a) / a;
-                            Assertions.assertEquals(dfdx, f.getPartialDerivative(1, 0, 0), FastMath.abs(epsilon * dfdx));
+                            assertEquals(dfdx, f.getPartialDerivative(1, 0, 0), FastMath.abs(epsilon * dfdx));
                             double dfdy =  x * FastMath.sin(y) * dfdx / a;
-                            Assertions.assertEquals(dfdy, f.getPartialDerivative(0, 1, 0), FastMath.abs(epsilon * dfdy));
+                            assertEquals(dfdy, f.getPartialDerivative(0, 1, 0), FastMath.abs(epsilon * dfdy));
                             double cz = FastMath.cos(z);
                             double cz2 = cz * cz;
                             double dfdz = -x * dfdx / (a * cz2);
-                            Assertions.assertEquals(dfdz, f.getPartialDerivative(0, 0, 1), FastMath.abs(epsilon * dfdz));
+                            assertEquals(dfdz, f.getPartialDerivative(0, 0, 1), FastMath.abs(epsilon * dfdz));
                             if (f.getOrder() > 1) {
                                 double df2dx2 = -(f0 / (a * a));
-                                Assertions.assertEquals(df2dx2, f.getPartialDerivative(2, 0, 0), FastMath.abs(epsilon * df2dx2));
+                                assertEquals(df2dx2, f.getPartialDerivative(2, 0, 0), FastMath.abs(epsilon * df2dx2));
                                 double df2dy2 = x * FastMath.cos(y) * dfdx / a -
                                                 x * x * FastMath.sin(y) * FastMath.sin(y) * f0 / (a * a * a * a) +
                                                 2 * FastMath.sin(y) * dfdy / a;
-                                Assertions.assertEquals(df2dy2, f.getPartialDerivative(0, 2, 0), FastMath.abs(epsilon * df2dy2));
+                                assertEquals(df2dy2, f.getPartialDerivative(0, 2, 0), FastMath.abs(epsilon * df2dy2));
                                 double c4 = cz2 * cz2;
                                 double df2dz2 = x * (2 * a * (1 - a * cz * FastMath.sin(z)) * dfdx - x * f0 / a ) / (a * a * a * c4);
-                                Assertions.assertEquals(df2dz2, f.getPartialDerivative(0, 0, 2), FastMath.abs(epsilon * df2dz2));
+                                assertEquals(df2dz2, f.getPartialDerivative(0, 0, 2), FastMath.abs(epsilon * df2dz2));
                                 double df2dxdy = dfdy / x  - x * FastMath.sin(y) * f0 / (a * a * a);
-                                Assertions.assertEquals(df2dxdy, f.getPartialDerivative(1, 1, 0), FastMath.abs(epsilon * df2dxdy));
+                                assertEquals(df2dxdy, f.getPartialDerivative(1, 1, 0), FastMath.abs(epsilon * df2dxdy));
                             }
                         }
                     }
@@ -563,7 +568,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSqrtDefinition() {
+    void testSqrtDefinition() {
         double[] epsilon = new double[] { 5.0e-16, 5.0e-16, 2.7e-15, 5.7e-14, 2.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -573,23 +578,23 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure sqrt2 = FastMath.sqrt(dsX);
                 DerivativeStructure zero = sqrt1.subtract(sqrt2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testRootNSingularity() {
+    void testRootNSingularity() {
         for (int n = 2; n < 10; ++n) {
             for (int maxOrder = 0; maxOrder < 12; ++maxOrder) {
                 DSFactory factory = new DSFactory(1, maxOrder);
                 DerivativeStructure dsZero = factory.variable(0, 0.0);
                 DerivativeStructure rootN  = dsZero.rootN(n);
-                Assertions.assertEquals(0.0, rootN.getValue(), 1.0e-20);
+                assertEquals(0.0, rootN.getValue(), 1.0e-20);
                 if (maxOrder > 0) {
-                    Assertions.assertTrue(Double.isInfinite(rootN.getPartialDerivative(1)));
-                    Assertions.assertTrue(rootN.getPartialDerivative(1) > 0);
+                    assertTrue(Double.isInfinite(rootN.getPartialDerivative(1)));
+                    assertTrue(rootN.getPartialDerivative(1) > 0);
                     for (int order = 2; order <= maxOrder; ++order) {
                         // the following checks shows a LIMITATION of the current implementation
                         // we have no way to tell dsZero is a pure linear variable x = 0
@@ -610,7 +615,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                         // if we knew dsZero is really the x variable and not the identity
                         // function applied to x, we would not have computed f'(g(x)) * g''(x)
                         // and we would have found that the result was -infinity and not NaN
-                        Assertions.assertTrue(Double.isNaN(rootN.getPartialDerivative(order)));
+                        assertTrue(Double.isNaN(rootN.getPartialDerivative(order)));
                     }
                 }
 
@@ -623,16 +628,16 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     gDerivatives[k] = FastMath.pow(-1.0, k + 1);
                 }
                 DerivativeStructure correctRoot = factory.build(gDerivatives).rootN(n);
-                Assertions.assertEquals(0.0, correctRoot.getValue(), 1.0e-20);
+                assertEquals(0.0, correctRoot.getValue(), 1.0e-20);
                 if (maxOrder > 0) {
-                    Assertions.assertTrue(Double.isInfinite(correctRoot.getPartialDerivative(1)));
-                    Assertions.assertTrue(correctRoot.getPartialDerivative(1) > 0);
+                    assertTrue(Double.isInfinite(correctRoot.getPartialDerivative(1)));
+                    assertTrue(correctRoot.getPartialDerivative(1) > 0);
                     for (int order = 2; order <= maxOrder; ++order) {
-                        Assertions.assertTrue(Double.isInfinite(correctRoot.getPartialDerivative(order)));
+                        assertTrue(Double.isInfinite(correctRoot.getPartialDerivative(order)));
                         if ((order % 2) == 0) {
-                            Assertions.assertTrue(correctRoot.getPartialDerivative(order) < 0);
+                            assertTrue(correctRoot.getPartialDerivative(order) < 0);
                         } else {
-                            Assertions.assertTrue(correctRoot.getPartialDerivative(order) > 0);
+                            assertTrue(correctRoot.getPartialDerivative(order) > 0);
                         }
                     }
                 }
@@ -644,7 +649,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSqrtPow2() {
+    void testSqrtPow2() {
         double[] epsilon = new double[] { 1.0e-16, 3.0e-16, 2.0e-15, 6.0e-14, 6.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -653,14 +658,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = dsX.multiply(dsX).sqrt();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testCbrtDefinition() {
+    void testCbrtDefinition() {
         double[] epsilon = new double[] { 4.0e-16, 9.0e-16, 6.0e-15, 2.0e-13, 4.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -670,14 +675,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure cbrt2 = FastMath.cbrt(dsX);
                 DerivativeStructure zero = cbrt1.subtract(cbrt2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testCbrtPow3() {
+    void testCbrtPow3() {
         double[] epsilon = new double[] { 1.0e-16, 5.0e-16, 8.0e-15, 3.0e-13, 4.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -686,14 +691,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = dsX.multiply(dsX.multiply(dsX)).cbrt();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testPowReciprocalPow() {
+    void testPowReciprocalPow() {
         double[] epsilon = new double[] { 2.0e-15, 2.0e-14, 3.0e-13, 8.0e-12, 3.0e-10 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
@@ -706,7 +711,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     for (int n = 0; n <= maxOrder; ++n) {
                         for (int m = 0; m <= maxOrder; ++m) {
                             if (n + m <= maxOrder) {
-                                Assertions.assertEquals(0.0, zero.getPartialDerivative(n, m), epsilon[n + m]);
+                                assertEquals(0.0, zero.getPartialDerivative(n, m), epsilon[n + m]);
                             }
                         }
                     }
@@ -716,7 +721,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testHypotDefinition() {
+    void testHypotDefinition() {
         double epsilon = 1.0e-20;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
@@ -730,7 +735,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     for (int n = 0; n <= maxOrder; ++n) {
                         for (int m = 0; m <= maxOrder; ++m) {
                             if (n + m <= maxOrder) {
-                                Assertions.assertEquals(0, zero.getPartialDerivative(n, m), epsilon);
+                                assertEquals(0, zero.getPartialDerivative(n, m), epsilon);
                             }
                         }
                     }
@@ -740,65 +745,65 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testHypotNoOverflow() {
+    void testHypotNoOverflow() {
 
         DSFactory factory = new DSFactory(2, 5);
         DerivativeStructure dsX = factory.variable(0, +3.0e250);
         DerivativeStructure dsY = factory.variable(1, -4.0e250);
         DerivativeStructure hypot = FastMath.hypot(dsX, dsY);
-        Assertions.assertEquals(5.0e250, hypot.getValue(), 1.0e235);
-        Assertions.assertEquals(dsX.getValue() / hypot.getValue(), hypot.getPartialDerivative(1, 0), 1.0e-10);
-        Assertions.assertEquals(dsY.getValue() / hypot.getValue(), hypot.getPartialDerivative(0, 1), 1.0e-10);
+        assertEquals(5.0e250, hypot.getValue(), 1.0e235);
+        assertEquals(dsX.getValue() / hypot.getValue(), hypot.getPartialDerivative(1, 0), 1.0e-10);
+        assertEquals(dsY.getValue() / hypot.getValue(), hypot.getPartialDerivative(0, 1), 1.0e-10);
 
         DerivativeStructure sqrt  = dsX.multiply(dsX).add(dsY.multiply(dsY)).sqrt();
-        Assertions.assertTrue(Double.isInfinite(sqrt.getValue()));
+        assertTrue(Double.isInfinite(sqrt.getValue()));
 
     }
 
     @Test
-    public void testHypotNeglectible() {
+    void testHypotNeglectible() {
 
         DSFactory factory = new DSFactory(2, 5);
         DerivativeStructure dsSmall = factory.variable(0, +3.0e-10);
         DerivativeStructure dsLarge = factory.variable(1, -4.0e25);
 
-        Assertions.assertEquals(dsLarge.abs().getValue(),
+        assertEquals(dsLarge.abs().getValue(),
                             DerivativeStructure.hypot(dsSmall, dsLarge).getValue(),
                             1.0e-10);
-        Assertions.assertEquals(0,
+        assertEquals(0,
                             DerivativeStructure.hypot(dsSmall, dsLarge).getPartialDerivative(1, 0),
                             1.0e-10);
-        Assertions.assertEquals(-1,
+        assertEquals(-1,
                             DerivativeStructure.hypot(dsSmall, dsLarge).getPartialDerivative(0, 1),
                             1.0e-10);
 
-        Assertions.assertEquals(dsLarge.abs().getValue(),
+        assertEquals(dsLarge.abs().getValue(),
                             DerivativeStructure.hypot(dsLarge, dsSmall).getValue(),
                             1.0e-10);
-        Assertions.assertEquals(0,
+        assertEquals(0,
                             DerivativeStructure.hypot(dsLarge, dsSmall).getPartialDerivative(1, 0),
                             1.0e-10);
-        Assertions.assertEquals(-1,
+        assertEquals(-1,
                             DerivativeStructure.hypot(dsLarge, dsSmall).getPartialDerivative(0, 1),
                             1.0e-10);
 
     }
 
     @Test
-    public void testHypotSpecial() {
+    void testHypotSpecial() {
         DSFactory factory = new DSFactory(2, 5);
-        Assertions.assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.variable(0, Double.NaN),
+        assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.variable(0, Double.NaN),
                                                                  factory.variable(0, +3.0e250)).getValue()));
-        Assertions.assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.variable(0, +3.0e250),
+        assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.variable(0, +3.0e250),
                                                                  factory.variable(0, Double.NaN)).getValue()));
-        Assertions.assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.variable(0, Double.POSITIVE_INFINITY),
+        assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.variable(0, Double.POSITIVE_INFINITY),
                                                                       factory.variable(0, +3.0e250)).getValue()));
-        Assertions.assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.variable(0, +3.0e250),
+        assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.variable(0, +3.0e250),
                                                                       factory.variable(0, Double.POSITIVE_INFINITY)).getValue()));
     }
 
     @Test
-    public void testPrimitiveRemainder() {
+    void testPrimitiveRemainder() {
         double epsilon = 1.0e-15;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
@@ -811,7 +816,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     for (int n = 0; n <= maxOrder; ++n) {
                         for (int m = 0; m <= maxOrder; ++m) {
                             if (n + m <= maxOrder) {
-                                Assertions.assertEquals(0, zero.getPartialDerivative(n, m), epsilon);
+                                assertEquals(0, zero.getPartialDerivative(n, m), epsilon);
                             }
                         }
                     }
@@ -821,7 +826,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testRemainder() {
+    void testRemainder() {
         double epsilon = 2.0e-15;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
@@ -835,7 +840,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     for (int n = 0; n <= maxOrder; ++n) {
                         for (int m = 0; m <= maxOrder; ++m) {
                             if (n + m <= maxOrder) {
-                                Assertions.assertEquals(0, zero.getPartialDerivative(n, m), epsilon);
+                                assertEquals(0, zero.getPartialDerivative(n, m), epsilon);
                             }
                         }
                     }
@@ -854,14 +859,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 double refExp = FastMath.exp(x);
                 DerivativeStructure exp = FastMath.exp(factory.variable(0, x));
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(refExp, exp.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(refExp, exp.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testExpm1Definition() {
+    void testExpm1Definition() {
         double epsilon = 3.0e-16;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -871,7 +876,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure expm12 = dsX.exp().subtract(dsX.getField().getOne());
                 DerivativeStructure zero = expm11.subtract(expm12);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon);
                 }
             }
         }
@@ -885,17 +890,17 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 DerivativeStructure log = FastMath.log(factory.variable(0, x));
-                Assertions.assertEquals(FastMath.log(x), log.getValue(), epsilon[0]);
+                assertEquals(FastMath.log(x), log.getValue(), epsilon[0]);
                 for (int n = 1; n <= maxOrder; ++n) {
                     double refDer = -CombinatoricsUtils.factorial(n - 1) / FastMath.pow(-x, n);
-                    Assertions.assertEquals(refDer, log.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(refDer, log.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testLog1pDefinition() {
+    void testLog1pDefinition() {
         double epsilon = 3.0e-16;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -905,14 +910,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure log1p2 = FastMath.log(dsX.add(dsX.getField().getOne()));
                 DerivativeStructure zero = log1p1.subtract(log1p2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon);
                 }
             }
         }
     }
 
     @Test
-    public void testLog10Definition() {
+    void testLog10Definition() {
         double[] epsilon = new double[] { 3.0e-16, 9.0e-16, 8.0e-15, 3.0e-13, 8.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -922,14 +927,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure log102 = dsX.log().divide(FastMath.log(10.0));
                 DerivativeStructure zero = log101.subtract(log102);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testLogExp() {
+    void testLogExp() {
         double[] epsilon = new double[] { 2.0e-16, 2.0e-16, 3.0e-16, 2.0e-15, 6.0e-15 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -938,14 +943,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = dsX.exp().log();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testLog1pExpm1() {
+    void testLog1pExpm1() {
         double[] epsilon = new double[] { 6.0e-17, 3.0e-16, 5.0e-16, 9.0e-16, 6.0e-15 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -954,14 +959,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = dsX.expm1().log1p();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testLog10Power() {
+    void testLog10Power() {
         double[] epsilon = new double[] { 3.0e-16, 3.0e-16, 9.0e-16, 6.0e-15, 6.0e-14 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -970,14 +975,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = factory.constant(10.0).pow(dsX).log10();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testSinCosSeparated() {
+    void testSinCosSeparated() {
         double epsilon = 5.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -990,20 +995,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 for (int n = 0; n <= maxOrder; ++n) {
                     switch (n % 4) {
                     case 0 :
-                        Assertions.assertEquals( s, sin.getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals( c, cos.getPartialDerivative(n), epsilon);
+                        assertEquals( s, sin.getPartialDerivative(n), epsilon);
+                        assertEquals( c, cos.getPartialDerivative(n), epsilon);
                         break;
                     case 1 :
-                        Assertions.assertEquals( c, sin.getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals(-s, cos.getPartialDerivative(n), epsilon);
+                        assertEquals( c, sin.getPartialDerivative(n), epsilon);
+                        assertEquals(-s, cos.getPartialDerivative(n), epsilon);
                         break;
                     case 2 :
-                        Assertions.assertEquals(-s, sin.getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals(-c, cos.getPartialDerivative(n), epsilon);
+                        assertEquals(-s, sin.getPartialDerivative(n), epsilon);
+                        assertEquals(-c, cos.getPartialDerivative(n), epsilon);
                         break;
                     default :
-                        Assertions.assertEquals(-c, sin.getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals( s, cos.getPartialDerivative(n), epsilon);
+                        assertEquals(-c, sin.getPartialDerivative(n), epsilon);
+                        assertEquals( s, cos.getPartialDerivative(n), epsilon);
                         break;
                     }
                 }
@@ -1012,7 +1017,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSinCosCombined() {
+    void testSinCosCombined() {
         double epsilon = 5.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1024,20 +1029,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 for (int n = 0; n <= maxOrder; ++n) {
                     switch (n % 4) {
                     case 0 :
-                        Assertions.assertEquals( s, sinCos.sin().getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals( c, sinCos.cos().getPartialDerivative(n), epsilon);
+                        assertEquals( s, sinCos.sin().getPartialDerivative(n), epsilon);
+                        assertEquals( c, sinCos.cos().getPartialDerivative(n), epsilon);
                         break;
                     case 1 :
-                        Assertions.assertEquals( c, sinCos.sin().getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals(-s, sinCos.cos().getPartialDerivative(n), epsilon);
+                        assertEquals( c, sinCos.sin().getPartialDerivative(n), epsilon);
+                        assertEquals(-s, sinCos.cos().getPartialDerivative(n), epsilon);
                         break;
                     case 2 :
-                        Assertions.assertEquals(-s, sinCos.sin().getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals(-c, sinCos.cos().getPartialDerivative(n), epsilon);
+                        assertEquals(-s, sinCos.sin().getPartialDerivative(n), epsilon);
+                        assertEquals(-c, sinCos.cos().getPartialDerivative(n), epsilon);
                         break;
                     default :
-                        Assertions.assertEquals(-c, sinCos.sin().getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals( s, sinCos.cos().getPartialDerivative(n), epsilon);
+                        assertEquals(-c, sinCos.sin().getPartialDerivative(n), epsilon);
+                        assertEquals( s, sinCos.cos().getPartialDerivative(n), epsilon);
                         break;
                     }
                 }
@@ -1046,7 +1051,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSinAsin() {
+    void testSinAsin() {
         double[] epsilon = new double[] { 3.0e-16, 5.0e-16, 3.0e-15, 2.0e-14, 4.0e-13 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1055,14 +1060,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = FastMath.asin(FastMath.sin(dsX));
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testCosAcos() {
+    void testCosAcos() {
         double[] epsilon = new double[] { 6.0e-16, 6.0e-15, 2.0e-13, 4.0e-12, 2.0e-10 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1071,14 +1076,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = FastMath.acos(FastMath.cos(dsX));
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testTanAtan() {
+    void testTanAtan() {
         double[] epsilon = new double[] { 6.0e-17, 2.0e-16, 2.0e-15, 4.0e-14, 2.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1087,14 +1092,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = FastMath.atan(FastMath.tan(dsX));
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testTangentDefinition() {
+    void testTangentDefinition() {
         double[] epsilon = new double[] { 5.0e-16, 2.7e-15, 3.0e-14, 5.0e-13, 2.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1104,7 +1109,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure tan2 = dsX.tan();
                 DerivativeStructure zero = tan1.subtract(tan2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
@@ -1129,7 +1134,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     for (int n = 0; n <= maxOrder; ++n) {
                         for (int m = 0; m <= maxOrder; ++m) {
                             if (n + m <= maxOrder) {
-                                Assertions.assertEquals(0, zero.getPartialDerivative(n, m), epsilon[n + m]);
+                                assertEquals(0, zero.getPartialDerivative(n, m), epsilon[n + m]);
                             }
                         }
                     }
@@ -1139,35 +1144,35 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testAtan2SpecialCasesDerivative() {
+    void testAtan2SpecialCasesDerivative() {
 
         DSFactory factory = new DSFactory(2, 2);
         DerivativeStructure pp =
                 DerivativeStructure.atan2(factory.variable(1, +0.0),
                                           factory.variable(1, +0.0));
-        Assertions.assertEquals(0, pp.getValue(), 1.0e-15);
-        Assertions.assertEquals(+1, FastMath.copySign(1, pp.getValue()), 1.0e-15);
+        assertEquals(0, pp.getValue(), 1.0e-15);
+        assertEquals(+1, FastMath.copySign(1, pp.getValue()), 1.0e-15);
 
         DerivativeStructure pn =
                 DerivativeStructure.atan2(factory.variable(1, +0.0),
                                           factory.variable(1, -0.0));
-        Assertions.assertEquals(FastMath.PI, pn.getValue(), 1.0e-15);
+        assertEquals(FastMath.PI, pn.getValue(), 1.0e-15);
 
         DerivativeStructure np =
                 DerivativeStructure.atan2(factory.variable(1, -0.0),
                                           factory.variable(1, +0.0));
-        Assertions.assertEquals(0, np.getValue(), 1.0e-15);
-        Assertions.assertEquals(-1, FastMath.copySign(1, np.getValue()), 1.0e-15);
+        assertEquals(0, np.getValue(), 1.0e-15);
+        assertEquals(-1, FastMath.copySign(1, np.getValue()), 1.0e-15);
 
         DerivativeStructure nn =
                 DerivativeStructure.atan2(factory.variable(1, -0.0),
                                           factory.variable(1, -0.0));
-        Assertions.assertEquals(-FastMath.PI, nn.getValue(), 1.0e-15);
+        assertEquals(-FastMath.PI, nn.getValue(), 1.0e-15);
 
     }
 
     @Test
-    public void testSinhCoshCombined() {
+    void testSinhCoshCombined() {
         double epsilon = 5.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1178,11 +1183,11 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 double ch = FastMath.cosh(x);
                 for (int n = 0; n <= maxOrder; ++n) {
                     if (n % 2 == 0) {
-                        Assertions.assertEquals(sh, sinhCosh.sinh().getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals(ch, sinhCosh.cosh().getPartialDerivative(n), epsilon);
+                        assertEquals(sh, sinhCosh.sinh().getPartialDerivative(n), epsilon);
+                        assertEquals(ch, sinhCosh.cosh().getPartialDerivative(n), epsilon);
                     } else {
-                        Assertions.assertEquals(ch, sinhCosh.sinh().getPartialDerivative(n), epsilon);
-                        Assertions.assertEquals(sh, sinhCosh.cosh().getPartialDerivative(n), epsilon);
+                        assertEquals(ch, sinhCosh.sinh().getPartialDerivative(n), epsilon);
+                        assertEquals(sh, sinhCosh.cosh().getPartialDerivative(n), epsilon);
                     }
                 }
             }
@@ -1190,7 +1195,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSinhDefinition() {
+    void testSinhDefinition() {
         double[] epsilon = new double[] { 3.0e-16, 3.0e-16, 5.0e-16, 2.0e-15, 6.0e-15 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1200,14 +1205,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure sinh2 = FastMath.sinh(dsX);
                 DerivativeStructure zero = sinh1.subtract(sinh2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testCoshDefinition() {
+    void testCoshDefinition() {
         double[] epsilon = new double[] { 3.0e-16, 3.0e-16, 5.0e-16, 2.0e-15, 6.0e-15 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1217,14 +1222,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure cosh2 = FastMath.cosh(dsX);
                 DerivativeStructure zero = cosh1.subtract(cosh2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testTanhDefinition() {
+    void testTanhDefinition() {
         double[] epsilon = new double[] { 3.0e-16, 5.0e-16, 7.0e-16, 3.0e-15, 2.0e-14 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1234,14 +1239,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure tanh2 = FastMath.tanh(dsX);
                 DerivativeStructure zero = tanh1.subtract(tanh2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testSinhAsinh() {
+    void testSinhAsinh() {
         double[] epsilon = new double[] { 3.0e-16, 3.0e-16, 4.0e-16, 7.0e-16, 3.0e-15, 8.0e-15 };
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1250,14 +1255,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = FastMath.asinh(dsX.sinh());
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testCoshAcosh() {
+    void testCoshAcosh() {
         double[] epsilon = new double[] { 2.0e-15, 1.0e-14, 2.0e-13, 6.0e-12, 3.0e-10, 2.0e-8 };
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1266,14 +1271,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = FastMath.acosh(dsX.cosh());
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testTanhAtanh() {
+    void testTanhAtanh() {
         double[] epsilon = new double[] { 3.0e-16, 2.0e-16, 7.0e-16, 4.0e-15, 3.0e-14, 4.0e-13 };
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1282,14 +1287,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = FastMath.atanh(dsX.tanh());
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testCompositionOneVariableY() {
+    void testCompositionOneVariableY() {
         double epsilon = 1.0e-13;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1299,16 +1304,16 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     DerivativeStructure dsY = factory.variable(0, y);
                     DerivativeStructure f = dsX.divide(dsY).sqrt();
                     double f0 = FastMath.sqrt(x / y);
-                    Assertions.assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
+                    assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
                     if (f.getOrder() > 0) {
                         double f1 = -x / (2 * y * y * f0);
-                        Assertions.assertEquals(f1, f.getPartialDerivative(1), FastMath.abs(epsilon * f1));
+                        assertEquals(f1, f.getPartialDerivative(1), FastMath.abs(epsilon * f1));
                         if (f.getOrder() > 1) {
                             double f2 = (f0 - x / (4 * y * f0)) / (y * y);
-                            Assertions.assertEquals(f2, f.getPartialDerivative(2), FastMath.abs(epsilon * f2));
+                            assertEquals(f2, f.getPartialDerivative(2), FastMath.abs(epsilon * f2));
                             if (f.getOrder() > 2) {
                                 double f3 = (x / (8 * y * f0) - 2 * f0) / (y * y * y);
-                                Assertions.assertEquals(f3, f.getPartialDerivative(3), FastMath.abs(epsilon * f3));
+                                assertEquals(f3, f.getPartialDerivative(3), FastMath.abs(epsilon * f3));
                             }
                         }
                     }
@@ -1318,7 +1323,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testTaylorPolynomial() {
+    void testTaylorPolynomial() {
         DSFactory factory = new DSFactory(3, 4);
         for (double x = 0; x < 1.2; x += 0.1) {
             DerivativeStructure dsX = factory.variable(0, x);
@@ -1331,7 +1336,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                         for (double dy = -0.2; dy < 0.2; dy += 0.1) {
                             for (double dz = -0.2; dz < 0.2; dz += 0.1) {
                                 double ref = (x + dx) * (y + dy) * ((x + dx) * (y + dy) + (z + dz));
-                                Assertions.assertEquals(ref, f.taylor(dx, dy, dz), 2.0e-15);
+                                assertEquals(ref, f.taylor(dx, dy, dz), 2.0e-15);
                             }
                         }
                     }
@@ -1341,7 +1346,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testTaylorAtan2() {
+    void testTaylorAtan2() {
         double[] expected = new double[] { 0.214, 0.0241, 0.00422, 6.48e-4, 8.04e-5 };
         double x0 =  0.1;
         double y0 = -0.3;
@@ -1357,7 +1362,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     maxError = FastMath.max(maxError, FastMath.abs(ref - atan2.taylor(dx, dy)));
                 }
             }
-            Assertions.assertEquals(0.0, expected[maxOrder] - maxError, 0.01 * expected[maxOrder]);
+            assertEquals(0.0, expected[maxOrder] - maxError, 0.01 * expected[maxOrder]);
         }
     }
 
@@ -1366,20 +1371,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure minusOne = factory.variable(0, -1.0);
-        Assertions.assertEquals(+1.0, FastMath.abs(minusOne).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.abs(minusOne).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.abs(minusOne).getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.0, FastMath.abs(minusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusOne = factory.variable(0, +1.0);
-        Assertions.assertEquals(+1.0, FastMath.abs(plusOne).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.abs(plusOne).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.abs(plusOne).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, FastMath.abs(plusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure minusZero = factory.variable(0, -0.0);
-        Assertions.assertEquals(+0.0, FastMath.abs(minusZero).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.abs(minusZero).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+0.0, FastMath.abs(minusZero).getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.0, FastMath.abs(minusZero).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusZero = factory.variable(0, +0.0);
-        Assertions.assertEquals(+0.0, FastMath.abs(plusZero).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.abs(plusZero).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+0.0, FastMath.abs(plusZero).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, FastMath.abs(plusZero).getPartialDerivative(1), 1.0e-15);
 
     }
 
@@ -1389,85 +1394,85 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure minusOne = factory.variable(0, -1.0);
-        Assertions.assertEquals(-1.0, FastMath.sign(minusOne).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals( 0.0, FastMath.sign(minusOne).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-1.0, FastMath.sign(minusOne).getPartialDerivative(0), 1.0e-15);
+        assertEquals( 0.0, FastMath.sign(minusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusOne = factory.variable(0, +1.0);
-        Assertions.assertEquals(+1.0, FastMath.sign(plusOne).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals( 0.0, FastMath.sign(plusOne).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.sign(plusOne).getPartialDerivative(0), 1.0e-15);
+        assertEquals( 0.0, FastMath.sign(plusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure minusZero = factory.variable(0, -0.0);
-        Assertions.assertEquals(-0.0, FastMath.sign(minusZero).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertTrue(Double.doubleToLongBits(FastMath.sign(minusZero).getValue()) < 0);
-        Assertions.assertEquals( 0.0, FastMath.sign(minusZero).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-0.0, FastMath.sign(minusZero).getPartialDerivative(0), 1.0e-15);
+        assertTrue(Double.doubleToLongBits(FastMath.sign(minusZero).getValue()) < 0);
+        assertEquals( 0.0, FastMath.sign(minusZero).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusZero = factory.variable(0, +0.0);
-        Assertions.assertEquals(+0.0, FastMath.sign(plusZero).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(0, Double.doubleToLongBits(FastMath.sign(plusZero).getValue()));
-        Assertions.assertEquals( 0.0, FastMath.sign(plusZero).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+0.0, FastMath.sign(plusZero).getPartialDerivative(0), 1.0e-15);
+        assertEquals(0, Double.doubleToLongBits(FastMath.sign(plusZero).getValue()));
+        assertEquals( 0.0, FastMath.sign(plusZero).getPartialDerivative(1), 1.0e-15);
 
     }
 
     @Test
-    public void testCeilFloorRintLong() {
+    void testCeilFloorRintLong() {
 
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure x = factory.variable(0, -1.5);
-        Assertions.assertEquals(-1.5, x.getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, x.getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.ceil(x).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+0.0, FastMath.ceil(x).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-2.0, FastMath.floor(x).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+0.0, FastMath.floor(x).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-2.0, FastMath.rint(x).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+0.0, FastMath.rint(x).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-2.0, x.subtract(x.getField().getOne()).rint().getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.5, x.getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, x.getPartialDerivative(1), 1.0e-15);
+        assertEquals(-1.0, FastMath.ceil(x).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+0.0, FastMath.ceil(x).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-2.0, FastMath.floor(x).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+0.0, FastMath.floor(x).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-2.0, FastMath.rint(x).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+0.0, FastMath.rint(x).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-2.0, x.subtract(x.getField().getOne()).rint().getPartialDerivative(0), 1.0e-15);
 
     }
 
     @Test
-    public void testCopySign() {
+    void testCopySign() {
 
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure minusOne = factory.variable(0, -1.0);
-        Assertions.assertEquals(+1.0, FastMath.copySign(minusOne, +1.0).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(minusOne, +1.0).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(minusOne, -1.0).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(minusOne, -1.0).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(minusOne, +0.0).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(minusOne, +0.0).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(minusOne, -0.0).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(minusOne, -0.0).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(minusOne, Double.NaN).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(minusOne, Double.NaN).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(minusOne, +1.0).getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(minusOne, +1.0).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(minusOne, -1.0).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(minusOne, -1.0).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(minusOne, +0.0).getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(minusOne, +0.0).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(minusOne, -0.0).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(minusOne, -0.0).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(minusOne, Double.NaN).getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(minusOne, Double.NaN).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusOne = factory.variable(0, +1.0);
-        Assertions.assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+1.0)).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+1.0)).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-1.0)).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-1.0)).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+0.0)).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+0.0)).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-0.0)).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-0.0)).getPartialDerivative(1), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(Double.NaN)).getPartialDerivative(0), 1.0e-15);
-        Assertions.assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(Double.NaN)).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+1.0)).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+1.0)).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-1.0)).getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-1.0)).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+0.0)).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(+0.0)).getPartialDerivative(1), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-0.0)).getPartialDerivative(0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(plusOne, factory.constant(-0.0)).getPartialDerivative(1), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(Double.NaN)).getPartialDerivative(0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(plusOne, factory.constant(Double.NaN)).getPartialDerivative(1), 1.0e-15);
 
     }
 
     @Test
-    public void testToDegreesDefinition() {
+    void testToDegreesDefinition() {
         double epsilon = 3.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 DerivativeStructure dsX = factory.variable(0, x);
-                Assertions.assertEquals(FastMath.toDegrees(x), dsX.toDegrees().getValue(), epsilon);
+                assertEquals(FastMath.toDegrees(x), dsX.toDegrees().getValue(), epsilon);
                 for (int n = 1; n <= maxOrder; ++n) {
                     if (n == 1) {
-                        Assertions.assertEquals(180 / FastMath.PI, dsX.toDegrees().getPartialDerivative(1), epsilon);
+                        assertEquals(180 / FastMath.PI, dsX.toDegrees().getPartialDerivative(1), epsilon);
                     } else {
-                        Assertions.assertEquals(0.0, dsX.toDegrees().getPartialDerivative(n), epsilon);
+                        assertEquals(0.0, dsX.toDegrees().getPartialDerivative(n), epsilon);
                     }
                 }
             }
@@ -1475,18 +1480,18 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testToRadiansDefinition() {
+    void testToRadiansDefinition() {
         double epsilon = 3.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 DerivativeStructure dsX = factory.variable(0, x);
-                Assertions.assertEquals(FastMath.toRadians(x), dsX.toRadians().getValue(), epsilon);
+                assertEquals(FastMath.toRadians(x), dsX.toRadians().getValue(), epsilon);
                 for (int n = 1; n <= maxOrder; ++n) {
                     if (n == 1) {
-                        Assertions.assertEquals(FastMath.PI / 180, dsX.toRadians().getPartialDerivative(1), epsilon);
+                        assertEquals(FastMath.PI / 180, dsX.toRadians().getPartialDerivative(1), epsilon);
                     } else {
-                        Assertions.assertEquals(0.0, dsX.toRadians().getPartialDerivative(n), epsilon);
+                        assertEquals(0.0, dsX.toRadians().getPartialDerivative(n), epsilon);
                     }
                 }
             }
@@ -1494,7 +1499,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDegRad() {
+    void testDegRad() {
         double epsilon = 3.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -1503,21 +1508,21 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure rebuiltX = dsX.toDegrees().toRadians();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon);
                 }
             }
         }
     }
 
     @Test
-    public void testComposeMismatchedDimensions() {
+    void testComposeMismatchedDimensions() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new DSFactory(1, 3).variable(0, 1.2).compose(new double[3]);
         });
     }
 
     @Test
-    public void testCompose() {
+    void testCompose() {
         double[] epsilon = new double[] { 1.0e-20, 5.0e-14, 2.0e-13, 3.0e-13, 2.0e-13, 1.0e-20 };
         PolynomialFunction poly =
                 new PolynomialFunction(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 });
@@ -1541,14 +1546,14 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 DerivativeStructure dsY2 = dsX.compose(f);
                 DerivativeStructure zero = dsY1.subtract(dsY2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assertions.assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
+                    assertEquals(0.0, zero.getPartialDerivative(n), epsilon[n]);
                 }
             }
         }
     }
 
     @Test
-    public void testIntegration() {
+    void testIntegration() {
         // check that first-order integration on two variables does not depend on sequence of operations
         final RandomGenerator random = new Well19937a(0x87bb96d6e11557bdl);
         final DSFactory factory = new DSFactory(3, 7);
@@ -1566,7 +1571,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testIntegrationGreaterThanOrder() {
+    void testIntegrationGreaterThanOrder() {
         // check that integration to a too high order generates zero
         // as integration constants are set to zero
         final RandomGenerator random = new Well19937a(0x4744a847b11e4c6fl);
@@ -1586,7 +1591,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testIntegrationNoOp() {
+    void testIntegrationNoOp() {
         // check that integration of order 0 is no-op
         final RandomGenerator random = new Well19937a(0x75a35152f30f644bl);
         final DSFactory factory = new DSFactory(3, 7);
@@ -1605,7 +1610,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDifferentiationNoOp() {
+    void testDifferentiationNoOp() {
         // check that differentiation of order 0 is no-op
         final RandomGenerator random = new Well19937a(0x3b6ae4c2f1282949l);
         final DSFactory factory = new DSFactory(3, 7);
@@ -1624,7 +1629,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testIntegrationDifferentiation() {
+    void testIntegrationDifferentiation() {
         // check that integration and differentiation for univariate functions are each other inverse except for constant
         // term and highest order one
         final RandomGenerator random = new Well19937a(0x67fe66c05e5ee222l);
@@ -1653,7 +1658,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDifferentiation1() {
+    void testDifferentiation1() {
         // check differentiation operator with result obtained manually
         final int freeParam = 3;
         final int order = 5;
@@ -1667,13 +1672,13 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         f.setDerivativeComponent(factory.getCompiler().getPartialDerivativeIndex(orders), value);
         final DerivativeStructure dfDx = f.differentiate(0, 1);
         orders[0] -= 1;
-        Assertions.assertEquals(1., dfDx.getPartialDerivative(new int[freeParam]), 0.);
-        Assertions.assertEquals(value, dfDx.getPartialDerivative(orders), 0.);
+        assertEquals(1., dfDx.getPartialDerivative(new int[freeParam]), 0.);
+        assertEquals(value, dfDx.getPartialDerivative(orders), 0.);
         checkEquals(factory.constant(0), f.differentiate(0, order + 1), 0.);
     }
 
     @Test
-    public void testDifferentiation2() {
+    void testDifferentiation2() {
         // check that first-order differentiation twice is same as second-order differentiation
         final RandomGenerator random = new Well19937a(0xec293aaee352de94l);
         final DSFactory factory = new DSFactory(5, 4);
@@ -1691,7 +1696,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDifferentiation3() {
+    void testDifferentiation3() {
         // check that first-order differentiation on two variables does not depend on sequence of operations
         final RandomGenerator random = new Well19937a(0x35409ecc1348e46cl);
         final DSFactory factory = new DSFactory(3, 7);
@@ -1709,20 +1714,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testField() {
+    void testField() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             DerivativeStructure x = factory.variable(0, 1.0);
             checkF0F1(x.getField().getZero(), 0.0, 0.0, 0.0, 0.0);
             checkF0F1(x.getField().getOne(), 1.0, 0.0, 0.0, 0.0);
-            Assertions.assertEquals(maxOrder, x.getField().getZero().getOrder());
-            Assertions.assertEquals(3, x.getField().getZero().getFreeParameters());
-            Assertions.assertEquals(DerivativeStructure.class, x.getField().getRuntimeClass());
+            assertEquals(maxOrder, x.getField().getZero().getOrder());
+            assertEquals(3, x.getField().getZero().getFreeParameters());
+            assertEquals(DerivativeStructure.class, x.getField().getRuntimeClass());
         }
     }
 
     @Test
-    public void testOneParameterConstructor() {
+    void testOneParameterConstructor() {
         double x = 1.2;
         double cos = FastMath.cos(x);
         double sin = FastMath.sin(x);
@@ -1730,20 +1735,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         DerivativeStructure yRef = factory.variable(0, x).cos();
         try {
             new DSFactory(1, 4).build(0.0, 0.0);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException dme) {
             // expected
         } catch (Exception e) {
-            Assertions.fail("wrong exceptionc caught " + e.getClass().getName());
+            fail("wrong exceptionc caught " + e.getClass().getName());
         }
         double[] derivatives = new double[] { cos, -sin, -cos, sin, cos };
         DerivativeStructure y = factory.build(derivatives);
         checkEquals(yRef, y, 1.0e-15);
-        UnitTestUtils.assertEquals(derivatives, y.getAllDerivatives(), 1.0e-15);
+        UnitTestUtils.customAssertEquals(derivatives, y.getAllDerivatives(), 1.0e-15);
     }
 
     @Test
-    public void testOneOrderConstructor() {
+    void testOneOrderConstructor() {
         DSFactory factory = new DSFactory(3, 1);
         double x =  1.2;
         double y =  2.4;
@@ -1753,20 +1758,20 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         DerivativeStructure zRef = factory.variable(2, z);
         try {
             new DSFactory(3, 1).build(x + y - z, 1.0, 1.0);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException dme) {
             // expected
         } catch (Exception e) {
-            Assertions.fail("wrong exceptionc caught " + e.getClass().getName());
+            fail("wrong exceptionc caught " + e.getClass().getName());
         }
         double[] derivatives = new double[] { x + y - z, 1.0, 1.0, -1.0 };
         DerivativeStructure t = factory.build(derivatives);
         checkEquals(xRef.add(yRef.subtract(zRef)), t, 1.0e-15);
-        UnitTestUtils.assertEquals(derivatives, xRef.add(yRef.subtract(zRef)).getAllDerivatives(), 1.0e-15);
+        UnitTestUtils.customAssertEquals(derivatives, xRef.add(yRef.subtract(zRef)).getAllDerivatives(), 1.0e-15);
     }
 
     @Test
-    public void testLinearCombination1DSDS() {
+    void testLinearCombination1DSDS() {
         DSFactory factory = new DSFactory(6, 1);
         final DerivativeStructure[] a = new DerivativeStructure[] {
             factory.variable(0, -1321008684645961.0 / 268435456.0),
@@ -1782,19 +1787,19 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         final DerivativeStructure abSumInline = a[0].linearCombination(a[0], b[0], a[1], b[1], a[2], b[2]);
         final DerivativeStructure abSumArray = a[0].linearCombination(a, b);
 
-        Assertions.assertEquals(abSumInline.getValue(), abSumArray.getValue(), 0);
-        Assertions.assertEquals(-1.8551294182586248737720779899, abSumInline.getValue(), 1.0e-15);
-        Assertions.assertEquals(b[0].getValue(), abSumInline.getPartialDerivative(1, 0, 0, 0, 0, 0), 1.0e-15);
-        Assertions.assertEquals(b[1].getValue(), abSumInline.getPartialDerivative(0, 1, 0, 0, 0, 0), 1.0e-15);
-        Assertions.assertEquals(b[2].getValue(), abSumInline.getPartialDerivative(0, 0, 1, 0, 0, 0), 1.0e-15);
-        Assertions.assertEquals(a[0].getValue(), abSumInline.getPartialDerivative(0, 0, 0, 1, 0, 0), 1.0e-15);
-        Assertions.assertEquals(a[1].getValue(), abSumInline.getPartialDerivative(0, 0, 0, 0, 1, 0), 1.0e-15);
-        Assertions.assertEquals(a[2].getValue(), abSumInline.getPartialDerivative(0, 0, 0, 0, 0, 1), 1.0e-15);
+        assertEquals(abSumInline.getValue(), abSumArray.getValue(), 0);
+        assertEquals(-1.8551294182586248737720779899, abSumInline.getValue(), 1.0e-15);
+        assertEquals(b[0].getValue(), abSumInline.getPartialDerivative(1, 0, 0, 0, 0, 0), 1.0e-15);
+        assertEquals(b[1].getValue(), abSumInline.getPartialDerivative(0, 1, 0, 0, 0, 0), 1.0e-15);
+        assertEquals(b[2].getValue(), abSumInline.getPartialDerivative(0, 0, 1, 0, 0, 0), 1.0e-15);
+        assertEquals(a[0].getValue(), abSumInline.getPartialDerivative(0, 0, 0, 1, 0, 0), 1.0e-15);
+        assertEquals(a[1].getValue(), abSumInline.getPartialDerivative(0, 0, 0, 0, 1, 0), 1.0e-15);
+        assertEquals(a[2].getValue(), abSumInline.getPartialDerivative(0, 0, 0, 0, 0, 1), 1.0e-15);
 
     }
 
     @Test
-    public void testLinearCombination1DoubleDS() {
+    void testLinearCombination1DoubleDS() {
         DSFactory factory = new DSFactory(3, 1);
         final double[] a = new double[] {
             -1321008684645961.0 / 268435456.0,
@@ -1812,16 +1817,16 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                                                                        a[2], b[2]);
         final DerivativeStructure abSumArray = b[0].linearCombination(a, b);
 
-        Assertions.assertEquals(abSumInline.getValue(), abSumArray.getValue(), 0);
-        Assertions.assertEquals(-1.8551294182586248737720779899, abSumInline.getValue(), 1.0e-15);
-        Assertions.assertEquals(a[0], abSumInline.getPartialDerivative(1, 0, 0), 1.0e-15);
-        Assertions.assertEquals(a[1], abSumInline.getPartialDerivative(0, 1, 0), 1.0e-15);
-        Assertions.assertEquals(a[2], abSumInline.getPartialDerivative(0, 0, 1), 1.0e-15);
+        assertEquals(abSumInline.getValue(), abSumArray.getValue(), 0);
+        assertEquals(-1.8551294182586248737720779899, abSumInline.getValue(), 1.0e-15);
+        assertEquals(a[0], abSumInline.getPartialDerivative(1, 0, 0), 1.0e-15);
+        assertEquals(a[1], abSumInline.getPartialDerivative(0, 1, 0), 1.0e-15);
+        assertEquals(a[2], abSumInline.getPartialDerivative(0, 0, 1), 1.0e-15);
 
     }
 
     @Test
-    public void testLinearCombination2DSDS() {
+    void testLinearCombination2DSDS() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
         Well1024a random = new Well1024a(0xc6af886975069f11l);
@@ -1838,35 +1843,35 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             DerivativeStructure lin = u[0].linearCombination(u[0], v[0], u[1], v[1]);
             double ref = u[0].getValue() * v[0].getValue() +
                          u[1].getValue() * v[1].getValue();
-            Assertions.assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
-            Assertions.assertEquals(v[0].getValue(), lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
-            Assertions.assertEquals(v[1].getValue(), lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
+            assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
+            assertEquals(v[0].getValue(), lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
+            assertEquals(v[1].getValue(), lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
 
             lin = u[0].linearCombination(u[0], v[0], u[1], v[1], u[2], v[2]);
             ref = u[0].getValue() * v[0].getValue() +
                   u[1].getValue() * v[1].getValue() +
                   u[2].getValue() * v[2].getValue();
-            Assertions.assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
-            Assertions.assertEquals(v[0].getValue(), lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
-            Assertions.assertEquals(v[1].getValue(), lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
-            Assertions.assertEquals(v[2].getValue(), lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
+            assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
+            assertEquals(v[0].getValue(), lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
+            assertEquals(v[1].getValue(), lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
+            assertEquals(v[2].getValue(), lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
 
             lin = u[0].linearCombination(u[0], v[0], u[1], v[1], u[2], v[2], u[3], v[3]);
             ref = u[0].getValue() * v[0].getValue() +
                   u[1].getValue() * v[1].getValue() +
                   u[2].getValue() * v[2].getValue() +
                   u[3].getValue() * v[3].getValue();
-            Assertions.assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
-            Assertions.assertEquals(v[0].getValue(), lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
-            Assertions.assertEquals(v[1].getValue(), lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
-            Assertions.assertEquals(v[2].getValue(), lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
-            Assertions.assertEquals(v[3].getValue(), lin.getPartialDerivative(0, 0, 0, 1), 1.0e-15 * FastMath.abs(v[3].getValue()));
+            assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
+            assertEquals(v[0].getValue(), lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
+            assertEquals(v[1].getValue(), lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
+            assertEquals(v[2].getValue(), lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
+            assertEquals(v[3].getValue(), lin.getPartialDerivative(0, 0, 0, 1), 1.0e-15 * FastMath.abs(v[3].getValue()));
 
         }
     }
 
     @Test
-    public void testLinearCombination2DoubleDS() {
+    void testLinearCombination2DoubleDS() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
         Well1024a random = new Well1024a(0xc6af886975069f11l);
@@ -1883,64 +1888,64 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             DerivativeStructure lin = v[0].linearCombination(u[0], v[0], u[1], v[1]);
             double ref = u[0] * v[0].getValue() +
                          u[1] * v[1].getValue();
-            Assertions.assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
-            Assertions.assertEquals(u[0], lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
-            Assertions.assertEquals(u[1], lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
+            assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
+            assertEquals(u[0], lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
+            assertEquals(u[1], lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
 
             lin = v[0].linearCombination(u[0], v[0], u[1], v[1], u[2], v[2]);
             ref = u[0] * v[0].getValue() +
                   u[1] * v[1].getValue() +
                   u[2] * v[2].getValue();
-            Assertions.assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
-            Assertions.assertEquals(u[0], lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
-            Assertions.assertEquals(u[1], lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
-            Assertions.assertEquals(u[2], lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
+            assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
+            assertEquals(u[0], lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
+            assertEquals(u[1], lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
+            assertEquals(u[2], lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
 
             lin = v[0].linearCombination(u[0], v[0], u[1], v[1], u[2], v[2], u[3], v[3]);
             ref = u[0] * v[0].getValue() +
                   u[1] * v[1].getValue() +
                   u[2] * v[2].getValue() +
                   u[3] * v[3].getValue();
-            Assertions.assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
-            Assertions.assertEquals(u[0], lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
-            Assertions.assertEquals(u[1], lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
-            Assertions.assertEquals(u[2], lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
-            Assertions.assertEquals(u[3], lin.getPartialDerivative(0, 0, 0, 1), 1.0e-15 * FastMath.abs(v[3].getValue()));
+            assertEquals(ref, lin.getValue(), 1.0e-15 * FastMath.abs(ref));
+            assertEquals(u[0], lin.getPartialDerivative(1, 0, 0, 0), 1.0e-15 * FastMath.abs(v[0].getValue()));
+            assertEquals(u[1], lin.getPartialDerivative(0, 1, 0, 0), 1.0e-15 * FastMath.abs(v[1].getValue()));
+            assertEquals(u[2], lin.getPartialDerivative(0, 0, 1, 0), 1.0e-15 * FastMath.abs(v[2].getValue()));
+            assertEquals(u[3], lin.getPartialDerivative(0, 0, 0, 1), 1.0e-15 * FastMath.abs(v[3].getValue()));
 
         }
     }
 
     @Test
-    public void testSerialization() {
+    void testSerialization() {
         DerivativeStructure a = new DSFactory(3, 2).variable(0, 1.3);
         DerivativeStructure b = (DerivativeStructure) UnitTestUtils.serializeAndRecover(a);
-        Assertions.assertEquals(a.getFreeParameters(), b.getFreeParameters());
-        Assertions.assertEquals(a.getOrder(), b.getOrder());
+        assertEquals(a.getFreeParameters(), b.getFreeParameters());
+        assertEquals(a.getOrder(), b.getOrder());
         checkEquals(a, b, 1.0e-15);
     }
 
     @Test
-    public void testZero() {
+    void testZero() {
         DerivativeStructure zero = new DSFactory(3, 2).variable(2, 17.0).getField().getZero();
         double[] a = zero.getAllDerivatives();
-        Assertions.assertEquals(10, a.length);
+        assertEquals(10, a.length);
         for (int i = 0; i < a.length; ++i) {
-            Assertions.assertEquals(0.0, a[i], 1.0e-15);
+            assertEquals(0.0, a[i], 1.0e-15);
         }
     }
 
     @Test
-    public void testOne() {
+    void testOne() {
         DerivativeStructure one = new DSFactory(3, 2).variable(2, 17.0).getField().getOne();
         double[] a = one.getAllDerivatives();
-        Assertions.assertEquals(10, a.length);
+        assertEquals(10, a.length);
         for (int i = 0; i < a.length; ++i) {
-            Assertions.assertEquals(i == 0 ? 1.0 : 0.0, a[i], 1.0e-15);
+            assertEquals(i == 0 ? 1.0 : 0.0, a[i], 1.0e-15);
         }
     }
 
     @Test
-    public void testMap() {
+    void testMap() {
         List<int[]> pairs = new ArrayList<>();
         for (int parameters = 1; parameters < 5; ++parameters) {
             for (int order = 0; order < 3; ++order) {
@@ -1957,43 +1962,43 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
         // despite we have created numerous factories,
         // there should be only one field for each pair parameters/order
-        Assertions.assertEquals(pairs.size(), map.size());
+        assertEquals(pairs.size(), map.size());
         @SuppressWarnings("unchecked")
         Field<DerivativeStructure> first = (Field<DerivativeStructure>) map.entrySet().iterator().next().getKey();
-        Assertions.assertEquals(first, first);
-        Assertions.assertNotEquals(first, Binary64Field.getInstance());
+        assertEquals(first, first);
+        assertNotEquals(first, Binary64Field.getInstance());
 
     }
 
     @Test
-    public void testRebaseConditions() {
+    void testRebaseConditions() {
         final DSFactory f32 = new DSFactory(3, 2);
         final DSFactory f22 = new DSFactory(2, 2);
         final DSFactory f31 = new DSFactory(3, 1);
         try {
             f32.variable(0, 0).rebase(f22.variable(0, 0), f22.variable(1, 1.0));
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
         try {
             f32.variable(0, 0).rebase(f31.variable(0, 0), f31.variable(1, 1.0), f31.variable(2, 2.0));
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testRebaseNoVariables() {
+    void testRebaseNoVariables() {
         final DerivativeStructure x = new DSFactory(0, 2).constant(1.0);
-        Assertions.assertSame(x, x.rebase());
+        assertSame(x, x.rebase());
     }
 
     @Test
-    public void testRebaseValueMoreIntermediateThanBase() {
+    void testRebaseValueMoreIntermediateThanBase() {
         doTestRebaseValue(createBaseVariables(new DSFactory(2, 4), 1.5, -2.0),
                           q -> new DerivativeStructure[] {
                               q[0].add(q[1].multiply(3)),
@@ -2006,7 +2011,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testRebaseValueLessIntermediateThanBase() {
+    void testRebaseValueLessIntermediateThanBase() {
         doTestRebaseValue(createBaseVariables(new DSFactory(3, 4), 1.5, -2.0, 0.5),
                           q -> new DerivativeStructure[] {
                               q[0].add(q[1].multiply(3)),
@@ -2018,7 +2023,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testRebaseValueEqualIntermediateAndBase() {
+    void testRebaseValueEqualIntermediateAndBase() {
         doTestRebaseValue(createBaseVariables(new DSFactory(2, 4), 1.5, -2.0),
                           q -> new DerivativeStructure[] {
                               q[0].add(q[1].multiply(3)),
@@ -2050,12 +2055,12 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         // function rebased to base variables
         final DerivativeStructure rebased = fI.rebase(pBase);
 
-        Assertions.assertEquals(q[0].getFreeParameters(),                   ref.getFreeParameters());
-        Assertions.assertEquals(q[0].getOrder(),                            ref.getOrder());
-        Assertions.assertEquals(factoryP.getCompiler().getFreeParameters(), fI.getFreeParameters());
-        Assertions.assertEquals(factoryP.getCompiler().getOrder(),          fI.getOrder());
-        Assertions.assertEquals(ref.getFreeParameters(),                    rebased.getFreeParameters());
-        Assertions.assertEquals(ref.getOrder(),                             rebased.getOrder());
+        assertEquals(q[0].getFreeParameters(),                   ref.getFreeParameters());
+        assertEquals(q[0].getOrder(),                            ref.getOrder());
+        assertEquals(factoryP.getCompiler().getFreeParameters(), fI.getFreeParameters());
+        assertEquals(factoryP.getCompiler().getOrder(),          fI.getOrder());
+        assertEquals(ref.getFreeParameters(),                    rebased.getFreeParameters());
+        assertEquals(ref.getOrder(),                             rebased.getOrder());
 
         checkEquals(ref, rebased, tol);
 
@@ -2065,12 +2070,12 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testOrdersSum() {
+    void testOrdersSum() {
         for (int i = 0; i < 6; ++i) {
             for (int j = 0; j < 4; ++j) {
                 DSCompiler compiler = DSCompiler.getCompiler(i, j);
                 for (int k = 0; k < compiler.getSize(); ++k) {
-                    Assertions.assertEquals(IntStream.of(compiler.getPartialDerivativeOrders(k)).sum(),
+                    assertEquals(IntStream.of(compiler.getPartialDerivativeOrders(k)).sum(),
                                         compiler.getPartialDerivativeOrdersSum(k));
                 }
             }
@@ -2078,7 +2083,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDivisionVersusAlternativeImplementation() {
+    void testDivisionVersusAlternativeImplementation() {
         final DSFactory factory = new DSFactory(3, 10);
         final DerivativeStructure lhs = FastMath.cos(factory.variable(1, 2.5));
         final DerivativeStructure rhs = factory.variable(2, -4).multiply(factory.variable(0, -3.));
@@ -2086,7 +2091,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testReciprocalVersusAlternativeImplementation() {
+    void testReciprocalVersusAlternativeImplementation() {
         final DSFactory factory = new DSFactory(2, 15);
         final DerivativeStructure operand = factory.variable(0, 1.).
                 add(factory.variable(1, 0.).multiply(2.));
@@ -2094,32 +2099,32 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSqrtVersusRootN() {
+    void testSqrtVersusRootN() {
         final DSFactory factory = new DSFactory(2, 8);
         DerivativeStructure ds = factory.variable(1, -2.).multiply(factory.variable(0, 1.));
-        Assertions.assertArrayEquals(ds.sqrt().getAllDerivatives(), ds.rootN(2).getAllDerivatives(), 1e-10);
+        assertArrayEquals(ds.sqrt().getAllDerivatives(), ds.rootN(2).getAllDerivatives(), 1e-10);
     }
 
     @Test
-    public void testRunTimeClass() {
+    void testRunTimeClass() {
         Field<DerivativeStructure> field = new DSFactory(3, 2).constant(0.0).getField();
-        Assertions.assertEquals(DerivativeStructure.class, field.getRuntimeClass());
+        assertEquals(DerivativeStructure.class, field.getRuntimeClass());
     }
 
     private void checkF0F1(DerivativeStructure ds, double value, double...derivatives) {
 
         // check dimension
-        Assertions.assertEquals(derivatives.length, ds.getFreeParameters());
+        assertEquals(derivatives.length, ds.getFreeParameters());
 
         // check value, directly and also as 0th order derivative
-        Assertions.assertEquals(value, ds.getValue(), 1.0e-15);
-        Assertions.assertEquals(value, ds.getPartialDerivative(new int[ds.getFreeParameters()]), 1.0e-15);
+        assertEquals(value, ds.getValue(), 1.0e-15);
+        assertEquals(value, ds.getPartialDerivative(new int[ds.getFreeParameters()]), 1.0e-15);
 
         // check first order derivatives
         for (int i = 0; i < derivatives.length; ++i) {
             int[] orders = new int[derivatives.length];
             orders[i] = 1;
-            Assertions.assertEquals(derivatives[i], ds.getPartialDerivative(orders), 1.0e-15);
+            assertEquals(derivatives[i], ds.getPartialDerivative(orders), 1.0e-15);
         }
 
     }
@@ -2127,15 +2132,15 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     public static void checkEquals(DerivativeStructure ds1, DerivativeStructure ds2, double epsilon) {
 
         // check dimension
-        Assertions.assertEquals(ds1.getFreeParameters(), ds2.getFreeParameters());
-        Assertions.assertEquals(ds1.getOrder(), ds2.getOrder());
+        assertEquals(ds1.getFreeParameters(), ds2.getFreeParameters());
+        assertEquals(ds1.getOrder(), ds2.getOrder());
 
         int[] derivatives = new int[ds1.getFreeParameters()];
         int sum = 0;
         while (true) {
 
             if (sum <= ds1.getOrder()) {
-                Assertions.assertEquals(ds1.getPartialDerivative(derivatives),
+                assertEquals(ds1.getPartialDerivative(derivatives),
                                     ds2.getPartialDerivative(derivatives),
                                     epsilon);
             }
@@ -2293,7 +2298,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         compiler.multiply(lhs.getAllDerivatives(), 0, rhs.reciprocal().getAllDerivatives(), 0, result, 0);
         final double[] result2 = result.clone();
         compiler.divide(lhs.getAllDerivatives(), 0, rhs.getAllDerivatives(), 0, result2, 0);
-        Assertions.assertArrayEquals(result, result2, tolerance);
+        assertArrayEquals(result, result2, tolerance);
     }
 
     private void compareReciprocalToVersionViaPower(final DerivativeStructure operand, final double tolerance) {
@@ -2302,7 +2307,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         compiler.pow(operand.getAllDerivatives(), 0, -1, result, 0);
         final double[] result2 = result.clone();
         compiler.reciprocal(operand.getAllDerivatives(), 0, result2, 0);
-        Assertions.assertArrayEquals(result, result2, tolerance);
+        assertArrayEquals(result, result2, tolerance);
     }
 
 }

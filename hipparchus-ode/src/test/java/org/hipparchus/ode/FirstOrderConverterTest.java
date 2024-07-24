@@ -26,24 +26,26 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.nonstiff.ClassicalRungeKuttaIntegrator;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class FirstOrderConverterTest {
+
+class FirstOrderConverterTest {
 
     @Test
-    public void testDoubleDimension() {
+    void testDoubleDimension() {
         for (int i = 1; i < 10; ++i) {
             SecondOrderODE eqn2 = new Equations(i, 0.2);
             FirstOrderConverter eqn1 = new FirstOrderConverter(eqn2);
-            Assertions.assertEquals(eqn1.getDimension(), (2 * eqn2.getDimension()));
+            assertEquals(eqn1.getDimension(), (2 * eqn2.getDimension()));
         }
     }
 
     @Test
-    public void testDecreasingSteps()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    void testDecreasingSteps()
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         double previousError = Double.NaN;
         for (int i = 0; i < 10; ++i) {
@@ -52,7 +54,7 @@ public class FirstOrderConverterTest {
             double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, step)
                             - FastMath.sin(4.0);
             if (i > 0) {
-                Assertions.assertTrue(FastMath.abs(error) < FastMath.abs(previousError));
+                assertTrue(FastMath.abs(error) < FastMath.abs(previousError));
             }
             previousError = error;
 
@@ -60,19 +62,19 @@ public class FirstOrderConverterTest {
     }
 
     @Test
-    public void testSmallStep()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    void testSmallStep()
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 1.0e-4)
                         - FastMath.sin(4.0);
-        Assertions.assertTrue(FastMath.abs(error) < 1.0e-10);
+        assertTrue(FastMath.abs(error) < 1.0e-10);
     }
 
     @Test
-    public void testBigStep()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    void testBigStep()
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 0.5)
                         - FastMath.sin(4.0);
-        Assertions.assertTrue(FastMath.abs(error) > 0.1);
+        assertTrue(FastMath.abs(error) > 0.1);
     }
 
     private static class Equations

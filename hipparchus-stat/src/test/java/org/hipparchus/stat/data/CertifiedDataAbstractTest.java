@@ -26,7 +26,6 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +37,8 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  */
@@ -123,16 +124,16 @@ public abstract class CertifiedDataAbstractTest {
 
             Double summariesValue = getProperty(summaries, name);
             if (summariesValue != null) {
-                UnitTestUtils.assertEquals("summary value for " + name + " is incorrect.",
-                                       summariesValue.doubleValue(), expectedValue.doubleValue(),
-                                       getMaximumAbsoluteError());
+                UnitTestUtils.customAssertEquals("summary value for " + name + " is incorrect.",
+                                                 summariesValue.doubleValue(), expectedValue.doubleValue(),
+                                                 getMaximumAbsoluteError());
             }
 
             Double descriptivesValue = getProperty(descriptives, name);
             if (descriptivesValue != null) {
-                UnitTestUtils.assertEquals("descriptive value for " + name + " is incorrect.",
-                                       descriptivesValue.doubleValue(), expectedValue.doubleValue(),
-                                       getMaximumAbsoluteError());
+                UnitTestUtils.customAssertEquals("descriptive value for " + name + " is incorrect.",
+                                                 descriptivesValue.doubleValue(), expectedValue.doubleValue(),
+                                                 getMaximumAbsoluteError());
             }
         }
     }
@@ -150,14 +151,14 @@ public abstract class CertifiedDataAbstractTest {
             } else if (meth.getReturnType().equals(Long.TYPE)) {
                 return Double.valueOf(((Long) property).doubleValue());
             } else {
-                Assertions.fail("wrong type: " + meth.getReturnType().getName());
+                fail("wrong type: " + meth.getReturnType().getName());
             }
         } catch (NoSuchMethodException nsme) {
             // ignored
         } catch (InvocationTargetException ite) {
-            Assertions.fail(ite.getMessage());
+            fail(ite.getMessage());
         } catch (IllegalAccessException iae) {
-            Assertions.fail(iae.getMessage());
+            fail(iae.getMessage());
         }
         return null;
     }

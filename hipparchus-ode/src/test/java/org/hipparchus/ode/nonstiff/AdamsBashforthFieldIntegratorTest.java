@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest {
+class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> AdamsFieldIntegrator<T>
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
@@ -43,7 +43,7 @@ public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstr
     }
 
     @Test
-    public void testNbPoints() {
+    void testNbPoints() {
         doNbPointsTest();
     }
 

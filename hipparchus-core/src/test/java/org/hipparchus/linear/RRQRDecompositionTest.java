@@ -23,15 +23,15 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class RRQRDecompositionTest {
+class RRQRDecompositionTest {
     private double[][] testData3x3NonSingular = {
             { 12, -51, 4 },
             { 6, 167, -68 },
@@ -59,7 +59,7 @@ public class RRQRDecompositionTest {
 
     /** test dimensions */
     @Test
-    public void testDimensions() {
+    void testDimensions() {
         checkDimension(MatrixUtils.createRealMatrix(testData3x3NonSingular));
 
         checkDimension(MatrixUtils.createRealMatrix(testData4x3));
@@ -78,15 +78,15 @@ public class RRQRDecompositionTest {
         int rows = m.getRowDimension();
         int columns = m.getColumnDimension();
         RRQRDecomposition qr = new RRQRDecomposition(m);
-        Assertions.assertEquals(rows,    qr.getQ().getRowDimension());
-        Assertions.assertEquals(rows,    qr.getQ().getColumnDimension());
-        Assertions.assertEquals(rows,    qr.getR().getRowDimension());
-        Assertions.assertEquals(columns, qr.getR().getColumnDimension());
+        assertEquals(rows,    qr.getQ().getRowDimension());
+        assertEquals(rows,    qr.getQ().getColumnDimension());
+        assertEquals(rows,    qr.getR().getRowDimension());
+        assertEquals(columns, qr.getR().getColumnDimension());
     }
 
     /** test AP = QR */
     @Test
-    public void testAPEqualQR() {
+    void testAPEqualQR() {
         checkAPEqualQR(MatrixUtils.createRealMatrix(testData3x3NonSingular));
 
         checkAPEqualQR(MatrixUtils.createRealMatrix(testData3x3Singular));
@@ -107,12 +107,12 @@ public class RRQRDecompositionTest {
     private void checkAPEqualQR(RealMatrix m) {
         RRQRDecomposition rrqr = new RRQRDecomposition(m);
         double norm = rrqr.getQ().multiply(rrqr.getR()).subtract(m.multiply(rrqr.getP())).getNorm1();
-        Assertions.assertEquals(0, norm, normTolerance);
+        assertEquals(0, norm, normTolerance);
     }
 
     /** test the orthogonality of Q */
     @Test
-    public void testQOrthogonal() {
+    void testQOrthogonal() {
         checkQOrthogonal(MatrixUtils.createRealMatrix(testData3x3NonSingular));
 
         checkQOrthogonal(MatrixUtils.createRealMatrix(testData3x3Singular));
@@ -134,12 +134,12 @@ public class RRQRDecompositionTest {
         RRQRDecomposition qr = new RRQRDecomposition(m);
         RealMatrix eye = MatrixUtils.createRealIdentityMatrix(m.getRowDimension());
         double norm = qr.getQT().multiply(qr.getQ()).subtract(eye).getNorm1();
-        Assertions.assertEquals(0, norm, normTolerance);
+        assertEquals(0, norm, normTolerance);
     }
 
     /** test that R is upper triangular */
     @Test
-    public void testRUpperTriangular() {
+    void testRUpperTriangular() {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData3x3NonSingular);
         checkUpperTriangular(new RRQRDecomposition(matrix).getR());
 
@@ -168,7 +168,7 @@ public class RRQRDecompositionTest {
             @Override
             public void visit(int row, int column, double value) {
                 if (column < row) {
-                    Assertions.assertEquals(0.0, value, entryTolerance);
+                    assertEquals(0.0, value, entryTolerance);
                 }
             }
         });
@@ -176,7 +176,7 @@ public class RRQRDecompositionTest {
 
     /** test that H is trapezoidal */
     @Test
-    public void testHTrapezoidal() {
+    void testHTrapezoidal() {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData3x3NonSingular);
         checkTrapezoidal(new RRQRDecomposition(matrix).getH());
 
@@ -205,14 +205,14 @@ public class RRQRDecompositionTest {
             @Override
             public void visit(int row, int column, double value) {
                 if (column > row) {
-                    Assertions.assertEquals(0.0, value, entryTolerance);
+                    assertEquals(0.0, value, entryTolerance);
                 }
             }
         });
     }
 
     @Test
-    public void testNonInvertible() {
+    void testNonInvertible() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             RRQRDecomposition qr =
                 new RRQRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular), 3.0e-16);
@@ -233,11 +233,11 @@ public class RRQRDecompositionTest {
 
     /** test the rank is returned correctly */
     @Test
-    public void testRank() {
+    void testRank() {
         double[][] d = { { 1, 1, 1 }, { 0, 0, 0 }, { 1, 2, 3 } };
         RealMatrix m = new Array2DRowRealMatrix(d);
         RRQRDecomposition qr = new RRQRDecomposition(m);
-        Assertions.assertEquals(2, qr.getRank(1.0e-16));
+        assertEquals(2, qr.getRank(1.0e-16));
     }
 
 }

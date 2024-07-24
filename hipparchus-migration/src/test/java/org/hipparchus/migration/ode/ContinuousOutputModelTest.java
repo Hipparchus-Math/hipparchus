@@ -36,13 +36,17 @@ import org.hipparchus.ode.sampling.DummyStepInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @Deprecated
 public class ContinuousOutputModelTest {
@@ -51,7 +55,7 @@ public class ContinuousOutputModelTest {
     ODEIntegrator integ;
 
     @Test
-    public void testBoundaries() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testBoundaries() throws MathIllegalArgumentException, MathIllegalStateException {
         integ.addStepHandler(new ContinuousOutputModel());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
         ContinuousOutputModel cm = (ContinuousOutputModel) integ.getStepHandlers().iterator().next();
@@ -61,7 +65,7 @@ public class ContinuousOutputModelTest {
     }
 
     @Test
-    public void testRandomAccess() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testRandomAccess() throws MathIllegalArgumentException, MathIllegalStateException {
 
         ContinuousOutputModel cm = new ContinuousOutputModel();
         integ.addStepHandler(cm);
@@ -88,13 +92,13 @@ public class ContinuousOutputModelTest {
             maxErrorDot = FastMath.max(maxErrorDot, errorDot);
         }
 
-        Assertions.assertEquals(0.0, maxError,    1.0e-9);
-        Assertions.assertEquals(0.0, maxErrorDot, 4.0e-7);
+        assertEquals(0.0, maxError,    1.0e-9);
+        assertEquals(0.0, maxErrorDot, 4.0e-7);
 
     }
 
     @Test
-    public void testModelsMerging() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testModelsMerging() throws MathIllegalArgumentException, MathIllegalStateException {
 
         // theoretical solution: y[0] = cos(t), y[1] = sin(t)
         FirstOrderDifferentialEquations problem =
@@ -133,35 +137,35 @@ public class ContinuousOutputModelTest {
         cm.append(cm1);
 
         // check circle
-        Assertions.assertEquals(2.0 * FastMath.PI, cm.getInitialTime(), 1.0e-12);
-        Assertions.assertEquals(0, cm.getFinalTime(), 1.0e-12);
-        Assertions.assertEquals(cm.getFinalTime(), cm.getInterpolatedTime(), 1.0e-12);
+        assertEquals(2.0 * FastMath.PI, cm.getInitialTime(), 1.0e-12);
+        assertEquals(0, cm.getFinalTime(), 1.0e-12);
+        assertEquals(cm.getFinalTime(), cm.getInterpolatedTime(), 1.0e-12);
         for (double t = 0; t < 2.0 * FastMath.PI; t += 0.1) {
             cm.setInterpolatedTime(t);
             double[] y = cm.getInterpolatedState();
-            Assertions.assertEquals(FastMath.cos(t), y[0], 1.0e-7);
-            Assertions.assertEquals(FastMath.sin(t), y[1], 1.0e-7);
+            assertEquals(FastMath.cos(t), y[0], 1.0e-7);
+            assertEquals(FastMath.sin(t), y[1], 1.0e-7);
         }
 
     }
 
     @Test
-    public void testErrorConditions() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testErrorConditions() throws MathIllegalArgumentException, MathIllegalStateException {
 
         ContinuousOutputModel cm = new ContinuousOutputModel();
         cm.handleStep(buildInterpolator(0, new double[] { 0.0, 1.0, -2.0 }, 1));
 
         // dimension mismatch
-        Assertions.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0 }, 2.0));
+        assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0 }, 2.0));
 
         // hole between time ranges
-        Assertions.assertTrue(checkAppendError(cm, 10.0, new double[] { 0.0, 1.0, -2.0 }, 20.0));
+        assertTrue(checkAppendError(cm, 10.0, new double[] { 0.0, 1.0, -2.0 }, 20.0));
 
         // propagation direction mismatch
-        Assertions.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 0.0));
+        assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 0.0));
 
         // no errors
-        Assertions.assertFalse(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 2.0));
+        assertFalse(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 2.0));
 
     }
 
@@ -187,7 +191,7 @@ public class ContinuousOutputModelTest {
             mapper = ctr.newInstance(null, y0.length);
         } catch (NoSuchMethodException | SecurityException | InstantiationException |
                  IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
         return new DummyStepInterpolator(t1 >= t0,
                                          new ODEStateAndDerivative(t0, y0,  new double[y0.length]),
@@ -198,11 +202,11 @@ public class ContinuousOutputModelTest {
     }
 
     public void checkValue(double value, double reference) {
-        Assertions.assertTrue(FastMath.abs(value - reference) < 1.0e-10);
+        assertTrue(FastMath.abs(value - reference) < 1.0e-10);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         pb = new TestProblem3(0.9);
         double minStep = 0;
         double maxStep = pb.getFinalTime() - pb.getInitialTime();
@@ -210,7 +214,7 @@ public class ContinuousOutputModelTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         pb    = null;
         integ = null;
     }

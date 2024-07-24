@@ -32,14 +32,16 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class EigenDecompositionNonSymmetricTest {
 
@@ -48,31 +50,31 @@ public class EigenDecompositionNonSymmetricTest {
 
     /** test dimensions */
     @Test
-    public void testDimensions() {
+    void testDimensions() {
         final int m = matrix.getRowDimension();
         EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(matrix);
-        Assertions.assertEquals(m, ed.getV().getRowDimension());
-        Assertions.assertEquals(m, ed.getV().getColumnDimension());
-        Assertions.assertEquals(m, ed.getD().getColumnDimension());
-        Assertions.assertEquals(m, ed.getD().getColumnDimension());
-        Assertions.assertEquals(m, ed.getVInv().getRowDimension());
-        Assertions.assertEquals(m, ed.getVInv().getColumnDimension());
+        assertEquals(m, ed.getV().getRowDimension());
+        assertEquals(m, ed.getV().getColumnDimension());
+        assertEquals(m, ed.getD().getColumnDimension());
+        assertEquals(m, ed.getD().getColumnDimension());
+        assertEquals(m, ed.getVInv().getRowDimension());
+        assertEquals(m, ed.getVInv().getColumnDimension());
     }
 
     /** test eigenvalues */
     @Test
-    public void testEigenvalues() {
+    void testEigenvalues() {
         EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(matrix);
         Complex[] eigenValues = ed.getEigenvalues();
-        Assertions.assertEquals(refValues.length, eigenValues.length);
+        assertEquals(refValues.length, eigenValues.length);
         for (int i = 0; i < refValues.length; ++i) {
-            Assertions.assertEquals(refValues[i].getRealPart(),      eigenValues[i].getRealPart(), 3.0e-15);
-            Assertions.assertEquals(refValues[i].getImaginaryPart(), eigenValues[i].getImaginaryPart(), 3.0e-15);
+            assertEquals(refValues[i].getRealPart(),      eigenValues[i].getRealPart(), 3.0e-15);
+            assertEquals(refValues[i].getImaginaryPart(), eigenValues[i].getImaginaryPart(), 3.0e-15);
         }
     }
 
     @Test
-    public void testNonSymmetric() {
+    void testNonSymmetric() {
         // Vandermonde matrix V(x;i,j) = x_i^{n - j} with x = (-1,-2,3,4)
         double[][] vData = { { -1.0, 1.0, -1.0, 1.0 },
                              { -8.0, 4.0, -2.0, 1.0 },
@@ -101,7 +103,7 @@ public class EigenDecompositionNonSymmetricTest {
     }
 
     @Test
-    public void testRandomNonSymmetricMatrix() {
+    void testRandomNonSymmetricMatrix() {
         for (int run = 0; run < 100; run++) {
             RandomGenerator r = new Well1024a(0x171956baefeac83el);
 
@@ -127,7 +129,7 @@ public class EigenDecompositionNonSymmetricTest {
      *  Thanks Frederic Devernay &lt;frederic.devernay@m4x.org&gt;
      */
     @Test
-    public void testMath1051() {
+    void testMath1051() {
         double[][] data = {
                 {0,0,0,0,0},
                 {0,0,0,0,1},
@@ -141,7 +143,7 @@ public class EigenDecompositionNonSymmetricTest {
     }
 
     @Test
-    public void testNormalDistributionNonSymmetricMatrix() {
+    void testNormalDistributionNonSymmetricMatrix() {
         for (int run = 0; run < 100; run++) {
             final RandomGenerator r = new Well1024a(0x511d8551a5641ea2l);
             final RandomDataGenerator gen = new RandomDataGenerator(100);
@@ -162,7 +164,7 @@ public class EigenDecompositionNonSymmetricTest {
     }
 
     @Test
-    public void testMath848() {
+    void testMath848() {
         double[][] data = {
                 { 0.1849449280, -0.0646971046,  0.0774755812, -0.0969651755, -0.0692648806,  0.3282344352, -0.0177423074,  0.2063136340},
                 {-0.0742700134, -0.0289063030, -0.0017269460, -0.0375550146, -0.0487737922, -0.2616837868, -0.0821201295, -0.2530000167},
@@ -191,20 +193,20 @@ public class EigenDecompositionNonSymmetricTest {
             RealMatrix y = v.multiply(d);
 
             double diffNorm = x.subtract(y).getNorm1();
-            Assertions.assertTrue(x.subtract(y).getNorm1() < 1000 * Precision.EPSILON * FastMath.max(x.getNorm1(), y.getNorm1()),
+            assertTrue(x.subtract(y).getNorm1() < 1000 * Precision.EPSILON * FastMath.max(x.getNorm1(), y.getNorm1()),
                     "The norm of (X-Y) is too large: " + diffNorm + ", matrix=" + m.toString());
 
             RealMatrix invV = new LUDecomposition(v).getSolver().getInverse();
             double norm = v.multiply(d).multiply(invV).subtract(m).getNorm1();
-            Assertions.assertEquals(0.0, norm, 1.0e-10);
+            assertEquals(0.0, norm, 1.0e-10);
         } catch (Exception e) {
-            Assertions.fail("Failed to create EigenDecomposition for matrix " + m.toString() + ", ex=" + e.toString());
+            fail("Failed to create EigenDecomposition for matrix " + m.toString() + ", ex=" + e.toString());
         }
     }
 
     /** test eigenvectors */
     @Test
-    public void testEigenvectors() {
+    void testEigenvectors() {
         EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(matrix);
         FieldMatrix<Complex> cMatrix = MatrixUtils.createFieldMatrix(ComplexField.getInstance(),
                                                                      matrix.getRowDimension(),
@@ -220,27 +222,27 @@ public class EigenDecompositionNonSymmetricTest {
             final FieldVector<Complex> v      = ed.getEigenvector(i);
             final FieldVector<Complex> mV     = cMatrix.operate(v);
             for (int k = 0; k < v.getDimension(); ++k) {
-                Assertions.assertEquals(0, mV.getEntry(k).subtract(v.getEntry(k).multiply(lambda)).norm(), 1.0e-13);
+                assertEquals(0, mV.getEntry(k).subtract(v.getEntry(k).multiply(lambda)).norm(), 1.0e-13);
             }
         }
     }
 
     /** test A = VDV⁻¹ */
     @Test
-    public void testAEqualVDVInv() {
+    void testAEqualVDVInv() {
         EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(matrix);
         RealMatrix v  = ed.getV();
         RealMatrix d  = ed.getD();
         RealMatrix vI = MatrixUtils.inverse(v);
         double norm = v.multiply(d).multiply(vI).subtract(matrix).getNorm1();
-        Assertions.assertEquals(0, norm, 6.0e-13);
+        assertEquals(0, norm, 6.0e-13);
     }
 
     /**
      * Matrix with eigenvalues {2, 0, 12}
      */
     @Test
-    public void testDistinctEigenvalues() {
+    void testDistinctEigenvalues() {
         RealMatrix distinct = MatrixUtils.createRealMatrix(new double[][] {
                 {3, 1, -4},
                 {1, 3, -4},
@@ -257,7 +259,7 @@ public class EigenDecompositionNonSymmetricTest {
      * Verifies operation on indefinite matrix
      */
     @Test
-    public void testZeroDivide() {
+    void testZeroDivide() {
         RealMatrix indefinite = MatrixUtils.createRealMatrix(new double [][] {
                 { 0.0, 1.0, -1.0 },
                 { 1.0, 1.0, 0.0 },
@@ -275,7 +277,7 @@ public class EigenDecompositionNonSymmetricTest {
 
     /** test eigenvalues for a big matrix. */
     @Test
-    public void testBigMatrix() {
+    void testBigMatrix() {
         Random r = new Random(17748333525117l);
         double[] bigValues = new double[200];
         for (int i = 0; i < bigValues.length; ++i) {
@@ -285,9 +287,9 @@ public class EigenDecompositionNonSymmetricTest {
         EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(createTestMatrix(r, bigValues));
         Complex[] eigenValues = ed.getEigenvalues();
         Arrays.sort(eigenValues, new ComplexComparator());
-        Assertions.assertEquals(bigValues.length, eigenValues.length);
+        assertEquals(bigValues.length, eigenValues.length);
         for (int i = 0; i < bigValues.length; ++i) {
-            Assertions.assertEquals(bigValues[i], eigenValues[i].getRealPart(), 2.0e-14);
+            assertEquals(bigValues[i], eigenValues[i].getRealPart(), 2.0e-14);
         }
     }
 
@@ -296,7 +298,7 @@ public class EigenDecompositionNonSymmetricTest {
      * Matrix with eigenvalues {2e-100, 0, 12e-100}
      */
     @Test
-    public void testTinyValues() {
+    void testTinyValues() {
         final double tiny = 1.0e-100;
         RealMatrix distinct = MatrixUtils.createRealMatrix(new double[][] {
                 {3, 1, -4},
@@ -314,15 +316,15 @@ public class EigenDecompositionNonSymmetricTest {
     }
 
     @Test
-    public void testDeterminantWithCompleEigenValues() {
+    void testDeterminantWithCompleEigenValues() {
         final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] { { -3, -1.5, -3 }, { 0, -1, 0 }, { 1, 0, 0 } });
         EigenDecompositionNonSymmetric decomposition = new EigenDecompositionNonSymmetric(m);
-        Assertions.assertEquals(-3.0, decomposition.getDeterminant().getRealPart(),      1.0e-15);
-        Assertions.assertEquals( 0.0, decomposition.getDeterminant().getImaginaryPart(), 1.0e-15);
+        assertEquals(-3.0, decomposition.getDeterminant().getRealPart(),      1.0e-15);
+        assertEquals( 0.0, decomposition.getDeterminant().getImaginaryPart(), 1.0e-15);
     }
 
     @Test
-    public void testReal() {
+    void testReal() {
         // AA = [1 2;1 -3];
 
         RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
@@ -345,18 +347,18 @@ public class EigenDecompositionNonSymmetricTest {
             { (2 * s2 - s3) / 5, (4 * s3 + 3 * s2) / 12 }
         });
 
-        UnitTestUtils.assertEquals("D", D_expected, ed.getD(), 1.0e-15);
-        UnitTestUtils.assertEquals("V", V_expected, ed.getV(), 1.0e-15);
+        UnitTestUtils.customAssertEquals("D", D_expected, ed.getD(), 1.0e-15);
+        UnitTestUtils.customAssertEquals("V", V_expected, ed.getV(), 1.0e-15);
 
         // checking definition of the decomposition A = V*D*inv(V)
-        UnitTestUtils.assertEquals("A", A,
-                                   ed.getV().multiply(ed.getD()).multiply(MatrixUtils.inverse(ed.getV())),
-                                   2.0e-15);
+        UnitTestUtils.customAssertEquals("A", A,
+                                         ed.getV().multiply(ed.getD()).multiply(MatrixUtils.inverse(ed.getV())),
+                                         2.0e-15);
 
     }
 
     @Test
-    public void testImaginary() {
+    void testImaginary() {
         // AA = [3 -2;4 -1];
 
         RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
@@ -376,11 +378,11 @@ public class EigenDecompositionNonSymmetricTest {
             { -0.5, 0.5 }, { 0, 1 }
         });
 
-        UnitTestUtils.assertEquals("D", D_expected, ordEig.getD(), 1.0e-15);
-        UnitTestUtils.assertEquals("V", V_expected, ordEig.getV(), 1.0e-15);
+        UnitTestUtils.customAssertEquals("D", D_expected, ordEig.getD(), 1.0e-15);
+        UnitTestUtils.customAssertEquals("V", V_expected, ordEig.getV(), 1.0e-15);
 
         // checking definition of the decomposition A = V*D*inv(V)
-        UnitTestUtils.assertEquals("A", A, ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())), 1.0e-15);
+        UnitTestUtils.customAssertEquals("A", A, ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())), 1.0e-15);
 
         // checking A*V = D*V
         FieldMatrix<Complex> ac = new Array2DRowFieldMatrix<>(ComplexField.getInstance(), 2, 2);
@@ -394,15 +396,15 @@ public class EigenDecompositionNonSymmetricTest {
             final FieldVector<Complex> ei  = ordEig.getEigenvector(i);
             final FieldVector<Complex> aei = ac.operate(ei);
             for (int j = 0; j < ei.getDimension(); ++j) {
-                Assertions.assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
-                Assertions.assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
+                assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
+                assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
             }
         }
 
     }
 
     @Test
-    public void testImaginary33() {
+    void testImaginary33() {
         // AA = [3 -2 0;4 -1 0;1 1 1];
 
         RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
@@ -425,13 +427,13 @@ public class EigenDecompositionNonSymmetricTest {
             { a,        a, 0 },
             { a, -0.5 * a, b }
         });
-        UnitTestUtils.assertEquals("D", D_expected, ordEig.getD(), 1.0e-15);
-        UnitTestUtils.assertEquals("V", V_expected, ordEig.getV(), 1.0e-15);
+        UnitTestUtils.customAssertEquals("D", D_expected, ordEig.getD(), 1.0e-15);
+        UnitTestUtils.customAssertEquals("V", V_expected, ordEig.getV(), 1.0e-15);
 
         // checking definition of the decomposition A = V*D*inv(V)
-        UnitTestUtils.assertEquals("A", A,
-                                   ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())),
-                                   8.0e-15);
+        UnitTestUtils.customAssertEquals("A", A,
+                                         ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())),
+                                         8.0e-15);
 
         // checking A*V = D*V
         FieldMatrix<Complex> ac = new Array2DRowFieldMatrix<>(ComplexField.getInstance(), 3, 3);
@@ -445,15 +447,15 @@ public class EigenDecompositionNonSymmetricTest {
             final FieldVector<Complex> ei  = ordEig.getEigenvector(i);
             final FieldVector<Complex> aei = ac.operate(ei);
             for (int j = 0; j < ei.getDimension(); ++j) {
-                Assertions.assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
-                Assertions.assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
+                assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
+                assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
             }
         }
 
     }
 
     @Test
-    public void testImaginaryNullEigenvalue() {
+    void testImaginaryNullEigenvalue() {
         // AA = [3 -2 0;4 -1 0;3 -2 0];
 
         RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
@@ -477,13 +479,13 @@ public class EigenDecompositionNonSymmetricTest {
             {      -a, -2 * a,   s2 }
         });
 
-        UnitTestUtils.assertEquals("D", D_expected, ordEig.getD(), 1.0e-15);
-        UnitTestUtils.assertEquals("V", V_expected, ordEig.getV(), 2.0e-15);
+        UnitTestUtils.customAssertEquals("D", D_expected, ordEig.getD(), 1.0e-15);
+        UnitTestUtils.customAssertEquals("V", V_expected, ordEig.getV(), 2.0e-15);
 
         // checking definition of the decomposition A = V*D*inv(V)
-        UnitTestUtils.assertEquals("A", A,
-                                   ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())),
-                                   1.0e-14);
+        UnitTestUtils.customAssertEquals("A", A,
+                                         ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())),
+                                         1.0e-14);
 
         // checking A*V = D*V
         FieldMatrix<Complex> ac = new Array2DRowFieldMatrix<>(ComplexField.getInstance(), 3, 3);
@@ -498,8 +500,8 @@ public class EigenDecompositionNonSymmetricTest {
             final FieldVector<Complex> ei  = ordEig.getEigenvector(i);
             final FieldVector<Complex> aei = ac.operate(ei);
             for (int j = 0; j < ei.getDimension(); ++j) {
-                Assertions.assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
-                Assertions.assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
+                assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
+                assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
             }
         }
 
@@ -514,8 +516,8 @@ public class EigenDecompositionNonSymmetricTest {
                                     EigenDecompositionNonSymmetric ed, double tolerance) {
         Complex[] observed = ed.getEigenvalues();
         for (int i = 0; i < observed.length; i++) {
-            Assertions.assertTrue(isIncludedValue(observed[i], targetValues, tolerance));
-            Assertions.assertTrue(isIncludedValue(targetValues[i], observed, tolerance));
+            assertTrue(isIncludedValue(observed[i], targetValues, tolerance));
+            assertTrue(isIncludedValue(targetValues[i], observed, tolerance));
         }
     }
 
@@ -542,7 +544,7 @@ public class EigenDecompositionNonSymmetricTest {
      * used to find vectors in one-dimensional eigenspaces.
      */
     protected void checkEigenVector(Complex[] eigenVector, EigenDecompositionNonSymmetric ed, double tolerance) {
-        Assertions.assertTrue(isIncludedColumn(eigenVector, ed.getV(), tolerance));
+        assertTrue(isIncludedColumn(eigenVector, ed.getV(), tolerance));
     }
 
     /**
@@ -575,7 +577,7 @@ public class EigenDecompositionNonSymmetricTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         double[] real = {
         		0.001, 1.000, 1.001, 2.001, 2.002, 2.003
         };
@@ -587,7 +589,7 @@ public class EigenDecompositionNonSymmetricTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         refValues = null;
         matrix    = null;
     }

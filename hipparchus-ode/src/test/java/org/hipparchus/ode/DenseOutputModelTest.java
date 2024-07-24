@@ -32,7 +32,6 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,26 +42,31 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 public class DenseOutputModelTest {
 
     TestProblem3 pb;
     ODEIntegrator integ;
 
     @Test
-    public void testBoundaries() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testBoundaries() throws MathIllegalArgumentException, MathIllegalStateException {
         integ.addStepHandler(new DenseOutputModel());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
         DenseOutputModel dom = (DenseOutputModel) integ.getStepHandlers().iterator().next();
         double tBefore = 2.0 * pb.getInitialTime() - pb.getFinalTime();
-        Assertions.assertEquals(tBefore, dom.getInterpolatedState(tBefore).getTime(), 1.0e-10);
+        assertEquals(tBefore, dom.getInterpolatedState(tBefore).getTime(), 1.0e-10);
         double tAfter = 2.0 * pb.getFinalTime() - pb.getInitialTime();
-        Assertions.assertEquals(tAfter, dom.getInterpolatedState(tAfter).getTime(), 1.0e-10);
+        assertEquals(tAfter, dom.getInterpolatedState(tAfter).getTime(), 1.0e-10);
         double tMiddle = 2.0 * pb.getFinalTime() - pb.getInitialTime();
-        Assertions.assertEquals(tMiddle, dom.getInterpolatedState(tMiddle).getTime(), 1.0e-10);
+        assertEquals(tMiddle, dom.getInterpolatedState(tMiddle).getTime(), 1.0e-10);
     }
 
     @Test
-    public void testRandomAccess() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testRandomAccess() throws MathIllegalArgumentException, MathIllegalStateException {
 
         DenseOutputModel dom = new DenseOutputModel();
         integ.addStepHandler(dom);
@@ -89,13 +93,13 @@ public class DenseOutputModelTest {
             maxErrorDot = FastMath.max(maxErrorDot, errorDot);
         }
 
-        Assertions.assertEquals(0.0, maxError,    1.0e-9);
-        Assertions.assertEquals(0.0, maxErrorDot, 4.0e-7);
+        assertEquals(0.0, maxError,    1.0e-9);
+        assertEquals(0.0, maxErrorDot, 4.0e-7);
 
     }
 
     @Test
-    public void testModelsMerging() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testModelsMerging() throws MathIllegalArgumentException, MathIllegalStateException {
 
         // theoretical solution: y[0] = cos(t), y[1] = sin(t)
         OrdinaryDifferentialEquation problem =
@@ -129,38 +133,38 @@ public class DenseOutputModelTest {
         dom.append(dom1);
 
         // check circle
-        Assertions.assertEquals(2.0 * FastMath.PI, dom.getInitialTime(), 1.0e-12);
-        Assertions.assertEquals(0, dom.getFinalTime(), 1.0e-12);
+        assertEquals(2.0 * FastMath.PI, dom.getInitialTime(), 1.0e-12);
+        assertEquals(0, dom.getFinalTime(), 1.0e-12);
         for (double t = 0; t < 2.0 * FastMath.PI; t += 0.1) {
             final double[] y = dom.getInterpolatedState(t).getPrimaryState();
-            Assertions.assertEquals(FastMath.cos(t), y[0], 1.0e-7);
-            Assertions.assertEquals(FastMath.sin(t), y[1], 1.0e-7);
+            assertEquals(FastMath.cos(t), y[0], 1.0e-7);
+            assertEquals(FastMath.sin(t), y[1], 1.0e-7);
         }
 
     }
 
     @Test
-    public void testErrorConditions() throws MathIllegalArgumentException, MathIllegalStateException {
+    void testErrorConditions() throws MathIllegalArgumentException, MathIllegalStateException {
 
         DenseOutputModel cm = new DenseOutputModel();
         cm.handleStep(buildInterpolator(0, new double[] { 0.0, 1.0, -2.0 }, 1));
 
         // dimension mismatch
-        Assertions.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0 }, 2.0));
+        assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0 }, 2.0));
 
         // hole between time ranges
-        Assertions.assertTrue(checkAppendError(cm, 10.0, new double[] { 0.0, 1.0, -2.0 }, 20.0));
+        assertTrue(checkAppendError(cm, 10.0, new double[] { 0.0, 1.0, -2.0 }, 20.0));
 
         // propagation direction mismatch
-        Assertions.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 0.0));
+        assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 0.0));
 
         // no errors
-        Assertions.assertFalse(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 2.0));
+        assertFalse(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 2.0));
 
     }
 
     @Test
-    public void testSerialization() {
+    void testSerialization() {
         try {
             TestProblem1 pb = new TestProblem1();
             double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -175,8 +179,8 @@ public class DenseOutputModelTest {
             }
 
             int expectedSize = 131976;
-            Assertions.assertTrue(bos.size () >  9 * expectedSize / 10, "size = " + bos.size());
-            Assertions.assertTrue(bos.size () < 11 * expectedSize / 10, "size = " + bos.size());
+            assertTrue(bos.size () >  9 * expectedSize / 10, "size = " + bos.size());
+            assertTrue(bos.size () < 11 * expectedSize / 10, "size = " + bos.size());
 
             ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
             ObjectInputStream     ois = new ObjectInputStream(bis);
@@ -196,9 +200,9 @@ public class DenseOutputModelTest {
                     maxError = error;
                 }
             }
-            Assertions.assertEquals(0.0, maxError, 5.5e-7);
+            assertEquals(0.0, maxError, 5.5e-7);
         } catch (ClassNotFoundException | IOException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
 
     }
@@ -225,11 +229,11 @@ public class DenseOutputModelTest {
     }
 
     public void checkValue(double value, double reference) {
-        Assertions.assertTrue(FastMath.abs(value - reference) < 1.0e-10);
+        assertTrue(FastMath.abs(value - reference) < 1.0e-10);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         pb = new TestProblem3(0.9);
         double minStep = 0;
         double maxStep = pb.getFinalTime() - pb.getInitialTime();
@@ -237,7 +241,7 @@ public class DenseOutputModelTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         pb    = null;
         integ = null;
     }

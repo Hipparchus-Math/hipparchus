@@ -37,21 +37,23 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MerweUnscentedTransform;
 import org.hipparchus.util.UnscentedTransformProvider;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class UnscentedKalmanFilterTest {
+class UnscentedKalmanFilterTest {
 
     /** test state dimension equal to 0 */
     @Test
-    public void testWrongStateDimension() {
+    void testWrongStateDimension() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final ConstantProcess process = new ConstantProcess();
             final ProcessEstimate initial = new ProcessEstimate(0,
@@ -81,7 +83,7 @@ public class UnscentedKalmanFilterTest {
     }
 
     @Test
-    public void testConstant() {
+    void testConstant() {
 
         ConstantProcess process = new ConstantProcess();
 
@@ -89,7 +91,7 @@ public class UnscentedKalmanFilterTest {
         final ProcessEstimate initial = new ProcessEstimate(0,
                                                             MatrixUtils.createRealVector(new double[] { 10.0 }),
                                                             process.q);
-        Assertions.assertNull(initial.getInnovationCovariance());
+        assertNull(initial.getInnovationCovariance());
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = Reference.loadReferenceData(1, 1, "constant-value.txt");
@@ -146,7 +148,7 @@ public class UnscentedKalmanFilterTest {
     }
 
     @Test
-    public void testCannonballZeroProcessNoise() {
+    void testCannonballZeroProcessNoise() {
         doTestCannonball(new double[][] {
                             { 0.00, 0.00, 0.00, 0.00 },
                             { 0.00, 0.00, 0.00, 0.00 },
@@ -157,7 +159,7 @@ public class UnscentedKalmanFilterTest {
     }
 
     @Test
-    public void testCannonballNonZeroProcessNoise() {
+    void testCannonballNonZeroProcessNoise() {
         doTestCannonball(new double[][] {
                             { 0.01, 0.00, 0.00, 0.00 },
                             { 0.00, 0.10, 0.00, 0.00 },
@@ -206,8 +208,8 @@ public class UnscentedKalmanFilterTest {
         map(estimate -> {
             final ProcessEstimate p = filter.getPredicted();
             final ProcessEstimate c = filter.getCorrected();
-            Assertions.assertEquals(p.getTime(), c.getTime(), 1.0e-15);
-            Assertions.assertTrue(p.getState().getDistance(c.getState()) > 0.005);
+            assertEquals(p.getTime(), c.getTime(), 1.0e-15);
+            assertTrue(p.getState().getDistance(c.getState()) > 0.005);
             return estimate;
         }).
         forEach(estimate -> {
@@ -270,21 +272,21 @@ public class UnscentedKalmanFilterTest {
     }
 
     @Test
-    public void testWelshBishopExactR() {
+    void testWelshBishopExactR() {
         doTestWelshBishop(0xd30a8f811e2f7c61l, -0.37727, 0.1,
                           0.0, 1.0, 1.0e-5, 0.1 * 0.1,
                           50, -0.389117, 1.0e-6);
     }
 
     @Test
-    public void testWelshBishopBigR() {
+    void testWelshBishopBigR() {
         doTestWelshBishop(0xd30a8f811e2f7c61l, -0.37727, 0.1,
                           0.0, 1.0, 1.0e-5, 1.0 * 1.0,
                           50, -0.385613, 1.0e-6);
     }
 
     @Test
-    public void testWelshBishopSmallR() {
+    void testWelshBishopSmallR() {
         doTestWelshBishop(0xd30a8f811e2f7c61l, -0.37727, 0.1,
                           0.0, 1.0, 1.0e-5, 0.01 * 0.01,
                           50, -0.403015, 1.0e-6);
@@ -324,7 +326,7 @@ public class UnscentedKalmanFilterTest {
                         map(measurement -> filter.estimationStep(measurement)).
                         reduce((first, second) -> second).get();
 
-        Assertions.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
+        assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
 
     }
 
@@ -361,7 +363,7 @@ public class UnscentedKalmanFilterTest {
     }
 
     @Test
-    public void testRadar() {
+    void testRadar() {
         doTestRadar();
     }
     
@@ -563,7 +565,7 @@ public class UnscentedKalmanFilterTest {
 
             // Number of sigma-points
             int numPoints = sigmaPoints.length;
-            Assertions.assertEquals(STATE_DIMENSION * 2 + 1, numPoints);
+            assertEquals(STATE_DIMENSION * 2 + 1, numPoints);
 
             // Time delta
             double dt = measurement.getTime() - previousTime;
@@ -606,7 +608,7 @@ public class UnscentedKalmanFilterTest {
 
 
     @Test
-    public void testUkfEkfComparison() {
+    void testUkfEkfComparison() {
 
         // Common parameters
         final double processNoiseScale = 1.0;
@@ -640,10 +642,10 @@ public class UnscentedKalmanFilterTest {
         ProcessEstimate ukfEstimate = unscentedFilter.estimationStep(measurement1);
 
         // Make sure we get the same for both (the problem is linear)
-        UnitTestUtils.assertEquals("EKF and UKF states",
-                ekfEstimate.getState(), ukfEstimate.getState(), 1e-15);
-        UnitTestUtils.assertEquals("EKF and UKF covariances",
-                ekfEstimate.getCovariance(), ukfEstimate.getCovariance(), 1e-15);
+        UnitTestUtils.customAssertEquals("EKF and UKF states",
+                                         ekfEstimate.getState(), ukfEstimate.getState(), 1e-15);
+        UnitTestUtils.customAssertEquals("EKF and UKF covariances",
+                                         ekfEstimate.getCovariance(), ukfEstimate.getCovariance(), 1e-15);
 
     }
 

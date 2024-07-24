@@ -24,12 +24,14 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class CholeskyDecompositionTest {
+class CholeskyDecompositionTest {
 
     private double[][] testData = new double[][] {
             {  1,  2,   4,   7,  11 },
@@ -41,18 +43,18 @@ public class CholeskyDecompositionTest {
 
     /** test dimensions */
     @Test
-    public void testDimensions() {
+    void testDimensions() {
         CholeskyDecomposition llt =
             new CholeskyDecomposition(MatrixUtils.createRealMatrix(testData));
-        Assertions.assertEquals(testData.length, llt.getL().getRowDimension());
-        Assertions.assertEquals(testData.length, llt.getL().getColumnDimension());
-        Assertions.assertEquals(testData.length, llt.getLT().getRowDimension());
-        Assertions.assertEquals(testData.length, llt.getLT().getColumnDimension());
+        assertEquals(testData.length, llt.getL().getRowDimension());
+        assertEquals(testData.length, llt.getL().getColumnDimension());
+        assertEquals(testData.length, llt.getLT().getRowDimension());
+        assertEquals(testData.length, llt.getLT().getColumnDimension());
     }
 
     /** test non-square matrix */
     @Test
-    public void testNonSquare() {
+    void testNonSquare() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
         });
@@ -60,7 +62,7 @@ public class CholeskyDecompositionTest {
 
     /** test non-symmetric matrix */
     @Test
-    public void testNotSymmetricMatrixException() {
+    void testNotSymmetricMatrixException() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[][] changed = testData.clone();
             changed[0][changed[0].length - 1] += 1.0e-5;
@@ -70,7 +72,7 @@ public class CholeskyDecompositionTest {
 
     /** test non positive definite matrix */
     @Test
-    public void testNotPositiveDefinite() {
+    void testNotPositiveDefinite() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][]{
                 {14, 11, 13, 15, 24},
@@ -83,7 +85,7 @@ public class CholeskyDecompositionTest {
     }
 
     @Test
-    public void testMath274() {
+    void testMath274() {
         try {
             new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][] {
                 { 0.40434286, -0.09376327, 0.30328980, 0.04909388 },
@@ -92,15 +94,15 @@ public class CholeskyDecompositionTest {
                 { 0.04909388,  0.04762857, 0.04882449, 0.07543265 }
 
             }));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX,
+            assertEquals(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX,
                                 miae.getSpecifier());
         }
     }
 
     @Test
-    public void testDecomposer() {
+    void testDecomposer() {
         new CholeskyDecomposer(1.0e-15, -0.2).
         decompose(MatrixUtils.createRealMatrix(new double[][] {
             { 0.40434286, -0.09376327, 0.30328980, 0.04909388 },
@@ -113,43 +115,43 @@ public class CholeskyDecompositionTest {
 
     /** test A = LLT */
     @Test
-    public void testAEqualLLT() {
+    void testAEqualLLT() {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData);
         CholeskyDecomposition llt = new CholeskyDecomposition(matrix);
         RealMatrix l  = llt.getL();
         RealMatrix lt = llt.getLT();
         double norm = l.multiply(lt).subtract(matrix).getNorm1();
-        Assertions.assertEquals(0, norm, 1.0e-15);
-        Assertions.assertEquals(matrix.getRowDimension(),    llt.getSolver().getRowDimension());
-        Assertions.assertEquals(matrix.getColumnDimension(), llt.getSolver().getColumnDimension());
+        assertEquals(0, norm, 1.0e-15);
+        assertEquals(matrix.getRowDimension(),    llt.getSolver().getRowDimension());
+        assertEquals(matrix.getColumnDimension(), llt.getSolver().getColumnDimension());
     }
 
     /** test that L is lower triangular */
     @Test
-    public void testLLowerTriangular() {
+    void testLLowerTriangular() {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData);
         RealMatrix l = new CholeskyDecomposition(matrix).getL();
         for (int i = 0; i < l.getRowDimension(); i++) {
             for (int j = i + 1; j < l.getColumnDimension(); j++) {
-                Assertions.assertEquals(0.0, l.getEntry(i, j), 0.0);
+                assertEquals(0.0, l.getEntry(i, j), 0.0);
             }
         }
     }
 
     /** test that LT is transpose of L */
     @Test
-    public void testLTTransposed() {
+    void testLTTransposed() {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData);
         CholeskyDecomposition llt = new CholeskyDecomposition(matrix);
         RealMatrix l  = llt.getL();
         RealMatrix lt = llt.getLT();
         double norm = l.subtract(lt.transpose()).getNorm1();
-        Assertions.assertEquals(0, norm, 1.0e-15);
+        assertEquals(0, norm, 1.0e-15);
     }
 
     /** test matrices values */
     @Test
-    public void testMatricesValues() {
+    void testMatricesValues() {
         RealMatrix lRef = MatrixUtils.createRealMatrix(new double[][] {
                 {  1,  0,  0,  0,  0 },
                 {  2,  3,  0,  0,  0 },
@@ -162,12 +164,12 @@ public class CholeskyDecompositionTest {
 
         // check values against known references
         RealMatrix l = llt.getL();
-        Assertions.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
+        assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
         RealMatrix lt = llt.getLT();
-        Assertions.assertEquals(0, lt.subtract(lRef.transpose()).getNorm1(), 1.0e-13);
+        assertEquals(0, lt.subtract(lRef.transpose()).getNorm1(), 1.0e-13);
 
         // check the same cached instance is returned the second time
-        Assertions.assertTrue(l  == llt.getL());
-        Assertions.assertTrue(lt == llt.getLT());
+        assertTrue(l  == llt.getL());
+        assertTrue(lt == llt.getLT());
     }
 }

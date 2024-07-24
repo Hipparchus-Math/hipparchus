@@ -33,13 +33,13 @@ import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.correlation.Covariance;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTest {
+class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTest {
 
     private double[] y;
     private double[][] x;
@@ -85,21 +85,21 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     }
 
     @Test
-    public void cannotAddXSampleData() {
+    void cannotAddXSampleData() {
         assertThrows(NullArgumentException.class, () -> {
             createRegression().newSampleData(new double[]{}, null, null);
         });
     }
 
     @Test
-    public void cannotAddNullYSampleData() {
+    void cannotAddNullYSampleData() {
         assertThrows(NullArgumentException.class, () -> {
             createRegression().newSampleData(null, new double[][]{}, null);
         });
     }
 
     @Test
-    public void cannotAddSampleDataWithSizeMismatch() {
+    void cannotAddSampleDataWithSizeMismatch() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] y = new double[]{1.0, 2.0};
             double[][] x = new double[1][];
@@ -109,14 +109,14 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     }
 
     @Test
-    public void cannotAddNullCovarianceData() {
+    void cannotAddNullCovarianceData() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             createRegression().newSampleData(new double[]{}, new double[][]{}, null);
         });
     }
 
     @Test
-    public void notEnoughData() {
+    void notEnoughData() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[]   reducedY = new double[y.length - 1];
             double[][] reducedX = new double[x.length - 1][];
@@ -129,7 +129,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     }
 
     @Test
-    public void cannotAddCovarianceDataWithSampleSizeMismatch() {
+    void cannotAddCovarianceDataWithSampleSizeMismatch() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] y = new double[]{1.0, 2.0};
             double[][] x = new double[2][];
@@ -142,7 +142,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     }
 
     @Test
-    public void cannotAddCovarianceDataThatIsNotSquare() {
+    void cannotAddCovarianceDataThatIsNotSquare() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double[] y = new double[]{1.0, 2.0};
             double[][] x = new double[2][];
@@ -177,20 +177,20 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
      * test calculateYVariance
      */
     @Test
-    public void testYVariance() {
+    void testYVariance() {
 
         // assumes: y = new double[]{11.0, 12.0, 13.0, 14.0, 15.0, 16.0};
 
         GLSMultipleLinearRegression model = new GLSMultipleLinearRegression();
         model.newSampleData(y, x, omega);
-        UnitTestUtils.assertEquals(model.calculateYVariance(), 3.5, 0);
+        UnitTestUtils.customAssertEquals(model.calculateYVariance(), 3.5, 0);
     }
 
     /**
      * Verifies that setting X, Y and covariance separately has the same effect as newSample(X,Y,cov).
      */
     @Test
-    public void testNewSample2() {
+    void testNewSample2() {
         double[] y = new double[] {1, 2, 3, 4};
         double[][] x = new double[][] {
           {19, 22, 33},
@@ -206,9 +206,9 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         RealMatrix combinedCovInv = regression.getOmegaInverse();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assertions.assertEquals(combinedX, regression.getX());
-        Assertions.assertEquals(combinedY, regression.getY());
-        Assertions.assertEquals(combinedCovInv, regression.getOmegaInverse());
+        assertEquals(combinedX, regression.getX());
+        assertEquals(combinedY, regression.getY());
+        assertEquals(combinedCovInv, regression.getOmegaInverse());
     }
 
     /**
@@ -216,7 +216,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
      * as OLS.
      */
     @Test
-    public void testGLSOLSConsistency() {
+    void testGLSOLSConsistency() {
         RealMatrix identityCov = MatrixUtils.createRealIdentityMatrix(16);
         GLSMultipleLinearRegression glsModel = new GLSMultipleLinearRegression();
         OLSMultipleLinearRegression olsModel = new OLSMultipleLinearRegression();
@@ -228,7 +228,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         // TODO:  Should have assertRelativelyEquals(double[], double[], eps) in TestUtils
         //        Should also add RealVector and RealMatrix versions
         for (int i = 0; i < olsBeta.length; i++) {
-            UnitTestUtils.assertRelativelyEquals(olsBeta[i], glsBeta[i], 10E-7);
+            UnitTestUtils.customAssertRelativelyEquals(olsBeta[i], glsBeta[i], 10E-7);
         }
     }
 
@@ -238,7 +238,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
      * on average, perform better than OLS.
      */
     @Test
-    public void testGLSEfficiency() {
+    void testGLSEfficiency() {
         RandomGenerator rg = new JDKRandomGenerator();
         rg.setSeed(200);  // Seed has been selected to generate non-trivial covariance
 

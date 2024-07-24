@@ -39,7 +39,7 @@ public class VectorialCovarianceTest {
     }
 
     @Test
-    public void testMismatch() {
+    void testMismatch() {
         try {
             new VectorialCovariance(8, true).increment(new double[5]);
             fail("an exception should have been thrown");
@@ -50,7 +50,7 @@ public class VectorialCovarianceTest {
     }
 
     @Test
-    public void testSimplistic() {
+    void testSimplistic() {
         VectorialCovariance stat = new VectorialCovariance(2, true);
         stat.increment(new double[] {-1.0,  1.0});
         stat.increment(new double[] { 1.0, -1.0});
@@ -61,7 +61,7 @@ public class VectorialCovarianceTest {
     }
 
     @Test
-    public void testBasicStats() {
+    void testBasicStats() {
 
         VectorialCovariance stat = new VectorialCovariance(points[0].length, true);
         for (int i = 0; i < points.length; ++i) {
@@ -86,7 +86,7 @@ public class VectorialCovarianceTest {
     }
 
     @Test
-    public void testSerial(){
+    void testSerial(){
         VectorialCovariance stat = new VectorialCovariance(points[0].length, true);
         assertEquals(stat, UnitTestUtils.serializeAndRecover(stat));
     }

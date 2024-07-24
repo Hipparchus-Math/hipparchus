@@ -34,7 +34,6 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -47,6 +46,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  */
@@ -62,21 +66,21 @@ public class UnitTestUtils {
      * Verifies that expected and actual are within delta, or are both NaN or
      * infinities of the same sign.
      */
-    public static void assertEquals(double expected, double actual, double delta) {
-        Assertions.assertEquals(expected, actual, delta);
+    public static void customAssertEquals(double expected, double actual, double delta) {
+        assertEquals(expected, actual, delta);
     }
 
     /**
      * Verifies that expected and actual are within delta, or are both NaN or
      * infinities of the same sign.
      */
-    public static void assertEquals(String msg, double expected, double actual, double delta) {
+    public static void customAssertEquals(String msg, double expected, double actual, double delta) {
         // check for NaN
         if(Double.isNaN(expected)){
-            Assertions.assertTrue(Double.isNaN(actual),
+            assertTrue(Double.isNaN(actual),
                 "" + actual + " is not NaN.");
         } else {
-            Assertions.assertEquals(expected, actual, delta, msg);
+            assertEquals(expected, actual, delta, msg);
         }
     }
 
@@ -84,51 +88,51 @@ public class UnitTestUtils {
      * Verifies that the two arguments are exactly the same, either
      * both NaN or infinities of same sign, or identical floating point values.
      */
-    public static void assertSame(double expected, double actual) {
-     Assertions.assertEquals(expected, actual, 0);
+    public static void customAssertSame(double expected, double actual) {
+     assertEquals(expected, actual, 0);
     }
 
     /**
      * Verifies that real and imaginary parts of the two complex arguments
      * are exactly the same.  Also ensures that NaN / infinite components match.
      */
-    public static void assertSame(Complex expected, Complex actual) {
-        assertSame(expected.getRealPart(), actual.getRealPart());
-        assertSame(expected.getImaginaryPart(), actual.getImaginaryPart());
+    public static void customAssertSame(Complex expected, Complex actual) {
+        customAssertSame(expected.getRealPart(), actual.getRealPart());
+        customAssertSame(expected.getImaginaryPart(), actual.getImaginaryPart());
     }
 
     /**
      * Verifies that real and imaginary parts of the two complex arguments
      * differ by at most delta.  Also ensures that NaN / infinite components match.
      */
-    public static void assertEquals(Complex expected, Complex actual, double delta) {
-        Assertions.assertEquals(expected.getRealPart(), actual.getRealPart(), delta);
-        Assertions.assertEquals(expected.getImaginaryPart(), actual.getImaginaryPart(), delta);
+    public static void customAssertEquals(Complex expected, Complex actual, double delta) {
+        assertEquals(expected.getRealPart(), actual.getRealPart(), delta);
+        assertEquals(expected.getImaginaryPart(), actual.getImaginaryPart(), delta);
     }
 
     /**
      * Verifies that real and imaginary parts of the two complex arguments
      * differ by at most delta.  Also ensures that NaN / infinite components match.
      */
-    public static void assertEquals(FieldComplex<Binary64> expected, FieldComplex<Binary64> actual, double delta) {
-        Assertions.assertEquals(expected.getRealPart().getReal(), actual.getRealPart().getReal(), delta);
-        Assertions.assertEquals(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal(), delta);
+    public static void customAssertEquals(FieldComplex<Binary64> expected, FieldComplex<Binary64> actual, double delta) {
+        assertEquals(expected.getRealPart().getReal(), actual.getRealPart().getReal(), delta);
+        assertEquals(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal(), delta);
     }
 
     /**
      * Verifies that real and imaginary parts of the two complex arguments
      * are exactly the same.  Also ensures that NaN / infinite components match.
      */
-    public static void assertSame(FieldComplex<Binary64> expected, FieldComplex<Binary64> actual) {
-        assertSame(expected.getRealPart().getReal(), actual.getRealPart().getReal());
-        assertSame(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal());
+    public static void customAssertSame(FieldComplex<Binary64> expected, FieldComplex<Binary64> actual) {
+        customAssertSame(expected.getRealPart().getReal(), actual.getRealPart().getReal());
+        customAssertSame(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal());
     }
 
     /**
      * Verifies that two double arrays have equal entries, up to tolerance
      */
-    public static void assertEquals(double[] expected, double[] observed, double tolerance) {
-        assertEquals("Array comparison failure", expected, observed, tolerance);
+    public static void customAssertEquals(double[] expected, double[] observed, double tolerance) {
+        customAssertEquals("Array comparison failure", expected, observed, tolerance);
     }
 
     /**
@@ -164,8 +168,8 @@ public class UnitTestUtils {
      */
     public static void checkSerializedEquality(Object object) {
         Object object2 = serializeAndRecover(object);
-        Assertions.assertEquals(object, object2, "Equals check");
-        Assertions.assertEquals(object.hashCode(), object2.hashCode(), "HashCode check");
+        assertEquals(object, object2, "Equals check");
+        assertEquals(object.hashCode(), object2.hashCode(), "HashCode check");
     }
 
     /**
@@ -177,9 +181,9 @@ public class UnitTestUtils {
      * @param actual  observed value
      * @param relativeError  maximum allowable relative error
      */
-    public static void assertRelativelyEquals(double expected, double actual,
-            double relativeError) {
-        assertRelativelyEquals(null, expected, actual, relativeError);
+    public static void customAssertRelativelyEquals(double expected, double actual,
+                                                    double relativeError) {
+        customAssertRelativelyEquals(null, expected, actual, relativeError);
     }
 
     /**
@@ -192,19 +196,19 @@ public class UnitTestUtils {
      * @param actual  observed value
      * @param relativeError  maximum allowable relative error
      */
-    public static void assertRelativelyEquals(String msg, double expected,
-            double actual, double relativeError) {
+    public static void customAssertRelativelyEquals(String msg, double expected,
+                                                    double actual, double relativeError) {
         if (Double.isNaN(expected)) {
-            Assertions.assertTrue(Double.isNaN(actual), msg);
+            assertTrue(Double.isNaN(actual), msg);
         } else if (Double.isNaN(actual)) {
-            Assertions.assertTrue(Double.isNaN(expected), msg);
+            assertTrue(Double.isNaN(expected), msg);
         } else if (Double.isInfinite(actual) || Double.isInfinite(expected)) {
-            Assertions.assertEquals(expected, actual, relativeError);
+            assertEquals(expected, actual, relativeError);
         } else if (expected == 0.0) {
-            Assertions.assertEquals(actual, expected, relativeError, msg);
+            assertEquals(actual, expected, relativeError, msg);
         } else {
             double absError = FastMath.abs(expected) * relativeError;
-            Assertions.assertEquals(expected, actual, absError, msg);
+            assertEquals(expected, actual, absError, msg);
         }
     }
 
@@ -216,15 +220,15 @@ public class UnitTestUtils {
      * @param z  value sought
      * @param epsilon  tolerance
      */
-    public static void assertContains(String msg, Complex[] values,
-                                      Complex z, double epsilon) {
+    public static void customAssertContains(String msg, Complex[] values,
+                                            Complex z, double epsilon) {
         for (Complex value : values) {
             if (Precision.equals(value.getReal(), z.getReal(), epsilon) &&
                 Precision.equals(value.getImaginary(), z.getImaginary(), epsilon)) {
                 return;
             }
         }
-        Assertions.fail(msg + " Unable to find " + (new ComplexFormat()).format(z));
+        fail(msg + " Unable to find " + (new ComplexFormat()).format(z));
     }
 
     /**
@@ -234,9 +238,9 @@ public class UnitTestUtils {
      * @param z  value sought
      * @param epsilon  tolerance
      */
-    public static void assertContains(Complex[] values,
-            Complex z, double epsilon) {
-        assertContains(null, values, z, epsilon);
+    public static void customAssertContains(Complex[] values,
+                                            Complex z, double epsilon) {
+        customAssertContains(null, values, z, epsilon);
     }
 
     /**
@@ -247,14 +251,14 @@ public class UnitTestUtils {
      * @param x value sought
      * @param epsilon  tolerance
      */
-    public static void assertContains(String msg, double[] values,
-            double x, double epsilon) {
+    public static void customAssertContains(String msg, double[] values,
+                                            double x, double epsilon) {
         for (double value : values) {
             if (Precision.equals(value, x, epsilon)) {
                 return;
             }
         }
-        Assertions.fail(msg + " Unable to find " + x);
+        fail(msg + " Unable to find " + x);
     }
 
     /**
@@ -264,9 +268,9 @@ public class UnitTestUtils {
      * @param x value sought
      * @param epsilon  tolerance
      */
-    public static void assertContains(double[] values, double x,
-            double epsilon) {
-       assertContains(null, values, x, epsilon);
+    public static void customAssertContains(double[] values, double x,
+                                            double epsilon) {
+       customAssertContains(null, values, x, epsilon);
     }
 
     /**
@@ -280,14 +284,14 @@ public class UnitTestUtils {
      * @param delta the maximum difference between the entries of the expected
      * and actual vectors for which both entries are still considered equal
      */
-    public static void assertEquals(final String message,
-        final double[] expected, final RealVector actual, final double delta) {
+    public static void customAssertEquals(final String message,
+                                          final double[] expected, final RealVector actual, final double delta) {
         final String msgAndSep = message.equals("") ? "" : message + ", ";
-        Assertions.assertEquals(expected.length,
+        assertEquals(expected.length,
             actual.getDimension(),
             msgAndSep + "dimension");
         for (int i = 0; i < expected.length; i++) {
-            Assertions.assertEquals(expected[i],
+            assertEquals(expected[i],
                 actual.getEntry(i), delta, msgAndSep + "entry #" + i);
         }
     }
@@ -303,22 +307,22 @@ public class UnitTestUtils {
      * @param delta the maximum difference between the entries of the expected
      * and actual vectors for which both entries are still considered equal
      */
-    public static void assertEquals(final String message,
-        final RealVector expected, final RealVector actual, final double delta) {
+    public static void customAssertEquals(final String message,
+                                          final RealVector expected, final RealVector actual, final double delta) {
         final String msgAndSep = message.equals("") ? "" : message + ", ";
-        Assertions.assertEquals(expected.getDimension(),
+        assertEquals(expected.getDimension(),
             actual.getDimension(),
             msgAndSep + "dimension");
         final int dim = expected.getDimension();
         for (int i = 0; i < dim; i++) {
-            Assertions.assertEquals(expected.getEntry(i), actual.getEntry(i), delta, msgAndSep + "entry #" + i);
+            assertEquals(expected.getEntry(i), actual.getEntry(i), delta, msgAndSep + "entry #" + i);
         }
     }
 
     /** verifies that two matrices are close (1-norm) */
-    public static void assertEquals(String msg, RealMatrix expected, RealMatrix observed, double tolerance) {
+    public static void customAssertEquals(String msg, RealMatrix expected, RealMatrix observed, double tolerance) {
 
-        Assertions.assertNotNull(observed,msg + "\nObserved should not be null");
+        assertNotNull(observed,msg + "\nObserved should not be null");
 
         if (expected.getColumnDimension() != observed.getColumnDimension() ||
                 expected.getRowDimension() != observed.getRowDimension()) {
@@ -328,7 +332,7 @@ public class UnitTestUtils {
                     " x " + observed.getColumnDimension());
             messageBuffer.append("\nexpected " + expected.getRowDimension() +
                     " x " + expected.getColumnDimension());
-            Assertions.fail(messageBuffer.toString());
+            fail(messageBuffer.toString());
         }
 
         RealMatrix delta = expected.subtract(observed);
@@ -337,15 +341,15 @@ public class UnitTestUtils {
             messageBuffer.append("\nExpected: " + expected);
             messageBuffer.append("\nObserved: " + observed);
             messageBuffer.append("\nexpected - observed: " + delta);
-            Assertions.fail(messageBuffer.toString());
+            fail(messageBuffer.toString());
         }
     }
 
     /** verifies that two matrices are equal */
-    public static void assertEquals(FieldMatrix<? extends FieldElement<?>> expected,
-                                    FieldMatrix<? extends FieldElement<?>> observed) {
+    public static void customAssertEquals(FieldMatrix<? extends FieldElement<?>> expected,
+                                          FieldMatrix<? extends FieldElement<?>> observed) {
 
-        Assertions.assertNotNull(observed,"Observed should not be null");
+        assertNotNull(observed,"Observed should not be null");
 
         if (expected.getColumnDimension() != observed.getColumnDimension() ||
                 expected.getRowDimension() != observed.getRowDimension()) {
@@ -355,20 +359,20 @@ public class UnitTestUtils {
                     " x " + observed.getColumnDimension());
             messageBuffer.append("\nexpected " + expected.getRowDimension() +
                     " x " + expected.getColumnDimension());
-            Assertions.fail(messageBuffer.toString());
+            fail(messageBuffer.toString());
         }
 
         for (int i = 0; i < expected.getRowDimension(); ++i) {
             for (int j = 0; j < expected.getColumnDimension(); ++j) {
                 FieldElement<?> eij = expected.getEntry(i, j);
                 FieldElement<?> oij = observed.getEntry(i, j);
-                Assertions.assertEquals(eij, oij);
+                assertEquals(eij, oij);
             }
         }
     }
 
     /** verifies that two arrays are close (sup norm) */
-    public static void assertEquals(String msg, double[] expected, double[] observed, double tolerance) {
+    public static void customAssertEquals(String msg, double[] expected, double[] observed, double tolerance) {
         StringBuilder out = new StringBuilder(msg);
         if (expected.length != observed.length) {
             out.append("\n Arrays not same length. \n");
@@ -376,7 +380,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
         boolean failure = false;
         for (int i=0; i < expected.length; i++) {
@@ -392,12 +396,12 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
     }
 
     /** verifies that two int arrays are equal */
-    public static void assertEquals(int[] expected, int[] observed) {
+    public static void customAssertEquals(int[] expected, int[] observed) {
         StringBuilder out = new StringBuilder();
         if (expected.length != observed.length) {
             out.append("\n Arrays not same length. \n");
@@ -405,7 +409,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
         boolean failure = false;
         for (int i=0; i < expected.length; i++) {
@@ -421,7 +425,7 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
     }
 
@@ -429,7 +433,7 @@ public class UnitTestUtils {
      * verifies that for i = 0,..., observed.length, observed[i] is within epsilon of one of the values in expected[i]
      * or observed[i] is NaN and expected[i] contains a NaN.
      */
-    public static void assertContains(double[][] expected, double[] observed, double epsilon) {
+    public static void customAssertContains(double[][] expected, double[] observed, double epsilon) {
         StringBuilder out = new StringBuilder();
         if (expected.length != observed.length) {
             out.append("\n Arrays not same length. \n");
@@ -437,7 +441,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
         boolean failure = false;
         for (int i = 0; i < expected.length; i++) {
@@ -459,14 +463,14 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
     }
 
 
 
     /** verifies that two int arrays are equal */
-    public static void assertEquals(long[] expected, long[] observed) {
+    public static void customAssertEquals(long[] expected, long[] observed) {
         StringBuilder out = new StringBuilder();
         if (expected.length != observed.length) {
             out.append("\n Arrays not same length. \n");
@@ -474,7 +478,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
         boolean failure = false;
         for (int i=0; i < expected.length; i++) {
@@ -490,17 +494,17 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assertions.fail(out.toString());
+            fail(out.toString());
         }
     }
 
     /** verifies that two arrays are equal */
-    public static <T extends FieldElement<T>> void assertEquals(T[] m, T[] n) {
+    public static <T extends FieldElement<T>> void customAssertEquals(T[] m, T[] n) {
         if (m.length != n.length) {
-            Assertions.fail("vectors not same length");
+            fail("vectors not same length");
         }
         for (int i = 0; i < m.length; i++) {
-            Assertions.assertEquals(m[i],n[i]);
+            assertEquals(m[i],n[i]);
         }
     }
 
@@ -529,7 +533,7 @@ public class UnitTestUtils {
      * @param observed observed counts
      * @param alpha significance level of the test
      */
-    public static void assertChiSquareAccept(String[] valueLabels, double[] expected, long[] observed, double alpha) {
+    public static void customAssertChiSquareAccept(String[] valueLabels, double[] expected, long[] observed, double alpha) {
 
         // Fail if we can reject null hypothesis that distributions are the same
         if (chiSquareTest(expected, observed) <= alpha) {
@@ -553,7 +557,7 @@ public class UnitTestUtils {
             msgBuffer.append("This test can fail randomly due to sampling error with probability ");
             msgBuffer.append(alpha);
             msgBuffer.append(".");
-            Assertions.fail(msgBuffer.toString());
+            fail(msgBuffer.toString());
         }
     }
 
@@ -566,12 +570,12 @@ public class UnitTestUtils {
      * @param observed observed counts
      * @param alpha significance level of the test
      */
-    public static void assertChiSquareAccept(int[] values, double[] expected, long[] observed, double alpha) {
+    public static void customAssertChiSquareAccept(int[] values, double[] expected, long[] observed, double alpha) {
         String[] labels = new String[values.length];
         for (int i = 0; i < values.length; i++) {
             labels[i] = Integer.toString(values[i]);
         }
-        assertChiSquareAccept(labels, expected, observed, alpha);
+        customAssertChiSquareAccept(labels, expected, observed, alpha);
     }
 
     /**
@@ -582,12 +586,12 @@ public class UnitTestUtils {
      * @param observed observed counts
      * @param alpha significance level of the test
      */
-    public static void assertChiSquareAccept(double[] expected, long[] observed, double alpha) {
+    public static void customAssertChiSquareAccept(double[] expected, long[] observed, double alpha) {
         String[] labels = new String[expected.length];
         for (int i = 0; i < labels.length; i++) {
             labels[i] = Integer.toString(i + 1);
         }
-        assertChiSquareAccept(labels, expected, observed, alpha);
+        customAssertChiSquareAccept(labels, expected, observed, alpha);
     }
 
     /**
@@ -597,7 +601,7 @@ public class UnitTestUtils {
      * @param values sample data
      * @param alpha significance level of the test
      */
-    public static void assertGTest(final RealDistribution expectedDistribution, final double[] values, double alpha) {
+    public static void customAssertGTest(final RealDistribution expectedDistribution, final double[] values, double alpha) {
         final int numBins = values.length / 30;
         final double[] breaks = new double[numBins];
         for (int b = 0; b < breaks.length; b++) {
@@ -617,7 +621,7 @@ public class UnitTestUtils {
         final double[] expected = new double[numBins];
         Arrays.fill(expected, (double) values.length / numBins);
 
-        assertGTest(expected, observed, alpha);
+        customAssertGTest(expected, observed, alpha);
     }
 
     /**
@@ -628,7 +632,7 @@ public class UnitTestUtils {
      * @param observed observed counts
      * @param alpha significance level of the test
      */
-    public static void assertGTest(final double[] expected, long[] observed, double alpha) {
+    public static void customAssertGTest(final double[] expected, long[] observed, double alpha) {
         if (gTest(expected, observed) <  alpha) {
             StringBuilder msgBuffer = new StringBuilder();
             DecimalFormat df = new DecimalFormat("#.##");
@@ -646,7 +650,7 @@ public class UnitTestUtils {
             msgBuffer.append("This test can fail randomly due to sampling error with probability ");
             msgBuffer.append(alpha);
             msgBuffer.append(".");
-            Assertions.fail(msgBuffer.toString());
+            fail(msgBuffer.toString());
         }
     }
 

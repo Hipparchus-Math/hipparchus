@@ -28,13 +28,14 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FieldExplicitRungeKuttaIntegratorTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class FieldExplicitRungeKuttaIntegratorTest {
 
     @Test
-    public void testFraction() {
+    void testFraction() {
         // GIVEN
         final int p = 2;
         final int q = 3;
@@ -43,11 +44,11 @@ public class FieldExplicitRungeKuttaIntegratorTest {
         final Complex actualFraction = FieldExplicitRungeKuttaIntegrator.fraction(field, p, q);
         // THEN
         final Complex expectedFraction = FieldExplicitRungeKuttaIntegrator.fraction(field, (double) p, (double) q);
-        Assertions.assertEquals(expectedFraction.getReal(), actualFraction.getReal(), 0);
+        assertEquals(expectedFraction.getReal(), actualFraction.getReal(), 0);
     }
 
     @Test
-    public void testVersusNonField() {
+    void testVersusNonField() {
         // GIVEN
         final TestFieldEquations testFieldEquations = new TestFieldEquations();
         final FieldExpandableODE<Complex> fieldExpandableODE = new FieldExpandableODE<>(testFieldEquations);
@@ -78,12 +79,12 @@ public class FieldExplicitRungeKuttaIntegratorTest {
         final double[] expectedState = ExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y0Real, yDotKReal, h.getReal(),
                 explicitRungeKutta.getB());
         for (int i = 0; i < expectedState.length; i++) {
-            Assertions.assertEquals(expectedState[i], actualState[i].getReal(), 0);
+            assertEquals(expectedState[i], actualState[i].getReal(), 0);
         }
     }
 
     @Test
-    public void testRealCoefficientsVersusField() {
+    void testRealCoefficientsVersusField() {
         // GIVEN
         final TestFieldEquations testFieldEquations = new TestFieldEquations();
         final FieldExpandableODE<Complex> fieldExpandableODE = new FieldExpandableODE<>(testFieldEquations);
@@ -108,7 +109,7 @@ public class FieldExplicitRungeKuttaIntegratorTest {
         final Complex[] expectedState = FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y0, yDotK, h,
                 fieldExplicitRungeKutta.getRealB());
         for (int i = 0; i < expectedState.length; i++) {
-            Assertions.assertEquals(expectedState[i], actualState[i]);
+            assertEquals(expectedState[i], actualState[i]);
         }
     }
 

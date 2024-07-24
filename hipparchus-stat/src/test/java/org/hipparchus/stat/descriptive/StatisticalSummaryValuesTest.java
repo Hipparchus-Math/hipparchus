@@ -22,18 +22,21 @@
 package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.UnitTestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 /**
  * Test cases for the {@link StatisticalSummaryValues} class.
  */
-public final class StatisticalSummaryValuesTest {
+final class StatisticalSummaryValuesTest {
 
     @Test
-    public void testSerialization() {
+    void testSerialization() {
         StatisticalSummaryValues u = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
         UnitTestUtils.checkSerializedEquality(u);
         StatisticalSummaryValues t = (StatisticalSummaryValues) UnitTestUtils.serializeAndRecover(u);
@@ -42,38 +45,38 @@ public final class StatisticalSummaryValuesTest {
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testEqualsAndHashCode() {
+    void testEqualsAndHashCode() {
         StatisticalSummaryValues u  = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
         StatisticalSummaryValues t = null;
-        Assertions.assertEquals(u, u, "reflexive");
-        Assertions.assertNotEquals(u, t, "non-null compared to null");
-        Assertions.assertNotEquals(u, Double.valueOf(0), "wrong type");
+        assertEquals(u, u, "reflexive");
+        assertNotEquals(u, t, "non-null compared to null");
+        assertNotEquals(u, Double.valueOf(0), "wrong type");
         t = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
-        Assertions.assertEquals(t, u, "instances with same data should be equal");
-        Assertions.assertEquals(u.hashCode(), t.hashCode(), "hash code");
+        assertEquals(t, u, "instances with same data should be equal");
+        assertEquals(u.hashCode(), t.hashCode(), "hash code");
 
         u = new StatisticalSummaryValues(Double.NaN, 2, 3, 4, 5, 6);
         t = new StatisticalSummaryValues(1, Double.NaN, 3, 4, 5, 6);
-        Assertions.assertFalse((u.equals(t) ||t.equals(u)),
+        assertFalse((u.equals(t) ||t.equals(u)),
                 "instances based on different data should be different");
     }
 
     private void verifyEquality(StatisticalSummaryValues s, StatisticalSummaryValues u) {
-        Assertions.assertEquals(s.getN(),u.getN(),"N");
-        UnitTestUtils.assertEquals("sum",s.getSum(),u.getSum(), 0);
-        UnitTestUtils.assertEquals("var",s.getVariance(),u.getVariance(), 0);
-        UnitTestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(), 0);
-        UnitTestUtils.assertEquals("mean",s.getMean(),u.getMean(), 0);
-        UnitTestUtils.assertEquals("min",s.getMin(),u.getMin(), 0);
-        UnitTestUtils.assertEquals("max",s.getMax(),u.getMax(), 0);
+        assertEquals(s.getN(),u.getN(),"N");
+        UnitTestUtils.customAssertEquals("sum", s.getSum(), u.getSum(), 0);
+        UnitTestUtils.customAssertEquals("var", s.getVariance(), u.getVariance(), 0);
+        UnitTestUtils.customAssertEquals("std", s.getStandardDeviation(), u.getStandardDeviation(), 0);
+        UnitTestUtils.customAssertEquals("mean", s.getMean(), u.getMean(), 0);
+        UnitTestUtils.customAssertEquals("min", s.getMin(), u.getMin(), 0);
+        UnitTestUtils.customAssertEquals("max", s.getMax(), u.getMax(), 0);
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         StatisticalSummaryValues u  = new StatisticalSummaryValues(4.5, 16, 10, 5, 4, 45);
         Locale d = Locale.getDefault();
         Locale.setDefault(Locale.US);
-        Assertions.assertEquals("StatisticalSummaryValues:\n" +
+        assertEquals("StatisticalSummaryValues:\n" +
                      "n: 10\n" +
                      "min: 4.0\n" +
                      "max: 5.0\n" +

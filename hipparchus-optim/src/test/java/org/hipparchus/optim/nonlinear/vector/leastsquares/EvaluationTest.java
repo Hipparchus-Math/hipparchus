@@ -27,11 +27,16 @@ import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Ev
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * The only features tested here are utility methods defined
@@ -62,7 +67,7 @@ public class EvaluationTest {
     }
 
     @Test
-    public void testComputeResiduals() {
+    void testComputeResiduals() {
         //setup
         RealVector point = new ArrayRealVector(2);
         Evaluation evaluation = new LeastSquaresBuilder()
@@ -80,14 +85,14 @@ public class EvaluationTest {
                 .evaluate(point);
 
         //action + verify
-        Assertions.assertArrayEquals(
+        assertArrayEquals(
             new double[]{2, -3},
             evaluation.getResiduals().toArray(),
             Precision.EPSILON);
     }
 
     @Test
-    public void testComputeCovariance() throws IOException {
+    void testComputeCovariance() throws IOException {
         //setup
         RealVector point = new ArrayRealVector(2);
         Evaluation evaluation = new LeastSquaresBuilder()
@@ -105,7 +110,7 @@ public class EvaluationTest {
                 .evaluate(point);
 
         //action
-        UnitTestUtils.assertEquals(
+        UnitTestUtils.customAssertEquals(
                 "covariance",
                 evaluation.getCovariances(FastMath.nextAfter(1e-4, 0.0)),
                 MatrixUtils.createRealMatrix(new double[][]{{1, 0}, {0, 1e4}}),
@@ -115,14 +120,14 @@ public class EvaluationTest {
         //singularity fail
         try {
             evaluation.getCovariances(FastMath.nextAfter(1e-4, 1.0));
-            Assertions.fail("Expected Exception");
+            fail("Expected Exception");
         } catch (MathIllegalArgumentException e) {
             //expected
         }
     }
 
     @Test
-    public void testComputeValueAndJacobian() {
+    void testComputeValueAndJacobian() {
         //setup
         final RealVector point = new ArrayRealVector(new double[]{1, 2});
         Evaluation evaluation = new LeastSquaresBuilder()
@@ -130,7 +135,7 @@ public class EvaluationTest {
                 .model(new MultivariateJacobianFunction() {
                     public Pair<RealVector, RealMatrix> value(RealVector actualPoint) {
                         //verify correct values passed in
-                        Assertions.assertArrayEquals(
+                        assertArrayEquals(
                                 point.toArray(), actualPoint.toArray(), Precision.EPSILON);
                         //return values
                         return new Pair<RealVector, RealMatrix>(
@@ -148,9 +153,9 @@ public class EvaluationTest {
         RealMatrix jacobian = evaluation.getJacobian();
 
         //verify
-        Assertions.assertArrayEquals(evaluation.getPoint().toArray(), point.toArray(), 0);
-        Assertions.assertArrayEquals(new double[]{-12, -8}, residuals.toArray(), Precision.EPSILON);
-        UnitTestUtils.assertEquals(
+        assertArrayEquals(evaluation.getPoint().toArray(), point.toArray(), 0);
+        assertArrayEquals(new double[]{-12, -8}, residuals.toArray(), Precision.EPSILON);
+        UnitTestUtils.customAssertEquals(
                 "jacobian",
                 jacobian,
                 MatrixUtils.createRealMatrix(new double[][]{{20, 24},{14, 16}}),
@@ -158,7 +163,7 @@ public class EvaluationTest {
     }
 
     @Test
-    public void testComputeCost() throws IOException {
+    void testComputeCost() throws IOException {
         final StatisticalReferenceDataset dataset
             = StatisticalReferenceDatasetFactory.createKirby2();
 
@@ -167,11 +172,11 @@ public class EvaluationTest {
         final double expected = dataset.getResidualSumOfSquares();
         final double cost = lsp.evaluate(lsp.getStart()).getCost();
         final double actual = cost * cost;
-        Assertions.assertEquals(expected, actual, 1e-11 * expected, dataset.getName());
+        assertEquals(expected, actual, 1e-11 * expected, dataset.getName());
     }
 
     @Test
-    public void testComputeRMS() throws IOException {
+    void testComputeRMS() throws IOException {
         final StatisticalReferenceDataset dataset
             = StatisticalReferenceDatasetFactory.createKirby2();
 
@@ -180,11 +185,11 @@ public class EvaluationTest {
         final double expected = FastMath.sqrt(dataset.getResidualSumOfSquares() /
                                               dataset.getNumObservations());
         final double actual = lsp.evaluate(lsp.getStart()).getRMS();
-        Assertions.assertEquals(expected, actual, 1e-11 * expected, dataset.getName());
+        assertEquals(expected, actual, 1e-11 * expected, dataset.getName());
     }
 
     @Test
-    public void testComputeSigma() throws IOException {
+    void testComputeSigma() throws IOException {
         final StatisticalReferenceDataset dataset
             = StatisticalReferenceDatasetFactory.createKirby2();
 
@@ -198,12 +203,12 @@ public class EvaluationTest {
         final int dof = lsp.getObservationSize() - lsp.getParameterSize();
         for (int i = 0; i < sig.getDimension(); i++) {
             final double actual = FastMath.sqrt(cost * cost / dof) * sig.getEntry(i);
-            Assertions.assertEquals(expected[i], actual, 1e-6 * expected[i], dataset.getName() + ", parameter #" + i);
+            assertEquals(expected[i], actual, 1e-6 * expected[i], dataset.getName() + ", parameter #" + i);
         }
     }
 
     @Test
-    public void testEvaluateCopiesPoint() throws IOException {
+    void testEvaluateCopiesPoint() throws IOException {
         //setup
         StatisticalReferenceDataset dataset
                 = StatisticalReferenceDatasetFactory.createKirby2();
@@ -214,13 +219,13 @@ public class EvaluationTest {
         Evaluation evaluation = lsp.evaluate(point);
 
         //verify
-        Assertions.assertNotSame(point, evaluation.getPoint());
+        assertNotSame(point, evaluation.getPoint());
         point.setEntry(0, 1);
-        Assertions.assertEquals(0, evaluation.getPoint().getEntry(0), 0);
+        assertEquals(0, evaluation.getPoint().getEntry(0), 0);
     }
 
     @Test
-    public void testLazyEvaluation() {
+    void testLazyEvaluation() {
         final RealVector dummy = new ArrayRealVector(new double[] { 0 });
 
         final LeastSquaresProblem p
@@ -232,24 +237,24 @@ public class EvaluationTest {
 
         try {
             eval.getResiduals();
-            Assertions.fail("Exception expected");
+            fail("Exception expected");
         } catch (RuntimeException e) {
             // Expecting exception.
-            Assertions.assertEquals("dummyModel", e.getMessage());
+            assertEquals("dummyModel", e.getMessage());
         }
 
         try {
             eval.getJacobian();
-            Assertions.fail("Exception expected");
+            fail("Exception expected");
         } catch (RuntimeException e) {
             // Expecting exception.
-            Assertions.assertEquals("dummyJacobian", e.getMessage());
+            assertEquals("dummyJacobian", e.getMessage());
         }
     }
 
     // MATH-1151
     @Test
-    public void testLazyEvaluationPrecondition() {
+    void testLazyEvaluationPrecondition() {
         final RealVector dummy = new ArrayRealVector(new double[] { 0 });
 
         // "ValueAndJacobianFunction" is required but we implement only
@@ -263,7 +268,7 @@ public class EvaluationTest {
         try {
             // Should throw.
             LeastSquaresFactory.create(m1, dummy, dummy, null, null, 0, 0, true, null);
-            Assertions.fail("Expecting MathIllegalStateException");
+            fail("Expecting MathIllegalStateException");
         } catch (MathIllegalStateException e) {
             // Expected.
         }
@@ -285,7 +290,7 @@ public class EvaluationTest {
     }
 
     @Test
-    public void testDirectEvaluation() {
+    void testDirectEvaluation() {
         final RealVector dummy = new ArrayRealVector(new double[] { 0 });
 
         final LeastSquaresProblem p
@@ -295,12 +300,12 @@ public class EvaluationTest {
         try {
             // Should throw.
             p.evaluate(dummy);
-            Assertions.fail("Exception expected");
+            fail("Exception expected");
         } catch (RuntimeException e) {
             // Expecting exception.
             // Whether it is model or Jacobian that caused it is not significant.
             final String msg = e.getMessage();
-            Assertions.assertTrue(msg.equals("dummyModel") ||
+            assertTrue(msg.equals("dummyModel") ||
                               msg.equals("dummyJacobian"));
         }
     }

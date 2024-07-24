@@ -21,13 +21,13 @@
  */
 package org.hipparchus.stat.descriptive.summary;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@code SumLog} class.
@@ -45,7 +45,7 @@ public class SumLogTest extends StorelessUnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         SumOfLogs sum = getUnivariateStatistic();
         // empty
         assertEquals(0, sum.getResult(), 0);

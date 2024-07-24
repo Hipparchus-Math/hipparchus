@@ -22,18 +22,21 @@
 package org.hipparchus.fitting;
 
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link WeightedObservedPoints}.
  *
  */
-public class WeightedObservedPointsTest {
+class WeightedObservedPointsTest {
     @Test
-    public void testAdd1() {
+    void testAdd1() {
         final WeightedObservedPoints store = new WeightedObservedPoints();
 
         final double x = 1.2;
@@ -42,11 +45,11 @@ public class WeightedObservedPointsTest {
 
         store.add(w, x, y);
 
-        Assertions.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
+        assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
     }
 
     @Test
-    public void testAdd2() {
+    void testAdd2() {
         final WeightedObservedPoints store = new WeightedObservedPoints();
 
         final double x = 1.2;
@@ -55,11 +58,11 @@ public class WeightedObservedPointsTest {
 
         store.add(new WeightedObservedPoint(w, x, y));
 
-        Assertions.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
+        assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
     }
 
     @Test
-    public void testAdd3() {
+    void testAdd3() {
         final WeightedObservedPoints store = new WeightedObservedPoints();
 
         final double x = 1.2;
@@ -67,40 +70,40 @@ public class WeightedObservedPointsTest {
 
         store.add(x, y);
 
-        Assertions.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(1, x, y)));
+        assertTrue(lastElementIsSame(store, new WeightedObservedPoint(1, x, y)));
     }
 
     @Test
-    public void testClear() {
+    void testClear() {
         final WeightedObservedPoints store = new WeightedObservedPoints();
 
         store.add(new WeightedObservedPoint(1, 2, 3));
         store.add(new WeightedObservedPoint(2, -1, -2));
-        Assertions.assertEquals(2, store.toList().size());
+        assertEquals(2, store.toList().size());
 
         store.clear();
-        Assertions.assertEquals(0, store.toList().size());
+        assertEquals(0, store.toList().size());
     }
 
     // Ensure that an instance returned by "toList()" is independent from
     // the original container.
     @Test
-    public void testToListCopy() {
+    void testToListCopy() {
         final WeightedObservedPoints store = new WeightedObservedPoints();
 
         store.add(new WeightedObservedPoint(1, 2, 3));
         store.add(new WeightedObservedPoint(2, -3, -4));
 
         final List<WeightedObservedPoint> list = store.toList();
-        Assertions.assertEquals(2, list.size());
+        assertEquals(2, list.size());
 
         // Adding an element to "list" has no impact on "store".
         list.add(new WeightedObservedPoint(1.2, 3.4, 5.6));
-        Assertions.assertFalse(list.size() == store.toList().size());
+        assertFalse(list.size() == store.toList().size());
 
         // Clearing "store" has no impact on "list".
         store.clear();
-        Assertions.assertFalse(list.size() == 0);
+        assertFalse(list.size() == 0);
     }
 
     /**

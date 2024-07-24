@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Test cases for the {@link StatUtils} class.
  */
-public final class StatUtilsTest {
+final class StatUtilsTest {
 
     private static final double ONE = 1;
     private static final float  TWO = 2;
@@ -52,7 +52,7 @@ public final class StatUtilsTest {
 
     /** test stats */
     @Test
-    public void testStats() {
+    void testStats() {
         double[] values = new double[] { ONE, TWO, TWO, THREE };
         assertEquals(SUM, StatUtils.sum(values), TOLERANCE, "sum");
         assertEquals(SUMSQ, StatUtils.sumSq(values), TOLERANCE, "sumsq");
@@ -64,7 +64,7 @@ public final class StatUtilsTest {
     }
 
     @Test
-    public void testN0andN1Conditions() {
+    void testN0andN1Conditions() {
         double[] values = new double[0];
 
         assertTrue(Double.isNaN(StatUtils.mean(values)),
@@ -81,7 +81,7 @@ public final class StatUtilsTest {
     }
 
     @Test
-    public void testArrayIndexConditions() {
+    void testArrayIndexConditions() {
         double[] values = { 1.0, 2.0, 3.0, 4.0 };
 
         assertEquals(5.0, StatUtils.sum(values, 1, 2), Double.MIN_VALUE, "Sum not expected");
@@ -104,7 +104,7 @@ public final class StatUtilsTest {
     }
 
     @Test
-    public void testSumSq() {
+    void testSumSq() {
         double[] x = null;
 
         // test null
@@ -124,22 +124,22 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(0, StatUtils.sumSq(x), TOLERANCE);
-        UnitTestUtils.assertEquals(0, StatUtils.sumSq(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0, StatUtils.sumSq(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0, StatUtils.sumSq(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(4, StatUtils.sumSq(x), TOLERANCE);
-        UnitTestUtils.assertEquals(4, StatUtils.sumSq(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(4, StatUtils.sumSq(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(4, StatUtils.sumSq(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(18, StatUtils.sumSq(x), TOLERANCE);
-        UnitTestUtils.assertEquals(8, StatUtils.sumSq(x, 1, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(18, StatUtils.sumSq(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(8, StatUtils.sumSq(x, 1, 2), TOLERANCE);
     }
 
     @Test
-    public void testProduct() {
+    void testProduct() {
         double[] x = null;
 
         // test null
@@ -159,22 +159,22 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(1, StatUtils.product(x), TOLERANCE);
-        UnitTestUtils.assertEquals(1, StatUtils.product(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(1, StatUtils.product(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(1, StatUtils.product(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(TWO, StatUtils.product(x), TOLERANCE);
-        UnitTestUtils.assertEquals(TWO, StatUtils.product(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.product(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.product(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(12, StatUtils.product(x), TOLERANCE);
-        UnitTestUtils.assertEquals(4, StatUtils.product(x, 1, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(12, StatUtils.product(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(4, StatUtils.product(x, 1, 2), TOLERANCE);
     }
 
     @Test
-    public void testSumLog() {
+    void testSumLog() {
         double[] x = null;
 
         // test null
@@ -194,22 +194,22 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(0, StatUtils.sumLog(x), TOLERANCE);
-        UnitTestUtils.assertEquals(0, StatUtils.sumLog(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0, StatUtils.sumLog(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0, StatUtils.sumLog(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(FastMath.log(TWO), StatUtils.sumLog(x), TOLERANCE);
-        UnitTestUtils.assertEquals(FastMath.log(TWO), StatUtils.sumLog(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(FastMath.log(TWO), StatUtils.sumLog(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(FastMath.log(TWO), StatUtils.sumLog(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(FastMath.log(ONE) + 2.0 * FastMath.log(TWO) + FastMath.log(THREE), StatUtils.sumLog(x), TOLERANCE);
-        UnitTestUtils.assertEquals(2.0 * FastMath.log(TWO), StatUtils.sumLog(x, 1, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(FastMath.log(ONE) + 2.0 * FastMath.log(TWO) + FastMath.log(THREE), StatUtils.sumLog(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(2.0 * FastMath.log(TWO), StatUtils.sumLog(x, 1, 2), TOLERANCE);
     }
 
     @Test
-    public void testMean() {
+    void testMean() {
         double[] x = null;
 
         try {
@@ -221,19 +221,19 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(Double.NaN, StatUtils.mean(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(Double.NaN, StatUtils.mean(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(TWO, StatUtils.mean(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.mean(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(2.5, StatUtils.mean(x, 2, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(2.5, StatUtils.mean(x, 2, 2), TOLERANCE);
     }
 
     @Test
-    public void testVariance() {
+    void testVariance() {
         double[] x = null;
 
         try {
@@ -245,23 +245,23 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(Double.NaN, StatUtils.variance(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(Double.NaN, StatUtils.variance(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(0.0, StatUtils.variance(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0.0, StatUtils.variance(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(0.5, StatUtils.variance(x, 2, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0.5, StatUtils.variance(x, 2, 2), TOLERANCE);
 
         // test precomputed mean
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(0.5, StatUtils.variance(x,2.5, 2, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0.5, StatUtils.variance(x, 2.5, 2, 2), TOLERANCE);
     }
 
     @Test
-    public void testPopulationVariance() {
+    void testPopulationVariance() {
         double[] x = null;
 
         try {
@@ -273,23 +273,23 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(Double.NaN, StatUtils.populationVariance(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(Double.NaN, StatUtils.populationVariance(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(0.0, StatUtils.populationVariance(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0.0, StatUtils.populationVariance(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(0.25, StatUtils.populationVariance(x, 0, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0.25, StatUtils.populationVariance(x, 0, 2), TOLERANCE);
 
         // test precomputed mean
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(0.25, StatUtils.populationVariance(x, 2.5, 2, 2), TOLERANCE);
+        UnitTestUtils.customAssertEquals(0.25, StatUtils.populationVariance(x, 2.5, 2, 2), TOLERANCE);
     }
 
     @Test
-    public void testMax() {
+    void testMax() {
         double[] x = null;
 
         try {
@@ -301,35 +301,35 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(Double.NaN, StatUtils.max(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(Double.NaN, StatUtils.max(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(TWO, StatUtils.max(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.max(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(THREE, StatUtils.max(x, 1, 3), TOLERANCE);
+        UnitTestUtils.customAssertEquals(THREE, StatUtils.max(x, 1, 3), TOLERANCE);
 
         // test first nan is ignored
         x = new double[] {NAN, TWO, THREE};
-        UnitTestUtils.assertEquals(THREE, StatUtils.max(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(THREE, StatUtils.max(x), TOLERANCE);
 
         // test middle nan is ignored
         x = new double[] {ONE, NAN, THREE};
-        UnitTestUtils.assertEquals(THREE, StatUtils.max(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(THREE, StatUtils.max(x), TOLERANCE);
 
         // test last nan is ignored
         x = new double[] {ONE, TWO, NAN};
-        UnitTestUtils.assertEquals(TWO, StatUtils.max(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.max(x), TOLERANCE);
 
         // test all nan returns nan
         x = new double[] {NAN, NAN, NAN};
-        UnitTestUtils.assertEquals(NAN, StatUtils.max(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(NAN, StatUtils.max(x), TOLERANCE);
     }
 
     @Test
-    public void testMin() {
+    void testMin() {
         double[] x = null;
 
         try {
@@ -341,35 +341,35 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(Double.NaN, StatUtils.min(x, 0, 0), TOLERANCE);
+        UnitTestUtils.customAssertEquals(Double.NaN, StatUtils.min(x, 0, 0), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(TWO, StatUtils.min(x, 0, 1), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.min(x, 0, 1), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(TWO, StatUtils.min(x, 1, 3), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.min(x, 1, 3), TOLERANCE);
 
         // test first nan is ignored
         x = new double[] {NAN, TWO, THREE};
-        UnitTestUtils.assertEquals(TWO, StatUtils.min(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.min(x), TOLERANCE);
 
         // test middle nan is ignored
         x = new double[] {ONE, NAN, THREE};
-        UnitTestUtils.assertEquals(ONE, StatUtils.min(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(ONE, StatUtils.min(x), TOLERANCE);
 
         // test last nan is ignored
         x = new double[] {ONE, TWO, NAN};
-        UnitTestUtils.assertEquals(ONE, StatUtils.min(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(ONE, StatUtils.min(x), TOLERANCE);
 
         // test all nan returns nan
         x = new double[] {NAN, NAN, NAN};
-        UnitTestUtils.assertEquals(NAN, StatUtils.min(x), TOLERANCE);
+        UnitTestUtils.customAssertEquals(NAN, StatUtils.min(x), TOLERANCE);
     }
 
     @Test
-    public void testPercentile() {
+    void testPercentile() {
         double[] x = null;
 
         // test null
@@ -389,22 +389,22 @@ public final class StatUtilsTest {
 
         // test empty
         x = new double[] {};
-        UnitTestUtils.assertEquals(Double.NaN, StatUtils.percentile(x, 25), TOLERANCE);
-        UnitTestUtils.assertEquals(Double.NaN, StatUtils.percentile(x, 0, 0, 25), TOLERANCE);
+        UnitTestUtils.customAssertEquals(Double.NaN, StatUtils.percentile(x, 25), TOLERANCE);
+        UnitTestUtils.customAssertEquals(Double.NaN, StatUtils.percentile(x, 0, 0, 25), TOLERANCE);
 
         // test one
         x = new double[] {TWO};
-        UnitTestUtils.assertEquals(TWO, StatUtils.percentile(x, 25), TOLERANCE);
-        UnitTestUtils.assertEquals(TWO, StatUtils.percentile(x, 0, 1, 25), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.percentile(x, 25), TOLERANCE);
+        UnitTestUtils.customAssertEquals(TWO, StatUtils.percentile(x, 0, 1, 25), TOLERANCE);
 
         // test many
         x = new double[] {ONE, TWO, TWO, THREE};
-        UnitTestUtils.assertEquals(2.5, StatUtils.percentile(x, 70), TOLERANCE);
-        UnitTestUtils.assertEquals(2.5, StatUtils.percentile(x, 1, 3, 62.5), TOLERANCE);
+        UnitTestUtils.customAssertEquals(2.5, StatUtils.percentile(x, 70), TOLERANCE);
+        UnitTestUtils.customAssertEquals(2.5, StatUtils.percentile(x, 1, 3, 62.5), TOLERANCE);
     }
 
     @Test
-    public void testDifferenceStats() {
+    void testDifferenceStats() {
         double[] sample1 = {1d, 2d, 3d, 4d};
         double[] sample2 = {1d, 3d, 4d, 2d};
         double[] diff = {0d, -1d, -1d, 2d};
@@ -436,7 +436,7 @@ public final class StatUtilsTest {
     }
 
     @Test
-    public void testGeometricMean() {
+    void testGeometricMean() {
         double[] test = null;
         try {
             StatUtils.geometricMean(test);
@@ -455,7 +455,7 @@ public final class StatUtilsTest {
      * Run the test with the values 50 and 100 and assume standardized values
      */
     @Test
-    public void testNormalize1() {
+    void testNormalize1() {
         double[] sample = { 50, 100 };
         double[]
                         expectedSample = { -25 / FastMath.sqrt(1250), 25 / FastMath.sqrt(1250) };
@@ -470,7 +470,7 @@ public final class StatUtilsTest {
      * precision of 1E-10.
      */
     @Test
-    public void testNormalize2() {
+    void testNormalize2() {
         // create an sample with 77 values
         int length = 77;
         double[] sample = new double[length];
@@ -493,7 +493,7 @@ public final class StatUtilsTest {
     }
 
     @Test
-    public void testMode() {
+    void testMode() {
         final double[] singleMode = {0, 1, 0, 2, 7, 11, 12};
         final double[] modeSingle = StatUtils.mode(singleMode);
         assertEquals(0, modeSingle[0], Double.MIN_VALUE);

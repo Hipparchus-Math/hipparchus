@@ -171,7 +171,7 @@ public abstract class StorelessUnivariateStatisticAbstractTest
             for (int j =0; j < smallSamples[i].length; j++) {
                 stat.increment(smallSamples[i][j]);
             }
-            UnitTestUtils.assertEquals(stat.getResult(), stat.evaluate(smallSamples[i]), getTolerance());
+            UnitTestUtils.customAssertEquals(stat.getResult(), stat.evaluate(smallSamples[i]), getTolerance());
         }
     }
 

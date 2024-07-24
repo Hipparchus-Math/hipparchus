@@ -21,7 +21,6 @@
  */
 package org.hipparchus.exception;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +28,12 @@ import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class LocalizedFormatsAbstractTest {
 
@@ -45,7 +50,7 @@ public abstract class LocalizedFormatsAbstractTest {
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException |
                         IllegalArgumentException | InvocationTargetException e) {
-            Assertions.fail(e.getLocalizedMessage());
+            fail(e.getLocalizedMessage());
         }
         return localizable;
     }
@@ -57,14 +62,14 @@ public abstract class LocalizedFormatsAbstractTest {
         } catch (IllegalArgumentException iae) {
             localizable = null;
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
-            Assertions.fail(s + " <-> " + e.getLocalizedMessage());
+            fail(s + " <-> " + e.getLocalizedMessage());
         }
         return localizable;
     }
 
     @Test
     public void testMessageNumber() {
-        Assertions.assertEquals(getExpectedNumber(), getValues().length);
+        assertEquals(getExpectedNumber(), getValues().length);
     }
 
     @Test
@@ -80,10 +85,10 @@ public abstract class LocalizedFormatsAbstractTest {
                 for (final Enumeration<String> keys = bundle.getKeys(); keys.hasMoreElements();) {
                     keyPresent |= messageKey.equals(keys.nextElement());
                 }
-                Assertions.assertTrue(keyPresent,
+                assertTrue(keyPresent,
                                   "missing key \"" + message.toString() + "\" for language " + language);
             }
-            Assertions.assertEquals(language, bundle.getLocale().getLanguage());
+            assertEquals(language, bundle.getLocale().getLanguage());
         }
 
     }
@@ -98,12 +103,12 @@ public abstract class LocalizedFormatsAbstractTest {
             for (final Enumeration<String> keys = bundle.getKeys(); keys.hasMoreElements();) {
                 final String propertyKey = keys.nextElement();
                 try {
-                    Assertions.assertNotNull(valueOf(propertyKey));
+                    assertNotNull(valueOf(propertyKey));
                 } catch (IllegalArgumentException iae) {
-                    Assertions.fail("unknown key \"" + propertyKey + "\" in language " + language);
+                    fail("unknown key \"" + propertyKey + "\" in language " + language);
                 }
             }
-            Assertions.assertEquals(language, bundle.getLocale().getLanguage());
+            assertEquals(language, bundle.getLocale().getLanguage());
         }
 
     }
@@ -112,7 +117,7 @@ public abstract class LocalizedFormatsAbstractTest {
     public void testNoMissingFrenchTranslation() {
         for (Localizable message : getValues()) {
             String translated = message.getLocalizedString(Locale.FRENCH);
-            Assertions.assertFalse(translated.toLowerCase().contains("missing translation"), message.toString());
+            assertFalse(translated.toLowerCase().contains("missing translation"), message.toString());
         }
     }
 
@@ -120,7 +125,7 @@ public abstract class LocalizedFormatsAbstractTest {
     public void testNoOpEnglishTranslation() {
         for (Localizable message : getValues()) {
             String translated = message.getLocalizedString(Locale.ENGLISH);
-            Assertions.assertEquals(message.getSourceString(), translated);
+            assertEquals(message.getSourceString(), translated);
         }
     }
 
@@ -131,7 +136,7 @@ public abstract class LocalizedFormatsAbstractTest {
             for (Localizable message : getValues()) {
                 MessageFormat source     = new MessageFormat(message.getSourceString());
                 MessageFormat translated = new MessageFormat(message.getLocalizedString(locale));
-                Assertions.assertEquals(source.getFormatsByArgumentIndex().length,
+                assertEquals(source.getFormatsByArgumentIndex().length,
                                     translated.getFormatsByArgumentIndex().length,
                                     message.toString() + " (" + language + ")");
             }

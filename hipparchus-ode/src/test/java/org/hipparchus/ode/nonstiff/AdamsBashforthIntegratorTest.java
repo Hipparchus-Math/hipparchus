@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
+class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
 
     protected AdamsIntegrator
     createIntegrator(final int nSteps, final double minStep, final double maxStep,
@@ -40,7 +40,7 @@ public class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
     }
 
     @Test
-    public void testNbPoints() {
+    void testNbPoints() {
         doNbPointsTest();
     }
 

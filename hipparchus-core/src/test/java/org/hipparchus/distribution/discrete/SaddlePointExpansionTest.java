@@ -16,42 +16,43 @@
  */
 package org.hipparchus.distribution.discrete;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SaddlePointExpansionTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class SaddlePointExpansionTest {
 
     @Test
-    public void testSmallInteger() {
+    void testSmallInteger() {
         for (int n = 4; n < 16; ++n) {
-             Assertions.assertEquals(alternateStirlingErrorImplementation(n, 8),
+             assertEquals(alternateStirlingErrorImplementation(n, 8),
                                 SaddlePointExpansion.getStirlingError(n),
                                 1.0e-10);
         }
     }
 
     @Test
-    public void testSmallNonInteger() {
+    void testSmallNonInteger() {
         for (double z = 3.75; z < 14.8; z += 1.0) {
-            Assertions.assertEquals(alternateStirlingErrorImplementation(z, 12),
+            assertEquals(alternateStirlingErrorImplementation(z, 12),
                                 SaddlePointExpansion.getStirlingError(z),
                                 1.0e-10);
         }
     }
 
     @Test
-    public void testLargeValues() {
+    void testLargeValues() {
         for (double z = 15.25; z < 25.5; z += 1.0) {
-            Assertions.assertEquals(alternateStirlingErrorImplementation(z, 21),
+            assertEquals(alternateStirlingErrorImplementation(z, 21),
                                 SaddlePointExpansion.getStirlingError(z),
                                 1.0e-15);
         }
     }
 
     @Test
-    public void testSpecialValues() {
-        Assertions.assertEquals(0.0, SaddlePointExpansion.logBinomialProbability(0, 0, 0.6, 0.4), 1.0e-15);
-        Assertions.assertEquals(Double.NEGATIVE_INFINITY, SaddlePointExpansion.logBinomialProbability(1, 0, 0.6, 0.4), 1.0e-15);
+    void testSpecialValues() {
+        assertEquals(0.0, SaddlePointExpansion.logBinomialProbability(0, 0, 0.6, 0.4), 1.0e-15);
+        assertEquals(Double.NEGATIVE_INFINITY, SaddlePointExpansion.logBinomialProbability(1, 0, 0.6, 0.4), 1.0e-15);
     }
 
     private double alternateStirlingErrorImplementation(final double z, final int kMax) {

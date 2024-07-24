@@ -21,13 +21,14 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for the ClopperPearsonInterval.
  */
-public class ClopperPearsonIntervalTest extends BinomialProportionAbstractTest {
+class ClopperPearsonIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
     protected BinomialProportionMethod getBinomialProportionMethod() {
@@ -35,10 +36,10 @@ public class ClopperPearsonIntervalTest extends BinomialProportionAbstractTest {
     }
 
     @Test
-    public void testStandardInterval() {
+    void testStandardInterval() {
         ConfidenceInterval confidenceInterval = createStandardTestInterval();
-        Assertions.assertEquals(0.07873857, confidenceInterval.getLowerBound(), 1E-5);
-        Assertions.assertEquals(0.1248658, confidenceInterval.getUpperBound(), 1E-5);
+        assertEquals(0.07873857, confidenceInterval.getLowerBound(), 1E-5);
+        assertEquals(0.1248658, confidenceInterval.getUpperBound(), 1E-5);
     }
 
 }

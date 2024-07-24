@@ -21,60 +21,62 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test for class {@link TaylorMap}.
  */
-public class TaylorMapTest {
+class TaylorMapTest {
 
     @Test
-    public void testNullPoint() {
+    void testNullPoint() {
         try {
             new TaylorMap(null, new DerivativeStructure[2]);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
     @Test
-    public void testDim0Point() {
+    void testDim0Point() {
         try {
             new TaylorMap(new double[0], new DerivativeStructure[2]);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
     @Test
-    public void testNullFunctions() {
+    void testNullFunctions() {
         try {
             new TaylorMap(new double[2], null);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
     @Test
-    public void testNoFunctions() {
+    void testNoFunctions() {
         try {
             new TaylorMap(new double[2], new DerivativeStructure[0]);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
-            Assertions.assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, miae.getSpecifier());
+            assertEquals(0, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
     @Test
-    public void testIncompatiblePointAndFunctions() {
+    void testIncompatiblePointAndFunctions() {
         DSFactory factory = new DSFactory(6, 6);
         DerivativeStructure[] functions = new DerivativeStructure[factory.getCompiler().getFreeParameters()];
         for (int i = 0; i < functions.length; ++i) {
@@ -82,16 +84,16 @@ public class TaylorMapTest {
         }
         try {
             new TaylorMap(new double[functions.length - 1], functions);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(6, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(6, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testIncompatible() {
+    void testIncompatible() {
         DSFactory factory = new DSFactory(6, 6);
         DerivativeStructure[] functions = new DerivativeStructure[factory.getCompiler().getFreeParameters()];
         for (int i = 0; i < functions.length - 1; ++i) {
@@ -102,16 +104,16 @@ public class TaylorMapTest {
                                           constant(1.0);
         try {
             new TaylorMap(new double[functions.length], functions);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(6, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(5, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(6, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(5, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testNbParameters() {
+    void testNbParameters() {
         final int nbParameters = 6;
         final int nbFunctions  = 3;
         DSFactory factory = new DSFactory(nbParameters, 6);
@@ -119,12 +121,12 @@ public class TaylorMapTest {
         for (int i = 0; i < functions.length; ++i) {
             functions[i] = factory.constant(0);
         }
-        Assertions.assertEquals(nbParameters,
+        assertEquals(nbParameters,
                             new TaylorMap(new double[nbParameters], functions).getFreeParameters());
     }
 
     @Test
-    public void testNbFunctions() {
+    void testNbFunctions() {
         final int nbParameters = 6;
         final int nbFunctions  = 3;
         DSFactory factory = new DSFactory(nbParameters, 6);
@@ -132,32 +134,32 @@ public class TaylorMapTest {
         for (int i = 0; i < functions.length; ++i) {
             functions[i] = factory.constant(0);
         }
-        Assertions.assertEquals(nbFunctions,
+        assertEquals(nbFunctions,
                             new TaylorMap(new double[nbParameters], functions).getNbFunctions());
     }
 
     @Test
-    public void testIdentity() {
+    void testIdentity() {
         final TaylorMap map = new TaylorMap(7, 3, 4);
         for (int i = 0; i < map.getNbFunctions(); ++i) {
 
             final DerivativeStructure mi = map.getFunction(i);
 
-            Assertions.assertEquals(0.0, mi.getValue(), 1.0e-15);
+            assertEquals(0.0, mi.getValue(), 1.0e-15);
 
             int[] orders = new int[7];
             orders[i] = 1;
             int expectedOne = mi.getFactory().getCompiler().getPartialDerivativeIndex(orders);
 
             for (int j = 0; j < mi.getFactory().getCompiler().getSize(); ++j) {
-                Assertions.assertEquals(j == expectedOne ? 1.0 : 0.0, mi.getAllDerivatives()[j], 1.0e-15);
+                assertEquals(j == expectedOne ? 1.0 : 0.0, mi.getAllDerivatives()[j], 1.0e-15);
             }
 
         }
     }
 
     @Test
-    public void testValue() {
+    void testValue() {
 
         final DSFactory           factory = new DSFactory(2, 3);
         final DerivativeStructure p0      = factory.variable(0,  1.0);
@@ -169,15 +171,15 @@ public class TaylorMapTest {
 
         for (double dp0 = -0.1; dp0 < 0.1; dp0 += 0.01) {
             for (double dp1 = -0.1; dp1 < 0.1; dp1 += 0.01) {
-                Assertions.assertEquals(f0.taylor(dp0, dp1), map.value(dp0, dp1)[0], 1.0e-15);
-                Assertions.assertEquals(f1.taylor(dp0, dp1), map.value(dp0, dp1)[1], 1.0e-15);
+                assertEquals(f0.taylor(dp0, dp1), map.value(dp0, dp1)[0], 1.0e-15);
+                assertEquals(f1.taylor(dp0, dp1), map.value(dp0, dp1)[1], 1.0e-15);
             }
         }
 
     }
 
     @Test
-    public void testCompose() {
+    void testCompose() {
 
         final DSFactory           factory2 = new DSFactory(2, 2);
         final DSFactory           factory3 = new DSFactory(3, factory2.getCompiler().getOrder());
@@ -199,79 +201,79 @@ public class TaylorMapTest {
 
         for (double dp0 = -0.1; dp0 < 0.1; dp0 += 0.01) {
             for (double dp1 = -0.1; dp1 < 0.1; dp1 += 0.01) {
-                Assertions.assertEquals(g0.taylor(dp0, dp1) + g1.taylor(dp0, dp1),
+                assertEquals(g0.taylor(dp0, dp1) + g1.taylor(dp0, dp1),
                                     composed.value(dp0, dp1)[0],
                                     1.0e-15);
-                Assertions.assertEquals(g0.taylor(dp0, dp1) - g1.taylor(dp0, dp1) + g2.taylor(dp0, dp1),
+                assertEquals(g0.taylor(dp0, dp1) - g1.taylor(dp0, dp1) + g2.taylor(dp0, dp1),
                                     composed.value(dp0, dp1)[1],
                                     1.0e-15);
             }
         }
 
-        Assertions.assertEquals(p0.getValue(), mapG.getPoint()[0],     1.0e-15);
-        Assertions.assertEquals(p1.getValue(), mapG.getPoint()[1],     1.0e-15);
-        Assertions.assertEquals(g0.getValue(), mapF.getPoint()[0],     1.0e-15);
-        Assertions.assertEquals(g1.getValue(), mapF.getPoint()[1],     1.0e-15);
-        Assertions.assertEquals(g2.getValue(), mapF.getPoint()[2],     1.0e-15);
-        Assertions.assertEquals(p0.getValue(), composed.getPoint()[0], 1.0e-15);
-        Assertions.assertEquals(p1.getValue(), composed.getPoint()[1], 1.0e-15);
+        assertEquals(p0.getValue(), mapG.getPoint()[0],     1.0e-15);
+        assertEquals(p1.getValue(), mapG.getPoint()[1],     1.0e-15);
+        assertEquals(g0.getValue(), mapF.getPoint()[0],     1.0e-15);
+        assertEquals(g1.getValue(), mapF.getPoint()[1],     1.0e-15);
+        assertEquals(g2.getValue(), mapF.getPoint()[2],     1.0e-15);
+        assertEquals(p0.getValue(), composed.getPoint()[0], 1.0e-15);
+        assertEquals(p1.getValue(), composed.getPoint()[1], 1.0e-15);
 
         // the partial derivatives of f are only (∂f/∂g₀, ∂f/∂g₁, ∂f/∂g₂)
-        Assertions.assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(1, 0, 0), 1.0e-15);
-        Assertions.assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(0, 1, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 1), 1.0e-15);
-        Assertions.assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(1, 0, 0), 1.0e-15);
-        Assertions.assertEquals(-1.0, mapF.getFunction(1).getPartialDerivative(0, 1, 0), 1.0e-15);
-        Assertions.assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(0, 0, 1), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(1, 0, 0), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(0).getPartialDerivative(0, 1, 0), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 1), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(1, 0, 0), 1.0e-15);
+        assertEquals(-1.0, mapF.getFunction(1).getPartialDerivative(0, 1, 0), 1.0e-15);
+        assertEquals(+1.0, mapF.getFunction(1).getPartialDerivative(0, 0, 1), 1.0e-15);
 
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(2, 0, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 1, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 0, 1), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 2, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 1, 1), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 2), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(2, 0, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 1, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 0, 1), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 2, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 1, 1), 1.0e-15);
-        Assertions.assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 0, 2), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(2, 0, 0), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 1, 0), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(1, 0, 1), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 2, 0), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 1, 1), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(0).getPartialDerivative(0, 0, 2), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(2, 0, 0), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 1, 0), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(1, 0, 1), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 2, 0), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 1, 1), 1.0e-15);
+        assertEquals( 0.0, mapF.getFunction(1).getPartialDerivative(0, 0, 2), 1.0e-15);
 
         // the partial derivatives of the composed map are (∂f/∂p₀, ∂f/∂p₁)
-        Assertions.assertEquals(FastMath.cos(p0.getValue()) + 1.0,                 composed.getFunction(0).getPartialDerivative(1, 0), 1.0e-15);
-        Assertions.assertEquals(+1.0,                                              composed.getFunction(0).getPartialDerivative(0, 1), 1.0e-15);
-        Assertions.assertEquals(FastMath.cos(p0.getValue()) - 1.0 + p1.getValue(), composed.getFunction(1).getPartialDerivative(1, 0), 1.0e-15);
-        Assertions.assertEquals(-1.0 + p0.getValue(),                              composed.getFunction(1).getPartialDerivative(0, 1), 1.0e-15);
-        Assertions.assertEquals(-FastMath.sin(p0.getValue()),                      composed.getFunction(0).getPartialDerivative(2, 0), 1.0e-15);
-        Assertions.assertEquals( 0.0,                                              composed.getFunction(0).getPartialDerivative(1, 1), 1.0e-15);
-        Assertions.assertEquals( 0.0,                                              composed.getFunction(0).getPartialDerivative(0, 2), 1.0e-15);
-        Assertions.assertEquals(-FastMath.sin(p0.getValue()),                      composed.getFunction(1).getPartialDerivative(2, 0), 1.0e-15);
-        Assertions.assertEquals(+1.0,                                              composed.getFunction(1).getPartialDerivative(1, 1), 1.0e-15);
-        Assertions.assertEquals( 0.0,                                              composed.getFunction(1).getPartialDerivative(0, 2), 1.0e-15);
+        assertEquals(FastMath.cos(p0.getValue()) + 1.0,                 composed.getFunction(0).getPartialDerivative(1, 0), 1.0e-15);
+        assertEquals(+1.0,                                              composed.getFunction(0).getPartialDerivative(0, 1), 1.0e-15);
+        assertEquals(FastMath.cos(p0.getValue()) - 1.0 + p1.getValue(), composed.getFunction(1).getPartialDerivative(1, 0), 1.0e-15);
+        assertEquals(-1.0 + p0.getValue(),                              composed.getFunction(1).getPartialDerivative(0, 1), 1.0e-15);
+        assertEquals(-FastMath.sin(p0.getValue()),                      composed.getFunction(0).getPartialDerivative(2, 0), 1.0e-15);
+        assertEquals( 0.0,                                              composed.getFunction(0).getPartialDerivative(1, 1), 1.0e-15);
+        assertEquals( 0.0,                                              composed.getFunction(0).getPartialDerivative(0, 2), 1.0e-15);
+        assertEquals(-FastMath.sin(p0.getValue()),                      composed.getFunction(1).getPartialDerivative(2, 0), 1.0e-15);
+        assertEquals(+1.0,                                              composed.getFunction(1).getPartialDerivative(1, 1), 1.0e-15);
+        assertEquals( 0.0,                                              composed.getFunction(1).getPartialDerivative(0, 2), 1.0e-15);
 
     }
 
     @Test
-    public void testInvertNonSquare() {
+    void testInvertNonSquare() {
         final DSFactory           factory   = new DSFactory(2, 2);
         final DerivativeStructure p0        = factory.variable(0,  1.0);
         final DerivativeStructure p1        = factory.variable(1, -3.0);
         final TaylorMap           nonSquare = new TaylorMap(new double[] { p0.getValue(), p1.getValue() },
                                                             new DerivativeStructure[] { p0, p1, p0.add(p1) });
-        Assertions.assertEquals(2, nonSquare.getFreeParameters());
-        Assertions.assertEquals(3, nonSquare.getNbFunctions());
+        assertEquals(2, nonSquare.getFreeParameters());
+        assertEquals(3, nonSquare.getNbFunctions());
         try {
             nonSquare.invert(new QRDecomposer(1.0e-10));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testInvertMonoDimensional() {
+    void testInvertMonoDimensional() {
         final DSFactory factory = new DSFactory(1, 6);
         for (double x = 0.0; x < 3.0; x += 0.01) {
             final DerivativeStructure xDS = factory.variable(0, x);
@@ -284,7 +286,7 @@ public class TaylorMapTest {
     }
 
     @Test
-    public void testInvertBiDimensional() {
+    void testInvertBiDimensional() {
         final DSFactory factory = new DSFactory(2, 4);
         for (double x = -2.0 + FastMath.scalb(1.0, -6); x < 2.0; x += FastMath.scalb(1.0, -5)) {
             final DerivativeStructure xDS = factory.variable(0, x);

@@ -21,10 +21,11 @@
  */
 package org.hipparchus.random;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class MersenneTwisterTest extends RandomGeneratorAbstractTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class MersenneTwisterTest extends RandomGeneratorAbstractTest {
 
     @Override
     protected RandomGenerator makeGenerator() {
@@ -35,7 +36,7 @@ public class MersenneTwisterTest extends RandomGeneratorAbstractTest {
     // Tests exercising these features directly should be added to this class.
 
     @Test
-    public void testMakotoNishimura() {
+    void testMakotoNishimura() {
         MersenneTwister mt = new MersenneTwister(new int[] {0x123, 0x234, 0x345, 0x456});
         long[] refInt = {
             1067595299l,  955945823l,  477289528l, 4107218783l, 4228976476l, 3344332714l, 3355579695l,  227628506l,
@@ -294,12 +295,12 @@ public class MersenneTwisterTest extends RandomGeneratorAbstractTest {
 
         for (int i = 0; i < refInt.length; ++i) {
             int r = mt.nextInt();
-            Assertions.assertEquals(refInt[i], (r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l));
+            assertEquals(refInt[i], (r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l));
         }
 
         for (int i = 0; i < refDouble.length; ++i) {
             int r = mt.nextInt();
-            Assertions.assertEquals(refDouble[i],
+            assertEquals(refDouble[i],
                          ((r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l)) / 4294967296.0,
                          1.0e-8);
         }

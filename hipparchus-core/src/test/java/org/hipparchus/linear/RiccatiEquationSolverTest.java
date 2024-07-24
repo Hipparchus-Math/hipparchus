@@ -16,13 +16,14 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class RiccatiEquationSolverTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class RiccatiEquationSolverTest {
 
     @Test
-    public void test_real_2_2() {
+    void test_real_2_2() {
         // AA = [-3 2;1 1];
         // BB = [0;1];
 
@@ -53,7 +54,7 @@ public class RiccatiEquationSolverTest {
     }
 
     @Test
-    public void test_imaginary_2_2() {
+    void test_imaginary_2_2() {
         // AA = [3 -2;4 -1];
         // BB = [0;1];
 
@@ -86,7 +87,7 @@ public class RiccatiEquationSolverTest {
     }
 
     @Test
-    public void test_imaginary_6_6() {
+    void test_imaginary_6_6() {
 
         RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
             { 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 0, 1, 0 },
@@ -124,7 +125,7 @@ public class RiccatiEquationSolverTest {
     }
 
     @Test
-    public void test_imaginary_6_6_ill_conditioned() {
+    void test_imaginary_6_6_ill_conditioned() {
         // A = [0 0 0 1 0 0; 0 0 0 0 1 0; 0 0 0 0 0 1; 0 0 0 0 0 0; 0 0 0 0 0 0;
         // 0 0 0 0 0 0];
         // B = [ 0 0 0; 0 0 0; 0 0 0; -0.0032 0 0; 0 -0.0028 0; 0 0 -0.0019];
@@ -161,11 +162,11 @@ public class RiccatiEquationSolverTest {
     }
 
     private void checkEquals(final RealMatrix reference, final RealMatrix m, final double tol) {
-        Assertions.assertEquals(reference.getRowDimension(), m.getRowDimension());
-        Assertions.assertEquals(reference.getColumnDimension(), m.getColumnDimension());
+        assertEquals(reference.getRowDimension(), m.getRowDimension());
+        assertEquals(reference.getColumnDimension(), m.getColumnDimension());
         for (int i = 0; i < reference.getRowDimension(); ++i) {
             for (int j = 0; j < reference.getColumnDimension(); ++j) {
-                Assertions.assertEquals(reference.getEntry(i, j), m.getEntry(i, j), tol);
+                assertEquals(reference.getEntry(i, j), m.getEntry(i, j), tol);
             }
         }
     }

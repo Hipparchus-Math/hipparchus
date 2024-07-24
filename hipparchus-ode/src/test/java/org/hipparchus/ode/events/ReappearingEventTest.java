@@ -32,25 +32,26 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ReappearingEventTest {
 
     @Test
-    public void testDormandPrince()
+    void testDormandPrince()
         throws MathIllegalArgumentException, MathIllegalStateException {
         double tEnd = test(1);
-        Assertions.assertEquals(10.0, tEnd, 1e-7);
+        assertEquals(10.0, tEnd, 1e-7);
     }
 
     @Test
-    public void testGragg()
+    void testGragg()
         throws MathIllegalArgumentException, MathIllegalStateException {
         double tEnd = test(2);
-        Assertions.assertEquals(10.0, tEnd, 1e-7);
+        assertEquals(10.0, tEnd, 1e-7);
     }
 
     public double test(int integratorType)

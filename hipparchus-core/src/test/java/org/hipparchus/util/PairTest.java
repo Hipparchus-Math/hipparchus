@@ -13,76 +13,81 @@
  */
 package org.hipparchus.util;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for {@link Pair}.
  */
-public class PairTest {
+class PairTest {
 
     @Test
-    public void testAccessor() {
+    void testAccessor() {
         final Pair<Integer, Double> p = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
-        Assertions.assertEquals(Integer.valueOf(1), p.getKey());
-        Assertions.assertEquals(2, p.getValue().doubleValue(), Math.ulp(1d));
+        assertEquals(Integer.valueOf(1), p.getKey());
+        assertEquals(2, p.getValue().doubleValue(), Math.ulp(1d));
     }
 
     @Test
-    public void testAccessor2() {
+    void testAccessor2() {
         final Pair<Integer, Double> p = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
 
         // Check that both APIs refer to the same data.
 
-        Assertions.assertTrue(p.getFirst() == p.getKey());
-        Assertions.assertTrue(p.getSecond() == p.getValue());
+        assertTrue(p.getFirst() == p.getKey());
+        assertTrue(p.getSecond() == p.getValue());
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         Pair<Integer, Double> p1 = new Pair<>(null, null);
-        Assertions.assertNotEquals(null, p1);
+        assertNotEquals(null, p1);
 
         Pair<Integer, Double> p2 = new Pair<>(null, null);
-        Assertions.assertEquals(p1, p2);
+        assertEquals(p1, p2);
 
         p1 = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
-        Assertions.assertNotEquals(p1, p2);
+        assertNotEquals(p1, p2);
 
         p2 = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
-        Assertions.assertEquals(p1, p2);
+        assertEquals(p1, p2);
 
         Pair<Integer, Float> p3 = new Pair<>(Integer.valueOf(1), Float.valueOf(2));
-        Assertions.assertNotEquals(p1, p3);
+        assertNotEquals(p1, p3);
     }
 
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         final MyInteger m1 = new MyInteger(1);
         final MyInteger m2 = new MyInteger(1);
 
         final Pair<MyInteger, MyInteger> p1 = new Pair<>(m1, m1);
         final Pair<MyInteger, MyInteger> p2 = new Pair<>(m2, m2);
         // Same contents, same hash code.
-        Assertions.assertEquals(p1.hashCode(), p2.hashCode());
+        assertEquals(p1.hashCode(), p2.hashCode());
 
         // Different contents, different hash codes.
         m2.set(2);
-        Assertions.assertFalse(p1.hashCode() == p2.hashCode());
+        assertFalse(p1.hashCode() == p2.hashCode());
     }
 
     @Test
-    public void testToString() {
-        Assertions.assertEquals("[null, null]", new Pair<>(null, null).toString());
-        Assertions.assertEquals("[foo, 3]", new Pair<>("foo", 3).toString());
+    void testToString() {
+        assertEquals("[null, null]", new Pair<>(null, null).toString());
+        assertEquals("[foo, 3]", new Pair<>("foo", 3).toString());
     }
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         final Pair<String, Integer> p1 = Pair.create("foo", 3);
-        Assertions.assertNotNull(p1);
+        assertNotNull(p1);
         final Pair<String, Integer> p2 = new Pair<>("foo", 3);
-        Assertions.assertEquals(p2, p1);
+        assertEquals(p2, p1);
     }
 
     /**

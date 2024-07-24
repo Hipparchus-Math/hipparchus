@@ -23,18 +23,19 @@ package org.hipparchus.clustering;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DBSCANClustererTest {
+class DBSCANClustererTest {
 
     @Test
-    public void testCluster() {
+    void testCluster() {
         // Test data generated using: http://people.cs.nctu.edu.tw/~rsliang/dbscan/testdatagen.html
         final DoublePoint[] points = new DoublePoint[] {
                 new DoublePoint(new double[] { 83.08303244924173, 58.83387754182331 }),
@@ -123,7 +124,7 @@ public class DBSCANClustererTest {
         boolean cluster1Found = false;
         boolean cluster2Found = false;
         boolean cluster3Found = false;
-        Assertions.assertEquals(3, clusters.size());
+        assertEquals(3, clusters.size());
         for (final Cluster<DoublePoint> cluster : clusters) {
             if (cluster.getPoints().containsAll(clusterOne)) {
                 cluster1Found = true;
@@ -135,13 +136,13 @@ public class DBSCANClustererTest {
                 cluster3Found = true;
             }
         }
-        Assertions.assertTrue(cluster1Found);
-        Assertions.assertTrue(cluster2Found);
-        Assertions.assertTrue(cluster3Found);
+        assertTrue(cluster1Found);
+        assertTrue(cluster2Found);
+        assertTrue(cluster3Found);
     }
 
     @Test
-    public void testSingleLink() {
+    void testSingleLink() {
         final DoublePoint[] points = {
                 new DoublePoint(new int[] {10, 10}), // A
                 new DoublePoint(new int[] {12, 9}),
@@ -159,41 +160,41 @@ public class DBSCANClustererTest {
         final DBSCANClusterer<DoublePoint> clusterer = new DBSCANClusterer<DoublePoint>(3, 3);
         List<Cluster<DoublePoint>> clusters = clusterer.cluster(Arrays.asList(points));
 
-        Assertions.assertEquals(1, clusters.size());
+        assertEquals(1, clusters.size());
 
         final List<DoublePoint> clusterOne =
                 Arrays.asList(points[0], points[1], points[2], points[3], points[4], points[5], points[6], points[7]);
-        Assertions.assertTrue(clusters.get(0).getPoints().containsAll(clusterOne));
+        assertTrue(clusters.get(0).getPoints().containsAll(clusterOne));
     }
 
     @Test
-    public void testGetEps() {
+    void testGetEps() {
         final DBSCANClusterer<DoublePoint> transformer = new DBSCANClusterer<DoublePoint>(2.0, 5);
-        Assertions.assertEquals(2.0, transformer.getEps(), 0.0);
+        assertEquals(2.0, transformer.getEps(), 0.0);
     }
 
     @Test
-    public void testGetMinPts() {
+    void testGetMinPts() {
         final DBSCANClusterer<DoublePoint> transformer = new DBSCANClusterer<DoublePoint>(2.0, 5);
-        Assertions.assertEquals(5, transformer.getMinPts());
+        assertEquals(5, transformer.getMinPts());
     }
 
     @Test
-    public void testNegativeEps() {
+    void testNegativeEps() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new DBSCANClusterer<DoublePoint>(-2.0, 5);
         });
     }
 
     @Test
-    public void testNegativeMinPts() {
+    void testNegativeMinPts() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new DBSCANClusterer<DoublePoint>(2.0, -5);
         });
     }
 
     @Test
-    public void testNullDataset() {
+    void testNullDataset() {
         assertThrows(NullArgumentException.class, () -> {
             DBSCANClusterer<DoublePoint> clusterer = new DBSCANClusterer<DoublePoint>(2.0, 5);
             clusterer.cluster(null);

@@ -67,7 +67,7 @@ public class MedianTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesSingleton() {
+    void testAllTechniquesSingleton() {
         double[] singletonArray = new double[] { 1d };
         for (EstimationType e : EstimationType.values()) {
             UnivariateStatistic percentile = getTestMedian(e);
@@ -78,7 +78,7 @@ public class MedianTest extends UnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testAllTechniquesMedian() {
+    void testAllTechniquesMedian() {
         double[] d = new double[] { 1, 3, 2, 4 };
         testAssertMappedValues(d, new Object[][] { { LEGACY, 2.5d },
             { R_1, 2d }, { R_2, 2.5d }, { R_3, 2d }, { R_4, 2d }, { R_5, 2.5 },

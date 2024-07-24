@@ -22,8 +22,10 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for GumbelDistribution.
@@ -31,18 +33,18 @@ import org.junit.jupiter.api.Test;
 public class GumbelDistributionTest extends RealDistributionAbstractTest {
 
     @Test
-    public void testParameters() {
+    void testParameters() {
         GumbelDistribution d = makeDistribution();
-        Assertions.assertEquals(0.5, d.getLocation(), Precision.EPSILON);
-        Assertions.assertEquals(2, d.getScale(), Precision.EPSILON);
+        assertEquals(0.5, d.getLocation(), Precision.EPSILON);
+        assertEquals(2, d.getScale(), Precision.EPSILON);
     }
 
     @Test
-    public void testSupport() {
+    void testSupport() {
         GumbelDistribution d = makeDistribution();
-        Assertions.assertTrue(Double.isInfinite(d.getSupportLowerBound()));
-        Assertions.assertTrue(Double.isInfinite(d.getSupportUpperBound()));
-        Assertions.assertTrue(d.isSupportConnected());
+        assertTrue(Double.isInfinite(d.getSupportLowerBound()));
+        assertTrue(Double.isInfinite(d.getSupportUpperBound()));
+        assertTrue(d.isSupportConnected());
     }
 
     @Override

@@ -19,22 +19,23 @@ package org.hipparchus.special.elliptic.jacobi;
 import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class JacobiEllipticFieldComplexTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class JacobiEllipticFieldComplexTest {
 
     @Test
-    public void testComplex() throws IOException {
+    void testComplex() throws IOException {
         final DfpField field = new DfpField(30);
         final FieldComplex<Dfp> m = new FieldComplex<>(field.newDfp("0.3"), field.newDfp("1.0"));
         FieldJacobiElliptic<FieldComplex<Dfp>> je = JacobiEllipticBuilder.build(m);
         final FieldComplex<Dfp> z = new FieldComplex<>(field.newDfp("5.2"), field.newDfp("-2.5"));
         final FieldCopolarC<FieldComplex<Dfp>> valuesC = je.valuesC(z);
-        Assertions.assertEquals(-0.24609405083573348938, valuesC.sc().getRealPart().getReal(),      1.0e-15);
-        Assertions.assertEquals( 0.74202229271111558523, valuesC.sc().getImaginaryPart().getReal(), 1.0e-15);
+        assertEquals(-0.24609405083573348938, valuesC.sc().getRealPart().getReal(),      1.0e-15);
+        assertEquals( 0.74202229271111558523, valuesC.sc().getImaginaryPart().getReal(), 1.0e-15);
     }
 
 }

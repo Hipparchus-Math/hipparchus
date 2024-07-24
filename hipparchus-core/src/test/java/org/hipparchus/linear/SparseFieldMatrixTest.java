@@ -31,8 +31,13 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the {@link SparseFieldMatrix} class.
@@ -126,40 +131,40 @@ public class SparseFieldMatrixTest {
 
     /** test dimensions */
     @Test
-    public void testDimensions() {
+    void testDimensions() {
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         SparseFieldMatrix<Fraction> m2 = createSparseMatrix(testData2);
-        Assertions.assertEquals(3, m.getRowDimension(), "testData row dimension");
-        Assertions.assertEquals(3, m.getColumnDimension(), "testData column dimension");
-        Assertions.assertTrue(m.isSquare(), "testData is square");
-        Assertions.assertEquals(2, m2.getRowDimension(), "testData2 row dimension");
-        Assertions.assertEquals(3, m2.getColumnDimension(), "testData2 column dimension");
-        Assertions.assertFalse(m2.isSquare(), "testData2 is not square");
+        assertEquals(3, m.getRowDimension(), "testData row dimension");
+        assertEquals(3, m.getColumnDimension(), "testData column dimension");
+        assertTrue(m.isSquare(), "testData is square");
+        assertEquals(2, m2.getRowDimension(), "testData2 row dimension");
+        assertEquals(3, m2.getColumnDimension(), "testData2 column dimension");
+        assertFalse(m2.isSquare(), "testData2 is not square");
     }
 
     /** test copy functions */
     @Test
-    public void testCopyFunctions() {
+    void testCopyFunctions() {
         SparseFieldMatrix<Fraction> m1 = createSparseMatrix(testData);
         FieldMatrix<Fraction> m2 = m1.copy();
-        Assertions.assertEquals(m1.getClass(), m2.getClass());
-        Assertions.assertEquals((m2), m1);
+        assertEquals(m1.getClass(), m2.getClass());
+        assertEquals((m2), m1);
         SparseFieldMatrix<Fraction> m3 = createSparseMatrix(testData);
         FieldMatrix<Fraction> m4 = m3.copy();
-        Assertions.assertEquals(m3.getClass(), m4.getClass());
-        Assertions.assertEquals((m4), m3);
+        assertEquals(m3.getClass(), m4.getClass());
+        assertEquals((m4), m3);
     }
 
     /** test add */
     @Test
-    public void testAdd() {
+    void testAdd() {
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         SparseFieldMatrix<Fraction> mInv = createSparseMatrix(testDataInv);
         SparseFieldMatrix<Fraction> mDataPlusInv = createSparseMatrix(testDataPlusInv);
         FieldMatrix<Fraction> mPlusMInv = m.add(mInv);
         for (int row = 0; row < m.getRowDimension(); row++) {
             for (int col = 0; col < m.getColumnDimension(); col++) {
-                Assertions.assertEquals(mDataPlusInv.getEntry(row, col).doubleValue(), mPlusMInv.getEntry(row, col).doubleValue(),
+                assertEquals(mDataPlusInv.getEntry(row, col).doubleValue(), mPlusMInv.getEntry(row, col).doubleValue(),
                     entryTolerance,
                     "sum entry entry");
             }
@@ -168,12 +173,12 @@ public class SparseFieldMatrixTest {
 
     /** test add failure */
     @Test
-    public void testAddFail() {
+    void testAddFail() {
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         SparseFieldMatrix<Fraction> m2 = createSparseMatrix(testData2);
         try {
             m.add(m2);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -182,14 +187,14 @@ public class SparseFieldMatrixTest {
 
     /** test m-n = m + -n */
     @Test
-    public void testPlusMinus() {
+    void testPlusMinus() {
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         SparseFieldMatrix<Fraction> n = createSparseMatrix(testDataInv);
-        assertClose("m-n = m + -n", m.subtract(n),
-            n.scalarMultiply(new Fraction(-1)).add(m), entryTolerance);
+        customAssertClose("m-n = m + -n", m.subtract(n),
+                          n.scalarMultiply(new Fraction(-1)).add(m), entryTolerance);
         try {
             m.subtract(createSparseMatrix(testData2));
-            Assertions.fail("Expecting illegalArgumentException");
+            fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -197,26 +202,26 @@ public class SparseFieldMatrixTest {
 
     /** test multiply */
     @Test
-    public void testMultiply() {
+    void testMultiply() {
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         SparseFieldMatrix<Fraction> mInv = createSparseMatrix(testDataInv);
         SparseFieldMatrix<Fraction> identity = createSparseMatrix(id);
         SparseFieldMatrix<Fraction> m2 = createSparseMatrix(testData2);
-        assertClose("inverse multiply", m.multiply(mInv), identity,
-                entryTolerance);
-        assertClose("inverse multiply", m.multiply(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testDataInv)), identity,
-                    entryTolerance);
-        assertClose("inverse multiply", mInv.multiply(m), identity,
-                entryTolerance);
-        assertClose("identity multiply", m.multiply(identity), m,
-                entryTolerance);
-        assertClose("identity multiply", identity.multiply(mInv), mInv,
-                entryTolerance);
-        assertClose("identity multiply", m2.multiply(identity), m2,
-                entryTolerance);
+        customAssertClose("inverse multiply", m.multiply(mInv), identity,
+                          entryTolerance);
+        customAssertClose("inverse multiply", m.multiply(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testDataInv)), identity,
+                          entryTolerance);
+        customAssertClose("inverse multiply", mInv.multiply(m), identity,
+                          entryTolerance);
+        customAssertClose("identity multiply", m.multiply(identity), m,
+                          entryTolerance);
+        customAssertClose("identity multiply", identity.multiply(mInv), mInv,
+                          entryTolerance);
+        customAssertClose("identity multiply", m2.multiply(identity), m2,
+                          entryTolerance);
         try {
             m.multiply(createSparseMatrix(bigSingular));
-            Assertions.fail("Expecting illegalArgumentException");
+            fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -229,15 +234,15 @@ public class SparseFieldMatrixTest {
     private Fraction[][] d5 = new Fraction[][] { { new Fraction(30) }, { new Fraction(70) } };
 
     @Test
-    public void testMultiply2() {
+    void testMultiply2() {
         FieldMatrix<Fraction> m3 = createSparseMatrix(d3);
         FieldMatrix<Fraction> m4 = createSparseMatrix(d4);
         FieldMatrix<Fraction> m5 = createSparseMatrix(d5);
-        assertClose("m3*m4=m5", m3.multiply(m4), m5, entryTolerance);
+        customAssertClose("m3*m4=m5", m3.multiply(m4), m5, entryTolerance);
     }
 
     @Test
-    public void testMultiplyTransposedSparseFieldMatrix() {
+    void testMultiplyTransposedSparseFieldMatrix() {
         RandomGenerator randomGenerator = new Well1024a(0x5f31d5645cf821efl);
         final FieldMatrixChangingVisitor<Binary64> randomSetter = new DefaultFieldMatrixChangingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public Binary64 visit(final int row, final int column, final Binary64 value) {
@@ -246,7 +251,7 @@ public class SparseFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assertions.assertEquals(0.0, value.doubleValue(), 3.0e-14);
+                assertEquals(0.0, value.doubleValue(), 3.0e-14);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -263,20 +268,20 @@ public class SparseFieldMatrixTest {
     }
 
     @Test
-    public void testMultiplyTransposedWrongDimensions() {
+    void testMultiplyTransposedWrongDimensions() {
         try {
             new SparseFieldMatrix<>(Binary64Field.getInstance(), 2, 3).
             multiplyTransposed(new SparseFieldMatrix<>(Binary64Field.getInstance(), 3, 2));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     @Test
-    public void testTransposeMultiplySparseFieldMatrix() {
+    void testTransposeMultiplySparseFieldMatrix() {
         RandomGenerator randomGenerator = new Well1024a(0x5f31d5645cf821efl);
         final FieldMatrixChangingVisitor<Binary64> randomSetter = new DefaultFieldMatrixChangingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public Binary64 visit(final int row, final int column, final Binary64 value) {
@@ -285,7 +290,7 @@ public class SparseFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assertions.assertEquals(0.0, value.doubleValue(), 3.0e-14);
+                assertEquals(0.0, value.doubleValue(), 3.0e-14);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -302,27 +307,27 @@ public class SparseFieldMatrixTest {
     }
 
     @Test
-    public void testTransposeMultiplyWrongDimensions() {
+    void testTransposeMultiplyWrongDimensions() {
         try {
             new SparseFieldMatrix<>(Binary64Field.getInstance(), 2, 3).
             transposeMultiply(new SparseFieldMatrix<>(Binary64Field.getInstance(), 3, 2));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assertions.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
+            assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
     /** test trace */
     @Test
-    public void testTrace() {
+    void testTrace() {
         FieldMatrix<Fraction> m = createSparseMatrix(id);
-        Assertions.assertEquals(3d, m.getTrace().doubleValue(), entryTolerance, "identity trace");
+        assertEquals(3d, m.getTrace().doubleValue(), entryTolerance, "identity trace");
         m = createSparseMatrix(testData2);
         try {
             m.getTrace();
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -330,24 +335,24 @@ public class SparseFieldMatrixTest {
 
     /** test sclarAdd */
     @Test
-    public void testScalarAdd() {
+    void testScalarAdd() {
         FieldMatrix<Fraction> m = createSparseMatrix(testData);
-        assertClose("scalar add", createSparseMatrix(testDataPlus2),
-            m.scalarAdd(new Fraction(2)), entryTolerance);
+        customAssertClose("scalar add", createSparseMatrix(testDataPlus2),
+                          m.scalarAdd(new Fraction(2)), entryTolerance);
     }
 
     /** test operate */
     @Test
-    public void testOperate() {
+    void testOperate() {
         FieldMatrix<Fraction> m = createSparseMatrix(id);
-        assertClose("identity operate", testVector, m.operate(testVector),
-                entryTolerance);
-        assertClose("identity operate", testVector, m.operate(
+        customAssertClose("identity operate", testVector, m.operate(testVector),
+                          entryTolerance);
+        customAssertClose("identity operate", testVector, m.operate(
                 new ArrayFieldVector<Fraction>(testVector)).toArray(), entryTolerance);
         m = createSparseMatrix(bigSingular);
         try {
             m.operate(testVector);
-            Assertions.fail("Expecting illegalArgumentException");
+            fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -355,97 +360,97 @@ public class SparseFieldMatrixTest {
 
     /** test issue MATH-209 */
     @Test
-    public void testMath209() {
+    void testMath209() {
         FieldMatrix<Fraction> a = createSparseMatrix(new Fraction[][] {
                 { new Fraction(1), new Fraction(2) }, { new Fraction(3), new Fraction(4) }, { new Fraction(5), new Fraction(6) } });
         Fraction[] b = a.operate(new Fraction[] { new Fraction(1), new Fraction(1) });
-        Assertions.assertEquals(a.getRowDimension(), b.length);
-        Assertions.assertEquals(3.0, b[0].doubleValue(), 1.0e-12);
-        Assertions.assertEquals(7.0, b[1].doubleValue(), 1.0e-12);
-        Assertions.assertEquals(11.0, b[2].doubleValue(), 1.0e-12);
+        assertEquals(a.getRowDimension(), b.length);
+        assertEquals(3.0, b[0].doubleValue(), 1.0e-12);
+        assertEquals(7.0, b[1].doubleValue(), 1.0e-12);
+        assertEquals(11.0, b[2].doubleValue(), 1.0e-12);
     }
 
     /** test transpose */
     @Test
-    public void testTranspose() {
+    void testTranspose() {
         FieldMatrix<Fraction> m = createSparseMatrix(testData);
         FieldMatrix<Fraction> mIT = new FieldLUDecomposition<Fraction>(m).getSolver().getInverse().transpose();
         FieldMatrix<Fraction> mTI = new FieldLUDecomposition<Fraction>(m.transpose()).getSolver().getInverse();
-        assertClose("inverse-transpose", mIT, mTI, normTolerance);
+        customAssertClose("inverse-transpose", mIT, mTI, normTolerance);
         m = createSparseMatrix(testData2);
         FieldMatrix<Fraction> mt = createSparseMatrix(testData2T);
-        assertClose("transpose",mt,m.transpose(),normTolerance);
+        customAssertClose("transpose", mt, m.transpose(), normTolerance);
     }
 
     /** test preMultiply by vector */
     @Test
-    public void testPremultiplyVector() {
+    void testPremultiplyVector() {
         FieldMatrix<Fraction> m = createSparseMatrix(testData);
-        assertClose("premultiply", m.preMultiply(testVector), preMultTest,
-            normTolerance);
-        assertClose("premultiply", m.preMultiply(
+        customAssertClose("premultiply", m.preMultiply(testVector), preMultTest,
+                          normTolerance);
+        customAssertClose("premultiply", m.preMultiply(
             new ArrayFieldVector<Fraction>(testVector).toArray()), preMultTest, normTolerance);
         m = createSparseMatrix(bigSingular);
         try {
             m.preMultiply(testVector);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
 
     @Test
-    public void testPremultiply() {
+    void testPremultiply() {
         FieldMatrix<Fraction> m3 = createSparseMatrix(d3);
         FieldMatrix<Fraction> m4 = createSparseMatrix(d4);
         FieldMatrix<Fraction> m5 = createSparseMatrix(d5);
-        assertClose("m3*m4=m5", m4.preMultiply(m3), m5, entryTolerance);
+        customAssertClose("m3*m4=m5", m4.preMultiply(m3), m5, entryTolerance);
 
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         SparseFieldMatrix<Fraction> mInv = createSparseMatrix(testDataInv);
         SparseFieldMatrix<Fraction> identity = createSparseMatrix(id);
-        assertClose("inverse multiply", m.preMultiply(mInv), identity,
-                entryTolerance);
-        assertClose("inverse multiply", mInv.preMultiply(m), identity,
-                entryTolerance);
-        assertClose("identity multiply", m.preMultiply(identity), m,
-                entryTolerance);
-        assertClose("identity multiply", identity.preMultiply(mInv), mInv,
-                entryTolerance);
+        customAssertClose("inverse multiply", m.preMultiply(mInv), identity,
+                          entryTolerance);
+        customAssertClose("inverse multiply", mInv.preMultiply(m), identity,
+                          entryTolerance);
+        customAssertClose("identity multiply", m.preMultiply(identity), m,
+                          entryTolerance);
+        customAssertClose("identity multiply", identity.preMultiply(mInv), mInv,
+                          entryTolerance);
         try {
             m.preMultiply(createSparseMatrix(bigSingular));
-            Assertions.fail("Expecting illegalArgumentException");
+            fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
 
     @Test
-    public void testGetVectors() {
+    void testGetVectors() {
         FieldMatrix<Fraction> m = createSparseMatrix(testData);
-        assertClose("get row", m.getRow(0), testDataRow1, entryTolerance);
-        assertClose("get col", m.getColumn(2), testDataCol3, entryTolerance);
+        customAssertClose("get row", m.getRow(0), testDataRow1, entryTolerance);
+        customAssertClose("get col", m.getColumn(2), testDataCol3, entryTolerance);
         try {
             m.getRow(10);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
 
     @Test
-    public void testGetEntry() {
+    void testGetEntry() {
         FieldMatrix<Fraction> m = createSparseMatrix(testData);
-        Assertions.assertEquals(2d, m.getEntry(0, 1).doubleValue(), entryTolerance, "get entry");
+        assertEquals(2d, m.getEntry(0, 1).doubleValue(), entryTolerance, "get entry");
         try {
             m.getEntry(10, 4);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -453,7 +458,7 @@ public class SparseFieldMatrixTest {
 
     /** test examples in user guide */
     @Test
-    public void testExamples() {
+    void testExamples() {
         // Create a real matrix with two rows and three columns
         Fraction[][] matrixData = { { new Fraction(1), new Fraction(2), new Fraction(3) }, { new Fraction(2), new Fraction(5), new Fraction(3) } };
         FieldMatrix<Fraction> m = createSparseMatrix(matrixData);
@@ -462,12 +467,12 @@ public class SparseFieldMatrixTest {
         FieldMatrix<Fraction> n = createSparseMatrix(matrixData2);
         // Now multiply m by n
         FieldMatrix<Fraction> p = m.multiply(n);
-        Assertions.assertEquals(2, p.getRowDimension());
-        Assertions.assertEquals(2, p.getColumnDimension());
+        assertEquals(2, p.getRowDimension());
+        assertEquals(2, p.getColumnDimension());
         // Invert p
         FieldMatrix<Fraction> pInverse = new FieldLUDecomposition<Fraction>(p).getSolver().getInverse();
-        Assertions.assertEquals(2, pInverse.getRowDimension());
-        Assertions.assertEquals(2, pInverse.getColumnDimension());
+        assertEquals(2, pInverse.getRowDimension());
+        assertEquals(2, pInverse.getColumnDimension());
 
         // Solve example
         Fraction[][] coefficientsData = { { new Fraction(2), new Fraction(3), new Fraction(-2) }, { new Fraction(-1), new Fraction(7), new Fraction(6) },
@@ -478,18 +483,18 @@ public class SparseFieldMatrixTest {
         solution = new FieldLUDecomposition<Fraction>(coefficients)
             .getSolver()
             .solve(new ArrayFieldVector<Fraction>(constants, false)).toArray();
-        Assertions.assertEquals((new Fraction(2).multiply((solution[0])).add(new Fraction(3).multiply(solution[1])).subtract(new Fraction(2).multiply(solution[2]))).doubleValue(),
+        assertEquals((new Fraction(2).multiply((solution[0])).add(new Fraction(3).multiply(solution[1])).subtract(new Fraction(2).multiply(solution[2]))).doubleValue(),
                 constants[0].doubleValue(), 1E-12);
-        Assertions.assertEquals(((new Fraction(-1).multiply(solution[0])).add(new Fraction(7).multiply(solution[1])).add(new Fraction(6).multiply(solution[2]))).doubleValue(),
+        assertEquals(((new Fraction(-1).multiply(solution[0])).add(new Fraction(7).multiply(solution[1])).add(new Fraction(6).multiply(solution[2]))).doubleValue(),
                 constants[1].doubleValue(), 1E-12);
-        Assertions.assertEquals(((new Fraction(4).multiply(solution[0])).subtract(new Fraction(3).multiply( solution[1])).subtract(new Fraction(5).multiply(solution[2]))).doubleValue(),
+        assertEquals(((new Fraction(4).multiply(solution[0])).subtract(new Fraction(3).multiply( solution[1])).subtract(new Fraction(5).multiply(solution[2]))).doubleValue(),
                 constants[2].doubleValue(), 1E-12);
 
     }
 
     // test submatrix accessors
     @Test
-    public void testSubMatrix() {
+    void testSubMatrix() {
         FieldMatrix<Fraction> m = createSparseMatrix(subTestData);
         FieldMatrix<Fraction> mRows23Cols00 = createSparseMatrix(subRows23Cols00);
         FieldMatrix<Fraction> mRows00Cols33 = createSparseMatrix(subRows00Cols33);
@@ -499,145 +504,145 @@ public class SparseFieldMatrixTest {
         FieldMatrix<Fraction> mRows03Cols123 = createSparseMatrix(subRows03Cols123);
         FieldMatrix<Fraction> mRows20Cols123 = createSparseMatrix(subRows20Cols123);
         FieldMatrix<Fraction> mRows31Cols31 = createSparseMatrix(subRows31Cols31);
-        Assertions.assertEquals(mRows23Cols00, m.getSubMatrix(2, 3, 0, 0), "Rows23Cols00");
-        Assertions.assertEquals(mRows00Cols33, m.getSubMatrix(0, 0, 3, 3), "Rows00Cols33");
-        Assertions.assertEquals(mRows01Cols23, m.getSubMatrix(0, 1, 2, 3), "Rows01Cols23");
-        Assertions.assertEquals(mRows02Cols13,
+        assertEquals(mRows23Cols00, m.getSubMatrix(2, 3, 0, 0), "Rows23Cols00");
+        assertEquals(mRows00Cols33, m.getSubMatrix(0, 0, 3, 3), "Rows00Cols33");
+        assertEquals(mRows01Cols23, m.getSubMatrix(0, 1, 2, 3), "Rows01Cols23");
+        assertEquals(mRows02Cols13,
             m.getSubMatrix(new int[] { 0, 2 }, new int[] { 1, 3 }),
             "Rows02Cols13");
-        Assertions.assertEquals(mRows03Cols12,
+        assertEquals(mRows03Cols12,
             m.getSubMatrix(new int[] { 0, 3 }, new int[] { 1, 2 }),
             "Rows03Cols12");
-        Assertions.assertEquals(mRows03Cols123,
+        assertEquals(mRows03Cols123,
             m.getSubMatrix(new int[] { 0, 3 }, new int[] { 1, 2, 3 }),
             "Rows03Cols123");
-        Assertions.assertEquals(mRows20Cols123,
+        assertEquals(mRows20Cols123,
             m.getSubMatrix(new int[] { 2, 0 }, new int[] { 1, 2, 3 }),
             "Rows20Cols123");
-        Assertions.assertEquals(mRows31Cols31,
+        assertEquals(mRows31Cols31,
             m.getSubMatrix(new int[] { 3, 1 }, new int[] { 3, 1 }),
             "Rows31Cols31");
-        Assertions.assertEquals(mRows31Cols31,
+        assertEquals(mRows31Cols31,
             m.getSubMatrix(new int[] { 3, 1 }, new int[] { 3, 1 }),
             "Rows31Cols31");
 
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(-1, 1, 2, 2);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(1, 0, 2, 2);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(new int[] {}, new int[] { 0 });
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(new int[] { 0 }, new int[] { 4 });
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testGetRowMatrix() {
+    void testGetRowMatrix() {
         FieldMatrix<Fraction> m = createSparseMatrix(subTestData);
         FieldMatrix<Fraction> mRow0 = createSparseMatrix(subRow0);
         FieldMatrix<Fraction> mRow3 = createSparseMatrix(subRow3);
-        Assertions.assertEquals(mRow0, m.getRowMatrix(0), "Row0");
-        Assertions.assertEquals(mRow3, m.getRowMatrix(3), "Row3");
+        assertEquals(mRow0, m.getRowMatrix(0), "Row0");
+        assertEquals(mRow3, m.getRowMatrix(3), "Row3");
         try {
             m.getRowMatrix(-1);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testGetColumnMatrix() {
+    void testGetColumnMatrix() {
         FieldMatrix<Fraction> m = createSparseMatrix(subTestData);
         FieldMatrix<Fraction> mColumn1 = createSparseMatrix(subColumn1);
         FieldMatrix<Fraction> mColumn3 = createSparseMatrix(subColumn3);
-        Assertions.assertEquals(mColumn1, m.getColumnMatrix(1), "Column1");
-        Assertions.assertEquals(mColumn3, m.getColumnMatrix(3), "Column3");
+        assertEquals(mColumn1, m.getColumnMatrix(1), "Column1");
+        assertEquals(mColumn3, m.getColumnMatrix(3), "Column3");
         try {
             m.getColumnMatrix(-1);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testGetRowVector() {
+    void testGetRowVector() {
         FieldMatrix<Fraction> m = createSparseMatrix(subTestData);
         FieldVector<Fraction> mRow0 = new ArrayFieldVector<Fraction>(subRow0[0]);
         FieldVector<Fraction> mRow3 = new ArrayFieldVector<Fraction>(subRow3[0]);
-        Assertions.assertEquals(mRow0, m.getRowVector(0), "Row0");
-        Assertions.assertEquals(mRow3, m.getRowVector(3), "Row3");
+        assertEquals(mRow0, m.getRowVector(0), "Row0");
+        assertEquals(mRow3, m.getRowVector(3), "Row3");
         try {
             m.getRowVector(-1);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
 
     @Test
-    public void testGetColumnVector() {
+    void testGetColumnVector() {
         FieldMatrix<Fraction> m = createSparseMatrix(subTestData);
         FieldVector<Fraction> mColumn1 = columnToVector(subColumn1);
         FieldVector<Fraction> mColumn3 = columnToVector(subColumn3);
-        Assertions.assertEquals(mColumn1, m.getColumnVector(1), "Column1");
-        Assertions.assertEquals(mColumn3, m.getColumnVector(3), "Column3");
+        assertEquals(mColumn1, m.getColumnVector(1), "Column1");
+        assertEquals(mColumn3, m.getColumnVector(3), "Column3");
         try {
             m.getColumnVector(-1);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assertions.fail("Expecting MathIllegalArgumentException");
+            fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -652,17 +657,17 @@ public class SparseFieldMatrixTest {
     }
 
     @Test
-    public void testEqualsAndHashCode() {
+    void testEqualsAndHashCode() {
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         SparseFieldMatrix<Fraction> m1 = (SparseFieldMatrix<Fraction>) m.copy();
         SparseFieldMatrix<Fraction> mt = (SparseFieldMatrix<Fraction>) m.transpose();
-        Assertions.assertTrue(m.hashCode() != mt.hashCode());
-        Assertions.assertEquals(m.hashCode(), m1.hashCode());
-        Assertions.assertEquals(m, m);
-        Assertions.assertEquals(m, m1);
-        Assertions.assertNotEquals(null, m);
-        Assertions.assertNotEquals(m, mt);
-        Assertions.assertNotEquals(m, createSparseMatrix(bigSingular));
+        assertTrue(m.hashCode() != mt.hashCode());
+        assertEquals(m.hashCode(), m1.hashCode());
+        assertEquals(m, m);
+        assertEquals(m, m1);
+        assertNotEquals(null, m);
+        assertNotEquals(m, mt);
+        assertNotEquals(m, createSparseMatrix(bigSingular));
     }
 
     /* Disable for now
@@ -677,22 +682,22 @@ public class SparseFieldMatrixTest {
     */
 
     @Test
-    public void testSetSubMatrix() {
+    void testSetSubMatrix() {
         SparseFieldMatrix<Fraction> m = createSparseMatrix(testData);
         m.setSubMatrix(detData2, 1, 1);
         FieldMatrix<Fraction> expected = createSparseMatrix(new Fraction[][] {
                 { new Fraction(1), new Fraction(2), new Fraction(3) }, { new Fraction(2), new Fraction(1), new Fraction(3) }, { new Fraction(1), new Fraction(2), new Fraction(4) } });
-        Assertions.assertEquals(expected, m);
+        assertEquals(expected, m);
 
         m.setSubMatrix(detData2, 0, 0);
         expected = createSparseMatrix(new Fraction[][] {
                 { new Fraction(1), new Fraction(3), new Fraction(3) }, { new Fraction(2), new Fraction(4), new Fraction(3) }, { new Fraction(1), new Fraction(2), new Fraction(4) } });
-        Assertions.assertEquals(expected, m);
+        assertEquals(expected, m);
 
         m.setSubMatrix(testDataPlus2, 0, 0);
         expected = createSparseMatrix(new Fraction[][] {
                 { new Fraction(3), new Fraction(4), new Fraction(5) }, { new Fraction(4), new Fraction(7), new Fraction(5) }, { new Fraction(3), new Fraction(2), new Fraction(10) } });
-        Assertions.assertEquals(expected, m);
+        assertEquals(expected, m);
 
         // javadoc example
         SparseFieldMatrix<Fraction> matrix =
@@ -701,25 +706,25 @@ public class SparseFieldMatrixTest {
         matrix.setSubMatrix(new Fraction[][] { { new Fraction(3), new Fraction(4) }, { new Fraction(5), new Fraction(6) } }, 1, 1);
         expected = createSparseMatrix(new Fraction[][] {
                 { new Fraction(1), new Fraction(2), new Fraction(3), new Fraction(4) }, { new Fraction(5), new Fraction(3), new Fraction(4), new Fraction(8) }, { new Fraction(9), new Fraction(5), new Fraction(6), new Fraction(2) } });
-        Assertions.assertEquals(expected, matrix);
+        assertEquals(expected, matrix);
 
         // dimension overflow
         try {
             m.setSubMatrix(testData, 1, 1);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData, -1, 1);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData, 1, -1);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -727,13 +732,13 @@ public class SparseFieldMatrixTest {
         // null
         try {
             m.setSubMatrix(null, 1, 1);
-            Assertions.fail("expecting NullArgumentException");
+            fail("expecting NullArgumentException");
         } catch (NullArgumentException e) {
             // expected
         }
         try {
             new SparseFieldMatrix<Fraction>(field, 0, 0);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -741,7 +746,7 @@ public class SparseFieldMatrixTest {
         // ragged
         try {
             m.setSubMatrix(new Fraction[][] { { new Fraction(1) }, { new Fraction(2), new Fraction(3) } }, 0, 0);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -749,7 +754,7 @@ public class SparseFieldMatrixTest {
         // empty
         try {
             m.setSubMatrix(new Fraction[][] { {} }, 0, 0);
-            Assertions.fail("expecting MathIllegalArgumentException");
+            fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -758,24 +763,24 @@ public class SparseFieldMatrixTest {
     // --------------- -----------------Protected methods
 
     /** verifies that two matrices are close (1-norm) */
-    protected void assertClose(String msg, FieldMatrix<Fraction> m, FieldMatrix<Fraction> n,
-            double tolerance) {
+    protected void customAssertClose(String msg, FieldMatrix<Fraction> m, FieldMatrix<Fraction> n,
+                                     double tolerance) {
         for(int i=0; i < m.getRowDimension(); i++){
             for(int j=0; j < m.getColumnDimension(); j++){
-                Assertions.assertEquals(m.getEntry(i,j).doubleValue(), n.getEntry(i,j).doubleValue(), tolerance, msg);
+                assertEquals(m.getEntry(i,j).doubleValue(), n.getEntry(i,j).doubleValue(), tolerance, msg);
             }
 
         }
     }
 
     /** verifies that two vectors are close (sup norm) */
-    protected void assertClose(String msg, Fraction[] m, Fraction[] n,
-            double tolerance) {
+    protected void customAssertClose(String msg, Fraction[] m, Fraction[] n,
+                                     double tolerance) {
         if (m.length != n.length) {
-            Assertions.fail("vectors not same length");
+            fail("vectors not same length");
         }
         for (int i = 0; i < m.length; i++) {
-            Assertions.assertEquals(m[i].doubleValue(), n[i].doubleValue(),
+            assertEquals(m[i].doubleValue(), n[i].doubleValue(),
                     tolerance,
                     msg + " " + i + " elements differ");
         }

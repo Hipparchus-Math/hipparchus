@@ -42,7 +42,7 @@ public class FirstMomentTest extends StorelessUnivariateStatisticAbstractTest {
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         final FirstMoment mean = new FirstMoment();
 
         mean.clear();

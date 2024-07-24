@@ -24,46 +24,47 @@ package org.hipparchus.analysis.integration.gauss;
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Pair;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for {@link GaussIntegrator} class.
  *
  */
-public class FieldGaussIntegratorTest {
+class FieldGaussIntegratorTest {
     @Test
-    public void testGetWeights() {
+    void testGetWeights() {
         final double[] points = { 0, 1.2, 3.4 };
         final double[] weights = { 9.8, 7.6, 5.4 };
 
         final FieldGaussIntegrator<Binary64> integrator
             = new FieldGaussIntegrator<>(new Pair<>(toBinary64(points), toBinary64(weights)));
 
-        Assertions.assertEquals(weights.length, integrator.getNumberOfPoints());
+        assertEquals(weights.length, integrator.getNumberOfPoints());
 
         for (int i = 0; i < integrator.getNumberOfPoints(); i++) {
-            Assertions.assertEquals(weights[i], integrator.getWeight(i).getReal(), 0d);
+            assertEquals(weights[i], integrator.getWeight(i).getReal(), 0d);
         }
     }
 
     @Test
-    public void testGetPoints() {
+    void testGetPoints() {
         final double[] points = { 0, 1.2, 3.4 };
         final double[] weights = { 9.8, 7.6, 5.4 };
 
         final FieldGaussIntegrator<Binary64> integrator
         = new FieldGaussIntegrator<>(new Pair<>(toBinary64(points), toBinary64(weights)));
 
-        Assertions.assertEquals(points.length, integrator.getNumberOfPoints());
+        assertEquals(points.length, integrator.getNumberOfPoints());
 
         for (int i = 0; i < integrator.getNumberOfPoints(); i++) {
-            Assertions.assertEquals(points[i], integrator.getPoint(i).getReal(), 0d);
+            assertEquals(points[i], integrator.getPoint(i).getReal(), 0d);
         }
     }
 
     @Test
-    public void testIntegrate() {
+    void testIntegrate() {
         final double[] points = { 0, 1, 2, 3, 4, 5 };
         final double[] weights = { 1, 1, 1, 1, 1, 1 };
 
@@ -74,7 +75,7 @@ public class FieldGaussIntegratorTest {
         final CalculusFieldUnivariateFunction<Binary64> c = x -> val;
 
         final Binary64 s = integrator.integrate(c);
-        Assertions.assertEquals(val.multiply(points.length).getReal(), s.getReal(), 0d);
+        assertEquals(val.multiply(points.length).getReal(), s.getReal(), 0d);
     }
 
     private Binary64[] toBinary64(final double[] a) {

@@ -17,13 +17,14 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ADMMQPOptionTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class ADMMQPOptionTest {
 
     @Test
-    public void testSettersDouble() {
+    void testSettersDouble() {
         // GIVEN
         final ADMMQPOption option = new ADMMQPOption();
         // WHEN
@@ -37,16 +38,16 @@ public class ADMMQPOptionTest {
         option.setSigma(expectedValue);
         // THEN
         final double tolerance = 0.;
-        Assertions.assertEquals(expectedValue, option.getAlpha(), tolerance);
-        Assertions.assertEquals(expectedValue, option.getEps(), tolerance);
-        Assertions.assertEquals(expectedValue, option.getEpsInfeasible(), tolerance);
-        Assertions.assertEquals(expectedValue, option.getRhoMax(), tolerance);
-        Assertions.assertEquals(expectedValue, option.getRhoMin(), tolerance);
-        Assertions.assertEquals(expectedValue, option.getSigma(), tolerance);
+        assertEquals(expectedValue, option.getAlpha(), tolerance);
+        assertEquals(expectedValue, option.getEps(), tolerance);
+        assertEquals(expectedValue, option.getEpsInfeasible(), tolerance);
+        assertEquals(expectedValue, option.getRhoMax(), tolerance);
+        assertEquals(expectedValue, option.getRhoMin(), tolerance);
+        assertEquals(expectedValue, option.getSigma(), tolerance);
     }
 
     @Test
-    public void testSettersBoolean() {
+    void testSettersBoolean() {
         // GIVEN
         final ADMMQPOption option = new ADMMQPOption();
         // WHEN
@@ -55,13 +56,13 @@ public class ADMMQPOptionTest {
         option.setUpdateRho(expectedValue);
         option.setScaling(expectedValue);
         // THEN
-        Assertions.assertEquals(expectedValue, option.isPolishing());
-        Assertions.assertEquals(expectedValue, option.updateRho());
-        Assertions.assertEquals(expectedValue, option.isScaling());
+        assertEquals(expectedValue, option.isPolishing());
+        assertEquals(expectedValue, option.updateRho());
+        assertEquals(expectedValue, option.isScaling());
     }
 
     @Test
-    public void testSettersIntegers() {
+    void testSettersIntegers() {
         // GIVEN
         final ADMMQPOption option = new ADMMQPOption();
         // WHEN
@@ -70,9 +71,9 @@ public class ADMMQPOptionTest {
         option.setPolishingIteration(expectedValue);
         option.setScaleMaxIteration(expectedValue);
         // THEN
-        Assertions.assertEquals(expectedValue, option.getMaxRhoIteration());
-        Assertions.assertEquals(expectedValue, option.getPolishIteration());
-        Assertions.assertEquals(expectedValue, option.getScaleMaxIteration());
+        assertEquals(expectedValue, option.getMaxRhoIteration());
+        assertEquals(expectedValue, option.getPolishIteration());
+        assertEquals(expectedValue, option.getScaleMaxIteration());
     }
 
 }

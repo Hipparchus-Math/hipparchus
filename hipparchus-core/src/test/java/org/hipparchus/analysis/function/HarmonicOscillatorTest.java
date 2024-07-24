@@ -29,19 +29,19 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for class {@link HarmonicOscillator}.
  */
-public class HarmonicOscillatorTest {
+class HarmonicOscillatorTest {
     private final double EPS = Math.ulp(1d);
 
     @Test
-    public void testSomeValues() {
+    void testSomeValues() {
         final double a = -1.2;
         final double w = 0.34;
         final double p = 5.6;
@@ -50,12 +50,12 @@ public class HarmonicOscillatorTest {
         final double d = 0.12345;
         for (int i = 0; i < 10; i++) {
             final double v = i * d;
-            Assertions.assertEquals(a * FastMath.cos(w * v + p), f.value(v), 0);
+            assertEquals(a * FastMath.cos(w * v + p), f.value(v), 0);
         }
     }
 
     @Test
-    public void testDerivative() {
+    void testDerivative() {
         final double a = -1.2;
         final double w = 0.34;
         final double p = 5.6;
@@ -83,7 +83,7 @@ public class HarmonicOscillatorTest {
                             trigo = +FastMath.sin(w * v + p);
                             break;
                     }
-                    Assertions.assertEquals(a * FastMath.pow(w, k) * trigo,
+                    assertEquals(a * FastMath.pow(w, k) * trigo,
                                         h.getPartialDerivative(k),
                                         Precision.EPSILON);
                 }
@@ -92,7 +92,7 @@ public class HarmonicOscillatorTest {
     }
 
     @Test
-    public void testParametricUsage1() {
+    void testParametricUsage1() {
         assertThrows(NullArgumentException.class, () -> {
             final HarmonicOscillator.Parametric g = new HarmonicOscillator.Parametric();
             g.value(0, null);
@@ -100,7 +100,7 @@ public class HarmonicOscillatorTest {
     }
 
     @Test
-    public void testParametricUsage2() {
+    void testParametricUsage2() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final HarmonicOscillator.Parametric g = new HarmonicOscillator.Parametric();
             g.value(0, new double[]{0});
@@ -108,7 +108,7 @@ public class HarmonicOscillatorTest {
     }
 
     @Test
-    public void testParametricUsage3() {
+    void testParametricUsage3() {
         assertThrows(NullArgumentException.class, () -> {
             final HarmonicOscillator.Parametric g = new HarmonicOscillator.Parametric();
             g.gradient(0, null);
@@ -116,7 +116,7 @@ public class HarmonicOscillatorTest {
     }
 
     @Test
-    public void testParametricUsage4() {
+    void testParametricUsage4() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             final HarmonicOscillator.Parametric g = new HarmonicOscillator.Parametric();
             g.gradient(0, new double[]{0});
@@ -124,20 +124,20 @@ public class HarmonicOscillatorTest {
     }
 
     @Test
-    public void testParametricValue() {
+    void testParametricValue() {
         final double amplitude = 2;
         final double omega = 3;
         final double phase = 4;
         final HarmonicOscillator f = new HarmonicOscillator(amplitude, omega, phase);
 
         final HarmonicOscillator.Parametric g = new HarmonicOscillator.Parametric();
-        Assertions.assertEquals(f.value(-1), g.value(-1, new double[] {amplitude, omega, phase}), 0);
-        Assertions.assertEquals(f.value(0), g.value(0, new double[] {amplitude, omega, phase}), 0);
-        Assertions.assertEquals(f.value(2), g.value(2, new double[] {amplitude, omega, phase}), 0);
+        assertEquals(f.value(-1), g.value(-1, new double[] {amplitude, omega, phase}), 0);
+        assertEquals(f.value(0), g.value(0, new double[] {amplitude, omega, phase}), 0);
+        assertEquals(f.value(2), g.value(2, new double[] {amplitude, omega, phase}), 0);
     }
 
     @Test
-    public void testParametricGradient() {
+    void testParametricGradient() {
         final double amplitude = 2;
         final double omega = 3;
         final double phase = 4;
@@ -147,10 +147,10 @@ public class HarmonicOscillatorTest {
         final double[] grad = f.gradient(1, new double[] {amplitude, omega, phase});
         final double xTimesOmegaPlusPhase = omega * x + phase;
         final double a = FastMath.cos(xTimesOmegaPlusPhase);
-        Assertions.assertEquals(a, grad[0], EPS);
+        assertEquals(a, grad[0], EPS);
         final double w = -amplitude * x * FastMath.sin(xTimesOmegaPlusPhase);
-        Assertions.assertEquals(w, grad[1], EPS);
+        assertEquals(w, grad[1], EPS);
         final double p = -amplitude * FastMath.sin(xTimesOmegaPlusPhase);
-        Assertions.assertEquals(p, grad[2], EPS);
+        assertEquals(p, grad[2], EPS);
     }
 }

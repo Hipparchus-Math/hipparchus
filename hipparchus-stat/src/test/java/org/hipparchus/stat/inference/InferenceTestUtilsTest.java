@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Test cases for the InferenceTestUtils class.
  */
-public class InferenceTestUtilsTest {
+class InferenceTestUtilsTest {
 
     private double[] classA = { 93.0, 103.0, 95.0, 101.0 };
     private double[] classB = { 99.0, 92.0, 102.0, 100.0, 102.0 };
@@ -51,7 +51,7 @@ public class InferenceTestUtilsTest {
 
 
     @Test
-    public void testChiSquare() {
+    void testChiSquare() {
 
         // Target values computed using R version 1.8.1
         // Some assembly required ;-)
@@ -123,7 +123,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testChiSquareIndependence() {
+    void testChiSquareIndependence() {
 
         // Target values computed using R version 1.8.1
 
@@ -182,7 +182,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testChiSquareLargeTestStatistic() {
+    void testChiSquareLargeTestStatistic() {
         double[] exp = new double[] {
                 3389119.5, 649136.6, 285745.4, 25357364.76,
                 11291189.78, 543628.0, 232921.0, 437665.75
@@ -199,7 +199,7 @@ public class InferenceTestUtilsTest {
 
     /** Contingency table containing zeros - PR # 32531 */
     @Test
-    public void testChiSquareZeroCount() {
+    void testChiSquareZeroCount() {
         // Target values computed using R version 1.8.1
         long[][] counts = { {40, 0, 4}, {91, 1, 2}, {60, 2, 0}};
         assertEquals( 9.67444662263, InferenceTestUtils.chiSquare(counts), 1E-9, "chi-square test statistic");
@@ -211,7 +211,7 @@ public class InferenceTestUtilsTest {
     private StreamingStatistics emptyStats = new StreamingStatistics();
 
     @Test
-    public void testOneSampleT() {
+    void testOneSampleT() {
         double[] observed = {
             93.0, 103.0, 95.0, 101.0, 91.0, 105.0, 96.0, 94.0,
             101.0, 88.0, 98.0, 94.0, 101.0, 92.0, 95.0
@@ -284,7 +284,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testOneSampleTTest() {
+    void testOneSampleTTest() {
         double[] oneSidedP = {
             2d, 0d, 6d, 6d, 3d, 3d, 2d, 3d, -6d, 6d,
             6d, 6d, 3d, 0d, 1d, 1d, 0d, 2d, 3d, 3d
@@ -320,7 +320,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testTwoSampleTHeterscedastic() {
+    void testTwoSampleTHeterscedastic() {
         double[] sample1 = { 7d, -4d, 18d, 17d, -3d, -5d, 1d, 10d, 11d, -2d };
         double[] sample2 = { -1d, 12d, -1d, -3d, 3d, -5d, 5d, 2d, -11d, -1d, -3d };
         StreamingStatistics sampleStats1 = new StreamingStatistics();
@@ -404,8 +404,9 @@ public class InferenceTestUtilsTest {
             // expected
         }
     }
+
     @Test
-    public void testTwoSampleTHomoscedastic() {
+    void testTwoSampleTHomoscedastic() {
         double[] sample1 ={2, 4, 6, 8, 10, 97};
         double[] sample2 = {4, 6, 8, 10, 16};
         StreamingStatistics sampleStats1 = new StreamingStatistics();
@@ -428,7 +429,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testSmallSamples() {
+    void testSmallSamples() {
         double[] sample1 = {1d, 3d};
         double[] sample2 = {4d, 5d};
 
@@ -438,7 +439,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testPaired() {
+    void testPaired() {
         double[] sample1 = {1d, 3d, 5d, 7d};
         double[] sample2 = {0d, 6d, 11d, 2d};
         double[] sample3 = {5d, 7d, 8d, 10d};
@@ -452,7 +453,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testOneWayAnovaUtils() {
+    void testOneWayAnovaUtils() {
         classes.add(classA);
         classes.add(classB);
         classes.add(classC);
@@ -463,8 +464,9 @@ public class InferenceTestUtilsTest {
         assertEquals(oneWayAnova.anovaTest(classes, 0.01),
                      InferenceTestUtils.oneWayAnovaTest(classes, 0.01));
     }
+
     @Test
-    public void testGTestGoodnesOfFit() throws Exception {
+    void testGTestGoodnesOfFit() throws Exception {
         double[] exp = new double[] { 0.54d, 0.40d, 0.05d, 0.01d };
         long[] obs = new long[] { 70, 79, 3, 4 };
 
@@ -475,7 +477,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testGTestIndependance() throws Exception {
+    void testGTestIndependance() throws Exception {
         long[] obs1 = new long[] { 268, 199, 42 };
         long[] obs2 = new long[] { 807, 759, 184 };
 
@@ -489,7 +491,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testRootLogLikelihood() {
+    void testRootLogLikelihood() {
         // positive where k11 is bigger than expected.
         assertTrue(InferenceTestUtils.rootLogLikelihoodRatio(904, 21060, 1144, 283012) > 0.0);
 
@@ -511,7 +513,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testKSOneSample() throws Exception {
+    void testKSOneSample() throws Exception {
        final NormalDistribution unitNormal = new NormalDistribution(0d, 1d);
        final double[] sample = KolmogorovSmirnovTestTest.gaussian;
        final double tol = KolmogorovSmirnovTestTest.TOLERANCE;
@@ -520,7 +522,7 @@ public class InferenceTestUtilsTest {
     }
 
     @Test
-    public void testKSTwoSample() throws Exception {
+    void testKSTwoSample() throws Exception {
         final double tol = KolmogorovSmirnovTestTest.TOLERANCE;
         final double[] smallSample1 = { 6, 7, 9, 13, 19, 21, 22, 23, 24 };
         final double[] smallSample2 = { 10, 11, 12, 16, 20, 27, 28, 32, 44, 54 };

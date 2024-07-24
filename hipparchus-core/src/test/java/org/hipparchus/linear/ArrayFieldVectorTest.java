@@ -27,18 +27,23 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Test cases for the {@link ArrayFieldVector} class.
  *
  */
-public class ArrayFieldVectorTest {
+class ArrayFieldVectorTest {
 
     //
     protected Fraction[][] ma1 = {
@@ -259,79 +264,79 @@ public class ArrayFieldVectorTest {
     }
 
     @Test
-    public void testConstructors() {
+    void testConstructors() {
 
         ArrayFieldVector<Fraction> v0 = new ArrayFieldVector<Fraction>(FractionField.getInstance());
-        Assertions.assertEquals(0, v0.getDimension());
+        assertEquals(0, v0.getDimension());
 
         ArrayFieldVector<Fraction> v1 = new ArrayFieldVector<Fraction>(FractionField.getInstance(), 7);
-        Assertions.assertEquals(7, v1.getDimension());
-        Assertions.assertEquals(Fraction.ZERO, v1.getEntry(6));
+        assertEquals(7, v1.getDimension());
+        assertEquals(Fraction.ZERO, v1.getEntry(6));
 
         ArrayFieldVector<Fraction> v2 = new ArrayFieldVector<Fraction>(5, new Fraction(123, 100));
-        Assertions.assertEquals(5, v2.getDimension());
-        Assertions.assertEquals(new Fraction(123, 100), v2.getEntry(4));
+        assertEquals(5, v2.getDimension());
+        assertEquals(new Fraction(123, 100), v2.getEntry(4));
 
         ArrayFieldVector<Fraction> v3 = new ArrayFieldVector<Fraction>(FractionField.getInstance(), vec1);
-        Assertions.assertEquals(3, v3.getDimension());
-        Assertions.assertEquals(new Fraction(2), v3.getEntry(1));
+        assertEquals(3, v3.getDimension());
+        assertEquals(new Fraction(2), v3.getEntry(1));
 
         ArrayFieldVector<Fraction> v4 = new ArrayFieldVector<Fraction>(FractionField.getInstance(), vec4, 3, 2);
-        Assertions.assertEquals(2, v4.getDimension());
-        Assertions.assertEquals(new Fraction(4), v4.getEntry(0));
+        assertEquals(2, v4.getDimension());
+        assertEquals(new Fraction(4), v4.getEntry(0));
         try {
             new ArrayFieldVector<Fraction>(vec4, 8, 3);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
         FieldVector<Fraction> v5_i = new ArrayFieldVector<Fraction>(dvec1);
-        Assertions.assertEquals(9, v5_i.getDimension());
-        Assertions.assertEquals(new Fraction(9), v5_i.getEntry(8));
+        assertEquals(9, v5_i.getDimension());
+        assertEquals(new Fraction(9), v5_i.getEntry(8));
 
         ArrayFieldVector<Fraction> v5 = new ArrayFieldVector<Fraction>(dvec1);
-        Assertions.assertEquals(9, v5.getDimension());
-        Assertions.assertEquals(new Fraction(9), v5.getEntry(8));
+        assertEquals(9, v5.getDimension());
+        assertEquals(new Fraction(9), v5.getEntry(8));
 
         ArrayFieldVector<Fraction> v6 = new ArrayFieldVector<Fraction>(dvec1, 3, 2);
-        Assertions.assertEquals(2, v6.getDimension());
-        Assertions.assertEquals(new Fraction(4), v6.getEntry(0));
+        assertEquals(2, v6.getDimension());
+        assertEquals(new Fraction(4), v6.getEntry(0));
         try {
             new ArrayFieldVector<Fraction>(dvec1, 8, 3);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
         ArrayFieldVector<Fraction> v7 = new ArrayFieldVector<Fraction>(v1);
-        Assertions.assertEquals(7, v7.getDimension());
-        Assertions.assertEquals(Fraction.ZERO, v7.getEntry(6));
+        assertEquals(7, v7.getDimension());
+        assertEquals(Fraction.ZERO, v7.getEntry(6));
 
         FieldVectorTestImpl<Fraction> v7_i = new FieldVectorTestImpl<Fraction>(vec1);
 
         ArrayFieldVector<Fraction> v7_2 = new ArrayFieldVector<Fraction>(v7_i);
-        Assertions.assertEquals(3, v7_2.getDimension());
-        Assertions.assertEquals(new Fraction(2), v7_2.getEntry(1));
+        assertEquals(3, v7_2.getDimension());
+        assertEquals(new Fraction(2), v7_2.getEntry(1));
 
         ArrayFieldVector<Fraction> v8 = new ArrayFieldVector<Fraction>(v1, true);
-        Assertions.assertEquals(7, v8.getDimension());
-        Assertions.assertEquals(Fraction.ZERO, v8.getEntry(6));
-        Assertions.assertNotSame(v1.getDataRef(), v8.getDataRef(), "testData not same object ");
+        assertEquals(7, v8.getDimension());
+        assertEquals(Fraction.ZERO, v8.getEntry(6));
+        assertNotSame(v1.getDataRef(), v8.getDataRef(), "testData not same object ");
 
         ArrayFieldVector<Fraction> v8_2 = new ArrayFieldVector<Fraction>(v1, false);
-        Assertions.assertEquals(7, v8_2.getDimension());
-        Assertions.assertEquals(Fraction.ZERO, v8_2.getEntry(6));
-        Assertions.assertArrayEquals(v1.getDataRef(), v8_2.getDataRef());
+        assertEquals(7, v8_2.getDimension());
+        assertEquals(Fraction.ZERO, v8_2.getEntry(6));
+        assertArrayEquals(v1.getDataRef(), v8_2.getDataRef());
 
         ArrayFieldVector<Fraction> v9 = new ArrayFieldVector<Fraction>((FieldVector<Fraction>) v1, (FieldVector<Fraction>) v3);
-        Assertions.assertEquals(10, v9.getDimension());
-        Assertions.assertEquals(new Fraction(1), v9.getEntry(7));
+        assertEquals(10, v9.getDimension());
+        assertEquals(new Fraction(1), v9.getEntry(7));
 
     }
 
     @Test
-    public void testDataInOut() {
+    void testDataInOut() {
 
         ArrayFieldVector<Fraction> v1 = new ArrayFieldVector<Fraction>(vec1);
         ArrayFieldVector<Fraction> v2 = new ArrayFieldVector<Fraction>(vec2);
@@ -339,24 +344,24 @@ public class ArrayFieldVectorTest {
         FieldVectorTestImpl<Fraction> v2_t = new FieldVectorTestImpl<Fraction>(vec2);
 
         FieldVector<Fraction> v_append_1 = v1.append(v2);
-        Assertions.assertEquals(6, v_append_1.getDimension());
-        Assertions.assertEquals(new Fraction(4), v_append_1.getEntry(3));
+        assertEquals(6, v_append_1.getDimension());
+        assertEquals(new Fraction(4), v_append_1.getEntry(3));
 
         FieldVector<Fraction> v_append_2 = v1.append(new Fraction(2));
-        Assertions.assertEquals(4, v_append_2.getDimension());
-        Assertions.assertEquals(new Fraction(2), v_append_2.getEntry(3));
+        assertEquals(4, v_append_2.getDimension());
+        assertEquals(new Fraction(2), v_append_2.getEntry(3));
 
         FieldVector<Fraction> v_append_4 = v1.append(v2_t);
-        Assertions.assertEquals(6, v_append_4.getDimension());
-        Assertions.assertEquals(new Fraction(4), v_append_4.getEntry(3));
+        assertEquals(6, v_append_4.getDimension());
+        assertEquals(new Fraction(4), v_append_4.getEntry(3));
 
         FieldVector<Fraction> v_copy = v1.copy();
-        Assertions.assertEquals(3, v_copy.getDimension());
-        Assertions.assertNotSame(v1.getDataRef(), v_copy.toArray(), "testData not same object ");
+        assertEquals(3, v_copy.getDimension());
+        assertNotSame(v1.getDataRef(), v_copy.toArray(), "testData not same object ");
 
         Fraction[] a_frac = v1.toArray();
-        Assertions.assertEquals(3, a_frac.length);
-        Assertions.assertNotSame(v1.getDataRef(), a_frac, "testData not same object ");
+        assertEquals(3, a_frac.length);
+        assertNotSame(v1.getDataRef(), a_frac, "testData not same object ");
 
 
 //      ArrayFieldVector<Fraction> vout4 = (ArrayFieldVector<Fraction>) v1.clone();
@@ -365,54 +370,54 @@ public class ArrayFieldVectorTest {
 
 
         FieldVector<Fraction> vout5 = v4.getSubVector(3, 3);
-        Assertions.assertEquals(3, vout5.getDimension());
-        Assertions.assertEquals(new Fraction(5), vout5.getEntry(1));
+        assertEquals(3, vout5.getDimension());
+        assertEquals(new Fraction(5), vout5.getEntry(1));
         try {
             v4.getSubVector(3, 7);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
         ArrayFieldVector<Fraction> v_set1 = (ArrayFieldVector<Fraction>) v1.copy();
         v_set1.setEntry(1, new Fraction(11));
-        Assertions.assertEquals(new Fraction(11), v_set1.getEntry(1));
+        assertEquals(new Fraction(11), v_set1.getEntry(1));
         try {
             v_set1.setEntry(3, new Fraction(11));
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
         ArrayFieldVector<Fraction> v_set2 = (ArrayFieldVector<Fraction>) v4.copy();
         v_set2.set(3, v1);
-        Assertions.assertEquals(new Fraction(1), v_set2.getEntry(3));
-        Assertions.assertEquals(new Fraction(7), v_set2.getEntry(6));
+        assertEquals(new Fraction(1), v_set2.getEntry(3));
+        assertEquals(new Fraction(7), v_set2.getEntry(6));
         try {
             v_set2.set(7, v1);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
         ArrayFieldVector<Fraction> v_set3 = (ArrayFieldVector<Fraction>) v1.copy();
         v_set3.set(new Fraction(13));
-        Assertions.assertEquals(new Fraction(13), v_set3.getEntry(2));
+        assertEquals(new Fraction(13), v_set3.getEntry(2));
 
         try {
             v_set3.getEntry(23);
-            Assertions.fail("ArrayIndexOutOfBoundsException expected");
+            fail("ArrayIndexOutOfBoundsException expected");
         } catch (ArrayIndexOutOfBoundsException ex) {
             // expected behavior
         }
 
         ArrayFieldVector<Fraction> v_set4 = (ArrayFieldVector<Fraction>) v4.copy();
         v_set4.setSubVector(3, v2_t);
-        Assertions.assertEquals(new Fraction(4), v_set4.getEntry(3));
-        Assertions.assertEquals(new Fraction(7), v_set4.getEntry(6));
+        assertEquals(new Fraction(4), v_set4.getEntry(3));
+        assertEquals(new Fraction(7), v_set4.getEntry(6));
         try {
             v_set4.setSubVector(7, v2_t);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
@@ -420,14 +425,14 @@ public class ArrayFieldVectorTest {
 
         ArrayFieldVector<Fraction> vout10 = (ArrayFieldVector<Fraction>) v1.copy();
         ArrayFieldVector<Fraction> vout10_2 = (ArrayFieldVector<Fraction>) v1.copy();
-        Assertions.assertEquals(vout10, vout10_2);
+        assertEquals(vout10, vout10_2);
         vout10_2.setEntry(0, new Fraction(11, 10));
-        Assertions.assertNotSame(vout10, vout10_2);
+        assertNotSame(vout10, vout10_2);
 
     }
 
     @Test
-    public void testMapFunctions() {
+    void testMapFunctions() {
         ArrayFieldVector<Fraction> v1 = new ArrayFieldVector<Fraction>(vec1);
 
         //octave =  v1 .+ 2.0
@@ -488,7 +493,7 @@ public class ArrayFieldVectorTest {
     }
 
     @Test
-    public void testBasicFunctions() {
+    void testBasicFunctions() {
         ArrayFieldVector<Fraction> v1 = new ArrayFieldVector<Fraction>(vec1);
         ArrayFieldVector<Fraction> v2 = new ArrayFieldVector<Fraction>(vec2);
         new ArrayFieldVector<Fraction>(vec_null);
@@ -534,17 +539,17 @@ public class ArrayFieldVectorTest {
 
         // octave  dot(v1,v2)
         Fraction dot =  v1.dotProduct(v2);
-        Assertions.assertEquals(new Fraction(32), dot, "compare val ");
+        assertEquals(new Fraction(32), dot, "compare val ");
 
         // octave  dot(v1,v2_t)
         Fraction dot_2 =  v1.dotProduct(v2_t);
-        Assertions.assertEquals(new Fraction(32), dot_2, "compare val ");
+        assertEquals(new Fraction(32), dot_2, "compare val ");
 
         FieldMatrix<Fraction> m_outerProduct = v1.outerProduct(v2);
-        Assertions.assertEquals(new Fraction(4), m_outerProduct.getEntry(0,0), "compare val ");
+        assertEquals(new Fraction(4), m_outerProduct.getEntry(0,0), "compare val ");
 
         FieldMatrix<Fraction> m_outerProduct_2 = v1.outerProduct(v2_t);
-        Assertions.assertEquals(new Fraction(4), m_outerProduct_2.getEntry(0,0), "compare val ");
+        assertEquals(new Fraction(4), m_outerProduct_2.getEntry(0,0), "compare val ");
 
         ArrayFieldVector<Fraction> v_projection = v1.projection(v2);
         Fraction[] result_projection = {new Fraction(128, 77), new Fraction(160, 77), new Fraction(192, 77)};
@@ -557,13 +562,13 @@ public class ArrayFieldVectorTest {
      }
 
     @Test
-    public void testMisc() {
+    void testMisc() {
         ArrayFieldVector<Fraction> v1 = new ArrayFieldVector<Fraction>(vec1);
         ArrayFieldVector<Fraction> v4 = new ArrayFieldVector<Fraction>(vec4);
         FieldVector<Fraction> v4_2 = new ArrayFieldVector<Fraction>(vec4);
 
-        Assertions.assertEquals("{1; 2; 3}",  v1.toString());
-        Assertions.assertEquals("{1; 2; 3; 4; 5; 6; 7; 8; 9}",  v4.toString());
+        assertEquals("{1; 2; 3}",  v1.toString());
+        assertEquals("{1; 2; 3; 4; 5; 6; 7; 8; 9}",  v4.toString());
 
         /*
          Fraction[] dout1 = v1.copyOut();
@@ -572,21 +577,21 @@ public class ArrayFieldVectorTest {
          */
         try {
             v1.checkVectorDimensions(2);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
        try {
             v1.checkVectorDimensions(v4);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
         try {
             v1.checkVectorDimensions(v4_2);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
@@ -594,43 +599,43 @@ public class ArrayFieldVectorTest {
     }
 
     @Test
-    public void testSerial()  {
+    void testSerial()  {
         ArrayFieldVector<Fraction> v = new ArrayFieldVector<Fraction>(vec1);
-        Assertions.assertEquals(v,UnitTestUtils.serializeAndRecover(v));
+        assertEquals(v,UnitTestUtils.serializeAndRecover(v));
     }
 
     @Test
-    public void testZeroVectors() {
+    void testZeroVectors() {
 
         // when the field is not specified, array cannot be empty
         try {
             new ArrayFieldVector<Fraction>(new Fraction[0]);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
         try {
             new ArrayFieldVector<Fraction>(new Fraction[0], true);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
         try {
             new ArrayFieldVector<Fraction>(new Fraction[0], false);
-            Assertions.fail("MathIllegalArgumentException expected");
+            fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
         // when the field is specified, array can be empty
-        Assertions.assertEquals(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), new Fraction[0]).getDimension());
-        Assertions.assertEquals(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), new Fraction[0], true).getDimension());
-        Assertions.assertEquals(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), new Fraction[0], false).getDimension());
+        assertEquals(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), new Fraction[0]).getDimension());
+        assertEquals(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), new Fraction[0], true).getDimension());
+        assertEquals(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), new Fraction[0], false).getDimension());
 
     }
 
     @Test
-    public void testOuterProduct() {
+    void testOuterProduct() {
         final ArrayFieldVector<Fraction> u
             = new ArrayFieldVector<Fraction>(FractionField.getInstance(),
                                              new Fraction[] {new Fraction(1),
@@ -644,21 +649,21 @@ public class ArrayFieldVectorTest {
         final FieldMatrix<Fraction> uv = u.outerProduct(v);
 
         final double tol = Math.ulp(1d);
-        Assertions.assertEquals(new Fraction(4).doubleValue(), uv.getEntry(0, 0).doubleValue(), tol);
-        Assertions.assertEquals(new Fraction(-2).doubleValue(), uv.getEntry(0, 1).doubleValue(), tol);
-        Assertions.assertEquals(new Fraction(8).doubleValue(), uv.getEntry(1, 0).doubleValue(), tol);
-        Assertions.assertEquals(new Fraction(-4).doubleValue(), uv.getEntry(1, 1).doubleValue(), tol);
-        Assertions.assertEquals(new Fraction(-12).doubleValue(), uv.getEntry(2, 0).doubleValue(), tol);
-        Assertions.assertEquals(new Fraction(6).doubleValue(), uv.getEntry(2, 1).doubleValue(), tol);
+        assertEquals(new Fraction(4).doubleValue(), uv.getEntry(0, 0).doubleValue(), tol);
+        assertEquals(new Fraction(-2).doubleValue(), uv.getEntry(0, 1).doubleValue(), tol);
+        assertEquals(new Fraction(8).doubleValue(), uv.getEntry(1, 0).doubleValue(), tol);
+        assertEquals(new Fraction(-4).doubleValue(), uv.getEntry(1, 1).doubleValue(), tol);
+        assertEquals(new Fraction(-12).doubleValue(), uv.getEntry(2, 0).doubleValue(), tol);
+        assertEquals(new Fraction(6).doubleValue(), uv.getEntry(2, 1).doubleValue(), tol);
     }
 
     /** verifies that two vectors are equals */
     protected void checkArray(String msg, Fraction[] m, Fraction[] n) {
         if (m.length != n.length) {
-            Assertions.fail("vectors have different lengths");
+            fail("vectors have different lengths");
         }
         for (int i = 0; i < m.length; i++) {
-            Assertions.assertEquals(m[i],n[i],msg + " " +  i + " elements differ");
+            assertEquals(m[i],n[i],msg + " " +  i + " elements differ");
         }
     }
 
@@ -668,7 +673,7 @@ public class ArrayFieldVectorTest {
 
     /** The whole vector is visited. */
     @Test
-    public void testWalkInDefaultOrderPreservingVisitor1() {
+    void testWalkInDefaultOrderPreservingVisitor1() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -681,16 +686,16 @@ public class ArrayFieldVectorTest {
             private int expectedIndex;
 
             public void visit(final int actualIndex, final Fraction actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 expectedIndex = 0;
             }
 
@@ -703,7 +708,7 @@ public class ArrayFieldVectorTest {
 
     /** Visiting an invalid subvector. */
     @Test
-    public void testWalkInDefaultOrderPreservingVisitor2() {
+    void testWalkInDefaultOrderPreservingVisitor2() {
         final ArrayFieldVector<Fraction> v = create(5);
         final FieldVectorPreservingVisitor<Fraction> visitor;
         visitor = new FieldVectorPreservingVisitor<Fraction>() {
@@ -722,31 +727,31 @@ public class ArrayFieldVectorTest {
         };
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -754,7 +759,7 @@ public class ArrayFieldVectorTest {
 
     /** Visiting a valid subvector. */
     @Test
-    public void testWalkInDefaultOrderPreservingVisitor3() {
+    void testWalkInDefaultOrderPreservingVisitor3() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -769,16 +774,16 @@ public class ArrayFieldVectorTest {
             private int expectedIndex;
 
             public void visit(final int actualIndex, final Fraction actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 expectedIndex = expectedStart;
             }
 
@@ -791,7 +796,7 @@ public class ArrayFieldVectorTest {
 
     /** The whole vector is visited. */
     @Test
-    public void testWalkInOptimizedOrderPreservingVisitor1() {
+    void testWalkInOptimizedOrderPreservingVisitor1() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -804,20 +809,20 @@ public class ArrayFieldVectorTest {
 
             public void visit(final int actualIndex, final Fraction actualValue) {
                 visited[actualIndex] = true;
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 Arrays.fill(visited, false);
             }
 
             public Fraction end() {
                 for (int i = 0; i < data.length; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
@@ -828,7 +833,7 @@ public class ArrayFieldVectorTest {
 
     /** Visiting an invalid subvector. */
     @Test
-    public void testWalkInOptimizedOrderPreservingVisitor2() {
+    void testWalkInOptimizedOrderPreservingVisitor2() {
         final ArrayFieldVector<Fraction> v = create(5);
         final FieldVectorPreservingVisitor<Fraction> visitor;
         visitor = new FieldVectorPreservingVisitor<Fraction>() {
@@ -847,31 +852,31 @@ public class ArrayFieldVectorTest {
         };
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -879,7 +884,7 @@ public class ArrayFieldVectorTest {
 
     /** Visiting a valid subvector. */
     @Test
-    public void testWalkInOptimizedOrderPreservingVisitor3() {
+    void testWalkInOptimizedOrderPreservingVisitor3() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -893,21 +898,21 @@ public class ArrayFieldVectorTest {
             private final boolean[] visited = new boolean[data.length];
 
             public void visit(final int actualIndex, final Fraction actualValue) {
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 visited[actualIndex] = true;
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 Arrays.fill(visited, true);
             }
 
             public Fraction end() {
                 for (int i = expectedStart; i <= expectedEnd; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
@@ -918,7 +923,7 @@ public class ArrayFieldVectorTest {
 
     /** The whole vector is visited. */
     @Test
-    public void testWalkInDefaultOrderChangingVisitor1() {
+    void testWalkInDefaultOrderChangingVisitor1() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -931,17 +936,17 @@ public class ArrayFieldVectorTest {
             private int expectedIndex;
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 expectedIndex = 0;
             }
 
@@ -951,13 +956,13 @@ public class ArrayFieldVectorTest {
         };
         v.walkInDefaultOrder(visitor);
         for (int i = 0; i < data.length; i++) {
-            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
+            assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 
     /** Visiting an invalid subvector. */
     @Test
-    public void testWalkInDefaultOrderChangingVisitor2() {
+    void testWalkInDefaultOrderChangingVisitor2() {
         final ArrayFieldVector<Fraction> v = create(5);
         final FieldVectorChangingVisitor<Fraction> visitor;
         visitor = new FieldVectorChangingVisitor<Fraction>() {
@@ -976,31 +981,31 @@ public class ArrayFieldVectorTest {
         };
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -1008,7 +1013,7 @@ public class ArrayFieldVectorTest {
 
     /** Visiting a valid subvector. */
     @Test
-    public void testWalkInDefaultOrderChangingVisitor3() {
+    void testWalkInDefaultOrderChangingVisitor3() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -1023,17 +1028,17 @@ public class ArrayFieldVectorTest {
             private int expectedIndex;
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
-                Assertions.assertEquals(expectedIndex, actualIndex);
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(expectedIndex, actualIndex);
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 expectedIndex = expectedStart;
             }
 
@@ -1043,13 +1048,13 @@ public class ArrayFieldVectorTest {
         };
         v.walkInDefaultOrder(visitor, expectedStart, expectedEnd);
         for (int i = expectedStart; i <= expectedEnd; i++) {
-            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
+            assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 
     /** The whole vector is visited. */
     @Test
-    public void testWalkInOptimizedOrderChangingVisitor1() {
+    void testWalkInOptimizedOrderChangingVisitor1() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -1062,21 +1067,21 @@ public class ArrayFieldVectorTest {
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
                 visited[actualIndex] = true;
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(0, actualStart);
-                Assertions.assertEquals(data.length - 1, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(0, actualStart);
+                assertEquals(data.length - 1, actualEnd);
                 Arrays.fill(visited, false);
             }
 
             public Fraction end() {
                 for (int i = 0; i < data.length; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
@@ -1084,13 +1089,13 @@ public class ArrayFieldVectorTest {
         };
         v.walkInOptimizedOrder(visitor);
         for (int i = 0; i < data.length; i++) {
-            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
+            assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 
     /** Visiting an invalid subvector. */
     @Test
-    public void testWalkInOptimizedOrderChangingVisitor2() {
+    void testWalkInOptimizedOrderChangingVisitor2() {
         final ArrayFieldVector<Fraction> v = create(5);
         final FieldVectorChangingVisitor<Fraction> visitor;
         visitor = new FieldVectorChangingVisitor<Fraction>() {
@@ -1109,31 +1114,31 @@ public class ArrayFieldVectorTest {
         };
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
-            Assertions.fail();
+            fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -1141,7 +1146,7 @@ public class ArrayFieldVectorTest {
 
     /** Visiting a valid subvector. */
     @Test
-    public void testWalkInOptimizedOrderChangingVisitor3() {
+    void testWalkInOptimizedOrderChangingVisitor3() {
         final Fraction[] data = new Fraction[] {
             Fraction.ZERO, Fraction.ONE, Fraction.ZERO,
             Fraction.ZERO, Fraction.TWO, Fraction.ZERO,
@@ -1155,22 +1160,22 @@ public class ArrayFieldVectorTest {
             private final boolean[] visited = new boolean[data.length];
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
-                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
+                assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 visited[actualIndex] = true;
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assertions.assertEquals(data.length, actualSize);
-                Assertions.assertEquals(expectedStart, actualStart);
-                Assertions.assertEquals(expectedEnd, actualEnd);
+                assertEquals(data.length, actualSize);
+                assertEquals(expectedStart, actualStart);
+                assertEquals(expectedEnd, actualEnd);
                 Arrays.fill(visited, true);
             }
 
             public Fraction end() {
                 for (int i = expectedStart; i <= expectedEnd; i++) {
-                    Assertions.assertTrue(visited[i],
+                    assertTrue(visited[i],
                                       "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
@@ -1178,7 +1183,7 @@ public class ArrayFieldVectorTest {
         };
         v.walkInOptimizedOrder(visitor, expectedStart, expectedEnd);
         for (int i = expectedStart; i <= expectedEnd; i++) {
-            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
+            assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 

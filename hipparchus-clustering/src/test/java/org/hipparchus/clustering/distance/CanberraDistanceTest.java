@@ -21,33 +21,34 @@
  */
 package org.hipparchus.clustering.distance;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link CanberraDistance} class.
  */
-public class CanberraDistanceTest {
+class CanberraDistanceTest {
     final DistanceMeasure distance = new CanberraDistance();
 
     @Test
-    public void testZero() {
+    void testZero() {
         final double[] a = { 0, 1, -2, 3.4, 5, -6.7, 89 };
-        Assertions.assertEquals(0, distance.compute(a, a), 0d);
+        assertEquals(0, distance.compute(a, a), 0d);
     }
 
     @Test
-    public void testZero2() {
+    void testZero2() {
         final double[] a = { 0, 0 };
-        Assertions.assertEquals(0, distance.compute(a, a), 0d);
+        assertEquals(0, distance.compute(a, a), 0d);
     }
 
     @Test
-    public void test() {
+    void test() {
         final double[] a = { 1, 2, 3, 4, 9 };
         final double[] b = { -5, -6, 7, 4, 3 };
         final double expected = 2.9;
-        Assertions.assertEquals(expected, distance.compute(a, b), 0d);
-        Assertions.assertEquals(expected, distance.compute(b, a), 0d);
+        assertEquals(expected, distance.compute(a, b), 0d);
+        assertEquals(expected, distance.compute(b, a), 0d);
     }
 }

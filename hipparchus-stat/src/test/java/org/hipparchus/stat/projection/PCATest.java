@@ -18,8 +18,13 @@ package org.hipparchus.stat.projection;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.stat.LocalizedStatFormats;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PCATest {
 
@@ -104,60 +109,60 @@ public class PCATest {
     public static final double DELTA = 0.000001;
 
     @Test
-    public void defaultSettings() {
+    void defaultSettings() {
         PCA pca = new PCA(2);
-        Assertions.assertEquals(2, pca.getNumComponents());
-        Assertions.assertFalse(pca.isScale());
-        Assertions.assertTrue(pca.isBiasCorrection());
+        assertEquals(2, pca.getNumComponents());
+        assertFalse(pca.isScale());
+        assertTrue(pca.isBiasCorrection());
     }
 
     @Test
-    public void covariance() {
+    void covariance() {
         PCA pca = new PCA(2);
         double[][] actual = pca.fitAndTransform(SCORES);
-        Assertions.assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
-        Assertions.assertArrayEquals(EXPECTED_VARIANCE, pca.getVariance(), DELTA);
-        assertExpected(EXPECTED_COMPONENTS, pca.getComponents());
-        assertExpected(EXPECTED_COV, actual);
+        assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
+        assertArrayEquals(EXPECTED_VARIANCE, pca.getVariance(), DELTA);
+        customAssertExpected(EXPECTED_COMPONENTS, pca.getComponents());
+        customAssertExpected(EXPECTED_COV, actual);
 
         // calling fit and transform individually should be the same as combo method
         pca = new PCA(2);
         actual = pca.fit(SCORES).transform(SCORES);
-        Assertions.assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
-        assertExpected(EXPECTED_COV, actual);
+        assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
+        customAssertExpected(EXPECTED_COV, actual);
     }
 
     @Test
-    public void correlation() {
+    void correlation() {
         PCA pca = new PCA(2, true, true);
         double[][] actual = pca.fitAndTransform(SCORES);
-        assertExpected(EXPECTED_COR, actual);
+        customAssertExpected(EXPECTED_COR, actual);
     }
 
     @Test
-    public void correlationNoBias() {
+    void correlationNoBias() {
         PCA pca = new PCA(2, true, false);
         double[][] actual = pca.fitAndTransform(SCORES);
-        assertExpected(EXPECTED_COR_NO_BIAS, actual);
+        customAssertExpected(EXPECTED_COR_NO_BIAS, actual);
     }
 
     @Test
-    public void transformWithoutFit() {
+    void transformWithoutFit() {
         PCA pca = new PCA(2);
         try {
             pca.transform(SCORES);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
-            Assertions.assertEquals(LocalizedStatFormats.ILLEGAL_STATE_PCA, mise.getSpecifier());
-            Assertions.assertEquals("transform", mise.getParts()[0]);
+            assertEquals(LocalizedStatFormats.ILLEGAL_STATE_PCA, mise.getSpecifier());
+            assertEquals("transform", mise.getParts()[0]);
         }
     }
 
-    private static void assertExpected(double[][] expected, double[][] actual) {
+    private static void customAssertExpected(double[][] expected, double[][] actual) {
         for (int i = 0; i < expected.length; i++) {
             double[] e = expected[i];
             double[] t = actual[i];
-            Assertions.assertArrayEquals(e, t, DELTA);
+            assertArrayEquals(e, t, DELTA);
         }
     }
 }

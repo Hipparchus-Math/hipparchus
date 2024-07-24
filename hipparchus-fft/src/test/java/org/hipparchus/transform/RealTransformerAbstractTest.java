@@ -24,11 +24,13 @@ package org.hipparchus.transform;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Abstract test for classes implementing the {@link RealTransformer} interface.
@@ -163,7 +165,7 @@ public abstract class RealTransformerAbstractTest <T> {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(createRealData(n), type[j]);
-                    Assertions.fail(type[j] + ", " + n);
+                    fail(type[j] + ", " + n);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -190,7 +192,7 @@ public abstract class RealTransformerAbstractTest <T> {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(f, a, b, n, type[j]);
-                    Assertions.fail(type[j] + ", " + n);
+                    fail(type[j] + ", " + n);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -217,7 +219,7 @@ public abstract class RealTransformerAbstractTest <T> {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(f, a, b, -n, type[j]);
-                    Assertions.fail(type[j] + ", " + (-n));
+                    fail(type[j] + ", " + (-n));
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -244,7 +246,7 @@ public abstract class RealTransformerAbstractTest <T> {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(f, b, a, n, type[j]);
-                    Assertions.fail(type[j] + ", " + b + ", " + a);
+                    fail(type[j] + ", " + b + ", " + a);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -339,7 +341,7 @@ public abstract class RealTransformerAbstractTest <T> {
         for (int i = 0; i < n; i++) {
             final String msg = String.format("%d, %d", n, i);
             final double delta = tol * FastMath.abs(expected[i]);
-            Assertions.assertEquals(expected[i], actual[i], delta, msg);
+            assertEquals(expected[i], actual[i], delta, msg);
         }
     }
 
@@ -359,7 +361,7 @@ public abstract class RealTransformerAbstractTest <T> {
         for (int i = 0; i < n; i++) {
             final String msg = String.format("%d, %d", n, i);
             final double delta = tol * FastMath.abs(expected[i]);
-            Assertions.assertEquals(expected[i], actual[i], delta, msg);
+            assertEquals(expected[i], actual[i], delta, msg);
         }
     }
 }

@@ -23,11 +23,14 @@ package org.hipparchus.random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class HaltonSequenceGeneratorTest {
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class HaltonSequenceGeneratorTest {
 
     private double[][] referenceValues = {
             { 0.0,    0.0,    0.0  },
@@ -58,80 +61,80 @@ public class HaltonSequenceGeneratorTest {
     private HaltonSequenceGenerator generator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         generator = new HaltonSequenceGenerator(3);
     }
 
     @Test
-    public void test3DReference() {
+    void test3DReference() {
         for (int i = 0; i < referenceValues.length; i++) {
             double[] result = generator.nextVector();
-            Assertions.assertArrayEquals(referenceValues[i], result, 1e-3);
-            Assertions.assertEquals(i + 1, generator.getNextIndex());
+            assertArrayEquals(referenceValues[i], result, 1e-3);
+            assertEquals(i + 1, generator.getNextIndex());
         }
     }
 
     @Test
-    public void test2DUnscrambledReference() {
+    void test2DUnscrambledReference() {
         generator = new HaltonSequenceGenerator(2, new int[] {2, 3}, null);
         for (int i = 0; i < referenceValuesUnscrambled.length; i++) {
             double[] result = generator.nextVector();
-            Assertions.assertArrayEquals(referenceValuesUnscrambled[i], result, 1e-3);
-            Assertions.assertEquals(i + 1, generator.getNextIndex());
+            assertArrayEquals(referenceValuesUnscrambled[i], result, 1e-3);
+            assertEquals(i + 1, generator.getNextIndex());
         }
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         try {
             new HaltonSequenceGenerator(0);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
             new HaltonSequenceGenerator(41);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
     }
 
     @Test
-    public void testConstructor2() throws Exception{
+    void testConstructor2() throws Exception{
         try {
             new HaltonSequenceGenerator(2, new int[] { 1 }, null);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
             new HaltonSequenceGenerator(2, null, null);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (NullArgumentException e) {
             // expected
         }
 
         try {
             new HaltonSequenceGenerator(2, new int[] { 1, 1 }, new int[] { 1 });
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
     }
 
     @Test
-    public void testSkip() {
+    void testSkip() {
         double[] result = generator.skipTo(5);
-        Assertions.assertArrayEquals(referenceValues[5], result, 1e-3);
-        Assertions.assertEquals(6, generator.getNextIndex());
+        assertArrayEquals(referenceValues[5], result, 1e-3);
+        assertEquals(6, generator.getNextIndex());
 
         for (int i = 6; i < referenceValues.length; i++) {
             result = generator.nextVector();
-            Assertions.assertArrayEquals(referenceValues[i], result, 1e-3);
-            Assertions.assertEquals(i + 1, generator.getNextIndex());
+            assertArrayEquals(referenceValues[i], result, 1e-3);
+            assertEquals(i + 1, generator.getNextIndex());
         }
     }
 

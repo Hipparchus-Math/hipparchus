@@ -23,11 +23,12 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for {@link LogNormalDistribution}.
@@ -123,7 +124,7 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testQuantiles() {
+    void testQuantiles() {
         setCumulativeTestValues(new double[] {0, 0.0396495152787,
                                               0.16601209243, 0.272533253269,
                                               0.357618409638, 0.426488363093,
@@ -160,7 +161,7 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testInverseCumulativeProbabilityExtremes() {
+    void testInverseCumulativeProbabilityExtremes() {
         setInverseCumulativeTestPoints(new double[] {0, 1});
         setInverseCumulativeTestValues(
                 new double[] {0, Double.POSITIVE_INFINITY});
@@ -168,26 +169,26 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testGetLocation() {
+    void testGetLocation() {
         LogNormalDistribution distribution = (LogNormalDistribution)getDistribution();
-        Assertions.assertEquals(2.1, distribution.getLocation(), 0);
+        assertEquals(2.1, distribution.getLocation(), 0);
     }
 
     @Test
-    public void testGetShape() {
+    void testGetShape() {
         LogNormalDistribution distribution = (LogNormalDistribution)getDistribution();
-        Assertions.assertEquals(1.4, distribution.getShape(), 0);
+        assertEquals(1.4, distribution.getShape(), 0);
     }
 
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new LogNormalDistribution(1, 0);
         });
     }
 
     @Test
-    public void testDensity() {
+    void testDensity() {
         double [] x = new double[]{-2, -1, 0, 1, 2};
         // R 2.13: print(dlnorm(c(-2,-1,0,1,2)), digits=10)
         checkDensity(0, 1, x, new double[] { 0.0000000000, 0.0000000000,
@@ -203,7 +204,7 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
         double[] expected) {
         LogNormalDistribution d = new LogNormalDistribution(scale, shape);
         for (int i = 0; i < x.length; i++) {
-            Assertions.assertEquals(expected[i], d.density(x[i]), 1e-9);
+            assertEquals(expected[i], d.density(x[i]), 1e-9);
         }
     }
 
@@ -212,49 +213,49 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
      * Verifies fixes for JIRA MATH-167, MATH-414
      */
     @Test
-    public void testExtremeValues() {
+    void testExtremeValues() {
         LogNormalDistribution d = new LogNormalDistribution(0, 1);
         for (int i = 0; i < 1e5; i++) { // make sure no convergence exception
             double upperTail = d.cumulativeProbability(i);
             if (i <= 72) { // make sure not top-coded
-                Assertions.assertTrue(upperTail < 1.0d);
+                assertTrue(upperTail < 1.0d);
             }
             else { // make sure top coding not reversed
-                Assertions.assertTrue(upperTail > 0.99999);
+                assertTrue(upperTail > 0.99999);
             }
         }
 
-        Assertions.assertEquals(1, d.cumulativeProbability(Double.MAX_VALUE), 0);
-        Assertions.assertEquals(0, d.cumulativeProbability(-Double.MAX_VALUE), 0);
-        Assertions.assertEquals(1, d.cumulativeProbability(Double.POSITIVE_INFINITY), 0);
-        Assertions.assertEquals(0, d.cumulativeProbability(Double.NEGATIVE_INFINITY), 0);
+        assertEquals(1, d.cumulativeProbability(Double.MAX_VALUE), 0);
+        assertEquals(0, d.cumulativeProbability(-Double.MAX_VALUE), 0);
+        assertEquals(1, d.cumulativeProbability(Double.POSITIVE_INFINITY), 0);
+        assertEquals(0, d.cumulativeProbability(Double.NEGATIVE_INFINITY), 0);
     }
 
     @Test
-    public void testMeanVariance() {
+    void testMeanVariance() {
         final double tol = 1e-9;
         LogNormalDistribution dist;
 
         dist = new LogNormalDistribution(0, 1);
-        Assertions.assertEquals(1.6487212707001282, dist.getNumericalMean(), tol);
-        Assertions.assertEquals(
+        assertEquals(1.6487212707001282, dist.getNumericalMean(), tol);
+        assertEquals(
             4.670774270471604, dist.getNumericalVariance(), tol);
 
         dist = new LogNormalDistribution(2.2, 1.4);
-        Assertions.assertEquals(24.046753552064498, dist.getNumericalMean(), tol);
-        Assertions.assertEquals(
+        assertEquals(24.046753552064498, dist.getNumericalMean(), tol);
+        assertEquals(
             3526.913651880464, dist.getNumericalVariance(), tol);
 
         dist = new LogNormalDistribution(-2000.9, 10.4);
-        Assertions.assertEquals(0.0, dist.getNumericalMean(), tol);
-        Assertions.assertEquals(0.0, dist.getNumericalVariance(), tol);
+        assertEquals(0.0, dist.getNumericalMean(), tol);
+        assertEquals(0.0, dist.getNumericalVariance(), tol);
     }
 
     @Test
-    public void testTinyVariance() {
+    void testTinyVariance() {
         LogNormalDistribution dist = new LogNormalDistribution(0, 1e-9);
         double t = dist.getNumericalVariance();
-        Assertions.assertEquals(1e-18, t, 1e-20);
+        assertEquals(1e-18, t, 1e-20);
     }
 
 }

@@ -90,10 +90,10 @@ public class ChiSquaredDistributionTest extends RealDistributionAbstractTest {
         setTolerance(1e-9);
     }
 
- //---------------------------- Additional test cases -------------------------
+    //---------------------------- Additional test cases -------------------------
 
     @Test
-    public void testSmallDf() {
+    void testSmallDf() {
         setDistribution(new ChiSquaredDistribution(0.1d));
         setTolerance(1E-4);
         // quantiles computed using R version 1.8.1 (linux version)
@@ -108,13 +108,13 @@ public class ChiSquaredDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testDfAccessors() {
+    void testDfAccessors() {
         ChiSquaredDistribution distribution = (ChiSquaredDistribution) getDistribution();
         assertEquals(5d, distribution.getDegreesOfFreedom(), Double.MIN_VALUE);
     }
 
     @Test
-    public void testDensity() {
+    void testDensity() {
         double[] x = new double[]{-0.1, 1e-6, 0.5, 1, 2, 5};
         //R 2.5: print(dchisq(x, df=1), digits=10)
         checkDensity(1, x, new double[] {
@@ -142,7 +142,7 @@ public class ChiSquaredDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         ChiSquaredDistribution dist;
 

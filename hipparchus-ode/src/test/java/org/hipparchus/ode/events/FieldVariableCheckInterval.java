@@ -27,22 +27,23 @@ import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Tests for variable check interval.
  */
 public class FieldVariableCheckInterval implements FieldOrdinaryDifferentialEquation<Binary64> {
 
     @Test
-    public void testFixedInterval() {
+    void testFixedInterval() {
         double tZero = 7.0;
         double width = 0.25;
         doTest(tZero, width, s -> width / 25, 710);
     }
 
     @Test
-    public void testWidthAwareInterval() {
+    void testWidthAwareInterval() {
         double tZero = 7.0;
         double width = 0.25;
         doTest(tZero, width,
@@ -71,8 +72,8 @@ public class FieldVariableCheckInterval implements FieldOrdinaryDifferentialEqua
         final FieldODEStateAndDerivative<Binary64> finalState =
                         integrator.integrate(new FieldExpandableODE<>(this), new FieldODEState<>(t, y), tEnd);
         t = finalState.getTime();
-        Assertions.assertEquals(tZero, finalState.getTime().getReal(), e);
-        Assertions.assertEquals(expectedCalls, evt.count);
+        assertEquals(tZero, finalState.getTime().getReal(), e);
+        assertEquals(expectedCalls, evt.count);
      }
 
     /** {@inheritDoc} */

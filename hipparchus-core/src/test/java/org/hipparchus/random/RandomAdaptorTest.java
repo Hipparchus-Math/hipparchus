@@ -22,20 +22,21 @@
 package org.hipparchus.random;
 
 import org.hipparchus.exception.NullArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the RandomAdaptor class.
  */
-public class RandomAdaptorTest {
+class RandomAdaptorTest {
 
     @Test
-    public void testAdaptor() {
+    void testAdaptor() {
         ConstantGenerator generator = new ConstantGenerator();
         Random random = RandomAdaptor.of(generator);
         checkConstant(random);
@@ -46,21 +47,21 @@ public class RandomAdaptorTest {
     private void checkConstant(Random random) {
         byte[] bytes = new byte[] {0};
         random.nextBytes(bytes);
-        Assertions.assertEquals(0, bytes[0]);
-        Assertions.assertFalse(random.nextBoolean());
-        Assertions.assertEquals(0, random.nextDouble(), 0);
-        Assertions.assertEquals(0, random.nextFloat(), 0);
-        Assertions.assertEquals(0, random.nextGaussian(), 0);
-        Assertions.assertEquals(0, random.nextInt());
-        Assertions.assertEquals(0, random.nextInt(1));
-        Assertions.assertEquals(0, random.nextLong());
+        assertEquals(0, bytes[0]);
+        assertFalse(random.nextBoolean());
+        assertEquals(0, random.nextDouble(), 0);
+        assertEquals(0, random.nextFloat(), 0);
+        assertEquals(0, random.nextGaussian(), 0);
+        assertEquals(0, random.nextInt());
+        assertEquals(0, random.nextInt(1));
+        assertEquals(0, random.nextLong());
         random.setSeed(100);
-        Assertions.assertEquals(0, random.nextDouble(), 0);
+        assertEquals(0, random.nextDouble(), 0);
     }
 
     @SuppressWarnings("unused")
     @Test
-    public void testNullGenerator(){
+    void testNullGenerator(){
         assertThrows(NullArgumentException.class, () -> {
             RandomGenerator nullGenerator = null;
             Random random = new RandomAdaptor(nullGenerator);
@@ -69,7 +70,7 @@ public class RandomAdaptorTest {
 
     @SuppressWarnings("unused")
     @Test
-    public void testNullGenerator2(){
+    void testNullGenerator2(){
         assertThrows(NullArgumentException.class, () -> {
             RandomGenerator nullGenerator = null;
             Random random = RandomAdaptor.of(nullGenerator);

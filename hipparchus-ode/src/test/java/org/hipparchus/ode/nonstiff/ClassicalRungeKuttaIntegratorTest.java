@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.junit.jupiter.api.Test;
 
-public class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstractTest {
+class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
     protected RungeKuttaIntegrator createIntegrator(double step) {
         return new ClassicalRungeKuttaIntegrator(step);

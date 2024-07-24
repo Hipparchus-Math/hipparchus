@@ -24,7 +24,6 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.CombinatoricsUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -34,27 +33,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
  * Test for class {@link DSCompiler}.
  */
-public class DSCompilerTest {
+class DSCompilerTest {
 
     @Test
-    public void testSize() {
+    void testSize() {
         for (int i = 0; i < 6; ++i) {
             for (int j = 0; j < 6; ++j) {
                 long expected = CombinatoricsUtils.binomialCoefficient(i + j, i);
-                Assertions.assertEquals(expected, DSCompiler.getCompiler(i, j).getSize());
-                Assertions.assertEquals(expected, DSCompiler.getCompiler(j, i).getSize());
+                assertEquals(expected, DSCompiler.getCompiler(i, j).getSize());
+                assertEquals(expected, DSCompiler.getCompiler(j, i).getSize());
             }
         }
     }
 
     @Test
-    public void testIndices() {
+    void testIndices() {
 
         DSCompiler c = DSCompiler.getCompiler(0, 0);
         checkIndices(c.getPartialDerivativeOrders(0), new int[0]);
@@ -140,35 +141,35 @@ public class DSCompilerTest {
     }
 
     @Test
-    public void testIncompatibleParams() {
+    void testIncompatibleParams() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             DSCompiler.getCompiler(3, 2).checkCompatibility(DSCompiler.getCompiler(4, 2));
         });
     }
 
     @Test
-    public void testIncompatibleOrder() {
+    void testIncompatibleOrder() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             DSCompiler.getCompiler(3, 3).checkCompatibility(DSCompiler.getCompiler(3, 2));
         });
     }
 
     @Test
-    public void testSymmetry() {
+    void testSymmetry() {
         for (int i = 0; i < 6; ++i) {
             for (int j = 0; j < 6; ++j) {
                 DSCompiler c = DSCompiler.getCompiler(i, j);
                 for (int k = 0; k < c.getSize(); ++k) {
-                    Assertions.assertEquals(k, c.getPartialDerivativeIndex(c.getPartialDerivativeOrders(k)));
+                    assertEquals(k, c.getPartialDerivativeIndex(c.getPartialDerivativeOrders(k)));
                 }
             }
         }
     }
 
     @Test
-    public void testMultiplicationRules()
+    void testMultiplicationRules()
         throws SecurityException, NoSuchFieldException, IllegalArgumentException,
-               IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         Map<String,String> referenceRules = new HashMap<String, String>();
         referenceRules.put("(f*g)",             "f * g");
@@ -265,16 +266,16 @@ public class DSCompilerTest {
                         rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) rhsField.get(term)).intValue()),
                                                    "g", variables("p")));
                     }
-                    Assertions.assertEquals(referenceRules.get(product), rule.toString(), product);
+                    assertEquals(referenceRules.get(product), rule.toString(), product);
                 }
             }
         }
     }
 
     @Test
-    public void testCompositionRules()
+    void testCompositionRules()
         throws SecurityException, NoSuchFieldException, IllegalArgumentException,
-               IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
         // the following reference rules have all been computed independently from the library,
         // using only pencil and paper and some search and replace to handle symmetries
@@ -442,7 +443,7 @@ public class DSCompilerTest {
                     String product = ordersToString(compiler.getPartialDerivativeOrders(k),
                                                     "(f(g))", variables("p"));
                     String rule = univariateCompositionMappersToString(compiler, compIndirection[k]);
-                    Assertions.assertEquals(referenceRules.get(product), rule.toString(), product);
+                    assertEquals(referenceRules.get(product), rule.toString(), product);
                 }
             }
         }
@@ -450,9 +451,9 @@ public class DSCompilerTest {
     }
 
     @Test
-    public void testRebaserRules()
+    void testRebaserRules()
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-               NoSuchMethodException, SecurityException, NoSuchFieldException {
+        NoSuchMethodException, SecurityException, NoSuchFieldException {
 
         // the following reference rules have all been computed independently from the library,
         // using only pencil and paper (which was really tedious) and using search and replace to handle symmetries
@@ -522,11 +523,11 @@ public class DSCompilerTest {
             DSCompiler c3 = DSCompiler.getCompiler(3, order);
             Object[][] rebaser = (Object[][]) getterMethod.invoke(c2, c3);
 
-            Assertions.assertEquals(c3.getSize(), rebaser.length);
+            assertEquals(c3.getSize(), rebaser.length);
             for (int k = 0; k < rebaser.length; ++k) {
                 String key  = ordersToString(c3.getPartialDerivativeOrders(k), "f", variables("q"));
                 String rule = multivariateCompositionMappersToString(c2, c3, rebaser[k]);
-                Assertions.assertEquals(referenceRules.get(key), rule);
+                assertEquals(referenceRules.get(key), rule);
             }
 
         }
@@ -534,9 +535,9 @@ public class DSCompilerTest {
     }
 
     private void checkIndices(int[] indices, int ... expected) {
-        Assertions.assertEquals(expected.length, indices.length);
+        assertEquals(expected.length, indices.length);
         for (int i = 0; i < expected.length; ++i) {
-            Assertions.assertEquals(expected[i], indices[i]);
+            assertEquals(expected[i], indices[i]);
         }
     }
 
@@ -618,7 +619,7 @@ public class DSCompilerTest {
 
          } catch (NoSuchMethodException | SecurityException | NoSuchFieldException | IllegalAccessException |
                   IllegalArgumentException | InvocationTargetException e) {
-             Assertions.fail(e.getLocalizedMessage());
+             fail(e.getLocalizedMessage());
              return null;
          }
      }
@@ -681,7 +682,7 @@ public class DSCompilerTest {
 
          } catch (NoSuchMethodException | SecurityException | NoSuchFieldException | IllegalAccessException |
                   IllegalArgumentException | InvocationTargetException e) {
-             Assertions.fail(e.getLocalizedMessage());
+             fail(e.getLocalizedMessage());
              return null;
          }
      }
@@ -706,7 +707,7 @@ public class DSCompilerTest {
             case 8 : return "⁸";
             case 9 : return "⁹";
             default:
-                Assertions.fail("exponent out of range");
+                fail("exponent out of range");
                 return null;
         }
     }

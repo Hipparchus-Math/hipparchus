@@ -16,37 +16,38 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class RealMatrixTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class RealMatrixTest {
 
     @Test
-    public void testDefaultMultiplyTransposed() {
+    void testDefaultMultiplyTransposed() {
         RealMatrix a = MatrixUtils.createRealMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
         RealMatrix b = MatrixUtils.createRealMatrix(new double[][] { {4d, -5d, 6d} });
         RealMatrix abTRef = a.multiplyTransposed(b);
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
         RealMatrix abT = dma.multiplyTransposed(dmb);
-        Assertions.assertEquals(0.0, abT.subtract(abTRef).getNorm1(), 1.0e-10);
+        assertEquals(0.0, abT.subtract(abTRef).getNorm1(), 1.0e-10);
     }
 
     @Test
-    public void testDefaultTransposeMultiply() {
+    void testDefaultTransposeMultiply() {
         RealMatrix a = MatrixUtils.createRealMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
         RealMatrix b = MatrixUtils.createRealMatrix(new double[][] { {4d}, {-5d}, {6d} });
         RealMatrix aTbRef = a.transposeMultiply(b);
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
         RealMatrix aTb = dma.transposeMultiply(dmb);
-        Assertions.assertEquals(0.0, aTb.subtract(aTbRef).getNorm1(), 1.0e-10);
+        assertEquals(0.0, aTb.subtract(aTbRef).getNorm1(), 1.0e-10);
     }
 
     @Test
-    public void testDefaultMap() {
+    void testDefaultMap() {
         RealMatrix a = MatrixUtils.createRealMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
-        Assertions.assertEquals(0.0, a.add(a.map(x -> -x)).getNorm1(), 1.0e-10);
+        assertEquals(0.0, a.add(a.map(x -> -x)).getNorm1(), 1.0e-10);
     }
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf

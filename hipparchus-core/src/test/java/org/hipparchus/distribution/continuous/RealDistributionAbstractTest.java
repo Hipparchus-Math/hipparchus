@@ -29,12 +29,14 @@ import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Abstract base class for {@link RealDistribution} tests.
@@ -172,25 +174,25 @@ public abstract class RealDistributionAbstractTest {
     protected void verifyCumulativeProbabilities() {
         // verify cumulativeProbability(double)
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
-            UnitTestUtils.assertEquals("Incorrect cumulative probability value returned for "
+            UnitTestUtils.customAssertEquals("Incorrect cumulative probability value returned for "
                 + cumulativeTestPoints[i], cumulativeTestValues[i],
-                distribution.cumulativeProbability(cumulativeTestPoints[i]),
-                getTolerance());
+                                             distribution.cumulativeProbability(cumulativeTestPoints[i]),
+                                             getTolerance());
         }
         // verify probability(double, double)
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
             for (int j = 0; j < cumulativeTestPoints.length; j++) {
                 if (cumulativeTestPoints[i] <= cumulativeTestPoints[j]) {
-                    UnitTestUtils.assertEquals(cumulativeTestValues[j] - cumulativeTestValues[i],
-                        distribution.probability(cumulativeTestPoints[i], cumulativeTestPoints[j]),
-                        getTolerance());
+                    UnitTestUtils.customAssertEquals(cumulativeTestValues[j] - cumulativeTestValues[i],
+                                                     distribution.probability(cumulativeTestPoints[i], cumulativeTestPoints[j]),
+                                                     getTolerance());
                 } else {
                     try {
                         distribution.probability(cumulativeTestPoints[i], cumulativeTestPoints[j]);
                     } catch (MathIllegalArgumentException e) {
                         continue;
                     }
-                    Assertions.fail("distribution.probability(double, double) should have thrown an exception that second argument is too large");
+                    fail("distribution.probability(double, double) should have thrown an exception that second argument is too large");
                 }
             }
         }
@@ -202,10 +204,10 @@ public abstract class RealDistributionAbstractTest {
      */
     protected void verifyInverseCumulativeProbabilities() {
         for (int i = 0; i < inverseCumulativeTestPoints.length; i++) {
-            UnitTestUtils.assertEquals("Incorrect inverse cumulative probability value returned for "
+            UnitTestUtils.customAssertEquals("Incorrect inverse cumulative probability value returned for "
                 + inverseCumulativeTestPoints[i], inverseCumulativeTestValues[i],
-                 distribution.inverseCumulativeProbability(inverseCumulativeTestPoints[i]),
-                 getTolerance());
+                                             distribution.inverseCumulativeProbability(inverseCumulativeTestPoints[i]),
+                                             getTolerance());
         }
     }
 
@@ -214,10 +216,10 @@ public abstract class RealDistributionAbstractTest {
      */
     protected void verifyDensities() {
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
-            UnitTestUtils.assertEquals("Incorrect probability density value returned for "
+            UnitTestUtils.customAssertEquals("Incorrect probability density value returned for "
                 + cumulativeTestPoints[i], densityTestValues[i],
-                 distribution.density(cumulativeTestPoints[i]),
-                 getTolerance());
+                                             distribution.density(cumulativeTestPoints[i]),
+                                             getTolerance());
         }
     }
 
@@ -226,10 +228,10 @@ public abstract class RealDistributionAbstractTest {
      */
     protected void verifyLogDensities() {
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
-            UnitTestUtils.assertEquals("Incorrect probability density value returned for "
+            UnitTestUtils.customAssertEquals("Incorrect probability density value returned for "
                     + cumulativeTestPoints[i], logDensityTestValues[i],
-                    distribution.logDensity(cumulativeTestPoints[i]),
-                    getTolerance());
+                                             distribution.logDensity(cumulativeTestPoints[i]),
+                                             getTolerance());
         }
     }
 
@@ -279,8 +281,8 @@ public abstract class RealDistributionAbstractTest {
         for (int i=1; i < cumulativeTestPoints.length; i++) {
 
             // check that cdf(x, x) = 0
-            UnitTestUtils.assertEquals(0d,
-               distribution.probability
+            UnitTestUtils.customAssertEquals(0d,
+                                             distribution.probability
                  (cumulativeTestPoints[i], cumulativeTestPoints[i]), tolerance);
 
             // check that P(a < X <= b) = P(X <= b) - P(X <= a)
@@ -289,7 +291,7 @@ public abstract class RealDistributionAbstractTest {
             double diff = distribution.cumulativeProbability(upper) -
                 distribution.cumulativeProbability(lower);
             double direct = distribution.probability(lower, upper);
-            UnitTestUtils.assertEquals("Inconsistent probability for ("
+            UnitTestUtils.customAssertEquals("Inconsistent probability for ("
                     + lower + "," + upper + ")", diff, direct, tolerance);
         }
     }
@@ -301,19 +303,19 @@ public abstract class RealDistributionAbstractTest {
     public void testIllegalArguments() {
         try {
             distribution.probability(1, 0);
-            Assertions.fail("Expecting MathIllegalArgumentException for bad cumulativeProbability interval");
+            fail("Expecting MathIllegalArgumentException for bad cumulativeProbability interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             distribution.inverseCumulativeProbability(-1);
-            Assertions.fail("Expecting MathIllegalArgumentException for p = -1");
+            fail("Expecting MathIllegalArgumentException for p = -1");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             distribution.inverseCumulativeProbability(2);
-            Assertions.fail("Expecting MathIllegalArgumentException for p = 2");
+            fail("Expecting MathIllegalArgumentException for p = 2");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -348,7 +350,7 @@ public abstract class RealDistributionAbstractTest {
         }
         Collections.sort(integrationTestPoints);
         for (int i = 1; i < integrationTestPoints.size(); i++) {
-            Assertions.assertEquals(
+            assertEquals(
                     distribution.probability(
                             integrationTestPoints.get(0), integrationTestPoints.get(i)),
                             integrator.integrate(

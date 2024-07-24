@@ -37,14 +37,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Test cases for the {@link MultivariateSummaryStatistics} class.
  */
-public class MultivariateSummaryStatisticsTest {
+class MultivariateSummaryStatisticsTest {
 
     protected MultivariateSummaryStatistics createMultivariateSummaryStatistics(int k, boolean covarianceBiasCorrected) {
         return new MultivariateSummaryStatistics(k, covarianceBiasCorrected);
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         MultivariateSummaryStatistics stats = createMultivariateSummaryStatistics(2, true);
         stats.addValue(new double[] {1, 3});
         stats.addValue(new double[] {2, 2});
@@ -67,7 +67,7 @@ public class MultivariateSummaryStatisticsTest {
     }
 
     @Test
-    public void testDimension() {
+    void testDimension() {
         try {
             createMultivariateSummaryStatistics(2, true).addValue(new double[3]);
             fail("Expecting MathIllegalArgumentException");
@@ -78,7 +78,7 @@ public class MultivariateSummaryStatisticsTest {
 
     /** test stats */
     @Test
-    public void testStats() {
+    void testStats() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
         assertEquals(0, u.getN());
         u.addValue(new double[] { 1, 2 });
@@ -111,7 +111,7 @@ public class MultivariateSummaryStatisticsTest {
     }
 
     @Test
-    public void testN0andN1Conditions() {
+    void testN0andN1Conditions() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(1, true);
         assertTrue(Double.isNaN(u.getMean()[0]));
         assertTrue(Double.isNaN(u.getStandardDeviation()[0]));
@@ -129,7 +129,7 @@ public class MultivariateSummaryStatisticsTest {
     }
 
     @Test
-    public void testNaNContracts() {
+    void testNaNContracts() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(1, true);
         assertTrue(Double.isNaN(u.getMean()[0]));
         assertTrue(Double.isNaN(u.getMin()[0]));
@@ -145,7 +145,7 @@ public class MultivariateSummaryStatisticsTest {
     }
 
     @Test
-    public void testSerialization() {
+    void testSerialization() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
         // Empty test
         UnitTestUtils.checkSerializedEquality(u);
@@ -168,7 +168,7 @@ public class MultivariateSummaryStatisticsTest {
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testEqualsAndHashCode() {
+    void testEqualsAndHashCode() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
         MultivariateSummaryStatistics t = null;
         int emptyHash = u.hashCode();

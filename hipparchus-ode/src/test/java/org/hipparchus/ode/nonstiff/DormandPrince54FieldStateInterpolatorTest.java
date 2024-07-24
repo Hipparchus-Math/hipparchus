@@ -24,7 +24,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.Binary64Field;
 import org.junit.jupiter.api.Test;
 
-public class DormandPrince54FieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAbstractTest {
+class DormandPrince54FieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> RungeKuttaFieldStateInterpolator<T>
     createInterpolator(Field<T> field, boolean forward, T[][] yDotK,

@@ -41,8 +41,9 @@ import org.hipparchus.analysis.function.Sinh;
 import org.hipparchus.analysis.function.Sqrt;
 import org.hipparchus.analysis.function.Tan;
 import org.hipparchus.analysis.function.Tanh;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for the {@link OpenMapRealVector} class.
@@ -56,20 +57,20 @@ public class SparseRealVectorTest extends RealVectorAbstractTest {
     }
 
     @Test
-    public void testConstructors() {
+    void testConstructors() {
         final double[] vec1 = {1d, 2d, 3d};
         final Double[] dvec1 = {1d, 2d, 3d, 4d, 5d, 6d, 7d, 8d, 9d};
 
         OpenMapRealVector v0 = new OpenMapRealVector();
-        Assertions.assertEquals(0, v0.getDimension(), "testData len");
+        assertEquals(0, v0.getDimension(), "testData len");
 
         OpenMapRealVector v1 = new OpenMapRealVector(7);
-        Assertions.assertEquals(7, v1.getDimension(), "testData len");
-        Assertions.assertEquals(0.0, v1.getEntry(6), 0, "testData is 0.0 ");
+        assertEquals(7, v1.getDimension(), "testData len");
+        assertEquals(0.0, v1.getEntry(6), 0, "testData is 0.0 ");
 
         OpenMapRealVector v3 = new OpenMapRealVector(vec1);
-        Assertions.assertEquals(3, v3.getDimension(), "testData len");
-        Assertions.assertEquals(2.0, v3.getEntry(1), 0, "testData is 2.0 ");
+        assertEquals(3, v3.getDimension(), "testData len");
+        assertEquals(2.0, v3.getEntry(1), 0, "testData is 2.0 ");
 
         //SparseRealVector v4 = new SparseRealVector(vec4, 3, 2);
         //Assertions.assertEquals("testData len", 2, v4.getDimension());
@@ -82,32 +83,32 @@ public class SparseRealVectorTest extends RealVectorAbstractTest {
         //}
 
         RealVector v5_i = new OpenMapRealVector(dvec1);
-        Assertions.assertEquals(9, v5_i.getDimension(), "testData len");
-        Assertions.assertEquals(9.0, v5_i.getEntry(8), 0, "testData is 9.0 ");
+        assertEquals(9, v5_i.getDimension(), "testData len");
+        assertEquals(9.0, v5_i.getEntry(8), 0, "testData is 9.0 ");
 
         OpenMapRealVector v5 = new OpenMapRealVector(dvec1);
-        Assertions.assertEquals(9, v5.getDimension(), "testData len");
-        Assertions.assertEquals(9.0, v5.getEntry(8), 0, "testData is 9.0 ");
+        assertEquals(9, v5.getDimension(), "testData len");
+        assertEquals(9.0, v5.getEntry(8), 0, "testData is 9.0 ");
 
         OpenMapRealVector v7 = new OpenMapRealVector(v1);
-        Assertions.assertEquals(7, v7.getDimension(), "testData len");
-        Assertions.assertEquals(0.0, v7.getEntry(6), 0, "testData is 0.0 ");
+        assertEquals(7, v7.getDimension(), "testData len");
+        assertEquals(0.0, v7.getEntry(6), 0, "testData is 0.0 ");
 
         RealVectorTestImpl v7_i = new RealVectorTestImpl(vec1);
 
         OpenMapRealVector v7_2 = new OpenMapRealVector(v7_i);
-        Assertions.assertEquals(3, v7_2.getDimension(), "testData len");
-        Assertions.assertEquals(2.0d, v7_2.getEntry(1), 0, "testData is 0.0 ");
+        assertEquals(3, v7_2.getDimension(), "testData len");
+        assertEquals(2.0d, v7_2.getEntry(1), 0, "testData is 0.0 ");
 
         OpenMapRealVector v8 = new OpenMapRealVector(v1);
-        Assertions.assertEquals(7, v8.getDimension(), "testData len");
-        Assertions.assertEquals(0.0, v8.getEntry(6), 0, "testData is 0.0 ");
+        assertEquals(7, v8.getDimension(), "testData len");
+        assertEquals(0.0, v8.getEntry(6), 0, "testData is 0.0 ");
 
     }
 
     /* Check that the operations do not throw an exception (cf. MATH-645). */
     @Test
-    public void testConcurrentModification() {
+    void testConcurrentModification() {
         final RealVector u = new OpenMapRealVector(3, 1e-6);
         u.setEntry(0, 1);
         u.setEntry(1, 0);

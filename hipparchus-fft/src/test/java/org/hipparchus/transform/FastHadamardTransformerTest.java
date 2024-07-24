@@ -23,21 +23,24 @@ package org.hipparchus.transform;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
  * JUnit Test for HadamardTransformerTest
  * @see org.hipparchus.transform.FastHadamardTransformer
  */
-public final class FastHadamardTransformerTest {
+final class FastHadamardTransformerTest {
 
     /**
      * Test of transformer for the a 8-point FHT (means n=8)
      */
     @Test
-    public void test8Points() {
+    void test8Points() {
         checkAllTransforms(new int[] { 1, 4, -2, 3, 0, 1, 4, -1 },
                        new int[] { 10, -4, 2, -4, 2, -12, 6, 8 });
     }
@@ -46,7 +49,7 @@ public final class FastHadamardTransformerTest {
      * Test of transformer for the a 4-points FHT (means n=4)
      */
     @Test
-    public void test4Points() {
+    void test4Points() {
         checkAllTransforms(new int[] { 1, 2, 3, 4 },
                            new int[] { 10, -2, -4, 0 });
     }
@@ -55,23 +58,23 @@ public final class FastHadamardTransformerTest {
      * Test the inverse transform of an integer vector is not always an integer vector
      */
     @Test
-    public void testNoIntInverse() {
+    void testNoIntInverse() {
         FastHadamardTransformer transformer = new FastHadamardTransformer();
         double[] x = transformer.transform(new double[] { 0, 1, 0, 1}, TransformType.INVERSE);
-        Assertions.assertEquals( 0.5, x[0], 0);
-        Assertions.assertEquals(-0.5, x[1], 0);
-        Assertions.assertEquals( 0.0, x[2], 0);
-        Assertions.assertEquals( 0.0, x[3], 0);
+        assertEquals( 0.5, x[0], 0);
+        assertEquals(-0.5, x[1], 0);
+        assertEquals( 0.0, x[2], 0);
+        assertEquals( 0.0, x[3], 0);
     }
 
     /**
      * Test of transformer for wrong number of points
      */
     @Test
-    public void test3Points() {
+    void test3Points() {
         try {
             new FastHadamardTransformer().transform(new double[3], TransformType.FORWARD);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected
         }
@@ -95,7 +98,7 @@ public final class FastHadamardTransformerTest {
         double[] dResult = transformer.transform(dX, TransformType.FORWARD);
         for (int i = 0; i < dResult.length; i++) {
             // compare computed results to precomputed results
-            Assertions.assertTrue(Precision.equals(y[i], dResult[i], 1));
+            assertTrue(Precision.equals(y[i], dResult[i], 1));
         }
     }
 
@@ -107,7 +110,7 @@ public final class FastHadamardTransformerTest {
         int[] iResult = transformer.transform(x);
         for (int i = 0; i < iResult.length; i++) {
             // compare computed results to precomputed results
-            Assertions.assertEquals(y[i], iResult[i]);
+            assertEquals(y[i], iResult[i]);
         }
 
     }
@@ -124,7 +127,7 @@ public final class FastHadamardTransformerTest {
         double[] dResult = transformer.transform(dY, TransformType.INVERSE);
         for (int i = 0; i < dResult.length; i++) {
             // compare computed results to precomputed results
-            Assertions.assertTrue(Precision.equals(x[i], dResult[i], 1));
+            assertTrue(Precision.equals(x[i], dResult[i], 1));
         }
 
     }

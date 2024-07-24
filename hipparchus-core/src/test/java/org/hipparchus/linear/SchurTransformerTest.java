@@ -25,12 +25,15 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-public class SchurTransformerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class SchurTransformerTest {
 
     private double[][] testSquare5 = {
             { 5, 4, 3, 2, 1 },
@@ -57,45 +60,45 @@ public class SchurTransformerTest {
     };
 
     @Test
-    public void testNonSquare() {
+    void testNonSquare() {
         try {
             new SchurTransformer(MatrixUtils.createRealMatrix(new double[3][2]));
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
-            Assertions.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
+            assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 
     @Test
-    public void testAEqualPTPt() {
+    void testAEqualPTPt() {
         checkAEqualPTPt(MatrixUtils.createRealMatrix(testSquare5));
         checkAEqualPTPt(MatrixUtils.createRealMatrix(testSquare3));
         checkAEqualPTPt(MatrixUtils.createRealMatrix(testRandom));
    }
 
     @Test
-    public void testPOrthogonal() {
+    void testPOrthogonal() {
         checkOrthogonal(new SchurTransformer(MatrixUtils.createRealMatrix(testSquare5)).getP());
         checkOrthogonal(new SchurTransformer(MatrixUtils.createRealMatrix(testSquare3)).getP());
         checkOrthogonal(new SchurTransformer(MatrixUtils.createRealMatrix(testRandom)).getP());
     }
 
     @Test
-    public void testPTOrthogonal() {
+    void testPTOrthogonal() {
         checkOrthogonal(new SchurTransformer(MatrixUtils.createRealMatrix(testSquare5)).getPT());
         checkOrthogonal(new SchurTransformer(MatrixUtils.createRealMatrix(testSquare3)).getPT());
         checkOrthogonal(new SchurTransformer(MatrixUtils.createRealMatrix(testRandom)).getPT());
     }
 
     @Test
-    public void testSchurForm() {
+    void testSchurForm() {
         checkSchurForm(new SchurTransformer(MatrixUtils.createRealMatrix(testSquare5)).getT());
         checkSchurForm(new SchurTransformer(MatrixUtils.createRealMatrix(testSquare3)).getT());
         checkSchurForm(new SchurTransformer(MatrixUtils.createRealMatrix(testRandom)).getT());
     }
 
     @Test
-    public void testRandomData() {
+    void testRandomData() {
         for (int run = 0; run < 100; run++) {
             Random r = new Random(System.currentTimeMillis());
 
@@ -116,7 +119,7 @@ public class SchurTransformerTest {
     }
 
     @Test
-    public void testRandomDataNormalDistribution() {
+    void testRandomDataNormalDistribution() {
         for (int run = 0; run < 100; run++) {
             Random r = new Random(System.currentTimeMillis());
             RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
@@ -138,7 +141,7 @@ public class SchurTransformerTest {
     }
 
     @Test
-    public void testMath848() {
+    void testMath848() {
         double[][] data = {
                 { 0.1849449280, -0.0646971046,  0.0774755812, -0.0969651755, -0.0692648806,  0.3282344352, -0.0177423074,  0.2063136340},
                 {-0.0742700134, -0.0289063030, -0.0017269460, -0.0375550146, -0.0487737922, -0.2616837868, -0.0821201295, -0.2530000167},
@@ -166,7 +169,7 @@ public class SchurTransformerTest {
         RealMatrix result = p.multiply(t).multiply(pT);
 
         double norm = result.subtract(matrix).getNorm1();
-        Assertions.assertEquals(0, norm, 1.0e-9);
+        assertEquals(0, norm, 1.0e-9);
 
         return t;
     }
@@ -174,7 +177,7 @@ public class SchurTransformerTest {
     private void checkOrthogonal(RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assertions.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
+        assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
     }
 
     private void checkSchurForm(final RealMatrix m) {
@@ -183,7 +186,7 @@ public class SchurTransformerTest {
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
                 if (i > j + 1) {
-                    Assertions.assertEquals(0, m.getEntry(i, j), 1.0e-16);
+                    assertEquals(0, m.getEntry(i, j), 1.0e-16);
                 }
             }
         }
@@ -197,13 +200,13 @@ public class SchurTransformerTest {
 
         // check values against known references
         RealMatrix p = transformer.getP();
-        Assertions.assertEquals(0, p.subtract(MatrixUtils.createRealMatrix(pRef)).getNorm1(), 1.0e-14);
+        assertEquals(0, p.subtract(MatrixUtils.createRealMatrix(pRef)).getNorm1(), 1.0e-14);
 
         RealMatrix t = transformer.getT();
-        Assertions.assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm1(), 1.0e-14);
+        assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
-        Assertions.assertTrue(p == transformer.getP());
-        Assertions.assertTrue(t == transformer.getT());
+        assertTrue(p == transformer.getP());
+        assertTrue(t == transformer.getT());
     }
 }

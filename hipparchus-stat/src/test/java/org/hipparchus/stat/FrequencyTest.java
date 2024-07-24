@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Test cases for the {@link Frequency} class.
  */
-public final class FrequencyTest {
+final class FrequencyTest {
     private static final long ONE_LONG = 1L;
     private static final long TWO_LONG = 2L;
     private static final long THREE_LONG = 3L;
@@ -52,7 +52,7 @@ public final class FrequencyTest {
 
     /** test freq counts */
     @Test
-    public void testCounts() {
+    void testCounts() {
         Frequency<Long> f = new Frequency<>();
 
         assertEquals(0, f.getSumFreq(), "total count");
@@ -74,7 +74,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testCountsString() {
+    void testCountsString() {
         Frequency<String> f = new Frequency<>();
 
         f.addValue("one");
@@ -90,7 +90,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testCountsInteger() {
+    void testCountsInteger() {
         Frequency<Integer> f = new Frequency<>();
 
         f.addValue(1);
@@ -108,7 +108,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testCountsComparator() {
+    void testCountsComparator() {
         Frequency<String> f = new Frequency<>(String.CASE_INSENSITIVE_ORDER);
 
         f.addValue("one");
@@ -121,13 +121,13 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testCountsCharacter() {
+    void testCountsCharacter() {
         Frequency<Character> f = new Frequency<>();
 
         assertEquals(0L, f.getCount('a'));
         assertEquals(0L, f.getCumFreq('b'));
-        UnitTestUtils.assertEquals(Double.NaN, f.getPct('a'), 0.0);
-        UnitTestUtils.assertEquals(Double.NaN, f.getCumPct('b'), 0.0);
+        UnitTestUtils.customAssertEquals(Double.NaN, f.getPct('a'), 0.0);
+        UnitTestUtils.customAssertEquals(Double.NaN, f.getCumPct('b'), 0.0);
         f.addValue('a');
         f.addValue('b');
         f.addValue('c');
@@ -141,7 +141,7 @@ public final class FrequencyTest {
 
     /** test pcts */
     @Test
-    public void testPcts() {
+    void testPcts() {
         Frequency<Long> f = new Frequency<>();
 
         f.addValue(ONE_LONG);
@@ -165,7 +165,7 @@ public final class FrequencyTest {
 
     /** test empty table */
     @Test
-    public void testEmptyTable() {
+    void testEmptyTable() {
         final Frequency<Integer> freq = new Frequency<>();
 
         assertEquals(0, freq.getSumFreq(), "freq sum, empty table");
@@ -181,7 +181,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testCumPct() {
+    void testCumPct() {
         Frequency<Integer> f = new Frequency<>();
         f.addValue(3);
         f.addValue(4);
@@ -199,7 +199,7 @@ public final class FrequencyTest {
      * Tests toString()
      */
     @Test
-    public void testToString() throws Exception {
+    void testToString() throws Exception {
         Frequency<Long> f = new Frequency<>();
 
         f.addValue(ONE_LONG);
@@ -225,7 +225,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testIntegerValues() {
+    void testIntegerValues() {
         Frequency<Integer> f = new Frequency<>();
 
         Integer obj1 = null;
@@ -255,7 +255,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testSerial() {
+    void testSerial() {
         Frequency<Long> f = new Frequency<>();
 
         f.addValue(ONE_LONG);
@@ -266,7 +266,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testGetUniqueCount() {
+    void testGetUniqueCount() {
         Frequency<Long> f = new Frequency<>();
 
         assertEquals(0, f.getUniqueCount());
@@ -279,7 +279,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testIncrement() {
+    void testIncrement() {
         Frequency<Long> f = new Frequency<>();
 
         assertEquals(0, f.getUniqueCount());
@@ -302,7 +302,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testMerge() {
+    void testMerge() {
         Frequency<Long> f = new Frequency<>();
 
         assertEquals(0, f.getUniqueCount());
@@ -333,7 +333,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testMergeCollection() {
+    void testMergeCollection() {
         Frequency<Long> f = new Frequency<>();
 
         assertEquals(0, f.getUniqueCount());
@@ -361,7 +361,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testMode() {
+    void testMode() {
         Frequency<String> f = new Frequency<>();
 
         List<String> mode;
@@ -388,7 +388,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testModeDoubleNan() {
+    void testModeDoubleNan() {
         Frequency<Double> f = new Frequency<>();
 
         List<Double> mode;
@@ -409,7 +409,7 @@ public final class FrequencyTest {
     }
 
     @Test
-    public void testModeFloatNan() {
+    void testModeFloatNan() {
         Frequency<Float> f = new Frequency<>();
 
         List<Float> mode;

@@ -20,13 +20,14 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FieldFunctionsTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class FieldFunctionsTest {
 
     @Test
-    public void testScalarUnivariateFunctionConversion() {
+    void testScalarUnivariateFunctionConversion() {
         FieldUnivariateFunction f1 = new FieldUnivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(T x) {
                 return x.multiply(2);
@@ -36,14 +37,14 @@ public class FieldFunctionsTest {
         CalculusFieldUnivariateFunction<Binary64> f2 = x -> x.multiply(2);
 
         for (double x = 0; x < 1; x += 0.01) {
-            Assertions.assertEquals(f2.value(new Binary64(x)).getReal(),
+            assertEquals(f2.value(new Binary64(x)).getReal(),
                                 f1Converted.value(new Binary64(x)).getReal(),
                                 1.0e-15);
         }
     }
 
     @Test
-    public void testScalarMultivariateFunctionConversion() {
+    void testScalarMultivariateFunctionConversion() {
         FieldMultivariateFunction f1 = new FieldMultivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(@SuppressWarnings("unchecked") T... x) {
                 return x[0].multiply(2).add(x[1]);
@@ -54,7 +55,7 @@ public class FieldFunctionsTest {
 
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
-                Assertions.assertEquals(f2.value(new Binary64(x0), new Binary64(x1)).getReal(),
+                assertEquals(f2.value(new Binary64(x0), new Binary64(x1)).getReal(),
                                     f1Converted.value(new Binary64(x0), new Binary64(x1)).getReal(),
                                     1.0e-15);
             }
@@ -62,7 +63,7 @@ public class FieldFunctionsTest {
     }
 
     @Test
-    public void testVectorUnivariateFunctionConversion() {
+    void testVectorUnivariateFunctionConversion() {
         FieldUnivariateVectorFunction f1 = new FieldUnivariateVectorFunction() {
             public <T extends CalculusFieldElement<T>> T[] value(T x) {
                 T[] y = MathArrays.buildArray(x.getField(), 3);
@@ -79,7 +80,7 @@ public class FieldFunctionsTest {
 
         for (double x = 0; x < 1; x += 0.01) {
             for (int i = 0; i < 3; ++i) {
-                Assertions.assertEquals(f2.value(new Binary64(x))[i].getReal(),
+                assertEquals(f2.value(new Binary64(x))[i].getReal(),
                                     f1Converted.value(new Binary64(x))[i].getReal(),
                                     1.0e-15);
             }
@@ -87,7 +88,7 @@ public class FieldFunctionsTest {
     }
 
     @Test
-    public void testVectorMultivariateFunctionConversion() {
+    void testVectorMultivariateFunctionConversion() {
         FieldMultivariateVectorFunction f1 = new FieldMultivariateVectorFunction() {
             public <T extends CalculusFieldElement<T>> T[] value(@SuppressWarnings("unchecked") T... x) {
                 T[] y = MathArrays.buildArray(x[0].getField(), 3);
@@ -105,7 +106,7 @@ public class FieldFunctionsTest {
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
                 for (int i = 0; i < 3; ++i) {
-                    Assertions.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
+                    assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
                                         f1Converted.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
                                         1.0e-15);
                 }
@@ -114,7 +115,7 @@ public class FieldFunctionsTest {
     }
 
     @Test
-    public void testMatrixUnivariateFunctionConversion() {
+    void testMatrixUnivariateFunctionConversion() {
         FieldUnivariateMatrixFunction f1 = new FieldUnivariateMatrixFunction() {
             public <T extends CalculusFieldElement<T>> T[][] value(T x) {
                 T[][] y = MathArrays.buildArray(x.getField(), 2, 2);
@@ -134,7 +135,7 @@ public class FieldFunctionsTest {
         for (double x = 0; x < 1; x += 0.01) {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; ++j) {
-                    Assertions.assertEquals(f2.value(new Binary64(x))[i][j].getReal(),
+                    assertEquals(f2.value(new Binary64(x))[i][j].getReal(),
                                         f1Converted.value(new Binary64(x))[i][j].getReal(),
                                         1.0e-15);
                 }
@@ -143,7 +144,7 @@ public class FieldFunctionsTest {
     }
 
     @Test
-    public void testMatrixMultivariateFunctionConversion() {
+    void testMatrixMultivariateFunctionConversion() {
         FieldMultivariateMatrixFunction f1 = new FieldMultivariateMatrixFunction() {
             public <T extends CalculusFieldElement<T>> T[][] value(@SuppressWarnings("unchecked") T... x) {
                 T[][] y = MathArrays.buildArray(x[0].getField(), 2, 2);
@@ -164,7 +165,7 @@ public class FieldFunctionsTest {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
                 for (int i = 0; i < 2; ++i) {
                     for (int j = 0; j < 2; ++j) {
-                        Assertions.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
+                        assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
                                             f1Converted.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
                                             1.0e-15);
                     }

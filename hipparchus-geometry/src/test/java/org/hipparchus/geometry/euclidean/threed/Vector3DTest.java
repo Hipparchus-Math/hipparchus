@@ -29,7 +29,6 @@ import org.hipparchus.geometry.Space;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.text.DecimalFormat;
@@ -37,11 +36,16 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class Vector3DTest {
+class Vector3DTest {
     @Test
-    public void testConstructors() throws MathIllegalArgumentException {
+    void testConstructors() throws MathIllegalArgumentException {
         double r = FastMath.sqrt(2) /2;
         checkVector(new Vector3D(2, new Vector3D(FastMath.PI / 3, -FastMath.PI / 4)),
                     r, r * FastMath.sqrt(3), -2 * r);
@@ -62,162 +66,162 @@ public class Vector3DTest {
     }
 
     @Test
-    public void testSpace() {
+    void testSpace() {
         Space space = new Vector3D(1, 2, 2).getSpace();
-        Assertions.assertEquals(3, space.getDimension());
-        Assertions.assertEquals(2, space.getSubSpace().getDimension());
+        assertEquals(3, space.getDimension());
+        assertEquals(2, space.getSubSpace().getDimension());
         Space deserialized = (Space) UnitTestUtils.serializeAndRecover(space);
-        Assertions.assertTrue(space == deserialized);
+        assertTrue(space == deserialized);
     }
 
     @Test
-    public void testZero() {
-        Assertions.assertEquals(0, new Vector3D(1, 2, 2).getZero().getNorm(), 1.0e-15);
+    void testZero() {
+        assertEquals(0, new Vector3D(1, 2, 2).getZero().getNorm(), 1.0e-15);
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
-    public void testEquals() {
+    void testEquals() {
         Vector3D u1 = new Vector3D(1, 2, 3);
         Vector3D u2 = new Vector3D(1, 2, 3);
-        Assertions.assertEquals(u1, u1);
-        Assertions.assertEquals(u1, u2);
-        Assertions.assertNotEquals(u1, new Rotation(1, 0, 0, 0, false));
-        Assertions.assertNotEquals(u1, new Vector3D(1, 2, 3 + 10 * Precision.EPSILON));
-        Assertions.assertNotEquals(u1, new Vector3D(1, 2 + 10 * Precision.EPSILON, 3));
-        Assertions.assertNotEquals(u1, new Vector3D(1 + 10 * Precision.EPSILON, 2, 3));
-        Assertions.assertEquals(new Vector3D(0, Double.NaN, 0), new Vector3D(0, 0, Double.NaN));
+        assertEquals(u1, u1);
+        assertEquals(u1, u2);
+        assertNotEquals(u1, new Rotation(1, 0, 0, 0, false));
+        assertNotEquals(u1, new Vector3D(1, 2, 3 + 10 * Precision.EPSILON));
+        assertNotEquals(u1, new Vector3D(1, 2 + 10 * Precision.EPSILON, 3));
+        assertNotEquals(u1, new Vector3D(1 + 10 * Precision.EPSILON, 2, 3));
+        assertEquals(new Vector3D(0, Double.NaN, 0), new Vector3D(0, 0, Double.NaN));
     }
 
     @Test
-    public void testEqualsIeee754() {
+    void testEqualsIeee754() {
         Vector3D u1 = new Vector3D(1, 2, 3);
         Vector3D u2 = new Vector3D(1, 2, 3);
-        Assertions.assertTrue(u1.equalsIeee754(u1));
-        Assertions.assertTrue(u1.equalsIeee754(u2));
-        Assertions.assertFalse(u1.equalsIeee754(new Rotation(1, 0, 0, 0, false)));
-        Assertions.assertFalse(u1.equalsIeee754(new Vector3D(1, 2, 3 + 10 * Precision.EPSILON)));
-        Assertions.assertFalse(u1.equalsIeee754(new Vector3D(1, 2 + 10 * Precision.EPSILON, 3)));
-        Assertions.assertFalse(u1.equalsIeee754(new Vector3D(1 + 10 * Precision.EPSILON, 2, 3)));
-        Assertions.assertFalse(new Vector3D(0, Double.NaN, 0).equalsIeee754(new Vector3D(0, 0, Double.NaN)));
-        Assertions.assertFalse(Vector3D.NaN.equalsIeee754(Vector3D.NaN));
+        assertTrue(u1.equalsIeee754(u1));
+        assertTrue(u1.equalsIeee754(u2));
+        assertFalse(u1.equalsIeee754(new Rotation(1, 0, 0, 0, false)));
+        assertFalse(u1.equalsIeee754(new Vector3D(1, 2, 3 + 10 * Precision.EPSILON)));
+        assertFalse(u1.equalsIeee754(new Vector3D(1, 2 + 10 * Precision.EPSILON, 3)));
+        assertFalse(u1.equalsIeee754(new Vector3D(1 + 10 * Precision.EPSILON, 2, 3)));
+        assertFalse(new Vector3D(0, Double.NaN, 0).equalsIeee754(new Vector3D(0, 0, Double.NaN)));
+        assertFalse(Vector3D.NaN.equalsIeee754(Vector3D.NaN));
     }
 
     @Test
-    public void testHash() {
-        Assertions.assertEquals(new Vector3D(0, Double.NaN, 0).hashCode(), new Vector3D(0, 0, Double.NaN).hashCode());
+    void testHash() {
+        assertEquals(new Vector3D(0, Double.NaN, 0).hashCode(), new Vector3D(0, 0, Double.NaN).hashCode());
         Vector3D u = new Vector3D(1, 2, 3);
         Vector3D v = new Vector3D(1, 2, 3 + 10 * Precision.EPSILON);
-        Assertions.assertTrue(u.hashCode() != v.hashCode());
+        assertTrue(u.hashCode() != v.hashCode());
     }
 
     @Test
-    public void testInfinite() {
-        Assertions.assertTrue(new Vector3D(1, 1, Double.NEGATIVE_INFINITY).isInfinite());
-        Assertions.assertTrue(new Vector3D(1, Double.NEGATIVE_INFINITY, 1).isInfinite());
-        Assertions.assertTrue(new Vector3D(Double.NEGATIVE_INFINITY, 1, 1).isInfinite());
-        Assertions.assertFalse(new Vector3D(1, 1, 2).isInfinite());
-        Assertions.assertFalse(new Vector3D(1, Double.NaN, Double.NEGATIVE_INFINITY).isInfinite());
+    void testInfinite() {
+        assertTrue(new Vector3D(1, 1, Double.NEGATIVE_INFINITY).isInfinite());
+        assertTrue(new Vector3D(1, Double.NEGATIVE_INFINITY, 1).isInfinite());
+        assertTrue(new Vector3D(Double.NEGATIVE_INFINITY, 1, 1).isInfinite());
+        assertFalse(new Vector3D(1, 1, 2).isInfinite());
+        assertFalse(new Vector3D(1, Double.NaN, Double.NEGATIVE_INFINITY).isInfinite());
     }
 
     @Test
-    public void testNaN() {
-        Assertions.assertTrue(new Vector3D(1, 1, Double.NaN).isNaN());
-        Assertions.assertTrue(new Vector3D(1, Double.NaN, 1).isNaN());
-        Assertions.assertTrue(new Vector3D(Double.NaN, 1, 1).isNaN());
-        Assertions.assertFalse(new Vector3D(1, 1, 2).isNaN());
-        Assertions.assertFalse(new Vector3D(1, 1, Double.NEGATIVE_INFINITY).isNaN());
+    void testNaN() {
+        assertTrue(new Vector3D(1, 1, Double.NaN).isNaN());
+        assertTrue(new Vector3D(1, Double.NaN, 1).isNaN());
+        assertTrue(new Vector3D(Double.NaN, 1, 1).isNaN());
+        assertFalse(new Vector3D(1, 1, 2).isNaN());
+        assertFalse(new Vector3D(1, 1, Double.NEGATIVE_INFINITY).isNaN());
     }
 
     @Test
-    public void testToString() {
-        Assertions.assertEquals("{3; 2; 1}", new Vector3D(3, 2, 1).toString());
+    void testToString() {
+        assertEquals("{3; 2; 1}", new Vector3D(3, 2, 1).toString());
         NumberFormat format = new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.US));
-        Assertions.assertEquals("{3.000; 2.000; 1.000}", new Vector3D(3, 2, 1).toString(format));
+        assertEquals("{3.000; 2.000; 1.000}", new Vector3D(3, 2, 1).toString(format));
     }
 
     @Test
-    public void testWrongDimension() throws MathIllegalArgumentException {
+    void testWrongDimension() throws MathIllegalArgumentException {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new Vector3D(new double[]{2, 5});
         });
     }
 
     @Test
-    public void testCoordinates() {
+    void testCoordinates() {
         Vector3D v = new Vector3D(1, 2, 3);
-        Assertions.assertTrue(FastMath.abs(v.getX() - 1) < 1.0e-12);
-        Assertions.assertTrue(FastMath.abs(v.getY() - 2) < 1.0e-12);
-        Assertions.assertTrue(FastMath.abs(v.getZ() - 3) < 1.0e-12);
+        assertTrue(FastMath.abs(v.getX() - 1) < 1.0e-12);
+        assertTrue(FastMath.abs(v.getY() - 2) < 1.0e-12);
+        assertTrue(FastMath.abs(v.getZ() - 3) < 1.0e-12);
         double[] coordinates = v.toArray();
-        Assertions.assertTrue(FastMath.abs(coordinates[0] - 1) < 1.0e-12);
-        Assertions.assertTrue(FastMath.abs(coordinates[1] - 2) < 1.0e-12);
-        Assertions.assertTrue(FastMath.abs(coordinates[2] - 3) < 1.0e-12);
+        assertTrue(FastMath.abs(coordinates[0] - 1) < 1.0e-12);
+        assertTrue(FastMath.abs(coordinates[1] - 2) < 1.0e-12);
+        assertTrue(FastMath.abs(coordinates[2] - 3) < 1.0e-12);
     }
 
     @Test
-    public void testNorm1() {
-        Assertions.assertEquals(0.0, Vector3D.ZERO.getNorm1(), 0);
-        Assertions.assertEquals(6.0, new Vector3D(1, -2, 3).getNorm1(), 0);
+    void testNorm1() {
+        assertEquals(0.0, Vector3D.ZERO.getNorm1(), 0);
+        assertEquals(6.0, new Vector3D(1, -2, 3).getNorm1(), 0);
     }
 
     @Test
-    public void testNorm() {
-        Assertions.assertEquals(0.0, Vector3D.ZERO.getNorm(), 0);
-        Assertions.assertEquals(FastMath.sqrt(14), new Vector3D(1, 2, 3).getNorm(), 1.0e-12);
+    void testNorm() {
+        assertEquals(0.0, Vector3D.ZERO.getNorm(), 0);
+        assertEquals(FastMath.sqrt(14), new Vector3D(1, 2, 3).getNorm(), 1.0e-12);
     }
 
     @Test
-    public void testNormSq() {
-        Assertions.assertEquals(0.0, new Vector3D(0, 0, 0).getNormSq(), 0);
-        Assertions.assertEquals(14, new Vector3D(1, 2, 3).getNormSq(), 1.0e-12);
+    void testNormSq() {
+        assertEquals(0.0, new Vector3D(0, 0, 0).getNormSq(), 0);
+        assertEquals(14, new Vector3D(1, 2, 3).getNormSq(), 1.0e-12);
     }
 
     @Test
-    public void testNormInf() {
-        Assertions.assertEquals(0.0, Vector3D.ZERO.getNormInf(), 0);
-        Assertions.assertEquals(3.0, new Vector3D(1, -2, 3).getNormInf(), 0);
+    void testNormInf() {
+        assertEquals(0.0, Vector3D.ZERO.getNormInf(), 0);
+        assertEquals(3.0, new Vector3D(1, -2, 3).getNormInf(), 0);
     }
 
     @Test
-    public void testDistance1() {
+    void testDistance1() {
         Vector3D v1 = new Vector3D(1, -2, 3);
         Vector3D v2 = new Vector3D(-4, 2, 0);
-        Assertions.assertEquals(0.0, Vector3D.distance1(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
-        Assertions.assertEquals(12.0, Vector3D.distance1(v1, v2), 1.0e-12);
-        Assertions.assertEquals(v1.subtract(v2).getNorm1(), Vector3D.distance1(v1, v2), 1.0e-12);
+        assertEquals(0.0, Vector3D.distance1(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
+        assertEquals(12.0, Vector3D.distance1(v1, v2), 1.0e-12);
+        assertEquals(v1.subtract(v2).getNorm1(), Vector3D.distance1(v1, v2), 1.0e-12);
     }
 
     @Test
-    public void testDistance() {
+    void testDistance() {
         Vector3D v1 = new Vector3D(1, -2, 3);
         Vector3D v2 = new Vector3D(-4, 2, 0);
-        Assertions.assertEquals(0.0, Vector3D.distance(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
-        Assertions.assertEquals(FastMath.sqrt(50), Vector3D.distance(v1, v2), 1.0e-12);
-        Assertions.assertEquals(v1.subtract(v2).getNorm(), Vector3D.distance(v1, v2), 1.0e-12);
+        assertEquals(0.0, Vector3D.distance(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
+        assertEquals(FastMath.sqrt(50), Vector3D.distance(v1, v2), 1.0e-12);
+        assertEquals(v1.subtract(v2).getNorm(), Vector3D.distance(v1, v2), 1.0e-12);
     }
 
     @Test
-    public void testDistanceSq() {
+    void testDistanceSq() {
         Vector3D v1 = new Vector3D(1, -2, 3);
         Vector3D v2 = new Vector3D(-4, 2, 0);
-        Assertions.assertEquals(0.0, Vector3D.distanceSq(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
-        Assertions.assertEquals(50.0, Vector3D.distanceSq(v1, v2), 1.0e-12);
-        Assertions.assertEquals(Vector3D.distance(v1, v2) * Vector3D.distance(v1, v2),
+        assertEquals(0.0, Vector3D.distanceSq(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
+        assertEquals(50.0, Vector3D.distanceSq(v1, v2), 1.0e-12);
+        assertEquals(Vector3D.distance(v1, v2) * Vector3D.distance(v1, v2),
                             Vector3D.distanceSq(v1, v2), 1.0e-12);
   }
 
     @Test
-    public void testDistanceInf() {
+    void testDistanceInf() {
         Vector3D v1 = new Vector3D(1, -2, 3);
         Vector3D v2 = new Vector3D(-4, 2, 0);
-        Assertions.assertEquals(0.0, Vector3D.distanceInf(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
-        Assertions.assertEquals(5.0, Vector3D.distanceInf(v1, v2), 1.0e-12);
-        Assertions.assertEquals(v1.subtract(v2).getNormInf(), Vector3D.distanceInf(v1, v2), 1.0e-12);
+        assertEquals(0.0, Vector3D.distanceInf(Vector3D.MINUS_I, Vector3D.MINUS_I), 0);
+        assertEquals(5.0, Vector3D.distanceInf(v1, v2), 1.0e-12);
+        assertEquals(v1.subtract(v2).getNormInf(), Vector3D.distanceInf(v1, v2), 1.0e-12);
     }
 
     @Test
-    public void testSubtract() {
+    void testSubtract() {
         Vector3D v1 = new Vector3D(1, 2, 3);
         Vector3D v2 = new Vector3D(-3, -2, -1);
         v1 = v1.subtract(v2);
@@ -228,7 +232,7 @@ public class Vector3DTest {
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         Vector3D v1 = new Vector3D(1, 2, 3);
         Vector3D v2 = new Vector3D(-3, -2, -1);
         v1 = v1.add(v2);
@@ -239,7 +243,7 @@ public class Vector3DTest {
     }
 
     @Test
-    public void testScalarProduct() {
+    void testScalarProduct() {
         Vector3D v = new Vector3D(1, 2, 3);
         v = v.scalarMultiply(3);
         checkVector(v, 3, 6, 9);
@@ -248,21 +252,21 @@ public class Vector3DTest {
     }
 
     @Test
-    public void testVectorialProducts() {
+    void testVectorialProducts() {
         Vector3D v1 = new Vector3D(2, 1, -4);
         Vector3D v2 = new Vector3D(3, 1, -1);
 
-        Assertions.assertTrue(FastMath.abs(Vector3D.dotProduct(v1, v2) - 11) < 1.0e-12);
+        assertTrue(FastMath.abs(Vector3D.dotProduct(v1, v2) - 11) < 1.0e-12);
 
         Vector3D v3 = Vector3D.crossProduct(v1, v2);
         checkVector(v3, 3, -10, -1);
 
-        Assertions.assertTrue(FastMath.abs(Vector3D.dotProduct(v1, v3)) < 1.0e-12);
-        Assertions.assertTrue(FastMath.abs(Vector3D.dotProduct(v2, v3)) < 1.0e-12);
+        assertTrue(FastMath.abs(Vector3D.dotProduct(v1, v3)) < 1.0e-12);
+        assertTrue(FastMath.abs(Vector3D.dotProduct(v2, v3)) < 1.0e-12);
     }
 
     @Test
-    public void testCrossProductCancellation() {
+    void testCrossProductCancellation() {
         Vector3D v1 = new Vector3D(9070467121.0, 4535233560.0, 1);
         Vector3D v2 = new Vector3D(9070467123.0, 4535233561.0, 1);
         checkVector(Vector3D.crossProduct(v1, v2), -1, 2, 1);
@@ -275,84 +279,85 @@ public class Vector3DTest {
     }
 
     @Test
-    public void testAngular() {
-        Assertions.assertEquals(0,           Vector3D.PLUS_I.getAlpha(), 1.0e-10);
-        Assertions.assertEquals(0,           Vector3D.PLUS_I.getDelta(), 1.0e-10);
-        Assertions.assertEquals(FastMath.PI / 2, Vector3D.PLUS_J.getAlpha(), 1.0e-10);
-        Assertions.assertEquals(0,           Vector3D.PLUS_J.getDelta(), 1.0e-10);
-        Assertions.assertEquals(0,           Vector3D.PLUS_K.getAlpha(), 1.0e-10);
-        Assertions.assertEquals(FastMath.PI / 2, Vector3D.PLUS_K.getDelta(), 1.0e-10);
+    void testAngular() {
+        assertEquals(0,           Vector3D.PLUS_I.getAlpha(), 1.0e-10);
+        assertEquals(0,           Vector3D.PLUS_I.getDelta(), 1.0e-10);
+        assertEquals(FastMath.PI / 2, Vector3D.PLUS_J.getAlpha(), 1.0e-10);
+        assertEquals(0,           Vector3D.PLUS_J.getDelta(), 1.0e-10);
+        assertEquals(0,           Vector3D.PLUS_K.getAlpha(), 1.0e-10);
+        assertEquals(FastMath.PI / 2, Vector3D.PLUS_K.getDelta(), 1.0e-10);
 
         Vector3D u = new Vector3D(-1, 1, -1);
-        Assertions.assertEquals(3 * FastMath.PI /4, u.getAlpha(), 1.0e-10);
-        Assertions.assertEquals(-1.0 / FastMath.sqrt(3), FastMath.sin(u.getDelta()), 1.0e-10);
+        assertEquals(3 * FastMath.PI /4, u.getAlpha(), 1.0e-10);
+        assertEquals(-1.0 / FastMath.sqrt(3), FastMath.sin(u.getDelta()), 1.0e-10);
     }
 
     @Test
-    public void testAngularSeparation() throws MathRuntimeException {
+    void testAngularSeparation() throws MathRuntimeException {
         Vector3D v1 = new Vector3D(2, -1, 4);
 
         Vector3D  k = v1.normalize();
         Vector3D  i = k.orthogonal();
         Vector3D v2 = k.scalarMultiply(FastMath.cos(1.2)).add(i.scalarMultiply(FastMath.sin(1.2)));
 
-        Assertions.assertTrue(FastMath.abs(Vector3D.angle(v1, v2) - 1.2) < 1.0e-12);
+        assertTrue(FastMath.abs(Vector3D.angle(v1, v2) - 1.2) < 1.0e-12);
   }
 
     @Test
-    public void testNormalize() throws MathRuntimeException {
-        Assertions.assertEquals(1.0, new Vector3D(5, -4, 2).normalize().getNorm(), 1.0e-12);
+    void testNormalize() throws MathRuntimeException {
+        assertEquals(1.0, new Vector3D(5, -4, 2).normalize().getNorm(), 1.0e-12);
         try {
             Vector3D.ZERO.normalize();
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }
 
     @Test
-    public void testNegate() {
+    void testNegate() {
         checkVector(new Vector3D(0.1, 2.5, 1.3).negate(), -0.1, -2.5, -1.3);
     }
 
     @Test
-    public void testOrthogonal() throws MathRuntimeException {
+    void testOrthogonal() throws MathRuntimeException {
         Vector3D v1 = new Vector3D(0.1, 2.5, 1.3);
-        Assertions.assertEquals(0.0, Vector3D.dotProduct(v1, v1.orthogonal()), 1.0e-12);
+        assertEquals(0.0, Vector3D.dotProduct(v1, v1.orthogonal()), 1.0e-12);
         Vector3D v2 = new Vector3D(2.3, -0.003, 7.6);
-        Assertions.assertEquals(0.0, Vector3D.dotProduct(v2, v2.orthogonal()), 1.0e-12);
+        assertEquals(0.0, Vector3D.dotProduct(v2, v2.orthogonal()), 1.0e-12);
         Vector3D v3 = new Vector3D(-1.7, 1.4, 0.2);
-        Assertions.assertEquals(0.0, Vector3D.dotProduct(v3, v3.orthogonal()), 1.0e-12);
+        assertEquals(0.0, Vector3D.dotProduct(v3, v3.orthogonal()), 1.0e-12);
         Vector3D v4 = new Vector3D(4.2, 0.1, -1.8);
-        Assertions.assertEquals(0.0, Vector3D.dotProduct(v4, v4.orthogonal()), 1.0e-12);
+        assertEquals(0.0, Vector3D.dotProduct(v4, v4.orthogonal()), 1.0e-12);
         try {
             new Vector3D(0, 0, 0).orthogonal();
-            Assertions.fail("an exception should have been thrown");
-        } catch (MathRuntimeException ae) {
-            // expected behavior
-        }
-    }
-    @Test
-    public void testAngle() throws MathRuntimeException {
-        Assertions.assertEquals(0.22572612855273393616,
-                            Vector3D.angle(new Vector3D(1, 2, 3), new Vector3D(4, 5, 6)),
-                            1.0e-12);
-        Assertions.assertEquals(7.98595620686106654517199e-8,
-                            Vector3D.angle(new Vector3D(1, 2, 3), new Vector3D(2, 4, 6.000001)),
-                            1.0e-12);
-        Assertions.assertEquals(3.14159257373023116985197793156,
-                            Vector3D.angle(new Vector3D(1, 2, 3), new Vector3D(-2, -4, -6.000001)),
-                            1.0e-12);
-        try {
-            Vector3D.angle(Vector3D.ZERO, Vector3D.PLUS_I);
-            Assertions.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }
 
     @Test
-    public void testAccurateDotProduct() {
+    void testAngle() throws MathRuntimeException {
+        assertEquals(0.22572612855273393616,
+                            Vector3D.angle(new Vector3D(1, 2, 3), new Vector3D(4, 5, 6)),
+                            1.0e-12);
+        assertEquals(7.98595620686106654517199e-8,
+                            Vector3D.angle(new Vector3D(1, 2, 3), new Vector3D(2, 4, 6.000001)),
+                            1.0e-12);
+        assertEquals(3.14159257373023116985197793156,
+                            Vector3D.angle(new Vector3D(1, 2, 3), new Vector3D(-2, -4, -6.000001)),
+                            1.0e-12);
+        try {
+            Vector3D.angle(Vector3D.ZERO, Vector3D.PLUS_I);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException ae) {
+            // expected behavior
+        }
+    }
+
+    @Test
+    void testAccurateDotProduct() {
         // the following two vectors are nearly but not exactly orthogonal
         // naive dot product (i.e. computing u1.x * u2.x + u1.y * u2.y + u1.z * u2.z
         // leads to a result of 0.0, instead of the correct -1.855129...
@@ -364,12 +369,12 @@ public class Vector3DTest {
                                     8846951984510141.0 /     131072.0);
         double sNaive = u1.getX() * u2.getX() + u1.getY() * u2.getY() + u1.getZ() * u2.getZ();
         double sAccurate = u1.dotProduct(u2);
-        Assertions.assertEquals(0.0, sNaive, 1.0e-30);
-        Assertions.assertEquals(-2088690039198397.0 / 1125899906842624.0, sAccurate, 1.0e-15);
+        assertEquals(0.0, sNaive, 1.0e-30);
+        assertEquals(-2088690039198397.0 / 1125899906842624.0, sAccurate, 1.0e-15);
     }
 
     @Test
-    public void testDotProduct() {
+    void testDotProduct() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
         Well1024a random = new Well1024a(553267312521321234l);
@@ -382,12 +387,12 @@ public class Vector3DTest {
             double vz = 10000 * random.nextDouble();
             double sNaive = ux * vx + uy * vy + uz * vz;
             double sAccurate = new Vector3D(ux, uy, uz).dotProduct(new Vector3D(vx, vy, vz));
-            Assertions.assertEquals(sNaive, sAccurate, 2.5e-16 * sAccurate);
+            assertEquals(sNaive, sAccurate, 2.5e-16 * sAccurate);
         }
     }
 
     @Test
-    public void testAccurateCrossProduct() {
+    void testAccurateCrossProduct() {
         // the vectors u1 and u2 are nearly but not exactly anti-parallel
         // (7.31e-16 degrees from 180 degrees) naive cross product (i.e.
         // computing u1.x * u2.x + u1.y * u2.y + u1.z * u2.z
@@ -406,12 +411,12 @@ public class Vector3DTest {
                                        u1.getZ() * u2.getX() - u1.getX() * u2.getZ(),
                                        u1.getX() * u2.getY() - u1.getY() * u2.getX());
         Vector3D cAccurate = u1.crossProduct(u2);
-        Assertions.assertTrue(u3.distance(cNaive) > 2.9 * u3.getNorm());
-        Assertions.assertEquals(0.0, u3.distance(cAccurate), 1.0e-30 * cAccurate.getNorm());
+        assertTrue(u3.distance(cNaive) > 2.9 * u3.getNorm());
+        assertEquals(0.0, u3.distance(cAccurate), 1.0e-30 * cAccurate.getNorm());
     }
 
     @Test
-    public void testCrossProduct() {
+    void testCrossProduct() {
         // we compare accurate versus naive cross product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
         Well1024a random = new Well1024a(885362227452043214l);
@@ -424,12 +429,12 @@ public class Vector3DTest {
             double vz = 10000 * random.nextDouble();
             Vector3D cNaive = new Vector3D(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx);
             Vector3D cAccurate = new Vector3D(ux, uy, uz).crossProduct(new Vector3D(vx, vy, vz));
-            Assertions.assertEquals(0.0, cAccurate.distance(cNaive), 6.0e-15 * cAccurate.getNorm());
+            assertEquals(0.0, cAccurate.distance(cNaive), 6.0e-15 * cAccurate.getNorm());
         }
     }
 
     @Test
-    public void testArithmeticBlending() {
+    void testArithmeticBlending() {
 
         // Given
         final Vector3D v1 = new Vector3D(1,2,3);
@@ -445,8 +450,8 @@ public class Vector3DTest {
     }
 
     private void checkVector(Vector3D v, double x, double y, double z) {
-        Assertions.assertEquals(x, v.getX(), 1.0e-12);
-        Assertions.assertEquals(y, v.getY(), 1.0e-12);
-        Assertions.assertEquals(z, v.getZ(), 1.0e-12);
+        assertEquals(x, v.getX(), 1.0e-12);
+        assertEquals(y, v.getY(), 1.0e-12);
+        assertEquals(z, v.getZ(), 1.0e-12);
     }
 }

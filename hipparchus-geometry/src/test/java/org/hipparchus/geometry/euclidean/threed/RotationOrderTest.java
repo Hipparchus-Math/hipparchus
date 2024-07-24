@@ -24,16 +24,17 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RotationOrderTest {
 
-  @Test
-  public void testName() {
+class RotationOrderTest {
+
+    @Test
+    void testName() {
 
     RotationOrder[] orders = {
       RotationOrder.XYZ, RotationOrder.XZY, RotationOrder.YXZ,
@@ -43,29 +44,29 @@ public class RotationOrderTest {
     };
 
     for (int i = 0; i < orders.length; ++i) {
-      Assertions.assertEquals(getFieldName(orders[i]), orders[i].toString());
+      assertEquals(getFieldName(orders[i]), orders[i].toString());
     }
 
   }
 
-  @Test
-  public void testIssue72() {
+    @Test
+    void testIssue72() {
       for (RotationOrder order : RotationOrder.values()) {
           RotationOrder buildOrder = RotationOrder.getRotationOrder(order.toString());
-          Assertions.assertEquals(0.0, Vector3D.distance1(order.getA1(), buildOrder.getA1()), Double.MIN_VALUE);
-          Assertions.assertEquals(0.0, Vector3D.distance1(order.getA2(), buildOrder.getA2()), Double.MIN_VALUE);
-          Assertions.assertEquals(0.0, Vector3D.distance1(order.getA3(), buildOrder.getA3()), Double.MIN_VALUE);
+          assertEquals(0.0, Vector3D.distance1(order.getA1(), buildOrder.getA1()), Double.MIN_VALUE);
+          assertEquals(0.0, Vector3D.distance1(order.getA2(), buildOrder.getA2()), Double.MIN_VALUE);
+          assertEquals(0.0, Vector3D.distance1(order.getA3(), buildOrder.getA3()), Double.MIN_VALUE);
       }
   }
 
-  @Test
-  public void testIssue72InvalidName() {
+    @Test
+    void testIssue72InvalidName() {
       String wrongName = "BCE";
       try {
           RotationOrder.getRotationOrder(wrongName);
       } catch (MathIllegalStateException mise) {
-          Assertions.assertEquals(LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME, mise.getSpecifier());
-          Assertions.assertEquals(wrongName, mise.getParts()[0]);
+          assertEquals(LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME, mise.getSpecifier());
+          assertEquals(wrongName, mise.getParts()[0]);
       }
   }
 

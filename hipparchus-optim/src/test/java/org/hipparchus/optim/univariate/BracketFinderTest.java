@@ -23,16 +23,18 @@ package org.hipparchus.optim.univariate;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for {@link BracketFinder}.
  */
-public class BracketFinderTest {
+class BracketFinderTest {
 
     @Test
-    public void testCubicMin() {
+    void testCubicMin() {
         final BracketFinder bFind = new BracketFinder();
         final UnivariateFunction func = new UnivariateFunction() {
                 public double value(double x) {
@@ -48,13 +50,13 @@ public class BracketFinderTest {
         bFind.search(func, GoalType.MINIMIZE, -2 , -1);
         final double tol = 1e-15;
         // Comparing with results computed in Python.
-        Assertions.assertEquals(-2, bFind.getLo(), tol);
-        Assertions.assertEquals(-1, bFind.getMid(), tol);
-        Assertions.assertEquals(0.61803399999999997, bFind.getHi(), tol);
+        assertEquals(-2, bFind.getLo(), tol);
+        assertEquals(-1, bFind.getMid(), tol);
+        assertEquals(0.61803399999999997, bFind.getHi(), tol);
     }
 
     @Test
-    public void testCubicMax() {
+    void testCubicMax() {
         final BracketFinder bFind = new BracketFinder();
         final UnivariateFunction func = new UnivariateFunction() {
                 public double value(double x) {
@@ -69,13 +71,13 @@ public class BracketFinderTest {
 
         bFind.search(func, GoalType.MAXIMIZE, -2 , -1);
         final double tol = 1e-15;
-        Assertions.assertEquals(-2, bFind.getLo(), tol);
-        Assertions.assertEquals(-1, bFind.getMid(), tol);
-        Assertions.assertEquals(0.61803399999999997, bFind.getHi(), tol);
+        assertEquals(-2, bFind.getLo(), tol);
+        assertEquals(-1, bFind.getMid(), tol);
+        assertEquals(0.61803399999999997, bFind.getHi(), tol);
     }
 
     @Test
-    public void testMinimumIsOnIntervalBoundary() {
+    void testMinimumIsOnIntervalBoundary() {
         final UnivariateFunction func = new UnivariateFunction() {
                 public double value(double x) {
                     return x * x;
@@ -85,16 +87,16 @@ public class BracketFinderTest {
         final BracketFinder bFind = new BracketFinder();
 
         bFind.search(func, GoalType.MINIMIZE, 0, 1);
-        Assertions.assertTrue(bFind.getLo() <= 0);
-        Assertions.assertTrue(0 <= bFind.getHi());
+        assertTrue(bFind.getLo() <= 0);
+        assertTrue(0 <= bFind.getHi());
 
         bFind.search(func, GoalType.MINIMIZE, -1, 0);
-        Assertions.assertTrue(bFind.getLo() <= 0);
-        Assertions.assertTrue(0 <= bFind.getHi());
+        assertTrue(bFind.getLo() <= 0);
+        assertTrue(0 <= bFind.getHi());
     }
 
     @Test
-    public void testIntervalBoundsOrdering() {
+    void testIntervalBoundsOrdering() {
         final UnivariateFunction func = new UnivariateFunction() {
                 public double value(double x) {
                     return x * x;
@@ -104,19 +106,19 @@ public class BracketFinderTest {
         final BracketFinder bFind = new BracketFinder();
 
         bFind.search(func, GoalType.MINIMIZE, -1, 1);
-        Assertions.assertTrue(bFind.getLo() <= 0);
-        Assertions.assertTrue(0 <= bFind.getHi());
+        assertTrue(bFind.getLo() <= 0);
+        assertTrue(0 <= bFind.getHi());
 
         bFind.search(func, GoalType.MINIMIZE, 1, -1);
-        Assertions.assertTrue(bFind.getLo() <= 0);
-        Assertions.assertTrue(0 <= bFind.getHi());
+        assertTrue(bFind.getLo() <= 0);
+        assertTrue(0 <= bFind.getHi());
 
         bFind.search(func, GoalType.MINIMIZE, 1, 2);
-        Assertions.assertTrue(bFind.getLo() <= 0);
-        Assertions.assertTrue(0 <= bFind.getHi());
+        assertTrue(bFind.getLo() <= 0);
+        assertTrue(0 <= bFind.getHi());
 
         bFind.search(func, GoalType.MINIMIZE, 2, 1);
-        Assertions.assertTrue(bFind.getLo() <= 0);
-        Assertions.assertTrue(0 <= bFind.getHi());
+        assertTrue(bFind.getLo() <= 0);
+        assertTrue(0 <= bFind.getHi());
     }
 }

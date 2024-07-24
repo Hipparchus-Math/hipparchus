@@ -31,7 +31,8 @@ import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.util.FastMath;
-import org.junit.jupiter.api.Assertions;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StepInterpolatorTestUtils {
 
@@ -68,7 +69,7 @@ public class StepInterpolatorTestUtils {
                                                32 * (yP3h[i] - yM3h[i]) +
                                              -168 * (yP2h[i] - yM2h[i]) +
                                               672 * (yP1h[i] - yM1h[i])) / (840 * h);
-                    Assertions.assertEquals(approYDot, yDot[i], threshold, "" + (approYDot - yDot[i]));
+                    assertEquals(approYDot, yDot[i], threshold, "" + (approYDot - yDot[i]));
                 }
 
             }
@@ -110,7 +111,7 @@ public class StepInterpolatorTestUtils {
                                         add(yP2h[i].subtract(yM2h[i]).multiply(-168)).
                                         add(yP1h[i].subtract(yM1h[i]).multiply( 672)).
                                         divide(h.multiply(840));
-                    Assertions.assertEquals(approYDot.getReal(), yDot[i].getReal(), threshold);
+                    assertEquals(approYDot.getReal(), yDot[i].getReal(), threshold);
                 }
 
             }

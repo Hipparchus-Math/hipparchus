@@ -21,10 +21,11 @@
  */
 package org.hipparchus.random;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class Well1024aTest extends RandomGeneratorAbstractTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class Well1024aTest extends RandomGeneratorAbstractTest {
 
     @Override
     protected RandomGenerator makeGenerator() {
@@ -32,7 +33,7 @@ public class Well1024aTest extends RandomGeneratorAbstractTest {
     }
 
     @Test
-    public void testReferenceCode() {
+    void testReferenceCode() {
         Well1024a mt = new Well1024a(new int[] {
             740849862,  1202665156,  -199039369,  -259008301,  -291878969, -1164428990, -1565918811,   491009864,
           -1883086670,  1383450241,  1244617256,   689006653, -1576746370, -1307940314,  1421489086,  1742094000,
@@ -75,7 +76,7 @@ public class Well1024aTest extends RandomGeneratorAbstractTest {
         };
 
         for (int i = 0; i < refInt.length; ++i) {
-            Assertions.assertEquals(refInt[i], mt.nextInt());
+            assertEquals(refInt[i], mt.nextInt());
         }
 
     }

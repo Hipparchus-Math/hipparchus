@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test class for MonotoneChain.
  */
-public class MonotoneChainTest extends ConvexHullGenerator2DAbstractTest {
+class MonotoneChainTest extends ConvexHullGenerator2DAbstractTest {
 
     @Override
     protected ConvexHullGenerator2D createConvexHullGenerator(boolean includeCollinearPoints) {
@@ -43,7 +43,7 @@ public class MonotoneChainTest extends ConvexHullGenerator2DAbstractTest {
     // ------------------------------------------------------------------------------
 
     @Test
-    public void testConvergenceException() {
+    void testConvergenceException() {
         assertThrows(MathIllegalStateException.class, () -> {
             final Collection<Vector2D> points = new ArrayList<Vector2D>();
 

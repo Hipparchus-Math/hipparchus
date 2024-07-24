@@ -21,14 +21,14 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for TDistribution.
@@ -79,14 +79,14 @@ public class TDistributionTest extends RealDistributionAbstractTest {
      *      Bug report that prompted this unit test.</a>
      */
     @Test
-    public void testCumulativeProbabilityAgainstStackOverflow() {
+    void testCumulativeProbabilityAgainstStackOverflow() {
         TDistribution td = new TDistribution(5.);
         td.cumulativeProbability(.1);
         td.cumulativeProbability(.01);
     }
 
     @Test
-    public void testSmallDf() {
+    void testSmallDf() {
         setDistribution(new TDistribution(1d));
         // quantiles computed using R version 2.9.2
         setCumulativeTestPoints(new double[] {-318.308838986, -31.8205159538, -12.7062047362,
@@ -102,7 +102,7 @@ public class TDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testInverseCumulativeProbabilityExtremes() {
+    void testInverseCumulativeProbabilityExtremes() {
         setInverseCumulativeTestPoints(new double[] {0, 1});
         setInverseCumulativeTestValues(
                 new double[] {Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY});
@@ -110,46 +110,46 @@ public class TDistributionTest extends RealDistributionAbstractTest {
     }
 
     @Test
-    public void testCumulativeProbablilityExtremes() {
+    void testCumulativeProbablilityExtremes() {
         TDistribution dist;
         for (int i = 1; i < 11; i++) {
             dist = new TDistribution(i * 5);
-            Assertions.assertEquals(1,
+            assertEquals(1,
                 dist.cumulativeProbability(Double.POSITIVE_INFINITY), Double.MIN_VALUE);
-            Assertions.assertEquals(0,
+            assertEquals(0,
                 dist.cumulativeProbability(Double.NEGATIVE_INFINITY), Double.MIN_VALUE);
         }
     }
 
     @Test
-    public void testDfAccessors() {
+    void testDfAccessors() {
         TDistribution dist = (TDistribution) getDistribution();
-        Assertions.assertEquals(5d, dist.getDegreesOfFreedom(), Double.MIN_VALUE);
+        assertEquals(5d, dist.getDegreesOfFreedom(), Double.MIN_VALUE);
     }
 
     @Test
-    public void testPreconditions() {
+    void testPreconditions() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             new TDistribution(0);
         });
     }
 
     @Test
-    public void testMoments() {
+    void testMoments() {
         final double tol = 1e-9;
         TDistribution dist;
 
         dist = new TDistribution(1);
-        Assertions.assertTrue(Double.isNaN(dist.getNumericalMean()));
-        Assertions.assertTrue(Double.isNaN(dist.getNumericalVariance()));
+        assertTrue(Double.isNaN(dist.getNumericalMean()));
+        assertTrue(Double.isNaN(dist.getNumericalVariance()));
 
         dist = new TDistribution(1.5);
-        Assertions.assertEquals(0, dist.getNumericalMean(), tol);
-        Assertions.assertTrue(Double.isInfinite(dist.getNumericalVariance()));
+        assertEquals(0, dist.getNumericalMean(), tol);
+        assertTrue(Double.isInfinite(dist.getNumericalVariance()));
 
         dist = new TDistribution(5);
-        Assertions.assertEquals(0, dist.getNumericalMean(), tol);
-        Assertions.assertEquals(dist.getNumericalVariance(), 5d / (5d - 2d), tol);
+        assertEquals(0, dist.getNumericalMean(), tol);
+        assertEquals(dist.getNumericalVariance(), 5d / (5d - 2d), tol);
     }
 
     /*
@@ -159,16 +159,16 @@ public class TDistributionTest extends RealDistributionAbstractTest {
      * Have chosen problevels from 0.10 to 0.001
      */
     @Test
-    public void nistData(){
+    void nistData(){
         double[] prob = new double[]{ 0.10,0.05,0.025,0.01,0.005,0.001};
         double[] args2 = new double[]{1.886,2.920,4.303,6.965,9.925,22.327};
         double[] args10 = new double[]{1.372,1.812,2.228,2.764,3.169,4.143};
         double[] args30 = new double[]{1.310,1.697,2.042,2.457,2.750,3.385};
         double[] args100= new double[]{1.290,1.660,1.984,2.364,2.626,3.174};
-        UnitTestUtils.assertEquals(prob, makeNistResults(args2, 2), 1.0e-4);
-        UnitTestUtils.assertEquals(prob, makeNistResults(args10, 10), 1.0e-4);
-        UnitTestUtils.assertEquals(prob, makeNistResults(args30, 30), 1.0e-4);
-        UnitTestUtils.assertEquals(prob, makeNistResults(args100, 100), 1.0e-4);
+        UnitTestUtils.customAssertEquals(prob, makeNistResults(args2, 2), 1.0e-4);
+        UnitTestUtils.customAssertEquals(prob, makeNistResults(args10, 10), 1.0e-4);
+        UnitTestUtils.customAssertEquals(prob, makeNistResults(args30, 30), 1.0e-4);
+        UnitTestUtils.customAssertEquals(prob, makeNistResults(args100, 100), 1.0e-4);
         return;
     }
     private double[] makeNistResults(double[] args, int df){

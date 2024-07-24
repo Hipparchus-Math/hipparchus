@@ -22,8 +22,11 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@link GeometricMean} class.
@@ -41,34 +44,34 @@ public class GeometricMeanTest extends StorelessUnivariateStatisticAbstractTest{
     }
 
     @Test
-    public void testSpecialValues() {
+    void testSpecialValues() {
         GeometricMean mean = getUnivariateStatistic();
         // empty
-        Assertions.assertTrue(Double.isNaN(mean.getResult()));
+        assertTrue(Double.isNaN(mean.getResult()));
 
         // finite data
         mean.increment(1d);
-        Assertions.assertFalse(Double.isNaN(mean.getResult()));
+        assertFalse(Double.isNaN(mean.getResult()));
 
         // add 0 -- makes log sum blow to minus infinity, should make 0
         mean.increment(0d);
-        Assertions.assertEquals(0d, mean.getResult(), 0);
+        assertEquals(0d, mean.getResult(), 0);
 
         // add positive infinity - note the minus infinity above
         mean.increment(Double.POSITIVE_INFINITY);
-        Assertions.assertTrue(Double.isNaN(mean.getResult()));
+        assertTrue(Double.isNaN(mean.getResult()));
 
         // clear
         mean.clear();
-        Assertions.assertTrue(Double.isNaN(mean.getResult()));
+        assertTrue(Double.isNaN(mean.getResult()));
 
         // positive infinity by itself
         mean.increment(Double.POSITIVE_INFINITY);
-        Assertions.assertEquals(Double.POSITIVE_INFINITY, mean.getResult(), 0);
+        assertEquals(Double.POSITIVE_INFINITY, mean.getResult(), 0);
 
         // negative value -- should make NaN
         mean.increment(-2d);
-        Assertions.assertTrue(Double.isNaN(mean.getResult()));
+        assertTrue(Double.isNaN(mean.getResult()));
     }
 
 }

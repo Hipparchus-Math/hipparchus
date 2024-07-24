@@ -25,7 +25,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Binary64Field;
 import org.junit.jupiter.api.Test;
 
-public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
+class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> RungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {
