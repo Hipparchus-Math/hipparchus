@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="3.2" date="TBD" description="TBD">
+      <action dev="vincent" type="update" issue="issues/285">
+        Migrated tests from JUnit 4 to JUnit 5
+      </action>
+    </release>
     <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes several
                                                           bugfixes and improvements. The main additions are
                                                           Gauss-Markov order 1 autoregressive process generation

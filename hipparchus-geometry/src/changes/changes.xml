@@ -48,6 +48,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   <properties>
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
+  <release version="3.2" date="TBD" description="TBD">
+    <action dev="vincent" type="update" issue="issues/285">
+      Migrated tests from JUnit 4 to JUnit 5
+    </action>
+  </release>
   <body>
     <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes one
                                                           bugfix on 3D rotations at Cardan/Euler singularity.">
