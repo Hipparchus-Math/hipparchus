@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Locale;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -70,7 +71,7 @@ class MathRuntimeExceptionTest {
 
     /** Check the bracketing exception message uses full precision. */
     @Test
-    void testGetMessageDecimalFormat() {
+    void testGetMessageDecimalFormatUnsupportedLocale() {
         // setup
         double a = FastMath.nextUp(1.0), b = FastMath.nextDown(1.0);
         double fa = -Double.MIN_NORMAL, fb = -12.345678901234567e-10;
@@ -78,12 +79,31 @@ class MathRuntimeExceptionTest {
         // action
         String message = new MathRuntimeException(
                 LocalizedCoreFormats.NOT_BRACKETING_INTERVAL, a, b, fa, fb)
-                .getMessage();
+                .getMessage(Locale.TRADITIONAL_CHINESE);
 
         // verify
         String expected = "interval does not bracket a root: " +
                 "f(1.0000000000000002E0) = -22.250738585072014E-309, " +
                 "f(999.9999999999999E-3) = -1.2345678901234566E-9";
+        assertThat( message, CoreMatchers.is( expected) );
+    }
+
+    /** Check the bracketing exception message uses full precision. */
+    @Test
+    void testGetMessageDecimalFormatSupportedLocale() {
+        // setup
+        double a = FastMath.nextUp(1.0), b = FastMath.nextDown(1.0);
+        double fa = -Double.MIN_NORMAL, fb = -12.345678901234567e-10;
+
+        // action
+        String message = new MathRuntimeException(
+                LocalizedCoreFormats.NOT_BRACKETING_INTERVAL, a, b, fa, fb)
+                .getMessage(Locale.FRENCH);
+
+        // verify
+        String expected = "l'intervalle n'encadre pas une racine : " +
+                          "f(1,0000000000000002E0) = -22,250738585072014E-309, " +
+                          "f(999,9999999999999E-3) = -1,2345678901234566E-9";
         assertThat( message, CoreMatchers.is( expected) );
     }
 

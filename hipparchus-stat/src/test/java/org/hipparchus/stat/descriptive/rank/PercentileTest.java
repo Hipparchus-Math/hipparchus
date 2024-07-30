@@ -25,16 +25,19 @@ import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.KthSelector;
 import org.hipparchus.util.PivotingStrategy;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -133,7 +136,10 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
             p.evaluate(d, 0, d.length, -1.0);
             fail();
         } catch (final MathIllegalArgumentException ex) {
-            // success
+            Assertions.assertEquals(LocalizedStatFormats.OUT_OF_BOUNDS_QUANTILE_VALUE, ex.getSpecifier());
+            Assertions.assertEquals(-1, (Double) ex.getParts()[0], 1.0e-15);
+            Assertions.assertEquals("out of bounds quantile value: -1, must be in (0, 100]",
+                                    ex.getMessage(Locale.TRADITIONAL_CHINESE));
         }
         try {
             p.evaluate(d, 0, d.length, 101.0);
