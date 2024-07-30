@@ -24,6 +24,10 @@ package org.hipparchus.migration;
 
 
 import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.Locale;
 
 @Deprecated
 public class LocalizedMigrationFormatsTest extends LocalizedFormatsAbstractTest {
@@ -38,4 +42,9 @@ public class LocalizedMigrationFormatsTest extends LocalizedFormatsAbstractTest 
         return 82;
     }
 
+    @Test
+    public void testUnsupportedLocale() {
+        Assertions.assertEquals("Cardan angles singularity",
+                                LocalizedMigrationFormats.CARDAN_ANGLES_SINGULARITY.getLocalizedString(Locale.TRADITIONAL_CHINESE));
+    }
 }
