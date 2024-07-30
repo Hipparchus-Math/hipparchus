@@ -50,8 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.2" date="TBD" description="TBD">
+      <action dev="vincent" type="fix" issue="issues/347">
+        Fixed JUnit pioneer dependency version not compatible with Java 8.
+      </action>
       <action dev="vincent" type="update" issue="issues/285">
-        Migrated tests from JUnit 4 to JUnit 5
+        Migrated tests from JUnit 4 to JUnit 5.
       </action>
       <action dev="luc" type="fix" issue="issues/339">
         Changed CDN for faster site load.
