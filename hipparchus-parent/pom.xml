@@ -567,7 +567,7 @@
     <hipparchus.maven-install-plugin.version>3.1.1</hipparchus.maven-install-plugin.version>
     <hipparchus.apache-rat-plugin.version>0.16.1</hipparchus.apache-rat-plugin.version>
     <hipparchus.junit.version>5.10.3</hipparchus.junit.version>
-    <hipparchus.junit.pioneer.version>2.2.0</hipparchus.junit.pioneer.version>
+    <hipparchus.junit.pioneer.version>1.9.1</hipparchus.junit.pioneer.version>
     <hipparchus.mockito-core.version>5.12.0</hipparchus.mockito-core.version>
     <hipparchus.hamcrest.version>2.2</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
