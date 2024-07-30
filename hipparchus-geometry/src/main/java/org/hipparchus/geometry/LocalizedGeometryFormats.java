@@ -22,11 +22,8 @@
 package org.hipparchus.geometry;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import org.hipparchus.exception.Localizable;
-import org.hipparchus.exception.UTF8Control;
 
 /**
  * Enumeration for localized messages formats used in exceptions messages.
@@ -63,7 +60,7 @@ public enum LocalizedGeometryFormats implements Localizable {
     FACET_ORIENTATION_MISMATCH("facets orientation mismatch around edge joining points ({0}, {1}, {2}) and ({3}, {4}, {5})"),
 
     /** INCONSISTENT_STATE_AT_2_PI_WRAPPING. */
-    INCONSISTENT_STATE_AT_2_PI_WRAPPING("inconsistent state at 2\u03c0 wrapping"),
+    INCONSISTENT_STATE_AT_2_PI_WRAPPING("inconsistent state at 2π wrapping"),
 
     /** NON_INVERTIBLE_TRANSFORM. */
     NON_INVERTIBLE_TRANSFORM("non-invertible affine transform collapses some lines into single points"),
@@ -124,28 +121,8 @@ public enum LocalizedGeometryFormats implements Localizable {
     /** {@inheritDoc} */
     @Override
     public String getLocalizedString(final Locale locale) {
-        try {
-            final String path = LocalizedGeometryFormats.class.getName().replaceAll("\\.", "/");
-            ResourceBundle bundle =
-                    ResourceBundle.getBundle("assets/" + path, locale, new UTF8Control());
-            if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
-                final String translated = bundle.getString(name());
-                if ((translated != null) &&
-                    (translated.length() > 0) &&
-                    (!translated.toLowerCase(locale).contains("missing translation"))) {
-                    // the value of the resource is the translated format
-                    return translated;
-                }
-            }
-
-        } catch (MissingResourceException mre) { // NOPMD
-            // do nothing here
-        }
-
-        // either the locale is not supported or the resource is unknown
-        // don't translate and fall back to using the source format
-        return sourceFormat;
-
+        return getLocalizedString("assets/" + LocalizedGeometryFormats.class.getName().replaceAll("\\.", "/"),
+                                  name(), locale);
     }
 
 }
