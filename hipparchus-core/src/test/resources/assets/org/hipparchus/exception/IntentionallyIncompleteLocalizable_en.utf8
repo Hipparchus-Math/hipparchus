@@ -1,0 +1,3 @@
+MESSAGE_WITHOUT_ARGUMENT   = message without argument
+MESSAGE_WITH_ONE_ARGUMENT  = message with one argument {0}
+MESSAGE_WITH_TWO_ARGUMENTS = message with two arguments {0}, {1}
