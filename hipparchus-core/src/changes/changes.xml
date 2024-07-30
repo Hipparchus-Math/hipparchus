@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.2" date="TBD" description="TBD">
+      <action dev="luc" type="update" issue="issues/346">
+        Added getLocalizedString(baseName, key, locale) with default implementation
+        to Localizable interface
+      </action>
       <action dev="vincent" type="update" issue="issues/285">
         Migrated tests from JUnit 4 to JUnit 5
       </action>

@@ -23,6 +23,8 @@ package org.hipparchus.exception;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Interface for localizable strings.
@@ -44,4 +46,37 @@ public interface Localizable extends Serializable {
      * localized version is available.
      */
     String getLocalizedString(Locale locale);
+
+    /**
+     * Gets the localized string.
+     *
+     * @param baseName base name of the resource bundle
+     * @param key key of the item in the bundle
+     * @param locale locale into which to get the string.
+     * @return the localized string or the source string if no
+     * localized version is available.
+     */
+    default String getLocalizedString(final String baseName, final String key, final Locale locale) {
+
+        try {
+            final ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale, new UTF8Control());
+            if (bundle.getLocale().getLanguage().equals(locale.getLanguage()))
+            {
+                final String translated = bundle.getString(key);
+                if (!(translated.isEmpty() || translated.toLowerCase().contains("missing translation")))
+                {
+                    // the value of the resource is the translated format
+                    return translated;
+                }
+            }
+        } catch (MissingResourceException mre) { // NOPMD
+            // do nothing here
+        }
+
+        // either the locale is not supported or the resource is not translated, or
+        // it is unknown: don't translate and fall back to using the source format
+        return getSourceString();
+
+    }
+
 }
