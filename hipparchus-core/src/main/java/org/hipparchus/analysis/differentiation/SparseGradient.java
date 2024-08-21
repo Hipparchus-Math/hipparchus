@@ -148,6 +148,12 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
         return (out == null) ? 0.0 : out;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public SparseGradient getAddendum() {
+        return new SparseGradient(0, derivatives);
+    }
+
     /**
      * Get the value of the function.
      * @return value of the function.

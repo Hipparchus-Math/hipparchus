@@ -437,6 +437,11 @@ class CalculusFieldElementTest {
         }
 
         @Override
+        public TestCalculusFieldElement getAddendum() {
+            return subtract(getReal());
+        }
+
+        @Override
         public TestCalculusFieldElement newInstance(double value) {
             return new TestCalculusFieldElement(value);
         }

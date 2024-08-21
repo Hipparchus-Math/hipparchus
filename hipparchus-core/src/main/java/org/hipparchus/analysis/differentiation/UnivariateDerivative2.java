@@ -107,6 +107,12 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
+    public UnivariateDerivative2 getAddendum() {
+        return new UnivariateDerivative2(0, f1, f2);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public double getValue() {
         return f0;
     }

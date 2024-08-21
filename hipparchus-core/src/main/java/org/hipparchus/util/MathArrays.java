@@ -1450,6 +1450,32 @@ public class MathArrays {
     /**
      * Returns {@code true} iff both arguments are {@code null} or have same
      * dimensions and all their elements are equal as defined by
+     * {@link Object#equals(Object)}.
+     *
+     * @param x First array.
+     * @param y Second array.
+     * @return {@code true} if the values are both {@code null} or have same
+     * dimension and equal elements.
+     * @since 4.0
+     */
+    public static <T extends FieldElement<T>> boolean equals(T[] x, T[] y) {
+        if ((x == null) || (y == null)) {
+            return !((x == null) ^ (y == null));
+        }
+        if (x.length != y.length) {
+            return false;
+        }
+        for (int i = 0; i < x.length; ++i) {
+            if (!x[i].equals(y[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns {@code true} iff both arguments are {@code null} or have same
+     * dimensions and all their elements are equal as defined by
      * {@link Precision#equalsIncludingNaN(double,double) this method}.
      *
      * @param x First array.

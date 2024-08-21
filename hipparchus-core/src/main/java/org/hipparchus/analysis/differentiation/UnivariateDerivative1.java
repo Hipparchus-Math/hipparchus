@@ -99,6 +99,12 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
+    public UnivariateDerivative1 getAddendum() {
+        return new UnivariateDerivative1(0, f1);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public double getValue() {
         return f0;
     }

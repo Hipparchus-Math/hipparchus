@@ -108,6 +108,12 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         return new FieldUnivariateDerivative2<>(value, f1, f2);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldUnivariateDerivative2<T> getAddendum() {
+        return new FieldUnivariateDerivative2<>(f0.getField().getZero(), f1, f2);
+    }
+
     /** Get the value part of the univariate derivative.
      * @return value part of the univariate derivative
      */

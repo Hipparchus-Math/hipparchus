@@ -187,6 +187,17 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
 
     /** {@inheritDoc} */
     @Override
+    public FieldTuple<T> getAddendum() {
+        final T[] addendum = values.clone();
+        addendum[0] = addendum[0].getField().getZero();
+        for (int i = 1; i < addendum.length; ++i) {
+            addendum[i] = addendum[i].subtract(values[0]);
+        }
+        return new FieldTuple<>(field, addendum);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldTuple<T> add(final double a) {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {

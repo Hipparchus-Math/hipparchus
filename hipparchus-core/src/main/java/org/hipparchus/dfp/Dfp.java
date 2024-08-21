@@ -312,7 +312,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         }
 
         Dfp xdfp = new Dfp(field, mantissa);
-        xdfp = xdfp.divide(new Dfp(field, 4503599627370496l)).add(field.getOne());  // Divide by 2^52, then add one
+        xdfp = xdfp.divide(new Dfp(field, 4503599627370496L)).add(field.getOne());  // Divide by 2^52, then add one
         xdfp = xdfp.multiply(DfpMath.pow(field.getTwo(), exponent));
 
         if ((bits & 0x8000000000000000L) != 0) {
@@ -1285,7 +1285,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
                         result = result.add(a);
                     }
 
-                    /** If exactly equal to 1/2 and odd then increment */
+                    // If exactly equal to 1/2 and odd then increment
                     if (a.equals(half) && result.exp > 0 && (result.mant[mant.length-result.exp]&1) != 0) {
                         a = newInstance(getOne());
                         a.sign = sign;
@@ -2632,7 +2632,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         }
 
 
-        y = y.multiply(newInstance(4503599627370496l)).rint();
+        y = y.multiply(newInstance(4503599627370496L)).rint();
         String str = y.toString();
         str = str.substring(0, str.length()-1);
         long mantissa = Long.parseLong(str);
@@ -2683,6 +2683,12 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     @Override
     public double getReal() {
         return toDouble();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Dfp getAddendum() {
+        return isFinite() ? subtract(getReal()) : getZero();
     }
 
     /** {@inheritDoc}

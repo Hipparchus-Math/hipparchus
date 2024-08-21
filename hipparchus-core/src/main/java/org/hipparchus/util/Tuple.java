@@ -192,6 +192,17 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
+    public Tuple getAddendum() {
+        final double[] addendum = values.clone();
+        addendum[0] = 0;
+        for (int i = 1; i < addendum.length; ++i) {
+            addendum[i] -= values[0];
+        }
+        return new Tuple(field, addendum);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Tuple add(final double a) {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {

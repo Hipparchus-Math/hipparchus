@@ -36,6 +36,26 @@ import org.hipparchus.util.MathArrays;
  */
 public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldElement<T> {
 
+    /** Get the addendum to the real value of the number.
+     * <p>
+     * The addendum is considered to be the part that when added back to
+     * the {@link #getReal() real part} recovers the instance. This means
+     * that when {@code e.getReal()} is finite (i.e. neither infinite
+     * nor NaN), then {@code e.getAddendum().add(e.getReal())} is {@code e}
+     * and {@code e.subtract(e.getReal())} is {@code e.getAddendum()}.
+     * Beware that for non-finite numbers, these two equalities may not hold.
+     * The first equality (with the addition), always holds even for infinity
+     * and NaNs if the real part is independent of the addendum (this is the
+     * case for all derivatives types, as well as for complex and Dfp, but it
+     * is not the case for Tuple and FieldTuple). The second equality (with
+     * the subtraction), generally doesn't hold for non-finite numbers, because
+     * the subtraction generates NaNs.
+     * </p>
+     * @return real value
+     * @since 4.0
+     */
+    T getAddendum();
+
     /** Get the Archimedes constant π.
      * <p>
      * Archimedes constant is the ratio of a circle's circumference to its diameter.

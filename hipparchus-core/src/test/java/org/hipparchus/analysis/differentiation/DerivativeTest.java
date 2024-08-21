@@ -137,6 +137,11 @@ class DerivativeTest {
         }
 
         @Override
+        public TestDerivative getAddendum() {
+            return subtract(getReal());
+        }
+
+        @Override
         public TestDerivative newInstance(double value) {
             return new TestDerivative(value);
         }

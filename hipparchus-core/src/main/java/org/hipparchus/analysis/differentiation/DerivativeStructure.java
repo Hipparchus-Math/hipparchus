@@ -155,6 +155,14 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return data[index];
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public DerivativeStructure getAddendum() {
+        final double[] addendum = data.clone();
+        addendum[0] = 0;
+        return new DerivativeStructure(factory, addendum);
+    }
+
     /** Get the value part of the derivative structure.
      * @return value part of the derivative structure
      * @see #getPartialDerivative(int...)

@@ -25,6 +25,8 @@ import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
+import java.util.Arrays;
+
 /** Class representing both the value and the differentials of a function.
  * <p>This class is similar to {@link DerivativeStructure} except function
  * parameters and value can be any {@link CalculusFieldElement}.</p>
@@ -89,14 +91,14 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return factory;
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public int getFreeParameters() {
         return getFactory().getCompiler().getFreeParameters();
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public int getOrder() {
         return getFactory().getCompiler().getOrder();
     }
@@ -129,6 +131,14 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      */
     T getDerivativeComponent(final int index) {
         return data[index];
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldDerivativeStructure<T> getAddendum() {
+        final T[] addendum = data.clone();
+        addendum[0] = addendum[0].getField().getZero();
+        return new FieldDerivativeStructure<>(factory, addendum);
     }
 
     /** Get the value part of the derivative structure.
@@ -1299,6 +1309,43 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
     @Override
     public FieldDerivativeStructure<T> getPi() {
         return factory.getDerivativeField().getPi();
+    }
+
+    /**
+     * Test for the equality of two derivative structures.
+     * <p>
+     * Derivative structures are considered equal if they have the same number
+     * of free parameters, the same derivation order, and the same derivatives.
+     * </p>
+     * @param other Object to test for equality to this
+     * @return true if two derivative structures are equal
+     */
+    @Override
+    public boolean equals(Object other) {
+
+        if (this == other) {
+            return true;
+        }
+
+        if (other instanceof FieldDerivativeStructure &&
+            ((FieldDerivativeStructure<?>) other).getField().equals(getField())) {
+            final FieldDerivativeStructure<T> rhs = (FieldDerivativeStructure<T>) other;
+            return (getFreeParameters() == rhs.getFreeParameters()) &&
+                   (getOrder() == rhs.getOrder()) &&
+                   MathArrays.equals(data, rhs.data);
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Get a hashCode for the derivative structure.
+     * @return a hash code value for this object
+     */
+    @Override
+    public int hashCode() {
+        return 227 + 229 * getFreeParameters() + 233 * getOrder() + 239 * Arrays.hashCode(data);
     }
 
 }

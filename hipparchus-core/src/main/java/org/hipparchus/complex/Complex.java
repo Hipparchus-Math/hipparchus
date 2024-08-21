@@ -506,6 +506,12 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
         return real;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Complex getAddendum() {
+        return new Complex(0, imaginary);
+    }
+
     /**
      * Access the real part.
      *
@@ -825,7 +831,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
      * <pre>
      *  Examples:
      *  <code>
-     *   cos(1 &plusmn; INFINITY i) = 1 \u2213 INFINITY i
+     *   cos(1 &plusmn; INFINITY i) = 1 ∓ INFINITY i
      *   cos(&plusmn;INFINITY + i) = NaN + NaN i
      *   cos(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
      *  </code>

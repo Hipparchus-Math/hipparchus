@@ -149,6 +149,12 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         return new FieldGradient<>(v, grad);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldGradient<T> getAddendum() {
+        return new FieldGradient<>(value.getField().getZero(), grad);
+    }
+
     /** Get the value part of the function.
      * @return value part of the value of the function
      */

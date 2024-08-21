@@ -49,7 +49,10 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="3.2" date="TBD" description="TBD">
+    <release version="4.0" date="TBD" description="TBD">
+      <action dev="luc" type="update" issue="issues/349">
+        Added getAddendum() to CalculusFieldElement interface.
+      </action>
       <action dev="vincent" type="fix" issue="issues/347">
         Fixed JUnit pioneer dependency version not compatible with Java 8.
       </action>

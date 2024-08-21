@@ -29,6 +29,7 @@ import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.DoubleFunction;
@@ -199,7 +200,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testSinCosSum() {
-        final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940l);
+        final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940L);
         for (int i = 0; i < 10000; ++i) {
             final double alpha  = 10.0 * (2.0 * random.nextDouble() - 1.0);
             final double beta   = 10.0 * (2.0 * random.nextDouble() - 1.0);
@@ -214,7 +215,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testSinCosdifference() {
-        final RandomGenerator random = new Well19937a(0x589aaf49471b03d5l);
+        final RandomGenerator random = new Well19937a(0x589aaf49471b03d5L);
         for (int i = 0; i < 10000; ++i) {
             final double alpha  = 10.0 * (2.0 * random.nextDouble() - 1.0);
             final double beta   = 10.0 * (2.0 * random.nextDouble() - 1.0);
@@ -442,7 +443,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testUlp() {
-        final RandomGenerator random = new Well19937a(0x36d4f8862421e0e4l);
+        final RandomGenerator random = new Well19937a(0x36d4f8862421e0e4L);
         for (int i = -300; i < 300; ++i) {
             final double x = FastMath.scalb(2.0 * random.nextDouble() - 1.0, i);
             assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
@@ -625,7 +626,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationFaFa() {
-        RandomGenerator r = new Well1024a(0xfafal);
+        RandomGenerator r = new Well1024a(0xfafaL);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 10);
             double[] bD = generateDouble(r, 10);
@@ -638,7 +639,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationDaFa() {
-        RandomGenerator r = new Well1024a(0xdafal);
+        RandomGenerator r = new Well1024a(0xdafaL);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 10);
             double[] bD = generateDouble(r, 10);
@@ -650,7 +651,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationFF2() {
-        RandomGenerator r = new Well1024a(0xff2l);
+        RandomGenerator r = new Well1024a(0xff2L);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 2);
             double[] bD = generateDouble(r, 2);
@@ -663,7 +664,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationDF2() {
-        RandomGenerator r = new Well1024a(0xdf2l);
+        RandomGenerator r = new Well1024a(0xdf2L);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 2);
             double[] bD = generateDouble(r, 2);
@@ -675,7 +676,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationFF3() {
-        RandomGenerator r = new Well1024a(0xff3l);
+        RandomGenerator r = new Well1024a(0xff3L);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 3);
             double[] bD = generateDouble(r, 3);
@@ -688,7 +689,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationDF3() {
-        RandomGenerator r = new Well1024a(0xdf3l);
+        RandomGenerator r = new Well1024a(0xdf3L);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 3);
             double[] bD = generateDouble(r, 3);
@@ -700,7 +701,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationFF4() {
-        RandomGenerator r = new Well1024a(0xff4l);
+        RandomGenerator r = new Well1024a(0xff4L);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 4);
             double[] bD = generateDouble(r, 4);
@@ -713,7 +714,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationDF4() {
-        RandomGenerator r = new Well1024a(0xdf4l);
+        RandomGenerator r = new Well1024a(0xdf4L);
         for (int i = 0; i < 50; ++i) {
             double[] aD = generateDouble(r, 4);
             double[] bD = generateDouble(r, 4);
@@ -726,6 +727,39 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     @Test
     public void testGetPi() {
         checkRelative(FastMath.PI, build(-10).getPi());
+    }
+
+    @Test
+    public void testGetReal() {
+        Assertions.assertEquals( 3.25, build( 3.25).getReal(), 1.0e-15);
+        Assertions.assertEquals(-3.25, build(-3.25).getReal(), 1.0e-15);
+        Assertions.assertTrue(build(Double.NEGATIVE_INFINITY).getReal() < 0);
+        Assertions.assertTrue(Double.isInfinite(build(Double.NEGATIVE_INFINITY).getReal()));
+        Assertions.assertTrue(build(Double.POSITIVE_INFINITY).getReal() > 0);
+        Assertions.assertTrue(Double.isInfinite(build(Double.POSITIVE_INFINITY).getReal()));
+        Assertions.assertTrue(Double.isNaN(build(Double.NaN).getReal()));
+    }
+
+    @Test
+    public void testGetAddendum() {
+        checkAddendum(build( 3.25));
+        checkAddendum(build(-3.25));
+        checkAddendum(build(Double.NEGATIVE_INFINITY));
+        checkAddendum(build(Double.POSITIVE_INFINITY));
+        checkAddendum(build(Double.NaN));
+    }
+
+    protected void checkAddendum(final T t) {
+        Assertions.assertEquals(0.0, t.getAddendum().getReal(), 1.0e-15);
+        final T rebuilt = t.getAddendum().add(t.getReal());
+        if (t.isInfinite()) {
+            Assertions.assertTrue(rebuilt.isInfinite());
+            Assertions.assertTrue(t.getReal() * rebuilt.getReal() > 0);
+        } else if (t.isNaN()) {
+            Assertions.assertTrue(rebuilt.isNaN());
+        } else {
+            Assertions.assertEquals(t, rebuilt);
+        }
     }
 
     @Test

@@ -349,6 +349,12 @@ public class Binary64 extends Number implements CalculusFieldElement<Binary64>, 
 
     /** {@inheritDoc} */
     @Override
+    public Binary64 getAddendum() {
+        return Binary64.ZERO;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Binary64 add(final double a) {
         return new Binary64(value + a);
     }

@@ -171,6 +171,11 @@ class FieldDerivativeTest {
         }
 
         @Override
+        public TestFieldDerivative getAddendum() {
+            return subtract(getReal());
+        }
+
+        @Override
         public TestFieldDerivative newInstance(double value) {
             return newInstance(new TestDerivative(value));
         }

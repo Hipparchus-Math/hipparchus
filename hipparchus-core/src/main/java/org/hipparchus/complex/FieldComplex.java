@@ -580,6 +580,12 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
         return real.getReal();
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldComplex<T> getAddendum() {
+        return new FieldComplex<>(real.getAddendum(), imaginary);
+    }
+
     /**
      * Access the real part.
      *
@@ -933,7 +939,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * <pre>
      *  Examples:
      *  <code>
-     *   cos(1 &plusmn; INFINITY i) = 1 \u2213 INFINITY i
+     *   cos(1 &plusmn; INFINITY i) = 1 ∓ INFINITY i
      *   cos(&plusmn;INFINITY + i) = NaN + NaN i
      *   cos(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
      *  </code>

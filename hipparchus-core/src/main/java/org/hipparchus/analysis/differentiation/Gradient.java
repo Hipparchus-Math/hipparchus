@@ -141,6 +141,12 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
         return new Gradient(v, grad);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Gradient getAddendum() {
+        return new Gradient(0, grad);
+    }
+
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
