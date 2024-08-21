@@ -14,6 +14,7 @@
 package org.hipparchus.util;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -168,7 +169,7 @@ public class MathArraysTest {
 
     @Test
     void testL2DistanceInt() {
-        int[] p1 = { 3, 0 };
+        int[] p1 = { 3, 0 };testArrayEquals();
         int[] p2 = { 0, 4 };
         assertTrue(Precision.equals(5, MathArrays.distance(p1, p2), 1));
     }
@@ -970,6 +971,59 @@ public class MathArraysTest {
                                                           Short.MIN_VALUE, 1, 0 }));
         assertFalse(MathArrays.equals(new short[] { Short.MAX_VALUE },
                                              new short[] { Short.MIN_VALUE }));
+
+    }
+
+    @Test
+    void testFloatArrayEquals() {
+        assertFalse(MathArrays.equals(new float[] { 1 }, null));
+        assertFalse(MathArrays.equals(null, new float[] { 1 }));
+        assertTrue(MathArrays.equals((float[]) null, (float[]) null));
+
+        assertFalse(MathArrays.equals(new float[] { 1 }, new float[0]));
+        assertTrue(MathArrays.equals(new float[] { 1 }, new float[] { 1 }));
+        assertTrue(MathArrays.equals(new float[] { Float.MAX_VALUE,
+                                                          Float.MIN_VALUE, 1, 0 },
+                                            new float[] { Float.MAX_VALUE,
+                                                          Float.MIN_VALUE, 1, 0 }));
+        assertFalse(MathArrays.equals(new float[] { Float.MAX_VALUE },
+                                             new float[] { Float.MIN_VALUE }));
+
+    }
+
+    @Test
+    void testDoubleArrayEquals() {
+        assertFalse(MathArrays.equals(new double[] { 1 }, null));
+        assertFalse(MathArrays.equals(null, new double[] { 1 }));
+        assertTrue(MathArrays.equals((double[]) null, (double[]) null));
+
+        assertFalse(MathArrays.equals(new double[] { 1 }, new double[0]));
+        assertTrue(MathArrays.equals(new double[] { 1 }, new double[] { 1 }));
+        assertTrue(MathArrays.equals(new double[] { Double.MAX_VALUE,
+                                                          Double.MIN_VALUE, 1, 0 },
+                                            new double[] { Double.MAX_VALUE,
+                                                          Double.MIN_VALUE, 1, 0 }));
+        assertFalse(MathArrays.equals(new double[] { Double.MAX_VALUE },
+                                             new double[] { Double.MIN_VALUE }));
+
+    }
+
+    @Test
+    void testFieldArrayEquals() {
+        assertFalse(MathArrays.equals(new Complex[] { Complex.I }, null));
+        assertFalse(MathArrays.equals(null, new Complex[] { Complex.I }));
+        assertTrue(MathArrays.equals((Complex[]) null, (Complex[]) null));
+
+        assertFalse(MathArrays.equals(new Complex[] { Complex.I }, new Complex[0]));
+        assertTrue(MathArrays.equals(new Complex[] { Complex.I }, new Complex[] { Complex.I }));
+        assertTrue(MathArrays.equals(new Complex[] { new Complex(Double.MAX_VALUE, 0),
+                                                     new Complex(Double.MIN_VALUE, 0),
+                                                     Complex.ONE, Complex.ZERO },
+                                     new Complex[] { new Complex(Double.MAX_VALUE, 0),
+                                                     new Complex(Double.MIN_VALUE, 0),
+                                                     Complex.ONE, Complex.ZERO }));
+        assertFalse(MathArrays.equals(new Complex[] { new Complex(Double.MAX_VALUE, 0) },
+                                             new Complex[] { new Complex(Double.MIN_VALUE, 0) }));
 
     }
 

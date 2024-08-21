@@ -38,6 +38,7 @@ import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
@@ -1762,7 +1763,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
             final FieldDerivativeStructure<T> f = factory.build(data);
             for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
                 final FieldDerivativeStructure<T> integ = f.integrate(index, factory.getCompiler().getOrder() + 1);
-                checkEquals(factory.constant(0), integ, 0.);
+                factory.constant(0).equals(integ);
             }
         }
     }
@@ -1800,7 +1801,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
             final FieldDerivativeStructure<T> f = factory.build(data);
             for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
                 final FieldDerivativeStructure<T> integ = f.differentiate(index, 0);
-                checkEquals(f, integ, 0.);
+                f.equals(integ);
             }
         }
     }
@@ -1851,7 +1852,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         orders[0] -= 1;
         assertEquals(1., dfDx.getPartialDerivative(new int[freeParam]).getReal(), 0.);
         assertEquals(value.getReal(), dfDx.getPartialDerivative(orders).getReal(), 0.);
-        checkEquals(factory.constant(0.0), f.differentiate(0, order + 1), 0.);
+        factory.constant(0.0).equals(f.differentiate(0, order + 1));
     }
 
     @Test
@@ -1901,6 +1902,21 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
             assertEquals(3, x.getField().getZero().getFreeParameters());
             assertEquals(FieldDerivativeStructure.class, x.getField().getRuntimeClass());
         }
+    }
+
+    @Test
+    public void testEquals() {
+        final FDSFactory<T> factory33 = buildFactory(3, 3);
+        final FDSFactory<T> factory35 = buildFactory(3, 5);
+        final FDSFactory<T> factory55 = buildFactory(5, 5);
+        Assertions.assertFalse(factory33.variable(0, 1.0).equals(factory35.variable(0, 1.0)));
+        Assertions.assertFalse(factory33.variable(0, 1.0).equals(factory55.variable(0, 1.0)));
+        Assertions.assertTrue(factory33.variable(0, 1.0).equals(factory33.variable(0, 1.0)));
+        Assertions.assertFalse(factory33.variable(0, 1.0).equals(new UnivariateDerivative1(0, 0)));
+        Assertions.assertFalse(factory33.variable(0, 1.0).equals(factory33.variable(1, 1.0)));
+        final FieldDerivativeStructure<T> x = factory33.variable(0, 1.0);
+        Assertions.assertEquals(x, x);
+        Assertions.assertNotEquals(0, x.hashCode());
     }
 
     @Test

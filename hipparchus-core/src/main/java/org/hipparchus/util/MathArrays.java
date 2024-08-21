@@ -1452,6 +1452,7 @@ public class MathArrays {
      * dimensions and all their elements are equal as defined by
      * {@link Object#equals(Object)}.
      *
+     * @param <T> type of the field elements
      * @param x First array.
      * @param y Second array.
      * @return {@code true} if the values are both {@code null} or have same
