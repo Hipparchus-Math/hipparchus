@@ -45,77 +45,70 @@ limitations under the License.
          missed the jar files, putting only the text files above in the archives. -->
     <fileSet>
       <directory>hipparchus-clustering/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-clustering-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-core/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-core-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-fft/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-fft-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-filtering/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-filtering-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-fitting/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-fitting-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-geometry/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-geometry-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
-      <directory>hipparchus-migration/target/</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>hipparchus-migration-${project.version}.jar</include>
-      </includes>
-    </fileSet>
-    <fileSet>
       <directory>hipparchus-ode/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-ode-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-optim/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-optim-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-samples/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-samples-${project.version}.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>hipparchus-stat/target/</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
       <includes>
         <include>hipparchus-stat-${project.version}.jar</include>
       </includes>

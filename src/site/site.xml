@@ -48,7 +48,7 @@
         Hipparchus is a pure Java library for mathematics and numerical analysis.
       </bottomDescription>
       <endContent>
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"/>
       </endContent>
       <pages>
         <index project="hipparchus-aggregator">
@@ -121,7 +121,6 @@
       <item name="Hipparchus::Fast Fourier Transforms"         href="hipparchus-fft/index.html"        />
       <item name="Hipparchus::Cluster Algorithms"              href="hipparchus-clustering/index.html" />
       <item name="Hipparchus::Filtering Algorithms"            href="hipparchus-filtering/index.html"  />
-      <item name="Hipparchus::Migration Code"                  href="hipparchus-migration/index.html"  />
       <item name="Hipparchus::Samples"                         href="hipparchus-samples/index.html"    />
     </menu>
 
@@ -135,11 +134,6 @@
       <item name="GitHub repository" href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Users forum" href="https://forum.orekit.org/c/hipparchus-usage"/>
       <item name="Developers forum" href="https://forum.orekit.org/c/hipparchus-development"/>
-    </menu>
-
-    <menu name ="Migrating from Apache Commons Math">
-      <item name="Migration module"     href="hipparchus-migration/index.html"/>
-      <item name="Migration script help" href="hipparchus-migration/script.html"/>
     </menu>
 
   </body>

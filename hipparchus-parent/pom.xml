@@ -488,11 +488,6 @@
         <artifactId>hipparchus-filtering</artifactId>
         <version>${project.version}</version>
       </dependency>
-      <dependency>
-        <groupId>org.hipparchus</groupId>
-        <artifactId>hipparchus-migration</artifactId>
-        <version>${project.version}</version>
-      </dependency>
 
       <dependency>
         <groupId>junit</groupId>
