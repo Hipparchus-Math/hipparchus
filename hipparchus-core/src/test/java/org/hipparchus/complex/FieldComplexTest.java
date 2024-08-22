@@ -27,6 +27,7 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -913,6 +914,18 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
                                          FastMath.atan(build(-0.0, -0.25)),
                                          1.0e-14);
         assertTrue(FastMath.copySign(1.0, FastMath.atan(build(-0.0, -0.25)).getReal()) < 0.0);
+    }
+
+    @Test
+    public void testAtanReal() {
+        final FieldComplex<Binary64> zP = build(0.8734729023516287, 0.0);
+        final FieldComplex<Binary64> aP = build(0.717964439926383,  0.0);
+        Assertions.assertEquals(aP, zP.atan());
+        Assertions.assertEquals(1.0, FastMath.copySign(new Binary64(1.0), zP.atan().getImaginary()).getReal(), 1.0e-15);
+        final FieldComplex<Binary64> zM = build(0.8734729023516287, -0.0);
+        final FieldComplex<Binary64> aM = build(0.717964439926383,  -0.0);
+        Assertions.assertEquals(aM, zM.atan());
+        Assertions.assertEquals(-1.0, FastMath.copySign(new Binary64(1.0), zM.atan().getImaginary()).getReal(), 1.0e-15);
     }
 
     @Test

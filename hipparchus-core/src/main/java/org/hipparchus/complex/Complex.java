@@ -802,6 +802,9 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
             final Complex tmp = createComplex((1 + imaginary) / (1 - imaginary), 0.0).log().multiplyPlusI().multiply(0.5);
             return createComplex(FastMath.copySign(tmp.real, real), tmp.imaginary);
 
+        } else if (imaginary == 0.0) {
+            // taking care to preserve the sign of the zero imaginary part
+            return createComplex(FastMath.atan(real), imaginary);
         } else {
             // regular formula
             final Complex n = createComplex(1 + imaginary, -real);

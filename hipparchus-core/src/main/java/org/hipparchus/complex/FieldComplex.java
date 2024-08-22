@@ -910,6 +910,9 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
                                         log().multiplyPlusI().multiply(0.5);
             return createComplex(FastMath.copySign(tmp.real, real), tmp.imaginary);
 
+        } else if (imaginary.isZero()) {
+            // taking care to preserve the sign of the zero imaginary part
+            return createComplex(FastMath.atan(real), imaginary);
         } else {
             // regular formula
             final FieldComplex<T> n = createComplex(one.add(imaginary), real.negate());
