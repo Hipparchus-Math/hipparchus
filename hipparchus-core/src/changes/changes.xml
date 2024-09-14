@@ -50,8 +50,8 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
-      <action dev="luc" type="fix" issue="issues/351">
-        Fixed {Field}Complex.atan for real values.
+      <action dev="luc" type="fix" issue="issues/354">
+        Added FieldBivariateGridInterpolator, FieldBilinearInterpolator and FieldBilinearInterpolatingFunction.
       </action>
       <action dev="luc" type="update" issue="issues/349">
         Added getAddendum() to CalculusFieldElement interface.
