@@ -563,7 +563,7 @@
     <hipparchus.apache-rat-plugin.version>0.16.1</hipparchus.apache-rat-plugin.version>
     <hipparchus.junit.version>5.10.3</hipparchus.junit.version>
     <hipparchus.junit.pioneer.version>1.9.1</hipparchus.junit.pioneer.version>
-    <hipparchus.mockito-core.version>5.12.0</hipparchus.mockito-core.version>
+    <hipparchus.mockito-core.version>4.11.0</hipparchus.mockito-core.version>
     <hipparchus.hamcrest.version>2.2</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
     <hipparchus.mathjax.enable>&lt;script src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot; id=&quot;MathJax-script&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
