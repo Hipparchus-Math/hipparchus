@@ -38,7 +38,11 @@ import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.ode.sampling.DummyStepInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -134,7 +138,7 @@ class DetectorBasedEventStateTest {
 
         public ResettingEvent(final double tEvent,
                               final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.tEvent    = tEvent;
@@ -228,7 +232,7 @@ class DetectorBasedEventStateTest {
 
         public SecondaryStateEvent(final int index, final double target,
                                    final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.index     = index;
@@ -294,7 +298,7 @@ class DetectorBasedEventStateTest {
 
         public CloseEventsGenerator(final double r1, final double r2,
                                     final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.r1        = r1;
@@ -326,6 +330,77 @@ class DetectorBasedEventStateTest {
             return count;
         }
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void testAdaptableInterval(final boolean isForward) {
+        // GIVEN
+        final TestDetector detector = new TestDetector();
+        final DetectorBasedEventState eventState = new DetectorBasedEventState(detector);
+        final ODEStateInterpolator mockedInterpolator = Mockito.mock(ODEStateInterpolator.class);
+        final ODEStateAndDerivative stateAndDerivative1 = getStateAndDerivative(1);
+        final ODEStateAndDerivative stateAndDerivative2 = getStateAndDerivative(-1);
+        if (isForward) {
+            Mockito.when(mockedInterpolator.getCurrentState()).thenReturn(stateAndDerivative1);
+            Mockito.when(mockedInterpolator.getPreviousState()).thenReturn(stateAndDerivative2);
+        } else {
+            Mockito.when(mockedInterpolator.getCurrentState()).thenReturn(stateAndDerivative2);
+            Mockito.when(mockedInterpolator.getPreviousState()).thenReturn(stateAndDerivative1);
+        }
+        Mockito.when(mockedInterpolator.isForward()).thenReturn(isForward);
+        // WHEN
+        eventState.evaluateStep(mockedInterpolator);
+        // THEN
+        if (isForward) {
+            Assertions.assertEquals(1, detector.triggeredForward);
+            Assertions.assertEquals(0, detector.triggeredBackward);
+        } else {
+            Assertions.assertEquals(0, detector.triggeredForward);
+            Assertions.assertEquals(1, detector.triggeredBackward);
+        }
+    }
+
+    private static ODEStateAndDerivative getStateAndDerivative(final double time) {
+        return new ODEStateAndDerivative(time, new double[] {time}, new double[1]);
+    }
+
+    private static class TestDetector implements ODEEventDetector {
+
+        int triggeredForward = 0;
+        int triggeredBackward = 0;
+
+        @Override
+        public AdaptableInterval getMaxCheckInterval() {
+            return (state, isForward) -> {
+                if (isForward) {
+                    triggeredForward++;
+                } else {
+                    triggeredBackward++;
+                }
+                return 1.;
+            };
+        }
+
+        @Override
+        public int getMaxIterationCount() {
+            return 10;
+        }
+
+        @Override
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return new BracketingNthOrderBrentSolver();
+        }
+
+        @Override
+        public ODEEventHandler getHandler() {
+            return null;
+        }
+
+        @Override
+        public double g(ODEStateAndDerivative state) {
+            return 0.;
+        }
     }
 
 }

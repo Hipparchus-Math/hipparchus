@@ -150,7 +150,7 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
          */
         public Event(final double maxCheck, final double threshold, final int maxIter,
                      final int idx, final int eventType) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.idx       = idx;

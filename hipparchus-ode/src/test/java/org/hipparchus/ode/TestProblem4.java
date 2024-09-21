@@ -113,7 +113,7 @@ public class TestProblem4 extends TestProblemAbstract {
         }
 
         public AdaptableInterval getMaxCheckInterval() {
-            return s -> maxCheck;
+            return (s, isForward) -> maxCheck;
         }
 
         public int getMaxIterationCount() {

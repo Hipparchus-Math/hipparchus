@@ -171,7 +171,7 @@ public abstract class AdamsIntegratorAbstractTest {
 
             @Override
             public AdaptableInterval getMaxCheckInterval() {
-                return s -> 0.5 * range;
+                return (s, isForward) -> 0.5 * range;
             }
 
             @Override
@@ -219,7 +219,7 @@ public abstract class AdamsIntegratorAbstractTest {
 
                 @Override
                 public AdaptableInterval getMaxCheckInterval() {
-                    return s -> 0.5 * range;
+                    return (s, isForward) -> 0.5 * range;
                 }
 
                 @Override
