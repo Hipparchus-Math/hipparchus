@@ -54,6 +54,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     </action>
   </release>
   <body>
+    <release version="4.0" date="TBD" description="TBD">
+      <action dev="serrof" type="add" issue="issues/335">
+        Add boolean for propagation direction in (Field)AdaptableInterval.
+      </action>
+    </release>
     <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes one
                                                           bugfixes and adds two features on existing integrators.">
       <action dev="serrof" type="add" issue="issues/269">

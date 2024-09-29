@@ -114,7 +114,7 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxCheck(final E newMaxCheck) {
-        return withMaxCheck(s -> newMaxCheck.getReal());
+        return withMaxCheck((s, isForward) -> newMaxCheck.getReal());
     }
 
     /**

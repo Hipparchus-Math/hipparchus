@@ -198,7 +198,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           assertSame(functions[i], detectors.get(i).getHandler());
-          assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
           assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
           assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -235,7 +235,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
         for (int i = 0; i < detectors.size(); ++i) {
             assertSame(functions[i], detectors.get(i).getHandler());
-            assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+            assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
             assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
             assertEquals(1000, detectors.get(i).getMaxIterationCount());
         }
@@ -274,7 +274,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
         for (int i = 0; i < detectors.size(); ++i) {
             assertSame(functions[i], detectors.get(i).getHandler());
-            assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+            assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
             assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
             assertEquals(1000, detectors.get(i).getMaxIterationCount());
         }
@@ -310,7 +310,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
         for (int i = 0; i < detectors.size(); ++i) {
             assertSame(functions[i], detectors.get(i).getHandler());
-            assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+            assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
             assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
             assertEquals(1000, detectors.get(i).getMaxIterationCount());
         }
@@ -362,7 +362,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
             integ.addEventDetector(new ODEEventDetector() {
                 public AdaptableInterval getMaxCheckInterval() {
-                    return s-> Double.POSITIVE_INFINITY;
+                    return (s, isForward)-> Double.POSITIVE_INFINITY;
                 }
                 public int getMaxIterationCount() {
                     return 1000;
@@ -405,7 +405,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
         integ.addEventDetector(new ODEEventDetector() {
             public AdaptableInterval getMaxCheckInterval() {
-                return s-> Double.POSITIVE_INFINITY;
+                return (s, isForward)-> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 3;
@@ -835,7 +835,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         integrator.setInitialStepSize(60.0);
         integrator.addEventDetector(new ODEEventDetector() {
             public AdaptableInterval getMaxCheckInterval() {
-                return s-> Double.POSITIVE_INFINITY;
+                return (s, isForward)-> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 100;
@@ -908,11 +908,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public abstract void testUnstableDerivative();
 
     protected void doTestUnstableDerivative(final double epsilon) {
-        final StepProblem stepProblem = new StepProblem(s -> 999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
+        final StepProblem stepProblem = new StepProblem((s, isForward) -> 999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
                         withMaxCheck(1.0).
                         withMaxIter(1000).
                         withThreshold(1.0e-12);
-        assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
+        assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null, true), 1.0e-15);
         assertEquals(1000,    stepProblem.getMaxIterationCount());
         assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
         assertNotNull(stepProblem.getHandler());
@@ -963,7 +963,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
 
         public AdaptableInterval getMaxCheckInterval() {
-            return s-> 0.01;
+            return (s, isForward)-> 0.01;
         }
 
         public int getMaxIterationCount() {
@@ -1225,7 +1225,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         integ.addEventDetector(new ODEEventDetector() {
             @Override
             public AdaptableInterval getMaxCheckInterval() {
-                return s-> Double.POSITIVE_INFINITY;
+                return (s, isForward)-> Double.POSITIVE_INFINITY;
             }
             @Override
             public int getMaxIterationCount() {

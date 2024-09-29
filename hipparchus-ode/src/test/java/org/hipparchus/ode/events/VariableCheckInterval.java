@@ -37,7 +37,7 @@ public class VariableCheckInterval implements OrdinaryDifferentialEquation {
     void testFixedInterval() {
         double tZero = 7.0;
         double width = 0.25;
-        doTest(tZero, width, s -> width / 25, 710);
+        doTest(tZero, width, (s, isForward) -> width / 25, 710);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class VariableCheckInterval implements OrdinaryDifferentialEquation {
         double tZero = 7.0;
         double width = 0.25;
         doTest(tZero, width,
-               s -> {
+               (s, isForward) -> {
                    if (s.getTime() < tZero - 0.5 * width) {
                        return tZero - 0.25 * width - s.getTime();
                    } else if (s.getTime() > tZero + 0.5 * width) {

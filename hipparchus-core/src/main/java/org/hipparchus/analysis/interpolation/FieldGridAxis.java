@@ -16,13 +16,13 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Helper for finding interpolation nodes along one axis of grid data.
@@ -45,15 +45,13 @@ import org.hipparchus.util.MathArrays;
  * <p>
  * This class is thread-safe.
  * </p>
- * @since 1.4
+ * @param <T> Type of the field elements.
+ * @since 4.0
  */
-public class GridAxis implements Serializable {
-
-    /** Serializable UID. */
-    private static final long serialVersionUID = 20180926L;
+public class FieldGridAxis<T extends CalculusFieldElement<T>> {
 
     /** All the coordinates of the interpolation points, sorted in increasing order. */
-    private final double[] grid;
+    private final T[] grid;
 
     /** Number of points required for interpolation. */
     private final int n;
@@ -68,7 +66,7 @@ public class GridAxis implements Serializable {
      * @exception MathIllegalArgumentException if grid size is smaller than {@code n}
      * or if the grid is not sorted in strict increasing order
      */
-    public GridAxis(final double[] grid, final int n)
+    public FieldGridAxis(final T[] grid, final int n)
         throws MathIllegalArgumentException {
 
         // safety checks
@@ -102,7 +100,7 @@ public class GridAxis implements Serializable {
      * @param index node index
      * @return coordinate of the node at specified index
      */
-    public double node(final int index) {
+    public T node(final int index) {
         return grid[index];
     }
 
@@ -156,7 +154,7 @@ public class GridAxis implements Serializable {
      * coordinate {@code t}
      * @since 1.4
      */
-    public int interpolationIndex(final double t) {
+    public int interpolationIndex(final T t) {
 
         final int middleOffset = (n - 1) / 2;
         int iInf = middleOffset;
@@ -166,14 +164,14 @@ public class GridAxis implements Serializable {
         // for faster return in a common case
         final int    cached = cache.get();
         final int    middle = cached + middleOffset;
-        final double aMid0  = grid[middle];
-        final double aMid1  = grid[middle + 1];
-        if (t < aMid0) {
+        final T aMid0  = grid[middle];
+        final T aMid1  = grid[middle + 1];
+        if (t.getReal() < aMid0.getReal()) {
             if (middle == iInf) {
                 // we are in the unbalanced low area
                 return cached;
             }
-        } else if (t < aMid1) {
+        } else if (t.getReal() < aMid1.getReal()) {
             // we are in the balanced middle area
             return cached;
         } else {
@@ -184,12 +182,12 @@ public class GridAxis implements Serializable {
         }
 
         // we need to find a new index
-        double aInf = grid[iInf];
-        double aSup = grid[iSup];
+        T aInf = grid[iInf];
+        T aSup = grid[iSup];
         while (iSup - iInf > 1) {
-            final int iInterp = (int) ((iInf * (aSup - t) + iSup * (t - aInf)) / (aSup - aInf));
+            final int iInterp = (int) ((iInf * (aSup.getReal() - t.getReal()) + iSup * (t.getReal() - aInf.getReal())) / (aSup.getReal() - aInf.getReal()));
             final int iMed    = FastMath.max(iInf + 1, FastMath.min(iInterp, iSup - 1));
-            if (t < grid[iMed]) {
+            if (t.getReal() < grid[iMed].getReal()) {
                 // keeps looking in the lower part of the grid
                 iSup = iMed;
                 aSup = grid[iSup];

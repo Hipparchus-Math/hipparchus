@@ -92,7 +92,7 @@ public class ReappearingEventTest {
          * @param maxIter maximum number of iterations in the event time search
          */
         public Event(final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
         }
