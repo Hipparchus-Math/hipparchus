@@ -59,7 +59,8 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
     /** Build a polygons set representing the whole real 2-sphere.
      * @param tolerance below which points are consider to be identical
-     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link
+     * Sphere2D#SMALLEST_TOLERANCE}
      */
     public SphericalPolygonsSet(final double tolerance) throws MathIllegalArgumentException {
         super(tolerance);
@@ -69,7 +70,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
     /** Build a polygons set representing a hemisphere.
      * @param pole pole of the hemisphere (the pole is in the inside half)
      * @param tolerance below which points are consider to be identical
-     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere2D#SMALLEST_TOLERANCE}
      */
     public SphericalPolygonsSet(final Vector3D pole, final double tolerance)
         throws MathIllegalArgumentException {
@@ -87,7 +88,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param outsideRadius distance of the vertices to the center
      * @param n number of sides of the polygon
      * @param tolerance below which points are consider to be identical
-     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere2D#SMALLEST_TOLERANCE}
      */
     public SphericalPolygonsSet(final Vector3D center, final Vector3D meridian,
                                 final double outsideRadius, final int n,
@@ -105,7 +106,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * {@code Boolean.TRUE} and {@code Boolean.FALSE}</p>
      * @param tree inside/outside BSP tree representing the region
      * @param tolerance below which points are consider to be identical
-     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere2D#SMALLEST_TOLERANCE}
      */
     public SphericalPolygonsSet(final BSPTree<Sphere2D> tree, final double tolerance)
         throws MathIllegalArgumentException {
@@ -133,7 +134,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param boundary collection of boundary elements, as a
      * collection of {@link SubHyperplane SubHyperplane} objects
      * @param tolerance below which points are consider to be identical
-     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere2D#SMALLEST_TOLERANCE}
      */
     public SphericalPolygonsSet(final Collection<SubHyperplane<Sphere2D>> boundary, final double tolerance)
         throws MathIllegalArgumentException {
