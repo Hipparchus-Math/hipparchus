@@ -602,7 +602,7 @@ class SphericalPolygonsSetTest {
     @Test
     void testGitHubIssue42A() {
         // if building it was allowed (i.e. if the check for tolerance was removed)
-        // the BSP tree would wrong, it would include a large extra chunk that contains
+        // the BSP tree would be wrong, it would include a large extra chunk that contains
         // a point that should really be outside
         try {
             doTestGitHubIssue42(1.0e-100);
@@ -618,9 +618,8 @@ class SphericalPolygonsSetTest {
     void testGitHubIssue42B() {
         // the BSP tree is right, but size cannot be computed
         try {
-            /* success of this call is dependent on numerical noise.
-             * If it fails it should fail predictably.
-             */
+            // success of this call is dependent on numerical noise.
+            // If it fails it should fail predictably.
             doTestGitHubIssue42(9.0e-16);
         } catch (MathIllegalStateException e) {
             assertEquals(
