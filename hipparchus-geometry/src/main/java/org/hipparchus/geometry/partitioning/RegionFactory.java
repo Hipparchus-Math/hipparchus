@@ -365,7 +365,7 @@ public class RegionFactory<S extends Space> {
     /** Handler replacing nodes with vanishing cuts with leaf nodes. */
     private class VanishingToLeaf implements VanishingCutHandler<S> {
 
-        /** Inside/outside indocator to use for ambiguous nodes. */
+        /** Inside/outside indicator to use for ambiguous nodes. */
         private final boolean inside;
 
         /** Simple constructor.
