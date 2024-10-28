@@ -37,10 +37,11 @@ import org.hipparchus.util.SinhCosh;
  * <p>{@link UnivariateDerivative2} instances can be used directly thanks to
  * the arithmetic operators to the mathematical functions provided as
  * methods by this class (+, -, *, /, %, sin, cos ...).</p>
- * <p>Implementing complex expressions by hand using these classes is
- * a tedious and error-prone task but has the advantage of having no limitation
- * on the derivation order despite not requiring users to compute the derivatives by
- * themselves.</p>
+ * <p>Implementing complex expressions by hand using {@link Derivative}-based
+ * classes (or in fact any {@link org.hipparchus.CalculusFieldElement} class) is
+ * a tedious and error-prone task but has the advantage of not requiring users
+ * to compute the derivatives by themselves and allowing to switch for one
+ * derivative implementation to another as they all share the same filed API.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  * @see DerivativeStructure
  * @see UnivariateDerivative2
