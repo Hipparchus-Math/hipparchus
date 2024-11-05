@@ -65,7 +65,7 @@ public abstract class RealVector {
      * </p>
      * @since 3.0
      */
-    public RealVector() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected RealVector() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

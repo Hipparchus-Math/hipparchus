@@ -55,7 +55,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * </p>
      * @since 3.0
      */
-    public AbstractMultipleLinearRegression() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected AbstractMultipleLinearRegression() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

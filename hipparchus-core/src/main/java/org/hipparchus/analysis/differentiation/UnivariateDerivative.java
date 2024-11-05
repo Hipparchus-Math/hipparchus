@@ -38,7 +38,7 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
      * </p>
      * @since 3.0
      */
-    public UnivariateDerivative() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected UnivariateDerivative() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

@@ -45,7 +45,7 @@ public abstract class IterativeLinearSolver {
      *
      * @param maxIterations the maximum number of iterations
      */
-    public IterativeLinearSolver(final int maxIterations) {
+    protected IterativeLinearSolver(final int maxIterations) {
         this.manager = new IterationManager(maxIterations);
     }
 
@@ -55,7 +55,7 @@ public abstract class IterativeLinearSolver {
      * @param manager the custom iteration manager
      * @throws NullArgumentException if {@code manager} is {@code null}
      */
-    public IterativeLinearSolver(final IterationManager manager)
+    protected IterativeLinearSolver(final IterationManager manager)
         throws NullArgumentException {
         MathUtils.checkNotNull(manager);
         this.manager = manager;

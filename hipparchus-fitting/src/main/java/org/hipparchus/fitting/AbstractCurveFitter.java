@@ -62,7 +62,7 @@ public abstract class AbstractCurveFitter {
      * </p>
      * @since 3.0
      */
-    public AbstractCurveFitter() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected AbstractCurveFitter() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

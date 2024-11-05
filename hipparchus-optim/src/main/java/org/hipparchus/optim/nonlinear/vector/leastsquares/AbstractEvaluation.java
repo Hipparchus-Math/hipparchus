@@ -44,7 +44,7 @@ public abstract class AbstractEvaluation implements Evaluation {
      * @param observationSize the number of observations.
      * Needed for {@link #getRMS()} and {@link #getReducedChiSquare(int)}.
      */
-    public AbstractEvaluation(final int observationSize) {
+    protected AbstractEvaluation(final int observationSize) {
         this.observationSize = observationSize;
     }
 

@@ -50,7 +50,7 @@ public abstract class FieldAbstractRuleFactory<T extends CalculusFieldElement<T>
     /** Simple constructor
      * @param field field to which rule coefficients belong
      */
-    public FieldAbstractRuleFactory(final Field<T> field) {
+    protected FieldAbstractRuleFactory(final Field<T> field) {
         this.field            = field;
         this.pointsAndWeights = new TreeMap<>();
     }

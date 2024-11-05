@@ -61,7 +61,7 @@ public abstract class PreconditionedIterativeLinearSolver
      *
      * @param maxIterations the maximum number of iterations
      */
-    public PreconditionedIterativeLinearSolver(final int maxIterations) {
+    protected PreconditionedIterativeLinearSolver(final int maxIterations) {
         super(maxIterations);
     }
 
