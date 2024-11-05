@@ -41,7 +41,7 @@ public abstract class SparseRealVector extends RealVector {
      * </p>
      * @since 3.0
      */
-    public SparseRealVector() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected SparseRealVector() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

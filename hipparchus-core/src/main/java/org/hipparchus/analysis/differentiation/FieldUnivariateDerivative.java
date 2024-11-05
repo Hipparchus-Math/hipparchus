@@ -35,7 +35,7 @@ public abstract class FieldUnivariateDerivative<S extends CalculusFieldElement<S
      * </p>
      * @since 3.0
      */
-    public FieldUnivariateDerivative() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected FieldUnivariateDerivative() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

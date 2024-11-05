@@ -33,7 +33,7 @@ public abstract class AbstractUnscentedTransform implements UnscentedTransformPr
      * Constructor.
      * @param stateDim the dimension of the state
      */
-    public AbstractUnscentedTransform(final int stateDim) {
+    protected AbstractUnscentedTransform(final int stateDim) {
         // Check state dimension
         if (stateDim == 0) {
             // State dimension must be different from 0

@@ -48,7 +48,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      * </p>
      * @since 3.0
      */
-    public AbstractIntegerDistribution() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected AbstractIntegerDistribution() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

@@ -43,7 +43,7 @@ public abstract class IterativeLinearSolverEvent
      * @param iterations the number of iterations performed at the time
      * {@code this} event is created
      */
-    public IterativeLinearSolverEvent(final Object source, final int iterations) {
+    protected IterativeLinearSolverEvent(final Object source, final int iterations) {
         super(source, iterations);
     }
 

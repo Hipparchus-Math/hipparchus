@@ -79,7 +79,7 @@ public abstract class AdaptiveStepsizeIntegrator
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
      */
-    public AdaptiveStepsizeIntegrator(final String name,
+    protected AdaptiveStepsizeIntegrator(final String name,
                                       final double minStep, final double maxStep,
                                       final double scalAbsoluteTolerance,
                                       final double scalRelativeTolerance) {
@@ -100,7 +100,7 @@ public abstract class AdaptiveStepsizeIntegrator
      * @param vecAbsoluteTolerance allowed absolute error
      * @param vecRelativeTolerance allowed relative error
      */
-    public AdaptiveStepsizeIntegrator(final String name,
+    protected AdaptiveStepsizeIntegrator(final String name,
                                       final double minStep, final double maxStep,
                                       final double[] vecAbsoluteTolerance,
                                       final double[] vecRelativeTolerance) {

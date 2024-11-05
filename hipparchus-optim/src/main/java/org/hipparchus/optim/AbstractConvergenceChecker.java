@@ -44,8 +44,8 @@ public abstract class AbstractConvergenceChecker<P>
      * @param relativeThreshold relative tolerance threshold
      * @param absoluteThreshold absolute tolerance threshold
      */
-    public AbstractConvergenceChecker(final double relativeThreshold,
-                                      final double absoluteThreshold) {
+    protected AbstractConvergenceChecker(final double relativeThreshold,
+                                         final double absoluteThreshold) {
         this.relativeThreshold = relativeThreshold;
         this.absoluteThreshold = absoluteThreshold;
     }

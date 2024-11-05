@@ -79,9 +79,8 @@ public abstract class BaseMultiStartMultivariateOptimizer<P>
      * @param generator Random vector generator to use for restarts.
      * @throws MathIllegalArgumentException if {@code starts < 1}.
      */
-    public BaseMultiStartMultivariateOptimizer(final BaseMultivariateOptimizer<P> optimizer,
-                                               final int starts,
-                                               final RandomVectorGenerator generator) {
+    protected BaseMultiStartMultivariateOptimizer(final BaseMultivariateOptimizer<P> optimizer, final int starts,
+                                                  final RandomVectorGenerator generator) {
         super(optimizer.getConvergenceChecker());
 
         if (starts < 1) {
