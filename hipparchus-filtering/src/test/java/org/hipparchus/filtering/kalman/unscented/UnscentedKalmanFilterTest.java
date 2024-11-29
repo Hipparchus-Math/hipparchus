@@ -127,9 +127,12 @@ class UnscentedKalmanFilterTest {
         });
         @Override
         public UnscentedEvolution getEvolution(double previousTime, final RealVector[] previousStateSamples,  SimpleMeasurement measurement) {
-            return new UnscentedEvolution(measurement.getTime(),
-                                          previousStateSamples,
-                                          q);
+            return new UnscentedEvolution(measurement.getTime(), previousStateSamples);
+        }
+
+        @Override
+        public RealMatrix getProcessNoiseMatrix(double previousTime, RealVector predictedState, SimpleMeasurement measurement) {
+            return q;
         }
 
         @Override
@@ -237,19 +240,19 @@ class UnscentedKalmanFilterTest {
         public UnscentedEvolution getEvolution(double previousTime, RealVector[] previousStateSamples, SimpleMeasurement measurement) {
             final double dt = measurement.getTime() - previousTime;
             final RealVector[] states = new RealVector[9];
-            final RealVector[] measurementSamples = new RealVector[9];
             for (int i = 0 ; i < 9 ; i++) {
                 states[i]= MatrixUtils.createRealVector(new double[] {previousStateSamples[i].getEntry(0) + previousStateSamples[i].getEntry(1) * dt,
                         previousStateSamples[i].getEntry(1),
                         previousStateSamples[i].getEntry(2) + previousStateSamples[i].getEntry(3) * dt - 0.5 * g * dt * dt,
                         previousStateSamples[i].getEntry(3) - g * dt});
-                measurementSamples[i]= MatrixUtils.createRealVector(new double[] { states[i].getEntry(0), states[i].getEntry(2) });
-
             }
-            
 
-            
-            return new UnscentedEvolution(measurement.getTime(), states, q);
+            return new UnscentedEvolution(measurement.getTime(), states);
+        }
+
+        @Override
+        public RealMatrix getProcessNoiseMatrix(double previousTime, RealVector predictedState, SimpleMeasurement measurement) {
+            return q;
         }
 
         @Override
@@ -343,9 +346,12 @@ class UnscentedKalmanFilterTest {
         public UnscentedEvolution getEvolution(double previousTime,
                                                RealVector[] previousStates,
                                                SimpleMeasurement measurement) {
-            return new UnscentedEvolution(measurement.getTime(),
-                                          previousStates,
-                                          q);
+            return new UnscentedEvolution(measurement.getTime(), previousStates);
+        }
+
+        @Override
+        public RealMatrix getProcessNoiseMatrix(double previousTime, RealVector predictedState, SimpleMeasurement measurement) {
+            return q;
         }
 
         @Override
@@ -425,7 +431,6 @@ class UnscentedKalmanFilterTest {
             final double     dt    = measurement.getTime() - previousTime;
 
             final RealVector[] states = new RealVector[7];
-            final RealVector[] measurementSamples = new RealVector[7];
             for (int i = 0; i < 7; i++) {
                 
                 states[i]= MatrixUtils.createRealVector(new double[] {
@@ -433,17 +438,18 @@ class UnscentedKalmanFilterTest {
                         sigmaPoints[i].getEntry(1),
                         sigmaPoints[i].getEntry(2)
                     });
-                measurementSamples[i]= MatrixUtils.createRealVector(new double[] { FastMath.sqrt(FastMath.pow(states[i].getEntry(0), 2) + FastMath.pow(states[i].getEntry(2), 2)) });
             }
 
+            return new UnscentedEvolution(measurement.getTime(), states);
+        }
 
-            final RealMatrix processNoiseMatrix = MatrixUtils.createRealMatrix(new double[][] {
-                { 0.01, 0.00, 0.00},
-                { 0.00, 0.01, 0.00},
-                { 0.00, 0.00, 0.01}
+        @Override
+        public RealMatrix getProcessNoiseMatrix(double previousTime, RealVector predictedState, SimpleMeasurement measurement) {
+            return MatrixUtils.createRealMatrix(new double[][] {
+                    { 0.01, 0.00, 0.00},
+                    { 0.00, 0.01, 0.00},
+                    { 0.00, 0.00, 0.01}
             });
-
-            return new UnscentedEvolution(measurement.getTime(), states,  processNoiseMatrix);
         }
 
         @Override
@@ -578,7 +584,14 @@ class UnscentedKalmanFilterTest {
                 predictedPoints[i] = MatrixUtils.createRealVector(point);
             }
 
-            // Process noise covariance
+            return new UnscentedEvolution(measurement.getTime(), predictedPoints);
+        }
+
+        @Override
+        public RealMatrix getProcessNoiseMatrix(double previousTime, RealVector predictedState, T measurement) {
+            // Time delta
+            double dt = measurement.getTime() - previousTime;
+
             RealMatrix processNoiseCovariance = MatrixUtils.createRealMatrix(STATE_DIMENSION, STATE_DIMENSION);
             processNoiseCovariance.setEntry(0, 0, dt * dt * dt / 3.0);
             processNoiseCovariance.setEntry(0, 1, dt * dt / 2.0);
@@ -586,7 +599,7 @@ class UnscentedKalmanFilterTest {
             processNoiseCovariance.setEntry(1, 1, dt);
             processNoiseCovariance = processNoiseCovariance.scalarMultiply(processNoiseScale);
 
-            return new UnscentedEvolution(measurement.getTime(), predictedPoints, processNoiseCovariance);
+            return processNoiseCovariance;
         }
 
         @Override
