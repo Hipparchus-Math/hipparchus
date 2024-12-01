@@ -204,6 +204,12 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         return corrected;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public RealMatrix getStateCrossCovariance() {
+        return null;
+    }
+
     /** Get the unscented transform provider.
      * @return unscented transform provider
      */
@@ -253,31 +259,11 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         for (int i = 0; i <= 2 * n; i++) {
             final RealVector stateDiff = predictedStates[i].subtract(predictedState);
             final RealVector measDiff  = predictedMeasurements[i].subtract(predictedMeasurement);
-            crossCovarianceMatrix = crossCovarianceMatrix.add(outer(stateDiff, measDiff).scalarMultiply(wc.getEntry(i)));
+            crossCovarianceMatrix = crossCovarianceMatrix.add(stateDiff.outerProduct(measDiff).scalarMultiply(wc.getEntry(i)));
         }
 
         // Return the cross covariance
         return crossCovarianceMatrix;
     }
 
-    /** Computes the outer product of two vectors.
-     * @param a first vector
-     * @param b second vector
-     * @return the outer product of a and b
-     */
-    private RealMatrix outer(final RealVector a, final RealVector b) {
-
-        // Initialize matrix
-        final RealMatrix outMatrix = MatrixUtils.createRealMatrix(a.getDimension(), b.getDimension());
-
-        // Fill matrix
-        for (int row = 0; row < outMatrix.getRowDimension(); row++) {
-            for (int col = 0; col < outMatrix.getColumnDimension(); col++) {
-                outMatrix.setEntry(row, col, a.getEntry(row) * b.getEntry(col));
-            }
-        }
-
-        // Return
-        return outMatrix;
-    }
 }

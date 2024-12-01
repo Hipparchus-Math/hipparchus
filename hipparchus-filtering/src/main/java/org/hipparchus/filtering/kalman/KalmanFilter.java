@@ -18,6 +18,7 @@
 package org.hipparchus.filtering.kalman;
 
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.linear.RealMatrix;
 
 /**
  * Interface representing a Kalman filter.
@@ -43,5 +44,11 @@ public interface KalmanFilter<T extends Measurement> {
      * @return current corrected state
      */
     ProcessEstimate getCorrected();
+
+    /** Get the cross-covariance between the previous state and the prediction.
+     * Not required for forward filtering, but required for the smoother.
+     * @return cross-covariance
+     */
+    RealMatrix getStateCrossCovariance();
 
 }
