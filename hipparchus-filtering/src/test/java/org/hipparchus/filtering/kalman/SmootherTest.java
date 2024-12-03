@@ -23,11 +23,17 @@ import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
 import org.hipparchus.filtering.kalman.linear.LinearEvolution;
 import org.hipparchus.filtering.kalman.linear.LinearKalmanFilter;
 import org.hipparchus.filtering.kalman.linear.LinearProcess;
+import org.hipparchus.filtering.kalman.unscented.UnscentedEvolution;
+import org.hipparchus.filtering.kalman.unscented.UnscentedKalmanFilter;
+import org.hipparchus.filtering.kalman.unscented.UnscentedProcess;
 import org.hipparchus.linear.*;
+import org.hipparchus.util.MerweUnscentedTransform;
+import org.hipparchus.util.UnscentedTransformProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -116,6 +122,38 @@ public class SmootherTest {
     }
 
 
+    // Test unscented Kalman filter/smoother
+    // Simple linear 1D constant velocity
+    @Test
+    void testUnscentedSmoother() {
+
+        // Initialise filter
+        final UnscentedProcess<SimpleMeasurement> process = new UnscentedConstantVelocity<>(initialTime, PROCESS_NOISE);
+
+        // Smoother wrapping the filter
+        final double alpha = 1.0;
+        final double beta = 2.0;
+        final double kappa = 0.0;
+        UnscentedTransformProvider unscentedTransformProvider =
+                new MerweUnscentedTransform(initialState.getState().getDimension(), alpha, beta, kappa);
+        final KalmanFilterSmoother<SimpleMeasurement> smoother = new KalmanFilterSmoother<>(
+                new UnscentedKalmanFilter<>(decomposer, process, initialState, unscentedTransformProvider), decomposer);
+
+        // Process measurements with smoother (forwards pass)
+        measurements.forEach(smoother::estimationStep);
+
+        // Smooth backwards
+        List<ProcessEstimate> smoothedStates = smoother.backwardsSmooth();
+
+        // Check against reference
+        Assertions.assertEquals(referenceData.size(), smoothedStates.size());
+        for (int i = 0; i < referenceData.size(); ++i) {
+            referenceData.get(i).checkState(smoothedStates.get(i).getState(), 1e-14);
+            referenceData.get(i).checkCovariance(smoothedStates.get(i).getCovariance(), 1e-14);
+        }
+    }
+
+
     // Process model for the linear Kalman filter
     private static class LinearConstantVelocity<T extends Measurement> implements LinearProcess<T> {
 
@@ -175,6 +213,56 @@ public class SmootherTest {
                                         final NonLinearEvolution evolution,
                                         final RealMatrix innovationCovarianceMatrix) {
             return measurement.getValue().subtract(evolution.getMeasurementJacobian().operate(evolution.getCurrentState()));
+        }
+    }
+
+    // Process model for the unscented Kalman filter
+    private static class UnscentedConstantVelocity<T extends Measurement> implements UnscentedProcess<T> {
+
+        private double currentTime;
+        private final double processNoiseScale;
+
+        public UnscentedConstantVelocity(final double initialTime, final double processNoiseScale) {
+            currentTime = initialTime;
+            this.processNoiseScale = processNoiseScale;
+        }
+
+        @Override
+        public UnscentedEvolution getEvolution(final double previousTime,
+                                               final RealVector[] sigmaPoints,
+                                               final T measurement) {
+            final double dt = measurement.getTime() - currentTime;
+            currentTime = measurement.getTime();
+
+            final RealMatrix stateTransitionMatrix = getStateTransitionMatrix(dt);
+
+            final RealVector[] predictedSigmaPoints = Arrays.stream(sigmaPoints)
+                    .map(stateTransitionMatrix::operate)
+                    .toArray(RealVector[]::new);
+
+            return new UnscentedEvolution(
+                    currentTime,
+                    predictedSigmaPoints,
+                    getProcessNoiseMatrix(dt, processNoiseScale)
+            );
+        }
+
+        @Override
+        public RealVector[] getPredictedMeasurements(final RealVector[] predictedSigmaPoints,
+                                                     final T measurement) {
+
+            final RealMatrix measurementJacobian = getMeasurementJacobian();
+            return Arrays.stream(predictedSigmaPoints)
+                    .map(measurementJacobian::operate)
+                    .toArray(RealVector[]::new);
+        }
+
+        @Override
+        public RealVector getInnovation(final T measurement,
+                                        final RealVector predictedMeasurement,
+                                        final RealVector predictedState,
+                                        final RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(predictedMeasurement);
         }
     }
 

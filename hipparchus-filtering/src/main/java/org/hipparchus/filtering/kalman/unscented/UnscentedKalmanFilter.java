@@ -57,6 +57,12 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     /** Unscented transform provider. */
     private final UnscentedTransformProvider utProvider;
 
+    /** Prior corrected sigma-points. */
+    private RealVector[] priorSigmaPoints;
+
+    /** Predicted sigma-points. */
+    private RealVector[] predictedNoNoiseSigmaPoints;
+
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
      * @param process unscented process to estimate
@@ -72,6 +78,9 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         this.corrected  = initialState;
         this.n          = corrected.getState().getDimension();
         this.utProvider = utProvider;
+        this.priorSigmaPoints = null;
+        this.predictedNoNoiseSigmaPoints = null;
+
         // Check state dimension
         if (n == 0) {
             // State dimension must be different from 0
@@ -85,6 +94,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
 
         // Calculate sigma points
         final RealVector[] sigmaPoints = utProvider.unscentedTransform(corrected.getState(), corrected.getCovariance());
+        priorSigmaPoints = sigmaPoints;
 
         // Perform the prediction and correction steps
         return predictionAndCorrectionSteps(measurement, sigmaPoints);
@@ -102,6 +112,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         // Prediction phase
         final UnscentedEvolution evolution = process.getEvolution(getCorrected().getTime(),
                                                                   sigmaPoints, measurement);
+        predictedNoNoiseSigmaPoints = evolution.getCurrentStates();
 
         // Computation of Eq. 17, weighted mean state
         final RealVector predictedState = utProvider.getUnscentedMeanState(evolution.getCurrentStates());
@@ -207,7 +218,10 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     /** {@inheritDoc} */
     @Override
     public RealMatrix getStateCrossCovariance() {
-        return null;
+        final RealVector priorState = utProvider.getUnscentedMeanState(priorSigmaPoints);
+        final RealVector predictedState = utProvider.getUnscentedMeanState(predictedNoNoiseSigmaPoints);
+
+        return computeCrossCovarianceMatrix(priorSigmaPoints, priorState, predictedNoNoiseSigmaPoints, predictedState);
     }
 
     /** Get the unscented transform provider.
