@@ -44,7 +44,7 @@ import org.hipparchus.util.MathUtils;
  * its subsequence (x1, ... xN) has a low discrepancy. It can be used to generate pseudo-random
  * points in a space S, which are equi-distributed.
  * <p>
- * The implementation already comes with support for up to 1000 dimensions with direction numbers
+ * The implementation already comes with support for up to 21201 dimensions with direction numbers
  * calculated from <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Stephen Joe and Frances Kuo</a>.
  * <p>
  * The generator supports two modes:
@@ -66,10 +66,10 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
     private static final double SCALE = FastMath.pow(2, BITS);
 
     /** The maximum supported space dimension. */
-    private static final int MAX_DIMENSION = 1000;
+    private static final int MAX_DIMENSION = 21201;
 
     /** The resource containing the direction numbers. */
-    private static final String RESOURCE_NAME = "/assets/org/hipparchus/random/new-joe-kuo-6.1000";
+    private static final String RESOURCE_NAME = "/assets/org/hipparchus/random/new-joe-kuo-6.21201";
 
     /** Character set for file input. */
     private static final String FILE_CHARSET = "US-ASCII";
@@ -179,7 +179,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
 
         // special case: dimension 1 -> use unit initialization
         for (int i = 1; i <= BITS; i++) {
-            direction[0][i] = 1l << (BITS - i);
+            direction[0][i] = 1L << (BITS - i);
         }
 
         final Charset charset = Charset.forName(FILE_CHARSET);

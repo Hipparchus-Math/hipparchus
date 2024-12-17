@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class SobolSequenceGeneratorTest {
 
-    private double[][] referenceValues = {
+    private final double[][] referenceValues = {
             { 0.0, 0.0, 0.0 },
             { 0.5, 0.5, 0.5 },
             { 0.75, 0.25, 0.25 },
@@ -72,7 +72,7 @@ class SobolSequenceGeneratorTest {
         }
 
         try {
-            new SobolSequenceGenerator(1001);
+            new SobolSequenceGenerator(21202);
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
@@ -82,16 +82,16 @@ class SobolSequenceGeneratorTest {
     @Test
     void testConstructor2() throws Exception{
         try {
-            final String RESOURCE_NAME = "/assets/org/hipparchus/random/new-joe-kuo-6.1000";
+            final String RESOURCE_NAME = "/assets/org/hipparchus/random/new-joe-kuo-6.21201";
             final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
-            new SobolSequenceGenerator(1001, is);
+            new SobolSequenceGenerator(21202, is);
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
-            new SobolSequenceGenerator(1001);
+            new SobolSequenceGenerator(21202);
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected

@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issuers/360">
+        Increased dimension of directions numbers in Sobol sequence generation.
+      </action>
       <action dev="luc" type="fix" issue="issues/354">
         Added FieldBivariateGridInterpolator, FieldBilinearInterpolator and FieldBilinearInterpolatingFunction.
       </action>
