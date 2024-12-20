@@ -55,6 +55,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </release>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="serrof" type="update" issue="issues/361">
+        Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK.
+      </action>
       <action dev="serrof" type="add" issue="issues/335">
         Add boolean for propagation direction in (Field)AdaptableInterval.
       </action>
