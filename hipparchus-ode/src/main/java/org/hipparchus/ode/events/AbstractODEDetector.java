@@ -29,7 +29,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> implements ODEEventDetector {
 
     /** Default maximum checking interval (s). */
-    public static final double DEFAULT_MAXCHECK = 600;
+    public static final double DEFAULT_MAX_CHECK = 600;
 
     /** Default convergence threshold (s). */
     public static final double DEFAULT_THRESHOLD = 1.e-6;
