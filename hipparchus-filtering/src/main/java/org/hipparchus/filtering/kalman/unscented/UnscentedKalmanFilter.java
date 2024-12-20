@@ -40,7 +40,7 @@ import org.hipparchus.util.UnscentedTransformProvider;
 public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilter<T> {
 
     /** Process to be estimated. */
-    private UnscentedProcess<T> process;
+    private final UnscentedProcess<T> process;
 
     /** Predicted state. */
     private ProcessEstimate predicted;
@@ -103,8 +103,14 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         final UnscentedEvolution evolution = process.getEvolution(getCorrected().getTime(),
                                                                   sigmaPoints, measurement);
 
-        predict(evolution.getCurrentTime(), evolution.getCurrentStates(),
-                evolution.getProcessNoiseMatrix());
+        // Computation of Eq. 17, weighted mean state
+        final RealVector predictedState = utProvider.getUnscentedMeanState(evolution.getCurrentStates());
+
+        // Calculate process noise
+        final RealMatrix processNoiseMatrix = process.getProcessNoiseMatrix(getCorrected().getTime(), predictedState,
+                                                                            measurement);
+
+        predict(evolution.getCurrentTime(), evolution.getCurrentStates(), processNoiseMatrix);
 
         // Calculate sigma points from predicted state
         final RealVector[] predictedSigmaPoints = utProvider.unscentedTransform(predicted.getState(),
@@ -127,7 +133,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      * @param predictedStates predicted state vectors
      * @param noise process noise covariance matrix
      */
-    private void predict(final double time, final RealVector[] predictedStates,  final RealMatrix noise) {
+    private void predict(final double time, final RealVector[] predictedStates, final RealMatrix noise) {
 
         // Computation of Eq. 17, weighted mean state
         final RealVector predictedState = utProvider.getUnscentedMeanState(predictedStates);
