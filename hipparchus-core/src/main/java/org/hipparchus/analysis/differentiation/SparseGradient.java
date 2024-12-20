@@ -129,15 +129,6 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
     }
 
     /**
-     * Find the number of variables.
-     * @return number of variables
-     */
-    @Deprecated
-    public int numVars() {
-        return getFreeParameters();
-    }
-
-    /**
      * Get the derivative with respect to a particular index variable.
      *
      * @param index index to differentiate with.
