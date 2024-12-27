@@ -53,7 +53,7 @@ public class SmootherTest {
         referenceData = Reference.loadReferenceData(2, 1, "cv-smoother.txt");
 
         // Measurements (skip first one corresponding to smoothed initial state)
-        final RealMatrix measurementNoise = MatrixUtils.createRealMatrix(new double[][] {{1e-3}});
+        final RealMatrix measurementNoise = MatrixUtils.createRealMatrix(new double[][]{{1e-3}});
         measurements = referenceData.stream()
                 .skip(1)
                 .map(r -> new SimpleMeasurement(r.getTime(), r.getZ(), measurementNoise))
@@ -174,7 +174,7 @@ public class SmootherTest {
                     getStateTransitionMatrix(dt),
                     MatrixUtils.createRealMatrix(2, 2),
                     MatrixUtils.createRealVector(2),
-                    getProcessNoiseMatrix(dt, processNoiseScale),
+                    getProcessNoise(dt, processNoiseScale),
                     getMeasurementJacobian()
             );
         }
@@ -203,7 +203,7 @@ public class SmootherTest {
                     currentTime,
                     stateTransitionMatrix.operate(previousState),
                     stateTransitionMatrix,
-                    getProcessNoiseMatrix(dt, processNoiseScale),
+                    getProcessNoise(dt, processNoiseScale),
                     getMeasurementJacobian()
             );
         }
@@ -240,11 +240,13 @@ public class SmootherTest {
                     .map(stateTransitionMatrix::operate)
                     .toArray(RealVector[]::new);
 
-            return new UnscentedEvolution(
-                    currentTime,
-                    predictedSigmaPoints,
-                    getProcessNoiseMatrix(dt, processNoiseScale)
-            );
+            return new UnscentedEvolution(currentTime, predictedSigmaPoints);
+        }
+
+        @Override
+        public RealMatrix getProcessNoiseMatrix(double previousTime, RealVector predictedState, T measurement) {
+            final double dt = measurement.getTime() - previousTime;
+            return getProcessNoise(dt, processNoiseScale);
         }
 
         @Override
@@ -272,7 +274,7 @@ public class SmootherTest {
         return MatrixUtils.createRealMatrix(new double[][]{{1.0, dt}, {0.0, 1.0}});
     }
 
-    private static RealMatrix getProcessNoiseMatrix(final double dt, final double processNoiseScale) {
+    private static RealMatrix getProcessNoise(final double dt, final double processNoiseScale) {
         final double dt2 = dt * dt;
         final double dt3 = dt2 * dt;
 
