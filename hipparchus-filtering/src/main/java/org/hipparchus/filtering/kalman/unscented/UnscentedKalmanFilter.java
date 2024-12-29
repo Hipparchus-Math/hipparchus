@@ -20,6 +20,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.filtering.kalman.KalmanFilter;
+import org.hipparchus.filtering.kalman.KalmanObserver;
 import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.linear.MatrixDecomposer;
@@ -63,6 +64,9 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     /** Predicted sigma-points. */
     private RealVector[] predictedNoNoiseSigmaPoints;
 
+    /** Observer. */
+    private KalmanObserver observer;
+
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
      * @param process unscented process to estimate
@@ -80,6 +84,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         this.utProvider = utProvider;
         this.priorSigmaPoints = null;
         this.predictedNoNoiseSigmaPoints = null;
+        this.observer = null;
 
         // Check state dimension
         if (n == 0) {
@@ -107,7 +112,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      * @return estimated state after measurement has been considered
      * @throws MathRuntimeException if matrix cannot be decomposed
      */
-    public ProcessEstimate predictionAndCorrectionSteps(final T measurement, final RealVector[] sigmaPoints) throws MathRuntimeException {
+    private ProcessEstimate predictionAndCorrectionSteps(final T measurement, final RealVector[] sigmaPoints) throws MathRuntimeException {
 
         // Prediction phase
         final UnscentedEvolution evolution = process.getEvolution(getCorrected().getTime(),
@@ -135,6 +140,10 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
                                                                                 predictedMeasurements, predictedMeasurement);
         final RealVector   innovation            = (r == null) ? null : process.getInnovation(measurement, predictedMeasurement, predicted.getState(), r);
         correct(measurement, r, crossCovarianceMatrix, innovation);
+
+        if (observer != null) {
+            observer.updatePerformed(this);
+        }
         return getCorrected();
 
     }
@@ -199,6 +208,14 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
                                         null, null, innovationCovarianceMatrix, k);
 
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setObserver(final KalmanObserver kalmanObserver) {
+        observer = kalmanObserver;
+        observer.init(this);
+    }
+
     /** Get the predicted state.
      * @return predicted state
      */

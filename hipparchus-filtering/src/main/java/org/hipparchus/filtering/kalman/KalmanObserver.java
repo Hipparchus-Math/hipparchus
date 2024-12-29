@@ -14,28 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.hipparchus.filtering.kalman;
 
-import org.hipparchus.exception.MathRuntimeException;
-
-/**
- * Interface representing a Kalman filter.
- * @param <T> the type of the measurements
- * @since 1.3
+/** Observer for Kalman filter recursions.
+ * <p>
+ * This interface is intended to be implemented by users to monitor
+ * the progress of the Kalman filter estimator during estimation.
+ * </p>
  */
-public interface KalmanFilter<T extends Measurement> extends KalmanEstimate {
+public interface KalmanObserver {
 
-    /** Perform one estimation step.
-     * @param measurement single measurement to handle
-     * @return estimated state after measurement has been considered
-     * @exception MathRuntimeException if estimation fails
+    /** Callback for initialisation of observer.
+     * @param estimate estimate calculated by a Kalman filter
      */
-    ProcessEstimate estimationStep(T measurement)
-        throws MathRuntimeException;
+    default void init(KalmanEstimate estimate) {}
 
-    /** Set the filter observer callback.
-     * @param observer the observer
+    /** Notification callback after each Kalman filter measurement update.
+     * @param estimate estimate calculated by a Kalman filter
      */
-    void setObserver(KalmanObserver observer);
+    void updatePerformed(KalmanEstimate estimate);
 }

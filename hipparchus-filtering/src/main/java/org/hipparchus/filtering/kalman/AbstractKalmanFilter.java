@@ -44,6 +44,9 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
     /** State transition matrix. */
     private RealMatrix stateTransitionMatrix;
 
+    /** Observer. */
+    private KalmanObserver observer;
+
 
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
@@ -54,6 +57,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
         this.corrected  = initialState;
         this.priorCovariance = null;
         this.stateTransitionMatrix = null;
+        this.observer = null;
     }
 
     /** Perform prediction step.
@@ -142,6 +146,21 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
         corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance,
                                         stm, h, s, k);
 
+    }
+
+    /** Get the observer.
+     * @return the observer
+     */
+    protected KalmanObserver getObserver() {
+        return observer;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void setObserver(final KalmanObserver kalmanObserver) {
+        observer = kalmanObserver;
+        observer.init(this);
     }
 
     /** Get the predicted state.

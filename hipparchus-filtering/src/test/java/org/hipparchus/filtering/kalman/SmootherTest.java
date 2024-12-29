@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.hipparchus.filtering.kalman;
 
 import org.hipparchus.filtering.kalman.extended.ExtendedKalmanFilter;
@@ -72,17 +71,20 @@ public class SmootherTest {
     // Test linear Kalman filter/smoother
     // Simple linear 1D constant velocity
     @Test
-    void testKalmanSmoother() {
+    void testKalmanSmootherObserver() {
 
         // Initialise filter process
         final LinearProcess<SimpleMeasurement> process = new LinearConstantVelocity<>(initialTime, PROCESS_NOISE);
 
-        // Smoother wrapping the filter
-        final KalmanFilterSmoother<SimpleMeasurement> smoother =
-                new KalmanFilterSmoother<>(new LinearKalmanFilter<>(decomposer, process, initialState), decomposer);
+        // Kalman filter
+        final KalmanFilter<SimpleMeasurement> filter = new LinearKalmanFilter<>(decomposer, process, initialState);
+
+        // Smoother observer
+        final KalmanSmoother smoother = new KalmanSmoother(decomposer);
+        filter.setObserver(smoother);
 
         // Process measurements with smoother (forwards pass)
-        measurements.forEach(smoother::estimationStep);
+        measurements.forEach(filter::estimationStep);
 
         // Smooth backwards
         List<ProcessEstimate> smoothedStates = smoother.backwardsSmooth();
@@ -95,20 +97,24 @@ public class SmootherTest {
         }
     }
 
+
     // Test extended Kalman filter/smoother
     // Simple linear 1D constant velocity
     @Test
-    void testExtendedSmoother() {
+    void testExtendedSmootherObserver() {
 
         // Initialise filter
         final NonLinearProcess<SimpleMeasurement> process = new ExtendedConstantVelocity<>(initialTime, PROCESS_NOISE);
 
-        // Smoother wrapping the filter
-        final KalmanFilterSmoother<SimpleMeasurement> smoother =
-                new KalmanFilterSmoother<>(new ExtendedKalmanFilter<>(decomposer, process, initialState), decomposer);
+        // Kalman filter
+        final ExtendedKalmanFilter<SimpleMeasurement> filter = new ExtendedKalmanFilter<>(decomposer, process, initialState);
 
-        // Process measurements with smoother (forwards pass)
-        measurements.forEach(smoother::estimationStep);
+        // Smoother observer
+        final KalmanSmoother smoother = new KalmanSmoother(decomposer);
+        filter.setObserver(smoother);
+
+        // Process measurements with filter
+        measurements.forEach(filter::estimationStep);
 
         // Smooth backwards
         List<ProcessEstimate> smoothedStates = smoother.backwardsSmooth();
@@ -125,22 +131,26 @@ public class SmootherTest {
     // Test unscented Kalman filter/smoother
     // Simple linear 1D constant velocity
     @Test
-    void testUnscentedSmoother() {
+    void testUnscentedSmootherObserver() {
 
         // Initialise filter
         final UnscentedProcess<SimpleMeasurement> process = new UnscentedConstantVelocity<>(initialTime, PROCESS_NOISE);
 
-        // Smoother wrapping the filter
         final double alpha = 1.0;
         final double beta = 2.0;
         final double kappa = 0.0;
         UnscentedTransformProvider unscentedTransformProvider =
                 new MerweUnscentedTransform(initialState.getState().getDimension(), alpha, beta, kappa);
-        final KalmanFilterSmoother<SimpleMeasurement> smoother = new KalmanFilterSmoother<>(
-                new UnscentedKalmanFilter<>(decomposer, process, initialState, unscentedTransformProvider), decomposer);
+
+        final UnscentedKalmanFilter<SimpleMeasurement> filter =
+                new UnscentedKalmanFilter<>(decomposer, process, initialState, unscentedTransformProvider);
+
+        // Smoother observer
+        final KalmanSmoother smoother = new KalmanSmoother(decomposer);
+        filter.setObserver(smoother);
 
         // Process measurements with smoother (forwards pass)
-        measurements.forEach(smoother::estimationStep);
+        measurements.forEach(filter::estimationStep);
 
         // Smooth backwards
         List<ProcessEstimate> smoothedStates = smoother.backwardsSmooth();
