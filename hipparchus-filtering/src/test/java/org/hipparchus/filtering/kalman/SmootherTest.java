@@ -16,6 +16,7 @@
  */
 package org.hipparchus.filtering.kalman;
 
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.filtering.kalman.extended.ExtendedKalmanFilter;
 import org.hipparchus.filtering.kalman.extended.NonLinearEvolution;
 import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
@@ -83,7 +84,7 @@ public class SmootherTest {
         final KalmanSmoother smoother = new KalmanSmoother(decomposer);
         filter.setObserver(smoother);
 
-        // Process measurements with smoother (forwards pass)
+        // Process measurements with filter
         measurements.forEach(filter::estimationStep);
 
         // Smooth backwards
@@ -149,7 +150,7 @@ public class SmootherTest {
         final KalmanSmoother smoother = new KalmanSmoother(decomposer);
         filter.setObserver(smoother);
 
-        // Process measurements with smoother (forwards pass)
+        // Process measurements with filter
         measurements.forEach(filter::estimationStep);
 
         // Smooth backwards
@@ -161,6 +162,29 @@ public class SmootherTest {
             referenceData.get(i).checkState(smoothedStates.get(i).getState(), 1e-14);
             referenceData.get(i).checkCovariance(smoothedStates.get(i).getCovariance(), 1e-14);
         }
+    }
+
+
+    @Test
+    void testProcessMeasurements() {
+        // Initialise filter process
+        final LinearProcess<SimpleMeasurement> process = new LinearConstantVelocity<>(initialTime, PROCESS_NOISE);
+
+        // Kalman filter
+        final KalmanFilter<SimpleMeasurement> filter = new LinearKalmanFilter<>(decomposer, process, initialState);
+
+        // Smoother observer
+        final KalmanSmoother smoother = new KalmanSmoother(decomposer);
+        filter.setObserver(smoother);
+
+        // Smooth backwards.  No measurements processed.  Should throw.
+        Assertions.assertThrows(MathIllegalStateException.class, smoother::backwardsSmooth);
+
+        // Process a single measurement
+        filter.estimationStep(measurements.get(0));
+
+        // Now should not throw
+        Assertions.assertDoesNotThrow(smoother::backwardsSmooth);
     }
 
 

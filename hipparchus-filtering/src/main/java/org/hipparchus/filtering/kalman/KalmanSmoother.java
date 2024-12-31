@@ -16,6 +16,8 @@
  */
 package org.hipparchus.filtering.kalman;
 
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.filtering.LocalizedFilterFormats;
 import org.hipparchus.linear.MatrixDecomposer;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -28,10 +30,26 @@ import java.util.List;
  * Kalman smoother for linear, extended or unscented filters.
  * <p>
  * This implementation is attached to a filter using the observer mechanism.  Once all measurements have been
- * processed by the filter, the smoothing method can be called
+ * processed by the filter, the smoothing method can be called.
+ * </br>
+ * For example
+ * <pre>{@code
+ *     // Kalman filter
+ *     final KalmanFilter<SimpleMeasurement> filter = new LinearKalmanFilter<>(decomposer, process, initialState);
+ *
+ *     // Smoother observer
+ *     final KalmanSmoother smoother = new KalmanSmoother(decomposer);
+ *     filter.setObserver(smoother);
+ *
+ *     // Process measurements with filter (forwards pass)
+ *     measurements.forEach(filter::estimationStep);
+ *
+ *     // Smooth backwards
+ *     List<ProcessEstimate> smoothedStates = smoother.backwardsSmooth();
+ * }</pre>
  * </p>
  *
- * @see "Sarkka, S. Bayesian Filtering and Smoothing. Cambridge 2013"
+ * @see "Särkkä, S. Bayesian Filtering and Smoothing. Cambridge 2013"
  */
 public class KalmanSmoother implements KalmanObserver {
 
@@ -89,6 +107,12 @@ public class KalmanSmoother implements KalmanObserver {
      * @return list of smoothed states
      */
     public List<ProcessEstimate> backwardsSmooth() {
+        // Check for at least one measurement
+        if (smootherData.size() < 2) {
+            throw new MathIllegalStateException(LocalizedFilterFormats.PROCESS_AT_LEAST_ONE_MEASUREMENT);
+        }
+
+        // Initialise output
         final LinkedList<ProcessEstimate> smootherResults = new LinkedList<>();
 
         // Last smoothed state is the same as the filtered state
