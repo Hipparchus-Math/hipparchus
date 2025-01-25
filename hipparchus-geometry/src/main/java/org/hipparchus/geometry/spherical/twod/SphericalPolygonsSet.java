@@ -506,7 +506,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
             // the instance has a single cell without any boundaries
 
-            if (tree.getCut() == null && (Boolean) tree.getAttribute()) {
+            if ((Boolean) tree.getAttribute()) {
                 // the instance covers the whole space
                 setSize(4 * FastMath.PI);
                 setBarycenter(new S2Point(0, 0));
