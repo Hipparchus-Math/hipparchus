@@ -609,7 +609,7 @@ class SphericalPolygonsSetTest {
             assertEquals(LocalizedGeometryFormats.TOO_SMALL_TOLERANCE, miae.getSpecifier());
             assertEquals(1.0e-100, (Double) miae.getParts()[0], 1.0e-110);
             assertEquals("Sphere2D.SMALLEST_TOLERANCE", miae.getParts()[1]);
-            assertEquals(Sphere2D.SMALLEST_TOLERANCE, (Double) miae.getParts()[2]), 1.0e-20);
+            assertEquals(Sphere2D.SMALLEST_TOLERANCE, (Double) miae.getParts()[2], 1.0e-20);
         }
     }
 
