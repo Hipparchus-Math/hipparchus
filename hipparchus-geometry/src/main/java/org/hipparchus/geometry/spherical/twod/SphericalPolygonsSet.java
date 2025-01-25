@@ -74,10 +74,10 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      */
     public SphericalPolygonsSet(final Vector3D pole, final double tolerance)
         throws MathIllegalArgumentException {
-        super(new BSPTree<Sphere2D>(new Circle(pole, tolerance).wholeHyperplane(),
-                                    new BSPTree<Sphere2D>(Boolean.FALSE),
-                                    new BSPTree<Sphere2D>(Boolean.TRUE),
-                                    null),
+        super(new BSPTree<>(new Circle(pole, tolerance).wholeHyperplane(),
+                            new BSPTree<>(Boolean.FALSE),
+                            new BSPTree<>(Boolean.TRUE),
+                            null),
               tolerance);
         Sphere2D.checkTolerance(tolerance);
     }
@@ -239,7 +239,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         final int n = vertices.length;
         if (n == 0) {
             // the tree represents the whole space
-            return new BSPTree<Sphere2D>(Boolean.TRUE);
+            return new BSPTree<>(Boolean.TRUE);
         }
 
         // build the vertices
@@ -270,7 +270,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
         // build the tree top-down
         final BSPTree<Sphere2D> tree = new BSPTree<>();
-        insertEdges(hyperplaneThickness, tree, edges);
+        insertEdges(tree, edges);
 
         return tree;
 
@@ -429,17 +429,14 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         return low - 1;
     }
 
-    /** Recursively build a tree by inserting cut sub-hyperplanes.
-     * @param hyperplaneThickness tolerance below which points are considered to
-     * belong to the hyperplane (which is therefore more a slab)
-     * @param node current tree node (it is a leaf node at the beginning
-     * of the call)
+    /**
+     * Recursively build a tree by inserting cut sub-hyperplanes.
+     * @param node  current tree node (it is a leaf node at the beginning
+     *              of the call)
      * @param edges list of edges to insert in the cell defined by this node
-     * (excluding edges not belonging to the cell defined by this node)
+     *              (excluding edges not belonging to the cell defined by this node)
      */
-    private static void insertEdges(final double hyperplaneThickness,
-                                    final BSPTree<Sphere2D> node,
-                                    final List<Edge> edges) {
+    private static void insertEdges(final BSPTree<Sphere2D> node, final List<Edge> edges) {
 
         // find an edge with an hyperplane that can be inserted in the node
         int index = 0;
@@ -475,12 +472,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
         // recurse through lower levels
         if (!outsideList.isEmpty()) {
-            insertEdges(hyperplaneThickness, node.getPlus(), outsideList);
+            insertEdges(node.getPlus(), outsideList);
         } else {
             node.getPlus().setAttribute(Boolean.FALSE);
         }
         if (!insideList.isEmpty()) {
-            insertEdges(hyperplaneThickness, node.getMinus(),  insideList);
+            insertEdges(node.getMinus(), insideList);
         } else {
             node.getMinus().setAttribute(Boolean.TRUE);
         }
@@ -763,10 +760,10 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
         // handle special cases first
         if (isEmpty()) {
-            return new EnclosingBall<Sphere2D, S2Point>(S2Point.PLUS_K, Double.NEGATIVE_INFINITY);
+            return new EnclosingBall<>(S2Point.PLUS_K, Double.NEGATIVE_INFINITY);
         }
         if (isFull()) {
-            return new EnclosingBall<Sphere2D, S2Point>(S2Point.PLUS_K, Double.POSITIVE_INFINITY);
+            return new EnclosingBall<>(S2Point.PLUS_K, Double.POSITIVE_INFINITY);
         }
 
         // as the polygons is neither empty nor full, it has some boundaries and cut hyperplanes
@@ -774,14 +771,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         if (isEmpty(root.getMinus()) && isFull(root.getPlus())) {
             // the polygon covers an hemisphere, and its boundary is one 2π long edge
             final Circle circle = (Circle) root.getCut().getHyperplane();
-            return new EnclosingBall<Sphere2D, S2Point>(new S2Point(circle.getPole()).negate(),
-                                                        0.5 * FastMath.PI);
+            return new EnclosingBall<>(new S2Point(circle.getPole()).negate(), 0.5 * FastMath.PI);
         }
         if (isFull(root.getMinus()) && isEmpty(root.getPlus())) {
             // the polygon covers an hemisphere, and its boundary is one 2π long edge
             final Circle circle = (Circle) root.getCut().getHyperplane();
-            return new EnclosingBall<Sphere2D, S2Point>(new S2Point(circle.getPole()),
-                                                        0.5 * FastMath.PI);
+            return new EnclosingBall<>(new S2Point(circle.getPole()), 0.5 * FastMath.PI);
         }
 
         // gather some inside points, to be used by the encloser
