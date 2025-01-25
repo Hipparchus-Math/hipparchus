@@ -159,13 +159,8 @@ public class RegionFactory<S extends Space> {
         return region1.buildNew(tree);
     }
 
-    /** Get the complement of the region (exchanged interior/exterior).
-     * @param region region to complement, it will not modified, a new
-     * region independent region will be built
-     * @return a new region, complement of the specified one
-     */
-    /** Get the complement of the region (exchanged interior/exterior).
-     * @param region region to complement, it will not modified, a new
+     /** Get the complement of the region (exchanged interior/exterior).
+     * @param region region to complement, it will not be modified, a new
      * region independent region will be built
      * @return a new region, complement of the specified one
      */
@@ -223,7 +218,7 @@ public class RegionFactory<S extends Space> {
                 final SubHyperplane<S> plusInside  =
                         (attribute.getPlusOutside() == null) ? null : attribute.getPlusOutside().copySelf();
                 // we start with an empty list of splitters, it will be filled in out of recursion
-                attribute = new BoundaryAttribute<>(plusOutside, plusInside, new NodesSet<S>());
+                attribute = new BoundaryAttribute<>(plusOutside, plusInside, new NodesSet<>());
             }
 
             transformedNode = new BSPTree<>(node.getCut().copySelf(),
@@ -262,7 +257,7 @@ public class RegionFactory<S extends Space> {
             final BSPTree<S> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
             final Region<S> r = region1.buildNew(cell);
             final Point<S> p = r.getBarycenter();
-            return new BSPTree<S>(shouldBeInside(region1.checkPoint(p), region2.checkPoint(p)));
+            return new BSPTree<>(shouldBeInside(region1.checkPoint(p), region2.checkPoint(p)));
         }
 
         /**
@@ -423,10 +418,10 @@ public class RegionFactory<S extends Space> {
         public BSPTree<S> fixNode(final BSPTree<S> node) {
             if (node.getPlus().getAttribute().equals(node.getMinus().getAttribute())) {
                 // no ambiguity
-                return new BSPTree<S>(node.getPlus().getAttribute());
+                return new BSPTree<>(node.getPlus().getAttribute());
             } else {
                 // ambiguous node
-                return new BSPTree<S>(inside);
+                return new BSPTree<>(inside);
             }
         }
 
