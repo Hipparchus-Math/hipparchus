@@ -126,7 +126,7 @@ public class RegionFactory<S extends Space> {
      */
     public Region<S> intersection(final Region<S> region1, final Region<S> region2) {
         final BSPTree<S> tree =
-            region1.getTree(false).merge(region2.getTree(false), new IntersectionMerger());
+            region1.getTree(false).merge(region2.getTree(false), new IntersectionMerger(region1, region2));
         tree.visit(nodeCleaner);
         return region1.buildNew(tree);
     }
@@ -237,6 +237,44 @@ public class RegionFactory<S extends Space> {
 
     }
 
+    /** BSP tree leaf merger computing intersection of two regions. */
+    private abstract class FixingMerger implements BSPTree.LeafMerger<S>, VanishingCutHandler<S> {
+
+        /** First region. */
+        private final Region<S> region1;
+
+        /** Second region. */
+        private final Region<S> region2;
+
+        /** Simple constructor.
+         * @param region1 first region
+         * @param region2 second region
+         */
+        protected FixingMerger(final Region<S> region1, final Region<S> region2) {
+            this.region1 = region1.copySelf();
+            this.region2 = region2.copySelf();
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public BSPTree<S> fixNode(final BSPTree<S> node) {
+            // get a representative point in the degenerate cell
+            final BSPTree<S> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
+            final Region<S> r = region1.buildNew(cell);
+            final Point<S> p = r.getBarycenter();
+            return new BSPTree<S>(shouldBeInside(region1.checkPoint(p), region2.checkPoint(p)));
+        }
+
+        /**
+         * Check if node should be an inside or outside node.
+         * @param location1 location of representative point in region1
+         * @param location2 location of representative point in region2
+         * @return true if node should be an inside node
+         */
+        protected abstract boolean shouldBeInside(final Location location1, final Location location2);
+
+    }
+
     /** BSP tree leaf merger computing union of two regions. */
     private class UnionMerger implements BSPTree.LeafMerger<S> {
         /** {@inheritDoc} */
@@ -256,7 +294,16 @@ public class RegionFactory<S extends Space> {
     }
 
     /** BSP tree leaf merger computing intersection of two regions. */
-    private class IntersectionMerger implements BSPTree.LeafMerger<S> {
+    private class IntersectionMerger extends FixingMerger {
+
+        /** Simple constructor.
+         * @param region1 first region
+         * @param region2 second region
+         */
+        IntersectionMerger(final Region<S> region1, final Region<S> region2) {
+            super(region1, region2);
+        }
+
         /** {@inheritDoc} */
         @Override
         public BSPTree<S> merge(final BSPTree<S> leaf, final BSPTree<S> tree,
@@ -264,13 +311,21 @@ public class RegionFactory<S extends Space> {
                                 final boolean isPlusChild, final boolean leafFromInstance) {
             if ((Boolean) leaf.getAttribute()) {
                 // the leaf node represents an inside cell
-                tree.insertInTree(parentTree, isPlusChild, new VanishingToLeaf(true));
+                tree.insertInTree(parentTree, isPlusChild, this);
                 return tree;
             }
             // the leaf node represents an outside cell
-            leaf.insertInTree(parentTree, isPlusChild, new VanishingToLeaf(false));
+            leaf.insertInTree(parentTree, isPlusChild, this);
             return leaf;
         }
+
+        /** {@inheritDoc} */
+        @Override
+        protected boolean shouldBeInside(final Location location1, final Location location2)
+        {
+            return !(location1.equals(Location.OUTSIDE) || location2.equals(Location.OUTSIDE));
+        }
+
     }
 
     /** BSP tree leaf merger computing symmetric difference (exclusive or) of two regions. */
@@ -291,21 +346,14 @@ public class RegionFactory<S extends Space> {
     }
 
     /** BSP tree leaf merger computing difference of two regions. */
-    private class DifferenceMerger implements BSPTree.LeafMerger<S>, VanishingCutHandler<S> {
-
-        /** Region to subtract from. */
-        private final Region<S> region1;
-
-        /** Region to subtract. */
-        private final Region<S> region2;
+    private class DifferenceMerger extends FixingMerger {
 
         /** Simple constructor.
          * @param region1 region to subtract from
          * @param region2 region to subtract
          */
         DifferenceMerger(final Region<S> region1, final Region<S> region2) {
-            this.region1 = region1.copySelf();
-            this.region2 = region2.copySelf();
+            super(region1, region2);
         }
 
         /** {@inheritDoc} */
@@ -329,13 +377,8 @@ public class RegionFactory<S extends Space> {
 
         /** {@inheritDoc} */
         @Override
-        public BSPTree<S> fixNode(final BSPTree<S> node) {
-            // get a representative point in the degenerate cell
-            final BSPTree<S> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
-            final Region<S> r = region1.buildNew(cell);
-            final Point<S> p = r.getBarycenter();
-            return new BSPTree<S>(region1.checkPoint(p) == Location.INSIDE &&
-                                  region2.checkPoint(p) == Location.OUTSIDE);
+        protected boolean shouldBeInside(final Location location1, final Location location2) {
+            return location1 == Location.INSIDE && location2 == Location.OUTSIDE;
         }
 
     }

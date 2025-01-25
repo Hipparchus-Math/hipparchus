@@ -872,7 +872,7 @@ class SphericalPolygonsSetTest {
         final SphericalPolygonsSet sps3 = new SphericalPolygonsSet(thickness2, vertices1);
         final SphericalPolygonsSet sps4 = new SphericalPolygonsSet(thickness2, vertices2);
         assertEquals(1.4886e-12, regionFactory.intersection(sps3, sps4).getSize(), 1.0e-15);
-        assertEquals(2.4077e-06, regionFactory.intersection(sps4, sps3).getSize(), 1.0e-10);
+        assertEquals(0.0,        regionFactory.intersection(sps4, sps3).getSize(), 1.0e-15);
 
     }
 
