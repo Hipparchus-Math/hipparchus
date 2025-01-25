@@ -667,26 +667,21 @@ public class BSPTree<S extends Space> {
                 // on the wrong side of this parent hyperplane
                 if (tree == tree.parent.plus) {
                     cut = cut.split(hyperplane).getPlus();
+                    fixVanishingCut(vanishingHandler);
+                    if (cut == null) {
+                        break;
+                    }
                     plus.chopOffMinus(hyperplane, vanishingHandler);
                     minus.chopOffMinus(hyperplane, vanishingHandler);
                 } else {
                     cut = cut.split(hyperplane).getMinus();
-                    plus.chopOffPlus(hyperplane, vanishingHandler);
-                    minus.chopOffPlus(hyperplane, vanishingHandler);
-                }
-
-                if (cut == null) {
-                    // the cut sub-hyperplane has vanished
-                    final BSPTree<S> fixed = vanishingHandler.fixNode(this);
-                    cut       = fixed.cut;
-                    plus      = fixed.plus;
-                    minus     = fixed.minus;
-                    attribute = fixed.attribute;
+                    fixVanishingCut(vanishingHandler);
                     if (cut == null) {
                         break;
                     }
+                    plus.chopOffPlus(hyperplane, vanishingHandler);
+                    minus.chopOffPlus(hyperplane, vanishingHandler);
                 }
-
             }
 
             // since we may have drop some parts of the inserted tree,
@@ -752,14 +747,7 @@ public class BSPTree<S extends Space> {
             plus.chopOffMinus(hyperplane, vanishingHandler);
             minus.chopOffMinus(hyperplane, vanishingHandler);
 
-            if (cut == null) {
-                // the cut sub-hyperplane has vanished
-                final BSPTree<S> fixed = vanishingHandler.fixNode(this);
-                cut       = fixed.cut;
-                plus      = fixed.plus;
-                minus     = fixed.minus;
-                attribute = fixed.attribute;
-            }
+            fixVanishingCut(vanishingHandler);
 
         }
     }
@@ -779,15 +767,22 @@ public class BSPTree<S extends Space> {
             plus.chopOffPlus(hyperplane, vanishingHandler);
             minus.chopOffPlus(hyperplane, vanishingHandler);
 
-            if (cut == null) {
-                // the cut sub-hyperplane has vanished
-                final BSPTree<S> fixed = vanishingHandler.fixNode(this);
-                cut       = fixed.cut;
-                plus      = fixed.plus;
-                minus     = fixed.minus;
-                attribute = fixed.attribute;
-            }
+            fixVanishingCut(vanishingHandler);
 
+        }
+    }
+
+    /** Fix vanishing cut.
+     * @param vanishingHandler handler to use for handling very rare corner
+     */
+    private void fixVanishingCut(final VanishingCutHandler<S> vanishingHandler) {
+        if (cut == null) {
+            // the cut sub-hyperplane has vanished
+            final BSPTree<S> fixed = vanishingHandler.fixNode(this);
+            cut       = fixed.cut;
+            plus      = fixed.plus;
+            minus     = fixed.minus;
+            attribute = fixed.attribute;
         }
     }
 
