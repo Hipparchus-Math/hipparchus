@@ -46,7 +46,7 @@ public abstract class AbstractRuleFactory implements RuleFactory {
      * </p>
      * @since 3.0
      */
-    public AbstractRuleFactory() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected AbstractRuleFactory() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

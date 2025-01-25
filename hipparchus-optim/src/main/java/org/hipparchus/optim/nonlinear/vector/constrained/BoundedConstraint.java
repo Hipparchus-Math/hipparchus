@@ -40,7 +40,7 @@ public abstract class BoundedConstraint implements Constraint {
      * @param lower lower bound (null if no lower bound)
      * @param upper upper bound (null if no upper bound)
      */
-     public BoundedConstraint(final RealVector lower, final RealVector upper) {
+    protected BoundedConstraint(final RealVector lower, final RealVector upper) {
 
          // ensure lower is always properly set, even when there are no lower bounds
          if (lower == null) {

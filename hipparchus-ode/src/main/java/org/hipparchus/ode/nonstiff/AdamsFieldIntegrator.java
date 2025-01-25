@@ -62,11 +62,9 @@ public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> ex
      * @param scalRelativeTolerance allowed relative error
      * @exception MathIllegalArgumentException if order is 1 or less
      */
-    public AdamsFieldIntegrator(final Field<T> field, final String name,
-                                final int nSteps, final int order,
-                                final double minStep, final double maxStep,
-                                final double scalAbsoluteTolerance,
-                                final double scalRelativeTolerance)
+    protected AdamsFieldIntegrator(final Field<T> field, final String name, final int nSteps, final int order,
+                                   final double minStep, final double maxStep, final double scalAbsoluteTolerance,
+                                   final double scalRelativeTolerance)
         throws MathIllegalArgumentException {
         super(field, name, nSteps, order, minStep, maxStep,
               scalAbsoluteTolerance, scalRelativeTolerance);
@@ -89,11 +87,9 @@ public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> ex
      * @param vecRelativeTolerance allowed relative error
      * @exception IllegalArgumentException if order is 1 or less
      */
-    public AdamsFieldIntegrator(final Field<T> field, final String name,
-                                final int nSteps, final int order,
-                                final double minStep, final double maxStep,
-                                final double[] vecAbsoluteTolerance,
-                                final double[] vecRelativeTolerance)
+    protected AdamsFieldIntegrator(final Field<T> field, final String name, final int nSteps, final int order,
+                                   final double minStep, final double maxStep, final double[] vecAbsoluteTolerance,
+                                   final double[] vecRelativeTolerance)
         throws IllegalArgumentException {
         super(field, name, nSteps, order, minStep, maxStep,
               vecAbsoluteTolerance, vecRelativeTolerance);

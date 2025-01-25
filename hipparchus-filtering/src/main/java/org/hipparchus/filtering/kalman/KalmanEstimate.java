@@ -14,28 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.hipparchus.filtering.kalman;
 
-import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.linear.RealMatrix;
 
-/**
- * Interface representing a Kalman filter.
- * @param <T> the type of the measurements
- * @since 1.3
- */
-public interface KalmanFilter<T extends Measurement> extends KalmanEstimate {
+public interface KalmanEstimate {
 
-    /** Perform one estimation step.
-     * @param measurement single measurement to handle
-     * @return estimated state after measurement has been considered
-     * @exception MathRuntimeException if estimation fails
+    /** Get the current predicted state.
+     * @return current predicted state
      */
-    ProcessEstimate estimationStep(T measurement)
-        throws MathRuntimeException;
+    ProcessEstimate getPredicted();
 
-    /** Set the filter observer callback.
-     * @param observer the observer
+    /** Get the current corrected state.
+     * @return current corrected state
      */
-    void setObserver(KalmanObserver observer);
+    ProcessEstimate getCorrected();
+
+    /** Get the cross-covariance between the previous state and the prediction.
+     * Not required for forward filtering, but required for the smoother.
+     * @return cross-covariance
+     */
+    RealMatrix getStateCrossCovariance();
+
 }

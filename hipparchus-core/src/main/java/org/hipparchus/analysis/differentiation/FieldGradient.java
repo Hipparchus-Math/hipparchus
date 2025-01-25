@@ -38,10 +38,11 @@ import org.hipparchus.util.MathUtils;
  * <p>{@link FieldGradient} instances can be used directly thanks to
  * the arithmetic operators to the mathematical functions provided as
  * methods by this class (+, -, *, /, %, sin, cos ...).</p>
- * <p>Implementing complex expressions by hand using these classes is
- * a tedious and error-prone task but has the advantage of having no limitation
- * on the derivation order despite not requiring users to compute the derivatives by
- * themselves.</p>
+ * <p>Implementing complex expressions by hand using {@link Derivative}-based
+ * classes (or in fact any {@link org.hipparchus.CalculusFieldElement} class) is
+ * a tedious and error-prone task but has the advantage of not requiring users
+ * to compute the derivatives by themselves and allowing to switch for one
+ * derivative implementation to another as they all share the same filed API.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  * @param <T> the type of the function parameters and value
  * @see DerivativeStructure
@@ -80,7 +81,7 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         System.arraycopy(gradient, 0, grad, 0, grad.length);
     }
 
-    /** Build an instance from a {@link DerivativeStructure}.
+    /** Build an instance from a {@link FieldDerivativeStructure}.
      * @param ds derivative structure
      * @exception MathIllegalArgumentException if {@code ds} order
      * is not 1

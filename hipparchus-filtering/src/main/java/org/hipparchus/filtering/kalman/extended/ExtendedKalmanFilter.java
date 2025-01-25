@@ -66,6 +66,11 @@ public class ExtendedKalmanFilter<T extends Measurement> extends AbstractKalmanF
         final RealMatrix s          = computeInnovationCovarianceMatrix(measurement.getCovariance(), h);
         final RealVector innovation = (h == null) ? null : process.getInnovation(measurement, evolution, s);
         correct(measurement, stm, innovation, h, s);
+
+        if (getObserver() != null) {
+            getObserver().updatePerformed(this);
+        }
+
         return getCorrected();
 
     }

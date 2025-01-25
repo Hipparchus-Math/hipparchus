@@ -41,7 +41,7 @@ public abstract class AbstractStorelessUnivariateStatistic
      * </p>
      * @since 3.0
      */
-    public AbstractStorelessUnivariateStatistic() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    protected AbstractStorelessUnivariateStatistic() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 

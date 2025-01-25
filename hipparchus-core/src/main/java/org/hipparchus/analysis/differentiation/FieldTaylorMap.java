@@ -111,14 +111,6 @@ public class FieldTaylorMap<T extends CalculusFieldElement<T>> implements Differ
         return functions[0].getOrder();
     }
 
-    /** Get the number of parameters of the map.
-     * @return number of parameters of the map
-     */
-    @Deprecated
-    public int getNbParameters() {
-        return getFreeParameters();
-    }
-
     /** Get the number of functions of the map.
      * @return number of functions of the map
      */

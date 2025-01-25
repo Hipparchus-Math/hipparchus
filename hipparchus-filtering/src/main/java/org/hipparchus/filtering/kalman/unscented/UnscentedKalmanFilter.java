@@ -20,6 +20,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.filtering.kalman.KalmanFilter;
+import org.hipparchus.filtering.kalman.KalmanObserver;
 import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.linear.MatrixDecomposer;
@@ -40,7 +41,7 @@ import org.hipparchus.util.UnscentedTransformProvider;
 public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilter<T> {
 
     /** Process to be estimated. */
-    private UnscentedProcess<T> process;
+    private final UnscentedProcess<T> process;
 
     /** Predicted state. */
     private ProcessEstimate predicted;
@@ -57,6 +58,15 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     /** Unscented transform provider. */
     private final UnscentedTransformProvider utProvider;
 
+    /** Prior corrected sigma-points. */
+    private RealVector[] priorSigmaPoints;
+
+    /** Predicted sigma-points. */
+    private RealVector[] predictedNoNoiseSigmaPoints;
+
+    /** Observer. */
+    private KalmanObserver observer;
+
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
      * @param process unscented process to estimate
@@ -72,6 +82,10 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         this.corrected  = initialState;
         this.n          = corrected.getState().getDimension();
         this.utProvider = utProvider;
+        this.priorSigmaPoints = null;
+        this.predictedNoNoiseSigmaPoints = null;
+        this.observer = null;
+
         // Check state dimension
         if (n == 0) {
             // State dimension must be different from 0
@@ -85,6 +99,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
 
         // Calculate sigma points
         final RealVector[] sigmaPoints = utProvider.unscentedTransform(corrected.getState(), corrected.getCovariance());
+        priorSigmaPoints = sigmaPoints;
 
         // Perform the prediction and correction steps
         return predictionAndCorrectionSteps(measurement, sigmaPoints);
@@ -97,14 +112,21 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      * @return estimated state after measurement has been considered
      * @throws MathRuntimeException if matrix cannot be decomposed
      */
-    public ProcessEstimate predictionAndCorrectionSteps(final T measurement, final RealVector[] sigmaPoints) throws MathRuntimeException {
+    private ProcessEstimate predictionAndCorrectionSteps(final T measurement, final RealVector[] sigmaPoints) throws MathRuntimeException {
 
         // Prediction phase
         final UnscentedEvolution evolution = process.getEvolution(getCorrected().getTime(),
                                                                   sigmaPoints, measurement);
+        predictedNoNoiseSigmaPoints = evolution.getCurrentStates();
 
-        predict(evolution.getCurrentTime(), evolution.getCurrentStates(),
-                evolution.getProcessNoiseMatrix());
+        // Computation of Eq. 17, weighted mean state
+        final RealVector predictedState = utProvider.getUnscentedMeanState(evolution.getCurrentStates());
+
+        // Calculate process noise
+        final RealMatrix processNoiseMatrix = process.getProcessNoiseMatrix(getCorrected().getTime(), predictedState,
+                                                                            measurement);
+
+        predict(evolution.getCurrentTime(), evolution.getCurrentStates(), processNoiseMatrix);
 
         // Calculate sigma points from predicted state
         final RealVector[] predictedSigmaPoints = utProvider.unscentedTransform(predicted.getState(),
@@ -118,6 +140,10 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
                                                                                 predictedMeasurements, predictedMeasurement);
         final RealVector   innovation            = (r == null) ? null : process.getInnovation(measurement, predictedMeasurement, predicted.getState(), r);
         correct(measurement, r, crossCovarianceMatrix, innovation);
+
+        if (observer != null) {
+            observer.updatePerformed(this);
+        }
         return getCorrected();
 
     }
@@ -127,7 +153,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      * @param predictedStates predicted state vectors
      * @param noise process noise covariance matrix
      */
-    private void predict(final double time, final RealVector[] predictedStates,  final RealMatrix noise) {
+    private void predict(final double time, final RealVector[] predictedStates, final RealMatrix noise) {
 
         // Computation of Eq. 17, weighted mean state
         final RealVector predictedState = utProvider.getUnscentedMeanState(predictedStates);
@@ -182,6 +208,14 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
                                         null, null, innovationCovarianceMatrix, k);
 
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setObserver(final KalmanObserver kalmanObserver) {
+        observer = kalmanObserver;
+        observer.init(this);
+    }
+
     /** Get the predicted state.
      * @return predicted state
      */
@@ -196,6 +230,15 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     @Override
     public ProcessEstimate getCorrected() {
         return corrected;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RealMatrix getStateCrossCovariance() {
+        final RealVector priorState = utProvider.getUnscentedMeanState(priorSigmaPoints);
+        final RealVector predictedState = utProvider.getUnscentedMeanState(predictedNoNoiseSigmaPoints);
+
+        return computeCrossCovarianceMatrix(priorSigmaPoints, priorState, predictedNoNoiseSigmaPoints, predictedState);
     }
 
     /** Get the unscented transform provider.
@@ -247,31 +290,11 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         for (int i = 0; i <= 2 * n; i++) {
             final RealVector stateDiff = predictedStates[i].subtract(predictedState);
             final RealVector measDiff  = predictedMeasurements[i].subtract(predictedMeasurement);
-            crossCovarianceMatrix = crossCovarianceMatrix.add(outer(stateDiff, measDiff).scalarMultiply(wc.getEntry(i)));
+            crossCovarianceMatrix = crossCovarianceMatrix.add(stateDiff.outerProduct(measDiff).scalarMultiply(wc.getEntry(i)));
         }
 
         // Return the cross covariance
         return crossCovarianceMatrix;
     }
 
-    /** Computes the outer product of two vectors.
-     * @param a first vector
-     * @param b second vector
-     * @return the outer product of a and b
-     */
-    private RealMatrix outer(final RealVector a, final RealVector b) {
-
-        // Initialize matrix
-        final RealMatrix outMatrix = MatrixUtils.createRealMatrix(a.getDimension(), b.getDimension());
-
-        // Fill matrix
-        for (int row = 0; row < outMatrix.getRowDimension(); row++) {
-            for (int col = 0; col < outMatrix.getColumnDimension(); col++) {
-                outMatrix.setEntry(row, col, a.getEntry(row) * b.getEntry(col));
-            }
-        }
-
-        // Return
-        return outMatrix;
-    }
 }

@@ -52,10 +52,10 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
      * @param scalRelativeTolerance allowed relative error
      * @exception MathIllegalArgumentException if order is 1 or less
      */
-    public AdamsIntegrator(final String name, final int nSteps, final int order,
-                           final double minStep, final double maxStep,
-                           final double scalAbsoluteTolerance,
-                           final double scalRelativeTolerance)
+    protected AdamsIntegrator(final String name, final int nSteps, final int order,
+                              final double minStep, final double maxStep,
+                              final double scalAbsoluteTolerance,
+                              final double scalRelativeTolerance)
         throws MathIllegalArgumentException {
         super(name, nSteps, order, minStep, maxStep,
               scalAbsoluteTolerance, scalRelativeTolerance);
@@ -77,10 +77,9 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
      * @param vecRelativeTolerance allowed relative error
      * @exception IllegalArgumentException if order is 1 or less
      */
-    public AdamsIntegrator(final String name, final int nSteps, final int order,
-                           final double minStep, final double maxStep,
-                           final double[] vecAbsoluteTolerance,
-                           final double[] vecRelativeTolerance)
+    protected AdamsIntegrator(final String name, final int nSteps, final int order,
+                              final double minStep, final double maxStep,
+                              final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance)
         throws IllegalArgumentException {
         super(name, nSteps, order, minStep, maxStep,
               vecAbsoluteTolerance, vecRelativeTolerance);

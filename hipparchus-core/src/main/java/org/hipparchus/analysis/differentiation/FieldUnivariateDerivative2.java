@@ -37,10 +37,11 @@ import org.hipparchus.util.MathUtils;
  * <p>{@link FieldUnivariateDerivative2} instances can be used directly thanks to
  * the arithmetic operators to the mathematical functions provided as
  * methods by this class (+, -, *, /, %, sin, cos ...).</p>
- * <p>Implementing complex expressions by hand using these classes is
- * a tedious and error-prone task but has the advantage of having no limitation
- * on the derivation order despite not requiring users to compute the derivatives by
- * themselves.</p>
+ * <p>Implementing complex expressions by hand using {@link Derivative}-based
+ * classes (or in fact any {@link org.hipparchus.CalculusFieldElement} class) is
+ * a tedious and error-prone task but has the advantage of not requiring users
+ * to compute the derivatives by themselves and allowing to switch for one
+ * derivative implementation to another as they all share the same filed API.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  * @param <T> the type of the function parameters and value
  * @see DerivativeStructure
@@ -75,7 +76,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         this.f2 = f2;
     }
 
-    /** Build an instance from a {@link DerivativeStructure}.
+    /** Build an instance from a {@link FieldDerivativeStructure}.
      * @param ds derivative structure
      * @exception MathIllegalArgumentException if either {@code ds} parameters
      * is not 1 or {@code ds} order is not 2

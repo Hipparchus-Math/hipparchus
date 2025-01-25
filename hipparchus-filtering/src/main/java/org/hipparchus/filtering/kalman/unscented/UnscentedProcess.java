@@ -41,6 +41,14 @@ public interface UnscentedProcess<T extends Measurement>  {
      */
     UnscentedEvolution getEvolution(double previousTime, RealVector[] sigmaPoints, T measurement);
 
+    /** Get the process noise covariance corresponding to the state evolution between two times.
+     * @param previousTime time of the previous state
+     * @param predictedState predicted state
+     * @param measurement measurement to process
+     * @return states evolution
+     */
+    RealMatrix getProcessNoiseMatrix(double previousTime, RealVector predictedState, T measurement);
+
     /** Get the state evolution between two times.
      * @param predictedSigmaPoints predicted state sigma points
      * @param measurement measurement to process

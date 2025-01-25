@@ -50,8 +50,20 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="serrof" type="update" issue="issues/361">
+        Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK.
+      </action>
+      <action dev="luc" type="fix" issue="issuers/360">
+        Increased dimension of directions numbers in Sobol sequence generation.
+      </action>
+      <action dev="luc" type="fix" issue="issues/354">
+        Added FieldBivariateGridInterpolator, FieldBilinearInterpolator and FieldBilinearInterpolatingFunction.
+      </action>
+      <action dev="serrof" type="update" issue="issues/330">
+        Made constructors of abstract classes protected when they were public.
+      </action>
       <action dev="serrof" type="add" issue="issues/335">
-          Add boolean for propagation direction in (Field)AdaptableInterval.
+        Add boolean for propagation direction in (Field)AdaptableInterval.
       </action>
       <action dev="luc" type="update" issue="issues/350">
         Removed obsolete hipparchus-migration module.
@@ -61,6 +73,10 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="vincent" type="fix" issue="issues/347">
         Fixed JUnit pioneer dependency version not compatible with Java 8.
+      </action>
+      <action dev="luc" type="update" issue="issues/346">
+        Added getLocalizedString(baseName, key, locale) with default implementation
+        to Localizable interface
       </action>
       <action dev="vincent" type="update" issue="issues/285">
         Migrated tests from JUnit 4 to JUnit 5.

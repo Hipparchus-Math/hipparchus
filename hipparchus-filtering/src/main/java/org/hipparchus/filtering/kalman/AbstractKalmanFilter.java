@@ -38,6 +38,16 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
     /** Corrected state. */
     private ProcessEstimate corrected;
 
+    /** Prior corrected covariance. */
+    private RealMatrix priorCovariance;
+
+    /** State transition matrix. */
+    private RealMatrix stateTransitionMatrix;
+
+    /** Observer. */
+    private KalmanObserver observer;
+
+
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
      * @param initialState initial state
@@ -45,6 +55,9 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
     protected AbstractKalmanFilter(final MatrixDecomposer decomposer, final ProcessEstimate initialState) {
         this.decomposer = decomposer;
         this.corrected  = initialState;
+        this.priorCovariance = null;
+        this.stateTransitionMatrix = null;
+        this.observer = null;
     }
 
     /** Perform prediction step.
@@ -57,6 +70,8 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
         final RealMatrix predictedCovariance =
                         stm.multiply(corrected.getCovariance().multiplyTransposed(stm)).add(noise);
         predicted = new ProcessEstimate(time, predictedState, predictedCovariance);
+        stateTransitionMatrix = stm;
+        priorCovariance = corrected.getCovariance();
         corrected = null;
     }
 
@@ -133,6 +148,21 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
 
     }
 
+    /** Get the observer.
+     * @return the observer
+     */
+    protected KalmanObserver getObserver() {
+        return observer;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void setObserver(final KalmanObserver kalmanObserver) {
+        observer = kalmanObserver;
+        observer.init(this);
+    }
+
     /** Get the predicted state.
      * @return predicted state
      */
@@ -149,4 +179,9 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
         return corrected;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public RealMatrix getStateCrossCovariance() {
+        return priorCovariance.multiplyTransposed(stateTransitionMatrix);
+    }
 }

@@ -89,10 +89,10 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
      */
-    public AdaptiveStepsizeFieldIntegrator(final Field<T> field, final String name,
-                                           final double minStep, final double maxStep,
-                                           final double scalAbsoluteTolerance,
-                                           final double scalRelativeTolerance) {
+    protected AdaptiveStepsizeFieldIntegrator(final Field<T> field, final String name,
+                                              final double minStep, final double maxStep,
+                                              final double scalAbsoluteTolerance,
+                                              final double scalRelativeTolerance) {
         super(field, name);
         stepsizeHelper = new StepsizeHelper(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
         resetInternalState();
@@ -111,10 +111,10 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
      * @param vecAbsoluteTolerance allowed absolute error
      * @param vecRelativeTolerance allowed relative error
      */
-    public AdaptiveStepsizeFieldIntegrator(final Field<T> field, final String name,
-                                           final double minStep, final double maxStep,
-                                           final double[] vecAbsoluteTolerance,
-                                           final double[] vecRelativeTolerance) {
+    protected AdaptiveStepsizeFieldIntegrator(final Field<T> field, final String name,
+                                              final double minStep, final double maxStep,
+                                              final double[] vecAbsoluteTolerance,
+                                              final double[] vecRelativeTolerance) {
         super(field, name);
         stepsizeHelper = new StepsizeHelper(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
         resetInternalState();

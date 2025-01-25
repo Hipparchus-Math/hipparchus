@@ -31,7 +31,7 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
     implements FieldODEEventDetector<E> {
 
     /** Default maximum checking interval (s). */
-    public static final double DEFAULT_MAXCHECK = 600;
+    public static final double DEFAULT_MAX_CHECK = 600;
 
     /** Default convergence threshold (s). */
     public static final double DEFAULT_THRESHOLD = 1.e-6;

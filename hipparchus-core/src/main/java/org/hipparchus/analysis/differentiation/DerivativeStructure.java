@@ -48,10 +48,12 @@ import org.hipparchus.util.MathUtils;
  * <p>{@link DerivativeStructure} instances can be used directly thanks to
  * the arithmetic operators to the mathematical functions provided as
  * methods by this class (+, -, *, /, %, sin, cos ...).</p>
- * <p>Implementing complex expressions by hand using these classes is
- * a tedious and error-prone task but has the advantage of having no limitation
- * on the derivation order despite not requiring users to compute the derivatives by
- * themselves. Implementing complex expression can also be done by developing computation
+ * <p>Implementing complex expressions by hand using {@link Derivative}-based
+ * classes (or in fact any {@link org.hipparchus.CalculusFieldElement} class) is
+ * a tedious and error-prone task but has the advantage of not requiring users
+ * to compute the derivatives by themselves and allowing to switch for one
+ * derivative implementation to another as they all share the same filed API.</p>
+ * <p>Implementing complex expression can also be done by developing computation
  * code using standard primitive double values and to use {@link
  * UnivariateFunctionDifferentiator differentiators} to create the {@link
  * DerivativeStructure}-based instances. This method is simpler but may be limited in
