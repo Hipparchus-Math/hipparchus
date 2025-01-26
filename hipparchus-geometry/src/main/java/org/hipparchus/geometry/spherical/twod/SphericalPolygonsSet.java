@@ -569,8 +569,13 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, S2Point, Sphe
                     pending -= splitEdgeConnections(edges);
                 }
                 if (pending > 0) {
-                    closeVerticesConnections(edges);
+                    pending -= closeVerticesConnections(edges);
                 }
+                if (pending > 0) {
+                    // this should not happen
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
+                }
+
 
                 // extract the edges loops
                 loops = new ArrayList<>();
@@ -690,10 +695,6 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, S2Point, Sphe
         EdgeWithNodeInfo previous = defining;
         EdgeWithNodeInfo next     = (EdgeWithNodeInfo) defining.getEnd().getOutgoing();
         while (next != defining) {
-            if (next == null) {
-                // this should not happen
-                throw new MathIllegalStateException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
-            }
             next.setProcessed(true);
 
             // filter out spurious vertices

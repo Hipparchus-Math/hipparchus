@@ -29,8 +29,6 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
-import org.hipparchus.geometry.partitioning.BSPTree;
-import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.partitioning.RegionFactory;
@@ -45,15 +43,10 @@ import org.hipparchus.util.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.IntPredicate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -877,16 +870,16 @@ class SphericalPolygonsSetTest {
     }
 
     @Test
-    public void testIssueOrekit1388A() throws IOException {
+    public void testIssueOrekit1388A() {
         doTestIssueOrekit1388(true);
     }
 
     @Test
-    public void testIssueOrekit1388B() throws IOException {
+    public void testIssueOrekit1388B() {
         doTestIssueOrekit1388(false);
     }
 
-    private void doTestIssueOrekit1388(final boolean order) throws IOException {
+    private void doTestIssueOrekit1388(final boolean order) {
         final double[][] coordinates1 = new double[][] {
             { 18.52684751402596,  -76.97880893719434 },
             { 18.451108862175584, -76.99484778988442 },
@@ -895,16 +888,18 @@ class SphericalPolygonsSetTest {
             { 18.223887203723567, -77.04290545732495 },
             { 18.148144771769385, -77.05890521550272 },
             { 18.072401410187016, -77.0748953260324  },
-            { 17.99665712514784,  -77.09087584010511 }, // keep
+            { 17.99665712514784,  -77.09087584010511 },
             { 17.92091192468999,  -77.10684680260262 },
-            { 17.84516581113023,  -77.12280827309398 }, // keep
-            { 17.769418792522664, -77.13876029654094 }, // keep
+            { 17.84516581113023,  -77.12280827309398 },
+            { 17.769418792522664, -77.13876029654094 },
             { 17.747659863099422, -77.14334087084347 },
             { 17.67571798336192,  -77.15846791369165 },
-            { 17.624293265977183, -77.16928381433733 },
+//            adding 1.0e-4 to the second coordinate of the following point
+//            generates an open outline boundary error
+            { 17.624293265977183, -77.16938381433733 },
             { 17.5485398681768,   -77.18520934447962 },
-            { 17.526779103104783, -77.1897823275402  }, // keep
-            { 17.49650619905315,  -77.0342031192472  }, // keep
+            { 17.526779103104783, -77.1897823275402  },
+            { 17.49650619905315,  -77.0342031192472  },
             { 17.588661518962343, -77.01473903648854 },
             { 17.728574326965138, -76.98517769352242 },
             { 17.80416324015021,  -76.96919708557023 },
@@ -917,7 +912,7 @@ class SphericalPolygonsSetTest {
             { 18.3331742522667,   -76.85707550881591 },
             { 18.408750874895002, -76.84101662269072 },
             { 18.57249082100609,  -76.80620195239239 },
-            { 18.602585205425896, -76.96276018365842 } // keep
+            { 18.602585205425896, -76.96276018365842 }
         };
 
         final double[][] coordinates2 = new double[][] {
@@ -926,14 +921,14 @@ class SphericalPolygonsSetTest {
             { 18.20775293886321,  -78.0711865934217  },
             { 18.07679345301507,  -77.95901517339438 },
             { 18.006705181057598, -77.85325354879791 },
-            { 17.857293838883137, -77.73787723105598 },   // keep
-            { 17.854243316622103, -77.57442744758828 },   // keep
-            { 17.875595873376014, -77.38213358468467 },   // keep
+            { 17.857293838883137, -77.73787723105598 },
+            { 17.854243316622103, -77.57442744758828 },
+            { 17.875595873376014, -77.38213358468467 },
             { 17.72607423578937,  -77.23470828979222 },
-            { 17.71386286451302,  -77.12253686976543 },   // keep
-            { 17.790170276013725, -77.14817605148616 },   // keep
-            { 17.869495404611797, -77.14497115377101 },   // keep
-            { 17.854243309397717, -76.9302429967729  },   // keep
+            { 17.71386286451302,  -77.12253686976543 },
+            { 17.790170276013725, -77.14817605148616 },
+            { 17.869495404611797, -77.14497115377101 },
+            { 17.854243309397717, -76.9302429967729  },
             { 17.954882874700132, -76.84371075846688 },
             { 17.94268718313505,  -76.6898756681441  },
             { 17.869495397388064, -76.54886016868198 },
@@ -942,7 +937,7 @@ class SphericalPolygonsSetTest {
             { 18.155989976776553, -76.32451732862788 },
             { 18.22601854027039,  -76.63218750927341 },
             { 18.33861403170316,  -76.85653034932697 },
-            { 18.405527980074993, -76.97831646249921 },   // keep
+            { 18.405527980074993, -76.97831646249921 },
             { 18.4541763474828,   -77.28598664314421 },
             { 18.496732365966466, -77.705828243816   },
             { 18.451136227912485, -78.00708862903122 },
@@ -976,9 +971,6 @@ class SphericalPolygonsSetTest {
                 new RegionFactory<Sphere2D, S2Point>().intersection(shape1.copySelf(), shape2.copySelf()) :
                 new RegionFactory<Sphere2D, S2Point>().intersection(shape2.copySelf(), shape1.copySelf());
 
-        // TODO: remove
-        print(shape1, shape2, intersection);
-
         for (final double[] doubles : expectedIn) {
             Assertions.assertEquals(Location.INSIDE, intersection.checkPoint(s2Point(doubles[0], doubles[1])));
         }
@@ -987,143 +979,6 @@ class SphericalPolygonsSetTest {
             Assertions.assertEquals(Location.OUTSIDE, intersection.checkPoint(s2Point(doubles[0], doubles[1])));
         }
 
-    }
-
-    private void print(final SphericalPolygonsSet shape1, SphericalPolygonsSet shape2,
-                       final Region<Sphere2D, S2Point> intersection)
-        throws IOException {
-        shape1.getTree(true).visit(new LinksChecker());
-        shape2.getTree(true).visit(new LinksChecker());
-        intersection.getTree(true).visit(new LinksChecker());
-        final ProcessBuilder pb = new ProcessBuilder("gnuplot").
-                                  redirectOutput(ProcessBuilder.Redirect.INHERIT).
-                                  redirectError(ProcessBuilder.Redirect.INHERIT);
-        pb.environment().remove("XDG_SESSION_TYPE");
-        final String output = null;// = "/tmp";
-        final Process gnuplot = pb.start();
-        try (PrintStream out = new PrintStream(gnuplot.getOutputStream(), false, StandardCharsets.UTF_8.name())) {
-            final File outputFile;
-            if (output == null) {
-                out.format(Locale.US, "set terminal qt size %d, %d title 'issue 1388'%n", 1000, 1000);
-                outputFile = null;
-            } else {
-                out.format(Locale.US, "set terminal pngcairo size %d, %d%n", 1000, 1000);
-                outputFile = new File(output, "issue-1388.png");
-                out.format(Locale.US, "set output '%s'%n", outputFile.getAbsolutePath());
-            }
-            out.format(Locale.US, "set xlabel 'longitude'%n");
-            out.format(Locale.US, "set ylabel 'latitude'%n");
-            print(out, "$shape1", shape1);
-            print(out, "$shape2", shape2);
-            print(out, "$intersection", (SphericalPolygonsSet) intersection);
-            final List<String> leafNames = printLeafs(out, "$leaf", shape2);
-            out.format(Locale.US, "plot $intersection using 1:2 with filledcurves lt 4 fs pattern 5 title 'intersection',\\%n");
-            out.format(Locale.US, "     $shape1 using 1:2 with linespoints lc 1 pt 9 title 'shape1',\\%n");
-            out.format(Locale.US, "     $shape2 using 1:2 with linespoints lc 2 pt 11 title 'shape2'");
-            int pattern = 1;
-            for (final String leafName : leafNames) {
-                out.format(Locale.US, " ,\\%n     %s using 1:2 with filledcurves fs pattern %d title '%s'",
-                           leafName, pattern++, leafName.substring(1));
-            }
-            out.format(Locale.US, "%n");
-            if (output == null) {
-                out.format(Locale.US, "pause mouse close%n");
-            } else {
-                System.out.println(outputFile + " written");
-            }
-        }
-
-    }
-
-    private static class LinksChecker implements BSPTreeVisitor<Sphere2D, S2Point> {
-
-        /** {@inheritDoc} */
-        @Override
-        public Order visitOrder(final BSPTree<Sphere2D, S2Point> node) {
-            return Order.MINUS_SUB_PLUS;
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public void visitInternalNode(final BSPTree<Sphere2D, S2Point> node) {
-            checkLinks(node);
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public void visitLeafNode(final BSPTree<Sphere2D, S2Point> node) {
-            checkLinks(node);
-        }
-
-        /** Check node is a child of its parent.
-         * @param node node to check
-         */
-        private void checkLinks(final BSPTree<Sphere2D, S2Point> node) {
-            if (node.getParent() != null) {
-                if (node != node.getParent().getMinus() && node != node.getParent().getPlus()) {
-                    Assertions.fail("corrupted tree");
-                }
-            }
-        }
-
-    }
-
-    private void print(final PrintStream out, final String dataName, final SphericalPolygonsSet shape) {
-        out.format(Locale.US, "%s <<EOD%n", dataName);
-        boolean following = false;
-        for (Vertex first : shape.getBoundaryLoops()) {
-            if (following) {
-                out.format(Locale.US, "%n%n");
-            }
-            int count = 0;
-            for (Vertex v = first; count == 0 || v != first;
-                 v = v.getOutgoing().getEnd()) {
-                ++count;
-                Edge e = v.getIncoming();
-                out.format(Locale.US, "%.3f %.3f%n",
-                           FastMath.toDegrees(v.getLocation().getTheta()),
-                           90.0 - FastMath.toDegrees(v.getLocation().getPhi()));
-            }
-            out.format(Locale.US, "%.3f %.3f%n",
-                       FastMath.toDegrees(first.getLocation().getTheta()),
-                       90.0 - FastMath.toDegrees(first.getLocation().getPhi()));
-            following = true;
-        }
-        out.format(Locale.US, "EOD%n");
-    }
-
-    private List<String> printLeafs(final PrintStream out, final String baseName, final SphericalPolygonsSet shape)
-    {
-        final List<String> names = new ArrayList<>();
-        shape.getTree(true).visit(new BSPTreeVisitor<Sphere2D, S2Point>() {
-            @Override
-            public Order visitOrder(final BSPTree<Sphere2D, S2Point> node) {
-                return Order.MINUS_SUB_PLUS;
-            }
-
-            @Override
-            public void visitInternalNode(final BSPTree<Sphere2D, S2Point> node) {
-            }
-
-            @Override
-            public void visitLeafNode(final BSPTree<Sphere2D, S2Point> node) {
-                //if (node.getParent() != null) {
-                if ((Boolean) node.getAttribute()) {
-                    String suffix = "";
-                    for (BSPTree<Sphere2D, S2Point> current = node; current.getParent() != null; current = current.getParent()) {
-                        suffix = (current == current.getParent().getMinus() ? "m" : "p") + suffix;
-                    }
-                    final String name = baseName + suffix;
-                    // inside lead node
-                    print(out, name,
-                          new SphericalPolygonsSet(node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null),
-                                                   shape.getTolerance()));
-                    names.add(name);
-                }
-            }
-
-        });
-        return names;
     }
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,

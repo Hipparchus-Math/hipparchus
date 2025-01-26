@@ -77,7 +77,7 @@ class EdgeWithNodeInfo extends Edge {
                                    next.getStart().getLocation().getVector()) > 0.0;
     }
 
-    /** Check if two edges result from a single edged having split by a circle.
+    /** Check if two edges result from a single edged having been split by a circle.
      * @param previous candidate previous edge
      * @param next candidate next edge
      * @return true if {@code edge} is a natural follower for instance
