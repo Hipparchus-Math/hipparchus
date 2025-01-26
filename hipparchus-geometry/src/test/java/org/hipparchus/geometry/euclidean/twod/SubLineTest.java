@@ -23,6 +23,7 @@ package org.hipparchus.geometry.euclidean.twod;
 
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
+import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.junit.jupiter.api.Test;
 
@@ -64,7 +65,7 @@ class SubLineTest {
     @Test
     void testNoSegments() {
         SubLine empty = new SubLine(new Line(new Vector2D(-1, -7), new Vector2D(7, -1), 1.0e-10),
-                                    new RegionFactory<Euclidean1D>().getComplement(new IntervalsSet(1.0e-10)));
+                                    new RegionFactory<Euclidean1D, Vector1D>().getComplement(new IntervalsSet(1.0e-10)));
         List<Segment> segments = empty.getSegments();
         assertEquals(0, segments.size());
     }
@@ -72,8 +73,8 @@ class SubLineTest {
     @Test
     void testSeveralSegments() {
         SubLine twoSubs = new SubLine(new Line(new Vector2D(-1, -7), new Vector2D(7, -1), 1.0e-10),
-                                    new RegionFactory<Euclidean1D>().union(new IntervalsSet(1, 2, 1.0e-10),
-                                                                           new IntervalsSet(3, 4, 1.0e-10)));
+                                    new RegionFactory<Euclidean1D, Vector1D>().
+                                            union(new IntervalsSet(1, 2, 1.0e-10), new IntervalsSet(3, 4, 1.0e-10)));
         List<Segment> segments = twoSubs.getSegments();
         assertEquals(2, segments.size());
     }

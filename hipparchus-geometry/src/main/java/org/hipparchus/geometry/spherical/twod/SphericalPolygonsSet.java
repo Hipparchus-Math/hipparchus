@@ -32,6 +32,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
+import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.enclosing.WelzlEncloser;
 import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
@@ -45,6 +46,7 @@ import org.hipparchus.geometry.partitioning.BoundaryProjection;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.Arc;
+import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -52,7 +54,7 @@ import org.hipparchus.util.Precision;
 
 /** This class represents a region on the 2-sphere: a set of spherical polygons.
  */
-public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
+public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, S2Point, Sphere1D, S1Point> {
 
     /** Boundary defined as an array of closed loops start vertices. */
     private List<Vertex> loops;
@@ -108,7 +110,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param tolerance below which points are consider to be identical
      * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere2D#SMALLEST_TOLERANCE}
      */
-    public SphericalPolygonsSet(final BSPTree<Sphere2D> tree, final double tolerance)
+    public SphericalPolygonsSet(final BSPTree<Sphere2D, S2Point> tree, final double tolerance)
         throws MathIllegalArgumentException {
         super(tree, tolerance);
         Sphere2D.checkTolerance(tolerance);
@@ -136,7 +138,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param tolerance below which points are consider to be identical
      * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere2D#SMALLEST_TOLERANCE}
      */
-    public SphericalPolygonsSet(final Collection<SubHyperplane<Sphere2D>> boundary, final double tolerance)
+    public SphericalPolygonsSet(final Collection<SubHyperplane<Sphere2D, S2Point>> boundary, final double tolerance)
         throws MathIllegalArgumentException {
         super(boundary, tolerance);
         Sphere2D.checkTolerance(tolerance);
@@ -162,8 +164,8 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * {@link RegionFactory} instead.</p>
      * <p>The list of {@code vertices} is reduced by selecting a sub-set of vertices
      * before creating the boundary set. Every point in {@code vertices} will be on the
-     * {@link #checkPoint(org.hipparchus.geometry.Point) boundary} of the constructed polygon set, but not
-     * necessarily the center-line of the boundary.</p>
+     * {boundary of the constructed polygon set, but not necessarily the center-line of
+     * the boundary.</p>
      * <p>
      * Polygons with thin pikes or dents are inherently difficult to handle because
      * they involve circles with almost opposite directions at some vertices. Polygons
@@ -232,8 +234,8 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param vertices vertices of the simple loop boundary
      * @return the BSP tree of the input vertices
      */
-    private static BSPTree<Sphere2D> verticesToTree(final double hyperplaneThickness,
-                                                    S2Point ... vertices) {
+    private static BSPTree<Sphere2D, S2Point> verticesToTree(final double hyperplaneThickness,
+                                                             S2Point ... vertices) {
         // thin vertices to those that define distinct circles
         vertices = reduce(hyperplaneThickness, vertices).toArray(new S2Point[0]);
         final int n = vertices.length;
@@ -269,7 +271,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         }
 
         // build the tree top-down
-        final BSPTree<Sphere2D> tree = new BSPTree<>();
+        final BSPTree<Sphere2D, S2Point> tree = new BSPTree<>();
         insertEdges(tree, edges);
 
         return tree;
@@ -436,7 +438,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param edges list of edges to insert in the cell defined by this node
      *              (excluding edges not belonging to the cell defined by this node)
      */
-    private static void insertEdges(final BSPTree<Sphere2D> node, final List<Edge> edges) {
+    private static void insertEdges(final BSPTree<Sphere2D, S2Point> node, final List<Edge> edges) {
 
         // find an edge with an hyperplane that can be inserted in the node
         int index = 0;
@@ -451,7 +453,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         if (inserted == null) {
             // no suitable edge was found, the node remains a leaf node
             // we need to set its inside/outside boolean indicator
-            final BSPTree<Sphere2D> parent = node.getParent();
+            final BSPTree<Sphere2D, S2Point> parent = node.getParent();
             if (parent == null || node == parent.getMinus()) {
                 node.setAttribute(Boolean.TRUE);
             } else {
@@ -486,7 +488,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
     /** {@inheritDoc} */
     @Override
-    public SphericalPolygonsSet buildNew(final BSPTree<Sphere2D> tree) {
+    public SphericalPolygonsSet buildNew(final BSPTree<Sphere2D, S2Point> tree) {
         return new SphericalPolygonsSet(tree, getTolerance());
     }
 
@@ -497,7 +499,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
     @Override
     protected void computeGeometricalProperties() throws MathIllegalStateException {
 
-        final BSPTree<Sphere2D> tree = getTree(true);
+        final BSPTree<Sphere2D, S2Point> tree = getTree(true);
 
         if (tree.getCut() == null) {
 
@@ -713,7 +715,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * <p>
      * This method is intended as a first test to quickly identify points
      * that are guaranteed to be outside of the region, hence performing a full
-     * {@link #checkPoint(org.hipparchus.geometry.Vector) checkPoint}
+     * {@link AbstractRegion#checkPoint(Point)}  checkPoint}
      * only if the point status remains undecided after the quick check. It is
      * is therefore mostly useful to speed up computation for small polygons with
      * complex shapes (say a country boundary on Earth), as the spherical cap will
@@ -767,7 +769,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         }
 
         // as the polygons is neither empty nor full, it has some boundaries and cut hyperplanes
-        final BSPTree<Sphere2D> root = getTree(false);
+        final BSPTree<Sphere2D, S2Point> root = getTree(false);
         if (isEmpty(root.getMinus()) && isFull(root.getPlus())) {
             // the polygon covers an hemisphere, and its boundary is one 2π long edge
             final Circle circle = (Circle) root.getCut().getHyperplane();
@@ -809,11 +811,11 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
                     new EnclosingBall<>(S2Point.PLUS_K, Double.POSITIVE_INFINITY);
             for (Vector3D outsidePoint : getOutsidePoints()) {
                 final S2Point outsideS2 = new S2Point(outsidePoint);
-                final BoundaryProjection<Sphere2D> projection = projectToBoundary(outsideS2);
+                final BoundaryProjection<Sphere2D, S2Point> projection = projectToBoundary(outsideS2);
                 if (FastMath.PI - projection.getOffset() < enclosingS2.getRadius()) {
                     enclosingS2 = new EnclosingBall<>(outsideS2.negate(),
                                                       FastMath.PI - projection.getOffset(),
-                                                      (S2Point) projection.getProjected());
+                                                      projection.getProjected());
                 }
             }
             return enclosingS2;
@@ -844,7 +846,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      */
     private List<Vector3D> getOutsidePoints() {
         final SphericalPolygonsSet complement =
-                (SphericalPolygonsSet) new RegionFactory<Sphere2D>().getComplement(this);
+                (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().getComplement(this);
         final PropertiesComputer pc = new PropertiesComputer(getTolerance());
         complement.getTree(true).visit(pc);
         return pc.getConvexCellsInsidePoints();

@@ -47,11 +47,14 @@ import org.hipparchus.geometry.Space;
  * </p>
 
  * @param <S> Type of the embedding space.
+ * @param <P> Type of the points in the embedding space.
  * @param <T> Type of the embedded sub-space.
+ * @param <Q> Type of the points in the embedded sub-space.
 
  * @see Hyperplane
  */
-public interface Embedding<S extends Space, T extends Space> {
+public interface Embedding<S extends Space, P extends Point<S>,
+                           T extends Space, Q extends Point<T>> {
 
     /** Transform a space point into a sub-space point.
      * @param point n-dimension point of the space
@@ -59,7 +62,7 @@ public interface Embedding<S extends Space, T extends Space> {
      * the specified space point
      * @see #toSpace
      */
-    Point<T> toSubSpace(Point<S> point);
+    Q toSubSpace(P point);
 
     /** Transform a sub-space point into a space point.
      * @param point (n-1)-dimension point of the sub-space
@@ -67,6 +70,6 @@ public interface Embedding<S extends Space, T extends Space> {
      * specified sub-space point
      * @see #toSubSpace
      */
-    Point<S> toSpace(Point<T> point);
+    P toSpace(Q point);
 
 }

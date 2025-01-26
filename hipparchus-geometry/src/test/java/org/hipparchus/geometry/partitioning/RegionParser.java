@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.StringTokenizer;
 
+import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
@@ -43,6 +44,7 @@ import org.hipparchus.geometry.spherical.oned.LimitAngle;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.geometry.spherical.twod.Circle;
+import org.hipparchus.geometry.spherical.twod.S2Point;
 import org.hipparchus.geometry.spherical.twod.Sphere2D;
 import org.hipparchus.geometry.spherical.twod.SphericalPolygonsSet;
 
@@ -67,7 +69,8 @@ public class RegionParser {
      */
     public static ArcsSet parseArcsSet(final String s)
         throws IOException, ParseException {
-        final TreeBuilder<Sphere1D> builder = new TreeBuilder<Sphere1D>("ArcsSet", s) {
+        final TreeBuilder<Sphere1D, S1Point> builder =
+                new TreeBuilder<Sphere1D, S1Point>("ArcsSet", s) {
 
             /** {@inheritDoc} */
             @Override
@@ -88,12 +91,13 @@ public class RegionParser {
      */
     public static SphericalPolygonsSet parseSphericalPolygonsSet(final String s)
         throws IOException, ParseException {
-        final TreeBuilder<Sphere2D> builder = new TreeBuilder<Sphere2D>("SphericalPolygonsSet", s) {
+        final TreeBuilder<Sphere2D, S2Point> builder =
+                new TreeBuilder<Sphere2D, S2Point>("SphericalPolygonsSet", s) {
 
             /** {@inheritDoc} */
             @Override
             public Circle parseHyperplane()
-                throws IOException, ParseException {
+                throws IOException {
                 return new Circle(new Vector3D(getNumber(), getNumber(), getNumber()), getNumber());
             }
 
@@ -109,7 +113,8 @@ public class RegionParser {
      */
     public static IntervalsSet parseIntervalsSet(final String s)
         throws IOException, ParseException {
-        final TreeBuilder<Euclidean1D> builder = new TreeBuilder<Euclidean1D>("IntervalsSet", s) {
+        final TreeBuilder<Euclidean1D, Vector1D> builder =
+                new TreeBuilder<Euclidean1D, Vector1D>("IntervalsSet", s) {
 
             /** {@inheritDoc} */
             @Override
@@ -130,12 +135,13 @@ public class RegionParser {
      */
     public static PolygonsSet parsePolygonsSet(final String s)
         throws IOException, ParseException {
-        final TreeBuilder<Euclidean2D> builder = new TreeBuilder<Euclidean2D>("PolygonsSet", s) {
+        final TreeBuilder<Euclidean2D, Vector2D> builder =
+                new TreeBuilder<Euclidean2D, Vector2D>("PolygonsSet", s) {
 
             /** {@inheritDoc} */
             @Override
             public Line parseHyperplane()
-                throws IOException, ParseException {
+                throws IOException {
                 return new Line(new Vector2D(getNumber(), getNumber()), getNumber(), getNumber());
             }
 
@@ -151,12 +157,13 @@ public class RegionParser {
      */
     public static PolyhedronsSet parsePolyhedronsSet(final String s)
         throws IOException, ParseException {
-        final TreeBuilder<Euclidean3D> builder = new TreeBuilder<Euclidean3D>("PolyhedronsSet", s) {
+        final TreeBuilder<Euclidean3D, Vector3D> builder =
+                new TreeBuilder<Euclidean3D, Vector3D>("PolyhedronsSet", s) {
 
             /** {@inheritDoc} */
             @Override
             public Plane parseHyperplane()
-                throws IOException, ParseException {
+                throws IOException {
                 return new Plane(new Vector3D(getNumber(), getNumber(), getNumber()),
                                  new Vector3D(getNumber(), getNumber(), getNumber()),
                                  getNumber());
@@ -168,8 +175,9 @@ public class RegionParser {
 
     /** Local class for building an {@link AbstractRegion} tree.
      * @param <S> Type of the space.
+     * @param <P> Type of the points in space.
      */
-    private abstract static class TreeBuilder<S extends Space> {
+    private abstract static class TreeBuilder<S extends Space, P extends Point<S>> {
 
         /** Keyword for tolerance. */
         private static final String TOLERANCE = "tolerance";
@@ -193,7 +201,7 @@ public class RegionParser {
         private static final String FALSE     = "false";
 
         /** Tree root. */
-        private BSPTree<S> root;
+        private BSPTree<S, P> root;
 
         /** Tolerance. */
         private final double tolerance;
@@ -215,7 +223,7 @@ public class RegionParser {
             getWord(TOLERANCE);
             tolerance = getNumber();
             getWord(PLUS);
-            root = new BSPTree<S>();
+            root = new BSPTree<>();
             parseTree(root);
             if (tokenizer.hasMoreTokens()) {
                 throw new ParseException("unexpected " + tokenizer.nextToken(), 0);
@@ -227,7 +235,7 @@ public class RegionParser {
          * @exception IOException if the string cannot be read
          * @exception ParseException if the string cannot be parsed
          */
-        private void parseTree(final BSPTree<S> node)
+        private void parseTree(final BSPTree<S, P> node)
             throws IOException, ParseException {
             if (INTERNAL.equals(getWord(INTERNAL, LEAF))) {
                 // this is an internal node, it has a cut sub-hyperplane (stored as a whole hyperplane)
@@ -246,11 +254,10 @@ public class RegionParser {
         /** Get next word.
          * @param allowed allowed values
          * @return parsed word
-         * @exception IOException if the string cannot be read
          * @exception ParseException if the string cannot be parsed
          */
         protected String getWord(final String ... allowed)
-            throws IOException, ParseException {
+            throws ParseException {
             final String token = tokenizer.nextToken();
             for (final String a : allowed) {
                 if (a.equals(token)) {
@@ -283,7 +290,7 @@ public class RegionParser {
         /** Get the built tree.
          * @return built tree
          */
-        public BSPTree<S> getTree() {
+        public BSPTree<S, P> getTree() {
             return root;
         }
 
@@ -299,7 +306,7 @@ public class RegionParser {
          * @exception IOException if the string cannot be read
          * @exception ParseException if the string cannot be parsed
          */
-        protected abstract Hyperplane<S> parseHyperplane()
+        protected abstract Hyperplane<S, P> parseHyperplane()
             throws IOException, ParseException;
 
     }

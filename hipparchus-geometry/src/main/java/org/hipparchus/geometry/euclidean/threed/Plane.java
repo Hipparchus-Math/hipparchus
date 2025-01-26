@@ -23,9 +23,6 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.Point;
-import org.hipparchus.geometry.Vector;
-import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
@@ -37,7 +34,9 @@ import org.hipparchus.util.FastMath;
 
 /** The class represent planes in a three dimensional space.
  */
-public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Euclidean2D> {
+public class Plane
+    implements Hyperplane<Euclidean3D, Vector3D>,
+               Embedding<Euclidean3D, Vector3D, Euclidean2D, Vector2D> {
 
     /** Offset of the origin with respect to the plane. */
     private double originOffset;
@@ -180,8 +179,8 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     }
 
     /** Get the normalized normal vector.
-     * <p>The frame defined by ({@link #getU getU}, {@link #getV getV},
-     * {@link #getNormal getNormal}) is a rigth-handed orthonormalized
+     * <p>The frame defined by ({@link #getU() getU()}, {@link #getV() getV()},
+     * {@code getNormal()}) is a right-handed orthonormalized
      * frame).</p>
      * @return normalized normal vector
      * @see #getU
@@ -192,8 +191,8 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     }
 
     /** Get the plane first canonical vector.
-     * <p>The frame defined by ({@link #getU getU}, {@link #getV getV},
-     * {@link #getNormal getNormal}) is a rigth-handed orthonormalized
+     * <p>The frame defined by ({@code getU()}, {@link #getV() getV()},
+     * {@link #getNormal() getNormal()}) is a right-handed orthonormalized
      * frame).</p>
      * @return normalized first canonical vector
      * @see #getV
@@ -204,8 +203,8 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     }
 
     /** Get the plane second canonical vector.
-     * <p>The frame defined by ({@link #getU getU}, {@link #getV getV},
-     * {@link #getNormal getNormal}) is a rigth-handed orthonormalized
+     * <p>The frame defined by ({@link #getU() getU()}, {@code getV()},
+     * {@link #getNormal() getNormal()}) is a right-handed orthonormalized
      * frame).</p>
      * @return normalized second canonical vector
      * @see #getU
@@ -218,7 +217,7 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     /** {@inheritDoc}
      */
     @Override
-    public Point<Euclidean3D> project(Point<Euclidean3D> point) {
+    public Vector3D project(Vector3D point) {
         return toSpace(toSubSpace(point));
     }
 
@@ -248,24 +247,6 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
         originOffset = -originOffset;
     }
 
-    /** Transform a space point into a sub-space point.
-     * @param vector n-dimension point of the space
-     * @return (n-1)-dimension point of the sub-space corresponding to
-     * the specified space point
-     */
-    public Vector2D toSubSpace(Vector<Euclidean3D, Vector3D> vector) {
-        return toSubSpace((Point<Euclidean3D>) vector);
-    }
-
-    /** Transform a sub-space point into a space point.
-     * @param vector (n-1)-dimension point of the sub-space
-     * @return n-dimension point of the space corresponding to the
-     * specified sub-space point
-     */
-    public Vector3D toSpace(Vector<Euclidean2D, Vector2D> vector) {
-        return toSpace((Point<Euclidean2D>) vector);
-    }
-
     /** Transform a 3D space point into an in-plane point.
      * @param point point of the space (must be a {@link Vector3D
      * Vector3D} instance)
@@ -274,9 +255,8 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @see #toSpace
      */
     @Override
-    public Vector2D toSubSpace(final Point<Euclidean3D> point) {
-        final Vector3D p3D = (Vector3D) point;
-        return new Vector2D(p3D.dotProduct(u), p3D.dotProduct(v));
+    public Vector2D toSubSpace(final Vector3D point) {
+        return new Vector2D(point.dotProduct(u), point.dotProduct(v));
     }
 
     /** Transform an in-plane point into a 3D space point.
@@ -286,9 +266,8 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @see #toSubSpace
      */
     @Override
-    public Vector3D toSpace(final Point<Euclidean2D> point) {
-        final Vector2D p2D = (Vector2D) point;
-        return new Vector3D(p2D.getX(), u, p2D.getY(), v, -originOffset, w);
+    public Vector3D toSpace(final Vector2D point) {
+        return new Vector3D(point.getX(), u, point.getY(), v, -originOffset, w);
     }
 
     /** Get one point from the 3D-space.
@@ -363,7 +342,7 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
         if (FastMath.abs(dot) < 1.0e-10) {
             return null;
         }
-        final Vector3D point = line.toSpace((Point<Euclidean1D>) Vector1D.ZERO);
+        final Vector3D point = line.toSpace(Vector1D.ZERO);
         final double   k     = -(originOffset + w.dotProduct(point)) / dot;
         return new Vector3D(1.0, point, k, direction);
     }
@@ -435,7 +414,7 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     /** {@inheritDoc} */
     @Override
     public SubPlane emptyHyperplane() {
-        return new SubPlane(this, new RegionFactory<Euclidean2D>().getComplement(new PolygonsSet(tolerance)));
+        return new SubPlane(this, new RegionFactory<Euclidean2D, Vector2D>().getComplement(new PolygonsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.
@@ -469,14 +448,6 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
         return originOffset + (sameOrientationAs(plane) ? -plane.originOffset : plane.originOffset);
     }
 
-    /** Get the offset (oriented distance) of a vector.
-     * @param vector vector to check
-     * @return offset of the vector
-     */
-    public double getOffset(Vector<Euclidean3D, Vector3D> vector) {
-        return getOffset((Point<Euclidean3D>) vector);
-    }
-
     /** Get the offset (oriented distance) of a point.
      * <p>The offset is 0 if the point is on the underlying hyperplane,
      * it is positive if the point is on one particular side of the
@@ -486,8 +457,8 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @return offset of the point
      */
     @Override
-    public double getOffset(final Point<Euclidean3D> point) {
-        return ((Vector3D) point).dotProduct(w) + originOffset;
+    public double getOffset(final Vector3D point) {
+        return point.dotProduct(w) + originOffset;
     }
 
     /** Check if the instance has the same orientation as another hyperplane.
@@ -496,7 +467,7 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * the same orientation
      */
     @Override
-    public boolean sameOrientationAs(final Hyperplane<Euclidean3D> other) {
+    public boolean sameOrientationAs(final Hyperplane<Euclidean3D, Vector3D> other) {
         return (((Plane) other).w).dotProduct(w) > 0.0;
     }
 

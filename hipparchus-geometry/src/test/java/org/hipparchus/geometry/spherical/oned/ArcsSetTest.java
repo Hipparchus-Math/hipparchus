@@ -125,16 +125,12 @@ class ArcsSetTest {
 
     @Test
     void testWrongInterval() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new ArcsSet(1.2, 0.0, 1.0e-10);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new ArcsSet(1.2, 0.0, 1.0e-10));
     }
 
     @Test
     void testTooSmallTolerance() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new ArcsSet(0.0, 1.0, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new ArcsSet(0.0, 1.0, 0.9 * Sphere1D.SMALLEST_TOLERANCE));
     }
 
     @Test
@@ -167,7 +163,7 @@ class ArcsSetTest {
 
     @Test
     void testEmpty() {
-        ArcsSet empty = (ArcsSet) new RegionFactory<Sphere1D>().getComplement(new ArcsSet(1.0e-10));
+        ArcsSet empty = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().getComplement(new ArcsSet(1.0e-10));
         assertEquals(1.0e-10, empty.getTolerance(), 1.0e-20);
         assertEquals(0.0, empty.getSize(), 1.0e-10);
         assertTrue(empty.asList().isEmpty());
@@ -185,7 +181,7 @@ class ArcsSetTest {
 
     @Test
     void testSpecialConstruction() {
-        List<SubHyperplane<Sphere1D>> boundary = new ArrayList<SubHyperplane<Sphere1D>>();
+        List<SubHyperplane<Sphere1D, S1Point>> boundary = new ArrayList<>();
         boundary.add(new LimitAngle(new S1Point(0.0), false, 1.0e-10).wholeHyperplane());
         boundary.add(new LimitAngle(new S1Point(MathUtils.TWO_PI - 1.0e-11), true, 1.0e-10).wholeHyperplane());
         ArcsSet set = new ArcsSet(boundary, 1.0e-10);
@@ -211,7 +207,7 @@ class ArcsSetTest {
         assertEquals(3.0, bList.get(0).getInf(), 1.0e-10);
         assertEquals(5.0, bList.get(0).getSup(), 1.0e-10);
 
-        ArcsSet aMb = (ArcsSet) new RegionFactory<Sphere1D>().difference(a, b);
+        ArcsSet aMb = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().difference(a, b);
         for (int k = -2; k < 3; ++k) {
             assertEquals(Location.OUTSIDE,  aMb.checkPoint(new S1Point(0.0 + k * MathUtils.TWO_PI)));
             assertEquals(Location.OUTSIDE,  aMb.checkPoint(new S1Point(0.9 + k * MathUtils.TWO_PI)));
@@ -242,8 +238,8 @@ class ArcsSetTest {
     @Test
     void testIntersection() {
 
-        ArcsSet a   = (ArcsSet) new RegionFactory<Sphere1D>().union(new ArcsSet(1.0, 3.0, 1.0e-10),
-                                                                    new ArcsSet(5.0, 6.0, 1.0e-10));
+        ArcsSet a   = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().
+                       union(new ArcsSet(1.0, 3.0, 1.0e-10), new ArcsSet(5.0, 6.0, 1.0e-10));
         List<Arc> aList = a.asList();
         assertEquals(2,   aList.size());
         assertEquals(1.0, aList.get(0).getInf(), 1.0e-10);
@@ -257,7 +253,7 @@ class ArcsSetTest {
         assertEquals(0.0, bList.get(0).getInf(), 1.0e-10);
         assertEquals(5.5, bList.get(0).getSup(), 1.0e-10);
 
-        ArcsSet aMb = (ArcsSet) new RegionFactory<Sphere1D>().intersection(a, b);
+        ArcsSet aMb = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().intersection(a, b);
         for (int k = -2; k < 3; ++k) {
             assertEquals(Location.OUTSIDE,  aMb.checkPoint(new S1Point(0.0 + k * MathUtils.TWO_PI)));
             assertEquals(Location.BOUNDARY, aMb.checkPoint(new S1Point(1.0 + k * MathUtils.TWO_PI)));
@@ -286,7 +282,7 @@ class ArcsSetTest {
 
     @Test
     void testMultiple() {
-        RegionFactory<Sphere1D> factory = new RegionFactory<Sphere1D>();
+        RegionFactory<Sphere1D, S1Point> factory = new RegionFactory<>();
         ArcsSet set = (ArcsSet)
         factory.intersection(factory.union(factory.difference(new ArcsSet(1.0, 6.0, 1.0e-10),
                                                               new ArcsSet(3.0, 5.0, 1.0e-10)),
@@ -320,8 +316,8 @@ class ArcsSetTest {
 
     @Test
     void testIteration() {
-        ArcsSet set = (ArcsSet) new RegionFactory<Sphere1D>().difference(new ArcsSet(1.0, 6.0, 1.0e-10),
-                                                                         new ArcsSet(3.0, 5.0, 1.0e-10));
+        ArcsSet set = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().
+                difference(new ArcsSet(1.0, 6.0, 1.0e-10), new ArcsSet(3.0, 5.0, 1.0e-10));
         Iterator<double[]> iterator = set.iterator();
         try {
             iterator.remove();
@@ -354,7 +350,9 @@ class ArcsSetTest {
 
     @Test
     void testEmptyTree() {
-        assertEquals(MathUtils.TWO_PI, new ArcsSet(new BSPTree<Sphere1D>(Boolean.TRUE), 1.0e-10).getSize(), 1.0e-10);
+        assertEquals(MathUtils.TWO_PI,
+                     new ArcsSet(new BSPTree<>(Boolean.TRUE), 1.0e-10).getSize(),
+                     1.0e-10);
     }
 
     @Test
@@ -362,13 +360,13 @@ class ArcsSetTest {
         for (int k = -2; k < 3; ++k) {
             SubLimitAngle l1  = new LimitAngle(new S1Point(1.0 + k * MathUtils.TWO_PI), false, 1.0e-10).wholeHyperplane();
             SubLimitAngle l2  = new LimitAngle(new S1Point(1.5 + k * MathUtils.TWO_PI), true,  1.0e-10).wholeHyperplane();
-            ArcsSet set = new ArcsSet(new BSPTree<Sphere1D>(l1,
-                                                            new BSPTree<Sphere1D>(Boolean.FALSE),
-                                                            new BSPTree<Sphere1D>(l2,
-                                                                                  new BSPTree<Sphere1D>(Boolean.FALSE),
-                                                                                  new BSPTree<Sphere1D>(Boolean.TRUE),
-                                                                                  null),
-                                                            null),
+            ArcsSet set = new ArcsSet(new BSPTree<>(l1,
+                                                    new BSPTree<>(Boolean.FALSE),
+                                                    new BSPTree<>(l2,
+                                                                  new BSPTree<>(Boolean.FALSE),
+                                                                  new BSPTree<>(Boolean.TRUE),
+                                                                  null),
+                                                    null),
                                       1.0e-10);
             for (double alpha = 1.0e-6; alpha < MathUtils.TWO_PI; alpha += 0.001) {
                 if (alpha < 1 || alpha > 1.5) {
@@ -387,24 +385,21 @@ class ArcsSetTest {
             SubLimitAngle l1 = new LimitAngle(new S1Point(1.0), false, 1.0e-10).wholeHyperplane();
             SubLimitAngle l2 = new LimitAngle(new S1Point(2.0), true, 1.0e-10).wholeHyperplane();
             SubLimitAngle l3 = new LimitAngle(new S1Point(3.0), false, 1.0e-10).wholeHyperplane();
-            new ArcsSet(new BSPTree<Sphere1D>(l1,
-                    new BSPTree<Sphere1D>(Boolean.FALSE),
-                    new BSPTree<Sphere1D>(l2,
-                        new BSPTree<Sphere1D>(l3,
-                            new BSPTree<Sphere1D>(Boolean.FALSE),
-                            new BSPTree<Sphere1D>(Boolean.TRUE),
-                            null),
-                        new BSPTree<Sphere1D>(Boolean.TRUE),
-                        null),
-                    null),
-                1.0e-10);
+            new ArcsSet(new BSPTree<>(l1,
+                                      new BSPTree<>(Boolean.FALSE),
+                                      new BSPTree<>(l2,
+                                                    new BSPTree<>(l3, new BSPTree<>(Boolean.FALSE), new BSPTree<>(Boolean.TRUE), null),
+                                                    new BSPTree<>(Boolean.TRUE),
+                                                    null),
+                                      null),
+                        1.0e-10);
         });
     }
 
     @Test
     void testSide() {
-        ArcsSet set = (ArcsSet) new RegionFactory<Sphere1D>().difference(new ArcsSet(1.0, 6.0, 1.0e-10),
-                                                                         new ArcsSet(3.0, 5.0, 1.0e-10));
+        ArcsSet set = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().
+                difference(new ArcsSet(1.0, 6.0, 1.0e-10), new ArcsSet(3.0, 5.0, 1.0e-10));
         for (int k = -2; k < 3; ++k) {
             assertEquals(Side.MINUS, set.split(new Arc(0.5 + k * MathUtils.TWO_PI,
                                                               6.1 + k * MathUtils.TWO_PI,
@@ -456,7 +451,7 @@ class ArcsSetTest {
 
     @Test
     void testSideHyper() {
-        ArcsSet sub = (ArcsSet) new RegionFactory<Sphere1D>().getComplement(new ArcsSet(1.0e-10));
+        ArcsSet sub = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().getComplement(new ArcsSet(1.0e-10));
         assertTrue(sub.isEmpty());
         assertEquals(Side.HYPER,  sub.split(new Arc(2.0, 3.0, 1.0e-10)).getSide());
     }
@@ -578,13 +573,13 @@ class ArcsSetTest {
         ArcsSet splitPlus  = split.getPlus();
         ArcsSet splitMinus = split.getMinus();
         assertEquals(1,   splitMinus.asList().size());
-        assertEquals(1.0 * FastMath.PI, splitMinus.asList().get(0).getInf(), 1.0e-10);
+        assertEquals(      FastMath.PI, splitMinus.asList().get(0).getInf(), 1.0e-10);
         assertEquals(1.5 * FastMath.PI, splitMinus.asList().get(0).getSup(), 1.0e-10);
         assertEquals(0.5 * FastMath.PI, splitMinus.getSize(), 1.0e-10);
         assertEquals(1,   splitPlus.asList().size());
         assertEquals(1.5 * FastMath.PI, splitPlus.asList().get(0).getInf(), 1.0e-10);
         assertEquals(2.5 * FastMath.PI, splitPlus.asList().get(0).getSup(), 1.0e-10);
-        assertEquals(1.0 * FastMath.PI, splitPlus.getSize(), 1.0e-10);
+        assertEquals(      FastMath.PI, splitPlus.getSize(), 1.0e-10);
 
     }
 
@@ -677,7 +672,7 @@ class ArcsSetTest {
         assertEquals(a2, setB.asList().get(1).getInf(), 1.0e-15);
         assertEquals(a3, setB.asList().get(1).getSup(), 1.0e-15);
 
-        final ArcsSet intersection = (ArcsSet) new RegionFactory<Sphere1D>().intersection(setA, setB);
+        final ArcsSet intersection = (ArcsSet) new RegionFactory<Sphere1D, S1Point>().intersection(setA, setB);
         assertEquals((a1 - a0) + (a3 - a2), intersection.getSize(), 1.0e-10);
         assertEquals(2, intersection.asList().size());
         assertEquals(a0, intersection.asList().get(0).getInf(), 1.0e-15);

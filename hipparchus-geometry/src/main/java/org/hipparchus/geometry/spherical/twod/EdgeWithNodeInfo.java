@@ -32,13 +32,13 @@ import org.hipparchus.geometry.partitioning.BSPTree;
 class EdgeWithNodeInfo extends Edge {
 
     /** Node containing edge. */
-    private final BSPTree<Sphere2D> node;
+    private final BSPTree<Sphere2D, S2Point> node;
 
     /** Node whose intersection with current node defines start point. */
-    private final BSPTree<Sphere2D> startNode;
+    private final BSPTree<Sphere2D, S2Point> startNode;
 
     /** Node whose intersection with current node defines end point. */
-    private final BSPTree<Sphere2D> endNode;
+    private final BSPTree<Sphere2D, S2Point> endNode;
 
     /** Indicator for completely processed edge. */
     private boolean processed;
@@ -54,9 +54,9 @@ class EdgeWithNodeInfo extends Edge {
      */
     EdgeWithNodeInfo(final Vertex start, final Vertex end,
                      final double length, final Circle circle,
-                     final BSPTree<Sphere2D> node,
-                     final BSPTree<Sphere2D> startNode,
-                     final BSPTree<Sphere2D> endNode) {
+                     final BSPTree<Sphere2D, S2Point> node,
+                     final BSPTree<Sphere2D, S2Point> startNode,
+                     final BSPTree<Sphere2D, S2Point> endNode) {
         super(start, end, length, circle);
         this.node      = node;
         this.startNode = startNode;

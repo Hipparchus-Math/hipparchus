@@ -29,15 +29,16 @@ import org.hipparchus.geometry.Space;
  * processing methods.</p>
  * <p>Instances of this class are guaranteed to be immutable</p>
  * @param <S> Type of the space.
+ * @param <P> Type of the points in space.
  * @see AbstractRegion#projectToBoundary(Point)
  */
-public class BoundaryProjection<S extends Space> {
+public class BoundaryProjection<S extends Space, P extends Point<S>> {
 
     /** Original point. */
-    private final Point<S> original;
+    private final P original;
 
     /** Projected point. */
-    private final Point<S> projected;
+    private final P projected;
 
     /** Offset of the point with respect to the boundary it is projected on. */
     private final double offset;
@@ -47,7 +48,7 @@ public class BoundaryProjection<S extends Space> {
      * @param projected projected point
      * @param offset offset of the point with respect to the boundary it is projected on
      */
-    public BoundaryProjection(final Point<S> original, final Point<S> projected, final double offset) {
+    public BoundaryProjection(final P original, final P projected, final double offset) {
         this.original  = original;
         this.projected = projected;
         this.offset    = offset;
@@ -56,14 +57,14 @@ public class BoundaryProjection<S extends Space> {
     /** Get the original point.
      * @return original point
      */
-    public Point<S> getOriginal() {
+    public P getOriginal() {
         return original;
     }
 
     /** Projected point.
      * @return projected point, or null if there are no boundary
      */
-    public Point<S> getProjected() {
+    public P getProjected() {
         return projected;
     }
 

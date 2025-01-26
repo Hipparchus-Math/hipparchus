@@ -30,14 +30,14 @@ import org.hipparchus.geometry.partitioning.Region;
  * boolean.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class SubOrientedPoint extends AbstractSubHyperplane<Euclidean1D, Euclidean1D> {
+public class SubOrientedPoint extends AbstractSubHyperplane<Euclidean1D, Vector1D, Euclidean1D, Vector1D> {
 
     /** Simple constructor.
      * @param hyperplane underlying hyperplane
      * @param remainingRegion remaining region of the hyperplane
      */
-    public SubOrientedPoint(final Hyperplane<Euclidean1D> hyperplane,
-                            final Region<Euclidean1D> remainingRegion) {
+    public SubOrientedPoint(final Hyperplane<Euclidean1D, Vector1D> hyperplane,
+                            final Region<Euclidean1D, Vector1D> remainingRegion) {
         super(hyperplane, remainingRegion);
     }
 
@@ -55,21 +55,22 @@ public class SubOrientedPoint extends AbstractSubHyperplane<Euclidean1D, Euclide
 
     /** {@inheritDoc} */
     @Override
-    protected AbstractSubHyperplane<Euclidean1D, Euclidean1D> buildNew(final Hyperplane<Euclidean1D> hyperplane,
-                                                                       final Region<Euclidean1D> remainingRegion) {
+    protected AbstractSubHyperplane<Euclidean1D, Vector1D, Euclidean1D, Vector1D>
+        buildNew(final Hyperplane<Euclidean1D, Vector1D> hyperplane,
+                 final Region<Euclidean1D, Vector1D> remainingRegion) {
         return new SubOrientedPoint(hyperplane, remainingRegion);
     }
 
     /** {@inheritDoc} */
     @Override
-    public SplitSubHyperplane<Euclidean1D> split(final Hyperplane<Euclidean1D> hyperplane) {
+    public SplitSubHyperplane<Euclidean1D, Vector1D> split(final Hyperplane<Euclidean1D, Vector1D> hyperplane) {
         final double global = hyperplane.getOffset(((OrientedPoint) getHyperplane()).getLocation());
         if (global < -hyperplane.getTolerance()) {
-            return new SplitSubHyperplane<Euclidean1D>(null, this);
+            return new SplitSubHyperplane<>(null, this);
         } else if (global > hyperplane.getTolerance()) {
-            return new SplitSubHyperplane<Euclidean1D>(this, null);
+            return new SplitSubHyperplane<>(this, null);
         } else {
-            return new SplitSubHyperplane<Euclidean1D>(null, null);
+            return new SplitSubHyperplane<>(null, null);
         }
     }
 

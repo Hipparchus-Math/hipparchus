@@ -43,9 +43,10 @@ import org.hipparchus.geometry.Space;
  * </p>
 
  * @param <S> Type of the space.
+ * @param <P> Type of the points in space.
 
  */
-public interface Hyperplane<S extends Space> {
+public interface Hyperplane<S extends Space, P extends Point<S>> {
 
     /** Copy the instance.
      * <p>The instance created is completely independant of the original
@@ -53,7 +54,7 @@ public interface Hyperplane<S extends Space> {
      * shared (except for immutable objects).</p>
      * @return a new hyperplane, copy of the instance
      */
-    Hyperplane<S> copySelf();
+    Hyperplane<S, P> copySelf();
 
     /** Get the offset (oriented distance) of a point.
      * <p>The offset is 0 if the point is on the underlying hyperplane,
@@ -63,13 +64,13 @@ public interface Hyperplane<S extends Space> {
      * @param point point to check
      * @return offset of the point
      */
-    double getOffset(Point<S> point);
+    double getOffset(P point);
 
     /** Project a point to the hyperplane.
      * @param point point to project
      * @return projected point
      */
-    Point<S> project(Point<S> point);
+    P project(P point);
 
     /** Get the tolerance below which points are considered to belong to the hyperplane.
      * @return tolerance below which points are considered to belong to the hyperplane
@@ -85,22 +86,22 @@ public interface Hyperplane<S extends Space> {
      * @return true if the instance and the other hyperplane have
      * the same orientation
      */
-    boolean sameOrientationAs(Hyperplane<S> other);
+    boolean sameOrientationAs(Hyperplane<S, P> other);
 
     /** Build a sub-hyperplane covering the whole hyperplane.
      * @return a sub-hyperplane covering the whole hyperplane
      */
-    SubHyperplane<S> wholeHyperplane();
+    SubHyperplane<S, P> wholeHyperplane();
 
     /** Build a sub-hyperplane covering nothing.
      * @return a sub-hyperplane covering nothing
      * @since 1.4
      */
-    SubHyperplane<S> emptyHyperplane();
+    SubHyperplane<S, P> emptyHyperplane();
 
     /** Build a region covering the whole space.
      * @return a region containing the instance
      */
-    Region<S> wholeSpace();
+    Region<S, P> wholeSpace();
 
 }

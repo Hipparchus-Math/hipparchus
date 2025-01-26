@@ -25,16 +25,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 
 /** Set of {@link BSPTree BSP tree} nodes.
  * @see BoundaryAttribute
  * @param <S> Type of the space.
+ * @param <P> Type of the points in space.
  */
-public class NodesSet<S extends Space> implements Iterable<BSPTree<S>> {
+public class NodesSet<S extends Space, P extends Point<S>> implements Iterable<BSPTree<S, P>> {
 
     /** List of sub-hyperplanes. */
-    private final List<BSPTree<S>> list;
+    private final List<BSPTree<S, P>> list;
 
     /** Simple constructor.
      */
@@ -45,9 +47,9 @@ public class NodesSet<S extends Space> implements Iterable<BSPTree<S>> {
     /** Add a node if not already known.
      * @param node node to add
      */
-    public void add(final BSPTree<S> node) {
+    public void add(final BSPTree<S, P> node) {
 
-        for (final BSPTree<S> existing : list) {
+        for (final BSPTree<S, P> existing : list) {
             if (node == existing) {
                 // the node is already known, don't add it
                 return;
@@ -62,15 +64,15 @@ public class NodesSet<S extends Space> implements Iterable<BSPTree<S>> {
     /** Add nodes if they are not already known.
      * @param iterator nodes iterator
      */
-    public void addAll(final Iterable<BSPTree<S>> iterator) {
-        for (final BSPTree<S> node : iterator) {
+    public void addAll(final Iterable<BSPTree<S, P>> iterator) {
+        for (final BSPTree<S, P> node : iterator) {
             add(node);
         }
     }
 
     /** {@inheritDoc} */
     @Override
-    public Iterator<BSPTree<S>> iterator() {
+    public Iterator<BSPTree<S, P>> iterator() {
         return list.iterator();
     }
 

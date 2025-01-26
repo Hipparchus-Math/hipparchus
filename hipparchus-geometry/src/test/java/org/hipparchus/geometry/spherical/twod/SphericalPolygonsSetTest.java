@@ -36,6 +36,7 @@ import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
+import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
@@ -82,7 +83,7 @@ class SphericalPolygonsSetTest {
     @Test
     void testEmpty() {
         SphericalPolygonsSet empty =
-            (SphericalPolygonsSet) new RegionFactory<Sphere2D>().getComplement(new SphericalPolygonsSet(1.0e-10));
+            (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().getComplement(new SphericalPolygonsSet(1.0e-10));
         UnitSphereRandomVectorGenerator random =
                 new UnitSphereRandomVectorGenerator(3, new Well1024a(0x76d9205d6167b6ddL));
         for (int i = 0; i < 1000; ++i) {
@@ -120,7 +121,7 @@ class SphericalPolygonsSetTest {
         assertEquals(0.5 * FastMath.PI, southCap.getRadius(), 1.0e-10);
 
         EnclosingBall<Sphere2D, S2Point> northCap =
-                ((SphericalPolygonsSet) new RegionFactory<Sphere2D>().getComplement(south)).getEnclosingCap();
+                ((SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().getComplement(south)).getEnclosingCap();
         assertEquals(0.0, S2Point.PLUS_K.distance(northCap.getCenter()), 1.0e-10);
         assertEquals(0.5 * FastMath.PI, northCap.getRadius(), 1.0e-10);
 
@@ -130,7 +131,7 @@ class SphericalPolygonsSetTest {
     void testPositiveOctantByIntersection() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        RegionFactory<Sphere2D> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet plusX = new SphericalPolygonsSet(Vector3D.PLUS_I, tol);
         SphericalPolygonsSet plusY = new SphericalPolygonsSet(Vector3D.PLUS_J, tol);
         SphericalPolygonsSet plusZ = new SphericalPolygonsSet(Vector3D.PLUS_K, tol);
@@ -216,7 +217,7 @@ class SphericalPolygonsSetTest {
     void testNonConvex() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        RegionFactory<Sphere2D> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet plusX = new SphericalPolygonsSet(Vector3D.PLUS_I, tol);
         SphericalPolygonsSet plusY = new SphericalPolygonsSet(Vector3D.PLUS_J, tol);
         SphericalPolygonsSet plusZ = new SphericalPolygonsSet(Vector3D.PLUS_K, tol);
@@ -285,7 +286,7 @@ class SphericalPolygonsSetTest {
     @Test
     void testModeratlyComplexShape() {
         double tol = 0.01;
-        List<SubHyperplane<Sphere2D>> boundary = new ArrayList<>();
+        List<SubHyperplane<Sphere2D, S2Point>> boundary = new ArrayList<>();
         boundary.add(create(Vector3D.MINUS_J, Vector3D.PLUS_I,  Vector3D.PLUS_K,  tol, 0.0, 0.5 * FastMath.PI));
         boundary.add(create(Vector3D.MINUS_I, Vector3D.PLUS_K,  Vector3D.PLUS_J,  tol, 0.0, 0.5 * FastMath.PI));
         boundary.add(create(Vector3D.PLUS_K,  Vector3D.PLUS_J,  Vector3D.MINUS_I, tol, 0.0, 0.5 * FastMath.PI));
@@ -342,7 +343,7 @@ class SphericalPolygonsSetTest {
     void testSeveralParts() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        List<SubHyperplane<Sphere2D>> boundary = new ArrayList<>();
+        List<SubHyperplane<Sphere2D, S2Point>> boundary = new ArrayList<>();
 
         // first part: +X, +Y, +Z octant
         boundary.add(create(Vector3D.PLUS_J,  Vector3D.PLUS_K,  Vector3D.PLUS_I,  tol, 0.0, 0.5 * FastMath.PI));
@@ -392,7 +393,7 @@ class SphericalPolygonsSetTest {
                                                               new S2Point(FastMath.PI / 3, FastMath.PI / 3),
                                                               new S2Point(FastMath.PI / 4, FastMath.PI / 6));
         SphericalPolygonsSet hexaWithHole =
-                (SphericalPolygonsSet) new RegionFactory<Sphere2D>().difference(hexa, hole);
+                (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().difference(hexa, hole);
 
         for (double phi = center.getPhi() - alpha + 0.1; phi < center.getPhi() + alpha - 0.1; phi += 0.07) {
             Location l = hexaWithHole.checkPoint(new S2Point(FastMath.PI / 4, phi));
@@ -424,7 +425,7 @@ class SphericalPolygonsSetTest {
         SphericalPolygonsSet triOut    = new SphericalPolygonsSet(center, Vector3D.PLUS_K, 0.25, 3, tol);
         SphericalPolygonsSet triIn     = new SphericalPolygonsSet(center, Vector3D.PLUS_K, 0.15, 3, tol);
 
-        RegionFactory<Sphere2D> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet hexa   = (SphericalPolygonsSet) factory.difference(hexaOut,   hexaIn);
         SphericalPolygonsSet penta  = (SphericalPolygonsSet) factory.difference(pentaOut,  pentaIn);
         SphericalPolygonsSet quadri = (SphericalPolygonsSet) factory.difference(quadriOut, quadriIn);
@@ -485,7 +486,7 @@ class SphericalPolygonsSetTest {
           { 42.15249,  9.56001 }, { 43.00998,  9.39000 }, { 42.62812,  8.74600 }, { 42.25651,  8.54421 },
           { 41.58361,  8.77572 }, { 41.38000,  9.22975 }
         });
-        RegionFactory<Sphere2D> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet zone = (SphericalPolygonsSet) factory.union(continental, corsica);
         EnclosingBall<Sphere2D, S2Point> enclosing = zone.getEnclosingCap();
         Vector3D enclosingCenter = enclosing.getCenter().getVector();
@@ -567,7 +568,7 @@ class SphericalPolygonsSetTest {
 
     @Test
     void testGitHubIssue41() {
-        RegionFactory<Sphere2D> regionFactory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point> regionFactory = new RegionFactory<>();
         S2Point[] s2pA = new S2Point[]{
                 new S2Point(new Vector3D(0.2122954606, -0.629606302,  0.7473463333)),
                 new S2Point(new Vector3D(0.2120220248, -0.6296445493, 0.747391733)),
@@ -857,7 +858,7 @@ class SphericalPolygonsSetTest {
             new S2Point(0.016, 1.5533430342749532)
         };
 
-        final RegionFactory<Sphere2D> regionFactory = new RegionFactory<>();
+        final RegionFactory<Sphere2D, S2Point> regionFactory = new RegionFactory<>();
 
         // thickness is small enough for proper computation of very small intersection
         double thickness1 = 4.96740426e-11;
@@ -887,74 +888,74 @@ class SphericalPolygonsSetTest {
 
     private void doTestIssueOrekit1388(final boolean order) throws IOException {
         final double[][] coordinates1 = new double[][] {
-//            { 18.52684751402596,  -76.97880893719434 },
-//            { 18.451108862175584, -76.99484778988442 },
-//            { 18.375369256045143, -77.01087679277504 },
-//            { 18.299628701801268, -77.02689599675749 },
-//            { 18.223887203723567, -77.04290545732495 },
-//            { 18.148144771769385, -77.05890521550272 },
-//            { 18.072401410187016, -77.0748953260324  },
+            { 18.52684751402596,  -76.97880893719434 },
+            { 18.451108862175584, -76.99484778988442 },
+            { 18.375369256045143, -77.01087679277504 },
+            { 18.299628701801268, -77.02689599675749 },
+            { 18.223887203723567, -77.04290545732495 },
+            { 18.148144771769385, -77.05890521550272 },
+            { 18.072401410187016, -77.0748953260324  },
             { 17.99665712514784,  -77.09087584010511 }, // keep
-//            { 17.92091192468999,  -77.10684680260262 },
+            { 17.92091192468999,  -77.10684680260262 },
             { 17.84516581113023,  -77.12280827309398 }, // keep
             { 17.769418792522664, -77.13876029654094 }, // keep
-//            { 17.747659863099422, -77.14334087084347 },
-//            { 17.67571798336192,  -77.15846791369165 },
-//            { 17.624293265977183, -77.16928381433733 },
-//            { 17.5485398681768,   -77.18520934447962 },
+            { 17.747659863099422, -77.14334087084347 },
+            { 17.67571798336192,  -77.15846791369165 },
+            { 17.624293265977183, -77.16928381433733 },
+            { 17.5485398681768,   -77.18520934447962 },
             { 17.526779103104783, -77.1897823275402  }, // keep
             { 17.49650619905315,  -77.0342031192472  }, // keep
-//            { 17.588661518962343, -77.01473903648854 },
-//            { 17.728574326965138, -76.98517769352242 },
-//            { 17.80416324015021,  -76.96919708557023 },
-//            { 17.87969526622326,  -76.95321858415689 },
-//            { 17.955280973332677, -76.93721874766547 },
-//            { 18.030855567607098, -76.92121123297645 },
-//            { 18.106414929680927, -76.90519686376611 },
-//            { 18.182031502555215, -76.88916022728444 },
-//            { 18.257597934434987, -76.87312403715188 },
-//            { 18.3331742522667,   -76.85707550881591 },
-//            { 18.408750874895002, -76.84101662269072 },
-//            { 18.57249082100609,  -76.80620195239239 },
+            { 17.588661518962343, -77.01473903648854 },
+            { 17.728574326965138, -76.98517769352242 },
+            { 17.80416324015021,  -76.96919708557023 },
+            { 17.87969526622326,  -76.95321858415689 },
+            { 17.955280973332677, -76.93721874766547 },
+            { 18.030855567607098, -76.92121123297645 },
+            { 18.106414929680927, -76.90519686376611 },
+            { 18.182031502555215, -76.88916022728444 },
+            { 18.257597934434987, -76.87312403715188 },
+            { 18.3331742522667,   -76.85707550881591 },
+            { 18.408750874895002, -76.84101662269072 },
+            { 18.57249082100609,  -76.80620195239239 },
             { 18.602585205425896, -76.96276018365842 } // keep
         };
 
         final double[][] coordinates2 = new double[][] {
-//            { 18.338614038907608, -78.37885677406668 },
-//            { 18.195574802144037, -78.24425107003432 },
-//            { 18.20775293886321,  -78.0711865934217  },
-//            { 18.07679345301507,  -77.95901517339438 },
-//            { 18.006705181057598, -77.85325354879791 },
+            { 18.338614038907608, -78.37885677406668 },
+            { 18.195574802144037, -78.24425107003432 },
+            { 18.20775293886321,  -78.0711865934217  },
+            { 18.07679345301507,  -77.95901517339438 },
+            { 18.006705181057598, -77.85325354879791 },
             { 17.857293838883137, -77.73787723105598 },   // keep
             { 17.854243316622103, -77.57442744758828 },   // keep
             { 17.875595873376014, -77.38213358468467 },   // keep
-//            { 17.72607423578937,  -77.23470828979222 },
+            { 17.72607423578937,  -77.23470828979222 },
             { 17.71386286451302,  -77.12253686976543 },   // keep
             { 17.790170276013725, -77.14817605148616 },   // keep
             { 17.869495404611797, -77.14497115377101 },   // keep
             { 17.854243309397717, -76.9302429967729  },   // keep
-//            { 17.954882874700132, -76.84371075846688 },
-//            { 17.94268718313505,  -76.6898756681441  },
-//            { 17.869495397388064, -76.54886016868198 },
-//            { 17.863394719203555, -76.35015651034861 },
-//            { 17.93049065091843,  -76.23478019260665 },
-//            { 18.155989976776553, -76.32451732862788 },
-//            { 18.22601854027039,  -76.63218750927341 },
-//            { 18.33861403170316,  -76.85653034932697 },
+            { 17.954882874700132, -76.84371075846688 },
+            { 17.94268718313505,  -76.6898756681441  },
+            { 17.869495397388064, -76.54886016868198 },
+            { 17.863394719203555, -76.35015651034861 },
+            { 17.93049065091843,  -76.23478019260665 },
+            { 18.155989976776553, -76.32451732862788 },
+            { 18.22601854027039,  -76.63218750927341 },
+            { 18.33861403170316,  -76.85653034932697 },
             { 18.405527980074993, -76.97831646249921 },   // keep
-//            { 18.4541763474828,   -77.28598664314421 },
-//            { 18.496732365966466, -77.705828243816   },
-//            { 18.451136227912485, -78.00708862903122 },
-//            { 18.405527980074993, -78.25707065080552 }
+            { 18.4541763474828,   -77.28598664314421 },
+            { 18.496732365966466, -77.705828243816   },
+            { 18.451136227912485, -78.00708862903122 },
+            { 18.405527980074993, -78.25707065080552 }
         };
 
         final double[][] expectedIn = new double[][] {
-//                { 18.408, -77.003 },
-//                { 18.338, -76.857 },
-//                { 17.869, -77.117 },
-//                { 17.857, -76.959 },
-//                { 17.761, -77.139 },
-//                { 17.715, -77.125 },
+                { 18.408, -77.003 },
+                { 18.338, -76.857 },
+                { 17.869, -77.117 },
+                { 17.857, -76.959 },
+                { 17.761, -77.139 },
+                { 17.715, -77.125 },
                 { 17.935, -77.055 }
         };
 
@@ -970,9 +971,10 @@ class SphericalPolygonsSetTest {
 
         SphericalPolygonsSet shape1 = buildSimpleZone(coordinates1);
         SphericalPolygonsSet shape2 = buildSimpleZone(coordinates2);
-        Region<Sphere2D> intersection = order ?
-                                        new RegionFactory<Sphere2D>().intersection(shape1.copySelf(), shape2.copySelf()) :
-                                        new RegionFactory<Sphere2D>().intersection(shape2.copySelf(), shape1.copySelf());
+        Region<Sphere2D, S2Point> intersection =
+                order ?
+                new RegionFactory<Sphere2D, S2Point>().intersection(shape1.copySelf(), shape2.copySelf()) :
+                new RegionFactory<Sphere2D, S2Point>().intersection(shape2.copySelf(), shape1.copySelf());
 
         // TODO: remove
         print(shape1, shape2, intersection);
@@ -988,7 +990,7 @@ class SphericalPolygonsSetTest {
     }
 
     private void print(final SphericalPolygonsSet shape1, SphericalPolygonsSet shape2,
-                       final Region<Sphere2D> intersection)
+                       final Region<Sphere2D, S2Point> intersection)
         throws IOException {
         shape1.getTree(true).visit(new LinksChecker());
         shape2.getTree(true).visit(new LinksChecker());
@@ -1033,30 +1035,30 @@ class SphericalPolygonsSetTest {
 
     }
 
-    private static class LinksChecker implements BSPTreeVisitor<Sphere2D> {
+    private static class LinksChecker implements BSPTreeVisitor<Sphere2D, S2Point> {
 
         /** {@inheritDoc} */
         @Override
-        public Order visitOrder(final BSPTree<Sphere2D> node) {
+        public Order visitOrder(final BSPTree<Sphere2D, S2Point> node) {
             return Order.MINUS_SUB_PLUS;
         }
 
         /** {@inheritDoc} */
         @Override
-        public void visitInternalNode(final BSPTree<Sphere2D> node) {
+        public void visitInternalNode(final BSPTree<Sphere2D, S2Point> node) {
             checkLinks(node);
         }
 
         /** {@inheritDoc} */
         @Override
-        public void visitLeafNode(final BSPTree<Sphere2D> node) {
+        public void visitLeafNode(final BSPTree<Sphere2D, S2Point> node) {
             checkLinks(node);
         }
 
         /** Check node is a child of its parent.
          * @param node node to check
          */
-        private void checkLinks(final BSPTree<Sphere2D> node) {
+        private void checkLinks(final BSPTree<Sphere2D, S2Point> node) {
             if (node.getParent() != null) {
                 if (node != node.getParent().getMinus() && node != node.getParent().getPlus()) {
                     Assertions.fail("corrupted tree");
@@ -1093,22 +1095,22 @@ class SphericalPolygonsSetTest {
     private List<String> printLeafs(final PrintStream out, final String baseName, final SphericalPolygonsSet shape)
     {
         final List<String> names = new ArrayList<>();
-        shape.getTree(true).visit(new BSPTreeVisitor<Sphere2D>() {
+        shape.getTree(true).visit(new BSPTreeVisitor<Sphere2D, S2Point>() {
             @Override
-            public Order visitOrder(final BSPTree<Sphere2D> node) {
+            public Order visitOrder(final BSPTree<Sphere2D, S2Point> node) {
                 return Order.MINUS_SUB_PLUS;
             }
 
             @Override
-            public void visitInternalNode(final BSPTree<Sphere2D> node) {
+            public void visitInternalNode(final BSPTree<Sphere2D, S2Point> node) {
             }
 
             @Override
-            public void visitLeafNode(final BSPTree<Sphere2D> node) {
+            public void visitLeafNode(final BSPTree<Sphere2D, S2Point> node) {
                 //if (node.getParent() != null) {
                 if ((Boolean) node.getAttribute()) {
                     String suffix = "";
-                    for (BSPTree<Sphere2D> current = node; current.getParent() != null; current = current.getParent()) {
+                    for (BSPTree<Sphere2D, S2Point> current = node; current.getParent() != null; current = current.getParent()) {
                         suffix = (current == current.getParent().getMinus() ? "m" : "p") + suffix;
                     }
                     final String name = baseName + suffix;
@@ -1126,8 +1128,8 @@ class SphericalPolygonsSetTest {
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,
                              double tolerance, double ... limits) {
-        RegionFactory<Sphere1D> factory = new RegionFactory<>();
-        Circle circle = new Circle(pole, tolerance);
+        RegionFactory<Sphere1D, S1Point> factory = new RegionFactory<>();
+        Circle                           circle  = new Circle(pole, tolerance);
         Circle phased =
                 (Circle) Circle.getTransform(new Rotation(circle.getXAxis(), circle.getYAxis(), x, y)).apply(circle);
         ArcsSet set = (ArcsSet) factory.getComplement(new ArcsSet(tolerance));

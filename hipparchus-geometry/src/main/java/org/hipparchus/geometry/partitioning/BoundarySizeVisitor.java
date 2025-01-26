@@ -21,12 +21,14 @@
  */
 package org.hipparchus.geometry.partitioning;
 
+import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 
 /** Visitor computing the boundary size.
  * @param <S> Type of the space.
+ * @param <P> Type of the points in space.
  */
-class BoundarySizeVisitor<S extends Space> implements BSPTreeVisitor<S> {
+class BoundarySizeVisitor<S extends Space, P extends Point<S>> implements BSPTreeVisitor<S, P> {
 
     /** Size of the boundary. */
     private double boundarySize;
@@ -39,16 +41,16 @@ class BoundarySizeVisitor<S extends Space> implements BSPTreeVisitor<S> {
 
     /** {@inheritDoc}*/
     @Override
-    public Order visitOrder(final BSPTree<S> node) {
+    public Order visitOrder(final BSPTree<S, P> node) {
         return Order.MINUS_SUB_PLUS;
     }
 
     /** {@inheritDoc}*/
     @Override
-    public void visitInternalNode(final BSPTree<S> node) {
+    public void visitInternalNode(final BSPTree<S, P> node) {
         @SuppressWarnings("unchecked")
-        final BoundaryAttribute<S> attribute =
-            (BoundaryAttribute<S>) node.getAttribute();
+        final BoundaryAttribute<S, P> attribute =
+            (BoundaryAttribute<S, P>) node.getAttribute();
         if (attribute.getPlusOutside() != null) {
             boundarySize += attribute.getPlusOutside().getSize();
         }
@@ -59,7 +61,7 @@ class BoundarySizeVisitor<S extends Space> implements BSPTreeVisitor<S> {
 
     /** {@inheritDoc}*/
     @Override
-    public void visitLeafNode(final BSPTree<S> node) {
+    public void visitLeafNode(final BSPTree<S, P> node) {
     }
 
     /** Get the size of the boundary.

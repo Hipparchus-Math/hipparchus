@@ -51,23 +51,26 @@ import org.hipparchus.geometry.Space;
  *   </li>
  * </ul>
 
- * @param <S> Type of the embedding space.
- * @param <T> Type of the embedded sub-space.
+ * @param <S> Type of the space.
+ * @param <P> Type of the points in the space.
+ * @param <T> Type of the sub-space.
+ * @param <Q> Type of the points in the sub-space.
 
  */
-public interface Transform<S extends Space, T extends Space> {
+public interface Transform<S extends Space, P extends Point<S>,
+                           T extends Space, Q extends Point<T>> {
 
     /** Transform a point of a space.
      * @param point point to transform
      * @return a new object representing the transformed point
      */
-    Point<S> apply(Point<S> point);
+    P apply(P point);
 
     /** Transform an hyperplane of a space.
      * @param hyperplane hyperplane to transform
      * @return a new object representing the transformed hyperplane
      */
-    Hyperplane<S> apply(Hyperplane<S> hyperplane);
+    Hyperplane<S, P> apply(Hyperplane<S, P> hyperplane);
 
     /** Transform a sub-hyperplane embedded in an hyperplane.
      * @param sub sub-hyperplane to transform
@@ -79,6 +82,6 @@ public interface Transform<S extends Space, T extends Space> {
      * <em>has</em> been applied to it)
      * @return a new object representing the transformed sub-hyperplane
      */
-    SubHyperplane<T> apply(SubHyperplane<T> sub, Hyperplane<S> original, Hyperplane<S> transformed);
+    SubHyperplane<T, Q> apply(SubHyperplane<T, Q> sub, Hyperplane<S, P> original, Hyperplane<S, P> transformed);
 
 }

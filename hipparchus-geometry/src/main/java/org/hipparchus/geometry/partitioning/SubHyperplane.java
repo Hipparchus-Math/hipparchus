@@ -21,6 +21,7 @@
  */
 package org.hipparchus.geometry.partitioning;
 
+import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 
 /** This interface represents the remaining parts of an hyperplane after
@@ -40,10 +41,11 @@ import org.hipparchus.geometry.Space;
  * versions, which breaks compatibility for external implementations.
  * </p>
 
- * @param <S> Type of the embedding space.
+ * @param <S> Type of the space.
+ * @param <P> Type of the points in space.
 
  */
-public interface SubHyperplane<S extends Space> {
+public interface SubHyperplane<S extends Space, P extends Point<S>> {
 
     /** Copy the instance.
      * <p>The instance created is completely independent of the original
@@ -52,12 +54,12 @@ public interface SubHyperplane<S extends Space> {
      * objects).</p>
      * @return a new sub-hyperplane, copy of the instance
      */
-    SubHyperplane<S> copySelf();
+    SubHyperplane<S, P> copySelf();
 
     /** Get the underlying hyperplane.
      * @return underlying hyperplane
      */
-    Hyperplane<S> getHyperplane();
+    Hyperplane<S, P> getHyperplane();
 
     /** Check if the instance is empty.
      * @return true if the instance is empty
@@ -76,25 +78,26 @@ public interface SubHyperplane<S extends Space> {
      * on the plus side of the hyperplane and the part of the
      * instance on the minus side of the hyperplane
      */
-    SplitSubHyperplane<S> split(Hyperplane<S> hyperplane);
+    SplitSubHyperplane<S, P> split(Hyperplane<S, P> hyperplane);
 
     /** Compute the union of the instance and another sub-hyperplane.
      * @param other other sub-hyperplane to union (<em>must</em> be in the
      * same hyperplane as the instance)
      * @return a new sub-hyperplane, union of the instance and other
      */
-    SubHyperplane<S> reunite(SubHyperplane<S> other);
+    SubHyperplane<S, P> reunite(SubHyperplane<S, P> other);
 
     /** Class holding the results of the {@link #split split} method.
      * @param <U> Type of the embedding space.
+     * @param <R> Type of the points in the embedding space.
      */
-    class SplitSubHyperplane<U extends Space> {
+    class SplitSubHyperplane<U extends Space, R extends Point<U>> {
 
         /** Part of the sub-hyperplane on the plus side of the splitting hyperplane. */
-        private final SubHyperplane<U> plus;
+        private final SubHyperplane<U, R> plus;
 
         /** Part of the sub-hyperplane on the minus side of the splitting hyperplane. */
-        private final SubHyperplane<U> minus;
+        private final SubHyperplane<U, R> minus;
 
         /** Build a SplitSubHyperplane from its parts.
          * @param plus part of the sub-hyperplane on the plus side of the
@@ -102,8 +105,8 @@ public interface SubHyperplane<S extends Space> {
          * @param minus part of the sub-hyperplane on the minus side of the
          * splitting hyperplane
          */
-        public SplitSubHyperplane(final SubHyperplane<U> plus,
-                                  final SubHyperplane<U> minus) {
+        public SplitSubHyperplane(final SubHyperplane<U, R> plus,
+                                  final SubHyperplane<U, R> minus) {
             this.plus  = plus;
             this.minus = minus;
         }
@@ -111,14 +114,14 @@ public interface SubHyperplane<S extends Space> {
         /** Get the part of the sub-hyperplane on the plus side of the splitting hyperplane.
          * @return part of the sub-hyperplane on the plus side of the splitting hyperplane
          */
-        public SubHyperplane<U> getPlus() {
+        public SubHyperplane<U, R> getPlus() {
             return plus;
         }
 
         /** Get the part of the sub-hyperplane on the minus side of the splitting hyperplane.
          * @return part of the sub-hyperplane on the minus side of the splitting hyperplane
          */
-        public SubHyperplane<U> getMinus() {
+        public SubHyperplane<U, R> getMinus() {
             return minus;
         }
 
