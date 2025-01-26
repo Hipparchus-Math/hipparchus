@@ -22,14 +22,13 @@
 package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.partitioning.Hyperplane;
 
 /** This class represents a 1D oriented hyperplane on the circle.
  * <p>An hyperplane on the 1-sphere is an angle with an orientation.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class LimitAngle implements Hyperplane<Sphere1D> {
+public class LimitAngle implements Hyperplane<Sphere1D, S1Point> {
 
     /** Angle location. */
     private final S1Point location;
@@ -67,8 +66,8 @@ public class LimitAngle implements Hyperplane<Sphere1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double getOffset(final Point<Sphere1D> point) {
-        final double delta = ((S1Point) point).getAlpha() - location.getAlpha();
+    public double getOffset(final S1Point point) {
+        final double delta = point.getAlpha() - location.getAlpha();
         return direct ? delta : -delta;
     }
 
@@ -131,8 +130,8 @@ public class LimitAngle implements Hyperplane<Sphere1D> {
 
     /** {@inheritDoc} */
     @Override
-    public boolean sameOrientationAs(final Hyperplane<Sphere1D> other) {
-        return !(direct ^ ((LimitAngle) other).direct);
+    public boolean sameOrientationAs(final Hyperplane<Sphere1D, S1Point> other) {
+        return direct == ((LimitAngle) other).direct;
     }
 
     /** Get the hyperplane location on the circle.
@@ -144,7 +143,7 @@ public class LimitAngle implements Hyperplane<Sphere1D> {
 
     /** {@inheritDoc} */
     @Override
-    public Point<Sphere1D> project(Point<Sphere1D> point) {
+    public S1Point project(S1Point point) {
         return location;
     }
 

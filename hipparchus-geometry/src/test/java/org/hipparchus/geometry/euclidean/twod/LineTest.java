@@ -22,7 +22,6 @@
 package org.hipparchus.geometry.euclidean.twod;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.Transform;
@@ -79,12 +78,12 @@ class LineTest {
     void testPointAt() {
         Line l = new Line(new Vector2D(2, 1), new Vector2D(-2, -2), 1.0e-10);
         for (double a = -2.0; a < 2.0; a += 0.2) {
-            Point<Euclidean1D> pA = new Vector1D(a);
-            Point<Euclidean2D> point = l.toSpace(pA);
+            Vector1D pA = new Vector1D(a);
+            Vector2D point = l.toSpace(pA);
             assertEquals(a, (l.toSubSpace(point)).getX(), 1.0e-10);
             assertEquals(0.0, l.getOffset(point),   1.0e-10);
             for (double o = -2.0; o < 2.0; o += 0.2) {
-                point = l.getPointAt((Vector1D) pA, o);
+                point = l.getPointAt(pA, o);
                 assertEquals(a, (l.toSubSpace(point)).getX(), 1.0e-10);
                 assertEquals(o, l.getOffset(point),   1.0e-10);
             }
@@ -114,14 +113,14 @@ class LineTest {
     void testTransform() throws MathIllegalArgumentException {
 
         Line l1 = new Line(new Vector2D(1.0 ,1.0), new Vector2D(4.0 ,1.0), 1.0e-10);
-        Transform<Euclidean2D, Euclidean1D> t1 =
+        Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> t1 =
             Line.getTransform(0.0, 0.5, -1.0, 0.0, 1.0, 1.5);
         assertEquals(0.5 * FastMath.PI,
                             ((Line) t1.apply(l1)).getAngle(),
                             1.0e-10);
 
         Line l2 = new Line(new Vector2D(0.0, 0.0), new Vector2D(1.0, 1.0), 1.0e-10);
-        Transform<Euclidean2D, Euclidean1D> t2 =
+        Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> t2 =
             Line.getTransform(0.0, 0.5, -1.0, 0.0, 1.0, 1.5);
         assertEquals(FastMath.atan2(1.0, -2.0),
                             ((Line) t2.apply(l2)).getAngle(),

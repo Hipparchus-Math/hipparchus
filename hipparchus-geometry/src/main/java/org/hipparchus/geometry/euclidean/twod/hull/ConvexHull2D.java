@@ -158,11 +158,11 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
 
     /** {@inheritDoc} */
     @Override
-    public Region<Euclidean2D> createRegion() throws MathIllegalArgumentException {
+    public Region<Euclidean2D, Vector2D> createRegion() throws MathIllegalArgumentException {
         if (vertices.length < 3) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DATA);
         }
-        final RegionFactory<Euclidean2D> factory = new RegionFactory<>();
+        final RegionFactory<Euclidean2D, Vector2D> factory = new RegionFactory<>();
         final Segment[] segments = retrieveLineSegments();
         final Line[] lineArray = new Line[segments.length];
         for (int i = 0; i < segments.length; i++) {

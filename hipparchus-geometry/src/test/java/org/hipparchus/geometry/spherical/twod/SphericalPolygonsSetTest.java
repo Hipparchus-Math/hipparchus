@@ -34,11 +34,13 @@ import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
+import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -49,6 +51,7 @@ import java.util.function.IntPredicate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -58,7 +61,7 @@ class SphericalPolygonsSetTest {
     void testFullSphere() {
         SphericalPolygonsSet full = new SphericalPolygonsSet(1.0e-10);
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x852fd2a0ed8d2f6dl));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x852fd2a0ed8d2f6dL));
         for (int i = 0; i < 1000; ++i) {
             Vector3D v = new Vector3D(random.nextVector());
             assertEquals(Location.INSIDE, full.checkPoint(new S2Point(v)));
@@ -73,9 +76,9 @@ class SphericalPolygonsSetTest {
     @Test
     void testEmpty() {
         SphericalPolygonsSet empty =
-            (SphericalPolygonsSet) new RegionFactory<Sphere2D>().getComplement(new SphericalPolygonsSet(1.0e-10));
+            (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().getComplement(new SphericalPolygonsSet(1.0e-10));
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x76d9205d6167b6ddl));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x76d9205d6167b6ddL));
         for (int i = 0; i < 1000; ++i) {
             Vector3D v = new Vector3D(random.nextVector());
             assertEquals(Location.OUTSIDE, empty.checkPoint(new S2Point(v)));
@@ -93,7 +96,7 @@ class SphericalPolygonsSetTest {
         double sinTol = FastMath.sin(tol);
         SphericalPolygonsSet south = new SphericalPolygonsSet(Vector3D.MINUS_K, tol);
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x6b9d4a6ad90d7b0bl));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x6b9d4a6ad90d7b0bL));
         for (int i = 0; i < 1000; ++i) {
             Vector3D v = new Vector3D(random.nextVector());
             if (v.getZ() < -sinTol) {
@@ -111,7 +114,7 @@ class SphericalPolygonsSetTest {
         assertEquals(0.5 * FastMath.PI, southCap.getRadius(), 1.0e-10);
 
         EnclosingBall<Sphere2D, S2Point> northCap =
-                ((SphericalPolygonsSet) new RegionFactory<Sphere2D>().getComplement(south)).getEnclosingCap();
+                ((SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().getComplement(south)).getEnclosingCap();
         assertEquals(0.0, S2Point.PLUS_K.distance(northCap.getCenter()), 1.0e-10);
         assertEquals(0.5 * FastMath.PI, northCap.getRadius(), 1.0e-10);
 
@@ -121,14 +124,14 @@ class SphericalPolygonsSetTest {
     void testPositiveOctantByIntersection() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        RegionFactory<Sphere2D> factory = new RegionFactory<Sphere2D>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet plusX = new SphericalPolygonsSet(Vector3D.PLUS_I, tol);
         SphericalPolygonsSet plusY = new SphericalPolygonsSet(Vector3D.PLUS_J, tol);
         SphericalPolygonsSet plusZ = new SphericalPolygonsSet(Vector3D.PLUS_K, tol);
         SphericalPolygonsSet octant =
                 (SphericalPolygonsSet) factory.intersection(factory.intersection(plusX, plusY), plusZ);
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x9c9802fde3cbcf25l));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x9c9802fde3cbcf25L));
         for (int i = 0; i < 1000; ++i) {
             Vector3D v = new Vector3D(random.nextVector());
             if ((v.getX() > sinTol) && (v.getY() > sinTol) && (v.getZ() > sinTol)) {
@@ -153,7 +156,7 @@ class SphericalPolygonsSetTest {
         for (Vertex v = first; count == 0 || v != first; v = v.getOutgoing().getEnd()) {
             ++count;
             Edge e = v.getIncoming();
-            assertTrue(v == e.getStart().getOutgoing().getEnd());
+            assertSame(v, e.getStart().getOutgoing().getEnd());
             xPFound = xPFound || e.getCircle().getPole().distance(Vector3D.PLUS_I) < 1.0e-10;
             yPFound = yPFound || e.getCircle().getPole().distance(Vector3D.PLUS_J) < 1.0e-10;
             zPFound = zPFound || e.getCircle().getPole().distance(Vector3D.PLUS_K) < 1.0e-10;
@@ -170,9 +173,7 @@ class SphericalPolygonsSetTest {
         assertTrue(zVFound);
         assertEquals(3, count);
 
-        assertEquals(0.0,
-                            ((S2Point) octant.getBarycenter()).distance(new S2Point(new Vector3D(1, 1, 1))),
-                            1.0e-10);
+        assertEquals(0.0, octant.getBarycenter().distance(new S2Point(new Vector3D(1, 1, 1))), 1.0e-10);
         assertEquals(0.5 * FastMath.PI, octant.getSize(), 1.0e-10);
 
         EnclosingBall<Sphere2D, S2Point> cap = octant.getEnclosingCap();
@@ -192,7 +193,7 @@ class SphericalPolygonsSetTest {
         double sinTol = FastMath.sin(tol);
         SphericalPolygonsSet octant = new SphericalPolygonsSet(tol, S2Point.PLUS_I, S2Point.PLUS_J, S2Point.PLUS_K);
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0xb8fc5acc91044308l));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0xb8fc5acc91044308L));
         for (int i = 0; i < 1000; ++i) {
             Vector3D v = new Vector3D(random.nextVector());
             if ((v.getX() > sinTol) && (v.getY() > sinTol) && (v.getZ() > sinTol)) {
@@ -209,7 +210,7 @@ class SphericalPolygonsSetTest {
     void testNonConvex() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        RegionFactory<Sphere2D> factory = new RegionFactory<Sphere2D>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet plusX = new SphericalPolygonsSet(Vector3D.PLUS_I, tol);
         SphericalPolygonsSet plusY = new SphericalPolygonsSet(Vector3D.PLUS_J, tol);
         SphericalPolygonsSet plusZ = new SphericalPolygonsSet(Vector3D.PLUS_K, tol);
@@ -217,7 +218,7 @@ class SphericalPolygonsSetTest {
                 (SphericalPolygonsSet) factory.difference(plusZ, factory.intersection(plusX, plusY));
 
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x9c9802fde3cbcf25l));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0x9c9802fde3cbcf25L));
         for (int i = 0; i < 1000; ++i) {
             Vector3D v = new Vector3D(random.nextVector());
             if (((v.getX() < -sinTol) || (v.getY() < -sinTol)) && (v.getZ() > sinTol)) {
@@ -245,7 +246,7 @@ class SphericalPolygonsSetTest {
         for (Vertex v = first; count == 0 || v != first; v = v.getOutgoing().getEnd()) {
             ++count;
             Edge e = v.getIncoming();
-            assertTrue(v == e.getStart().getOutgoing().getEnd());
+            assertSame(v, e.getStart().getOutgoing().getEnd());
             if (e.getCircle().getPole().distance(Vector3D.MINUS_I) < 1.0e-10) {
                 xPFound = true;
                 sumPoleX += e.getLength();
@@ -278,7 +279,7 @@ class SphericalPolygonsSetTest {
     @Test
     void testModeratlyComplexShape() {
         double tol = 0.01;
-        List<SubHyperplane<Sphere2D>> boundary = new ArrayList<SubHyperplane<Sphere2D>>();
+        List<SubHyperplane<Sphere2D, S2Point>> boundary = new ArrayList<>();
         boundary.add(create(Vector3D.MINUS_J, Vector3D.PLUS_I,  Vector3D.PLUS_K,  tol, 0.0, 0.5 * FastMath.PI));
         boundary.add(create(Vector3D.MINUS_I, Vector3D.PLUS_K,  Vector3D.PLUS_J,  tol, 0.0, 0.5 * FastMath.PI));
         boundary.add(create(Vector3D.PLUS_K,  Vector3D.PLUS_J,  Vector3D.MINUS_I, tol, 0.0, 0.5 * FastMath.PI));
@@ -312,7 +313,7 @@ class SphericalPolygonsSetTest {
         for (Vertex v = first; count == 0 || v != first; v = v.getOutgoing().getEnd()) {
             ++count;
             Edge e = v.getIncoming();
-            assertTrue(v == e.getStart().getOutgoing().getEnd());
+            assertSame(v, e.getStart().getOutgoing().getEnd());
             pXFound = pXFound || v.getLocation().getVector().distance(Vector3D.PLUS_I)  < 1.0e-10;
             mXFound = mXFound || v.getLocation().getVector().distance(Vector3D.MINUS_I) < 1.0e-10;
             pYFound = pYFound || v.getLocation().getVector().distance(Vector3D.PLUS_J)  < 1.0e-10;
@@ -335,7 +336,7 @@ class SphericalPolygonsSetTest {
     void testSeveralParts() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        List<SubHyperplane<Sphere2D>> boundary = new ArrayList<SubHyperplane<Sphere2D>>();
+        List<SubHyperplane<Sphere2D, S2Point>> boundary = new ArrayList<>();
 
         // first part: +X, +Y, +Z octant
         boundary.add(create(Vector3D.PLUS_J,  Vector3D.PLUS_K,  Vector3D.PLUS_I,  tol, 0.0, 0.5 * FastMath.PI));
@@ -350,7 +351,7 @@ class SphericalPolygonsSetTest {
         SphericalPolygonsSet polygon = new SphericalPolygonsSet(boundary, tol);
 
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0xcc5ce49949e0d3ecl));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0xcc5ce49949e0d3ecL));
         for (int i = 0; i < 1000; ++i) {
             Vector3D v = new Vector3D(random.nextVector());
             if ((v.getX() < -sinTol) && (v.getY() < -sinTol) && (v.getZ() < -sinTol)) {
@@ -385,7 +386,7 @@ class SphericalPolygonsSetTest {
                                                               new S2Point(FastMath.PI / 3, FastMath.PI / 3),
                                                               new S2Point(FastMath.PI / 4, FastMath.PI / 6));
         SphericalPolygonsSet hexaWithHole =
-                (SphericalPolygonsSet) new RegionFactory<Sphere2D>().difference(hexa, hole);
+                (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().difference(hexa, hole);
 
         for (double phi = center.getPhi() - alpha + 0.1; phi < center.getPhi() + alpha - 0.1; phi += 0.07) {
             Location l = hexaWithHole.checkPoint(new S2Point(FastMath.PI / 4, phi));
@@ -417,7 +418,7 @@ class SphericalPolygonsSetTest {
         SphericalPolygonsSet triOut    = new SphericalPolygonsSet(center, Vector3D.PLUS_K, 0.25, 3, tol);
         SphericalPolygonsSet triIn     = new SphericalPolygonsSet(center, Vector3D.PLUS_K, 0.15, 3, tol);
 
-        RegionFactory<Sphere2D> factory = new RegionFactory<Sphere2D>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet hexa   = (SphericalPolygonsSet) factory.difference(hexaOut,   hexaIn);
         SphericalPolygonsSet penta  = (SphericalPolygonsSet) factory.difference(pentaOut,  pentaIn);
         SphericalPolygonsSet quadri = (SphericalPolygonsSet) factory.difference(quadriOut, quadriIn);
@@ -478,10 +479,10 @@ class SphericalPolygonsSetTest {
           { 42.15249,  9.56001 }, { 43.00998,  9.39000 }, { 42.62812,  8.74600 }, { 42.25651,  8.54421 },
           { 41.58361,  8.77572 }, { 41.38000,  9.22975 }
         });
-        RegionFactory<Sphere2D> factory = new RegionFactory<Sphere2D>();
+        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
         SphericalPolygonsSet zone = (SphericalPolygonsSet) factory.union(continental, corsica);
         EnclosingBall<Sphere2D, S2Point> enclosing = zone.getEnclosingCap();
-        Vector3D enclosingCenter = ((S2Point) enclosing.getCenter()).getVector();
+        Vector3D enclosingCenter = enclosing.getCenter().getVector();
 
         double step = FastMath.toRadians(0.1);
         for (Vertex loopStart : zone.getBoundaryLoops()) {
@@ -504,7 +505,7 @@ class SphericalPolygonsSetTest {
 
         EnclosingBall<Sphere2D, S2Point> continentalInscribed =
                 ((SphericalPolygonsSet) factory.getComplement(continental)).getEnclosingCap();
-        Vector3D continentalCenter = ((S2Point) continentalInscribed.getCenter()).getVector();
+        Vector3D continentalCenter = continentalInscribed.getCenter().getVector();
         assertEquals(2.2, FastMath.toDegrees(FastMath.PI - continentalInscribed.getRadius()), 0.1);
         for (Vertex loopStart : continental.getBoundaryLoops()) {
             int count = 0;
@@ -519,7 +520,7 @@ class SphericalPolygonsSetTest {
 
         EnclosingBall<Sphere2D, S2Point> corsicaInscribed =
                 ((SphericalPolygonsSet) factory.getComplement(corsica)).getEnclosingCap();
-        Vector3D corsicaCenter = ((S2Point) corsicaInscribed.getCenter()).getVector();
+        Vector3D corsicaCenter = corsicaInscribed.getCenter().getVector();
         assertEquals(0.34, FastMath.toDegrees(FastMath.PI - corsicaInscribed.getRadius()), 0.01);
         for (Vertex loopStart : corsica.getBoundaryLoops()) {
             int count = 0;
@@ -560,7 +561,7 @@ class SphericalPolygonsSetTest {
 
     @Test
     void testGitHubIssue41() {
-        RegionFactory<Sphere2D> regionFactory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point> regionFactory = new RegionFactory<>();
         S2Point[] s2pA = new S2Point[]{
                 new S2Point(new Vector3D(0.2122954606, -0.629606302,  0.7473463333)),
                 new S2Point(new Vector3D(0.2120220248, -0.6296445493, 0.747391733)),
@@ -594,15 +595,15 @@ class SphericalPolygonsSetTest {
     @Test
     void testGitHubIssue42A() {
         // if building it was allowed (i.e. if the check for tolerance was removed)
-        // the BSP tree would wrong, it would include a large extra chunk that contains
+        // the BSP tree would be wrong, it would include a large extra chunk that contains
         // a point that should really be outside
         try {
             doTestGitHubIssue42(1.0e-100);
         } catch (MathIllegalArgumentException miae) {
             assertEquals(LocalizedGeometryFormats.TOO_SMALL_TOLERANCE, miae.getSpecifier());
-            assertEquals(1.0e-100, ((Double) miae.getParts()[0]).doubleValue(), 1.0e-110);
+            assertEquals(1.0e-100, (Double) miae.getParts()[0], 1.0e-110);
             assertEquals("Sphere2D.SMALLEST_TOLERANCE", miae.getParts()[1]);
-            assertEquals(Sphere2D.SMALLEST_TOLERANCE, ((Double) miae.getParts()[2]).doubleValue(), 1.0e-20);
+            assertEquals(Sphere2D.SMALLEST_TOLERANCE, (Double) miae.getParts()[2], 1.0e-20);
         }
     }
 
@@ -610,9 +611,8 @@ class SphericalPolygonsSetTest {
     void testGitHubIssue42B() {
         // the BSP tree is right, but size cannot be computed
         try {
-            /* success of this call is dependent on numerical noise.
-             * If it fails it should fail predictably.
-             */
+            // success of this call is dependent on numerical noise.
+            // If it fails it should fail predictably.
             doTestGitHubIssue42(9.0e-16);
         } catch (MathIllegalStateException e) {
             assertEquals(
@@ -697,7 +697,7 @@ class SphericalPolygonsSetTest {
             // check original points are on the boundary
             assertEquals(Location.BOUNDARY, zone.checkPoint(vertex), "" + vertex);
             double offset = FastMath.abs(zone.projectToBoundary(vertex).getOffset());
-            assertEquals(0, offset, cornerTol, "" + vertex + " offset: " + offset);
+            assertEquals(0, offset, cornerTol, vertex + " offset: " + offset);
             // check original points are within the cap
             assertTrue(
                     cap.contains(vertex, tol),
@@ -728,7 +728,7 @@ class SphericalPolygonsSetTest {
 
         SphericalPolygonsSet octant = new SphericalPolygonsSet(tol, points.toArray(new S2Point[0]));
         UnitSphereRandomVectorGenerator random =
-                new UnitSphereRandomVectorGenerator(3, new Well1024a(0xb8fc5acc91044308l));
+                new UnitSphereRandomVectorGenerator(3, new Well1024a(0xb8fc5acc91044308L));
         /* Where exactly the boundaries fall depends on which points are kept from
          * decimation, which can vary by up to tol. So a point up to 2*tol away from a
          * input point may be on the boundary. All input points are guaranteed to be on
@@ -851,7 +851,7 @@ class SphericalPolygonsSetTest {
             new S2Point(0.016, 1.5533430342749532)
         };
 
-        final RegionFactory<Sphere2D> regionFactory = new RegionFactory<Sphere2D>();
+        final RegionFactory<Sphere2D, S2Point> regionFactory = new RegionFactory<>();
 
         // thickness is small enough for proper computation of very small intersection
         double thickness1 = 4.96740426e-11;
@@ -865,14 +865,126 @@ class SphericalPolygonsSetTest {
         final SphericalPolygonsSet sps3 = new SphericalPolygonsSet(thickness2, vertices1);
         final SphericalPolygonsSet sps4 = new SphericalPolygonsSet(thickness2, vertices2);
         assertEquals(1.4886e-12, regionFactory.intersection(sps3, sps4).getSize(), 1.0e-15);
-        assertEquals(2.4077e-06, regionFactory.intersection(sps4, sps3).getSize(), 1.0e-10);
+        assertEquals(0.0,        regionFactory.intersection(sps4, sps3).getSize(), 1.0e-15);
+
+    }
+
+    @Test
+    public void testIssueOrekit1388A() {
+        doTestIssueOrekit1388(true);
+    }
+
+    @Test
+    public void testIssueOrekit1388B() {
+        doTestIssueOrekit1388(false);
+    }
+
+    private void doTestIssueOrekit1388(final boolean order) {
+        final double[][] coordinates1 = new double[][] {
+            { 18.52684751402596,  -76.97880893719434 },
+            { 18.451108862175584, -76.99484778988442 },
+            { 18.375369256045143, -77.01087679277504 },
+            { 18.299628701801268, -77.02689599675749 },
+            { 18.223887203723567, -77.04290545732495 },
+            { 18.148144771769385, -77.05890521550272 },
+            { 18.072401410187016, -77.0748953260324  },
+            { 17.99665712514784,  -77.09087584010511 },
+            { 17.92091192468999,  -77.10684680260262 },
+            { 17.84516581113023,  -77.12280827309398 },
+            { 17.769418792522664, -77.13876029654094 },
+            { 17.747659863099422, -77.14334087084347 },
+            { 17.67571798336192,  -77.15846791369165 },
+//            adding 1.0e-4 to the second coordinate of the following point
+//            generates an open outline boundary error
+            { 17.624293265977183, -77.16938381433733 },
+            { 17.5485398681768,   -77.18520934447962 },
+            { 17.526779103104783, -77.1897823275402  },
+            { 17.49650619905315,  -77.0342031192472  },
+            { 17.588661518962343, -77.01473903648854 },
+            { 17.728574326965138, -76.98517769352242 },
+            { 17.80416324015021,  -76.96919708557023 },
+            { 17.87969526622326,  -76.95321858415689 },
+            { 17.955280973332677, -76.93721874766547 },
+            { 18.030855567607098, -76.92121123297645 },
+            { 18.106414929680927, -76.90519686376611 },
+            { 18.182031502555215, -76.88916022728444 },
+            { 18.257597934434987, -76.87312403715188 },
+            { 18.3331742522667,   -76.85707550881591 },
+            { 18.408750874895002, -76.84101662269072 },
+            { 18.57249082100609,  -76.80620195239239 },
+            { 18.602585205425896, -76.96276018365842 }
+        };
+
+        final double[][] coordinates2 = new double[][] {
+            { 18.338614038907608, -78.37885677406668 },
+            { 18.195574802144037, -78.24425107003432 },
+            { 18.20775293886321,  -78.0711865934217  },
+            { 18.07679345301507,  -77.95901517339438 },
+            { 18.006705181057598, -77.85325354879791 },
+            { 17.857293838883137, -77.73787723105598 },
+            { 17.854243316622103, -77.57442744758828 },
+            { 17.875595873376014, -77.38213358468467 },
+            { 17.72607423578937,  -77.23470828979222 },
+            { 17.71386286451302,  -77.12253686976543 },
+            { 17.790170276013725, -77.14817605148616 },
+            { 17.869495404611797, -77.14497115377101 },
+            { 17.854243309397717, -76.9302429967729  },
+            { 17.954882874700132, -76.84371075846688 },
+            { 17.94268718313505,  -76.6898756681441  },
+            { 17.869495397388064, -76.54886016868198 },
+            { 17.863394719203555, -76.35015651034861 },
+            { 17.93049065091843,  -76.23478019260665 },
+            { 18.155989976776553, -76.32451732862788 },
+            { 18.22601854027039,  -76.63218750927341 },
+            { 18.33861403170316,  -76.85653034932697 },
+            { 18.405527980074993, -76.97831646249921 },
+            { 18.4541763474828,   -77.28598664314421 },
+            { 18.496732365966466, -77.705828243816   },
+            { 18.451136227912485, -78.00708862903122 },
+            { 18.405527980074993, -78.25707065080552 }
+        };
+
+        final double[][] expectedIn = new double[][] {
+                { 18.408, -77.003 },
+                { 18.338, -76.857 },
+                { 17.869, -77.117 },
+                { 17.857, -76.959 },
+                { 17.761, -77.139 },
+                { 17.715, -77.125 },
+                { 17.935, -77.055 }
+        };
+
+        final double[][] expectedOut = new double[][] {
+                { 17.794, -77.145 },
+                { 17.736, -76.981 },
+                { 17.715, -77.138 },
+                { 18.153, -77.059 },
+                { 18.232, -76.877 },
+                { 18.373, -76.917 },
+                { 17.871, -77.261 } // this is the point that was wrongly inside the intersection
+        };
+
+        SphericalPolygonsSet shape1 = buildSimpleZone(coordinates1);
+        SphericalPolygonsSet shape2 = buildSimpleZone(coordinates2);
+        Region<Sphere2D, S2Point> intersection =
+                order ?
+                new RegionFactory<Sphere2D, S2Point>().intersection(shape1.copySelf(), shape2.copySelf()) :
+                new RegionFactory<Sphere2D, S2Point>().intersection(shape2.copySelf(), shape1.copySelf());
+
+        for (final double[] doubles : expectedIn) {
+            Assertions.assertEquals(Location.INSIDE, intersection.checkPoint(s2Point(doubles[0], doubles[1])));
+        }
+
+        for (final double[] doubles : expectedOut) {
+            Assertions.assertEquals(Location.OUTSIDE, intersection.checkPoint(s2Point(doubles[0], doubles[1])));
+        }
 
     }
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,
                              double tolerance, double ... limits) {
-        RegionFactory<Sphere1D> factory = new RegionFactory<Sphere1D>();
-        Circle circle = new Circle(pole, tolerance);
+        RegionFactory<Sphere1D, S1Point> factory = new RegionFactory<>();
+        Circle                           circle  = new Circle(pole, tolerance);
         Circle phased =
                 (Circle) Circle.getTransform(new Rotation(circle.getXAxis(), circle.getYAxis(), x, y)).apply(circle);
         ArcsSet set = (ArcsSet) factory.getComplement(new ArcsSet(tolerance));

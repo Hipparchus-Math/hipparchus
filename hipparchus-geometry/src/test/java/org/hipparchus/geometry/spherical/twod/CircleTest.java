@@ -142,7 +142,7 @@ class CircleTest {
 
     @Test
     void testInsideArc() {
-        RandomGenerator random = new Well1024a(0xbfd34e92231bbcfel);
+        RandomGenerator random = new Well1024a(0xbfd34e92231bbcfeL);
         UnitSphereRandomVectorGenerator sphRandom = new UnitSphereRandomVectorGenerator(3, random);
         for (int i = 0; i < 100; ++i) {
             Circle c1 = new Circle(new Vector3D(sphRandom.nextVector()), 1.0e-10);
@@ -165,17 +165,17 @@ class CircleTest {
 
     @Test
     void testTransform() {
-        RandomGenerator random = new Well1024a(0x16992fc4294bf2f1l);
+        RandomGenerator random = new Well1024a(0x16992fc4294bf2f1L);
         UnitSphereRandomVectorGenerator sphRandom = new UnitSphereRandomVectorGenerator(3, random);
         for (int i = 0; i < 100; ++i) {
 
             Rotation r = new Rotation(new Vector3D(sphRandom.nextVector()),
                                       FastMath.PI * random.nextDouble(),
                                       RotationConvention.VECTOR_OPERATOR);
-            Transform<Sphere2D, Sphere1D> t = Circle.getTransform(r);
+            Transform<Sphere2D, S2Point, Sphere1D, S1Point> t = Circle.getTransform(r);
 
             S2Point  p = new S2Point(new Vector3D(sphRandom.nextVector()));
-            S2Point tp = (S2Point) t.apply(p);
+            S2Point tp = t.apply(p);
             assertEquals(0.0, r.applyTo(p.getVector()).distance(tp.getVector()), 1.0e-10);
 
             Circle  c = new Circle(new Vector3D(sphRandom.nextVector()), 1.0e-10);
@@ -183,7 +183,7 @@ class CircleTest {
             assertEquals(0.0, r.applyTo(c.getPole()).distance(tc.getPole()),   1.0e-10);
             assertEquals(0.0, r.applyTo(c.getXAxis()).distance(tc.getXAxis()), 1.0e-10);
             assertEquals(0.0, r.applyTo(c.getYAxis()).distance(tc.getYAxis()), 1.0e-10);
-            assertEquals(c.getTolerance(), ((Circle) t.apply(c)).getTolerance(), 1.0e-10);
+            assertEquals(c.getTolerance(), t.apply(c).getTolerance(), 1.0e-10);
 
             SubLimitAngle  sub = new LimitAngle(new S1Point(MathUtils.TWO_PI * random.nextDouble()),
                                                 random.nextBoolean(), 1.0e-10).wholeHyperplane();
@@ -197,9 +197,7 @@ class CircleTest {
 
     @Test
     void testTooSmallTolerance() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Circle(Vector3D.PLUS_K, 0.9 * Sphere2D.SMALLEST_TOLERANCE);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Circle(Vector3D.PLUS_K, 0.9 * Sphere2D.SMALLEST_TOLERANCE));
     }
 
     /** Check {@link Circle#getArc(S2Point, S2Point)}. */

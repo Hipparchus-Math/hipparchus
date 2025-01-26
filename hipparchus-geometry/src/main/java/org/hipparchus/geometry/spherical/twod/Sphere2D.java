@@ -71,7 +71,7 @@ public class Sphere2D implements Serializable, Space {
      */
     public static void checkTolerance(final double tolerance)
         throws MathIllegalArgumentException {
-        if (tolerance < Sphere1D.SMALLEST_TOLERANCE) {
+        if (tolerance < SMALLEST_TOLERANCE) {
             throw new MathIllegalArgumentException(LocalizedGeometryFormats.TOO_SMALL_TOLERANCE,
                                                    tolerance, "Sphere2D.SMALLEST_TOLERANCE", SMALLEST_TOLERANCE);
         }

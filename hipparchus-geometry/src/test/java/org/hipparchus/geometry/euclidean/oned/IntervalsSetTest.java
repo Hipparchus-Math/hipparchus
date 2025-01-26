@@ -45,7 +45,7 @@ class IntervalsSetTest {
                                                           new OrientedPoint(new Vector1D(5.7), true, 1.0e-10).wholeHyperplane()),
                                             1.0e-10);
         assertEquals(3.4, set.getSize(), 1.0e-10);
-        assertEquals(4.0, ((Vector1D) set.getBarycenter()).getX(), 1.0e-10);
+        assertEquals(4.0, set.getBarycenter().getX(), 1.0e-10);
         assertEquals(Region.Location.BOUNDARY, set.checkPoint(new Vector1D(2.3)));
         assertEquals(Region.Location.BOUNDARY, set.checkPoint(new Vector1D(5.7)));
         assertEquals(Region.Location.OUTSIDE,  set.checkPoint(new Vector1D(1.2)));
@@ -85,7 +85,7 @@ class IntervalsSetTest {
         assertEquals(9.0, set.getInf(), 1.0e-10);
         assertTrue(Double.isInfinite(set.getSup()));
 
-        set = (IntervalsSet) new RegionFactory<Euclidean1D>().getComplement(set);
+        set = (IntervalsSet) new RegionFactory<Euclidean1D, Vector1D>().getComplement(set);
         assertEquals(9.0, set.getSup(), 1.0e-10);
         assertTrue(Double.isInfinite(set.getInf()));
 
@@ -93,14 +93,14 @@ class IntervalsSetTest {
 
     @Test
     void testMultiple() {
-        RegionFactory<Euclidean1D> factory = new RegionFactory<Euclidean1D>();
+        RegionFactory<Euclidean1D, Vector1D> factory = new RegionFactory<>();
         IntervalsSet set = (IntervalsSet)
         factory.intersection(factory.union(factory.difference(new IntervalsSet(1.0, 6.0, 1.0e-10),
                                                               new IntervalsSet(3.0, 5.0, 1.0e-10)),
                                                               new IntervalsSet(9.0, Double.POSITIVE_INFINITY, 1.0e-10)),
                                                               new IntervalsSet(Double.NEGATIVE_INFINITY, 11.0, 1.0e-10));
         assertEquals(5.0, set.getSize(), 1.0e-10);
-        assertEquals(5.9, ((Vector1D) set.getBarycenter()).getX(), 1.0e-10);
+        assertEquals(5.9, set.getBarycenter().getX(), 1.0e-10);
         assertEquals(Region.Location.OUTSIDE,  set.checkPoint(new Vector1D(0.0)));
         assertEquals(Region.Location.OUTSIDE,  set.checkPoint(new Vector1D(4.0)));
         assertEquals(Region.Location.OUTSIDE,  set.checkPoint(new Vector1D(8.0)));
@@ -128,7 +128,7 @@ class IntervalsSetTest {
     void testSinglePoint() {
         IntervalsSet set = new IntervalsSet(1.0, 1.0, 1.0e-10);
         assertEquals(0.0, set.getSize(), Precision.SAFE_MIN);
-        assertEquals(1.0, ((Vector1D) set.getBarycenter()).getX(), Precision.EPSILON);
+        assertEquals(1.0, set.getBarycenter().getX(), Precision.EPSILON);
         try {
             set.iterator().remove();
             fail("an exception should have been thrown");
@@ -201,7 +201,7 @@ class IntervalsSetTest {
         assertEquals(a2, setB.asList().get(1).getInf(), 1.0e-15);
         assertEquals(a3, setB.asList().get(1).getSup(), 1.0e-15);
 
-        final IntervalsSet intersection = (IntervalsSet) new RegionFactory<Euclidean1D>().intersection(setA, setB);
+        final IntervalsSet intersection = (IntervalsSet) new RegionFactory<Euclidean1D, Vector1D>().intersection(setA, setB);
         assertEquals((a1 - a0) + (a3 - a2), intersection.getSize(), 1.0e-10);
         assertEquals(2, intersection.asList().size());
         assertEquals(a0, intersection.asList().get(0).getInf(), 1.0e-15);

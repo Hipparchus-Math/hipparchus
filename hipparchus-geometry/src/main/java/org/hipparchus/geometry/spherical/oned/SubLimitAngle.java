@@ -28,14 +28,14 @@ import org.hipparchus.geometry.partitioning.Region;
 /** This class represents sub-hyperplane for {@link LimitAngle}.
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class SubLimitAngle extends AbstractSubHyperplane<Sphere1D, Sphere1D> {
+public class SubLimitAngle extends AbstractSubHyperplane<Sphere1D, S1Point, Sphere1D, S1Point> {
 
     /** Simple constructor.
      * @param hyperplane underlying hyperplane
      * @param remainingRegion remaining region of the hyperplane
      */
-    public SubLimitAngle(final Hyperplane<Sphere1D> hyperplane,
-                         final Region<Sphere1D> remainingRegion) {
+    public SubLimitAngle(final Hyperplane<Sphere1D, S1Point> hyperplane,
+                         final Region<Sphere1D, S1Point> remainingRegion) {
         super(hyperplane, remainingRegion);
     }
 
@@ -53,21 +53,22 @@ public class SubLimitAngle extends AbstractSubHyperplane<Sphere1D, Sphere1D> {
 
     /** {@inheritDoc} */
     @Override
-    protected AbstractSubHyperplane<Sphere1D, Sphere1D> buildNew(final Hyperplane<Sphere1D> hyperplane,
-                                                                 final Region<Sphere1D> remainingRegion) {
+    protected AbstractSubHyperplane<Sphere1D, S1Point, Sphere1D, S1Point>
+        buildNew(final Hyperplane<Sphere1D, S1Point> hyperplane,
+                 final Region<Sphere1D, S1Point> remainingRegion) {
         return new SubLimitAngle(hyperplane, remainingRegion);
     }
 
     /** {@inheritDoc} */
     @Override
-    public SplitSubHyperplane<Sphere1D> split(final Hyperplane<Sphere1D> hyperplane) {
+    public SplitSubHyperplane<Sphere1D, S1Point> split(final Hyperplane<Sphere1D, S1Point> hyperplane) {
         final double global = hyperplane.getOffset(((LimitAngle) getHyperplane()).getLocation());
         if (global < -hyperplane.getTolerance())  {
-            return new SplitSubHyperplane<Sphere1D>(null, this);
+            return new SplitSubHyperplane<>(null, this);
         } else if (global > hyperplane.getTolerance()) {
-            return new SplitSubHyperplane<Sphere1D>(this, null);
+            return new SplitSubHyperplane<>(this, null);
         } else {
-            return new SplitSubHyperplane<Sphere1D>(null, null);
+            return new SplitSubHyperplane<>(null, null);
         }
     }
 

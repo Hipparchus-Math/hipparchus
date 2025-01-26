@@ -33,7 +33,7 @@ import org.hipparchus.util.MathUtils;
 
 /** Visitor computing geometrical properties.
  */
-class PropertiesComputer implements BSPTreeVisitor<Sphere2D> {
+class PropertiesComputer implements BSPTreeVisitor<Sphere2D, S2Point> {
 
     /** Tolerance below which points are consider to be identical. */
     private final double tolerance;
@@ -59,19 +59,19 @@ class PropertiesComputer implements BSPTreeVisitor<Sphere2D> {
 
     /** {@inheritDoc} */
     @Override
-    public Order visitOrder(final BSPTree<Sphere2D> node) {
+    public Order visitOrder(final BSPTree<Sphere2D, S2Point> node) {
         return Order.MINUS_SUB_PLUS;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void visitInternalNode(final BSPTree<Sphere2D> node) {
+    public void visitInternalNode(final BSPTree<Sphere2D, S2Point> node) {
         // nothing to do here
     }
 
     /** {@inheritDoc} */
     @Override
-    public void visitLeafNode(final BSPTree<Sphere2D> node) {
+    public void visitLeafNode(final BSPTree<Sphere2D, S2Point> node) {
         if ((Boolean) node.getAttribute()) {
 
             // transform this inside leaf cell into a simple convex polygon

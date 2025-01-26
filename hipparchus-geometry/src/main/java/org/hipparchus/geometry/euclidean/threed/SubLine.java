@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.Point;
-import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.Interval;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
@@ -91,8 +89,8 @@ public class SubLine {
         final List<Segment> segments = new ArrayList<>(list.size());
 
         for (final Interval interval : list) {
-            final Vector3D start = line.toSpace((Point<Euclidean1D>) new Vector1D(interval.getInf()));
-            final Vector3D end   = line.toSpace((Point<Euclidean1D>) new Vector1D(interval.getSup()));
+            final Vector3D start = line.toSpace(new Vector1D(interval.getInf()));
+            final Vector3D end   = line.toSpace(new Vector1D(interval.getSup()));
             segments.add(new Segment(start, end, line));
         }
 
@@ -123,10 +121,10 @@ public class SubLine {
         }
 
         // check location of point with respect to first sub-line
-        Location loc1 = remainingRegion.checkPoint((Point<Euclidean1D>) line.toSubSpace((Point<Euclidean3D>) v1D));
+        Location loc1 = remainingRegion.checkPoint(line.toSubSpace(v1D));
 
         // check location of point with respect to second sub-line
-        Location loc2 = subLine.remainingRegion.checkPoint((Point<Euclidean1D>) subLine.line.toSubSpace((Point<Euclidean3D>) v1D));
+        Location loc2 = subLine.remainingRegion.checkPoint(subLine.line.toSubSpace(v1D));
 
         if (includeEndPoints) {
             return ((loc1 != Location.OUTSIDE) && (loc2 != Location.OUTSIDE)) ? v1D : null;
@@ -146,9 +144,7 @@ public class SubLine {
     private static IntervalsSet buildIntervalSet(final Vector3D start, final Vector3D end, final double tolerance)
         throws MathIllegalArgumentException {
         final Line line = new Line(start, end, tolerance);
-        return new IntervalsSet(line.toSubSpace((Point<Euclidean3D>) start).getX(),
-                                line.toSubSpace((Point<Euclidean3D>) end).getX(),
-                                tolerance);
+        return new IntervalsSet(line.toSubSpace(start).getX(), line.toSubSpace(end).getX(), tolerance);
     }
 
 }

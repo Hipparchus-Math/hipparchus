@@ -50,6 +50,12 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/368">
+        Added point type to geometry classes parameters
+      </action>
+      <action dev="luc" type="update" issue="issues/314">
+        Improved robustness of BSP tree operations
+      </action>
       <action dev="serrof" type="update" issue="issues/361">
         Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK.
       </action>

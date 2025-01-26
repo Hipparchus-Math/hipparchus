@@ -36,7 +36,7 @@
       space with (d-1)-dimensional space
     end note
 
-    interface "Vector<S extends Space>" as Vector_S_ {
+    interface "Vector<S extends Space, P extends Point<S>>" as Vector_S_ {
       +Space getSpace()
       +Vector getZero()
       +double getNorm()
@@ -54,9 +54,9 @@
     Space <-- Vector_S_
 
     package partitioning #DDEBD8 {
-      interface "Region<S extends Space>" as Region_S_
-      interface "Hyperplane<S extends Space>" as Hyperplane_S_
-      interface "SubHyperplane<S extends Space>" as SubHyperplane_S_
+      interface "Region<S extends Space, P extends Point<S>>" as Region_S_
+      interface "Hyperplane<S extends Space, P extends Point<S>>" as Hyperplane_S_
+      interface "SubHyperplane<S extends Space, P extends Point<S>>" as SubHyperplane_S_
     }
 
     package euclidean #DDEBD8 {

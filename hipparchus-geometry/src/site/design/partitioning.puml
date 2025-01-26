@@ -28,7 +28,7 @@
 
     package partitioning #DDEBD8 {
 
-      abstract "AbstractSubHyperplane<S extends Space, T extends Space>" as AbstractSubHyperplane_S_T_
+      abstract "AbstractSubHyperplane<S extends Space, P extends Point<S>, T extends Space, Q extends Point<T>>" as AbstractSubHyperplane_S_T_
       note left
         an abstract sub-hyperplane contains
          - an hyperplane defined in space S
@@ -36,14 +36,14 @@
         T being a sub-space of S
       end note
 
-      interface "Hyperplane<S extends Space>" as Hyperplane_S_ {
+      interface "Hyperplane<S extends Space, P extends Point<S>>" as Hyperplane_S_ {
         +double getOffset(Vector point)
         +boolean sameOrientationAs(Hyperplane other)
         +SubHyperplane wholeHyperplane()
         +Region wholeSpace()
       }
 
-      interface "SubHyperplane<S extends Space>" as SubHyperplane_S_ {
+      interface "SubHyperplane<S extends Space, P extends Point<S>>" as SubHyperplane_S_ {
         +Hyperplane getHyperplane()
         +boolean isEmpty()
         +double getSize()
@@ -52,7 +52,7 @@
         +SubHyperplane reunite(SubHyperplane other)
       }
 
-      class "BSPTree<S extends Space>" as BSPTree_S_ {
+      class "BSPTree<S extends Space, P extends Point<S>>" as BSPTree_S_ {
         +boolean insertCut(Hyperplane hyperplane)
         +void setAttribute(Object attribute)
         +Object getAttribute()
@@ -61,19 +61,19 @@
         +BSPTree split(SubHyperplane sub)
       }
 
-      interface "BSPTreeVisitor<S extends Space>" as BSPTreeVisitor_S_ {
+      interface "BSPTreeVisitor<S extends Space, P extends Point<S>>" as BSPTreeVisitor_S_ {
         +Order visitOrder(BSPTree node)
         +void visitInternalNode(BSPTree node)
         +void visitLeafNode(BSPTree node)
       }
 
-      interface "Region<S extends Space>" as Region_S_ {
+      interface "Region<S extends Space, P extends Point<S>>" as Region_S_ {
         +boolean isEmpty()
         +boolean contains(Region region)
-        +Location checkPoint(Vector point)
+        +Location checkPoint(P point)
         +double getBoundarySize()
         +double getSize()
-        +Vector getBarycenter()
+        +P getBarycenter()
         +Side side(Hyperplane hyperplane)
         +SubHyperplane intersection(SubHyperplane sub)
       }

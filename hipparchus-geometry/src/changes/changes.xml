@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <release version="4.0" date="TBD" description="TBD">
+    <action dev="luc" type="fix" issue="issues/368">
+      Added point type to geometry classes parameters
+    </action>
+    <action dev="luc" type="update" issue="issues/314">
+      Improved robustness of BSP tree operations
+    </action>
     <action dev="vincent" type="update" issue="issues/285">
       Migrated tests from JUnit 4 to JUnit 5
     </action>

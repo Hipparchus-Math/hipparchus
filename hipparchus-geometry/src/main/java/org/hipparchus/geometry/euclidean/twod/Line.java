@@ -23,8 +23,6 @@ package org.hipparchus.geometry.euclidean.twod;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
-import org.hipparchus.geometry.Point;
-import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
 import org.hipparchus.geometry.euclidean.oned.OrientedPoint;
@@ -64,7 +62,9 @@ import org.hipparchus.util.SinCos;
  * right half plane is the set of points with positive offsets.</p>
 
  */
-public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euclidean1D> {
+public class Line
+    implements Hyperplane<Euclidean2D, Vector2D>,
+               Embedding<Euclidean2D, Vector2D, Euclidean1D, Vector1D> {
 
     /** Angle with respect to the abscissa axis. */
     private double angle;
@@ -225,35 +225,16 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
         return reverse;
     }
 
-    /** Transform a space point into a sub-space point.
-     * @param vector n-dimension point of the space
-     * @return (n-1)-dimension point of the sub-space corresponding to
-     * the specified space point
-     */
-    public Vector1D toSubSpace(Vector<Euclidean2D, Vector2D> vector) {
-        return toSubSpace((Point<Euclidean2D>) vector);
-    }
-
-    /** Transform a sub-space point into a space point.
-     * @param vector (n-1)-dimension point of the sub-space
-     * @return n-dimension point of the space corresponding to the
-     * specified sub-space point
-     */
-    public Vector2D toSpace(Vector<Euclidean1D, Vector1D> vector) {
-        return toSpace((Point<Euclidean1D>) vector);
+    /** {@inheritDoc} */
+    @Override
+    public Vector1D toSubSpace(final Vector2D point) {
+        return new Vector1D(MathArrays.linearCombination(cos, point.getX(), sin, point.getY()));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D toSubSpace(final Point<Euclidean2D> point) {
-        Vector2D p2 = (Vector2D) point;
-        return new Vector1D(MathArrays.linearCombination(cos, p2.getX(), sin, p2.getY()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Vector2D toSpace(final Point<Euclidean1D> point) {
-        final double abscissa = ((Vector1D) point).getX();
+    public Vector2D toSpace(final Vector1D point) {
+        final double abscissa = point.getX();
         return new Vector2D(MathArrays.linearCombination(abscissa, cos, -originOffset, sin),
                             MathArrays.linearCombination(abscissa, sin,  originOffset, cos));
     }
@@ -275,7 +256,7 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
     /** {@inheritDoc}
      */
     @Override
-    public Point<Euclidean2D> project(Point<Euclidean2D> point) {
+    public Vector2D project(Vector2D point) {
         return toSpace(toSubSpace(point));
     }
 
@@ -295,7 +276,7 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
     /** {@inheritDoc} */
     @Override
     public SubLine emptyHyperplane() {
-        return new SubLine(this, new RegionFactory<Euclidean1D>().getComplement(new IntervalsSet(tolerance)));
+        return new SubLine(this, new RegionFactory<Euclidean1D, Vector1D>().getComplement(new IntervalsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.
@@ -322,24 +303,15 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
                (MathArrays.linearCombination(cos, line.cos, sin, line.sin) > 0 ? -line.originOffset : line.originOffset);
     }
 
-    /** Get the offset (oriented distance) of a vector.
-     * @param vector vector to check
-     * @return offset of the vector
-     */
-    public double getOffset(Vector<Euclidean2D, Vector2D> vector) {
-        return getOffset((Point<Euclidean2D>) vector);
+    /** {@inheritDoc} */
+    @Override
+    public double getOffset(final Vector2D point) {
+        return MathArrays.linearCombination(sin, point.getX(), -cos, point.getY(), 1.0, originOffset);
     }
 
     /** {@inheritDoc} */
     @Override
-    public double getOffset(final Point<Euclidean2D> point) {
-        Vector2D p2 = (Vector2D) point;
-        return MathArrays.linearCombination(sin, p2.getX(), -cos, p2.getY(), 1.0, originOffset);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean sameOrientationAs(final Hyperplane<Euclidean2D> other) {
+    public boolean sameOrientationAs(final Hyperplane<Euclidean2D, Vector2D> other) {
         final Line otherL = (Line) other;
         return MathArrays.linearCombination(sin, otherL.sin, cos, otherL.cos) >= 0.0;
     }
@@ -440,12 +412,12 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * SubHyperplane} instances
      * @exception MathIllegalArgumentException if the transform is non invertible
      */
-    public static Transform<Euclidean2D, Euclidean1D> getTransform(final double cXX,
-                                                                   final double cYX,
-                                                                   final double cXY,
-                                                                   final double cYY,
-                                                                   final double cX1,
-                                                                   final double cY1)
+    public static Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> getTransform(final double cXX,
+                                                                                       final double cYX,
+                                                                                       final double cXY,
+                                                                                       final double cYY,
+                                                                                       final double cX1,
+                                                                                       final double cY1)
         throws MathIllegalArgumentException {
         return new LineTransform(cXX, cYX, cXY, cYY, cX1, cY1);
     }
@@ -457,7 +429,8 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * applied to a large number of lines (for example to a large
      * polygon)./<p>
      */
-    private static class LineTransform implements Transform<Euclidean2D, Euclidean1D> {
+    private static class LineTransform
+        implements Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> {
 
         /** Transform factor between input abscissa and output abscissa. */
         private final double cXX;
@@ -518,17 +491,16 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
 
         /** {@inheritDoc} */
         @Override
-        public Vector2D apply(final Point<Euclidean2D> point) {
-            final Vector2D p2D = (Vector2D) point;
-            final double  x   = p2D.getX();
-            final double  y   = p2D.getY();
+        public Vector2D apply(final Vector2D point) {
+            final double  x   = point.getX();
+            final double  y   = point.getY();
             return new Vector2D(MathArrays.linearCombination(cXX, x, cXY, y, cX1, 1),
                                 MathArrays.linearCombination(cYX, x, cYY, y, cY1, 1));
         }
 
         /** {@inheritDoc} */
         @Override
-        public Line apply(final Hyperplane<Euclidean2D> hyperplane) {
+        public Line apply(final Hyperplane<Euclidean2D, Vector2D> hyperplane) {
             final Line   line    = (Line) hyperplane;
             final double rOffset = MathArrays.linearCombination(c1X, line.cos, c1Y, line.sin, c11, line.originOffset);
             final double rCos    = MathArrays.linearCombination(cXX, line.cos, cXY, line.sin);
@@ -541,9 +513,9 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
 
         /** {@inheritDoc} */
         @Override
-        public SubHyperplane<Euclidean1D> apply(final SubHyperplane<Euclidean1D> sub,
-                                                final Hyperplane<Euclidean2D> original,
-                                                final Hyperplane<Euclidean2D> transformed) {
+        public SubHyperplane<Euclidean1D, Vector1D> apply(final SubHyperplane<Euclidean1D, Vector1D> sub,
+                                                          final Hyperplane<Euclidean2D, Vector2D> original,
+                                                          final Hyperplane<Euclidean2D, Vector2D> transformed) {
             final OrientedPoint op     = (OrientedPoint) sub.getHyperplane();
             final Line originalLine    = (Line) original;
             final Line transformedLine = (Line) transformed;

@@ -21,8 +21,6 @@
  */
 package org.hipparchus.geometry.euclidean.oned;
 
-import org.hipparchus.geometry.Point;
-import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.partitioning.Hyperplane;
 
 /** This class represents a 1D oriented hyperplane.
@@ -30,7 +28,7 @@ import org.hipparchus.geometry.partitioning.Hyperplane;
  * boolean.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class OrientedPoint implements Hyperplane<Euclidean1D> {
+public class OrientedPoint implements Hyperplane<Euclidean1D, Vector1D> {
 
     /** Vector location. */
     private final Vector1D location;
@@ -63,18 +61,10 @@ public class OrientedPoint implements Hyperplane<Euclidean1D> {
         return this;
     }
 
-    /** Get the offset (oriented distance) of a vector.
-     * @param vector vector to check
-     * @return offset of the vector
-     */
-    public double getOffset(Vector<Euclidean1D, Vector1D> vector) {
-        return getOffset((Point<Euclidean1D>) vector);
-    }
-
     /** {@inheritDoc} */
     @Override
-    public double getOffset(final Point<Euclidean1D> point) {
-        final double delta = ((Vector1D) point).getX() - location.getX();
+    public double getOffset(final Vector1D point) {
+        final double delta = point.getX() - location.getX();
         return direct ? delta : -delta;
     }
 
@@ -121,14 +111,14 @@ public class OrientedPoint implements Hyperplane<Euclidean1D> {
 
     /** {@inheritDoc} */
     @Override
-    public boolean sameOrientationAs(final Hyperplane<Euclidean1D> other) {
-        return !(direct ^ ((OrientedPoint) other).direct);
+    public boolean sameOrientationAs(final Hyperplane<Euclidean1D, Vector1D> other) {
+        return direct == ((OrientedPoint) other).direct;
     }
 
     /** {@inheritDoc}
      */
     @Override
-    public Point<Euclidean1D> project(Point<Euclidean1D> point) {
+    public Vector1D project(Vector1D point) {
         return location;
     }
 

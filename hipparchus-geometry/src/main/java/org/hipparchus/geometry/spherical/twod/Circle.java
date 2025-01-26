@@ -49,7 +49,7 @@ import org.hipparchus.util.SinCos;
  * a spherical polygon boundary.</p>
 
  */
-public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1D> {
+public class Circle implements Hyperplane<Sphere2D, S2Point>, Embedding<Sphere2D, S2Point, Sphere1D, S1Point> {
 
     /** Pole or circle center. */
     private Vector3D pole;
@@ -151,7 +151,7 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
 
     /** {@inheritDoc} */
     @Override
-    public Point<Sphere2D> project(Point<Sphere2D> point) {
+    public S2Point project(S2Point point) {
         return toSpace(toSubSpace(point));
     }
 
@@ -165,8 +165,8 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * @see #getPhase(Vector3D)
      */
     @Override
-    public S1Point toSubSpace(final Point<Sphere2D> point) {
-        return new S1Point(getPhase(((S2Point) point).getVector()));
+    public S1Point toSubSpace(final S2Point point) {
+        return new S1Point(getPhase(point.getVector()));
     }
 
     /** Get the phase angle of a direction.
@@ -177,7 +177,7 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * </p>
      * @param direction direction for which phase is requested
      * @return phase angle of the direction around the circle
-     * @see #toSubSpace(Point)
+     * @see #toSubSpace(S2Point)
      */
     public double getPhase(final Vector3D direction) {
         return FastMath.PI + FastMath.atan2(-direction.dotProduct(y), -direction.dotProduct(x));
@@ -187,14 +187,14 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * @see #getPointAt(double)
      */
     @Override
-    public S2Point toSpace(final Point<Sphere1D> point) {
-        return new S2Point(getPointAt(((S1Point) point).getAlpha()));
+    public S2Point toSpace(final S1Point point) {
+        return new S2Point(getPointAt(point.getAlpha()));
     }
 
     /** Get a circle point from its phase around the circle.
      * @param alpha phase around the circle
      * @return circle point on the sphere
-     * @see #toSpace(Point)
+     * @see #toSpace(S1Point)
      * @see #getXAxis()
      * @see #getYAxis()
      */
@@ -265,7 +265,7 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
     /** {@inheritDoc} */
     @Override
     public SubCircle emptyHyperplane() {
-        return new SubCircle(this, new RegionFactory<Sphere1D>().getComplement(new ArcsSet(tolerance)));
+        return new SubCircle(this, new RegionFactory<Sphere1D, S1Point>().getComplement(new ArcsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.
@@ -281,8 +281,8 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * @see #getOffset(Vector3D)
      */
     @Override
-    public double getOffset(final Point<Sphere2D> point) {
-        return getOffset(((S2Point) point).getVector());
+    public double getOffset(final S2Point point) {
+        return getOffset(point.getVector());
     }
 
     /** Get the offset (oriented distance) of a direction.
@@ -292,7 +292,7 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * the cone delimited by the circle, and negative inside the cone.</p>
      * @param direction direction to check
      * @return offset of the direction
-     * @see #getOffset(Point)
+     * @see #getOffset(S2Point)
      */
     public double getOffset(final Vector3D direction) {
         return Vector3D.angle(pole, direction) - 0.5 * FastMath.PI;
@@ -300,7 +300,7 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
 
     /** {@inheritDoc} */
     @Override
-    public boolean sameOrientationAs(final Hyperplane<Sphere2D> other) {
+    public boolean sameOrientationAs(final Hyperplane<Sphere2D, S2Point> other) {
         final Circle otherC = (Circle) other;
         return Vector3D.dotProduct(pole, otherC.pole) >= 0.0;
     }
@@ -330,12 +330,12 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * org.hipparchus.geometry.partitioning.SubHyperplane
      * SubHyperplane} instances
      */
-    public static Transform<Sphere2D, Sphere1D> getTransform(final Rotation rotation) {
+    public static Transform<Sphere2D, S2Point, Sphere1D, S1Point> getTransform(final Rotation rotation) {
         return new CircleTransform(rotation);
     }
 
     /** Class embedding a 3D rotation. */
-    private static class CircleTransform implements Transform<Sphere2D, Sphere1D> {
+    private static class CircleTransform implements Transform<Sphere2D, S2Point, Sphere1D, S1Point> {
 
         /** Underlying rotation. */
         private final Rotation rotation;
@@ -349,13 +349,13 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
 
         /** {@inheritDoc} */
         @Override
-        public S2Point apply(final Point<Sphere2D> point) {
-            return new S2Point(rotation.applyTo(((S2Point) point).getVector()));
+        public S2Point apply(final S2Point point) {
+            return new S2Point(rotation.applyTo(point.getVector()));
         }
 
         /** {@inheritDoc} */
         @Override
-        public Circle apply(final Hyperplane<Sphere2D> hyperplane) {
+        public Circle apply(final Hyperplane<Sphere2D, S2Point> hyperplane) {
             final Circle circle = (Circle) hyperplane;
             return new Circle(rotation.applyTo(circle.pole),
                               rotation.applyTo(circle.x),
@@ -365,9 +365,9 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
 
         /** {@inheritDoc} */
         @Override
-        public SubHyperplane<Sphere1D> apply(final SubHyperplane<Sphere1D> sub,
-                                             final Hyperplane<Sphere2D> original,
-                                             final Hyperplane<Sphere2D> transformed) {
+        public SubHyperplane<Sphere1D, S1Point> apply(final SubHyperplane<Sphere1D, S1Point> sub,
+                                                      final Hyperplane<Sphere2D, S2Point> original,
+                                                      final Hyperplane<Sphere2D, S2Point> transformed) {
             // as the circle is rotated, the limit angles are rotated too
             return sub;
         }

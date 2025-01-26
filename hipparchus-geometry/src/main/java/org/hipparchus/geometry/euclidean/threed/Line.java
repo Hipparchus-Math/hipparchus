@@ -23,8 +23,6 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.Point;
-import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
@@ -44,7 +42,7 @@ import org.hipparchus.util.Precision;
  * @see #fromDirection(Vector3D, Vector3D, double)
  * @see #Line(Vector3D, Vector3D, double)
  */
-public class Line implements Embedding<Euclidean3D, Euclidean1D> {
+public class Line implements Embedding<Euclidean3D, Vector3D, Euclidean1D, Vector1D> {
 
     /** Line direction. */
     private Vector3D direction;
@@ -181,38 +179,20 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
         return new Vector3D(1.0, zero, abscissa, direction);
     }
 
-    /** Transform a space point into a sub-space point.
-     * @param vector n-dimension point of the space
-     * @return (n-1)-dimension point of the sub-space corresponding to
-     * the specified space point
-     */
-    public Vector1D toSubSpace(Vector<Euclidean3D, Vector3D> vector) {
-        return toSubSpace((Point<Euclidean3D>) vector);
-    }
-
-    /** Transform a sub-space point into a space point.
-     * @param vector (n-1)-dimension point of the sub-space
-     * @return n-dimension point of the space corresponding to the
-     * specified sub-space point
-     */
-    public Vector3D toSpace(Vector<Euclidean1D, Vector1D> vector) {
-        return toSpace((Point<Euclidean1D>) vector);
-    }
-
     /** {@inheritDoc}
      * @see #getAbscissa(Vector3D)
      */
     @Override
-    public Vector1D toSubSpace(final Point<Euclidean3D> point) {
-        return new Vector1D(getAbscissa((Vector3D) point));
+    public Vector1D toSubSpace(final Vector3D point) {
+        return new Vector1D(getAbscissa(point));
     }
 
     /** {@inheritDoc}
      * @see #pointAt(double)
      */
     @Override
-    public Vector3D toSpace(final Point<Euclidean1D> point) {
-        return pointAt(((Vector1D) point).getX());
+    public Vector3D toSpace(final Vector1D point) {
+        return pointAt(point.getX());
     }
 
     /** Check if the instance is similar to another line.

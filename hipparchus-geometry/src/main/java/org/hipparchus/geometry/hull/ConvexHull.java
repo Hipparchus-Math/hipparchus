@@ -43,5 +43,5 @@ public interface ConvexHull<S extends Space, P extends Point<S>> extends Seriali
      * @throws MathIllegalArgumentException if the number of vertices is not enough to
      * build a region in the respective space
      */
-    Region<S> createRegion() throws MathIllegalArgumentException;
+    Region<S, P> createRegion() throws MathIllegalArgumentException;
 }
