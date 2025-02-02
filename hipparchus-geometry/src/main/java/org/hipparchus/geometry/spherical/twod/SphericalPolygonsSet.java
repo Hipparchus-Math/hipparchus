@@ -774,12 +774,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, S2Point, Sphe
         if (isEmpty(root.getMinus()) && isFull(root.getPlus())) {
             // the polygon covers an hemisphere, and its boundary is one 2π long edge
             final Circle circle = (Circle) root.getCut().getHyperplane();
-            return new EnclosingBall<>(new S2Point(circle.getPole()).negate(), 0.5 * FastMath.PI);
+            return new EnclosingBall<>(new S2Point(circle.getPole()).negate(), MathUtils.SEMI_PI);
         }
         if (isFull(root.getMinus()) && isEmpty(root.getPlus())) {
             // the polygon covers an hemisphere, and its boundary is one 2π long edge
             final Circle circle = (Circle) root.getCut().getHyperplane();
-            return new EnclosingBall<>(new S2Point(circle.getPole()), 0.5 * FastMath.PI);
+            return new EnclosingBall<>(new S2Point(circle.getPole()), MathUtils.SEMI_PI);
         }
 
         // gather some inside points, to be used by the encloser

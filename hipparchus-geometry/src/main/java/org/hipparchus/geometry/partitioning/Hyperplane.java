@@ -49,7 +49,7 @@ import org.hipparchus.geometry.Space;
 public interface Hyperplane<S extends Space, P extends Point<S>> {
 
     /** Copy the instance.
-     * <p>The instance created is completely independant of the original
+     * <p>The instance created is completely independent of the original
      * one. A deep copy is used, none of the underlying objects are
      * shared (except for immutable objects).</p>
      * @return a new hyperplane, copy of the instance

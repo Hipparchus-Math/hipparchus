@@ -43,19 +43,19 @@ import org.hipparchus.util.SinCos;
 public class S2Point implements Point<Sphere2D> {
 
     /** +I (coordinates: \( \theta = 0, \varphi = \pi/2 \)). */
-    public static final S2Point PLUS_I = new S2Point(0, 0.5 * FastMath.PI, Vector3D.PLUS_I);
+    public static final S2Point PLUS_I = new S2Point(0, MathUtils.SEMI_PI, Vector3D.PLUS_I);
 
     /** +J (coordinates: \( \theta = \pi/2, \varphi = \pi/2 \))). */
-    public static final S2Point PLUS_J = new S2Point(0.5 * FastMath.PI, 0.5 * FastMath.PI, Vector3D.PLUS_J);
+    public static final S2Point PLUS_J = new S2Point(MathUtils.SEMI_PI, MathUtils.SEMI_PI, Vector3D.PLUS_J);
 
     /** +K (coordinates: \( \theta = any angle, \varphi = 0 \)). */
     public static final S2Point PLUS_K = new S2Point(0, 0, Vector3D.PLUS_K);
 
     /** -I (coordinates: \( \theta = \pi, \varphi = \pi/2 \)). */
-    public static final S2Point MINUS_I = new S2Point(FastMath.PI, 0.5 * FastMath.PI, Vector3D.MINUS_I);
+    public static final S2Point MINUS_I = new S2Point(FastMath.PI, MathUtils.SEMI_PI, Vector3D.MINUS_I);
 
     /** -J (coordinates: \( \theta = 3\pi/2, \varphi = \pi/2 \)). */
-    public static final S2Point MINUS_J = new S2Point(1.5 * FastMath.PI, 0.5 * FastMath.PI, Vector3D.MINUS_J);
+    public static final S2Point MINUS_J = new S2Point(1.5 * FastMath.PI, MathUtils.SEMI_PI, Vector3D.MINUS_J);
 
     /** -K (coordinates: \( \theta = any angle, \varphi = \pi \)). */
     public static final S2Point MINUS_K = new S2Point(0, FastMath.PI, Vector3D.MINUS_K);

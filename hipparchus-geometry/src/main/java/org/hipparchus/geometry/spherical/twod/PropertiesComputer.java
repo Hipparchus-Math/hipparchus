@@ -51,9 +51,9 @@ class PropertiesComputer implements BSPTreeVisitor<Sphere2D, S2Point> {
      * @param tolerance below which points are consider to be identical
      */
     PropertiesComputer(final double tolerance) {
-        this.tolerance              = tolerance;
-        this.summedArea             = 0;
-        this.summedBarycenter       = Vector3D.ZERO;
+        this.tolerance               = tolerance;
+        this.summedArea              = 0;
+        this.summedBarycenter        = Vector3D.ZERO;
         this.convexCellsInsidePoints = new ArrayList<>();
     }
 

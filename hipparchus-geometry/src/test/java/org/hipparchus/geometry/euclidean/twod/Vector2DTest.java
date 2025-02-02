@@ -27,6 +27,7 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 import org.junit.jupiter.api.Test;
 
@@ -174,21 +175,17 @@ class Vector2DTest {
         final double alpha = 0.01;
         final SinCos sc = FastMath.sinCos(alpha);
         assertEquals(alpha,
-                            Vector2D.angle(new Vector2D(sc.cos(), sc.sin()),
-                                           Vector2D.PLUS_I),
-                            1.0e-15);
+                     Vector2D.angle(new Vector2D(sc.cos(), sc.sin()), Vector2D.PLUS_I),
+                     1.0e-15);
         assertEquals(FastMath.PI - alpha,
-                            Vector2D.angle(new Vector2D(-sc.cos(), sc.sin()),
-                                           Vector2D.PLUS_I),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI - alpha,
-                            Vector2D.angle(new Vector2D(sc.sin(), sc.cos()),
-                                           Vector2D.PLUS_I),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI + alpha,
-                            Vector2D.angle(new Vector2D(-sc.sin(), sc.cos()),
-                                           Vector2D.PLUS_I),
-                            1.0e-15);
+                     Vector2D.angle(new Vector2D(-sc.cos(), sc.sin()), Vector2D.PLUS_I),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI - alpha,
+                     Vector2D.angle(new Vector2D(sc.sin(), sc.cos()), Vector2D.PLUS_I),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI + alpha,
+                     Vector2D.angle(new Vector2D(-sc.sin(), sc.cos()), Vector2D.PLUS_I),
+                     1.0e-15);
     }
 
 

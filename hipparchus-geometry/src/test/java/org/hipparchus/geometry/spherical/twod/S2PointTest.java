@@ -31,7 +31,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -53,16 +55,12 @@ class S2PointTest {
 
     @Test
     void testNegativePolarAngle() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new S2Point(1.0, -1.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new S2Point(1.0, -1.0));
     }
 
     @Test
     void testTooLargePolarAngle() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new S2Point(1.0, 3.5);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new S2Point(1.0, 3.5));
     }
 
     @Test
@@ -78,7 +76,7 @@ class S2PointTest {
         S2Point a = new S2Point(1.0, 1.0);
         S2Point b = new S2Point(1.0, 1.0);
         assertEquals(a.hashCode(), b.hashCode());
-        assertFalse(a == b);
+        assertNotSame(a, b);
         assertEquals(a, b);
         assertEquals(a, a);
         assertNotEquals('a', a);
@@ -92,7 +90,7 @@ class S2PointTest {
         S2Point a = new S2Point(1.0, 1.0);
         S2Point b = new S2Point(1.0, 1.0);
         assertEquals(a.hashCode(), b.hashCode());
-        assertFalse(a == b);
+        assertNotSame(a, b);
         assertTrue(a.equalsIeee754(b));
         assertTrue(a.equalsIeee754(a));
         assertFalse(a.equalsIeee754('a'));
@@ -103,17 +101,17 @@ class S2PointTest {
 
     @Test
     void testDistance() {
-        S2Point a = new S2Point(1.0, 0.5 * FastMath.PI);
-        S2Point b = new S2Point(a.getTheta() + 0.5 * FastMath.PI, a.getPhi());
-        assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
+        S2Point a = new S2Point(1.0, MathUtils.SEMI_PI);
+        S2Point b = new S2Point(a.getTheta() + MathUtils.SEMI_PI, a.getPhi());
+        assertEquals(MathUtils.SEMI_PI, a.distance(b), 1.0e-10);
         assertEquals(FastMath.PI, a.distance(a.negate()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, S2Point.MINUS_I.distance(S2Point.MINUS_K), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, S2Point.MINUS_I.distance(S2Point.MINUS_K), 1.0e-10);
         assertEquals(0.0, new S2Point(1.0, 0).distance(new S2Point(2.0, 0)), 1.0e-10);
     }
 
     @Test
     void testNegate() {
-        RandomGenerator generator = new Well1024a(0x79d1bc2e0999d238l);
+        RandomGenerator generator = new Well1024a(0x79d1bc2e0999d238L);
         for (int i = 0; i < 100000; ++i) {
             S2Point p = new S2Point(MathUtils.TWO_PI * generator.nextDouble(),
                                     FastMath.PI * generator.nextDouble());
@@ -125,9 +123,9 @@ class S2PointTest {
     @Test
     void testSpace() {
         S2Point a = new S2Point(1.0, 1.0);
-        assertTrue(a.getSpace() instanceof Sphere2D);
+        assertInstanceOf(Sphere2D.class, a.getSpace());
         assertEquals(2, a.getSpace().getDimension());
-        assertTrue(a.getSpace().getSubSpace() instanceof Sphere1D);
+        assertInstanceOf(Sphere1D.class, a.getSpace().getSubSpace());
     }
 
 }

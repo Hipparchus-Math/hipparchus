@@ -25,6 +25,7 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 import org.junit.jupiter.api.Test;
 
@@ -262,20 +263,20 @@ class FieldVector2DTest {
         final double alpha = 0.01;
         final SinCos sc = FastMath.sinCos(alpha);
         assertEquals(alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.cos(), sc.sin())),
-                                                FieldVector2D.getPlusI(field)).getReal(),
-                            1.0e-15);
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.cos(), sc.sin())),
+                                         FieldVector2D.getPlusI(field)).getReal(),
+                     1.0e-15);
         assertEquals(FastMath.PI - alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.cos(), sc.sin())),
-                                                FieldVector2D.getPlusI(field)).getReal(),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI - alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.sin(), sc.cos())),
-                                                FieldVector2D.getPlusI(field)).getReal(),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI + alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.sin(), sc.cos())),
-                                                FieldVector2D.getPlusI(field)).getReal(),
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.cos(), sc.sin())),
+                                         FieldVector2D.getPlusI(field)).getReal(),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI - alpha,
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.sin(), sc.cos())),
+                                         FieldVector2D.getPlusI(field)).getReal(),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI + alpha,
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.sin(), sc.cos())),
+                                         FieldVector2D.getPlusI(field)).getReal(),
                             1.0e-15);
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), Vector2D.PLUS_I);
@@ -284,21 +285,21 @@ class FieldVector2DTest {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
         assertEquals(alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.cos(), sc.sin())),
-                                                Vector2D.PLUS_I).getReal(),
-                            1.0e-15);
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.cos(), sc.sin())),
+                                         Vector2D.PLUS_I).getReal(),
+                     1.0e-15);
         assertEquals(FastMath.PI - alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.cos(), sc.sin())),
-                                                Vector2D.PLUS_I).getReal(),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI - alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.sin(), sc.cos())),
-                                                Vector2D.PLUS_I).getReal(),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI + alpha,
-                            FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.sin(), sc.cos())),
-                                                Vector2D.PLUS_I).getReal(),
-                            1.0e-15);
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.cos(), sc.sin())),
+                                         Vector2D.PLUS_I).getReal(),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI - alpha,
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(sc.sin(), sc.cos())),
+                                         Vector2D.PLUS_I).getReal(),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI + alpha,
+                     FieldVector2D.angle(new FieldVector2D<>(field, new Vector2D(-sc.sin(), sc.cos())),
+                                         Vector2D.PLUS_I).getReal(),
+                     1.0e-15);
         try {
             FieldVector2D.angle(Vector2D.ZERO, FieldVector2D.getPlusI(field));
             fail("an exception should habe been thrown");
@@ -306,21 +307,21 @@ class FieldVector2DTest {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
         assertEquals(alpha,
-                            FieldVector2D.angle(new Vector2D(sc.cos(), sc.sin()),
-                                                FieldVector2D.getPlusI(field)).getReal(),
-                            1.0e-15);
+                     FieldVector2D.angle(new Vector2D(sc.cos(), sc.sin()),
+                                         FieldVector2D.getPlusI(field)).getReal(),
+                     1.0e-15);
         assertEquals(FastMath.PI - alpha,
-                            FieldVector2D.angle(new Vector2D(-sc.cos(), sc.sin()),
-                                                FieldVector2D.getPlusI(field)).getReal(),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI - alpha,
-                            FieldVector2D.angle(new Vector2D(sc.sin(), sc.cos()),
-                                                FieldVector2D.getPlusI(field)).getReal(),
-                            1.0e-15);
-        assertEquals(0.5 * FastMath.PI + alpha,
-                            FieldVector2D.angle(new Vector2D(-sc.sin(), sc.cos()),
-                                                FieldVector2D.getPlusI(field)).getReal(),
-                            1.0e-15);
+                     FieldVector2D.angle(new Vector2D(-sc.cos(), sc.sin()),
+                                         FieldVector2D.getPlusI(field)).getReal(),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI - alpha,
+                     FieldVector2D.angle(new Vector2D(sc.sin(), sc.cos()),
+                                         FieldVector2D.getPlusI(field)).getReal(),
+                     1.0e-15);
+        assertEquals(MathUtils.SEMI_PI + alpha,
+                     FieldVector2D.angle(new Vector2D(-sc.sin(), sc.cos()),
+                                         FieldVector2D.getPlusI(field)).getReal(),
+                     1.0e-15);
     }
 
 

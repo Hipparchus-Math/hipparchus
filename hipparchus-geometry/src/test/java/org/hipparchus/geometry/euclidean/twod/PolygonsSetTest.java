@@ -38,6 +38,7 @@ import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
 import org.hipparchus.random.UniformRandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -1232,7 +1233,7 @@ class PolygonsSetTest {
         BSPTree<Euclidean2D, Vector2D> bsp = new BSPTree<>();
         bsp.insertCut(new Line(Vector2D.ZERO, 0.0, tolerance));
         bsp.getPlus().setAttribute(Boolean.FALSE);
-        bsp.getMinus().insertCut(new Line(Vector2D.ZERO, 0.5 * FastMath.PI, tolerance));
+        bsp.getMinus().insertCut(new Line(Vector2D.ZERO, MathUtils.SEMI_PI, tolerance));
         bsp.getMinus().getPlus().setAttribute(Boolean.FALSE);
         bsp.getMinus().getMinus().setAttribute(Boolean.TRUE);
         PolygonsSet polygons = new PolygonsSet(bsp, tolerance);

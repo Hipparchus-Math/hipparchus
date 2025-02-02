@@ -24,15 +24,18 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,9 +71,9 @@ class FieldRotationDSTest {
     @Test
     void testAxisAngleVectorOperator() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(createAxis(10, 10, 10),
-                                                                                      createAngle(2 * FastMath.PI / 3) ,
-                                                                                      RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r = new FieldRotation<>(createAxis(10, 10, 10),
+                                                                   createAngle(2 * FastMath.PI / 3) ,
+                                                                   RotationConvention.VECTOR_OPERATOR);
         checkVector(r.applyTo(createVector(1, 0, 0)), createVector(0, 1, 0));
         checkVector(r.applyTo(createVector(0, 1, 0)), createVector(0, 0, 1));
         checkVector(r.applyTo(createVector(0, 0, 1)), createVector(1, 0, 0));
@@ -80,23 +83,22 @@ class FieldRotationDSTest {
         checkAngle(r.getAngle(), 2 * FastMath.PI / 3);
 
         try {
-            new FieldRotation<DerivativeStructure>(createAxis(0, 0, 0),
-                                                   createAngle(2 * FastMath.PI / 3),
-                                                   RotationConvention.VECTOR_OPERATOR);
+            new FieldRotation<>(createAxis(0, 0, 0), createAngle(2 * FastMath.PI / 3), RotationConvention.VECTOR_OPERATOR);
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
         }
 
-        r = new FieldRotation<DerivativeStructure>(createAxis(0, 0, 1),
-                                                   createAngle(1.5 * FastMath.PI),
-                                                   RotationConvention.VECTOR_OPERATOR);
+        r = new FieldRotation<>(createAxis(0, 0, 1),
+                                createAngle(1.5 * FastMath.PI),
+                                RotationConvention.VECTOR_OPERATOR);
         checkVector(r.getAxis(RotationConvention.VECTOR_OPERATOR), createVector(0, 0, -1));
         checkVector(r.getAxis(RotationConvention.FRAME_TRANSFORM), createVector(0, 0, +1));
-        checkAngle(r.getAngle(), 0.5 * FastMath.PI);
+        checkAngle(r.getAngle(), MathUtils.SEMI_PI);
 
-        r = new FieldRotation<DerivativeStructure>(createAxis(0, 1, 0),
-                                                   createAngle(FastMath.PI),
-                                                   RotationConvention.VECTOR_OPERATOR);
+        r = new FieldRotation<>(createAxis(0, 1, 0),
+                                createAngle(FastMath.PI),
+                                RotationConvention.VECTOR_OPERATOR);
         checkVector(r.getAxis(RotationConvention.VECTOR_OPERATOR), createVector(0, +1, 0));
         checkVector(r.getAxis(RotationConvention.FRAME_TRANSFORM), createVector(0, -1, 0));
         checkAngle(r.getAngle(), FastMath.PI);
@@ -109,9 +111,9 @@ class FieldRotationDSTest {
     @Test
     void testAxisAngleFrameTransform() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(createAxis(10, 10, 10),
-                                                                                      createAngle(2 * FastMath.PI / 3) ,
-                                                                                      RotationConvention.FRAME_TRANSFORM);
+        FieldRotation<DerivativeStructure> r = new FieldRotation<>(createAxis(10, 10, 10),
+                                                                   createAngle(2 * FastMath.PI / 3) ,
+                                                                   RotationConvention.FRAME_TRANSFORM);
         checkVector(r.applyTo(createVector(1, 0, 0)), createVector(0, 0, 1));
         checkVector(r.applyTo(createVector(0, 1, 0)), createVector(1, 0, 0));
         checkVector(r.applyTo(createVector(0, 0, 1)), createVector(0, 1, 0));
@@ -121,23 +123,24 @@ class FieldRotationDSTest {
         checkAngle(r.getAngle(), 2 * FastMath.PI / 3);
 
         try {
-            new FieldRotation<DerivativeStructure>(createAxis(0, 0, 0),
-                                                   createAngle(2 * FastMath.PI / 3),
-                                                   RotationConvention.FRAME_TRANSFORM);
+            new FieldRotation<>(createAxis(0, 0, 0),
+                                createAngle(2 * FastMath.PI / 3),
+                                RotationConvention.FRAME_TRANSFORM);
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
         }
 
-        r = new FieldRotation<DerivativeStructure>(createAxis(0, 0, 1),
-                                                   createAngle(1.5 * FastMath.PI),
-                                                   RotationConvention.FRAME_TRANSFORM);
+        r = new FieldRotation<>(createAxis(0, 0, 1),
+                                createAngle(1.5 * FastMath.PI),
+                                RotationConvention.FRAME_TRANSFORM);
         checkVector(r.getAxis(RotationConvention.FRAME_TRANSFORM), createVector(0, 0, -1));
         checkVector(r.getAxis(RotationConvention.VECTOR_OPERATOR), createVector(0, 0, +1));
-        checkAngle(r.getAngle(), 0.5 * FastMath.PI);
+        checkAngle(r.getAngle(), MathUtils.SEMI_PI);
 
-        r = new FieldRotation<DerivativeStructure>(createAxis(0, 1, 0),
-                                                   createAngle(FastMath.PI),
-                                                   RotationConvention.FRAME_TRANSFORM);
+        r = new FieldRotation<>(createAxis(0, 1, 0),
+                                createAngle(FastMath.PI),
+                                RotationConvention.FRAME_TRANSFORM);
         checkVector(r.getAxis(RotationConvention.FRAME_TRANSFORM), createVector(0, +1, 0));
         checkVector(r.getAxis(RotationConvention.VECTOR_OPERATOR), createVector(0, -1, 0));
         checkAngle(r.getAngle(), FastMath.PI);
@@ -368,13 +371,13 @@ class FieldRotationDSTest {
 
         FieldVector3D<DerivativeStructure> u = createVector(3, 2, 1);
         FieldVector3D<DerivativeStructure> v = createVector(-4, 2, 2);
-        FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(u, v);
+        FieldRotation<DerivativeStructure> r = new FieldRotation<>(u, v);
         checkVector(r.applyTo(u.scalarMultiply(v.getNorm())), v.scalarMultiply(u.getNorm()));
 
-        checkAngle(new FieldRotation<DerivativeStructure>(u, u.negate()).getAngle(), FastMath.PI);
+        checkAngle(new FieldRotation<>(u, u.negate()).getAngle(), FastMath.PI);
 
         try {
-            new FieldRotation<DerivativeStructure>(u, createVector(0, 0, 0));
+            new FieldRotation<>(u, createVector(0, 0, 0));
             fail("an exception should have been thrown");
         } catch (MathRuntimeException e) {
             // expected behavior
@@ -389,11 +392,11 @@ class FieldRotationDSTest {
         FieldVector3D<DerivativeStructure> u2 = createVector(0, 5, 0);
         FieldVector3D<DerivativeStructure> v1 = createVector(0, 0, 2);
         FieldVector3D<DerivativeStructure> v2 = createVector(-2, 0, 2);
-        FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(u1, u2, v1, v2);
+        FieldRotation<DerivativeStructure> r = new FieldRotation<>(u1, u2, v1, v2);
         checkVector(r.applyTo(createVector(1, 0, 0)), createVector(0, 0, 1));
         checkVector(r.applyTo(createVector(0, 1, 0)), createVector(-1, 0, 0));
 
-        r = new FieldRotation<DerivativeStructure>(u1, u2, u1.negate(), u2.negate());
+        r = new FieldRotation<>(u1, u2, u1.negate(), u2.negate());
         FieldVector3D<DerivativeStructure> axis = r.getAxis(RotationConvention.VECTOR_OPERATOR);
         if (FieldVector3D.dotProduct(axis, createVector(0, 0, 1)).getReal() > 0) {
             checkVector(axis, createVector(0, 0, 1));
@@ -403,18 +406,18 @@ class FieldRotationDSTest {
         checkAngle(r.getAngle(), FastMath.PI);
 
         double sqrt = FastMath.sqrt(2) / 2;
-        r = new FieldRotation<DerivativeStructure>(createVector(1, 0, 0),  createVector(0, 1, 0),
+        r = new FieldRotation<>(createVector(1, 0, 0),  createVector(0, 1, 0),
                            createVector(0.5, 0.5,  sqrt),
                            createVector(0.5, 0.5, -sqrt));
         checkRotationDS(r, sqrt, 0.5, 0.5, 0);
 
-        r = new FieldRotation<DerivativeStructure>(u1, u2, u1, FieldVector3D.crossProduct(u1, u2));
+        r = new FieldRotation<>(u1, u2, u1, FieldVector3D.crossProduct(u1, u2));
         checkRotationDS(r, sqrt, -sqrt, 0, 0);
 
-        checkRotationDS(new FieldRotation<DerivativeStructure>(u1, u2, u1, u2), 1, 0, 0, 0);
+        checkRotationDS(new FieldRotation<>(u1, u2, u1, u2), 1, 0, 0, 0);
 
         try {
-            new FieldRotation<DerivativeStructure>(u1, u2, createVector(0, 0, 0), v2);
+            new FieldRotation<>(u1, u2, createVector(0, 0, 0), v2);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException e) {
             // expected behavior
@@ -543,12 +546,9 @@ class FieldRotationDSTest {
             }
         }
 
-        checkVector(r.applyTo(createVector(1, 0, 0)),
-                    new FieldVector3D<DerivativeStructure>(m3[0][0], m3[1][0], m3[2][0]));
-        checkVector(r.applyTo(createVector(0, 1, 0)),
-                    new FieldVector3D<DerivativeStructure>(m3[0][1], m3[1][1], m3[2][1]));
-        checkVector(r.applyTo(createVector(0, 0, 1)),
-                    new FieldVector3D<DerivativeStructure>(m3[0][2], m3[1][2], m3[2][2]));
+        checkVector(r.applyTo(createVector(1, 0, 0)), new FieldVector3D<>(m3[0][0], m3[1][0], m3[2][0]));
+        checkVector(r.applyTo(createVector(0, 1, 0)), new FieldVector3D<>(m3[0][1], m3[1][1], m3[2][1]));
+        checkVector(r.applyTo(createVector(0, 0, 1)), new FieldVector3D<>(m3[0][2], m3[1][2], m3[2][2]));
 
         double[][] m4 = { { 1.0,  0.0,  0.0 },
             { 0.0, -1.0,  0.0 },
@@ -579,17 +579,17 @@ class FieldRotationDSTest {
                 RotationOrder.YZX, RotationOrder.ZXY, RotationOrder.ZYX
             };
 
-            for (int i = 0; i < CardanOrders.length; ++i) {
+            for (final RotationOrder cardanOrder : CardanOrders) {
                 for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 0.3) {
                     for (double alpha2 = -1.55; alpha2 < 1.55; alpha2 += 0.3) {
                         for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 0.3) {
                             FieldRotation<DerivativeStructure> r =
-                                            new FieldRotation<DerivativeStructure>(CardanOrders[i],
-                                                                                   convention,
-                                                                                   factory.variable(0, alpha1),
-                                                                                   factory.variable(1, alpha2),
-                                                                                   factory.variable(2, alpha3));
-                            DerivativeStructure[] angles = r.getAngles(CardanOrders[i], convention);
+                                    new FieldRotation<>(cardanOrder,
+                                                        convention,
+                                                        factory.variable(0, alpha1),
+                                                        factory.variable(1, alpha2),
+                                                        factory.variable(2, alpha3));
+                            DerivativeStructure[] angles = r.getAngles(cardanOrder, convention);
                             checkAngle(angles[0], alpha1);
                             checkAngle(angles[1], alpha2);
                             checkAngle(angles[2], alpha3);
@@ -603,17 +603,17 @@ class FieldRotationDSTest {
                 RotationOrder.YZY, RotationOrder.ZXZ, RotationOrder.ZYZ
             };
 
-            for (int i = 0; i < EulerOrders.length; ++i) {
+            for (final RotationOrder eulerOrder : EulerOrders) {
                 for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 0.3) {
                     for (double alpha2 = 0.05; alpha2 < 3.1; alpha2 += 0.3) {
                         for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 0.3) {
                             FieldRotation<DerivativeStructure> r =
-                                            new FieldRotation<DerivativeStructure>(EulerOrders[i],
-                                                                                   convention,
-                                                                                   factory.variable(0, alpha1),
-                                                                                   factory.variable(1, alpha2),
-                                                                                   factory.variable(2, alpha3));
-                            DerivativeStructure[] angles = r.getAngles(EulerOrders[i], convention);
+                                    new FieldRotation<>(eulerOrder,
+                                                        convention,
+                                                        factory.variable(0, alpha1),
+                                                        factory.variable(1, alpha2),
+                                                        factory.variable(2, alpha3));
+                            DerivativeStructure[] angles = r.getAngles(eulerOrder, convention);
                             checkAngle(angles[0], alpha1);
                             checkAngle(angles[1], alpha2);
                             checkAngle(angles[2], alpha3);
@@ -638,16 +638,15 @@ class FieldRotationDSTest {
             double[] singularCardanAngle = {
                 -FastMath.PI / 2, -FastMath.PI / 2 + 1.0e-12, -FastMath.PI / 2 + 1.0e-10,
                 FastMath.PI / 2 - 1.0e-10, FastMath.PI / 2 - 1.0e-12, FastMath.PI / 2
-           };
-            for (int i = 0; i < CardanOrders.length; ++i) {
-                for (int j = 0; j < singularCardanAngle.length; ++j) {
-                    FieldRotation<DerivativeStructure> r =
-                                    new FieldRotation<DerivativeStructure>(CardanOrders[i],
-                                                                           convention,
-                                                                           factory.variable(0, 0.1),
-                                                                           factory.variable(1, singularCardanAngle[j]),
-                                                                           factory.variable(2, 0.3));
-                    assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1].getReal(), 4.5e-16);
+            };
+            for (final RotationOrder cardanOrder : CardanOrders) {
+                for (final double v : singularCardanAngle) {
+                    FieldRotation<DerivativeStructure> r = new FieldRotation<>(cardanOrder,
+                                                                               convention,
+                                                                               factory.variable(0, 0.1),
+                                                                               factory.variable(1, v),
+                                                                               factory.variable(2, 0.3));
+                    assertEquals(v, r.getAngles(cardanOrder, convention)[1].getReal(), 4.5e-16);
                 }
             }
 
@@ -657,16 +656,15 @@ class FieldRotationDSTest {
             };
 
             double[] singularEulerAngle = { 0, 1.0e-12, 1.0e-10, FastMath.PI - 1.0e-10, FastMath.PI - 1.0e-12, FastMath.PI };
-            for (int i = 0; i < EulerOrders.length; ++i) {
-                for (int j = 0; j < singularEulerAngle.length; ++j) {
-                    FieldRotation<DerivativeStructure> r =
-                                    new FieldRotation<DerivativeStructure>(EulerOrders[i],
-                                                                           convention,
-                                                                           factory.variable(0, 0.1),
-                                                                           factory.variable(1, singularEulerAngle[j]),
-                                                                           factory.variable(2, 0.3));
-                    r.getAngles(EulerOrders[i], convention);
-                    assertEquals(singularEulerAngle[j],  r.getAngles(EulerOrders[i], convention)[1].getReal(), 1.0e-24);
+            for (final RotationOrder eulerOrder : EulerOrders) {
+                for (final double v : singularEulerAngle) {
+                    FieldRotation<DerivativeStructure> r = new FieldRotation<>(eulerOrder,
+                                                                               convention,
+                                                                               factory.variable(0, 0.1),
+                                                                               factory.variable(1, v),
+                                                                               factory.variable(2, 0.3));
+                    r.getAngles(eulerOrder, convention);
+                    assertEquals(v, r.getAngles(eulerOrder, convention)[1].getReal(), 1.0e-24);
                 }
             }
 
@@ -676,13 +674,13 @@ class FieldRotationDSTest {
     @Test
     void testQuaternion() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r1 = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                       createAngle(1.7),
-                                                                                       RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r1 = new FieldRotation<>(createVector(2, -3, 5),
+                                                                    createAngle(1.7),
+                                                                    RotationConvention.VECTOR_OPERATOR);
         double n = 23.5;
-        FieldRotation<DerivativeStructure> r2 = new FieldRotation<DerivativeStructure>(r1.getQ0().multiply(n), r1.getQ1().multiply(n),
-                                       r1.getQ2().multiply(n), r1.getQ3().multiply(n),
-                                       true);
+        FieldRotation<DerivativeStructure> r2 = new FieldRotation<>(r1.getQ0().multiply(n), r1.getQ1().multiply(n),
+                                                                    r1.getQ2().multiply(n), r1.getQ3().multiply(n),
+                                                                    true);
         for (double x = -0.9; x < 0.9; x += 0.2) {
             for (double y = -0.9; y < 0.9; y += 0.2) {
                 for (double z = -0.9; z < 0.9; z += 0.2) {
@@ -706,12 +704,12 @@ class FieldRotationDSTest {
     @Test
     void testApplyToRotation() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r1       = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                             createAngle(1.7),
-                                                                                             RotationConvention.VECTOR_OPERATOR);
-        FieldRotation<DerivativeStructure> r2       = new FieldRotation<DerivativeStructure>(createVector(-1, 3, 2),
-                                                                                             createAngle(0.3),
-                                                                                             RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r1       = new FieldRotation<>(createVector(2, -3, 5),
+                                                                          createAngle(1.7),
+                                                                          RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r2       = new FieldRotation<>(createVector(-1, 3, 2),
+                                                                          createAngle(0.3),
+                                                                          RotationConvention.VECTOR_OPERATOR);
         FieldRotation<DerivativeStructure> r3       = r2.applyTo(r1);
         FieldRotation<DerivativeStructure> r3Double = r2.applyTo(new Rotation(r1.getQ0().getReal(),
                                                                               r1.getQ1().getReal(),
@@ -734,12 +732,12 @@ class FieldRotationDSTest {
     @Test
     void testComposeVectorOperator() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r1       = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                             createAngle(1.7),
-                                                                                             RotationConvention.VECTOR_OPERATOR);
-        FieldRotation<DerivativeStructure> r2       = new FieldRotation<DerivativeStructure>(createVector(-1, 3, 2),
-                                                                                             createAngle(0.3),
-                                                                                             RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r1       = new FieldRotation<>(createVector(2, -3, 5),
+                                                                          createAngle(1.7),
+                                                                          RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r2       = new FieldRotation<>(createVector(-1, 3, 2),
+                                                                          createAngle(0.3),
+                                                                          RotationConvention.VECTOR_OPERATOR);
         FieldRotation<DerivativeStructure> r3       = r2.compose(r1, RotationConvention.VECTOR_OPERATOR);
         FieldRotation<DerivativeStructure> r3Double = r2.compose(new Rotation(r1.getQ0().getReal(),
                                                                               r1.getQ1().getReal(),
@@ -763,12 +761,12 @@ class FieldRotationDSTest {
     @Test
     void testComposeFrameTransform() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r1       = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                             createAngle(1.7),
-                                                                                             RotationConvention.FRAME_TRANSFORM);
-        FieldRotation<DerivativeStructure> r2       = new FieldRotation<DerivativeStructure>(createVector(-1, 3, 2),
-                                                                                             createAngle(0.3),
-                                                                                             RotationConvention.FRAME_TRANSFORM);
+        FieldRotation<DerivativeStructure> r1       = new FieldRotation<>(createVector(2, -3, 5),
+                                                                          createAngle(1.7),
+                                                                          RotationConvention.FRAME_TRANSFORM);
+        FieldRotation<DerivativeStructure> r2       = new FieldRotation<>(createVector(-1, 3, 2),
+                                                                          createAngle(0.3),
+                                                                          RotationConvention.FRAME_TRANSFORM);
         FieldRotation<DerivativeStructure> r3       = r2.compose(r1, RotationConvention.FRAME_TRANSFORM);
         FieldRotation<DerivativeStructure> r3Double = r2.compose(new Rotation(r1.getQ0().getReal(),
                                                                               r1.getQ1().getReal(),
@@ -792,12 +790,12 @@ class FieldRotationDSTest {
     @Test
     void testApplyInverseToRotation() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r1 = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                       createAngle(1.7),
-                                                                                       RotationConvention.VECTOR_OPERATOR);
-        FieldRotation<DerivativeStructure> r2 = new FieldRotation<DerivativeStructure>(createVector(-1, 3, 2),
-                                                                                       createAngle(0.3),
-                                                                                       RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r1 = new FieldRotation<>(createVector(2, -3, 5),
+                                                                    createAngle(1.7),
+                                                                    RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r2 = new FieldRotation<>(createVector(-1, 3, 2),
+                                                                    createAngle(0.3),
+                                                                    RotationConvention.VECTOR_OPERATOR);
         FieldRotation<DerivativeStructure> r3 = r2.applyInverseTo(r1);
         FieldRotation<DerivativeStructure> r3Double = r2.applyInverseTo(new Rotation(r1.getQ0().getReal(),
                                                                                      r1.getQ1().getReal(),
@@ -820,12 +818,12 @@ class FieldRotationDSTest {
     @Test
     void testComposeInverseVectorOperator() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r1 = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                       createAngle(1.7),
-                                                                                       RotationConvention.VECTOR_OPERATOR);
-        FieldRotation<DerivativeStructure> r2 = new FieldRotation<DerivativeStructure>(createVector(-1, 3, 2),
-                                                                                       createAngle(0.3),
-                                                                                       RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r1 = new FieldRotation<>(createVector(2, -3, 5),
+                                                                    createAngle(1.7),
+                                                                    RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r2 = new FieldRotation<>(createVector(-1, 3, 2),
+                                                                    createAngle(0.3),
+                                                                    RotationConvention.VECTOR_OPERATOR);
         FieldRotation<DerivativeStructure> r3 = r2.composeInverse(r1, RotationConvention.VECTOR_OPERATOR);
         FieldRotation<DerivativeStructure> r3Double = r2.composeInverse(new Rotation(r1.getQ0().getReal(),
                                                                                      r1.getQ1().getReal(),
@@ -849,12 +847,12 @@ class FieldRotationDSTest {
     @Test
     void testComposeInverseframeTransform() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r1 = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                       createAngle(1.7),
-                                                                                       RotationConvention.FRAME_TRANSFORM);
-        FieldRotation<DerivativeStructure> r2 = new FieldRotation<DerivativeStructure>(createVector(-1, 3, 2),
-                                                                                       createAngle(0.3),
-                                                                                       RotationConvention.FRAME_TRANSFORM);
+        FieldRotation<DerivativeStructure> r1 = new FieldRotation<>(createVector(2, -3, 5),
+                                                                    createAngle(1.7),
+                                                                    RotationConvention.FRAME_TRANSFORM);
+        FieldRotation<DerivativeStructure> r2 = new FieldRotation<>(createVector(-1, 3, 2),
+                                                                    createAngle(0.3),
+                                                                    RotationConvention.FRAME_TRANSFORM);
         FieldRotation<DerivativeStructure> r3 = r2.composeInverse(r1, RotationConvention.FRAME_TRANSFORM);
         FieldRotation<DerivativeStructure> r3Double = r2.composeInverse(new Rotation(r1.getQ0().getReal(),
                                                                                      r1.getQ1().getReal(),
@@ -878,13 +876,13 @@ class FieldRotationDSTest {
     @Test
     void testDoubleVectors() throws MathIllegalArgumentException {
 
-        Well1024a random = new Well1024a(0x180b41cfeeffaf67l);
+        Well1024a random = new Well1024a(0x180b41cfeeffaf67L);
         UnitSphereRandomVectorGenerator g = new UnitSphereRandomVectorGenerator(3, random);
         for (int i = 0; i < 10; ++i) {
             double[] unit = g.nextVector();
-            FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(createVector(unit[0], unit[1], unit[2]),
-                                                                                          createAngle(random.nextDouble()),
-                                                                                          RotationConvention.VECTOR_OPERATOR);
+            FieldRotation<DerivativeStructure> r = new FieldRotation<>(createVector(unit[0], unit[1], unit[2]),
+                                                                       createAngle(random.nextDouble()),
+                                                                       RotationConvention.VECTOR_OPERATOR);
 
             for (double x = -0.9; x < 0.9; x += 0.2) {
                 for (double y = -0.9; y < 0.9; y += 0.2) {
@@ -900,9 +898,9 @@ class FieldRotationDSTest {
                         DerivativeStructure[] rIuArray = new DerivativeStructure[3];
                         r.applyInverseTo(new double[] { x, y, z}, rIuArray);
                         checkVector(ruds, ru);
-                        checkVector(ruds, new FieldVector3D<DerivativeStructure>(ruArray));
+                        checkVector(ruds, new FieldVector3D<>(ruArray));
                         checkVector(rIuds, rIu);
-                        checkVector(rIuds, new FieldVector3D<DerivativeStructure>(rIuArray));
+                        checkVector(rIuds, new FieldVector3D<>(rIuArray));
                     }
                 }
             }
@@ -913,22 +911,22 @@ class FieldRotationDSTest {
     @Test
     void testDoubleRotations() throws MathIllegalArgumentException {
 
-        Well1024a random = new Well1024a(0x180b41cfeeffaf67l);
+        Well1024a random = new Well1024a(0x180b41cfeeffaf67L);
         UnitSphereRandomVectorGenerator g = new UnitSphereRandomVectorGenerator(3, random);
         DSFactory factory = new DSFactory(4, 1);
         for (int i = 0; i < 10; ++i) {
             double[] unit1 = g.nextVector();
             Rotation r1 = new Rotation(new Vector3D(unit1[0], unit1[1], unit1[2]),
                                       random.nextDouble(), RotationConvention.VECTOR_OPERATOR);
-            FieldRotation<DerivativeStructure> r1Prime = new FieldRotation<DerivativeStructure>(factory.variable(0, r1.getQ0()),
-                                                                                                factory.variable(1, r1.getQ1()),
-                                                                                                factory.variable(2, r1.getQ2()),
-                                                                                                factory.variable(3, r1.getQ3()),
-                                                                                                false);
+            FieldRotation<DerivativeStructure> r1Prime = new FieldRotation<>(factory.variable(0, r1.getQ0()),
+                                                                             factory.variable(1, r1.getQ1()),
+                                                                             factory.variable(2, r1.getQ2()),
+                                                                             factory.variable(3, r1.getQ3()),
+                                                                             false);
             double[] unit2 = g.nextVector();
-            FieldRotation<DerivativeStructure> r2 = new FieldRotation<DerivativeStructure>(createVector(unit2[0], unit2[1], unit2[2]),
-                                                                                           createAngle(random.nextDouble()),
-                                                                                           RotationConvention.VECTOR_OPERATOR);
+            FieldRotation<DerivativeStructure> r2 = new FieldRotation<>(createVector(unit2[0], unit2[1], unit2[2]),
+                                                                        createAngle(random.nextDouble()),
+                                                                        RotationConvention.VECTOR_OPERATOR);
 
             FieldRotation<DerivativeStructure> rA = FieldRotation.applyTo(r1, r2);
             FieldRotation<DerivativeStructure> rB = r1Prime.compose(r2, RotationConvention.VECTOR_OPERATOR);
@@ -966,9 +964,9 @@ class FieldRotationDSTest {
         double theta    = 1.7;
         double cosTheta = FastMath.cos(theta);
         double sinTheta = FastMath.sin(theta);
-        FieldRotation<DerivativeStructure> r    = new FieldRotation<DerivativeStructure>(createAxis(kx, ky, kz),
-                                                                                         createAngle(theta),
-                                                                                         RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r    = new FieldRotation<>(createAxis(kx, ky, kz),
+                                                                      createAngle(theta),
+                                                                      RotationConvention.VECTOR_OPERATOR);
         Vector3D a      = new Vector3D(kx / n, ky / n, kz / n);
 
         // Jacobian of the normalized rotation axis a with respect to the Cartesian vector k
@@ -1032,9 +1030,9 @@ class FieldRotationDSTest {
     @Test
     void testArray() throws MathIllegalArgumentException {
 
-        FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(createAxis(2, -3, 5),
-                                                                                      createAngle(1.7),
-                                                                                      RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r = new FieldRotation<>(createAxis(2, -3, 5),
+                                                                   createAngle(1.7),
+                                                                   RotationConvention.VECTOR_OPERATOR);
 
         for (double x = -0.9; x < 0.9; x += 0.2) {
             for (double y = -0.9; y < 0.9; y += 0.2) {
@@ -1062,9 +1060,9 @@ class FieldRotationDSTest {
         DerivativeStructure[] in      = new DerivativeStructure[3];
         DerivativeStructure[] out     = new DerivativeStructure[3];
         DerivativeStructure[] rebuilt = new DerivativeStructure[3];
-        FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(createVector(2, -3, 5),
-                                                                                      createAngle(1.7),
-                                                                                      RotationConvention.VECTOR_OPERATOR);
+        FieldRotation<DerivativeStructure> r = new FieldRotation<>(createVector(2, -3, 5),
+                                                                   createAngle(1.7),
+                                                                   RotationConvention.VECTOR_OPERATOR);
         for (double lambda = 0; lambda < 6.2; lambda += 0.2) {
             for (double phi = -1.55; phi < 1.55; phi += 0.2) {
                 FieldVector3D<DerivativeStructure> u = createVector(FastMath.cos(lambda) * FastMath.cos(phi),
@@ -1088,16 +1086,14 @@ class FieldRotationDSTest {
         for (double lambda = 0; lambda < 6.2; lambda += 0.2) {
             for (double phi = -1.55; phi < 1.55; phi += 0.2) {
                 FieldVector3D<DerivativeStructure> u = createVector(FastMath.cos(lambda) * FastMath.cos(phi),
-                                          FastMath.sin(lambda) * FastMath.cos(phi),
-                                          FastMath.sin(phi));
+                                                                    FastMath.sin(lambda) * FastMath.cos(phi),
+                                                                    FastMath.sin(phi));
                 checkVector(u, r.applyInverseTo(r.applyTo(u)));
                 checkVector(u, r.applyTo(r.applyInverseTo(u)));
             }
         }
 
-        r = new FieldRotation<DerivativeStructure>(createVector(0, 0, 1),
-                                                   createAngle(FastMath.PI),
-                                                   RotationConvention.VECTOR_OPERATOR);
+        r = new FieldRotation<>(createVector(0, 0, 1), createAngle(FastMath.PI), RotationConvention.VECTOR_OPERATOR);
         for (double lambda = 0; lambda < 6.2; lambda += 0.2) {
             for (double phi = -1.55; phi < 1.55; phi += 0.2) {
                 FieldVector3D<DerivativeStructure> u = createVector(FastMath.cos(lambda) * FastMath.cos(phi),
@@ -1118,7 +1114,7 @@ class FieldRotationDSTest {
         FieldVector3D<DerivativeStructure> u2 =createVector( -5712344449280879.0 /    2097152.0,
                                    -2275058564560979.0 /    1048576.0,
                                    4423475992255071.0 /      65536.0);
-        FieldRotation<DerivativeStructure> rot = new FieldRotation<DerivativeStructure>(u1, u2, createVector(1, 0, 0),createVector(0, 0, 1));
+        FieldRotation<DerivativeStructure> rot = new FieldRotation<>(u1, u2, createVector(1, 0, 0),createVector(0, 0, 1));
         assertEquals( 0.6228370359608200639829222, rot.getQ0().getReal(), 1.0e-15);
         assertEquals( 0.0257707621456498790029987, rot.getQ1().getReal(), 1.0e-15);
         assertEquals(-0.0000000002503012255839931, rot.getQ2().getReal(), 1.0e-15);
@@ -1133,7 +1129,7 @@ class FieldRotationDSTest {
         FieldVector3D<DerivativeStructure> v1 = createVector(0.9999999999999999, 0.0, 0.0);
         FieldVector3D<DerivativeStructure> v2 = createVector(0.0, 0.0, -1.0);
 
-        FieldRotation<DerivativeStructure> quat = new FieldRotation<DerivativeStructure>(u1, u2, v1, v2);
+        FieldRotation<DerivativeStructure> quat = new FieldRotation<>(u1, u2, v1, v2);
         double q2 = quat.getQ0().getReal() * quat.getQ0().getReal() +
                     quat.getQ1().getReal() * quat.getQ1().getReal() +
                     quat.getQ2().getReal() * quat.getQ2().getReal() +
@@ -1156,11 +1152,11 @@ class FieldRotationDSTest {
     private FieldRotation<DerivativeStructure> createRotation(double q0, double q1, double q2, double q3,
                                       boolean needsNormalization) {
         DSFactory factory = new DSFactory(4, 1);
-        return new FieldRotation<DerivativeStructure>(factory.variable(0, q0),
-                                                      factory.variable(1, q1),
-                                                      factory.variable(2, q2),
-                                                      factory.variable(3, q3),
-                                                      needsNormalization);
+        return new FieldRotation<>(factory.variable(0, q0),
+                                   factory.variable(1, q1),
+                                   factory.variable(2, q2),
+                                   factory.variable(3, q3),
+                                   needsNormalization);
     }
 
     private FieldRotation<DerivativeStructure> createRotation(double[][] m, double threshold) {
@@ -1173,21 +1169,17 @@ class FieldRotationDSTest {
                 index = (index + 1) % 4;
             }
         }
-        return new FieldRotation<DerivativeStructure>(mds, threshold);
+        return new FieldRotation<>(mds, threshold);
     }
 
     private FieldVector3D<DerivativeStructure> createVector(double x, double y, double z) {
         DSFactory factory = new DSFactory(4, 1);
-        return new FieldVector3D<DerivativeStructure>(factory.constant(x),
-                                                      factory.constant(y),
-                                                      factory.constant(z));
+        return new FieldVector3D<>(factory.constant(x), factory.constant(y),  factory.constant(z));
     }
 
     private FieldVector3D<DerivativeStructure> createAxis(double x, double y, double z) {
         DSFactory factory = new DSFactory(4, 1);
-        return new FieldVector3D<DerivativeStructure>(factory.variable(0, x),
-                                                      factory.variable(1, y),
-                                                      factory.variable(2, z));
+        return new FieldVector3D<>(factory.variable(0, x), factory.variable(1, y), factory.variable(2, z));
     }
 
     private DerivativeStructure createAngle(double alpha) {

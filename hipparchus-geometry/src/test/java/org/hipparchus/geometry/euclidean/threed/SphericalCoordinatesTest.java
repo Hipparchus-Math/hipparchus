@@ -27,6 +27,7 @@ import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,14 +36,13 @@ public class SphericalCoordinatesTest {
 
     @Test
     void testCoordinatesStoC() throws MathIllegalArgumentException {
-        double piO2 = 0.5 * FastMath.PI;
-        SphericalCoordinates sc1 = new SphericalCoordinates(2.0, 0, piO2);
+        SphericalCoordinates sc1 = new SphericalCoordinates(2.0, 0, MathUtils.SEMI_PI);
         assertEquals(0, sc1.getCartesian().distance(new Vector3D(2, 0, 0)), 1.0e-10);
-        SphericalCoordinates sc2 = new SphericalCoordinates(2.0, piO2, piO2);
+        SphericalCoordinates sc2 = new SphericalCoordinates(2.0, MathUtils.SEMI_PI, MathUtils.SEMI_PI);
         assertEquals(0, sc2.getCartesian().distance(new Vector3D(0, 2, 0)), 1.0e-10);
-        SphericalCoordinates sc3 = new SphericalCoordinates(2.0, FastMath.PI, piO2);
+        SphericalCoordinates sc3 = new SphericalCoordinates(2.0, FastMath.PI, MathUtils.SEMI_PI);
         assertEquals(0, sc3.getCartesian().distance(new Vector3D(-2, 0, 0)), 1.0e-10);
-        SphericalCoordinates sc4 = new SphericalCoordinates(2.0, -piO2, piO2);
+        SphericalCoordinates sc4 = new SphericalCoordinates(2.0, -MathUtils.SEMI_PI, MathUtils.SEMI_PI);
         assertEquals(0, sc4.getCartesian().distance(new Vector3D(0, -2, 0)), 1.0e-10);
         SphericalCoordinates sc5 = new SphericalCoordinates(2.0, 1.23456, 0);
         assertEquals(0, sc5.getCartesian().distance(new Vector3D(0, 0, 2)), 1.0e-10);
@@ -52,7 +52,7 @@ public class SphericalCoordinatesTest {
 
     @Test
     void testCoordinatesCtoS() throws MathIllegalArgumentException {
-        double piO2 = 0.5 * FastMath.PI;
+        double piO2 = MathUtils.SEMI_PI;
         SphericalCoordinates sc1 = new SphericalCoordinates(new Vector3D(2, 0, 0));
         assertEquals(2,           sc1.getR(),     1.0e-10);
         assertEquals(0,           sc1.getTheta(), 1.0e-10);

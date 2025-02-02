@@ -87,7 +87,7 @@ class ArcsSetTest {
         ArcsSet.Split split = set.split(arc);
         for (double alpha = 0.0; alpha <= MathUtils.TWO_PI; alpha += 0.01) {
             S1Point p = new S1Point(alpha);
-            if (alpha < 0.5 * FastMath.PI || alpha > 1.5 * FastMath.PI) {
+            if (alpha < MathUtils.SEMI_PI || alpha > 1.5 * FastMath.PI) {
                 assertEquals(Location.OUTSIDE, split.getPlus().checkPoint(p));
                 assertEquals(Location.INSIDE,  split.getMinus().checkPoint(p));
             } else {
@@ -569,13 +569,13 @@ class ArcsSetTest {
     @Test
     void testFarSplit() {
         ArcsSet set = new ArcsSet(FastMath.PI, 2.5 * FastMath.PI, 1.0e-10);
-        ArcsSet.Split split = set.split(new Arc(0.5 * FastMath.PI, 1.5 * FastMath.PI, 1.0e-10));
+        ArcsSet.Split split = set.split(new Arc(MathUtils.SEMI_PI, 1.5 * FastMath.PI, 1.0e-10));
         ArcsSet splitPlus  = split.getPlus();
         ArcsSet splitMinus = split.getMinus();
         assertEquals(1,   splitMinus.asList().size());
         assertEquals(      FastMath.PI, splitMinus.asList().get(0).getInf(), 1.0e-10);
         assertEquals(1.5 * FastMath.PI, splitMinus.asList().get(0).getSup(), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, splitMinus.getSize(), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, splitMinus.getSize(), 1.0e-10);
         assertEquals(1,   splitPlus.asList().size());
         assertEquals(1.5 * FastMath.PI, splitPlus.asList().get(0).getInf(), 1.0e-10);
         assertEquals(2.5 * FastMath.PI, splitPlus.asList().get(0).getSup(), 1.0e-10);

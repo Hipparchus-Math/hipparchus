@@ -28,7 +28,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -57,7 +59,7 @@ class S1PointTest {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(1.0);
         assertEquals(a.hashCode(), b.hashCode());
-        assertFalse(a == b);
+        assertNotSame(a, b);
         assertEquals(a, b);
         assertEquals(a, a);
         assertNotEquals('a', a);
@@ -70,7 +72,7 @@ class S1PointTest {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(1.0);
         assertEquals(a.hashCode(), b.hashCode());
-        assertFalse(a == b);
+        assertNotSame(a, b);
         assertTrue(a.equalsIeee754(b));
         assertTrue(a.equalsIeee754(a));
         assertFalse(a.equalsIeee754('a'));
@@ -81,14 +83,14 @@ class S1PointTest {
     @Test
     void testDistance() {
         S1Point a = new S1Point(1.0);
-        S1Point b = new S1Point(a.getAlpha() + 0.5 * FastMath.PI);
-        assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
+        S1Point b = new S1Point(a.getAlpha() + MathUtils.SEMI_PI);
+        assertEquals(MathUtils.SEMI_PI, a.distance(b), 1.0e-10);
     }
 
     @Test
     void testSpace() {
         S1Point a = new S1Point(1.0);
-        assertTrue(a.getSpace() instanceof Sphere1D);
+        assertInstanceOf(Sphere1D.class, a.getSpace());
         assertEquals(1, a.getSpace().getDimension());
         try {
             a.getSpace().getSubSpace();

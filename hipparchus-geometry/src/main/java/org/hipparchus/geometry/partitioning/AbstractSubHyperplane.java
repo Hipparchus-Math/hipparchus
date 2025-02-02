@@ -153,9 +153,9 @@ public abstract class AbstractSubHyperplane<S extends Space, P extends Point<S>,
      * @return a new tree
      */
     private BSPTree<T, Q> recurseTransform(final BSPTree<T, Q> node,
-                                        final Hyperplane<S, P> transformed,
-                                        final Transform<S, P, T, Q> transform,
-                                        final Map<BSPTree<T, Q>, BSPTree<T, Q>> map) {
+                                           final Hyperplane<S, P> transformed,
+                                           final Transform<S, P, T, Q> transform,
+                                           final Map<BSPTree<T, Q>, BSPTree<T, Q>> map) {
 
         final BSPTree<T, Q> transformedNode;
         if (node.getCut() == null) {

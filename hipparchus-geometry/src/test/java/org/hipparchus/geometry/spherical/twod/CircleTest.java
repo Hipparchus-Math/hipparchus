@@ -60,10 +60,10 @@ class CircleTest {
     void testXY() {
         Circle circle = new Circle(new S2Point(1.2, 2.5), new S2Point(-4.3, 0), 1.0e-10);
         assertEquals(0.0, circle.getPointAt(0).distance(circle.getXAxis()), 1.0e-10);
-        assertEquals(0.0, circle.getPointAt(0.5 * FastMath.PI).distance(circle.getYAxis()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, Vector3D.angle(circle.getXAxis(), circle.getYAxis()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, Vector3D.angle(circle.getXAxis(), circle.getPole()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, Vector3D.angle(circle.getPole(), circle.getYAxis()), 1.0e-10);
+        assertEquals(0.0, circle.getPointAt(MathUtils.SEMI_PI).distance(circle.getYAxis()), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, Vector3D.angle(circle.getXAxis(), circle.getYAxis()), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, Vector3D.angle(circle.getXAxis(), circle.getPole()), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, Vector3D.angle(circle.getPole(), circle.getYAxis()), 1.0e-10);
         assertEquals(0.0,
                             circle.getPole().distance(Vector3D.crossProduct(circle.getXAxis(), circle.getYAxis())),
                             1.0e-10);
@@ -74,10 +74,10 @@ class CircleTest {
         Circle circle = new Circle(new S2Point(1.2, 2.5), new S2Point(-4.3, 0), 1.0e-10);
         Circle reversed = circle.getReverse();
         assertEquals(0.0, reversed.getPointAt(0).distance(reversed.getXAxis()), 1.0e-10);
-        assertEquals(0.0, reversed.getPointAt(0.5 * FastMath.PI).distance(reversed.getYAxis()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, Vector3D.angle(reversed.getXAxis(), reversed.getYAxis()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, Vector3D.angle(reversed.getXAxis(), reversed.getPole()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, Vector3D.angle(reversed.getPole(), reversed.getYAxis()), 1.0e-10);
+        assertEquals(0.0, reversed.getPointAt(MathUtils.SEMI_PI).distance(reversed.getYAxis()), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, Vector3D.angle(reversed.getXAxis(), reversed.getYAxis()), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, Vector3D.angle(reversed.getXAxis(), reversed.getPole()), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, Vector3D.angle(reversed.getPole(), reversed.getYAxis()), 1.0e-10);
         assertEquals(0.0,
                             reversed.getPole().distance(Vector3D.crossProduct(reversed.getXAxis(), reversed.getYAxis())),
                             1.0e-10);
@@ -100,10 +100,10 @@ class CircleTest {
                             Vector3D.angle(Vector3D.crossProduct(circle.getPole(), p),
                                            Vector3D.crossProduct(circle.getPole(), samePhase)),
                             1.0e-10);
-        assertEquals(0.5 * FastMath.PI, Vector3D.angle(circle.getPole(), samePhase), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, Vector3D.angle(circle.getPole(), samePhase), 1.0e-10);
         assertEquals(circle.getPhase(p), circle.getPhase(samePhase), 1.0e-10);
         assertEquals(0.0, circle.getPhase(circle.getXAxis()), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, circle.getPhase(circle.getYAxis()), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, circle.getPhase(circle.getYAxis()), 1.0e-10);
 
     }
 
@@ -111,7 +111,7 @@ class CircleTest {
     void testSubSpace() {
         Circle circle = new Circle(new S2Point(1.2, 2.5), new S2Point(-4.3, 0), 1.0e-10);
         assertEquals(0.0, circle.toSubSpace(new S2Point(circle.getXAxis())).getAlpha(), 1.0e-10);
-        assertEquals(0.5 * FastMath.PI, circle.toSubSpace(new S2Point(circle.getYAxis())).getAlpha(), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, circle.toSubSpace(new S2Point(circle.getYAxis())).getAlpha(), 1.0e-10);
         Vector3D p = new Vector3D(1, 2, -4);
         assertEquals(circle.getPhase(p), circle.toSubSpace(new S2Point(p)).getAlpha(), 1.0e-10);
     }
@@ -124,7 +124,7 @@ class CircleTest {
                                       FastMath.sin(alpha), circle.getYAxis());
             Vector3D q = circle.toSpace(new S1Point(alpha)).getVector();
             assertEquals(0.0, p.distance(q), 1.0e-10);
-            assertEquals(0.5 * FastMath.PI, Vector3D.angle(circle.getPole(), q), 1.0e-10);
+            assertEquals(MathUtils.SEMI_PI, Vector3D.angle(circle.getPole(), q), 1.0e-10);
         }
     }
 
@@ -135,8 +135,8 @@ class CircleTest {
         assertEquals(0.0,                circle.getOffset(new S2Point(Vector3D.MINUS_I)), 1.0e-10);
         assertEquals(0.0,                circle.getOffset(new S2Point(Vector3D.PLUS_J)),  1.0e-10);
         assertEquals(0.0,                circle.getOffset(new S2Point(Vector3D.MINUS_J)), 1.0e-10);
-        assertEquals(-0.5 * FastMath.PI, circle.getOffset(new S2Point(Vector3D.PLUS_K)),  1.0e-10);
-        assertEquals( 0.5 * FastMath.PI, circle.getOffset(new S2Point(Vector3D.MINUS_K)), 1.0e-10);
+        assertEquals(-MathUtils.SEMI_PI, circle.getOffset(new S2Point(Vector3D.PLUS_K)),  1.0e-10);
+        assertEquals( MathUtils.SEMI_PI, circle.getOffset(new S2Point(Vector3D.MINUS_K)), 1.0e-10);
 
     }
 

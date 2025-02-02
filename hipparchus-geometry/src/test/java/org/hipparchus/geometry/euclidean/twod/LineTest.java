@@ -26,6 +26,7 @@ import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.Transform;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -115,16 +116,12 @@ class LineTest {
         Line l1 = new Line(new Vector2D(1.0 ,1.0), new Vector2D(4.0 ,1.0), 1.0e-10);
         Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> t1 =
             Line.getTransform(0.0, 0.5, -1.0, 0.0, 1.0, 1.5);
-        assertEquals(0.5 * FastMath.PI,
-                            ((Line) t1.apply(l1)).getAngle(),
-                            1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, ((Line) t1.apply(l1)).getAngle(), 1.0e-10);
 
         Line l2 = new Line(new Vector2D(0.0, 0.0), new Vector2D(1.0, 1.0), 1.0e-10);
         Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> t2 =
             Line.getTransform(0.0, 0.5, -1.0, 0.0, 1.0, 1.5);
-        assertEquals(FastMath.atan2(1.0, -2.0),
-                            ((Line) t2.apply(l2)).getAngle(),
-                            1.0e-10);
+        assertEquals(FastMath.atan2(1.0, -2.0), ((Line) t2.apply(l2)).getAngle(), 1.0e-10);
 
     }
 

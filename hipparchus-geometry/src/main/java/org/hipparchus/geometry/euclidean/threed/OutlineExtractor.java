@@ -33,6 +33,7 @@ import org.hipparchus.geometry.partitioning.BoundaryAttribute;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /** Extractor for {@link PolygonsSet polyhedrons sets} outlines.
  * <p>This class extracts the 2D outlines from {{@link PolygonsSet
@@ -223,7 +224,7 @@ public class OutlineExtractor {
                         if (closed || (previous != 1)) {
                             // the previous point is a real vertex
                             // it defines one bounding point of the edge
-                            final double angle = line.getAngle() + 0.5 * FastMath.PI;
+                            final double angle = line.getAngle() + MathUtils.SEMI_PI;
                             final org.hipparchus.geometry.euclidean.twod.Line l =
                                 new org.hipparchus.geometry.euclidean.twod.Line(pPoint, angle, tolerance);
                             edge = edge.split(l).getPlus();
@@ -232,7 +233,7 @@ public class OutlineExtractor {
                         if (closed || (current != (loop.length - 1))) {
                             // the current point is a real vertex
                             // it defines one bounding point of the edge
-                            final double angle = line.getAngle() + 0.5 * FastMath.PI;
+                            final double angle = line.getAngle() + MathUtils.SEMI_PI;
                             final org.hipparchus.geometry.euclidean.twod.Line l =
                                 new org.hipparchus.geometry.euclidean.twod.Line(cPoint, angle, tolerance);
                             edge = edge.split(l).getMinus();

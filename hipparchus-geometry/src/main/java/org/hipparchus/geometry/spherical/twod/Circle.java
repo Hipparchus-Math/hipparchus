@@ -35,6 +35,7 @@ import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 
 /** This class represents an oriented great circle on the 2-sphere.
@@ -77,7 +78,7 @@ public class Circle implements Hyperplane<Sphere2D, S2Point>, Embedding<Sphere2D
     }
 
     /** Build a great circle from two non-aligned points.
-     * <p>The circle is oriented from first to second point using the path smaller than \( \pi \).</p>
+     * <p>The circle is oriented from first to second point using the path smaller than π.</p>
      * @param first first point contained in the great circle
      * @param second second point contained in the great circle
      * @param tolerance tolerance below which close sub-arcs are merged together
@@ -221,7 +222,7 @@ public class Circle implements Hyperplane<Sphere2D, S2Point>, Embedding<Sphere2D
     /** Get the Y axis of the circle.
      * <p>
      * This method returns the same value as {@link #getPointAt(double)
-     * getPointAt(0.5 * FastMath.PI)} but it does not do any computation and always
+     * getPointAt(MathUtils.SEMI_PI)} but it does not do any computation and always
      * return the same instance.
      * </p>
      * @return an arbitrary y axis point on the circle
@@ -252,8 +253,7 @@ public class Circle implements Hyperplane<Sphere2D, S2Point>, Embedding<Sphere2D
      */
     public Arc getInsideArc(final Circle other) {
         final double alpha  = getPhase(other.pole);
-        final double halfPi = 0.5 * FastMath.PI;
-        return new Arc(alpha - halfPi, alpha + halfPi, tolerance);
+        return new Arc(alpha - MathUtils.SEMI_PI, alpha + MathUtils.SEMI_PI, tolerance);
     }
 
     /** {@inheritDoc} */
@@ -295,7 +295,7 @@ public class Circle implements Hyperplane<Sphere2D, S2Point>, Embedding<Sphere2D
      * @see #getOffset(S2Point)
      */
     public double getOffset(final Vector3D direction) {
-        return Vector3D.angle(pole, direction) - 0.5 * FastMath.PI;
+        return Vector3D.angle(pole, direction) - MathUtils.SEMI_PI;
     }
 
     /** {@inheritDoc} */

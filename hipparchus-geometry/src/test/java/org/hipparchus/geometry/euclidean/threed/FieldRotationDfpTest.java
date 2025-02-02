@@ -161,7 +161,7 @@ class FieldRotationDfpTest {
                                 RotationConvention.VECTOR_OPERATOR);
         checkVector(r.getAxis(RotationConvention.VECTOR_OPERATOR), createVector(0, 0, -1));
         checkVector(r.getAxis(RotationConvention.FRAME_TRANSFORM), createVector(0, 0, +1));
-        checkAngle(r.getAngle(), 0.5 * FastMath.PI);
+        checkAngle(r.getAngle(), MathUtils.SEMI_PI);
 
         r = new FieldRotation<>(createAxis(0, 1, 0),
                                 createAngle(FastMath.PI),
@@ -203,7 +203,7 @@ class FieldRotationDfpTest {
                                 RotationConvention.FRAME_TRANSFORM);
         checkVector(r.getAxis(RotationConvention.FRAME_TRANSFORM), createVector(0, 0, -1));
         checkVector(r.getAxis(RotationConvention.VECTOR_OPERATOR), createVector(0, 0, +1));
-        checkAngle(r.getAngle(), 0.5 * FastMath.PI);
+        checkAngle(r.getAngle(), MathUtils.SEMI_PI);
 
         r = new FieldRotation<>(createAxis(0, 1, 0),
                                 createAngle(FastMath.PI),
@@ -491,16 +491,16 @@ class FieldRotationDfpTest {
                 RotationOrder.YZX, RotationOrder.ZXY, RotationOrder.ZYX
             };
 
-            for (int i = 0; i < CardanOrders.length; ++i) {
+            for (final RotationOrder cardanOrder : CardanOrders) {
                 for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 2.0) {
                     for (double alpha2 = -1.55; alpha2 < 1.55; alpha2 += 0.8) {
                         for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 2.0) {
-                            FieldRotation<Dfp> r = new FieldRotation<>(CardanOrders[i],
+                            FieldRotation<Dfp> r = new FieldRotation<>(cardanOrder,
                                                                        convention,
                                                                        field.newDfp(alpha1),
                                                                        field.newDfp(alpha2),
                                                                        field.newDfp(alpha3));
-                            Dfp[] angles = r.getAngles(CardanOrders[i], convention);
+                            Dfp[] angles = r.getAngles(cardanOrder, convention);
                             checkAngle(angles[0], alpha1);
                             checkAngle(angles[1], alpha2);
                             checkAngle(angles[2], alpha3);
@@ -514,16 +514,16 @@ class FieldRotationDfpTest {
                 RotationOrder.YZY, RotationOrder.ZXZ, RotationOrder.ZYZ
             };
 
-            for (int i = 0; i < EulerOrders.length; ++i) {
+            for (final RotationOrder eulerOrder : EulerOrders) {
                 for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 2.0) {
                     for (double alpha2 = 0.05; alpha2 < 3.1; alpha2 += 0.8) {
                         for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 2.0) {
-                            FieldRotation<Dfp> r = new FieldRotation<>(EulerOrders[i],
+                            FieldRotation<Dfp> r = new FieldRotation<>(eulerOrder,
                                                                        convention,
                                                                        field.newDfp(alpha1),
                                                                        field.newDfp(alpha2),
                                                                        field.newDfp(alpha3));
-                            Dfp[] angles = r.getAngles(EulerOrders[i], convention);
+                            Dfp[] angles = r.getAngles(eulerOrder, convention);
                             checkAngle(angles[0], alpha1);
                             checkAngle(angles[1], alpha2);
                             checkAngle(angles[2], alpha3);
@@ -548,15 +548,12 @@ class FieldRotationDfpTest {
             double[] singularCardanAngle = {
                 -FastMath.PI / 2, -FastMath.PI / 2 + 1.0e-12, -FastMath.PI / 2 + 1.0e-10,
                 FastMath.PI / 2 - 1.0e-10, FastMath.PI / 2 - 1.0e-12, FastMath.PI / 2
-           };
-            for (int i = 0; i < CardanOrders.length; ++i) {
-                for (int j = 0; j < singularCardanAngle.length; ++j) {
-                    FieldRotation<Dfp> r = new FieldRotation<>(CardanOrders[i],
-                                                               convention,
-                                                               field.newDfp(0.1),
-                                                               field.newDfp(singularCardanAngle[j]),
-                                                               field.newDfp(0.3));
-                    assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1].getReal(), 4.5e-16);
+            };
+            for (final RotationOrder cardanOrder : CardanOrders) {
+                for (final double v : singularCardanAngle) {
+                    FieldRotation<Dfp> r = new FieldRotation<>(cardanOrder, convention,
+                                                               field.newDfp(0.1), field.newDfp(v), field.newDfp(0.3));
+                    assertEquals(v, r.getAngles(cardanOrder, convention)[1].getReal(), 4.5e-16);
                 }
             }
 
@@ -566,14 +563,11 @@ class FieldRotationDfpTest {
             };
 
             double[] singularEulerAngle = { 0, 1.0e-12, 1.0e-10, FastMath.PI - 1.0e-10, FastMath.PI - 1.0e-12, FastMath.PI };
-            for (int i = 0; i < EulerOrders.length; ++i) {
-                for (int j = 0; j < singularEulerAngle.length; ++j) {
-                    FieldRotation<Dfp> r = new FieldRotation<>(EulerOrders[i],
-                                                               convention,
-                                                               field.newDfp(0.1),
-                                                               field.newDfp(singularEulerAngle[j]),
-                                                               field.newDfp(0.3));
-                    assertEquals(singularEulerAngle[j], r.getAngles(EulerOrders[i], convention)[1].getReal(), 1.0e-24);
+            for (final RotationOrder eulerOrder : EulerOrders) {
+                for (final double v : singularEulerAngle) {
+                    FieldRotation<Dfp> r = new FieldRotation<>(eulerOrder, convention,
+                                                               field.newDfp(0.1), field.newDfp(v), field.newDfp(0.3));
+                    assertEquals(v, r.getAngles(eulerOrder, convention)[1].getReal(), 1.0e-24);
                 }
             }
 

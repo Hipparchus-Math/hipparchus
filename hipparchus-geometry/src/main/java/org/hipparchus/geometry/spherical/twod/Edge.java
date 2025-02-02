@@ -129,7 +129,7 @@ public class Edge {
      * vertices are introduced to connect these sub-edges together.
      * </p>
      * @param splitCircle circle splitting the edge in several parts
-     * @param outsideList list where to put parts that are outside of the split circle
+     * @param outsideList list where to put parts that are outside the split circle
      * @param insideList list where to put parts that are inside the split circle
      */
     void split(final Circle splitCircle, final List<Edge> outsideList, final List<Edge> insideList) {
@@ -164,12 +164,12 @@ public class Edge {
             }
 
             if (arcRelativeStart >= length - tolerance) {
-                // the edge ends while still outside of the circle
+                // the edge ends while still outside the circle
                 if (unwrappedEnd >= 0) {
                     addSubEdge(previousVertex, end,
                                length - alreadyManagedLength, outsideList);
                 } else {
-                    // the edge is entirely outside of the circle
+                    // the edge is entirely outside the circle
                     // we don't split anything
                     outsideList.add(this);
                 }
@@ -181,11 +181,11 @@ public class Edge {
                 alreadyManagedLength = arcRelativeStart;
 
                 if (arcRelativeEnd >= length - tolerance) {
-                    // the edge ends while still inside of the circle
+                    // the edge ends while still inside the circle
                     addSubEdge(previousVertex, end,
                                length - alreadyManagedLength, insideList);
                 } else {
-                    // the edge is long enough to exit outside of the circle
+                    // the edge is long enough to exit outside the circle
                     previousVertex = addSubEdge(previousVertex,
                                                 new Vertex(new S2Point(circle.getPointAt(edgeStart + arcRelativeEnd))),
                                                 arcRelativeEnd - alreadyManagedLength, insideList);
