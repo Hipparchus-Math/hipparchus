@@ -16,7 +16,6 @@
  */
 package org.hipparchus.filtering.kalman.unscented;
 
-import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 /**
