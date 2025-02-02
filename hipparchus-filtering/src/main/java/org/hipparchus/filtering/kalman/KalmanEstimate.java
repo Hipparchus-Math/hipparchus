@@ -18,6 +18,9 @@ package org.hipparchus.filtering.kalman;
 
 import org.hipparchus.linear.RealMatrix;
 
+/** Interface representing a Kalman estimate.
+ * @since 4.0
+ */
 public interface KalmanEstimate {
 
     /** Get the current predicted state.

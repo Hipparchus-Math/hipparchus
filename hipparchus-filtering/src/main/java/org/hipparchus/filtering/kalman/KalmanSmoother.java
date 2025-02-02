@@ -31,8 +31,10 @@ import java.util.List;
  * <p>
  * This implementation is attached to a filter using the observer mechanism.  Once all measurements have been
  * processed by the filter, the smoothing method can be called.
- * </br>
+ * </p>
+ * <p>
  * For example
+ * </p>
  * <pre>{@code
  *     // Kalman filter
  *     final KalmanFilter<SimpleMeasurement> filter = new LinearKalmanFilter<>(decomposer, process, initialState);
@@ -47,7 +49,6 @@ import java.util.List;
  *     // Smooth backwards
  *     List<ProcessEstimate> smoothedStates = smoother.backwardsSmooth();
  * }</pre>
- * </p>
  *
  * @see "Särkkä, S. Bayesian Filtering and Smoothing. Cambridge 2013"
  */
