@@ -26,6 +26,7 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
+import org.hipparchus.geometry.euclidean.twod.SubLine;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.Embedding;
 import org.hipparchus.geometry.partitioning.Hyperplane;
@@ -35,8 +36,8 @@ import org.hipparchus.util.FastMath;
 /** The class represent planes in a three dimensional space.
  */
 public class Plane
-    implements Hyperplane<Euclidean3D, Vector3D>,
-               Embedding<Euclidean3D, Vector3D, Euclidean2D, Vector2D> {
+    implements Hyperplane<Euclidean3D, Vector3D, Plane, SubPlane>,
+               Embedding<Euclidean3D, Vector3D,  Euclidean2D, Vector2D> {
 
     /** Offset of the origin with respect to the plane. */
     private double originOffset;
@@ -414,7 +415,8 @@ public class Plane
     /** {@inheritDoc} */
     @Override
     public SubPlane emptyHyperplane() {
-        return new SubPlane(this, new RegionFactory<Euclidean2D, Vector2D>().getComplement(new PolygonsSet(tolerance)));
+        final RegionFactory<Euclidean2D, Vector2D, org.hipparchus.geometry.euclidean.twod.Line, SubLine> factory = new RegionFactory<>();
+        return new SubPlane(this, factory.getComplement(new PolygonsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.
@@ -467,8 +469,8 @@ public class Plane
      * the same orientation
      */
     @Override
-    public boolean sameOrientationAs(final Hyperplane<Euclidean3D, Vector3D> other) {
-        return (((Plane) other).w).dotProduct(w) > 0.0;
+    public boolean sameOrientationAs(final Plane other) {
+        return other.w.dotProduct(w) > 0.0;
     }
 
 }

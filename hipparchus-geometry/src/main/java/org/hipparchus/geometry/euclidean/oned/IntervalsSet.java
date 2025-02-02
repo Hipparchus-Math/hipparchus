@@ -35,7 +35,9 @@ import org.hipparchus.util.Precision;
 
 /** This class represents a 1D region: a set of intervals.
  */
-public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidean1D, Vector1D>
+public class IntervalsSet
+    extends AbstractRegion<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint,
+                           Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
     implements Iterable<double[]> {
 
     /** Build an intervals set representing the whole real line.
@@ -66,7 +68,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param tree inside/outside BSP tree representing the intervals set
      * @param tolerance tolerance below which points are considered identical.
      */
-    public IntervalsSet(final BSPTree<Euclidean1D, Vector1D> tree, final double tolerance) {
+    public IntervalsSet(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> tree,
+                        final double tolerance) {
         super(tree, tolerance);
     }
 
@@ -90,8 +93,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param boundary collection of boundary elements
      * @param tolerance tolerance below which points are considered identical.
      */
-    public IntervalsSet(final Collection<SubHyperplane<Euclidean1D, Vector1D>> boundary,
-                        final double tolerance) {
+    public IntervalsSet(final Collection<SubOrientedPoint> boundary, final double tolerance) {
         super(boundary, tolerance);
     }
 
@@ -103,28 +105,25 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param tolerance tolerance below which points are considered identical.
      * @return the built tree
      */
-    private static BSPTree<Euclidean1D, Vector1D> buildTree(final double lower, final double upper,
-                                                            final double tolerance) {
+    private static BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        buildTree(final double lower, final double upper, final double tolerance) {
         if (Double.isInfinite(lower) && (lower < 0)) {
             if (Double.isInfinite(upper) && (upper > 0)) {
                 // the tree must cover the whole real line
                 return new BSPTree<>(Boolean.TRUE);
             }
             // the tree must be open on the negative infinity side
-            final SubHyperplane<Euclidean1D, Vector1D> upperCut =
-                new OrientedPoint(new Vector1D(upper), true, tolerance).wholeHyperplane();
+            final SubOrientedPoint upperCut = new OrientedPoint(new Vector1D(upper), true, tolerance).wholeHyperplane();
             return new BSPTree<>(upperCut, new BSPTree<>(Boolean.FALSE), new BSPTree<>(Boolean.TRUE), null);
         }
-        final SubHyperplane<Euclidean1D, Vector1D> lowerCut =
-            new OrientedPoint(new Vector1D(lower), false, tolerance).wholeHyperplane();
+        final SubOrientedPoint lowerCut = new OrientedPoint(new Vector1D(lower), false, tolerance).wholeHyperplane();
         if (Double.isInfinite(upper) && (upper > 0)) {
             // the tree must be open on the positive infinity side
             return new BSPTree<>(lowerCut, new BSPTree<>(Boolean.FALSE), new BSPTree<>(Boolean.TRUE), null);
         }
 
         // the tree must be bounded on the two sides
-        final SubHyperplane<Euclidean1D, Vector1D> upperCut =
-            new OrientedPoint(new Vector1D(upper), true, tolerance).wholeHyperplane();
+        final SubOrientedPoint upperCut = new OrientedPoint(new Vector1D(upper), true, tolerance).wholeHyperplane();
         return new BSPTree<>(lowerCut,
                              new BSPTree<>(Boolean.FALSE),
                              new BSPTree<>(upperCut, new BSPTree<>(Boolean.FALSE), new BSPTree<>(Boolean.TRUE), null),
@@ -134,7 +133,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
 
     /** {@inheritDoc} */
     @Override
-    public IntervalsSet buildNew(final BSPTree<Euclidean1D, Vector1D> tree) {
+    public IntervalsSet buildNew(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> tree) {
         return new IntervalsSet(tree, getTolerance());
     }
 
@@ -157,7 +156,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
             } else if (size >= Precision.SAFE_MIN) {
                 setBarycenter(new Vector1D(sum / size));
             } else {
-                setBarycenter(((OrientedPoint) getTree(false).getCut().getHyperplane()).getLocation());
+                setBarycenter(getTree(false).getCut().getHyperplane().getLocation());
             }
         }
     }
@@ -169,10 +168,10 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * instance is empty)
      */
     public double getInf() {
-        BSPTree<Euclidean1D, Vector1D> node = getTree(false);
+        BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node = getTree(false);
         double  inf  = Double.POSITIVE_INFINITY;
         while (node.getCut() != null) {
-            final OrientedPoint op = (OrientedPoint) node.getCut().getHyperplane();
+            final OrientedPoint op = node.getCut().getHyperplane();
             inf  = op.getLocation().getX();
             node = op.isDirect() ? node.getMinus() : node.getPlus();
         }
@@ -186,10 +185,10 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * instance is empty)
      */
     public double getSup() {
-        BSPTree<Euclidean1D, Vector1D> node = getTree(false);
+        BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node = getTree(false);
         double  sup  = Double.NEGATIVE_INFINITY;
         while (node.getCut() != null) {
-            final OrientedPoint op = (OrientedPoint) node.getCut().getHyperplane();
+            final OrientedPoint op = node.getCut().getHyperplane();
             sup  = op.getLocation().getX();
             node = op.isDirect() ? node.getPlus() : node.getMinus();
         }
@@ -268,15 +267,16 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param root tree root
      * @return first leaf node
      */
-    private BSPTree<Euclidean1D, Vector1D> getFirstLeaf(final BSPTree<Euclidean1D, Vector1D> root) {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        getFirstLeaf(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> root) {
 
         if (root.getCut() == null) {
             return root;
         }
 
         // find the smallest internal node
-        BSPTree<Euclidean1D, Vector1D> smallest = null;
-        for (BSPTree<Euclidean1D, Vector1D> n = root; n != null; n = previousInternalNode(n)) {
+        BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> smallest = null;
+        for (BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> n = root; n != null; n = previousInternalNode(n)) {
             smallest = n;
         }
 
@@ -288,10 +288,10 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @return smallest internal node,
      * or null if there are no internal nodes (i.e. the set is either empty or covers the real line)
      */
-    private BSPTree<Euclidean1D, Vector1D> getFirstIntervalBoundary() {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> getFirstIntervalBoundary() {
 
         // start search at the tree root
-        BSPTree<Euclidean1D, Vector1D> node = getTree(false);
+        BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node = getTree(false);
         if (node.getCut() == null) {
             return null;
         }
@@ -312,7 +312,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node internal node to check
      * @return true if the node corresponds to the start abscissa of an interval
      */
-    private boolean isIntervalStart(final BSPTree<Euclidean1D, Vector1D> node) {
+    private boolean isIntervalStart(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
 
         if ((Boolean) leafBefore(node).getAttribute()) {
             // it has an inside cell before it, it may end an interval but not start it
@@ -334,7 +334,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node internal node to check
      * @return true if the node corresponds to the end abscissa of an interval
      */
-    private boolean isIntervalEnd(final BSPTree<Euclidean1D, Vector1D> node) {
+    private boolean isIntervalEnd(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
 
         if (!(Boolean) leafBefore(node).getAttribute()) {
             // it has an outside cell before it, it may start an interval but not end it
@@ -357,7 +357,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @return next internal node in ascending order, or null
      * if this is the last internal node
      */
-    private BSPTree<Euclidean1D, Vector1D> nextInternalNode(BSPTree<Euclidean1D, Vector1D> node) {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        nextInternalNode(BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
 
         if (childAfter(node).getCut() != null) {
             // the next node is in the sub-tree
@@ -377,7 +378,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @return previous internal node in ascending order, or null
      * if this is the first internal node
      */
-    private BSPTree<Euclidean1D, Vector1D> previousInternalNode(BSPTree<Euclidean1D, Vector1D> node) {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        previousInternalNode(BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
 
         if (childBefore(node).getCut() != null) {
             // the next node is in the sub-tree
@@ -396,7 +398,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node internal node at which the sub-tree starts
      * @return leaf node just before the internal node
      */
-    private BSPTree<Euclidean1D, Vector1D> leafBefore(BSPTree<Euclidean1D, Vector1D> node) {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        leafBefore(BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
 
         node = childBefore(node);
         while (node.getCut() != null) {
@@ -411,7 +414,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node internal node at which the sub-tree starts
      * @return leaf node just after the internal node
      */
-    private BSPTree<Euclidean1D, Vector1D> leafAfter(BSPTree<Euclidean1D, Vector1D> node) {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        leafAfter(BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
 
         node = childAfter(node);
         while (node.getCut() != null) {
@@ -426,8 +430,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node child node considered
      * @return true is the node has a parent end is before it in ascending order
      */
-    private boolean isBeforeParent(final BSPTree<Euclidean1D, Vector1D> node) {
-        final BSPTree<Euclidean1D, Vector1D> parent = node.getParent();
+    private boolean isBeforeParent(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
+        final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> parent = node.getParent();
         if (parent == null) {
             return false;
         } else {
@@ -439,8 +443,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node child node considered
      * @return true is the node has a parent end is after it in ascending order
      */
-    private boolean isAfterParent(final BSPTree<Euclidean1D, Vector1D> node) {
-        final BSPTree<Euclidean1D, Vector1D> parent = node.getParent();
+    private boolean isAfterParent(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
+        final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> parent = node.getParent();
         if (parent == null) {
             return false;
         } else {
@@ -452,7 +456,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node internal node at which the sub-tree starts
      * @return child node just before the internal node
      */
-    private BSPTree<Euclidean1D, Vector1D> childBefore(BSPTree<Euclidean1D, Vector1D> node) {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        childBefore(BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
         if (isDirect(node)) {
             // smaller abscissas are on minus side, larger abscissas are on plus side
             return node.getMinus();
@@ -466,7 +471,8 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node internal node at which the sub-tree starts
      * @return child node just after the internal node
      */
-    private BSPTree<Euclidean1D, Vector1D> childAfter(BSPTree<Euclidean1D, Vector1D> node) {
+    private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>
+        childAfter(BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
         if (isDirect(node)) {
             // smaller abscissas are on minus side, larger abscissas are on plus side
             return node.getPlus();
@@ -480,16 +486,16 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
      * @param node internal node to check
      * @return true if the oriented point is direct
      */
-    private boolean isDirect(final BSPTree<Euclidean1D, Vector1D> node) {
-        return ((OrientedPoint) node.getCut().getHyperplane()).isDirect();
+    private boolean isDirect(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
+        return node.getCut().getHyperplane().isDirect();
     }
 
     /** Get the abscissa of an internal node.
      * @param node internal node to check
      * @return abscissa
      */
-    private double getAngle(final BSPTree<Euclidean1D, Vector1D> node) {
-        return ((OrientedPoint) node.getCut().getHyperplane()).getLocation().getX();
+    private double getAngle(final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> node) {
+        return node.getCut().getHyperplane().getLocation().getX();
     }
 
     /** {@inheritDoc}
@@ -509,7 +515,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
     private class SubIntervalsIterator implements Iterator<double[]> {
 
         /** Current node. */
-        private BSPTree<Euclidean1D, Vector1D> current;
+        private BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> current;
 
         /** Sub-interval no yet returned. */
         private double[] pending;
@@ -546,7 +552,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
         private void selectPending() {
 
             // look for the start of the interval
-            BSPTree<Euclidean1D, Vector1D> start = current;
+            BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> start = current;
             while (start != null && !isIntervalStart(start)) {
                 start = nextInternalNode(start);
             }
@@ -559,7 +565,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Vector1D, Euclidea
             }
 
             // look for the end of the interval
-            BSPTree<Euclidean1D, Vector1D> end = start;
+            BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> end = start;
             while (end != null && !isIntervalEnd(end)) {
                 end = nextInternalNode(end);
             }

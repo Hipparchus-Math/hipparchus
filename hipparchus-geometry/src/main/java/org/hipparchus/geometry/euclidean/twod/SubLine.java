@@ -28,25 +28,25 @@ import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.Interval;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
 import org.hipparchus.geometry.euclidean.oned.OrientedPoint;
+import org.hipparchus.geometry.euclidean.oned.SubOrientedPoint;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.AbstractSubHyperplane;
 import org.hipparchus.geometry.partitioning.BSPTree;
-import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.geometry.partitioning.Region;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.util.FastMath;
 
 /** This class represents a sub-hyperplane for {@link Line}.
  */
-public class SubLine extends AbstractSubHyperplane<Euclidean2D, Vector2D, Euclidean1D, Vector1D> {
+public class SubLine
+    extends AbstractSubHyperplane<Euclidean2D, Vector2D, Line, SubLine, Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> {
 
     /** Simple constructor.
      * @param hyperplane underlying hyperplane
      * @param remainingRegion remaining region of the hyperplane
      */
-    public SubLine(final Hyperplane<Euclidean2D, Vector2D> hyperplane,
-                   final Region<Euclidean1D, Vector1D> remainingRegion) {
+    public SubLine(final Line hyperplane,
+                   final Region<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> remainingRegion) {
         super(hyperplane, remainingRegion);
     }
 
@@ -83,14 +83,13 @@ public class SubLine extends AbstractSubHyperplane<Euclidean2D, Vector2D, Euclid
      */
     public List<Segment> getSegments() {
 
-        final Line line = (Line) getHyperplane();
         final List<Interval> list = ((IntervalsSet) getRemainingRegion()).asList();
         final List<Segment> segments = new ArrayList<>(list.size());
 
         for (final Interval interval : list) {
-            final Vector2D start = line.toSpace(new Vector1D(interval.getInf()));
-            final Vector2D end   = line.toSpace(new Vector1D(interval.getSup()));
-            segments.add(new Segment(start, end, line));
+            final Vector2D start = getHyperplane().toSpace(new Vector1D(interval.getInf()));
+            final Vector2D end   = getHyperplane().toSpace(new Vector1D(interval.getSup()));
+            segments.add(new Segment(start, end, getHyperplane()));
         }
 
         return segments;
@@ -114,8 +113,8 @@ public class SubLine extends AbstractSubHyperplane<Euclidean2D, Vector2D, Euclid
     public Vector2D intersection(final SubLine subLine, final boolean includeEndPoints) {
 
         // retrieve the underlying lines
-        Line line1 = (Line) getHyperplane();
-        Line line2 = (Line) subLine.getHyperplane();
+        Line line1 = getHyperplane();
+        Line line2 = subLine.getHyperplane();
 
         // compute the intersection on infinite line
         Vector2D v2D = line1.intersection(line2);
@@ -152,24 +151,22 @@ public class SubLine extends AbstractSubHyperplane<Euclidean2D, Vector2D, Euclid
 
     /** {@inheritDoc} */
     @Override
-    protected AbstractSubHyperplane<Euclidean2D, Vector2D, Euclidean1D, Vector1D>
-        buildNew(final Hyperplane<Euclidean2D, Vector2D> hyperplane,
-                 final Region<Euclidean1D, Vector1D> remainingRegion) {
+    protected SubLine buildNew(final Line hyperplane,
+                               final Region<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> remainingRegion) {
         return new SubLine(hyperplane, remainingRegion);
     }
 
     /** {@inheritDoc} */
     @Override
-    public SplitSubHyperplane<Euclidean2D, Vector2D> split(final Hyperplane<Euclidean2D, Vector2D> hyperplane) {
+    public SplitSubHyperplane<Euclidean2D, Vector2D, Line, SubLine> split(final Line hyperplane) {
 
-        final Line    thisLine  = (Line) getHyperplane();
-        final Line    otherLine = (Line) hyperplane;
-        final Vector2D crossing = thisLine.intersection(otherLine);
+        final Line    thisLine  = getHyperplane();
+        final Vector2D crossing = thisLine.intersection(hyperplane);
         final double tolerance  = thisLine.getTolerance();
 
         if (crossing == null) {
             // the lines are parallel
-            final double global = otherLine.getOffset(thisLine);
+            final double global = hyperplane.getOffset(thisLine);
             if (global < -tolerance) {
                 return new SplitSubHyperplane<>(null, this);
             } else if (global > tolerance) {
@@ -180,22 +177,21 @@ public class SubLine extends AbstractSubHyperplane<Euclidean2D, Vector2D, Euclid
         }
 
         // the lines do intersect
-        final boolean direct = FastMath.sin(thisLine.getAngle() - otherLine.getAngle()) < 0;
+        final boolean direct = FastMath.sin(thisLine.getAngle() - hyperplane.getAngle()) < 0;
         final Vector1D x      = thisLine.toSubSpace(crossing);
-        final SubHyperplane<Euclidean1D, Vector1D> subPlus  =
-                new OrientedPoint(x, !direct, tolerance).wholeHyperplane();
-        final SubHyperplane<Euclidean1D, Vector1D> subMinus =
-                new OrientedPoint(x,  direct, tolerance).wholeHyperplane();
+        final SubOrientedPoint subPlus  = new OrientedPoint(x, !direct, tolerance).wholeHyperplane();
+        final SubOrientedPoint subMinus = new OrientedPoint(x,  direct, tolerance).wholeHyperplane();
 
-        final BSPTree<Euclidean1D, Vector1D> splitTree = getRemainingRegion().getTree(false).split(subMinus);
-        final BSPTree<Euclidean1D, Vector1D> plusTree  = getRemainingRegion().isEmpty(splitTree.getPlus()) ?
-                                                         new BSPTree<>(Boolean.FALSE) :
-                                                         new BSPTree<>(subPlus, new BSPTree<>(Boolean.FALSE),
-                                                                       splitTree.getPlus(), null);
-        final BSPTree<Euclidean1D, Vector1D> minusTree = getRemainingRegion().isEmpty(splitTree.getMinus()) ?
-                                                         new BSPTree<>(Boolean.FALSE) :
-                                                         new BSPTree<>(subMinus, new BSPTree<>(Boolean.FALSE),
-                                                                       splitTree.getMinus(), null);
+        final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> splitTree =
+                getRemainingRegion().getTree(false).split(subMinus);
+        final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> plusTree  =
+                getRemainingRegion().isEmpty(splitTree.getPlus()) ?
+                                             new BSPTree<>(Boolean.FALSE) :
+                                             new BSPTree<>(subPlus, new BSPTree<>(Boolean.FALSE), splitTree.getPlus(), null);
+        final BSPTree<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> minusTree =
+                getRemainingRegion().isEmpty(splitTree.getMinus()) ?
+                                             new BSPTree<>(Boolean.FALSE) :
+                                             new BSPTree<>(subMinus, new BSPTree<>(Boolean.FALSE), splitTree.getMinus(), null);
         return new SplitSubHyperplane<>(new SubLine(thisLine.copySelf(), new IntervalsSet(plusTree, tolerance)),
                                         new SubLine(thisLine.copySelf(), new IntervalsSet(minusTree, tolerance)));
 

@@ -25,6 +25,8 @@ import java.util.Collection;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
+import org.hipparchus.geometry.euclidean.twod.Line;
+import org.hipparchus.geometry.euclidean.twod.SubLine;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.hull.ConvexHullGenerator;
 
@@ -32,7 +34,7 @@ import org.hipparchus.geometry.hull.ConvexHullGenerator;
  * Interface for convex hull generators in the two-dimensional euclidean space.
  *
  */
-public interface ConvexHullGenerator2D extends ConvexHullGenerator<Euclidean2D, Vector2D> {
+public interface ConvexHullGenerator2D extends ConvexHullGenerator<Euclidean2D, Vector2D, Line, SubLine> {
 
     /** {@inheritDoc} */
     @Override

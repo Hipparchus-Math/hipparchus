@@ -32,20 +32,25 @@ import org.hipparchus.geometry.Space;
  * @see BoundaryBuilder
  * @param <S> Type of the space.
  * @param <P> Type of the points in space.
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
  */
-class Characterization<S extends Space, P extends Point<S>> {
+class Characterization<S extends Space,
+                       P extends Point<S>,
+                       H extends Hyperplane<S, P, H, I>,
+                       I extends SubHyperplane<S, P, H, I>> {
 
     /** Part of the cut sub-hyperplane that touch outside cells. */
-    private SubHyperplane<S, P> outsideTouching;
+    private I outsideTouching;
 
     /** Part of the cut sub-hyperplane that touch inside cells. */
-    private SubHyperplane<S, P> insideTouching;
+    private I insideTouching;
 
     /** Nodes that were used to split the outside touching part. */
-    private final NodesSet<S, P> outsideSplitters;
+    private final NodesSet<S, P, H, I> outsideSplitters;
 
     /** Nodes that were used to split the inside touching part. */
-    private final NodesSet<S, P> insideSplitters;
+    private final NodesSet<S, P, H, I> insideSplitters;
 
     /** Simple constructor.
      * <p>Characterization consists in splitting the specified
@@ -59,7 +64,7 @@ class Characterization<S extends Space, P extends Point<S>> {
      * @param node current BSP tree node
      * @param sub sub-hyperplane to characterize
      */
-    Characterization(final BSPTree<S, P> node, final SubHyperplane<S, P> sub) {
+    Characterization(final BSPTree<S, P, H, I> node, final I sub) {
         outsideTouching  = null;
         insideTouching   = null;
         outsideSplitters = new NodesSet<>();
@@ -80,8 +85,8 @@ class Characterization<S extends Space, P extends Point<S>> {
      * @param sub sub-hyperplane to characterize
      * @param splitters nodes that did split the current one
      */
-    private void characterize(final BSPTree<S, P> node, final SubHyperplane<S, P> sub,
-                              final List<BSPTree<S, P>> splitters) {
+    private void characterize(final BSPTree<S, P, H, I> node, final I sub,
+                              final List<BSPTree<S, P, H, I>> splitters) {
         if (node.getCut() == null) {
             // we have reached a leaf node
             final boolean inside = (Boolean) node.getAttribute();
@@ -91,8 +96,8 @@ class Characterization<S extends Space, P extends Point<S>> {
                 addOutsideTouching(sub, splitters);
             }
         } else {
-            final Hyperplane<S, P> hyperplane = node.getCut().getHyperplane();
-            final SubHyperplane.SplitSubHyperplane<S, P> split = sub.split(hyperplane);
+            final H hyperplane = node.getCut().getHyperplane();
+            final SubHyperplane.SplitSubHyperplane<S, P, H, I> split = sub.split(hyperplane);
             switch (split.getSide()) {
             case PLUS:
                 characterize(node.getPlus(),  sub, splitters);
@@ -117,8 +122,7 @@ class Characterization<S extends Space, P extends Point<S>> {
      * @param sub part of the cut sub-hyperplane known to touch an outside cell
      * @param splitters sub-hyperplanes that did split the current one
      */
-    private void addOutsideTouching(final SubHyperplane<S, P> sub,
-                                    final List<BSPTree<S, P>> splitters) {
+    private void addOutsideTouching(final I sub, final List<BSPTree<S, P, H, I>> splitters) {
         if (outsideTouching == null) {
             outsideTouching = sub;
         } else {
@@ -131,8 +135,7 @@ class Characterization<S extends Space, P extends Point<S>> {
      * @param sub part of the cut sub-hyperplane known to touch an inside cell
      * @param splitters sub-hyperplanes that did split the current one
      */
-    private void addInsideTouching(final SubHyperplane<S, P> sub,
-                                   final List<BSPTree<S, P>> splitters) {
+    private void addInsideTouching(final I sub, final List<BSPTree<S, P, H, I>> splitters) {
         if (insideTouching == null) {
             insideTouching = sub;
         } else {
@@ -152,7 +155,7 @@ class Characterization<S extends Space, P extends Point<S>> {
      * @return parts of the cut sub-hyperplane known to touch outside cells
      * (may be null or empty)
      */
-    public SubHyperplane<S, P> outsideTouching() {
+    public I outsideTouching() {
         return outsideTouching;
     }
 
@@ -163,7 +166,7 @@ class Characterization<S extends Space, P extends Point<S>> {
      * </p>
      * @return nodes that were used to split the outside touching part
      */
-    public NodesSet<S, P> getOutsideSplitters() {
+    public NodesSet<S, P, H, I> getOutsideSplitters() {
         return outsideSplitters;
     }
 
@@ -178,7 +181,7 @@ class Characterization<S extends Space, P extends Point<S>> {
      * @return parts of the cut sub-hyperplane known to touch inside cells
      * (may be null or empty)
      */
-    public SubHyperplane<S, P> insideTouching() {
+    public I insideTouching() {
         return insideTouching;
     }
 
@@ -189,7 +192,7 @@ class Characterization<S extends Space, P extends Point<S>> {
      * </p>
      * @return nodes that were used to split the inside touching part
      */
-    public NodesSet<S, P> getInsideSplitters() {
+    public NodesSet<S, P, H, I> getInsideSplitters() {
         return insideSplitters;
     }
 

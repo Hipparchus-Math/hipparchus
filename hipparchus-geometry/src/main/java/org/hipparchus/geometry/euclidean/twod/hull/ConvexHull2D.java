@@ -24,6 +24,7 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Line;
 import org.hipparchus.geometry.euclidean.twod.Segment;
+import org.hipparchus.geometry.euclidean.twod.SubLine;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.hull.ConvexHull;
 import org.hipparchus.geometry.partitioning.Region;
@@ -35,7 +36,7 @@ import org.hipparchus.util.Precision;
  * This class represents a convex hull in an two-dimensional euclidean space.
  *
  */
-public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializable {
+public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D, Line, SubLine>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20140129L;
@@ -158,11 +159,11 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
 
     /** {@inheritDoc} */
     @Override
-    public Region<Euclidean2D, Vector2D> createRegion() throws MathIllegalArgumentException {
+    public Region<Euclidean2D, Vector2D, Line, SubLine> createRegion() throws MathIllegalArgumentException {
         if (vertices.length < 3) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DATA);
         }
-        final RegionFactory<Euclidean2D, Vector2D> factory = new RegionFactory<>();
+        final RegionFactory<Euclidean2D, Vector2D, Line, SubLine> factory = new RegionFactory<>();
         final Segment[] segments = retrieveLineSegments();
         final Line[] lineArray = new Line[segments.length];
         for (int i = 0; i < segments.length; i++) {

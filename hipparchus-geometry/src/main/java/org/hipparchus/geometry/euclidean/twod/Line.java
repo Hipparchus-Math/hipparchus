@@ -26,11 +26,11 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
 import org.hipparchus.geometry.euclidean.oned.OrientedPoint;
+import org.hipparchus.geometry.euclidean.oned.SubOrientedPoint;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.Embedding;
 import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.geometry.partitioning.RegionFactory;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.partitioning.Transform;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -63,7 +63,7 @@ import org.hipparchus.util.SinCos;
 
  */
 public class Line
-    implements Hyperplane<Euclidean2D, Vector2D>,
+    implements Hyperplane<Euclidean2D, Vector2D, Line, SubLine>,
                Embedding<Euclidean2D, Vector2D, Euclidean1D, Vector1D> {
 
     /** Angle with respect to the abscissa axis. */
@@ -276,7 +276,8 @@ public class Line
     /** {@inheritDoc} */
     @Override
     public SubLine emptyHyperplane() {
-        return new SubLine(this, new RegionFactory<Euclidean1D, Vector1D>().getComplement(new IntervalsSet(tolerance)));
+        final RegionFactory<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> factory = new RegionFactory<>();
+        return new SubLine(this, factory.getComplement(new IntervalsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.
@@ -311,9 +312,8 @@ public class Line
 
     /** {@inheritDoc} */
     @Override
-    public boolean sameOrientationAs(final Hyperplane<Euclidean2D, Vector2D> other) {
-        final Line otherL = (Line) other;
-        return MathArrays.linearCombination(sin, otherL.sin, cos, otherL.cos) >= 0.0;
+    public boolean sameOrientationAs(final Line other) {
+        return MathArrays.linearCombination(sin, other.sin, cos, other.cos) >= 0.0;
     }
 
     /** Get one point from the plane.
@@ -412,7 +412,8 @@ public class Line
      * SubHyperplane} instances
      * @exception MathIllegalArgumentException if the transform is non invertible
      */
-    public static Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> getTransform(final double cXX,
+    public static Transform<Euclidean2D, Vector2D, Line, SubLine,
+                            Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> getTransform(final double cXX,
                                                                                        final double cYX,
                                                                                        final double cXY,
                                                                                        final double cYY,
@@ -430,7 +431,7 @@ public class Line
      * polygon)./<p>
      */
     private static class LineTransform
-        implements Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> {
+        implements Transform<Euclidean2D, Vector2D, Line, SubLine, Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> {
 
         /** Transform factor between input abscissa and output abscissa. */
         private final double cXX;
@@ -500,28 +501,22 @@ public class Line
 
         /** {@inheritDoc} */
         @Override
-        public Line apply(final Hyperplane<Euclidean2D, Vector2D> hyperplane) {
-            final Line   line    = (Line) hyperplane;
-            final double rOffset = MathArrays.linearCombination(c1X, line.cos, c1Y, line.sin, c11, line.originOffset);
-            final double rCos    = MathArrays.linearCombination(cXX, line.cos, cXY, line.sin);
-            final double rSin    = MathArrays.linearCombination(cYX, line.cos, cYY, line.sin);
+        public Line apply(final Line hyperplane) {
+            final double rOffset = MathArrays.linearCombination(c1X, hyperplane.cos, c1Y, hyperplane.sin, c11, hyperplane.originOffset);
+            final double rCos    = MathArrays.linearCombination(cXX, hyperplane.cos, cXY, hyperplane.sin);
+            final double rSin    = MathArrays.linearCombination(cYX, hyperplane.cos, cYY, hyperplane.sin);
             final double inv     = 1.0 / FastMath.sqrt(rSin * rSin + rCos * rCos);
             return new Line(FastMath.PI + FastMath.atan2(-rSin, -rCos),
                             inv * rCos, inv * rSin,
-                            inv * rOffset, line.tolerance);
+                            inv * rOffset, hyperplane.tolerance);
         }
 
         /** {@inheritDoc} */
         @Override
-        public SubHyperplane<Euclidean1D, Vector1D> apply(final SubHyperplane<Euclidean1D, Vector1D> sub,
-                                                          final Hyperplane<Euclidean2D, Vector2D> original,
-                                                          final Hyperplane<Euclidean2D, Vector2D> transformed) {
-            final OrientedPoint op     = (OrientedPoint) sub.getHyperplane();
-            final Line originalLine    = (Line) original;
-            final Line transformedLine = (Line) transformed;
-            final Vector1D newLoc =
-                transformedLine.toSubSpace(apply(originalLine.toSpace(op.getLocation())));
-            return new OrientedPoint(newLoc, op.isDirect(), originalLine.tolerance).wholeHyperplane();
+        public SubOrientedPoint apply(final SubOrientedPoint sub, final Line original, final Line transformed) {
+            final OrientedPoint op     = sub.getHyperplane();
+            final Vector1D      newLoc = transformed.toSubSpace(apply(original.toSpace(op.getLocation())));
+            return new OrientedPoint(newLoc, op.isDirect(), original.tolerance).wholeHyperplane();
         }
 
     }

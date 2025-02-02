@@ -23,6 +23,8 @@ package org.hipparchus.geometry.euclidean.twod;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
+import org.hipparchus.geometry.euclidean.oned.OrientedPoint;
+import org.hipparchus.geometry.euclidean.oned.SubOrientedPoint;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.Transform;
 import org.hipparchus.util.FastMath;
@@ -114,14 +116,14 @@ class LineTest {
     void testTransform() throws MathIllegalArgumentException {
 
         Line l1 = new Line(new Vector2D(1.0 ,1.0), new Vector2D(4.0 ,1.0), 1.0e-10);
-        Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> t1 =
+        Transform<Euclidean2D, Vector2D, Line, SubLine, Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> t1 =
             Line.getTransform(0.0, 0.5, -1.0, 0.0, 1.0, 1.5);
-        assertEquals(MathUtils.SEMI_PI, ((Line) t1.apply(l1)).getAngle(), 1.0e-10);
+        assertEquals(MathUtils.SEMI_PI, t1.apply(l1).getAngle(), 1.0e-10);
 
         Line l2 = new Line(new Vector2D(0.0, 0.0), new Vector2D(1.0, 1.0), 1.0e-10);
-        Transform<Euclidean2D, Vector2D, Euclidean1D, Vector1D> t2 =
+        Transform<Euclidean2D, Vector2D, Line, SubLine, Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> t2 =
             Line.getTransform(0.0, 0.5, -1.0, 0.0, 1.0, 1.5);
-        assertEquals(FastMath.atan2(1.0, -2.0), ((Line) t2.apply(l2)).getAngle(), 1.0e-10);
+        assertEquals(FastMath.atan2(1.0, -2.0), t2.apply(l2).getAngle(), 1.0e-10);
 
     }
 

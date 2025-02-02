@@ -29,23 +29,28 @@ import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
 import org.hipparchus.geometry.euclidean.oned.OrientedPoint;
+import org.hipparchus.geometry.euclidean.oned.SubOrientedPoint;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
 import org.hipparchus.geometry.euclidean.threed.Plane;
 import org.hipparchus.geometry.euclidean.threed.PolyhedronsSet;
+import org.hipparchus.geometry.euclidean.threed.SubPlane;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Line;
 import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
+import org.hipparchus.geometry.euclidean.twod.SubLine;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.LimitAngle;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
+import org.hipparchus.geometry.spherical.oned.SubLimitAngle;
 import org.hipparchus.geometry.spherical.twod.Circle;
 import org.hipparchus.geometry.spherical.twod.S2Point;
 import org.hipparchus.geometry.spherical.twod.Sphere2D;
 import org.hipparchus.geometry.spherical.twod.SphericalPolygonsSet;
+import org.hipparchus.geometry.spherical.twod.SubCircle;
 
 /** Class dumping a string representation of an {@link AbstractRegion}.
  * <p>
@@ -65,15 +70,16 @@ public class RegionDumper {
      * @return string representation of the region
      */
     public static String dump(final ArcsSet arcsSet) {
-        final TreeDumper<Sphere1D, S1Point> visitor =
-                new TreeDumper<Sphere1D, S1Point>("ArcsSet", arcsSet.getTolerance()) {
+        final TreeDumper<Sphere1D, S1Point, LimitAngle, SubLimitAngle> visitor =
+                new TreeDumper<Sphere1D, S1Point, LimitAngle, SubLimitAngle>("ArcsSet", arcsSet.getTolerance()) {
 
             /** {@inheritDoc} */
             @Override
-            protected void formatHyperplane(final Hyperplane<Sphere1D, S1Point> hyperplane) {
-                final LimitAngle h = (LimitAngle) hyperplane;
+            protected void formatHyperplane(final LimitAngle hyperplane) {
                 getFormatter().format("%22.15e %b %22.15e",
-                                      h.getLocation().getAlpha(), h.isDirect(), h.getTolerance());
+                                      hyperplane.getLocation().getAlpha(),
+                                      hyperplane.isDirect(),
+                                      hyperplane.getTolerance());
             }
 
         };
@@ -86,16 +92,15 @@ public class RegionDumper {
      * @return string representation of the region
      */
     public static String dump(final SphericalPolygonsSet sphericalPolygonsSet) {
-        final TreeDumper<Sphere2D, S2Point> visitor =
-                new TreeDumper<Sphere2D, S2Point>("SphericalPolygonsSet", sphericalPolygonsSet.getTolerance()) {
+        final TreeDumper<Sphere2D, S2Point, Circle, SubCircle> visitor =
+                new TreeDumper<Sphere2D, S2Point, Circle, SubCircle>("SphericalPolygonsSet", sphericalPolygonsSet.getTolerance()) {
 
             /** {@inheritDoc} */
             @Override
-            protected void formatHyperplane(final Hyperplane<Sphere2D, S2Point> hyperplane) {
-                final Circle h = (Circle) hyperplane;
+            protected void formatHyperplane(final Circle hyperplane) {
                 getFormatter().format("%22.15e %22.15e %22.15e %22.15e",
-                                      h.getPole().getX(), h.getPole().getY(), h.getPole().getZ(),
-                                      h.getTolerance());
+                                      hyperplane.getPole().getX(), hyperplane.getPole().getY(), hyperplane.getPole().getZ(),
+                                      hyperplane.getTolerance());
             }
 
         };
@@ -108,15 +113,16 @@ public class RegionDumper {
      * @return string representation of the region
      */
     public static String dump(final IntervalsSet intervalsSet) {
-        final TreeDumper<Euclidean1D, Vector1D> visitor =
-                new TreeDumper<Euclidean1D, Vector1D>("IntervalsSet", intervalsSet.getTolerance()) {
+        final TreeDumper<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> visitor =
+                new TreeDumper<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>("IntervalsSet", intervalsSet.getTolerance()) {
 
             /** {@inheritDoc} */
             @Override
-            protected void formatHyperplane(final Hyperplane<Euclidean1D, Vector1D> hyperplane) {
-                final OrientedPoint h = (OrientedPoint) hyperplane;
+            protected void formatHyperplane(final OrientedPoint hyperplane) {
                 getFormatter().format("%22.15e %b %22.15e",
-                                      h.getLocation().getX(), h.isDirect(), h.getTolerance());
+                                      hyperplane.getLocation().getX(),
+                                      hyperplane.isDirect(),
+                                      hyperplane.getTolerance());
             }
 
         };
@@ -129,16 +135,15 @@ public class RegionDumper {
      * @return string representation of the region
      */
     public static String dump(final PolygonsSet polygonsSet) {
-        final TreeDumper<Euclidean2D, Vector2D> visitor =
-                new TreeDumper<Euclidean2D, Vector2D>("PolygonsSet", polygonsSet.getTolerance()) {
+        final TreeDumper<Euclidean2D, Vector2D, Line, SubLine> visitor =
+                new TreeDumper<Euclidean2D, Vector2D, Line, SubLine>("PolygonsSet", polygonsSet.getTolerance()) {
 
             /** {@inheritDoc} */
             @Override
-            protected void formatHyperplane(final Hyperplane<Euclidean2D, Vector2D> hyperplane) {
-                final Line h = (Line) hyperplane;
-                final Vector2D p = h.toSpace(Vector1D.ZERO);
+            protected void formatHyperplane(final Line hyperplane) {
+                final Vector2D p = hyperplane.toSpace(Vector1D.ZERO);
                 getFormatter().format("%22.15e %22.15e %22.15e %22.15e",
-                                      p.getX(), p.getY(), h.getAngle(), h.getTolerance());
+                                      p.getX(), p.getY(), hyperplane.getAngle(), hyperplane.getTolerance());
             }
 
         };
@@ -151,18 +156,17 @@ public class RegionDumper {
      * @return string representation of the region
      */
     public static String dump(final PolyhedronsSet polyhedronsSet) {
-        final TreeDumper<Euclidean3D, Vector3D> visitor =
-                new TreeDumper<Euclidean3D, Vector3D>("PolyhedronsSet", polyhedronsSet.getTolerance()) {
+        final TreeDumper<Euclidean3D, Vector3D, Plane, SubPlane> visitor =
+                new TreeDumper<Euclidean3D, Vector3D, Plane, SubPlane>("PolyhedronsSet", polyhedronsSet.getTolerance()) {
 
             /** {@inheritDoc} */
             @Override
-            protected void formatHyperplane(final Hyperplane<Euclidean3D, Vector3D> hyperplane) {
-                final Plane h = (Plane) hyperplane;
-                final Vector3D p = h.toSpace(Vector2D.ZERO);
+            protected void formatHyperplane(final Plane hyperplane) {
+                final Vector3D p = hyperplane.toSpace(Vector2D.ZERO);
                 getFormatter().format("%22.15e %22.15e %22.15e %22.15e %22.15e %22.15e %22.15e",
                                       p.getX(), p.getY(), p.getZ(),
-                                      h.getNormal().getX(), h.getNormal().getY(), h.getNormal().getZ(),
-                                      h.getTolerance());
+                                      hyperplane.getNormal().getX(), hyperplane.getNormal().getY(), hyperplane.getNormal().getZ(),
+                                      hyperplane.getTolerance());
             }
 
         };
@@ -173,8 +177,14 @@ public class RegionDumper {
     /** Dumping visitor.
      * @param <S> Type of the space.
      * @param <P> Type of the points in space.
+     * @param <H> Type of the hyperplane.
+     * @param <I> Type of the sub-hyperplane.
      */
-    private abstract static class TreeDumper<S extends Space, P extends Point<S>> implements BSPTreeVisitor<S, P> {
+    private abstract static class TreeDumper<S extends Space,
+                                             P extends Point<S>,
+                                             H extends Hyperplane<S, P, H, I>,
+                                             I extends SubHyperplane<S, P, H, I>>
+        implements BSPTreeVisitor<S, P, H, I> {
 
         /** Builder for the string representation of the dumped tree. */
         private final StringBuilder dump;
@@ -214,17 +224,17 @@ public class RegionDumper {
         /** Format a string representation of the hyperplane underlying a cut sub-hyperplane.
          * @param hyperplane hyperplane to format
          */
-        protected abstract void formatHyperplane(Hyperplane<S, P> hyperplane);
+        protected abstract void formatHyperplane(H hyperplane);
 
         /** {@inheritDoc} */
         @Override
-        public Order visitOrder(final BSPTree<S, P> node) {
+        public Order visitOrder(final BSPTree<S, P, H, I> node) {
             return Order.SUB_MINUS_PLUS;
         }
 
         /** {@inheritDoc} */
         @Override
-        public void visitInternalNode(final BSPTree<S, P> node) {
+        public void visitInternalNode(final BSPTree<S, P, H, I> node) {
             formatter.format("%s %s internal ", prefix, type(node));
             formatHyperplane(node.getCut().getHyperplane());
             formatter.format("%n");
@@ -233,10 +243,10 @@ public class RegionDumper {
 
         /** {@inheritDoc} */
         @Override
-        public void visitLeafNode(final BSPTree<S, P> node) {
+        public void visitLeafNode(final BSPTree<S, P, H, I> node) {
             formatter.format("%s %s leaf %s%n",
                              prefix, type(node), node.getAttribute());
-            for (BSPTree<S, P> n = node;
+            for (BSPTree<S, P, H, I> n = node;
                  n.getParent() != null && n == n.getParent().getPlus();
                  n = n.getParent()) {
                 prefix = prefix.substring(0, prefix.length() - 2);
@@ -248,7 +258,7 @@ public class RegionDumper {
          * @return "plus " or "minus" depending on the node being the plus or minus
          * child of its parent ("plus " is arbitrarily returned for the root node)
          */
-        private String type(final BSPTree<S, P> node) {
+        private String type(final BSPTree<S, P, H, I> node) {
             return (node.getParent() != null && node == node.getParent().getMinus()) ? "minus" : "plus ";
         }
 

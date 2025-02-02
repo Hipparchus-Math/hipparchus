@@ -26,18 +26,25 @@ import java.util.Collection;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
+import org.hipparchus.geometry.partitioning.Hyperplane;
+import org.hipparchus.geometry.partitioning.SubHyperplane;
 
 /**
  * Interface for convex hull generators.
  *
  * @param <S> Type of the {@link Space}
  * @param <P> Type of the {@link Point}
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
  *
  * @see <a href="http://en.wikipedia.org/wiki/Convex_hull">Convex Hull (Wikipedia)</a>
  * @see <a href="http://mathworld.wolfram.com/ConvexHull.html">Convex Hull (MathWorld)</a>
  *
  */
-public interface ConvexHullGenerator<S extends Space, P extends Point<S>> {
+public interface ConvexHullGenerator<S extends Space,
+                                     P extends Point<S>,
+                                     H extends Hyperplane<S, P, H, I>,
+                                     I extends SubHyperplane<S, P, H, I>> {
 
     /**
      * Builds the convex hull from the set of input points.
@@ -47,5 +54,5 @@ public interface ConvexHullGenerator<S extends Space, P extends Point<S>> {
      * @throws MathIllegalStateException if generator fails to generate a convex hull for
      * the given set of input points
      */
-    ConvexHull<S, P> generate(Collection<P> points) throws MathIllegalStateException;
+    ConvexHull<S, P, H, I> generate(Collection<P> points) throws MathIllegalStateException;
 }

@@ -35,16 +35,26 @@ import org.hipparchus.geometry.Space;
 /** Abstract class for all regions, independently of geometry type or dimension.
 
  * @param <S> Type of the space.
- * @param <P> Type of the points in the space.
+ * @param <P> Type of the points in space.
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
  * @param <T> Type of the sub-space.
- * @param <Q> Type of the points in the sub-space.
+ * @param <Q> Type of the points in sub-space.
+ * @param <F> Type of the hyperplane.
+ * @param <J> Type of the sub-hyperplane.
 
  */
-public abstract class AbstractRegion<S extends Space, P extends Point<S>, T extends Space, Q extends Point<T>>
-    implements Region<S, P> {
+public abstract class AbstractRegion<S extends Space,
+                                     P extends Point<S>,
+                                     H extends Hyperplane<S, P, H, I>,
+                                     I extends SubHyperplane<S, P, H, I>,
+                                     T extends Space, Q extends Point<T>,
+                                     F extends Hyperplane<T, Q, F, J>,
+                                     J extends SubHyperplane<T, Q, F, J>>
+    implements Region<S, P, H, I> {
 
     /** Inside/Outside BSP tree. */
-    private final BSPTree<S, P> tree;
+    private final BSPTree<S, P, H, I> tree;
 
     /** Tolerance below which points are considered to belong to hyperplanes. */
     private final double tolerance;
@@ -76,7 +86,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * @param tree inside/outside BSP tree representing the region
      * @param tolerance tolerance below which points are considered identical.
      */
-    protected AbstractRegion(final BSPTree<S, P> tree, final double tolerance) {
+    protected AbstractRegion(final BSPTree<S, P, H, I> tree, final double tolerance) {
         this.tree      = tree;
         this.tolerance = tolerance;
     }
@@ -101,7 +111,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * collection of {@link SubHyperplane SubHyperplane} objects
      * @param tolerance tolerance below which points are considered identical.
      */
-    protected AbstractRegion(final Collection<SubHyperplane<S, P>> boundary, final double tolerance) {
+    protected AbstractRegion(final Collection<I> boundary, final double tolerance) {
 
         this.tolerance = tolerance;
 
@@ -115,10 +125,10 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
             // sort the boundary elements in decreasing size order
             // (we don't want equal size elements to be removed, so
             // we use a trick to fool the TreeSet)
-            final TreeSet<SubHyperplane<S, P>> ordered = new TreeSet<>(new Comparator<SubHyperplane<S, P>>() {
+            final TreeSet<I> ordered = new TreeSet<>(new Comparator<I>() {
                 /** {@inheritDoc} */
                 @Override
-                public int compare(final SubHyperplane<S, P> o1, final SubHyperplane<S, P> o2) {
+                public int compare(final I o1, final I o2) {
                     final double size1 = o1.getSize();
                     final double size2 = o2.getSize();
                     return (size2 < size1) ? -1 : ((o1 == o2) ? 0 : +1);
@@ -131,22 +141,22 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
             insertCuts(tree, ordered);
 
             // set up the inside/outside flags
-            tree.visit(new BSPTreeVisitor<S, P>() {
+            tree.visit(new BSPTreeVisitor<S, P, H, I>() {
 
                 /** {@inheritDoc} */
                 @Override
-                public Order visitOrder(final BSPTree<S, P> node) {
+                public Order visitOrder(final BSPTree<S, P, H, I> node) {
                     return Order.PLUS_SUB_MINUS;
                 }
 
                 /** {@inheritDoc} */
                 @Override
-                public void visitInternalNode(final BSPTree<S, P> node) {
+                public void visitInternalNode(final BSPTree<S, P, H, I> node) {
                 }
 
                 /** {@inheritDoc} */
                 @Override
-                public void visitLeafNode(final BSPTree<S, P> node) {
+                public void visitLeafNode(final BSPTree<S, P, H, I> node) {
                     if (node.getParent() == null || node == node.getParent().getMinus()) {
                         node.setAttribute(Boolean.TRUE);
                     } else {
@@ -164,7 +174,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * empty region will be built)
      * @param tolerance tolerance below which points are considered identical.
      */
-    public AbstractRegion(final Hyperplane<S, P>[] hyperplanes, final double tolerance) {
+    public AbstractRegion(final H[] hyperplanes, final double tolerance) {
         this.tolerance = tolerance;
         if ((hyperplanes == null) || (hyperplanes.length == 0)) {
             tree = new BSPTree<>(Boolean.FALSE);
@@ -174,9 +184,9 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
             tree = hyperplanes[0].wholeSpace().getTree(false);
 
             // chop off parts of the space
-            BSPTree<S, P> node = tree;
+            BSPTree<S, P, H, I> node = tree;
             node.setAttribute(Boolean.TRUE);
-            for (final Hyperplane<S, P> hyperplane : hyperplanes) {
+            for (final H hyperplane : hyperplanes) {
                 if (node.insertCut(hyperplane)) {
                     node.setAttribute(null);
                     node.getPlus().setAttribute(Boolean.FALSE);
@@ -191,7 +201,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
 
     /** {@inheritDoc} */
     @Override
-    public abstract AbstractRegion<S, P, T, Q> buildNew(BSPTree<S, P> newTree);
+    public abstract AbstractRegion<S, P, H, I, T, Q, F, J> buildNew(BSPTree<S, P, H, I> newTree);
 
     /** Get the tolerance below which points are considered to belong to hyperplanes.
      * @return tolerance below which points are considered to belong to hyperplanes
@@ -206,12 +216,12 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * @param boundary collection of edges belonging to the cell defined
      * by the node
      */
-    private void insertCuts(final BSPTree<S, P> node, final Collection<SubHyperplane<S, P>> boundary) {
+    private void insertCuts(final BSPTree<S, P, H, I> node, final Collection<I> boundary) {
 
-        final Iterator<SubHyperplane<S, P>> iterator = boundary.iterator();
+        final Iterator<I> iterator = boundary.iterator();
 
         // build the current level
-        Hyperplane<S, P> inserted = null;
+        H inserted = null;
         while ((inserted == null) && iterator.hasNext()) {
             inserted = iterator.next().getHyperplane();
             if (!node.insertCut(inserted.copySelf())) {
@@ -224,11 +234,11 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
         }
 
         // distribute the remaining edges in the two sub-trees
-        final ArrayList<SubHyperplane<S, P>> plusList  = new ArrayList<>();
-        final ArrayList<SubHyperplane<S, P>> minusList = new ArrayList<>();
+        final ArrayList<I> plusList  = new ArrayList<>();
+        final ArrayList<I> minusList = new ArrayList<>();
         while (iterator.hasNext()) {
-            final SubHyperplane<S, P> other = iterator.next();
-            final SubHyperplane.SplitSubHyperplane<S, P> split = other.split(inserted);
+            final I other = iterator.next();
+            final SubHyperplane.SplitSubHyperplane<S, P, H, I> split = other.split(inserted);
             switch (split.getSide()) {
             case PLUS:
                 plusList.add(other);
@@ -253,7 +263,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
 
     /** {@inheritDoc} */
     @Override
-    public AbstractRegion<S, P, T, Q> copySelf() {
+    public AbstractRegion<S, P, H, I, T, Q, F, J> copySelf() {
         return buildNew(tree.copySelf());
     }
 
@@ -265,7 +275,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
 
     /** {@inheritDoc} */
     @Override
-    public boolean isEmpty(final BSPTree<S, P> node) {
+    public boolean isEmpty(final BSPTree<S, P, H, I> node) {
 
         // we use a recursive function rather than the BSPTreeVisitor
         // interface because we can stop visiting the tree as soon as we
@@ -289,7 +299,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
 
     /** {@inheritDoc} */
     @Override
-    public boolean isFull(final BSPTree<S, P> node) {
+    public boolean isFull(final BSPTree<S, P, H, I> node) {
 
         // we use a recursive function rather than the BSPTreeVisitor
         // interface because we can stop visiting the tree as soon as we
@@ -307,15 +317,15 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
 
     /** {@inheritDoc} */
     @Override
-    public boolean contains(final Region<S, P> region) {
-        return new RegionFactory<S, P>().difference(region, this).isEmpty();
+    public boolean contains(final Region<S, P, H, I> region) {
+        return new RegionFactory<S, P, H, I>().difference(region, this).isEmpty();
     }
 
     /** {@inheritDoc}
      */
     @Override
     public BoundaryProjection<S, P> projectToBoundary(final P point) {
-        final BoundaryProjector<S, P, T, Q> projector = new BoundaryProjector<>(point);
+        final BoundaryProjector<S, P, H, I, T, Q, F, J> projector = new BoundaryProjector<>(point);
         getTree(true).visit(projector);
         return projector.getProjection();
     }
@@ -333,8 +343,8 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * Region.Location#INSIDE INSIDE}, {@link Region.Location#OUTSIDE
      * OUTSIDE} or {@link Region.Location#BOUNDARY BOUNDARY}
      */
-    protected Location checkPoint(final BSPTree<S, P> node, final P point) {
-        final BSPTree<S, P> cell = node.getCell(point, tolerance);
+    protected Location checkPoint(final BSPTree<S, P, H, I> node, final P point) {
+        final BSPTree<S, P, H, I> cell = node.getCell(point, tolerance);
         if (cell.getCut() == null) {
             // the point is in the interior of a cell, just check the attribute
             return ((Boolean) cell.getAttribute()) ? Location.INSIDE : Location.OUTSIDE;
@@ -349,7 +359,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
 
     /** {@inheritDoc} */
     @Override
-    public BSPTree<S, P> getTree(final boolean includeBoundaryAttributes) {
+    public BSPTree<S, P, H, I> getTree(final boolean includeBoundaryAttributes) {
         if (includeBoundaryAttributes && (tree.getCut() != null) && (tree.getAttribute() == null)) {
             // compute the boundary attributes
             tree.visit(new BoundaryBuilder<>());
@@ -360,7 +370,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
     /** {@inheritDoc} */
     @Override
     public double getBoundarySize() {
-        final BoundarySizeVisitor<S, P> visitor = new BoundarySizeVisitor<>();
+        final BoundarySizeVisitor<S, P, H, I> visitor = new BoundarySizeVisitor<>();
         getTree(true).visit(visitor);
         return visitor.getSize();
     }
@@ -404,7 +414,7 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
 
     /** {@inheritDoc} */
     @Override
-    public SubHyperplane<S, P> intersection(final SubHyperplane<S, P> sub) {
+    public I intersection(final I sub) {
         return recurseIntersection(tree, sub);
     }
 
@@ -414,19 +424,19 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * @param sub sub-hyperplane traversing the region
      * @return filtered sub-hyperplane
      */
-    private SubHyperplane<S, P> recurseIntersection(final BSPTree<S, P> node, final SubHyperplane<S, P> sub) {
+    private I recurseIntersection(final BSPTree<S, P, H, I> node, final I sub) {
 
         if (node.getCut() == null) {
             return (Boolean) node.getAttribute() ? sub.copySelf() : null;
         }
 
-        final Hyperplane<S, P> hyperplane = node.getCut().getHyperplane();
-        final SubHyperplane.SplitSubHyperplane<S, P> split = sub.split(hyperplane);
+        final H hyperplane = node.getCut().getHyperplane();
+        final SubHyperplane.SplitSubHyperplane<S, P, H, I> split = sub.split(hyperplane);
         if (split.getPlus() != null) {
             if (split.getMinus() != null) {
                 // both sides
-                final SubHyperplane<S, P> plus  = recurseIntersection(node.getPlus(),  split.getPlus());
-                final SubHyperplane<S, P> minus = recurseIntersection(node.getMinus(), split.getMinus());
+                final I plus  = recurseIntersection(node.getPlus(),  split.getPlus());
+                final I minus = recurseIntersection(node.getMinus(), split.getMinus());
                 if (plus == null) {
                     return minus;
                 } else if (minus == null) {
@@ -459,21 +469,21 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * @return a new region, resulting from the application of the
      * transform to the instance
      */
-    public AbstractRegion<S, P, T, Q> applyTransform(final Transform<S, P, T, Q> transform) {
+    public AbstractRegion<S, P, H, I, T, Q, F, J> applyTransform(final Transform<S, P, H, I, T, Q, F, J> transform) {
 
         // transform the tree, except for boundary attribute splitters
-        final Map<BSPTree<S, P>, BSPTree<S, P>> map = new HashMap<>();
-        final BSPTree<S, P> transformedTree = recurseTransform(getTree(false), transform, map);
+        final Map<BSPTree<S, P, H, I>, BSPTree<S, P, H, I>> map = new HashMap<>();
+        final BSPTree<S, P, H, I> transformedTree = recurseTransform(getTree(false), transform, map);
 
         // set up the boundary attributes splitters
-        for (final Map.Entry<BSPTree<S, P>, BSPTree<S, P>> entry : map.entrySet()) {
+        for (final Map.Entry<BSPTree<S, P, H, I>, BSPTree<S, P, H, I>> entry : map.entrySet()) {
             if (entry.getKey().getCut() != null) {
                 @SuppressWarnings("unchecked")
-                BoundaryAttribute<S, P> original = (BoundaryAttribute<S, P>) entry.getKey().getAttribute();
+                BoundaryAttribute<S, P, H, I> original = (BoundaryAttribute<S, P, H, I>) entry.getKey().getAttribute();
                 if (original != null) {
                     @SuppressWarnings("unchecked")
-                    BoundaryAttribute<S, P> transformed = (BoundaryAttribute<S, P>) entry.getValue().getAttribute();
-                    for (final BSPTree<S, P> splitter : original.getSplitters()) {
+                    BoundaryAttribute<S, P, H, I> transformed = (BoundaryAttribute<S, P, H, I>) entry.getValue().getAttribute();
+                    for (final BSPTree<S, P, H, I> splitter : original.getSplitters()) {
                         transformed.getSplitters().add(map.get(splitter));
                     }
                 }
@@ -491,22 +501,22 @@ public abstract class AbstractRegion<S extends Space, P extends Point<S>, T exte
      * @return a new tree
      */
     @SuppressWarnings("unchecked")
-    private BSPTree<S, P> recurseTransform(final BSPTree<S, P> node, final Transform<S, P, T, Q> transform,
-                                        final Map<BSPTree<S, P>, BSPTree<S, P>> map) {
+    private BSPTree<S, P, H, I> recurseTransform(final BSPTree<S, P, H, I> node, final Transform<S, P, H, I, T, Q, F, J> transform,
+                                        final Map<BSPTree<S, P, H, I>, BSPTree<S, P, H, I>> map) {
 
-        final BSPTree<S, P> transformedNode;
+        final BSPTree<S, P, H, I> transformedNode;
         if (node.getCut() == null) {
             transformedNode = new BSPTree<>(node.getAttribute());
         } else {
 
-            final SubHyperplane<S, P>  sub = node.getCut();
-            final SubHyperplane<S, P> tSub = ((AbstractSubHyperplane<S, P, T, Q>) sub).applyTransform(transform);
-            BoundaryAttribute<S, P> attribute = (BoundaryAttribute<S, P>) node.getAttribute();
+            final I  sub = node.getCut();
+            final I tSub = ((AbstractSubHyperplane<S, P, H, I, T, Q, F, J>) sub).applyTransform(transform);
+            BoundaryAttribute<S, P, H, I> attribute = (BoundaryAttribute<S, P, H, I>) node.getAttribute();
             if (attribute != null) {
-                final SubHyperplane<S, P> tPO = (attribute.getPlusOutside() == null) ?
-                    null : ((AbstractSubHyperplane<S, P, T, Q>) attribute.getPlusOutside()).applyTransform(transform);
-                final SubHyperplane<S, P> tPI = (attribute.getPlusInside()  == null) ?
-                    null  : ((AbstractSubHyperplane<S, P, T, Q>) attribute.getPlusInside()).applyTransform(transform);
+                final I tPO = (attribute.getPlusOutside() == null) ?
+                    null : ((AbstractSubHyperplane<S, P, H, I, T, Q, F, J>) attribute.getPlusOutside()).applyTransform(transform);
+                final I tPI = (attribute.getPlusInside()  == null) ?
+                    null  : ((AbstractSubHyperplane<S, P, H, I, T, Q, F, J>) attribute.getPlusInside()).applyTransform(transform);
                 // we start with an empty list of splitters, it will be filled in out of recursion
                 attribute = new BoundaryAttribute<>(tPO, tPI, new NodesSet<>());
             }

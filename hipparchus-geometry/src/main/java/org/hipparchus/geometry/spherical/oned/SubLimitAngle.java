@@ -22,20 +22,19 @@
 package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.geometry.partitioning.AbstractSubHyperplane;
-import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.geometry.partitioning.Region;
 
 /** This class represents sub-hyperplane for {@link LimitAngle}.
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class SubLimitAngle extends AbstractSubHyperplane<Sphere1D, S1Point, Sphere1D, S1Point> {
+public class SubLimitAngle
+    extends AbstractSubHyperplane<Sphere1D, S1Point, LimitAngle, SubLimitAngle, Sphere1D, S1Point, LimitAngle, SubLimitAngle> {
 
     /** Simple constructor.
      * @param hyperplane underlying hyperplane
      * @param remainingRegion remaining region of the hyperplane
      */
-    public SubLimitAngle(final Hyperplane<Sphere1D, S1Point> hyperplane,
-                         final Region<Sphere1D, S1Point> remainingRegion) {
+    public SubLimitAngle(final LimitAngle hyperplane, final Region<Sphere1D, S1Point, LimitAngle, SubLimitAngle> remainingRegion) {
         super(hyperplane, remainingRegion);
     }
 
@@ -53,16 +52,14 @@ public class SubLimitAngle extends AbstractSubHyperplane<Sphere1D, S1Point, Sphe
 
     /** {@inheritDoc} */
     @Override
-    protected AbstractSubHyperplane<Sphere1D, S1Point, Sphere1D, S1Point>
-        buildNew(final Hyperplane<Sphere1D, S1Point> hyperplane,
-                 final Region<Sphere1D, S1Point> remainingRegion) {
+    protected SubLimitAngle buildNew(final LimitAngle hyperplane, final Region<Sphere1D, S1Point, LimitAngle, SubLimitAngle> remainingRegion) {
         return new SubLimitAngle(hyperplane, remainingRegion);
     }
 
     /** {@inheritDoc} */
     @Override
-    public SplitSubHyperplane<Sphere1D, S1Point> split(final Hyperplane<Sphere1D, S1Point> hyperplane) {
-        final double global = hyperplane.getOffset(((LimitAngle) getHyperplane()).getLocation());
+    public SplitSubHyperplane<Sphere1D, S1Point, LimitAngle, SubLimitAngle> split(final LimitAngle hyperplane) {
+        final double global = hyperplane.getOffset(getHyperplane().getLocation());
         if (global < -hyperplane.getTolerance())  {
             return new SplitSubHyperplane<>(null, this);
         } else if (global > hyperplane.getTolerance()) {

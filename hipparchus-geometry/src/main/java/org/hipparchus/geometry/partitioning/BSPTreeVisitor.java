@@ -48,12 +48,14 @@ import org.hipparchus.geometry.Space;
 
  * @param <S> Type of the space.
  * @param <P> Type of the points in space.
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
 
  * @see BSPTree
  * @see SubHyperplane
 
  */
-public interface BSPTreeVisitor<S extends Space, P extends Point<S>> {
+public interface BSPTreeVisitor<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>> {
 
     /** Enumerate for visit order with respect to plus sub-tree, minus sub-tree and cut sub-hyperplane. */
     enum Order {
@@ -100,7 +102,7 @@ public interface BSPTreeVisitor<S extends Space, P extends Point<S>> {
      * {@link Order#MINUS_PLUS_SUB}, {@link Order#MINUS_SUB_PLUS},
      * {@link Order#SUB_PLUS_MINUS}, {@link Order#SUB_MINUS_PLUS}
      */
-    Order visitOrder(BSPTree<S, P> node);
+    Order visitOrder(BSPTree<S, P, H, I> node);
 
     /** Visit a BSP tree node having a non-null sub-hyperplane.
      * <p>It is guaranteed that this method will be called after {@link
@@ -109,12 +111,12 @@ public interface BSPTreeVisitor<S extends Space, P extends Point<S>> {
      * @param node BSP node guaranteed to have a non-null cut sub-hyperplane
      * @see #visitLeafNode
      */
-    void visitInternalNode(BSPTree<S, P> node);
+    void visitInternalNode(BSPTree<S, P, H, I> node);
 
     /** Visit a leaf BSP tree node node having a null sub-hyperplane.
      * @param node leaf BSP node having a null sub-hyperplane
      * @see #visitInternalNode
      */
-    void visitLeafNode(BSPTree<S, P> node);
+    void visitLeafNode(BSPTree<S, P, H, I> node);
 
 }

@@ -44,9 +44,14 @@ import org.hipparchus.geometry.Space;
 
  * @param <S> Type of the space.
  * @param <P> Type of the points in space.
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
 
  */
-public interface Hyperplane<S extends Space, P extends Point<S>> {
+public interface Hyperplane<S extends Space,
+                            P extends Point<S>,
+                            H extends Hyperplane<S, P, H, I>,
+                            I extends SubHyperplane<S, P, H, I>> {
 
     /** Copy the instance.
      * <p>The instance created is completely independent of the original
@@ -54,7 +59,7 @@ public interface Hyperplane<S extends Space, P extends Point<S>> {
      * shared (except for immutable objects).</p>
      * @return a new hyperplane, copy of the instance
      */
-    Hyperplane<S, P> copySelf();
+    H copySelf();
 
     /** Get the offset (oriented distance) of a point.
      * <p>The offset is 0 if the point is on the underlying hyperplane,
@@ -86,22 +91,22 @@ public interface Hyperplane<S extends Space, P extends Point<S>> {
      * @return true if the instance and the other hyperplane have
      * the same orientation
      */
-    boolean sameOrientationAs(Hyperplane<S, P> other);
+    boolean sameOrientationAs(H other);
 
     /** Build a sub-hyperplane covering the whole hyperplane.
      * @return a sub-hyperplane covering the whole hyperplane
      */
-    SubHyperplane<S, P> wholeHyperplane();
+    I wholeHyperplane();
 
     /** Build a sub-hyperplane covering nothing.
      * @return a sub-hyperplane covering nothing
      * @since 1.4
      */
-    SubHyperplane<S, P> emptyHyperplane();
+    I emptyHyperplane();
 
     /** Build a region covering the whole space.
      * @return a region containing the instance
      */
-    Region<S, P> wholeSpace();
+    Region<S, P, H, I> wholeSpace();
 
 }

@@ -31,32 +31,35 @@ import org.hipparchus.geometry.Space;
  * </p>
  * @param <S> Type of the space.
  * @param <P> Type of the points in space.
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
  */
-class BoundaryBuilder<S extends Space, P extends Point<S>> implements BSPTreeVisitor<S, P> {
+class BoundaryBuilder<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>>
+    implements BSPTreeVisitor<S, P, H, I> {
 
     /** {@inheritDoc} */
     @Override
-    public Order visitOrder(BSPTree<S, P> node) {
+    public Order visitOrder(BSPTree<S, P, H, I> node) {
         return Order.PLUS_MINUS_SUB;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void visitInternalNode(BSPTree<S, P> node) {
+    public void visitInternalNode(BSPTree<S, P, H, I> node) {
 
-        SubHyperplane<S, P> plusOutside = null;
-        SubHyperplane<S, P> plusInside  = null;
-        NodesSet<S, P>      splitters   = null;
+        I                    plusOutside = null;
+        I                    plusInside  = null;
+        NodesSet<S, P, H, I> splitters   = null;
 
         // characterize the cut sub-hyperplane,
         // first with respect to the plus sub-tree
-        final Characterization<S, P> plusChar = new Characterization<>(node.getPlus(), node.getCut().copySelf());
+        final Characterization<S, P, H, I> plusChar = new Characterization<>(node.getPlus(), node.getCut().copySelf());
 
         if (plusChar.touchOutside()) {
             // plusChar.outsideTouching() corresponds to a subset of the cut sub-hyperplane
             // known to have outside cells on its plus side, we want to check if parts
             // of this subset do have inside cells on their minus side
-            final Characterization<S, P> minusChar = new Characterization<>(node.getMinus(), plusChar.outsideTouching());
+            final Characterization<S, P, H, I> minusChar = new Characterization<>(node.getMinus(), plusChar.outsideTouching());
             if (minusChar.touchInside()) {
                 // this part belongs to the boundary,
                 // it has the outside on its plus side and the inside on its minus side
@@ -71,7 +74,7 @@ class BoundaryBuilder<S extends Space, P extends Point<S>> implements BSPTreeVis
             // plusChar.insideTouching() corresponds to a subset of the cut sub-hyperplane
             // known to have inside cells on its plus side, we want to check if parts
             // of this subset do have outside cells on their minus side
-            final Characterization<S, P> minusChar = new Characterization<>(node.getMinus(), plusChar.insideTouching());
+            final Characterization<S, P, H, I> minusChar = new Characterization<>(node.getMinus(), plusChar.insideTouching());
             if (minusChar.touchOutside()) {
                 // this part belongs to the boundary,
                 // it has the inside on its plus side and the outside on its minus side
@@ -86,7 +89,7 @@ class BoundaryBuilder<S extends Space, P extends Point<S>> implements BSPTreeVis
 
         if (splitters != null) {
             // the parent nodes are natural splitters for boundary sub-hyperplanes
-            for (BSPTree<S, P> up = node.getParent(); up != null; up = up.getParent()) {
+            for (BSPTree<S, P, H, I> up = node.getParent(); up != null; up = up.getParent()) {
                 splitters.add(up);
             }
         }
@@ -98,7 +101,7 @@ class BoundaryBuilder<S extends Space, P extends Point<S>> implements BSPTreeVis
 
     /** {@inheritDoc} */
     @Override
-    public void visitLeafNode(BSPTree<S, P> node) {
+    public void visitLeafNode(BSPTree<S, P, H, I> node) {
     }
 
 }

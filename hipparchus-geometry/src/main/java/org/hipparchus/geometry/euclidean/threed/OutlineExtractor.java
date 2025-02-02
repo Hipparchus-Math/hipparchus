@@ -24,14 +24,14 @@ package org.hipparchus.geometry.euclidean.threed;
 import java.util.ArrayList;
 
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
+import org.hipparchus.geometry.euclidean.twod.Line;
 import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
+import org.hipparchus.geometry.euclidean.twod.SubLine;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
-import org.hipparchus.geometry.partitioning.AbstractSubHyperplane;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryAttribute;
 import org.hipparchus.geometry.partitioning.RegionFactory;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -123,7 +123,7 @@ public class OutlineExtractor {
     }
 
     /** Visitor projecting the boundary facets on a plane. */
-    private class BoundaryProjector implements BSPTreeVisitor<Euclidean3D, Vector3D> {
+    private class BoundaryProjector implements BSPTreeVisitor<Euclidean3D, Vector3D, Plane, SubPlane> {
 
         /** Projection of the polyhedrons set on the plane. */
         private PolygonsSet projected;
@@ -141,16 +141,16 @@ public class OutlineExtractor {
 
         /** {@inheritDoc} */
         @Override
-        public Order visitOrder(final BSPTree<Euclidean3D, Vector3D> node) {
+        public Order visitOrder(final BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
             return Order.MINUS_SUB_PLUS;
         }
 
         /** {@inheritDoc} */
         @Override
-        public void visitInternalNode(final BSPTree<Euclidean3D, Vector3D> node) {
+        public void visitInternalNode(final BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
             @SuppressWarnings("unchecked")
-            final BoundaryAttribute<Euclidean3D, Vector3D> attribute =
-                (BoundaryAttribute<Euclidean3D, Vector3D>) node.getAttribute();
+            final BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane> attribute =
+                (BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane>) node.getAttribute();
             if (attribute.getPlusOutside() != null) {
                 addContribution(attribute.getPlusOutside());
             }
@@ -161,23 +161,18 @@ public class OutlineExtractor {
 
         /** {@inheritDoc} */
         @Override
-        public void visitLeafNode(final BSPTree<Euclidean3D, Vector3D> node) {
+        public void visitLeafNode(final BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
         }
 
         /** Add he contribution of a boundary facet.
          * @param facet boundary facet
          */
-        private void addContribution(final SubHyperplane<Euclidean3D, Vector3D> facet) {
+        private void addContribution(final SubPlane facet) {
 
-            // extract the vertices of the facet
-            final AbstractSubHyperplane<Euclidean3D, Vector3D, Euclidean2D, Vector2D> absFacet =
-                (AbstractSubHyperplane<Euclidean3D, Vector3D, Euclidean2D, Vector2D>) facet;
-            final Plane plane    = (Plane) facet.getHyperplane();
-
-            final double scal = plane.getNormal().dotProduct(w);
+            final double scal = facet.getHyperplane().getNormal().dotProduct(w);
             if (FastMath.abs(scal) > 1.0e-3) {
                 Vector2D[][] vertices =
-                    ((PolygonsSet) absFacet.getRemainingRegion()).getVertices();
+                    ((PolygonsSet) facet.getRemainingRegion()).getVertices();
 
                 if (scal < 0) {
                     // the facet is seen from the back of the plane,
@@ -205,21 +200,21 @@ public class OutlineExtractor {
                 }
 
                 // compute the projection of the facet in the outline plane
-                final ArrayList<SubHyperplane<Euclidean2D, Vector2D>> edges = new ArrayList<>();
+                final ArrayList<SubLine> edges = new ArrayList<>();
                 for (Vector2D[] loop : vertices) {
                     final boolean closed = loop[0] != null;
                     int previous         = closed ? (loop.length - 1) : 1;
-                    final Vector3D previous3D = plane.toSpace(loop[previous]);
+                    final Vector3D previous3D = facet.getHyperplane().toSpace(loop[previous]);
                     int current          = (previous + 1) % loop.length;
                     Vector2D pPoint      = new Vector2D(previous3D.dotProduct(u), previous3D.dotProduct(v));
                     while (current < loop.length) {
 
-                        final Vector3D current3D = plane.toSpace(loop[current]);
+                        final Vector3D current3D = facet.getHyperplane().toSpace(loop[current]);
                         final Vector2D  cPoint    = new Vector2D(current3D.dotProduct(u),
                                                                  current3D.dotProduct(v));
                         final org.hipparchus.geometry.euclidean.twod.Line line =
                             new org.hipparchus.geometry.euclidean.twod.Line(pPoint, cPoint, tolerance);
-                        SubHyperplane<Euclidean2D, Vector2D> edge = line.wholeHyperplane();
+                        SubLine edge = line.wholeHyperplane();
 
                         if (closed || (previous != 1)) {
                             // the previous point is a real vertex
@@ -249,7 +244,8 @@ public class OutlineExtractor {
                 final PolygonsSet projectedFacet = new PolygonsSet(edges, tolerance);
 
                 // add the contribution of the facet to the global outline
-                projected = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().union(projected, projectedFacet);
+                final RegionFactory<Euclidean2D, Vector2D, Line, SubLine> factory = new RegionFactory<>();
+                projected = (PolygonsSet) factory.union(projected, projectedFacet);
 
             }
         }

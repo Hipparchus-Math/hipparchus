@@ -21,15 +21,20 @@ import java.io.Serializable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
+import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.geometry.partitioning.Region;
+import org.hipparchus.geometry.partitioning.SubHyperplane;
 
 /**
  * This class represents a convex hull.
  *
  * @param <S> Space type.
  * @param <P> Point type.
- */
-public interface ConvexHull<S extends Space, P extends Point<S>> extends Serializable {
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
+*/
+public interface ConvexHull<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>>
+        extends Serializable {
 
     /**
      * Get the vertices of the convex hull.
@@ -43,5 +48,5 @@ public interface ConvexHull<S extends Space, P extends Point<S>> extends Seriali
      * @throws MathIllegalArgumentException if the number of vertices is not enough to
      * build a region in the respective space
      */
-    Region<S, P> createRegion() throws MathIllegalArgumentException;
+    Region<S, P, H, I> createRegion() throws MathIllegalArgumentException;
 }

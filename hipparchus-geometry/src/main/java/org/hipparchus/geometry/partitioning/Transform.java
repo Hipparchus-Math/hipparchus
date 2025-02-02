@@ -51,14 +51,24 @@ import org.hipparchus.geometry.Space;
  *   </li>
  * </ul>
 
- * @param <S> Type of the space.
- * @param <P> Type of the points in the space.
- * @param <T> Type of the sub-space.
- * @param <Q> Type of the points in the sub-space.
+ * @param <S> Type of the origin space.
+ * @param <P> Type of the points in the origin space.
+ * @param <H> Type of the hyperplane in the origin space.
+ * @param <I> Type of the sub-hyperplane in the origin space.
+ * @param <T> Type of the destination sub-space.
+ * @param <Q> Type of the points in the destination sub-space.
+ * @param <F> Type of the hyperplane in the destination sub-space.
+ * @param <J> Type of the sub-hyperplane in the destination sub-space.
 
  */
-public interface Transform<S extends Space, P extends Point<S>,
-                           T extends Space, Q extends Point<T>> {
+public interface Transform<S extends Space,
+                           P extends Point<S>,
+                           H extends Hyperplane<S, P, H, I>,
+                           I extends SubHyperplane<S, P, H, I>,
+                           T extends Space,
+                           Q extends Point<T>,
+                           F extends Hyperplane<T, Q, F, J>,
+                           J extends SubHyperplane<T, Q, F, J>> {
 
     /** Transform a point of a space.
      * @param point point to transform
@@ -70,7 +80,7 @@ public interface Transform<S extends Space, P extends Point<S>,
      * @param hyperplane hyperplane to transform
      * @return a new object representing the transformed hyperplane
      */
-    Hyperplane<S, P> apply(Hyperplane<S, P> hyperplane);
+    H apply(H hyperplane);
 
     /** Transform a sub-hyperplane embedded in an hyperplane.
      * @param sub sub-hyperplane to transform
@@ -82,6 +92,6 @@ public interface Transform<S extends Space, P extends Point<S>,
      * <em>has</em> been applied to it)
      * @return a new object representing the transformed sub-hyperplane
      */
-    SubHyperplane<T, Q> apply(SubHyperplane<T, Q> sub, Hyperplane<S, P> original, Hyperplane<S, P> transformed);
+    J apply(J sub, H original, H transformed);
 
 }

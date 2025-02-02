@@ -115,7 +115,8 @@ class PolyhedronsSetTest {
 
     @Test
     void testEmptyBRepIfEmpty() {
-        PolyhedronsSet empty = (PolyhedronsSet) new RegionFactory<Euclidean3D, Vector3D>().getComplement(new PolyhedronsSet(1.0e-10));
+        PolyhedronsSet empty = (PolyhedronsSet) new RegionFactory<Euclidean3D, Vector3D, Plane, SubPlane>().
+                getComplement(new PolyhedronsSet(1.0e-10));
         assertTrue(empty.isEmpty());
         assertEquals(0.0, empty.getSize(), 1.0e-10);
         PolyhedronsSet.BRep brep = empty.getBRep();
@@ -125,7 +126,7 @@ class PolyhedronsSetTest {
 
     @Test
     void testNoBRepHalfSpace() {
-        BSPTree<Euclidean3D, Vector3D> bsp = new BSPTree<>();
+        BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> bsp = new BSPTree<>();
         bsp.insertCut(new Plane(Vector3D.PLUS_K, 1.0e-10));
         bsp.getPlus().setAttribute(Boolean.FALSE);
         bsp.getMinus().setAttribute(Boolean.TRUE);
@@ -141,7 +142,7 @@ class PolyhedronsSetTest {
 
     @Test
     void testNoBRepUnboundedOctant() {
-        BSPTree<Euclidean3D, Vector3D> bsp = new BSPTree<>();
+        BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> bsp = new BSPTree<>();
         bsp.insertCut(new Plane(Vector3D.PLUS_K, 1.0e-10));
         bsp.getPlus().setAttribute(Boolean.FALSE);
         bsp.getMinus().insertCut(new Plane(Vector3D.PLUS_I, 1.0e-10));
@@ -166,7 +167,7 @@ class PolyhedronsSetTest {
         PolyhedronsSet tubeAlongX = new PolyhedronsSet(-2.0, 2.0, -0.5, 0.5, -0.5, 0.5, tolerance);
         PolyhedronsSet tubeAlongY = new PolyhedronsSet(-0.5, 0.5, -2.0, 2.0, -0.5, 0.5, tolerance);
         PolyhedronsSet tubeAlongZ = new PolyhedronsSet(-0.5, 0.5, -0.5, 0.5, -2.0, 2.0, tolerance);
-        RegionFactory<Euclidean3D, Vector3D> factory = new RegionFactory<>();
+        RegionFactory<Euclidean3D, Vector3D, Plane, SubPlane> factory = new RegionFactory<>();
         PolyhedronsSet cubeWithHoles = (PolyhedronsSet) factory.difference(cube,
                                                                            factory.union(tubeAlongX,
                                                                                          factory.union(tubeAlongY, tubeAlongZ)));
@@ -186,11 +187,11 @@ class PolyhedronsSetTest {
         Vector3D vertex3 = new Vector3D(2, 3, 3);
         Vector3D vertex4 = new Vector3D(1, 3, 4);
         PolyhedronsSet tree =
-            (PolyhedronsSet) new RegionFactory<Euclidean3D, Vector3D>().buildConvex(
-                new Plane(vertex3, vertex2, vertex1, 1.0e-10),
-                new Plane(vertex2, vertex3, vertex4, 1.0e-10),
-                new Plane(vertex4, vertex3, vertex1, 1.0e-10),
-                new Plane(vertex1, vertex2, vertex4, 1.0e-10));
+            (PolyhedronsSet) new RegionFactory<Euclidean3D, Vector3D, Plane, SubPlane>().
+                    buildConvex(new Plane(vertex3, vertex2, vertex1, 1.0e-10),
+                                new Plane(vertex2, vertex3, vertex4, 1.0e-10),
+                                new Plane(vertex4, vertex3, vertex1, 1.0e-10),
+                                new Plane(vertex1, vertex2, vertex4, 1.0e-10));
         assertEquals(1.0 / 3.0, tree.getSize(), 1.0e-10);
         assertEquals(2.0 * FastMath.sqrt(3.0), tree.getBoundarySize(), 1.0e-10);
         Vector3D barycenter = tree.getBarycenter();
@@ -220,11 +221,11 @@ class PolyhedronsSetTest {
         Vector3D vertex3 = new Vector3D(2.8, 3.3, 3.7);
         Vector3D vertex4 = new Vector3D(1.0, 3.6, 4.5);
         PolyhedronsSet tree =
-            (PolyhedronsSet) new RegionFactory<Euclidean3D, Vector3D>().buildConvex(
-                new Plane(vertex3, vertex2, vertex1, 1.0e-10),
-                new Plane(vertex2, vertex3, vertex4, 1.0e-10),
-                new Plane(vertex4, vertex3, vertex1, 1.0e-10),
-                new Plane(vertex1, vertex2, vertex4, 1.0e-10));
+            (PolyhedronsSet) new RegionFactory<Euclidean3D, Vector3D, Plane, SubPlane>().
+                    buildConvex(new Plane(vertex3, vertex2, vertex1, 1.0e-10),
+                                new Plane(vertex2, vertex3, vertex4, 1.0e-10),
+                                new Plane(vertex4, vertex3, vertex1, 1.0e-10),
+                                new Plane(vertex1, vertex2, vertex4, 1.0e-10));
         Vector3D barycenter = tree.getBarycenter();
         Vector3D s = new Vector3D(10.2, 4.3, -6.7);
         Vector3D c = new Vector3D(-0.2, 2.1, -3.2);
@@ -251,29 +252,29 @@ class PolyhedronsSetTest {
                                                                 1.0, c,
                                                                 1.0, r.applyTo(vertex4.subtract(c)))
         };
-        tree.getTree(true).visit(new BSPTreeVisitor<Euclidean3D, Vector3D>() {
+        tree.getTree(true).visit(new BSPTreeVisitor<Euclidean3D, Vector3D, Plane, SubPlane>() {
 
-            public Order visitOrder(BSPTree<Euclidean3D, Vector3D> node) {
+            public Order visitOrder(BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
                 return Order.MINUS_SUB_PLUS;
             }
 
-            public void visitInternalNode(BSPTree<Euclidean3D, Vector3D> node) {
+            public void visitInternalNode(BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
                 @SuppressWarnings("unchecked")
-                BoundaryAttribute<Euclidean3D, Vector3D> attribute =
-                    (BoundaryAttribute<Euclidean3D, Vector3D>) node.getAttribute();
+                BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane> attribute =
+                    (BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane>) node.getAttribute();
                 if (attribute.getPlusOutside() != null) {
-                    checkFacet((SubPlane) attribute.getPlusOutside());
+                    checkFacet(attribute.getPlusOutside());
                 }
                 if (attribute.getPlusInside() != null) {
-                    checkFacet((SubPlane) attribute.getPlusInside());
+                    checkFacet(attribute.getPlusInside());
                 }
             }
 
-            public void visitLeafNode(BSPTree<Euclidean3D, Vector3D> node) {
+            public void visitLeafNode(BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
             }
 
             private void checkFacet(SubPlane facet) {
-                Plane plane = (Plane) facet.getHyperplane();
+                Plane plane = facet.getHyperplane();
                 Vector2D[][] vertices =
                     ((PolygonsSet) facet.getRemainingRegion()).getVertices();
                 assertEquals(1, vertices.length);
@@ -322,7 +323,7 @@ class PolyhedronsSetTest {
             new PolyhedronsSet(x - w, x + w, y - l, y + l, z - w, z + w, 1.0e-10);
         PolyhedronsSet zBeam =
             new PolyhedronsSet(x - w, x + w, y - w, y + w, z - l, z + l, 1.0e-10);
-        RegionFactory<Euclidean3D, Vector3D> factory = new RegionFactory<>();
+        RegionFactory<Euclidean3D, Vector3D, Plane, SubPlane> factory = new RegionFactory<>();
         PolyhedronsSet tree = (PolyhedronsSet) factory.union(xBeam, factory.union(yBeam, zBeam));
         Vector3D barycenter = tree.getBarycenter();
 
@@ -352,7 +353,7 @@ class PolyhedronsSetTest {
             1, 5, 6, 1, 6, 2,
             2, 6, 7, 2, 7, 3,
             4, 0, 3, 4, 3, 7};
-        ArrayList<SubHyperplane<Euclidean3D, Vector3D>> subHyperplaneList = new ArrayList<>();
+        ArrayList<SubPlane> subHyperplaneList = new ArrayList<>();
         for (int idx = 0; idx < indices.length; idx += 3) {
             int idxA = indices[idx] * 3;
             int idxB = indices[idx + 1] * 3;
@@ -362,7 +363,7 @@ class PolyhedronsSetTest {
             Vector3D v_3 = new Vector3D(coords[idxC], coords[idxC + 1], coords[idxC + 2]);
             Vector3D[] vertices = {v_1, v_2, v_3};
             Plane polyPlane = new Plane(v_1, v_2, v_3, 1.0e-10);
-            ArrayList<SubHyperplane<Euclidean2D, Vector2D>> lines = new ArrayList<>();
+            ArrayList<SubLine> lines = new ArrayList<>();
 
             Vector2D[] projPts = new Vector2D[vertices.length];
             for (int ptIdx = 0; ptIdx < projPts.length; ptIdx++) {
@@ -372,8 +373,9 @@ class PolyhedronsSetTest {
             for (int ptIdx = 0; ptIdx < projPts.length; ptIdx++) {
                 lines.add(new SubLine(projPts[ptIdx], projPts[(ptIdx + 1) % projPts.length], 1.0e-10));
             }
-            Region<Euclidean2D, Vector2D> polyRegion = new PolygonsSet(lines, 1.0e-10);
-            SubPlane polygon = new SubPlane(polyPlane, polyRegion);
+            Region<Euclidean2D, Vector2D, org.hipparchus.geometry.euclidean.twod.Line, SubLine> polyRegion =
+                    new PolygonsSet(lines, 1.0e-10);
+            SubPlane polygon    = new SubPlane(polyPlane, polyRegion);
             subHyperplaneList.add(polygon);
         }
         PolyhedronsSet polyhedronsSet = new PolyhedronsSet(subHyperplaneList, 1.0e-10);
@@ -440,7 +442,7 @@ class PolyhedronsSetTest {
             PolyhedronsSet parsed = RegionParser.parsePolyhedronsSet(dump);
             assertEquals(8.0, parsed.getSize(), 1.0e-10);
             assertEquals(24.0, parsed.getBoundarySize(), 1.0e-10);
-            assertTrue(new RegionFactory<Euclidean3D, Vector3D>().difference(polyset, parsed).isEmpty());
+            assertTrue(new RegionFactory<Euclidean3D, Vector3D, Plane, SubPlane>().difference(polyset, parsed).isEmpty());
     }
 
     @Test
@@ -519,28 +521,28 @@ class PolyhedronsSetTest {
         assertNotNull(upFromOutsideResult);
         assertEquals(0.0,
                             Vector3D.distance(lowerCorner,
-                                              ((Plane) upFromOutsideResult.getHyperplane()).intersection(upDiagonal)),
+                                              upFromOutsideResult.getHyperplane().intersection(upDiagonal)),
                             1.0e-15);
 
         SubPlane upFromCenterResult = (SubPlane) polySet.firstIntersection(center, upDiagonal);
         assertNotNull(upFromCenterResult);
         assertEquals(0.0,
                             Vector3D.distance(upperCorner,
-                                              ((Plane) upFromCenterResult.getHyperplane()).intersection(upDiagonal)),
+                                              upFromCenterResult.getHyperplane().intersection(upDiagonal)),
                             1.0e-15);
 
         SubPlane downFromOutsideResult = (SubPlane) polySet.firstIntersection(new Vector3D(2, 2, 2), downDiagonal);
         assertNotNull(downFromOutsideResult);
         assertEquals(0.0,
                             Vector3D.distance(upperCorner,
-                            ((Plane) downFromOutsideResult.getHyperplane()).intersection(downDiagonal)),
+                            downFromOutsideResult.getHyperplane().intersection(downDiagonal)),
                             1.0e-15);
 
         SubPlane downFromCenterResult = (SubPlane) polySet.firstIntersection(center, downDiagonal);
         assertNotNull(downFromCenterResult);
         assertEquals(0.0,
                             Vector3D.distance(lowerCorner,
-                                              ((Plane) downFromCenterResult.getHyperplane()).intersection(downDiagonal)),
+                                              downFromCenterResult.getHyperplane().intersection(downDiagonal)),
                             1.0e-15);
     }
 
@@ -556,9 +558,9 @@ class PolyhedronsSetTest {
                                               2 * random.nextDouble() - 1,
                                               2 * random.nextDouble() - 1).normalize();
             Line line = new Line(origin, origin.add(direction), polyset.getTolerance());
-            SubHyperplane<Euclidean3D, Vector3D> plane = polyset.firstIntersection(origin, line);
+            SubHyperplane<Euclidean3D, Vector3D, Plane, SubPlane> plane = polyset.firstIntersection(origin, line);
             if (plane != null) {
-                Vector3D intersectionPoint = ((Plane)plane.getHyperplane()).intersection(line);
+                Vector3D intersectionPoint = plane.getHyperplane().intersection(line);
                 double dotProduct = direction.dotProduct(intersectionPoint.subtract(origin));
                 assertTrue(dotProduct > 0);
             }

@@ -28,11 +28,9 @@ import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryProjection;
-import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.partitioning.RegionFactory;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.random.RandomVectorGenerator;
 import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
 import org.hipparchus.random.UniformRandomGenerator;
@@ -138,7 +136,8 @@ class PolygonsSetTest {
 
     @Test
     void testEmpty() {
-        PolygonsSet empty = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().getComplement(new PolygonsSet(1.0e-10));
+        PolygonsSet empty = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                            getComplement(new PolygonsSet(1.0e-10));
         assertTrue(empty.isEmpty());
         assertEquals(0, empty.getVertices().length);
         assertEquals(0.0, empty.getBoundarySize(), 1.0e-10);
@@ -330,7 +329,7 @@ class PolygonsSetTest {
         PolygonsSet set = buildSet(vertices);
 
         Line l1 = new Line(new Vector2D(-1.5, 0.0), FastMath.PI / 4, 1.0e-10);
-        SubLine s1 = (SubLine) set.intersection(l1.wholeHyperplane());
+        SubLine s1 = set.intersection(l1.wholeHyperplane());
         List<Interval> i1 = ((IntervalsSet) s1.getRemainingRegion()).asList();
         assertEquals(2, i1.size());
         Interval v10 = i1.get(0);
@@ -349,7 +348,7 @@ class PolygonsSetTest {
         assertEquals(3.0, p11Upper.getY(), 1.0e-10);
 
         Line l2 = new Line(new Vector2D(-1.0, 2.0), 0, 1.0e-10);
-        SubLine s2 = (SubLine) set.intersection(l2.wholeHyperplane());
+        SubLine s2 = set.intersection(l2.wholeHyperplane());
         List<Interval> i2 = ((IntervalsSet) s2.getRemainingRegion()).asList();
         assertEquals(1, i2.size());
         Interval v20 = i2.get(0);
@@ -383,7 +382,7 @@ class PolygonsSetTest {
         PolygonsSet set2 = buildSet(vertices2);
 
         PolygonsSet set =
-            (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().union(set1.copySelf(), set2.copySelf());
+            (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().union(set1.copySelf(), set2.copySelf());
         checkVertices(set1.getVertices(), vertices1);
         checkVertices(set2.getVertices(), vertices2);
         checkVertices(set.getVertices(), new Vector2D[][] {
@@ -420,7 +419,7 @@ class PolygonsSetTest {
             }
         };
         PolygonsSet set2 = buildSet(vertices2);
-        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().union(set1.copySelf(), set2.copySelf());
+        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().union(set1.copySelf(), set2.copySelf());
         checkVertices(set1.getVertices(), vertices1);
         checkVertices(set2.getVertices(), vertices2);
         checkVertices(set.getVertices(), new Vector2D[][] {
@@ -483,7 +482,8 @@ class PolygonsSetTest {
             }
         };
         PolygonsSet set2 = buildSet(vertices2);
-        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().intersection(set1.copySelf(), set2.copySelf());
+        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                           intersection(set1.copySelf(), set2.copySelf());
         checkVertices(set1.getVertices(), vertices1);
         checkVertices(set2.getVertices(), vertices2);
         checkVertices(set.getVertices(), new Vector2D[][] {
@@ -531,7 +531,8 @@ class PolygonsSetTest {
             }
         };
         PolygonsSet set2 = buildSet(vertices2);
-        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().xor(set1.copySelf(), set2.copySelf());
+        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                           xor(set1.copySelf(), set2.copySelf());
         checkVertices(set1.getVertices(), vertices1);
         checkVertices(set2.getVertices(), vertices2);
         checkVertices(set.getVertices(), new Vector2D[][] {
@@ -601,7 +602,8 @@ class PolygonsSetTest {
             }
         };
         PolygonsSet set2 = buildSet(vertices2);
-        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().difference(set1.copySelf(), set2.copySelf());
+        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                           difference(set1.copySelf(), set2.copySelf());
         checkVertices(set1.getVertices(), vertices1);
         checkVertices(set2.getVertices(), vertices2);
         checkVertices(set.getVertices(), new Vector2D[][] {
@@ -663,7 +665,8 @@ class PolygonsSetTest {
             }
         };
         PolygonsSet set2 = buildSet(vertices2);
-        assertTrue(new RegionFactory<Euclidean2D, Vector2D>().difference(set1.copySelf(), set2.copySelf()).isEmpty());
+        assertTrue(new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                   difference(set1.copySelf(), set2.copySelf()).isEmpty());
     }
 
     @Test
@@ -679,13 +682,13 @@ class PolygonsSetTest {
             new Line(new Vector2D(   0.0, 1.0),  3 * pi6, 1.0e-10).wholeHyperplane(),
             new Line(new Vector2D(-5.0 * sqrt3 / 6.0, 0.0), 9 * pi6, 1.0e-10).wholeHyperplane()
         };
-        hyp[1] = (SubLine) hyp[1].split(hyp[0].getHyperplane()).getMinus();
-        hyp[2] = (SubLine) hyp[2].split(hyp[1].getHyperplane()).getMinus();
-        hyp[3] = (SubLine) hyp[3].split(hyp[2].getHyperplane()).getMinus();
-        hyp[4] = (SubLine) hyp[4].split(hyp[3].getHyperplane()).getMinus().split(hyp[0].getHyperplane()).getMinus();
-        hyp[5] = (SubLine) hyp[5].split(hyp[4].getHyperplane()).getMinus().split(hyp[0].getHyperplane()).getMinus();
-        hyp[6] = (SubLine) hyp[6].split(hyp[3].getHyperplane()).getMinus().split(hyp[1].getHyperplane()).getMinus();
-        BSPTree<Euclidean2D, Vector2D> tree = new BSPTree<>(Boolean.TRUE);
+        hyp[1] = hyp[1].split(hyp[0].getHyperplane()).getMinus();
+        hyp[2] = hyp[2].split(hyp[1].getHyperplane()).getMinus();
+        hyp[3] = hyp[3].split(hyp[2].getHyperplane()).getMinus();
+        hyp[4] = hyp[4].split(hyp[3].getHyperplane()).getMinus().split(hyp[0].getHyperplane()).getMinus();
+        hyp[5] = hyp[5].split(hyp[4].getHyperplane()).getMinus().split(hyp[0].getHyperplane()).getMinus();
+        hyp[6] = hyp[6].split(hyp[3].getHyperplane()).getMinus().split(hyp[1].getHyperplane()).getMinus();
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> tree = new BSPTree<>(Boolean.TRUE);
         for (int i = hyp.length - 1; i >= 0; --i) {
             tree = new BSPTree<>(hyp[i], new BSPTree<>(Boolean.FALSE), tree, null);
         }
@@ -735,92 +738,92 @@ class PolygonsSetTest {
 
     @Test
     void testBug20040520() {
-        BSPTree<Euclidean2D, Vector2D> a0 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a0 =
             new BSPTree<>(buildSegment(new Vector2D(0.85, -0.05),
                                        new Vector2D(0.90, -0.10)),
                           new BSPTree<>(Boolean.FALSE),
                           new BSPTree<>(Boolean.TRUE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> a1 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a1 =
             new BSPTree<>(buildSegment(new Vector2D(0.85, -0.10),
                                        new Vector2D(0.90, -0.10)),
                           new BSPTree<>(Boolean.FALSE), a0, null);
-        BSPTree<Euclidean2D, Vector2D> a2 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a2 =
             new BSPTree<>(buildSegment(new Vector2D(0.90, -0.05),
                                        new Vector2D(0.85, -0.05)),
                           new BSPTree<>(Boolean.FALSE), a1, null);
-        BSPTree<Euclidean2D, Vector2D> a3 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a3 =
             new BSPTree<>(buildSegment(new Vector2D(0.82, -0.05),
                                        new Vector2D(0.82, -0.08)),
                           new BSPTree<>(Boolean.FALSE),
                           new BSPTree<>(Boolean.TRUE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> a4 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a4 =
             new BSPTree<>(buildHalfLine(new Vector2D(0.85, -0.05),
                                         new Vector2D(0.80, -0.05),
                                         false),
                           new BSPTree<>(Boolean.FALSE), a3, null);
-        BSPTree<Euclidean2D, Vector2D> a5 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a5 =
             new BSPTree<>(buildSegment(new Vector2D(0.82, -0.08),
                                        new Vector2D(0.82, -0.18)),
                           new BSPTree<>(Boolean.FALSE),
                           new BSPTree<>(Boolean.TRUE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> a6 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a6 =
             new BSPTree<>(buildHalfLine(new Vector2D(0.82, -0.18),
                                         new Vector2D(0.85, -0.15),
                                         true),
                           new BSPTree<>(Boolean.FALSE), a5, null);
-        BSPTree<Euclidean2D, Vector2D> a7 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a7 =
             new BSPTree<>(buildHalfLine(new Vector2D(0.85, -0.05),
                                         new Vector2D(0.82, -0.08),
                                         false),
                           a4, a6, null);
-        BSPTree<Euclidean2D, Vector2D> a8 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a8 =
             new BSPTree<>(buildLine(new Vector2D(0.85, -0.25),
                                     new Vector2D(0.85,  0.05)),
                           a2, a7, null);
-        BSPTree<Euclidean2D, Vector2D> a9 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> a9 =
             new BSPTree<>(buildLine(new Vector2D(0.90,  0.05),
                                     new Vector2D(0.90, -0.50)),
                           a8, new BSPTree<>(Boolean.FALSE), null);
 
-        BSPTree<Euclidean2D, Vector2D> b0 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> b0 =
             new BSPTree<>(buildSegment(new Vector2D(0.92, -0.12),
                                        new Vector2D(0.92, -0.08)),
                           new BSPTree<>(Boolean.FALSE), new BSPTree<>(Boolean.TRUE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> b1 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> b1 =
             new BSPTree<>(buildHalfLine(new Vector2D(0.92, -0.08),
                                         new Vector2D(0.90, -0.10),
                                         true),
                           new BSPTree<>(Boolean.FALSE), b0, null);
-        BSPTree<Euclidean2D, Vector2D> b2 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> b2 =
             new BSPTree<>(buildSegment(new Vector2D(0.92, -0.18),
                                        new Vector2D(0.92, -0.12)),
                           new BSPTree<>(Boolean.FALSE), new BSPTree<>(Boolean.TRUE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> b3 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> b3 =
             new BSPTree<>(buildSegment(new Vector2D(0.85, -0.15),
                                        new Vector2D(0.90, -0.20)),
                           new BSPTree<>(Boolean.FALSE), b2, null);
-        BSPTree<Euclidean2D, Vector2D> b4 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> b4 =
             new BSPTree<>(buildSegment(new Vector2D(0.95, -0.15),
                                        new Vector2D(0.85, -0.05)),
                           b1, b3, null);
-        BSPTree<Euclidean2D, Vector2D> b5 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> b5 =
             new BSPTree<>(buildHalfLine(new Vector2D(0.85, -0.05),
                                         new Vector2D(0.85, -0.25),
                                         true),
                           new BSPTree<>(Boolean.FALSE), b4, null);
-        BSPTree<Euclidean2D, Vector2D> b6 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> b6 =
             new BSPTree<>(buildLine(new Vector2D(0.0, -1.10),
                                     new Vector2D(1.0, -0.10)),
                           new BSPTree<>(Boolean.FALSE), b5, null);
 
         PolygonsSet c =
-            (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D>().union(new PolygonsSet(a9, 1.0e-10),
-                                                                           new PolygonsSet(b6, 1.0e-10));
+            (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                     union(new PolygonsSet(a9, 1.0e-10), new PolygonsSet(b6, 1.0e-10));
 
         checkPoints(Region.Location.INSIDE, c, new Vector2D[] {
             new Vector2D(0.83, -0.06),
@@ -875,7 +878,7 @@ class PolygonsSetTest {
                      new Vector2D(1.0, 2.0), 1.0e-10)
         };
 
-        BSPTree<Euclidean2D, Vector2D> node1 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> node1 =
             new BSPTree<>(new SubLine(l[0],
                                       new IntervalsSet(intersectionAbscissa(l[0], l[1]),
                                                        intersectionAbscissa(l[0], l[2]),
@@ -883,7 +886,7 @@ class PolygonsSetTest {
                           new BSPTree<>(Boolean.TRUE),
                           new BSPTree<>(Boolean.FALSE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> node2 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> node2 =
             new BSPTree<>(new SubLine(l[1],
                                       new IntervalsSet(intersectionAbscissa(l[1], l[2]),
                                                        intersectionAbscissa(l[1], l[3]),
@@ -891,7 +894,7 @@ class PolygonsSetTest {
                           node1,
                           new BSPTree<>(Boolean.FALSE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> node3 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> node3 =
             new BSPTree<>(new SubLine(l[2],
                                       new IntervalsSet(intersectionAbscissa(l[2], l[3]),
                                                        Double.POSITIVE_INFINITY,
@@ -899,7 +902,7 @@ class PolygonsSetTest {
                                      node2,
                           new BSPTree<>(Boolean.FALSE),
                           null);
-        BSPTree<Euclidean2D, Vector2D> node4 =
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> node4 =
             new BSPTree<>(l[3].wholeHyperplane(),
                           node3,
                           new BSPTree<>(Boolean.FALSE),
@@ -1084,8 +1087,8 @@ class PolygonsSetTest {
                 new Vector2D( 90.16122795307462,  38.39773101873203)
         };
         PolygonsSet set2 = new PolygonsSet(1.0e-8, vertices2);
-        PolygonsSet set  = (PolygonsSet) new
-                RegionFactory<Euclidean2D, Vector2D>().difference(set1.copySelf(), set2.copySelf());
+        PolygonsSet set  = (PolygonsSet) new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                           difference(set1.copySelf(), set2.copySelf());
 
         Vector2D[][] vertices = set.getVertices();
         assertNotNull(vertices[0][0]);
@@ -1136,34 +1139,35 @@ class PolygonsSetTest {
     @Test
     void testThinRectangle() {
 
-        RegionFactory<Euclidean2D, Vector2D> factory = new RegionFactory<>();
+        RegionFactory<Euclidean2D, Vector2D, Line, SubLine> factory = new RegionFactory<>();
         Vector2D pA = new Vector2D(0.0,        1.0);
         Vector2D pB = new Vector2D(0.0,        0.0);
         Vector2D pC = new Vector2D(1.0 / 64.0, 0.0);
         Vector2D pD = new Vector2D(1.0 / 64.0, 1.0);
 
         // if tolerance is smaller than rectangle width, the rectangle is computed accurately
-        Hyperplane<Euclidean2D, Vector2D>[] h1 = new Line[] {
+        Line[] h1 = new Line[] {
             new Line(pA, pB, 1.0 / 256),
             new Line(pB, pC, 1.0 / 256),
             new Line(pC, pD, 1.0 / 256),
             new Line(pD, pA, 1.0 / 256)
         };
-        Region<Euclidean2D, Vector2D> accuratePolygon = factory.buildConvex(h1);
+        Region<Euclidean2D, Vector2D, Line, SubLine> accuratePolygon = factory.buildConvex(h1);
         assertEquals(1.0 / 64.0, accuratePolygon.getSize(), 1.0e-10);
-        assertTrue(Double.isInfinite(new RegionFactory<Euclidean2D, Vector2D>().getComplement(accuratePolygon).getSize()));
+        assertTrue(Double.isInfinite(new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                                     getComplement(accuratePolygon).getSize()));
         assertEquals(2 * (1.0 + 1.0 / 64.0), accuratePolygon.getBoundarySize(), 1.0e-10);
 
         // if tolerance is larger than rectangle width, the rectangle degenerates
         // as of 3.3, its two long edges cannot be distinguished anymore and this part of the test did fail
         // this has been fixed in 3.4 (issue MATH-1174)
-        Hyperplane<Euclidean2D, Vector2D>[] h2 = new Line[] {
+        Line[] h2 = new Line[] {
             new Line(pA, pB, 1.0 / 16),
             new Line(pB, pC, 1.0 / 16),
             new Line(pC, pD, 1.0 / 16),
             new Line(pD, pA, 1.0 / 16)
         };
-        Region<Euclidean2D, Vector2D> degeneratedPolygon = factory.buildConvex(h2);
+        Region<Euclidean2D, Vector2D, Line, SubLine> degeneratedPolygon = factory.buildConvex(h2);
         assertEquals(0.0, degeneratedPolygon.getSize(), 1.0e-10);
         assertTrue(degeneratedPolygon.isEmpty());
 
@@ -1173,7 +1177,8 @@ class PolygonsSetTest {
     void testInconsistentHyperplanes() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             double tolerance = 1.0e-10;
-            new RegionFactory<Euclidean2D, Vector2D>().buildConvex(new Line(new Vector2D(0, 0), new Vector2D(0, 1), tolerance),
+            new RegionFactory<Euclidean2D, Vector2D, Line, SubLine>().
+                    buildConvex(new Line(new Vector2D(0, 0), new Vector2D(0, 1), tolerance),
                 new Line(new Vector2D(1, 1), new Vector2D(1, 0), tolerance));
         });
     }
@@ -1230,7 +1235,7 @@ class PolygonsSetTest {
     @Test
     void testInfiniteQuadrant() {
         final double tolerance = 1.0e-10;
-        BSPTree<Euclidean2D, Vector2D> bsp = new BSPTree<>();
+        BSPTree<Euclidean2D, Vector2D, Line, SubLine> bsp = new BSPTree<>();
         bsp.insertCut(new Line(Vector2D.ZERO, 0.0, tolerance));
         bsp.getPlus().setAttribute(Boolean.FALSE);
         bsp.getMinus().insertCut(new Line(Vector2D.ZERO, MathUtils.SEMI_PI, tolerance));
@@ -1387,14 +1392,14 @@ class PolygonsSetTest {
         public void count(PolygonsSet polygonsSet) {
             leafNodes     = 0;
             internalNodes = 0;
-            polygonsSet.getTree(false).visit(new BSPTreeVisitor<Euclidean2D, Vector2D>() {
-                public Order visitOrder(BSPTree<Euclidean2D, Vector2D> node) {
+            polygonsSet.getTree(false).visit(new BSPTreeVisitor<Euclidean2D, Vector2D, Line, SubLine>() {
+                public Order visitOrder(BSPTree<Euclidean2D, Vector2D, Line, SubLine> node) {
                     return Order.SUB_PLUS_MINUS;
                 }
-                public void visitInternalNode(BSPTree<Euclidean2D, Vector2D> node) {
+                public void visitInternalNode(BSPTree<Euclidean2D, Vector2D, Line, SubLine> node) {
                     ++internalNodes;
                 }
-                public void visitLeafNode(BSPTree<Euclidean2D, Vector2D> node) {
+                public void visitLeafNode(BSPTree<Euclidean2D, Vector2D, Line, SubLine> node) {
                     ++leafNodes;
                 }
 
@@ -1412,7 +1417,7 @@ class PolygonsSetTest {
     }
 
     private PolygonsSet buildSet(Vector2D[][] vertices) {
-        ArrayList<SubHyperplane<Euclidean2D, Vector2D>> edges = new ArrayList<>();
+        ArrayList<SubLine> edges = new ArrayList<>();
         for (final Vector2D[] vertex : vertices) {
             int l = vertex.length;
             for (int j = 0; j < l; ++j) {
@@ -1422,7 +1427,7 @@ class PolygonsSetTest {
         return new PolygonsSet(edges, 1.0e-10);
     }
 
-    private SubHyperplane<Euclidean2D, Vector2D> buildLine(Vector2D start, Vector2D end) {
+    private SubLine buildLine(Vector2D start, Vector2D end) {
         return new Line(start, end, 1.0e-10).wholeHyperplane();
     }
 
@@ -1431,15 +1436,14 @@ class PolygonsSetTest {
         return (l0.toSubSpace(p)).getX();
     }
 
-    private SubHyperplane<Euclidean2D, Vector2D> buildHalfLine(Vector2D start, Vector2D end,
-                                                               boolean startIsVirtual) {
+    private SubLine buildHalfLine(Vector2D start, Vector2D end, boolean startIsVirtual) {
         Line   line  = new Line(start, end, 1.0e-10);
         double lower = startIsVirtual ? Double.NEGATIVE_INFINITY : (line.toSubSpace(start)).getX();
         double upper = startIsVirtual ? (line.toSubSpace(end)).getX() : Double.POSITIVE_INFINITY;
         return new SubLine(line, new IntervalsSet(lower, upper, 1.0e-10));
     }
 
-    private SubHyperplane<Euclidean2D, Vector2D> buildSegment(Vector2D start, Vector2D end) {
+    private SubLine buildSegment(Vector2D start, Vector2D end) {
         Line   line  = new Line(start, end, 1.0e-10);
         double lower = (line.toSubSpace(start)).getX();
         double upper = (line.toSubSpace(end)).getX();

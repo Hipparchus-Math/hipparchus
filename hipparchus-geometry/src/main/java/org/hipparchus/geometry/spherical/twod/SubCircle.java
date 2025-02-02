@@ -23,54 +23,52 @@ package org.hipparchus.geometry.spherical.twod;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.AbstractSubHyperplane;
-import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.spherical.oned.Arc;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
+import org.hipparchus.geometry.spherical.oned.LimitAngle;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
+import org.hipparchus.geometry.spherical.oned.SubLimitAngle;
 import org.hipparchus.util.FastMath;
 
 /** This class represents a sub-hyperplane for {@link Circle}.
  */
-public class SubCircle extends AbstractSubHyperplane<Sphere2D, S2Point, Sphere1D, S1Point> {
+public class SubCircle
+    extends AbstractSubHyperplane<Sphere2D, S2Point, Circle, SubCircle, Sphere1D, S1Point, LimitAngle, SubLimitAngle> {
 
     /** Simple constructor.
      * @param hyperplane underlying hyperplane
      * @param remainingRegion remaining region of the hyperplane
      */
-    public SubCircle(final Hyperplane<Sphere2D, S2Point> hyperplane,
-                     final Region<Sphere1D, S1Point> remainingRegion) {
+    public SubCircle(final Circle hyperplane,
+                     final Region<Sphere1D, S1Point, LimitAngle, SubLimitAngle> remainingRegion) {
         super(hyperplane, remainingRegion);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected AbstractSubHyperplane<Sphere2D, S2Point, Sphere1D, S1Point>
-        buildNew(final Hyperplane<Sphere2D, S2Point> hyperplane,
-                 final Region<Sphere1D, S1Point> remainingRegion) {
+    protected SubCircle buildNew(final Circle hyperplane, final Region<Sphere1D, S1Point, LimitAngle, SubLimitAngle> remainingRegion) {
         return new SubCircle(hyperplane, remainingRegion);
     }
 
     /** {@inheritDoc} */
     @Override
-    public SplitSubHyperplane<Sphere2D, S2Point> split(final Hyperplane<Sphere2D, S2Point> hyperplane) {
+    public SplitSubHyperplane<Sphere2D, S2Point, Circle, SubCircle> split(final Circle hyperplane) {
 
-        final Circle thisCircle   = (Circle) getHyperplane();
-        final Circle otherCircle  = (Circle) hyperplane;
-        final double angle = Vector3D.angle(thisCircle.getPole(), otherCircle.getPole());
+        final double angle = Vector3D.angle(getHyperplane().getPole(), hyperplane.getPole());
 
-        if (angle < thisCircle.getTolerance() || angle > FastMath.PI - thisCircle.getTolerance()) {
+        if (angle < getHyperplane().getTolerance() || angle > FastMath.PI - getHyperplane().getTolerance()) {
             // the two circles are aligned or opposite
             return new SplitSubHyperplane<>(null, null);
         } else {
             // the two circles intersect each other
-            final Arc    arc          = thisCircle.getInsideArc(otherCircle);
+            final Arc    arc          = getHyperplane().getInsideArc(hyperplane);
             final ArcsSet.Split split = ((ArcsSet) getRemainingRegion()).split(arc);
             final ArcsSet plus        = split.getPlus();
             final ArcsSet minus       = split.getMinus();
-            return new SplitSubHyperplane<>(plus  == null ? null : new SubCircle(thisCircle.copySelf(), plus),
-                                            minus == null ? null : new SubCircle(thisCircle.copySelf(), minus));
+            return new SplitSubHyperplane<>(plus  == null ? null : new SubCircle(getHyperplane().copySelf(), plus),
+                                            minus == null ? null : new SubCircle(getHyperplane().copySelf(), minus));
         }
 
     }

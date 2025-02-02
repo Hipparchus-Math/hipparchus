@@ -32,10 +32,11 @@ import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.partitioning.RegionFactory;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
+import org.hipparchus.geometry.spherical.oned.LimitAngle;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
+import org.hipparchus.geometry.spherical.oned.SubLimitAngle;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -76,7 +77,8 @@ class SphericalPolygonsSetTest {
     @Test
     void testEmpty() {
         SphericalPolygonsSet empty =
-            (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().getComplement(new SphericalPolygonsSet(1.0e-10));
+            (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point, Circle, SubCircle>().
+                    getComplement(new SphericalPolygonsSet(1.0e-10));
         UnitSphereRandomVectorGenerator random =
                 new UnitSphereRandomVectorGenerator(3, new Well1024a(0x76d9205d6167b6ddL));
         for (int i = 0; i < 1000; ++i) {
@@ -114,7 +116,8 @@ class SphericalPolygonsSetTest {
         assertEquals(MathUtils.SEMI_PI, southCap.getRadius(), 1.0e-10);
 
         EnclosingBall<Sphere2D, S2Point> northCap =
-                ((SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().getComplement(south)).getEnclosingCap();
+                ((SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point, Circle, SubCircle>().
+                        getComplement(south)).getEnclosingCap();
         assertEquals(0.0, S2Point.PLUS_K.distance(northCap.getCenter()), 1.0e-10);
         assertEquals(MathUtils.SEMI_PI, northCap.getRadius(), 1.0e-10);
 
@@ -124,7 +127,7 @@ class SphericalPolygonsSetTest {
     void testPositiveOctantByIntersection() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point, Circle, SubCircle> factory = new RegionFactory<>();
         SphericalPolygonsSet plusX = new SphericalPolygonsSet(Vector3D.PLUS_I, tol);
         SphericalPolygonsSet plusY = new SphericalPolygonsSet(Vector3D.PLUS_J, tol);
         SphericalPolygonsSet plusZ = new SphericalPolygonsSet(Vector3D.PLUS_K, tol);
@@ -210,7 +213,7 @@ class SphericalPolygonsSetTest {
     void testNonConvex() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point, Circle, SubCircle> factory = new RegionFactory<>();
         SphericalPolygonsSet plusX = new SphericalPolygonsSet(Vector3D.PLUS_I, tol);
         SphericalPolygonsSet plusY = new SphericalPolygonsSet(Vector3D.PLUS_J, tol);
         SphericalPolygonsSet plusZ = new SphericalPolygonsSet(Vector3D.PLUS_K, tol);
@@ -279,7 +282,7 @@ class SphericalPolygonsSetTest {
     @Test
     void testModeratlyComplexShape() {
         double tol = 0.01;
-        List<SubHyperplane<Sphere2D, S2Point>> boundary = new ArrayList<>();
+        List<SubCircle> boundary = new ArrayList<>();
         boundary.add(create(Vector3D.MINUS_J, Vector3D.PLUS_I,  Vector3D.PLUS_K,  tol, 0.0, MathUtils.SEMI_PI));
         boundary.add(create(Vector3D.MINUS_I, Vector3D.PLUS_K,  Vector3D.PLUS_J,  tol, 0.0, MathUtils.SEMI_PI));
         boundary.add(create(Vector3D.PLUS_K,  Vector3D.PLUS_J,  Vector3D.MINUS_I, tol, 0.0, MathUtils.SEMI_PI));
@@ -336,7 +339,7 @@ class SphericalPolygonsSetTest {
     void testSeveralParts() {
         double tol = 0.01;
         double sinTol = FastMath.sin(tol);
-        List<SubHyperplane<Sphere2D, S2Point>> boundary = new ArrayList<>();
+        List<SubCircle> boundary = new ArrayList<>();
 
         // first part: +X, +Y, +Z octant
         boundary.add(create(Vector3D.PLUS_J,  Vector3D.PLUS_K,  Vector3D.PLUS_I,  tol, 0.0, MathUtils.SEMI_PI));
@@ -386,7 +389,8 @@ class SphericalPolygonsSetTest {
                                                               new S2Point(FastMath.PI / 3, FastMath.PI / 3),
                                                               new S2Point(FastMath.PI / 4, FastMath.PI / 6));
         SphericalPolygonsSet hexaWithHole =
-                (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point>().difference(hexa, hole);
+                (SphericalPolygonsSet) new RegionFactory<Sphere2D, S2Point, Circle, SubCircle>().
+                        difference(hexa, hole);
 
         for (double phi = center.getPhi() - alpha + 0.1; phi < center.getPhi() + alpha - 0.1; phi += 0.07) {
             Location l = hexaWithHole.checkPoint(new S2Point(FastMath.PI / 4, phi));
@@ -418,7 +422,7 @@ class SphericalPolygonsSetTest {
         SphericalPolygonsSet triOut    = new SphericalPolygonsSet(center, Vector3D.PLUS_K, 0.25, 3, tol);
         SphericalPolygonsSet triIn     = new SphericalPolygonsSet(center, Vector3D.PLUS_K, 0.15, 3, tol);
 
-        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point, Circle, SubCircle> factory = new RegionFactory<>();
         SphericalPolygonsSet hexa   = (SphericalPolygonsSet) factory.difference(hexaOut,   hexaIn);
         SphericalPolygonsSet penta  = (SphericalPolygonsSet) factory.difference(pentaOut,  pentaIn);
         SphericalPolygonsSet quadri = (SphericalPolygonsSet) factory.difference(quadriOut, quadriIn);
@@ -479,7 +483,7 @@ class SphericalPolygonsSetTest {
           { 42.15249,  9.56001 }, { 43.00998,  9.39000 }, { 42.62812,  8.74600 }, { 42.25651,  8.54421 },
           { 41.58361,  8.77572 }, { 41.38000,  9.22975 }
         });
-        RegionFactory<Sphere2D, S2Point> factory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point, Circle, SubCircle> factory = new RegionFactory<>();
         SphericalPolygonsSet zone = (SphericalPolygonsSet) factory.union(continental, corsica);
         EnclosingBall<Sphere2D, S2Point> enclosing = zone.getEnclosingCap();
         Vector3D enclosingCenter = enclosing.getCenter().getVector();
@@ -561,7 +565,7 @@ class SphericalPolygonsSetTest {
 
     @Test
     void testGitHubIssue41() {
-        RegionFactory<Sphere2D, S2Point> regionFactory = new RegionFactory<>();
+        RegionFactory<Sphere2D, S2Point, Circle, SubCircle> regionFactory = new RegionFactory<>();
         S2Point[] s2pA = new S2Point[]{
                 new S2Point(new Vector3D(0.2122954606, -0.629606302,  0.7473463333)),
                 new S2Point(new Vector3D(0.2120220248, -0.6296445493, 0.747391733)),
@@ -851,7 +855,7 @@ class SphericalPolygonsSetTest {
             new S2Point(0.016, 1.5533430342749532)
         };
 
-        final RegionFactory<Sphere2D, S2Point> regionFactory = new RegionFactory<>();
+        final RegionFactory<Sphere2D, S2Point, Circle, SubCircle> regionFactory = new RegionFactory<>();
 
         // thickness is small enough for proper computation of very small intersection
         double thickness1 = 4.96740426e-11;
@@ -966,10 +970,10 @@ class SphericalPolygonsSetTest {
 
         SphericalPolygonsSet shape1 = buildSimpleZone(coordinates1);
         SphericalPolygonsSet shape2 = buildSimpleZone(coordinates2);
-        Region<Sphere2D, S2Point> intersection =
+        Region<Sphere2D, S2Point, Circle, SubCircle> intersection =
                 order ?
-                new RegionFactory<Sphere2D, S2Point>().intersection(shape1.copySelf(), shape2.copySelf()) :
-                new RegionFactory<Sphere2D, S2Point>().intersection(shape2.copySelf(), shape1.copySelf());
+                new RegionFactory<Sphere2D, S2Point, Circle, SubCircle>().intersection(shape1.copySelf(), shape2.copySelf()) :
+                new RegionFactory<Sphere2D, S2Point, Circle, SubCircle>().intersection(shape2.copySelf(), shape1.copySelf());
 
         for (final double[] doubles : expectedIn) {
             Assertions.assertEquals(Location.INSIDE, intersection.checkPoint(s2Point(doubles[0], doubles[1])));
@@ -983,10 +987,9 @@ class SphericalPolygonsSetTest {
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,
                              double tolerance, double ... limits) {
-        RegionFactory<Sphere1D, S1Point> factory = new RegionFactory<>();
+        RegionFactory<Sphere1D, S1Point, LimitAngle, SubLimitAngle> factory = new RegionFactory<>();
         Circle                           circle  = new Circle(pole, tolerance);
-        Circle phased =
-                (Circle) Circle.getTransform(new Rotation(circle.getXAxis(), circle.getYAxis(), x, y)).apply(circle);
+        Circle phased = Circle.getTransform(new Rotation(circle.getXAxis(), circle.getYAxis(), x, y)).apply(circle);
         ArcsSet set = (ArcsSet) factory.getComplement(new ArcsSet(tolerance));
         for (int i = 0; i < limits.length; i += 2) {
             set = (ArcsSet) factory.union(set, new ArcsSet(limits[i], limits[i + 1], tolerance));

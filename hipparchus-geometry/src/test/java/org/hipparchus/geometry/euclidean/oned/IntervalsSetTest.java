@@ -53,7 +53,7 @@ class IntervalsSetTest {
         assertEquals(Region.Location.INSIDE,   set.checkPoint(new Vector1D(3.0)));
         assertEquals(2.3, set.getInf(), 1.0e-10);
         assertEquals(5.7, set.getSup(), 1.0e-10);
-        OrientedPoint op = (OrientedPoint) set.getTree(false).getCut().getHyperplane();
+        OrientedPoint op = set.getTree(false).getCut().getHyperplane();
         assertEquals(0.0, op.emptyHyperplane().getSize(), 1.0e-10);
         assertEquals(1.0e-10, op.getTolerance(), 1.0e-20);
         assertTrue(Double.isInfinite(op.wholeSpace().getSize()));
@@ -85,7 +85,7 @@ class IntervalsSetTest {
         assertEquals(9.0, set.getInf(), 1.0e-10);
         assertTrue(Double.isInfinite(set.getSup()));
 
-        set = (IntervalsSet) new RegionFactory<Euclidean1D, Vector1D>().getComplement(set);
+        set = (IntervalsSet) new RegionFactory<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>().getComplement(set);
         assertEquals(9.0, set.getSup(), 1.0e-10);
         assertTrue(Double.isInfinite(set.getInf()));
 
@@ -93,7 +93,7 @@ class IntervalsSetTest {
 
     @Test
     void testMultiple() {
-        RegionFactory<Euclidean1D, Vector1D> factory = new RegionFactory<>();
+        RegionFactory<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> factory = new RegionFactory<>();
         IntervalsSet set = (IntervalsSet)
         factory.intersection(factory.union(factory.difference(new IntervalsSet(1.0, 6.0, 1.0e-10),
                                                               new IntervalsSet(3.0, 5.0, 1.0e-10)),
@@ -201,7 +201,8 @@ class IntervalsSetTest {
         assertEquals(a2, setB.asList().get(1).getInf(), 1.0e-15);
         assertEquals(a3, setB.asList().get(1).getSup(), 1.0e-15);
 
-        final IntervalsSet intersection = (IntervalsSet) new RegionFactory<Euclidean1D, Vector1D>().intersection(setA, setB);
+        final IntervalsSet intersection = (IntervalsSet) new RegionFactory<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>().
+                                          intersection(setA, setB);
         assertEquals((a1 - a0) + (a3 - a2), intersection.getSize(), 1.0e-10);
         assertEquals(2, intersection.asList().size());
         assertEquals(a0, intersection.asList().get(0).getInf(), 1.0e-15);

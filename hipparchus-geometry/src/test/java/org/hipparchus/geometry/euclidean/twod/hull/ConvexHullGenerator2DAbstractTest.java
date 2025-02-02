@@ -18,6 +18,8 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
+import org.hipparchus.geometry.euclidean.twod.Line;
+import org.hipparchus.geometry.euclidean.twod.SubLine;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
@@ -349,8 +351,8 @@ public abstract class ConvexHullGenerator2DAbstractTest {
             new Vector2D(-11.0,  1.0),
         };
 
-        ConvexHull2D convHull = generator.generate(points);
-        Region<Euclidean2D, Vector2D> hullRegion = convHull.createRegion();
+        ConvexHull2D                                 convHull   = generator.generate(points);
+        Region<Euclidean2D, Vector2D, Line, SubLine> hullRegion = convHull.createRegion();
 
         assertEquals(274.0, hullRegion.getSize(), 1.0e-12);
         double perimeter = 0;
@@ -435,7 +437,7 @@ public abstract class ConvexHullGenerator2DAbstractTest {
                                                      final boolean includesCollinearPoints) {
 
         final Collection<Vector2D> hullVertices = Arrays.asList(hull.getVertices());
-        final Region<Euclidean2D, Vector2D> region = hull.createRegion();
+        final Region<Euclidean2D, Vector2D, Line, SubLine> region = hull.createRegion();
 
         for (final Vector2D p : points) {
             Location location = region.checkPoint(p);

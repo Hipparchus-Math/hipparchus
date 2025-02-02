@@ -32,10 +32,22 @@ import org.hipparchus.util.FastMath;
 /** Local tree visitor to compute projection on boundary.
  * @param <S> Type of the space.
  * @param <P> Type of the points in space.
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
  * @param <T> Type of the sub-space.
  * @param <Q> Type of the points in sub-space.
+ * @param <F> Type of the hyperplane in the destination sub-space.
+ * @param <J> Type of the sub-hyperplane in the destination sub-space.
  */
-class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q extends Point<T>> implements BSPTreeVisitor<S, P> {
+class BoundaryProjector<S extends Space,
+                        P extends Point<S>,
+                        H extends Hyperplane<S, P, H, I>,
+                        I extends SubHyperplane<S, P, H, I>,
+                        T extends Space,
+                        Q extends Point<T>,
+                        F extends Hyperplane<T, Q, F, J>,
+                        J extends SubHyperplane<T, Q, F, J>>
+    implements BSPTreeVisitor<S, P, H, I> {
 
     /** Original point. */
     private final P original;
@@ -44,7 +56,7 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
     private P projected;
 
     /** Leaf node closest to the test point. */
-    private BSPTree<S, P> leaf;
+    private BSPTree<S, P, H, I> leaf;
 
     /** Current offset. */
     private double offset;
@@ -61,7 +73,7 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
 
     /** {@inheritDoc} */
     @Override
-    public Order visitOrder(final BSPTree<S, P> node) {
+    public Order visitOrder(final BSPTree<S, P, H, I> node) {
         // we want to visit the tree so that the first encountered
         // leaf is the one closest to the test point
         if (node.getCut().getHyperplane().getOffset(original) <= 0) {
@@ -73,10 +85,10 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
 
     /** {@inheritDoc} */
     @Override
-    public void visitInternalNode(final BSPTree<S, P> node) {
+    public void visitInternalNode(final BSPTree<S, P, H, I> node) {
 
         // project the point on the cut sub-hyperplane
-        final Hyperplane<S, P> hyperplane = node.getCut().getHyperplane();
+        final H hyperplane = node.getCut().getHyperplane();
         final double signedOffset = hyperplane.getOffset(original);
         if (FastMath.abs(signedOffset) < offset) {
 
@@ -84,11 +96,11 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
             final P regular = hyperplane.project(original);
 
             // get boundary parts
-            final List<Region<T, Q>> boundaryParts = boundaryRegions(node);
+            final List<Region<T, Q, F, J>> boundaryParts = boundaryRegions(node);
 
             // check if regular projection really belongs to the boundary
             boolean regularFound = false;
-            for (final Region<T, Q> part : boundaryParts) {
+            for (final Region<T, Q, F, J> part : boundaryParts) {
                 if (!regularFound && belongsToPart(regular, hyperplane, part)) {
                     // the projected point lies in the boundary
                     projected    = regular;
@@ -101,7 +113,7 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
                 // the regular projected point is not on boundary,
                 // so we have to check further if a singular point
                 // (i.e. a vertex in 2D case) is a possible projection
-                for (final Region<T, Q> part : boundaryParts) {
+                for (final Region<T, Q, F, J> part : boundaryParts) {
                     final P spI = singularProjection(regular, hyperplane, part);
                     if (spI != null) {
                         final double distance = original.distance(spI);
@@ -120,7 +132,7 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
 
     /** {@inheritDoc} */
     @Override
-    public void visitLeafNode(final BSPTree<S, P> node) {
+    public void visitLeafNode(final BSPTree<S, P, H, I> node) {
         if (leaf == null) {
             // this is the first leaf we visit,
             // it is the closest one to the original point
@@ -144,12 +156,12 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
      * @param node internal node
      * @return regions in the node sub-hyperplane
      */
-    private List<Region<T, Q>> boundaryRegions(final BSPTree<S, P> node) {
+    private List<Region<T, Q, F, J>> boundaryRegions(final BSPTree<S, P, H, I> node) {
 
-        final List<Region<T, Q>> regions = new ArrayList<>(2);
+        final List<Region<T, Q, F, J>> regions = new ArrayList<>(2);
 
         @SuppressWarnings("unchecked")
-        final BoundaryAttribute<S, P> ba = (BoundaryAttribute<S, P>) node.getAttribute();
+        final BoundaryAttribute<S, P, H, I> ba = (BoundaryAttribute<S, P, H, I>) node.getAttribute();
         addRegion(ba.getPlusInside(),  regions);
         addRegion(ba.getPlusOutside(), regions);
 
@@ -161,9 +173,10 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
      * @param sub sub-hyperplane defining the region
      * @param list to fill up
      */
-    private void addRegion(final SubHyperplane<S, P> sub, final List<Region<T, Q>> list) {
+    private void addRegion(final SubHyperplane<S, P, H, I> sub, final List<Region<T, Q, F, J>> list) {
         if (sub != null) {
-            final Region<T, Q> region = ((AbstractSubHyperplane<S, P, T, Q>) sub).getRemainingRegion();
+            @SuppressWarnings("unchecked")
+            final Region<T, Q, F, J> region = ((AbstractSubHyperplane<S, P, H, I, T, Q, F, J>) sub).getRemainingRegion();
             if (region != null) {
                 list.add(region);
             }
@@ -176,8 +189,8 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
      * @param part boundary part
      * @return true if point lies on the boundary part
      */
-    private boolean belongsToPart(final P point, final Hyperplane<S, P> hyperplane,
-                                  final Region<T, Q> part) {
+    private boolean belongsToPart(final P point, final Hyperplane<S, P, H, I> hyperplane,
+                                  final Region<T, Q, F, J> part) {
 
         // there is a non-null sub-space, we can dive into smaller dimensions
         @SuppressWarnings("unchecked")
@@ -192,8 +205,8 @@ class BoundaryProjector<S extends Space, P extends Point<S>, T extends Space, Q 
      * @param part boundary part
      * @return projection to a singular point of boundary part (may be null)
      */
-    private P singularProjection(final P point, final Hyperplane<S, P> hyperplane,
-                                        final Region<T, Q> part) {
+    private P singularProjection(final P point, final Hyperplane<S, P, H, I> hyperplane,
+                                        final Region<T, Q, F, J> part) {
 
         // there is a non-null sub-space, we can dive into smaller dimensions
         @SuppressWarnings("unchecked")

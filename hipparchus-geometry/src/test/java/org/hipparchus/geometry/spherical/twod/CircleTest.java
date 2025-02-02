@@ -172,14 +172,14 @@ class CircleTest {
             Rotation r = new Rotation(new Vector3D(sphRandom.nextVector()),
                                       FastMath.PI * random.nextDouble(),
                                       RotationConvention.VECTOR_OPERATOR);
-            Transform<Sphere2D, S2Point, Sphere1D, S1Point> t = Circle.getTransform(r);
+            Transform<Sphere2D, S2Point, Circle, SubCircle, Sphere1D, S1Point, LimitAngle, SubLimitAngle> t = Circle.getTransform(r);
 
             S2Point  p = new S2Point(new Vector3D(sphRandom.nextVector()));
             S2Point tp = t.apply(p);
             assertEquals(0.0, r.applyTo(p.getVector()).distance(tp.getVector()), 1.0e-10);
 
             Circle  c = new Circle(new Vector3D(sphRandom.nextVector()), 1.0e-10);
-            Circle tc = (Circle) t.apply(c);
+            Circle tc = t.apply(c);
             assertEquals(0.0, r.applyTo(c.getPole()).distance(tc.getPole()),   1.0e-10);
             assertEquals(0.0, r.applyTo(c.getXAxis()).distance(tc.getXAxis()), 1.0e-10);
             assertEquals(0.0, r.applyTo(c.getYAxis()).distance(tc.getYAxis()), 1.0e-10);
@@ -187,9 +187,9 @@ class CircleTest {
 
             SubLimitAngle  sub = new LimitAngle(new S1Point(MathUtils.TWO_PI * random.nextDouble()),
                                                 random.nextBoolean(), 1.0e-10).wholeHyperplane();
-            Vector3D psub = c.getPointAt(((LimitAngle) sub.getHyperplane()).getLocation().getAlpha());
-            SubLimitAngle tsub = (SubLimitAngle) t.apply(sub, c, tc);
-            Vector3D ptsub = tc.getPointAt(((LimitAngle) tsub.getHyperplane()).getLocation().getAlpha());
+            Vector3D psub = c.getPointAt(sub.getHyperplane().getLocation().getAlpha());
+            SubLimitAngle tsub = t.apply(sub, c, tc);
+            Vector3D ptsub = tc.getPointAt(tsub.getHyperplane().getLocation().getAlpha());
             assertEquals(0.0, r.applyTo(psub).distance(ptsub), 1.0e-10);
 
         }

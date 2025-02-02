@@ -27,8 +27,11 @@ import org.hipparchus.geometry.Space;
 /** Visitor computing the boundary size.
  * @param <S> Type of the space.
  * @param <P> Type of the points in space.
+ * @param <H> Type of the hyperplane.
+ * @param <I> Type of the sub-hyperplane.
  */
-class BoundarySizeVisitor<S extends Space, P extends Point<S>> implements BSPTreeVisitor<S, P> {
+class BoundarySizeVisitor<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>>
+    implements BSPTreeVisitor<S, P, H, I> {
 
     /** Size of the boundary. */
     private double boundarySize;
@@ -41,16 +44,16 @@ class BoundarySizeVisitor<S extends Space, P extends Point<S>> implements BSPTre
 
     /** {@inheritDoc}*/
     @Override
-    public Order visitOrder(final BSPTree<S, P> node) {
+    public Order visitOrder(final BSPTree<S, P, H, I> node) {
         return Order.MINUS_SUB_PLUS;
     }
 
     /** {@inheritDoc}*/
     @Override
-    public void visitInternalNode(final BSPTree<S, P> node) {
+    public void visitInternalNode(final BSPTree<S, P, H, I> node) {
         @SuppressWarnings("unchecked")
-        final BoundaryAttribute<S, P> attribute =
-            (BoundaryAttribute<S, P>) node.getAttribute();
+        final BoundaryAttribute<S, P, H, I> attribute =
+            (BoundaryAttribute<S, P, H, I>) node.getAttribute();
         if (attribute.getPlusOutside() != null) {
             boundarySize += attribute.getPlusOutside().getSize();
         }
@@ -61,7 +64,7 @@ class BoundarySizeVisitor<S extends Space, P extends Point<S>> implements BSPTre
 
     /** {@inheritDoc}*/
     @Override
-    public void visitLeafNode(final BSPTree<S, P> node) {
+    public void visitLeafNode(final BSPTree<S, P, H, I> node) {
     }
 
     /** Get the size of the boundary.

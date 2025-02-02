@@ -28,7 +28,7 @@ import org.hipparchus.geometry.partitioning.Hyperplane;
  * boolean.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class OrientedPoint implements Hyperplane<Euclidean1D, Vector1D> {
+public class OrientedPoint implements Hyperplane<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> {
 
     /** Vector location. */
     private final Vector1D location;
@@ -111,8 +111,8 @@ public class OrientedPoint implements Hyperplane<Euclidean1D, Vector1D> {
 
     /** {@inheritDoc} */
     @Override
-    public boolean sameOrientationAs(final Hyperplane<Euclidean1D, Vector1D> other) {
-        return direct == ((OrientedPoint) other).direct;
+    public boolean sameOrientationAs(final OrientedPoint other) {
+        return direct == other.direct;
     }
 
     /** {@inheritDoc}

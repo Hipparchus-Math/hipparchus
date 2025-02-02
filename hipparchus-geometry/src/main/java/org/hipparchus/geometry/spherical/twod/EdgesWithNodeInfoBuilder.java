@@ -19,21 +19,18 @@ package org.hipparchus.geometry.spherical.twod;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.geometry.partitioning.AbstractSubHyperplane;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryAttribute;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.Arc;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.S1Point;
-import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
 
 /** Visitor building edges.
  * @since 1.4
  */
-class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point> {
+class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point, Circle, SubCircle> {
 
     /** Tolerance for close nodes connection. */
     private final double tolerance;
@@ -51,16 +48,17 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point> {
 
     /** {@inheritDoc} */
     @Override
-    public Order visitOrder(final BSPTree<Sphere2D, S2Point> node) {
+    public Order visitOrder(final BSPTree<Sphere2D, S2Point, Circle, SubCircle> node) {
         return Order.MINUS_SUB_PLUS;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void visitInternalNode(final BSPTree<Sphere2D, S2Point> node) {
+    public void visitInternalNode(final BSPTree<Sphere2D, S2Point, Circle, SubCircle> node) {
         @SuppressWarnings("unchecked")
-        final BoundaryAttribute<Sphere2D, S2Point> attribute = (BoundaryAttribute<Sphere2D, S2Point>) node.getAttribute();
-        final Iterable<BSPTree<Sphere2D, S2Point>> splitters = attribute.getSplitters();
+        final BoundaryAttribute<Sphere2D, S2Point, Circle, SubCircle> attribute =
+                (BoundaryAttribute<Sphere2D, S2Point, Circle, SubCircle>) node.getAttribute();
+        final Iterable<BSPTree<Sphere2D, S2Point, Circle, SubCircle>> splitters = attribute.getSplitters();
         if (attribute.getPlusOutside() != null) {
             addContribution(attribute.getPlusOutside(), node, splitters, false);
         }
@@ -71,7 +69,7 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point> {
 
     /** {@inheritDoc} */
     @Override
-    public void visitLeafNode(final BSPTree<Sphere2D, S2Point> node) {
+    public void visitLeafNode(final BSPTree<Sphere2D, S2Point, Circle, SubCircle> node) {
     }
 
     /** Add the contribution of a boundary edge.
@@ -80,13 +78,11 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point> {
      * @param splitters splitters for the boundary facet
      * @param reversed if true, the facet has the inside on its plus side
      */
-    private void addContribution(final SubHyperplane<Sphere2D, S2Point> sub, final BSPTree<Sphere2D, S2Point> node,
-                                 final Iterable<BSPTree<Sphere2D, S2Point>> splitters,
+    private void addContribution(final SubCircle sub, final BSPTree<Sphere2D, S2Point, Circle, SubCircle> node,
+                                 final Iterable<BSPTree<Sphere2D, S2Point, Circle, SubCircle>> splitters,
                                  final boolean reversed) {
-        final AbstractSubHyperplane<Sphere2D, S2Point, Sphere1D, S1Point> absSub =
-                        (AbstractSubHyperplane<Sphere2D, S2Point, Sphere1D, S1Point>) sub;
-        final Circle circle  = (Circle) sub.getHyperplane();
-        final List<Arc> arcs = ((ArcsSet) absSub.getRemainingRegion()).asList();
+        final Circle circle  = sub.getHyperplane();
+        final List<Arc> arcs = ((ArcsSet) sub.getRemainingRegion()).asList();
         for (final Arc a : arcs) {
 
             // find the 2D points
@@ -94,8 +90,8 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point> {
             final Vertex endS   = new Vertex(circle.toSpace(new S1Point(a.getSup())));
 
             // recover the connectivity information
-            final BSPTree<Sphere2D, S2Point> startN = selectClosest(startS.getLocation(), splitters);
-            final BSPTree<Sphere2D, S2Point> endN   = selectClosest(endS.getLocation(), splitters);
+            final BSPTree<Sphere2D, S2Point, Circle, SubCircle> startN = selectClosest(startS.getLocation(), splitters);
+            final BSPTree<Sphere2D, S2Point, Circle, SubCircle> endN   = selectClosest(endS.getLocation(), splitters);
 
             if (reversed) {
                 edges.add(new EdgeWithNodeInfo(endS, startS, a.getSize(), circle.getReverse(),
@@ -113,16 +109,17 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point> {
      * @param candidates candidate nodes
      * @return node closest to point, or null if no node is closer than tolerance
      */
-    private BSPTree<Sphere2D, S2Point> selectClosest(final S2Point point, final Iterable<BSPTree<Sphere2D, S2Point>> candidates) {
+    private BSPTree<Sphere2D, S2Point, Circle, SubCircle>
+        selectClosest(final S2Point point, final Iterable<BSPTree<Sphere2D, S2Point, Circle, SubCircle>> candidates) {
 
         if (point == null) {
             return null;
         }
 
-        BSPTree<Sphere2D, S2Point> selected = null;
+        BSPTree<Sphere2D, S2Point, Circle, SubCircle> selected = null;
 
         double min = Double.POSITIVE_INFINITY;
-        for (final BSPTree<Sphere2D, S2Point> node : candidates) {
+        for (final BSPTree<Sphere2D, S2Point, Circle, SubCircle> node : candidates) {
             final double distance = FastMath.abs(node.getCut().getHyperplane().getOffset(point));
             if (distance < min) {
                 selected = node;
