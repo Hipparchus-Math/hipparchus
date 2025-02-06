@@ -50,7 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
-      <action dev="luc" type="fix" issue="issuers/360">
+      <action dev="serrof" type="add" issue="issues/370">
+        Added native way to stack an independent variable in (Field)Gradient.
+      </action>
+      <action dev="luc" type="fix" issue="issues/360">
         Increased dimension of directions numbers in Sobol sequence generation.
       </action>
       <action dev="luc" type="fix" issue="issues/354">

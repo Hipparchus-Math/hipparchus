@@ -877,6 +877,17 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         return result;
     }
 
+    /**
+     * Add an independent variable to the Taylor expansion.
+     * @return object with one more variable
+     * @since 13.0
+     */
+    public FieldGradient<T> stackVariable() {
+        final T[] gradient = MathArrays.buildArray(getValueField(), this.getFreeParameters() + 1);
+        System.arraycopy(this.grad, 0, gradient, 0, this.getFreeParameters());
+        return new FieldGradient<>(this.value, gradient);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> getPi() {

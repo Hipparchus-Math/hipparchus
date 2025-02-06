@@ -712,6 +712,17 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
         return result;
     }
 
+    /**
+     * Add an independent variable to the Taylor expansion.
+     * @return object with one more variable
+     * @since 13.0
+     */
+    public Gradient stackVariable() {
+        final double[] gradient = new double[this.getFreeParameters() + 1];
+        System.arraycopy(this.grad, 0, gradient, 0, this.getFreeParameters());
+        return new Gradient(gradient, this.getValue());
+    }
+
     /** Test for the equality of two univariate derivatives.
      * <p>
      * univariate derivatives are considered equal if they have the same derivatives.

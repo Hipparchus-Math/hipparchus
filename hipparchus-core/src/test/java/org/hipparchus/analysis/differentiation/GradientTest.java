@@ -26,7 +26,10 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -89,6 +92,19 @@ class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
         for (int i = 0 ; i < g.getFreeParameters(); ++i) {
             assertEquals(i == 1 ? 1.0 : 0.0, g.getPartialDerivative(i), 1.0e-15);
         }
+    }
+
+    @Test
+    void testStackVariable() {
+        // GIVEN
+        final Gradient gradient = new Gradient(1, 2, 3);
+        // WHEN
+        final Gradient gradientWithMoreVariable = gradient.stackVariable();
+        // THEN
+        Assertions.assertEquals(gradient.getValue(), gradientWithMoreVariable.getValue());
+        Assertions.assertEquals(gradient.getFreeParameters() + 1, gradientWithMoreVariable.getFreeParameters());
+        Assertions.assertArrayEquals(gradient.getGradient(), Arrays.copyOfRange(gradientWithMoreVariable.getGradient(),
+                0, gradient.getFreeParameters()));
     }
 
     @Test
