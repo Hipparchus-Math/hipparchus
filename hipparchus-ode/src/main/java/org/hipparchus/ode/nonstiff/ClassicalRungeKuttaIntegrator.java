@@ -43,7 +43,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see LutherIntegrator
  */
 
-public class ClassicalRungeKuttaIntegrator extends RungeKuttaIntegrator {
+public class ClassicalRungeKuttaIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = "classical Runge-Kutta";

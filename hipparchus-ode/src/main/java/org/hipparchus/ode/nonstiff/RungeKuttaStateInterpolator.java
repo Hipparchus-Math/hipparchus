@@ -24,7 +24,7 @@ import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 /** This class represents an interpolator over the last step during an
  * ODE integration for Runge-Kutta and embedded Runge-Kutta integrators.
  *
- * @see RungeKuttaIntegrator
+ * @see FixedStepRungeKuttaIntegrator
  * @see EmbeddedRungeKuttaIntegrator
  *
  */

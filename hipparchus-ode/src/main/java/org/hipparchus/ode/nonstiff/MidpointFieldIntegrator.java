@@ -50,7 +50,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public class MidpointFieldIntegrator<T extends CalculusFieldElement<T>> extends RungeKuttaFieldIntegrator<T> {
+public class MidpointFieldIntegrator<T extends CalculusFieldElement<T>> extends FixedStepRungeKuttaFieldIntegrator<T> {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = MidpointIntegrator.METHOD_NAME;

@@ -54,7 +54,7 @@ import org.hipparchus.util.MathArrays;
  */
 
 public class GillFieldIntegrator<T extends CalculusFieldElement<T>>
-    extends RungeKuttaFieldIntegrator<T> {
+    extends FixedStepRungeKuttaFieldIntegrator<T> {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = GillIntegrator.METHOD_NAME;

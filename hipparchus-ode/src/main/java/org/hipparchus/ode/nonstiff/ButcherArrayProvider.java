@@ -18,7 +18,7 @@
 package org.hipparchus.ode.nonstiff;
 
 /** This interface represents an integrator  based on Butcher arrays.
- * @see RungeKuttaIntegrator
+ * @see FixedStepRungeKuttaIntegrator
  * @see EmbeddedRungeKuttaIntegrator
  */
 public interface ButcherArrayProvider {

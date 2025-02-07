@@ -42,7 +42,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see LutherIntegrator
  */
 
-public class ThreeEighthesIntegrator extends RungeKuttaIntegrator {
+public class ThreeEighthesIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = "3/8";

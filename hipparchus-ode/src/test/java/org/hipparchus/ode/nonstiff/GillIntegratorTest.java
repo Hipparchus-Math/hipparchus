@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 class GillIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
-    protected RungeKuttaIntegrator createIntegrator(double step) {
+    protected FixedStepRungeKuttaIntegrator createIntegrator(double step) {
         return new GillIntegrator(step);
     }
 

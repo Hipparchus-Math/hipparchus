@@ -67,7 +67,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
-    protected abstract <T extends CalculusFieldElement<T>> RungeKuttaFieldIntegrator<T>
+    protected abstract <T extends CalculusFieldElement<T>> FixedStepRungeKuttaFieldIntegrator<T>
         createIntegrator(Field<T> field, T step);
 
     @Test
@@ -77,7 +77,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         try {
 
             // get the Butcher arrays from the field integrator
-            RungeKuttaFieldIntegrator<T> fieldIntegrator = createIntegrator(field, field.getZero().add(1));
+            FixedStepRungeKuttaFieldIntegrator<T> fieldIntegrator = createIntegrator(field, field.getZero().add(1));
             T[][] fieldA = fieldIntegrator.getA();
             T[]   fieldB = fieldIntegrator.getB();
             T[]   fieldC = fieldIntegrator.getC();
@@ -87,9 +87,9 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
             // get the Butcher arrays from the regular integrator
             @SuppressWarnings("unchecked")
-            Constructor<RungeKuttaIntegrator> constructor =
-                (Constructor<RungeKuttaIntegrator>) Class.forName(regularName).getConstructor(Double.TYPE);
-            final RungeKuttaIntegrator regularIntegrator =
+            Constructor<FixedStepRungeKuttaIntegrator> constructor =
+                (Constructor<FixedStepRungeKuttaIntegrator>) Class.forName(regularName).getConstructor(Double.TYPE);
+            final FixedStepRungeKuttaIntegrator regularIntegrator =
                             constructor.newInstance(1.0);
             double[][] regularA = regularIntegrator.getA();
             double[]   regularB = regularIntegrator.getB();
@@ -147,7 +147,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             }
         };
 
-        RungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, field.getZero().add(60.0));
+        FixedStepRungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, field.getZero().add(60.0));
 
         T[] y0   = MathArrays.buildArray(field, k.length);
         for (int i = 0; i < y0.length; ++i) {
@@ -206,7 +206,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> void doTestSanityChecks(Field<T> field)
         throws MathIllegalArgumentException, MathIllegalStateException {
-        RungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, field.getZero().add(0.01));
+        FixedStepRungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, field.getZero().add(0.01));
         try  {
             TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
             integrator.integrate(new FieldExpandableODE<T>(pb),
@@ -253,7 +253,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
                 T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(FastMath.pow(2.0, -i));
 
-                RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
+                FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
                 TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
                 integ.addStepHandler(handler);
                 final double maxCheck = Double.POSITIVE_INFINITY;
@@ -316,7 +316,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001);
 
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
@@ -341,7 +341,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.2);
 
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
@@ -366,7 +366,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001).abs();
 
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
@@ -387,7 +387,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0003);
 
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         integ.addStepHandler(new KeplerHandler<T>(pb, expectedMaxError, epsilon));
         final FieldExpandableODE<T> expandable = new FieldExpandableODE<T>(pb);
         assertSame(pb, expandable.getPrimary());
@@ -431,7 +431,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
         final T finalTime = field.getZero().add(5.0);
         final T step = field.getZero().add(1.23456);
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         integ.addStepHandler(new FieldODEStepHandler<T>() {
             public void handleStep(FieldODEStateInterpolator<T> interpolator) {
                 if (interpolator.getCurrentState().getTime().subtract(finalTime).getReal() < -0.001) {
@@ -461,7 +461,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
         T h = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0003);
 
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(Double.NaN));
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(Double.NaN));
         T   t = pb.getInitialState().getTime();
         T[] y = pb.getInitialState().getPrimaryState();
         for (int i = 0; i < 100; ++i) {
@@ -480,7 +480,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> void doTestTooLargeFirstStep(final Field<T> field) {
 
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.5));
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.5));
         final T t0 = field.getZero();
         final T[] y0 = MathArrays.buildArray(field, 1);
         y0[0] = field.getOne();
@@ -523,7 +523,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
       assertEquals(1000,    stepProblem.getMaxIterationCount());
       assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy().getReal(), 1.0e-25);
       assertNotNull(stepProblem.getHandler());
-      RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.3));
+      FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.3));
       integ.addEventDetector(stepProblem);
       FieldODEStateAndDerivative<T> result = integ.integrate(new FieldExpandableODE<T>(stepProblem),
                                                              new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, 1)),
@@ -537,7 +537,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     protected <T extends CalculusFieldElement<T>> void doTestDerivativesConsistency(final Field<T> field, double epsilon) {
         TestFieldProblem3<T> pb = new TestFieldProblem3<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001);
-        RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
+        FixedStepRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 1.0e-10);
     }
 
@@ -564,7 +564,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         DerivativeStructure t     = factory.variable(parT, 6.0);
         SinCos sinCos = new SinCos(omega);
 
-        RungeKuttaFieldIntegrator<DerivativeStructure> integrator =
+        FixedStepRungeKuttaFieldIntegrator<DerivativeStructure> integrator =
                         createIntegrator(omega.getField(), t.subtract(t0).multiply(0.001));
         FieldODEStateAndDerivative<DerivativeStructure> result =
                         integrator.integrate(new FieldExpandableODE<DerivativeStructure>(sinCos),
@@ -777,7 +777,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public void testIssue250() {
         final Gradient defaultStep = Gradient.constant(3, 60.);
-        RungeKuttaFieldIntegrator<Gradient> integrator = createIntegrator(defaultStep.getField(), defaultStep);
+        FixedStepRungeKuttaFieldIntegrator<Gradient> integrator = createIntegrator(defaultStep.getField(), defaultStep);
         assertEquals(defaultStep.getReal(), integrator.getDefaultStep().getReal(), 0.);
     }
 
@@ -790,11 +790,11 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         final double step = FastMath.abs(0.001 * (pb.getFinalTime().getReal() - pb.getInitialState().getTime().getReal()));
         final Complex fieldStep = new Complex(step);
 
-        final RungeKuttaFieldIntegrator<Complex> integratorUsingFieldCoefficients = createIntegrator(field, fieldStep);
+        final FixedStepRungeKuttaFieldIntegrator<Complex> integratorUsingFieldCoefficients = createIntegrator(field, fieldStep);
         integratorUsingFieldCoefficients.setUsingFieldCoefficients(true);
         final FieldODEStateAndDerivative<Complex> terminalState1 = integratorUsingFieldCoefficients.integrate(new FieldExpandableODE<>(pb),
                 pb.getInitialState(), pb.getFinalTime());
-        final RungeKuttaFieldIntegrator<Complex> integratorNotUsingFieldCoefficients = createIntegrator(field, fieldStep);
+        final FixedStepRungeKuttaFieldIntegrator<Complex> integratorNotUsingFieldCoefficients = createIntegrator(field, fieldStep);
         integratorNotUsingFieldCoefficients.setUsingFieldCoefficients(false);
         final FieldODEStateAndDerivative<Complex> terminalState2 = integratorNotUsingFieldCoefficients.integrate(new FieldExpandableODE<>(pb),
                 pb.getInitialState(), pb.getFinalTime());

@@ -25,7 +25,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.CalculusFieldElement;
 
 /** This interface represents an integrator  based on Butcher arrays.
- * @see RungeKuttaFieldIntegrator
+ * @see FixedStepRungeKuttaFieldIntegrator
  * @see EmbeddedRungeKuttaFieldIntegrator
  * @param <T> the type of the field elements
  */

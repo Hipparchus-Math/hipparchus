@@ -54,7 +54,7 @@ import org.hipparchus.util.FastMath;
  * @see ThreeEighthesIntegrator
  */
 
-public class LutherIntegrator extends RungeKuttaIntegrator {
+public class LutherIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = "Luther";

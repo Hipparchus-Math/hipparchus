@@ -48,18 +48,19 @@ If the output is not quite correct, check for invisible trailing spaces!
   <properties>
     <title>Hipparchus ODE Release Notes</title>
   </properties>
-  <release version="4.0" date="TBD" description="TBD">
-    <action dev="vincent" type="update" issue="issues/285">
-      Migrated tests from JUnit 4 to JUnit 5
-    </action>
-  </release>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="serrof" type="update" issue="issues/372">
+        Rename RungeKutta(Field)Integrator as FixedStepRungeKutta(Field)Integrator.
+      </action>
       <action dev="serrof" type="update" issue="issues/361">
         Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK.
       </action>
       <action dev="serrof" type="add" issue="issues/335">
         Add boolean for propagation direction in (Field)AdaptableInterval.
+      </action>
+      <action dev="vincent" type="update" issue="issues/285">
+        Migrated tests from JUnit 4 to JUnit 5
       </action>
     </release>
     <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes one

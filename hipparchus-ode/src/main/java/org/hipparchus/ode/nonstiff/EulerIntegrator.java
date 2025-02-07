@@ -47,7 +47,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see LutherIntegrator
  */
 
-public class EulerIntegrator extends RungeKuttaIntegrator {
+public class EulerIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = "Euler";

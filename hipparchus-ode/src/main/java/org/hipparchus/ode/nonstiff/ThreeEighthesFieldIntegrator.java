@@ -52,7 +52,7 @@ import org.hipparchus.util.MathArrays;
  */
 
 public class ThreeEighthesFieldIntegrator<T extends CalculusFieldElement<T>>
-    extends RungeKuttaFieldIntegrator<T> {
+    extends FixedStepRungeKuttaFieldIntegrator<T> {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = ThreeEighthesIntegrator.METHOD_NAME;
