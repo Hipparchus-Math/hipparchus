@@ -66,7 +66,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class RungeKuttaIntegratorAbstractTest {
 
-    protected abstract RungeKuttaIntegrator createIntegrator(double step);
+    protected abstract FixedStepRungeKuttaIntegrator createIntegrator(double step);
 
     @Test
     public abstract void testMissedEndEvent();
@@ -92,7 +92,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             }
         };
 
-        RungeKuttaIntegrator integrator = createIntegrator(60.0);
+        FixedStepRungeKuttaIntegrator integrator = createIntegrator(60.0);
 
         double[] y0   = new double[k.length];
         for (int i = 0; i < y0.length; ++i) {
@@ -143,7 +143,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
     public abstract void testSanityChecks();
 
     protected void doTestSanityChecks() {
-        RungeKuttaIntegrator integrator = createIntegrator(0.01);
+        FixedStepRungeKuttaIntegrator integrator = createIntegrator(0.01);
         try  {
             TestProblem1 pb = new TestProblem1();
             integrator.integrate(new ExpandableODE(pb),
@@ -184,7 +184,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
                 double step = FastMath.scalb(pb.getFinalTime() - pb.getInitialState().getTime(), -i);
 
-                RungeKuttaIntegrator integ = createIntegrator(step);
+                FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
                 TestProblemHandler handler = new TestProblemHandler(pb, integ);
                 integ.addStepHandler(handler);
                 double eventTol = 1.0e-6 * step;
@@ -236,7 +236,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         TestProblem1 pb = new TestProblem1();
         double step = 0.001 * (pb.getFinalTime() - pb.getInitialState().getTime());
 
-        RungeKuttaIntegrator integ = createIntegrator(step);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -260,7 +260,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         TestProblem1 pb = new TestProblem1();
         double step = 0.2 * (pb.getFinalTime() - pb.getInitialState().getTime());
 
-        RungeKuttaIntegrator integ = createIntegrator(step);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -284,7 +284,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         TestProblem5 pb = new TestProblem5();
         double step = FastMath.abs(0.001 * (pb.getFinalTime() - pb.getInitialState().getTime()));
 
-        RungeKuttaIntegrator integ = createIntegrator(step);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -305,7 +305,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         final TestProblem3 pb  = new TestProblem3(0.9);
         double step = 0.0003 * (pb.getFinalTime() - pb.getInitialState().getTime());
 
-        RungeKuttaIntegrator integ = createIntegrator(step);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
         integ.addStepHandler(new KeplerHandler(pb, expectedMaxError, epsilon));
         final ExpandableODE expandable = new ExpandableODE(pb);
         assertSame(pb, expandable.getPrimary());
@@ -346,7 +346,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
         final double finalTime = 5.0;
         final double step = 1.23456;
-        RungeKuttaIntegrator integ = createIntegrator(step);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
         integ.addStepHandler(new ODEStepHandler() {
             public void handleStep(ODEStateInterpolator interpolator) {
                 if (interpolator.getCurrentState().getTime() < finalTime - 0.001) {
@@ -374,7 +374,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         final TestProblem3 pb  = new TestProblem3(0.9);
         double h = 0.0003 * (pb.getFinalTime() - pb.getInitialState().getTime());
 
-        RungeKuttaIntegrator integ = createIntegrator(Double.NaN);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(Double.NaN);
         double   t = pb.getInitialState().getTime();
         double[] y = pb.getInitialState().getPrimaryState();
         for (int i = 0; i < 100; ++i) {
@@ -393,7 +393,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
     protected void doTestTooLargeFirstStep() {
 
-        RungeKuttaIntegrator integ = createIntegrator(0.5);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(0.5);
         final double   t0 = 0;
         final double[] y0 = new double[] { 1.0 };
         final double   t  = 0.001;
@@ -427,7 +427,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         assertEquals(1000,    stepProblem.getMaxIterationCount());
         assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
         assertNotNull(stepProblem.getHandler());
-        RungeKuttaIntegrator integ = createIntegrator(0.3);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(0.3);
       integ.addEventDetector(stepProblem);
       ODEStateAndDerivative result = integ.integrate(new ExpandableODE(stepProblem),
                                                      new ODEState(0, new double[1]),
@@ -441,7 +441,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
     protected void doTestDerivativesConsistency(double epsilon) {
         TestProblem3 pb = new TestProblem3();
         double step = 0.001 * (pb.getFinalTime() - pb.getInitialState().getTime());
-        RungeKuttaIntegrator integ = createIntegrator(step);
+        FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
         StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.001, 1.0e-10);
     }
 
@@ -556,7 +556,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         try {
             TestProblem3 pb = new TestProblem3(0.9);
             double h = 0.0003 * (pb.getFinalTime() - pb.getInitialState().getTime());
-            RungeKuttaIntegrator integ = createIntegrator(h);
+            FixedStepRungeKuttaIntegrator integ = createIntegrator(h);
 
             integ.addStepHandler(new DenseOutputModel());
             integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
@@ -600,7 +600,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
     @Test
     public void testIssue250() {
         final double defaultStep = 60.;
-        RungeKuttaIntegrator integrator = createIntegrator(defaultStep);
+        FixedStepRungeKuttaIntegrator integrator = createIntegrator(defaultStep);
         assertEquals(defaultStep, integrator.getDefaultStep(), 0.);
     }
 

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 class MidpointIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
-    protected RungeKuttaIntegrator createIntegrator(double step) {
+    protected FixedStepRungeKuttaIntegrator createIntegrator(double step) {
         return new MidpointIntegrator(step);
     }
 

@@ -57,7 +57,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
+public abstract class FixedStepRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AbstractFieldIntegrator<T> implements FieldExplicitRungeKuttaIntegrator<T> {
 
     /** Time steps from Butcher array (without the first zero). */
@@ -91,7 +91,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
      * @param name name of the method
      * @param step integration step
      */
-    protected RungeKuttaFieldIntegrator(final Field<T> field, final String name, final T step) {
+    protected FixedStepRungeKuttaFieldIntegrator(final Field<T> field, final String name, final T step) {
         super(field, name);
         this.c    = getC();
         this.a    = getA();

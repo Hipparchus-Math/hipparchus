@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 class ThreeEighthesFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
-    protected <T extends CalculusFieldElement<T>> RungeKuttaFieldIntegrator<T>
+    protected <T extends CalculusFieldElement<T>> FixedStepRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {
         return new ThreeEighthesFieldIntegrator<T>(field, step);
     }

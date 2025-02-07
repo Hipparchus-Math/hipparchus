@@ -45,7 +45,7 @@ import org.hipparchus.util.FastMath;
  * @see LutherIntegrator
  */
 
-public class GillIntegrator extends RungeKuttaIntegrator {
+public class GillIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = "Gill";

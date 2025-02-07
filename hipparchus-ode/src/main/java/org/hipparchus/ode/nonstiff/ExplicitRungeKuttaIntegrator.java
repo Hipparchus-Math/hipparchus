@@ -40,7 +40,7 @@ import org.hipparchus.ode.OrdinaryDifferentialEquation;
  * </pre>
  *
  * @see ButcherArrayProvider
- * @see RungeKuttaIntegrator
+ * @see FixedStepRungeKuttaIntegrator
  * @see EmbeddedRungeKuttaIntegrator
  * @since 3.1
  */

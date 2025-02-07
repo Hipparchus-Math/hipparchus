@@ -41,7 +41,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *
  */
 
-public class MidpointIntegrator extends RungeKuttaIntegrator {
+public class MidpointIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = "midpoint";

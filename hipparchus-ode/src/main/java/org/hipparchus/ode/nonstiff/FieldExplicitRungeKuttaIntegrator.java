@@ -43,7 +43,7 @@ import org.hipparchus.util.MathArrays;
  * </pre>
  *
  * @see FieldButcherArrayProvider
- * @see RungeKuttaFieldIntegrator
+ * @see FixedStepRungeKuttaFieldIntegrator
  * @see EmbeddedRungeKuttaFieldIntegrator
  * @param <T> the type of the field elements
  * @since 3.1

@@ -50,7 +50,8 @@ import org.hipparchus.util.FastMath;
  * @see MidpointIntegrator
  */
 
-public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements ExplicitRungeKuttaIntegrator {
+public abstract class FixedStepRungeKuttaIntegrator extends AbstractIntegrator
+        implements ExplicitRungeKuttaIntegrator {
 
     /** Time steps from Butcher array (without the first zero). */
     private final double[] c;
@@ -70,7 +71,7 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
      * @param name name of the method
      * @param step integration step
      */
-    protected RungeKuttaIntegrator(final String name, final double step) {
+    protected FixedStepRungeKuttaIntegrator(final String name, final double step) {
         super(name);
         this.c    = getC();
         this.a    = getA();

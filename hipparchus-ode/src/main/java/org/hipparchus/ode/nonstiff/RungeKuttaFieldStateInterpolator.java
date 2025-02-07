@@ -32,7 +32,7 @@ import org.hipparchus.util.MathArrays;
 /** This class represents an interpolator over the last step during an
  * ODE integration for Runge-Kutta and embedded Runge-Kutta integrators.
  *
- * @see RungeKuttaFieldIntegrator
+ * @see FixedStepRungeKuttaFieldIntegrator
  * @see EmbeddedRungeKuttaFieldIntegrator
  *
  * @param <T> the type of the field elements

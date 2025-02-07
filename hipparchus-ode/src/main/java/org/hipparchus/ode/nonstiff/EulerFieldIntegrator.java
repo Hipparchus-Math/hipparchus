@@ -56,7 +56,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public class EulerFieldIntegrator<T extends CalculusFieldElement<T>> extends RungeKuttaFieldIntegrator<T> {
+public class EulerFieldIntegrator<T extends CalculusFieldElement<T>> extends FixedStepRungeKuttaFieldIntegrator<T> {
 
     /** Name of integration scheme. */
     public static final String METHOD_NAME = EulerIntegrator.METHOD_NAME;
