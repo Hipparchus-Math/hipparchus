@@ -33,7 +33,7 @@ class FieldGradientTest {
         // THEN
         Assertions.assertEquals(gradient.getValue(), gradientWithMoreVariable.getValue());
         Assertions.assertEquals(gradient.getFreeParameters() + 1, gradientWithMoreVariable.getFreeParameters());
-        Assertions.assertEquals(0., gradientWithMoreVariable.getGradient[gradient.getFreeParameters().getReal()])
+        Assertions.assertEquals(0., gradientWithMoreVariable.getGradient[gradient.getFreeParameters().getReal()]);
         Assertions.assertArrayEquals(gradient.getGradient(), Arrays.copyOfRange(gradientWithMoreVariable.getGradient(),
                 0, gradient.getFreeParameters()));
     }
