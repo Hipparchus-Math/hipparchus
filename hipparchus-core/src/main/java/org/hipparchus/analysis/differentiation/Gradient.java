@@ -715,7 +715,7 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     /**
      * Add an independent variable to the Taylor expansion.
      * @return object with one more variable
-     * @since 13.0
+     * @since 4.0
      */
     public Gradient stackVariable() {
         final double[] gradient = new double[this.getFreeParameters() + 1];
