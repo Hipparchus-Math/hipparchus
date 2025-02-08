@@ -146,7 +146,7 @@ public class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> exte
      * @return Nordsieck vector
      */
     public Array2DRowFieldMatrix<T> getNordsieck() {
-        return nordsieck;
+        return new Array2DRowFieldMatrix<>(nordsieck.getData());
     }
 
     /** {@inheritDoc} */

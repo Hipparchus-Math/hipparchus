@@ -22,7 +22,6 @@
 package org.hipparchus.optim.nonlinear.scalar;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,7 +33,6 @@ import org.hipparchus.random.RandomVectorGenerator;
 
 /**
  * Multi-start optimizer.
- *
  * This class wraps an optimizer in order to use it several times in
  * turn with different starting points (trying to avoid being trapped
  * in a local extremum when looking for a global one).

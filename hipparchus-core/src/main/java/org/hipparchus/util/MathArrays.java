@@ -25,7 +25,6 @@ package org.hipparchus.util;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -954,7 +953,6 @@ public class MathArrays {
             throw new NullArgumentException();
         }
 
-        final int yListLen = yList.length;
         final int len = x.length;
 
         for (final double[] y : yList) {
