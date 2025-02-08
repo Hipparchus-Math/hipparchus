@@ -51,8 +51,7 @@ import org.hipparchus.util.FastMath;
  * @see GillIntegrator
  */
 
-class GillStateInterpolator
-    extends RungeKuttaStateInterpolator {
+public class GillStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** First Gill coefficient. */
     private static final double ONE_MINUS_INV_SQRT_2 = 1 - FastMath.sqrt(0.5);
@@ -72,16 +71,14 @@ class GillStateInterpolator
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    GillStateInterpolator(final boolean forward,
-                          final double[][] yDotK,
-                          final ODEStateAndDerivative globalPreviousState,
-                          final ODEStateAndDerivative globalCurrentState,
-                          final ODEStateAndDerivative softPreviousState,
-                          final ODEStateAndDerivative softCurrentState,
-                          final EquationsMapper mapper) {
-        super(forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public GillStateInterpolator(final boolean forward,
+                                 final double[][] yDotK,
+                                 final ODEStateAndDerivative globalPreviousState,
+                                 final ODEStateAndDerivative globalCurrentState,
+                                 final ODEStateAndDerivative softPreviousState,
+                                 final ODEStateAndDerivative softCurrentState,
+                                 final EquationsMapper mapper) {
+        super(forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
     }
 
     /** {@inheritDoc} */

@@ -58,7 +58,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @param <T> the type of the field elements
  */
 
-class GillFieldStateInterpolator<T extends CalculusFieldElement<T>>
+public class GillFieldStateInterpolator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldStateInterpolator<T> {
 
     /** First Gill coefficient. */
@@ -77,16 +77,15 @@ class GillFieldStateInterpolator<T extends CalculusFieldElement<T>>
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    GillFieldStateInterpolator(final Field<T> field, final boolean forward,
-                               final T[][] yDotK,
-                               final FieldODEStateAndDerivative<T> globalPreviousState,
-                               final FieldODEStateAndDerivative<T> globalCurrentState,
-                               final FieldODEStateAndDerivative<T> softPreviousState,
-                               final FieldODEStateAndDerivative<T> softCurrentState,
-                               final FieldEquationsMapper<T> mapper) {
-        super(field, forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public GillFieldStateInterpolator(final Field<T> field, final boolean forward,
+                                      final T[][] yDotK,
+                                      final FieldODEStateAndDerivative<T> globalPreviousState,
+                                      final FieldODEStateAndDerivative<T> globalCurrentState,
+                                      final FieldODEStateAndDerivative<T> softPreviousState,
+                                      final FieldODEStateAndDerivative<T> softCurrentState,
+                                      final FieldEquationsMapper<T> mapper) {
+        super(field, forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+                mapper);
         final T sqrt = field.getZero().add(0.5).sqrt();
         one_minus_inv_sqrt_2 = field.getOne().subtract(sqrt);
         one_plus_inv_sqrt_2  = field.getOne().add(sqrt);

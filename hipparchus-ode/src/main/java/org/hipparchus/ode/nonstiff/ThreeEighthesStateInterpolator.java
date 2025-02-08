@@ -53,8 +53,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see ThreeEighthesIntegrator
  */
 
-class ThreeEighthesStateInterpolator
-    extends RungeKuttaStateInterpolator {
+public class ThreeEighthesStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160328L;
@@ -68,16 +67,14 @@ class ThreeEighthesStateInterpolator
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    ThreeEighthesStateInterpolator(final boolean forward,
-                                   final double[][] yDotK,
-                                   final ODEStateAndDerivative globalPreviousState,
-                                   final ODEStateAndDerivative globalCurrentState,
-                                   final ODEStateAndDerivative softPreviousState,
-                                   final ODEStateAndDerivative softCurrentState,
-                                   final EquationsMapper mapper) {
-        super(forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public ThreeEighthesStateInterpolator(final boolean forward,
+                                          final double[][] yDotK,
+                                          final ODEStateAndDerivative globalPreviousState,
+                                          final ODEStateAndDerivative globalCurrentState,
+                                          final ODEStateAndDerivative softPreviousState,
+                                          final ODEStateAndDerivative softCurrentState,
+                                          final EquationsMapper mapper) {
+        super(forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
     }
 
     /** {@inheritDoc} */
@@ -89,9 +86,9 @@ class ThreeEighthesStateInterpolator
                                                     final ODEStateAndDerivative newSoftCurrentState,
                                                     final EquationsMapper newMapper) {
         return new ThreeEighthesStateInterpolator(newForward, newYDotK,
-                                                  newGlobalPreviousState, newGlobalCurrentState,
-                                                  newSoftPreviousState, newSoftCurrentState,
-                                                  newMapper);
+                newGlobalPreviousState, newGlobalCurrentState,
+                newSoftPreviousState, newSoftCurrentState,
+                newMapper);
     }
 
     /** {@inheritDoc} */

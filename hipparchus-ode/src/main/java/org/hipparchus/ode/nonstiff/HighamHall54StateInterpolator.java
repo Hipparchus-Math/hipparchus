@@ -28,8 +28,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *
  */
 
-class HighamHall54StateInterpolator
-    extends RungeKuttaStateInterpolator {
+public class HighamHall54StateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20111120L;
@@ -43,16 +42,14 @@ class HighamHall54StateInterpolator
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    HighamHall54StateInterpolator(final boolean forward,
-                                  final double[][] yDotK,
-                                  final ODEStateAndDerivative globalPreviousState,
-                                  final ODEStateAndDerivative globalCurrentState,
-                                  final ODEStateAndDerivative softPreviousState,
-                                  final ODEStateAndDerivative softCurrentState,
-                                  final EquationsMapper mapper) {
-        super(forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public HighamHall54StateInterpolator(final boolean forward,
+                                         final double[][] yDotK,
+                                         final ODEStateAndDerivative globalPreviousState,
+                                         final ODEStateAndDerivative globalCurrentState,
+                                         final ODEStateAndDerivative softPreviousState,
+                                         final ODEStateAndDerivative softCurrentState,
+                                         final EquationsMapper mapper) {
+        super(forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
     }
 
     /** {@inheritDoc} */

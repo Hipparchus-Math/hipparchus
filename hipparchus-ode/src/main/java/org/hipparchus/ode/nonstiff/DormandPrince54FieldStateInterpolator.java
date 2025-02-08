@@ -36,7 +36,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @param <T> the type of the field elements
  */
 
-class DormandPrince54FieldStateInterpolator<T extends CalculusFieldElement<T>>
+public class DormandPrince54FieldStateInterpolator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldStateInterpolator<T> {
 
     /** Last row of the Butcher-array internal weights, element 0. */
@@ -86,16 +86,15 @@ class DormandPrince54FieldStateInterpolator<T extends CalculusFieldElement<T>>
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    DormandPrince54FieldStateInterpolator(final Field<T> field, final boolean forward,
-                                          final T[][] yDotK,
-                                          final FieldODEStateAndDerivative<T> globalPreviousState,
-                                          final FieldODEStateAndDerivative<T> globalCurrentState,
-                                          final FieldODEStateAndDerivative<T> softPreviousState,
-                                          final FieldODEStateAndDerivative<T> softCurrentState,
-                                          final FieldEquationsMapper<T> mapper) {
-        super(field, forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public DormandPrince54FieldStateInterpolator(final Field<T> field, final boolean forward,
+                                                 final T[][] yDotK,
+                                                 final FieldODEStateAndDerivative<T> globalPreviousState,
+                                                 final FieldODEStateAndDerivative<T> globalCurrentState,
+                                                 final FieldODEStateAndDerivative<T> softPreviousState,
+                                                 final FieldODEStateAndDerivative<T> softCurrentState,
+                                                 final FieldEquationsMapper<T> mapper) {
+        super(field, forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+                mapper);
         final T one = field.getOne();
         a70 = one.newInstance(   35.0 /  384.0);
         a72 = one.newInstance(  500.0 / 1113.0);

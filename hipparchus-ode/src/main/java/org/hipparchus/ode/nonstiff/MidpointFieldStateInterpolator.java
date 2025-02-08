@@ -51,7 +51,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @param <T> the type of the field elements
  */
 
-class MidpointFieldStateInterpolator<T extends CalculusFieldElement<T>>
+public class MidpointFieldStateInterpolator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldStateInterpolator<T> {
 
     /** Simple constructor.
@@ -64,15 +64,14 @@ class MidpointFieldStateInterpolator<T extends CalculusFieldElement<T>>
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    MidpointFieldStateInterpolator(final Field<T> field, final boolean forward,
-                                   final T[][] yDotK,
-                                   final FieldODEStateAndDerivative<T> globalPreviousState,
-                                   final FieldODEStateAndDerivative<T> globalCurrentState,
-                                   final FieldODEStateAndDerivative<T> softPreviousState,
-                                   final FieldODEStateAndDerivative<T> softCurrentState,
-                                   final FieldEquationsMapper<T> mapper) {
-        super(field, forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+    public MidpointFieldStateInterpolator(final Field<T> field, final boolean forward,
+                                          final T[][] yDotK,
+                                          final FieldODEStateAndDerivative<T> globalPreviousState,
+                                          final FieldODEStateAndDerivative<T> globalCurrentState,
+                                          final FieldODEStateAndDerivative<T> softPreviousState,
+                                          final FieldODEStateAndDerivative<T> softCurrentState,
+                                          final FieldEquationsMapper<T> mapper) {
+        super(field, forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
               mapper);
     }
 

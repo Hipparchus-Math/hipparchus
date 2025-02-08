@@ -49,7 +49,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @param <T> the type of the field elements
  */
 
-class EulerFieldStateInterpolator<T extends CalculusFieldElement<T>>
+public class EulerFieldStateInterpolator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldStateInterpolator<T> {
 
     /** Simple constructor.
@@ -62,15 +62,14 @@ class EulerFieldStateInterpolator<T extends CalculusFieldElement<T>>
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    EulerFieldStateInterpolator(final Field<T> field, final boolean forward,
-                                final T[][] yDotK,
-                                final FieldODEStateAndDerivative<T> globalPreviousState,
-                                final FieldODEStateAndDerivative<T> globalCurrentState,
-                                final FieldODEStateAndDerivative<T> softPreviousState,
-                                final FieldODEStateAndDerivative<T> softCurrentState,
-                                final FieldEquationsMapper<T> mapper) {
-        super(field, forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+    public EulerFieldStateInterpolator(final Field<T> field, final boolean forward,
+                                       final T[][] yDotK,
+                                       final FieldODEStateAndDerivative<T> globalPreviousState,
+                                       final FieldODEStateAndDerivative<T> globalCurrentState,
+                                       final FieldODEStateAndDerivative<T> softPreviousState,
+                                       final FieldODEStateAndDerivative<T> softCurrentState,
+                                       final FieldEquationsMapper<T> mapper) {
+        super(field, forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
               mapper);
     }
 
@@ -82,10 +81,8 @@ class EulerFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                     final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                     final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                     final FieldEquationsMapper<T> newMapper) {
-        return new EulerFieldStateInterpolator<T>(newField, newForward, newYDotK,
-                                                  newGlobalPreviousState, newGlobalCurrentState,
-                                                  newSoftPreviousState, newSoftCurrentState,
-                                                  newMapper);
+        return new EulerFieldStateInterpolator<>(newField, newForward, newYDotK, newGlobalPreviousState,
+                newGlobalCurrentState, newSoftPreviousState, newSoftCurrentState, newMapper);
     }
 
     /** {@inheritDoc} */
@@ -95,14 +92,12 @@ class EulerFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                                                    final T time, final T theta,
                                                                                    final T thetaH, final T oneMinusThetaH) {
         final T[] interpolatedState;
-        final T[] interpolatedDerivatives;
         if (getGlobalPreviousState() != null && theta.getReal() <= 0.5) {
             interpolatedState       = previousStateLinearCombination(thetaH);
-            interpolatedDerivatives = derivativeLinearCombination(time.getField().getOne());
         } else {
             interpolatedState       = currentStateLinearCombination(oneMinusThetaH.negate());
-            interpolatedDerivatives = derivativeLinearCombination(time.getField().getOne());
         }
+        final T[] interpolatedDerivatives = derivativeLinearCombination(time.getField().getOne());
 
         return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 

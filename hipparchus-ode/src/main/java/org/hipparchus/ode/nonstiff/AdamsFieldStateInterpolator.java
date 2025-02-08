@@ -42,7 +42,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> extends AbstractFieldODEStateInterpolator<T> {
+public class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> extends AbstractFieldODEStateInterpolator<T> {
 
     /** Step size used in the first scaled derivative and Nordsieck vector. */
     private T scalingH;
@@ -71,15 +71,14 @@ class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> extends Abs
      * @param globalCurrentState end of the global step
      * @param equationsMapper mapper for ODE equations primary and secondary components
      */
-    AdamsFieldStateInterpolator(final T stepSize, final FieldODEStateAndDerivative<T> reference,
-                                final T[] scaled, final Array2DRowFieldMatrix<T> nordsieck,
-                                final boolean isForward,
-                                final FieldODEStateAndDerivative<T> globalPreviousState,
-                                final FieldODEStateAndDerivative<T> globalCurrentState,
-                                final FieldEquationsMapper<T> equationsMapper) {
-        this(stepSize, reference, scaled, nordsieck,
-             isForward, globalPreviousState, globalCurrentState,
-             globalPreviousState, globalCurrentState, equationsMapper);
+    public AdamsFieldStateInterpolator(final T stepSize, final FieldODEStateAndDerivative<T> reference,
+                                       final T[] scaled, final Array2DRowFieldMatrix<T> nordsieck,
+                                       final boolean isForward,
+                                       final FieldODEStateAndDerivative<T> globalPreviousState,
+                                       final FieldODEStateAndDerivative<T> globalCurrentState,
+                                       final FieldEquationsMapper<T> equationsMapper) {
+        this(stepSize, reference, scaled, nordsieck, isForward, globalPreviousState, globalCurrentState,
+                globalPreviousState, globalCurrentState, equationsMapper);
     }
 
     /** Simple constructor.
@@ -126,7 +125,7 @@ class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> extends Abs
                                                     FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                     FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                     FieldEquationsMapper<T> newMapper) {
-        return new AdamsFieldStateInterpolator<T>(scalingH, reference, scaled, nordsieck,
+        return new AdamsFieldStateInterpolator<>(scalingH, reference, scaled, nordsieck,
                                                   newForward,
                                                   newGlobalPreviousState, newGlobalCurrentState,
                                                   newSoftPreviousState, newSoftCurrentState,

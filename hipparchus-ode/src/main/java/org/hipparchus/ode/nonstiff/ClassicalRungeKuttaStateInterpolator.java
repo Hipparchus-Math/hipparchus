@@ -51,8 +51,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see ClassicalRungeKuttaIntegrator
  */
 
-class ClassicalRungeKuttaStateInterpolator
-    extends RungeKuttaStateInterpolator {
+public class ClassicalRungeKuttaStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160328L;
@@ -66,16 +65,14 @@ class ClassicalRungeKuttaStateInterpolator
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    ClassicalRungeKuttaStateInterpolator(final boolean forward,
-                                         final double[][] yDotK,
-                                         final ODEStateAndDerivative globalPreviousState,
-                                         final ODEStateAndDerivative globalCurrentState,
-                                         final ODEStateAndDerivative softPreviousState,
-                                         final ODEStateAndDerivative softCurrentState,
-                                         final EquationsMapper mapper) {
-        super(forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public ClassicalRungeKuttaStateInterpolator(final boolean forward,
+                                                final double[][] yDotK,
+                                                final ODEStateAndDerivative globalPreviousState,
+                                                final ODEStateAndDerivative globalCurrentState,
+                                                final ODEStateAndDerivative softPreviousState,
+                                                final ODEStateAndDerivative softCurrentState,
+                                                final EquationsMapper mapper) {
+        super(forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
     }
 
     /** {@inheritDoc} */
@@ -87,9 +84,9 @@ class ClassicalRungeKuttaStateInterpolator
                                                           final ODEStateAndDerivative newSoftCurrentState,
                                                           final EquationsMapper newMapper) {
         return new ClassicalRungeKuttaStateInterpolator(newForward, newYDotK,
-                                                        newGlobalPreviousState, newGlobalCurrentState,
-                                                        newSoftPreviousState, newSoftCurrentState,
-                                                        newMapper);
+                newGlobalPreviousState, newGlobalCurrentState,
+                newSoftPreviousState, newSoftCurrentState,
+                newMapper);
     }
 
     /** {@inheritDoc} */

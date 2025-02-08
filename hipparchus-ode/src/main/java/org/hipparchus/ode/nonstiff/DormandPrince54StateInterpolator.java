@@ -28,8 +28,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *
  */
 
-class DormandPrince54StateInterpolator
-    extends RungeKuttaStateInterpolator {
+public class DormandPrince54StateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Last row of the Butcher-array internal weights, element 0. */
     private static final double A70 =    35.0 /  384.0;
@@ -80,16 +79,14 @@ class DormandPrince54StateInterpolator
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    DormandPrince54StateInterpolator(final boolean forward,
+    public DormandPrince54StateInterpolator(final boolean forward,
                                      final double[][] yDotK,
                                      final ODEStateAndDerivative globalPreviousState,
                                      final ODEStateAndDerivative globalCurrentState,
                                      final ODEStateAndDerivative softPreviousState,
                                      final ODEStateAndDerivative softCurrentState,
                                      final EquationsMapper mapper) {
-        super(forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+        super(forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
     }
 
     /** {@inheritDoc} */

@@ -68,8 +68,7 @@ import org.hipparchus.util.FastMath;
  * @see GraggBulirschStoerIntegrator
  */
 
-class GraggBulirschStoerStateInterpolator
-    extends AbstractODEStateInterpolator {
+public class GraggBulirschStoerStateInterpolator extends AbstractODEStateInterpolator {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160329L;
@@ -99,17 +98,15 @@ class GraggBulirschStoerStateInterpolator
      * (element k is $h^{k} d^{k}y(\tau)/dt^{k}$ where h is step size...)
      * @param mu degree of the interpolation polynomial
      */
-    GraggBulirschStoerStateInterpolator(final boolean forward,
-                                        final ODEStateAndDerivative globalPreviousState,
-                                        final ODEStateAndDerivative globalCurrentState,
-                                        final ODEStateAndDerivative softPreviousState,
-                                        final ODEStateAndDerivative softCurrentState,
-                                        final EquationsMapper mapper,
-                                        final double[][] yMidDots,
-                                        final int mu) {
-        super(forward,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public GraggBulirschStoerStateInterpolator(final boolean forward,
+                                               final ODEStateAndDerivative globalPreviousState,
+                                               final ODEStateAndDerivative globalCurrentState,
+                                               final ODEStateAndDerivative softPreviousState,
+                                               final ODEStateAndDerivative softCurrentState,
+                                               final EquationsMapper mapper,
+                                               final double[][] yMidDots,
+                                               final int mu) {
+        super(forward, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
 
         this.yMidDots      = yMidDots.clone();
         this.currentDegree = mu + 4;

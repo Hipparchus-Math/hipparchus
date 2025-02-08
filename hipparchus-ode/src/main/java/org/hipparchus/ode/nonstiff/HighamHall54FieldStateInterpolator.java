@@ -36,7 +36,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @param <T> the type of the field elements
  */
 
-class HighamHall54FieldStateInterpolator<T extends CalculusFieldElement<T>>
+public class HighamHall54FieldStateInterpolator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldStateInterpolator<T> {
 
     /** Simple constructor.
@@ -49,16 +49,15 @@ class HighamHall54FieldStateInterpolator<T extends CalculusFieldElement<T>>
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    HighamHall54FieldStateInterpolator(final Field<T> field, final boolean forward,
-                                       final T[][] yDotK,
-                                       final FieldODEStateAndDerivative<T> globalPreviousState,
-                                       final FieldODEStateAndDerivative<T> globalCurrentState,
-                                       final FieldODEStateAndDerivative<T> softPreviousState,
-                                       final FieldODEStateAndDerivative<T> softCurrentState,
-                                       final FieldEquationsMapper<T> mapper) {
-        super(field, forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public HighamHall54FieldStateInterpolator(final Field<T> field, final boolean forward,
+                                              final T[][] yDotK,
+                                              final FieldODEStateAndDerivative<T> globalPreviousState,
+                                              final FieldODEStateAndDerivative<T> globalCurrentState,
+                                              final FieldODEStateAndDerivative<T> softPreviousState,
+                                              final FieldODEStateAndDerivative<T> softCurrentState,
+                                              final FieldEquationsMapper<T> mapper) {
+        super(field, forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+                mapper);
     }
 
     /** {@inheritDoc} */
@@ -69,7 +68,7 @@ class HighamHall54FieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                            final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                            final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                            final FieldEquationsMapper<T> newMapper) {
-        return new HighamHall54FieldStateInterpolator<T>(newField, newForward, newYDotK,
+        return new HighamHall54FieldStateInterpolator<>(newField, newForward, newYDotK,
                                                          newGlobalPreviousState, newGlobalCurrentState,
                                                          newSoftPreviousState, newSoftCurrentState,
                                                          newMapper);

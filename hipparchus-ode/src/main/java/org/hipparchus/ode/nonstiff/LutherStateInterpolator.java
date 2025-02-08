@@ -32,7 +32,7 @@ import org.hipparchus.util.FastMath;
  * @see LutherIntegrator
  */
 
-class LutherStateInterpolator extends RungeKuttaStateInterpolator {
+public class LutherStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160328;
@@ -49,16 +49,14 @@ class LutherStateInterpolator extends RungeKuttaStateInterpolator {
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    LutherStateInterpolator(final boolean forward,
-                            final double[][] yDotK,
-                            final ODEStateAndDerivative globalPreviousState,
-                            final ODEStateAndDerivative globalCurrentState,
-                            final ODEStateAndDerivative softPreviousState,
-                            final ODEStateAndDerivative softCurrentState,
-                            final EquationsMapper mapper) {
-        super(forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public LutherStateInterpolator(final boolean forward,
+                                   final double[][] yDotK,
+                                   final ODEStateAndDerivative globalPreviousState,
+                                   final ODEStateAndDerivative globalCurrentState,
+                                   final ODEStateAndDerivative softPreviousState,
+                                   final ODEStateAndDerivative softCurrentState,
+                                   final EquationsMapper mapper) {
+        super(forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
     }
 
     /** {@inheritDoc} */

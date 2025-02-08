@@ -43,8 +43,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see MidpointIntegrator
  */
 
-class MidpointStateInterpolator
-    extends RungeKuttaStateInterpolator {
+public class MidpointStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160328L;
@@ -58,16 +57,14 @@ class MidpointStateInterpolator
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
      */
-    MidpointStateInterpolator(final boolean forward,
-                              final double[][] yDotK,
-                              final ODEStateAndDerivative globalPreviousState,
-                              final ODEStateAndDerivative globalCurrentState,
-                              final ODEStateAndDerivative softPreviousState,
-                              final ODEStateAndDerivative softCurrentState,
-                              final EquationsMapper mapper) {
-        super(forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+    public MidpointStateInterpolator(final boolean forward,
+                                     final double[][] yDotK,
+                                     final ODEStateAndDerivative globalPreviousState,
+                                     final ODEStateAndDerivative globalCurrentState,
+                                     final ODEStateAndDerivative softPreviousState,
+                                     final ODEStateAndDerivative softCurrentState,
+                                     final EquationsMapper mapper) {
+        super(forward, yDotK, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
     }
 
     /** {@inheritDoc} */
