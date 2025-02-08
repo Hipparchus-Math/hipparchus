@@ -61,7 +61,7 @@ public abstract class AbstractFieldODEStateInterpolator<T extends CalculusFieldE
     private final boolean forward;
 
     /** Mapper for ODE equations primary and secondary components. */
-    private FieldEquationsMapper<T> mapper;
+    private final FieldEquationsMapper<T> mapper;
 
     /** Simple constructor.
      * @param isForward integration direction indicator
@@ -85,16 +85,8 @@ public abstract class AbstractFieldODEStateInterpolator<T extends CalculusFieldE
         this.mapper              = equationsMapper;
     }
 
-    /** Create a new restricted version of the instance.
-     * <p>
-     * The instance is not changed at all.
-     * </p>
-     * @param previousState start of the restricted step
-     * @param currentState end of the restricted step
-     * @return restricted version of the instance
-     * @see #getPreviousState()
-     * @see #getCurrentState()
-     */
+    /** {@inheritDoc} */
+    @Override
     public AbstractFieldODEStateInterpolator<T> restrictStep(final FieldODEStateAndDerivative<T> previousState,
                                                              final FieldODEStateAndDerivative<T> currentState) {
         return create(forward, globalPreviousState, globalCurrentState, previousState, currentState, mapper);
