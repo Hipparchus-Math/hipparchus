@@ -19,6 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.LutherStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 
@@ -101,15 +102,12 @@ public class LutherIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected LutherStateInterpolator
-    createInterpolator(final boolean forward, double[][] yDotK,
-                       final ODEStateAndDerivative globalPreviousState,
-                       final ODEStateAndDerivative globalCurrentState,
-                       final EquationsMapper mapper) {
-        return new LutherStateInterpolator(forward, yDotK,
-                                          globalPreviousState, globalCurrentState,
-                                          globalPreviousState, globalCurrentState,
-                                          mapper);
+    protected LutherStateInterpolator createInterpolator(final boolean forward, double[][] yDotK,
+                                                         final ODEStateAndDerivative globalPreviousState,
+                                                         final ODEStateAndDerivative globalCurrentState,
+                                                         final EquationsMapper mapper) {
+        return new LutherStateInterpolator(forward, yDotK, globalPreviousState, globalCurrentState,
+                                          globalPreviousState, globalCurrentState, mapper);
     }
 
 }

@@ -536,6 +536,10 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             return new FieldODEStateAndDerivative<T>(time, y, yDot);
         }
 
+        @Override
+        public FieldODEStateInterpolator<T> restrictStep(FieldODEStateAndDerivative<T> previousState, FieldODEStateAndDerivative<T> currentState) {
+            return this;
+        }
     }
 
 }

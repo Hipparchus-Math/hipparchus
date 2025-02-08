@@ -43,6 +43,7 @@ import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEStepEndHandler;
 import org.hipparchus.ode.events.FieldStepEndEventState;
 import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
@@ -221,13 +222,13 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                         eqn.getMapper().mapStateAndDerivative(t0, y0, y0Dot);
 
         // initialize detector based event states (both  and step end based)
-        detectorBasedEventsStates.stream().forEach(s -> {
+        detectorBasedEventsStates.forEach(s -> {
             s.init(s0WithDerivatives, t);
             s.getEventDetector().getHandler().init(s0WithDerivatives, t, s.getEventDetector());
         });
 
         // initialize step end based event states
-        stepEndEventsStates.stream().forEach(s -> {
+        stepEndEventsStates.forEach(s -> {
             s.init(s0WithDerivatives, t);
             s.getHandler().init(s0WithDerivatives, t);
         });
@@ -310,12 +311,12 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
         FieldODEStateAndDerivative<T> previousState = interpolator.getGlobalPreviousState();
         final FieldODEStateAndDerivative<T> currentState = interpolator.getGlobalCurrentState();
-        AbstractFieldODEStateInterpolator<T> restricted = interpolator;
+        FieldODEStateInterpolator<T> restricted = interpolator;
 
         // initialize the events states if needed
         if (!statesInitialized) {
             // initialize event states
-            detectorBasedEventsStates.stream().forEach(s -> s.reinitializeBegin(interpolator));
+            detectorBasedEventsStates.forEach(s -> s.reinitializeBegin(interpolator));
             statesInitialized = true;
         }
 
@@ -339,7 +340,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
             // Evaluate all event detectors and end steps for events
             occurringEvents.clear();
-            final AbstractFieldODEStateInterpolator<T> finalRestricted = restricted;
+            final FieldODEStateInterpolator<T> finalRestricted = restricted;
             Stream.concat(detectorBasedEventsStates.stream(), stepEndEventsStates.stream()).
             forEach(s -> { if (s.evaluateStep(finalRestricted)) {
                     // the event occurs during the current step

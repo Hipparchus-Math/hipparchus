@@ -32,6 +32,7 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.RungeKuttaFieldStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -137,9 +138,9 @@ public abstract class FixedStepRungeKuttaFieldIntegrator<T extends CalculusField
      * @return external weights for the high order method from Butcher array
      */
     protected abstract RungeKuttaFieldStateInterpolator<T> createInterpolator(boolean forward, T[][] yDotK,
-                                                                             FieldODEStateAndDerivative<T> globalPreviousState,
-                                                                             FieldODEStateAndDerivative<T> globalCurrentState,
-                                                                             FieldEquationsMapper<T> mapper);
+                                                                              FieldODEStateAndDerivative<T> globalPreviousState,
+                                                                              FieldODEStateAndDerivative<T> globalCurrentState,
+                                                                              FieldEquationsMapper<T> mapper);
 
     /** {@inheritDoc} */
     @Override

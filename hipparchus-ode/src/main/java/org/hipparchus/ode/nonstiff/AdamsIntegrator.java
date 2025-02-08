@@ -27,6 +27,7 @@ import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.MultistepIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.AdamsStateInterpolator;
 
 
 /** Base class for {@link AdamsBashforthIntegrator Adams-Bashforth} and

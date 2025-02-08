@@ -29,6 +29,7 @@ import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.AdamsFieldStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 

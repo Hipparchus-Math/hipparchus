@@ -34,6 +34,7 @@ import org.hipparchus.linear.FieldMatrixPreservingVisitor;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.LocalizedODEFormats;
+import org.hipparchus.ode.nonstiff.interpolators.AdamsFieldStateInterpolator;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 

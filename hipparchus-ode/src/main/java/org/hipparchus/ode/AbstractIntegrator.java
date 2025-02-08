@@ -41,6 +41,7 @@ import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEStepEndHandler;
 import org.hipparchus.ode.events.StepEndEventState;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
@@ -81,7 +82,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
     private Incrementor evaluations;
 
     /** Differential equations to integrate. */
-    private transient ExpandableODE equations;
+    private ExpandableODE equations;
 
     /** Build an instance.
      * @param name name of the method
@@ -208,13 +209,13 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
                         eqn.getMapper().mapStateAndDerivative(t0, y0, y0Dot);
 
         // initialize detector based event states (both  and step end based)
-        detectorBasedEventsStates.stream().forEach(s -> {
+        detectorBasedEventsStates.forEach(s -> {
             s.init(s0WithDerivatives, t);
             s.getEventDetector().getHandler().init(s0WithDerivatives, t, s.getEventDetector());
         });
 
         // initialize step end based event states
-        stepEndEventsStates.stream().forEach(s -> {
+        stepEndEventsStates.forEach(s -> {
             s.init(s0WithDerivatives, t);
             s.getHandler().init(s0WithDerivatives, t);
         });
@@ -292,18 +293,18 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
         ODEStateAndDerivative previousState = interpolator.getGlobalPreviousState();
         final ODEStateAndDerivative currentState = interpolator.getGlobalCurrentState();
-        AbstractODEStateInterpolator restricted = interpolator;
+        ODEStateInterpolator restricted = interpolator;
 
 
         // initialize the events states if needed
         if (!statesInitialized) {
             // initialize event states
-            detectorBasedEventsStates.stream().forEach(s -> s.reinitializeBegin(interpolator));
+            detectorBasedEventsStates.forEach(s -> s.reinitializeBegin(interpolator));
             statesInitialized = true;
         }
 
         // set end of step
-        stepEndEventsStates.stream().forEach(s -> s.setStepEnd(currentState.getTime()));
+        stepEndEventsStates.forEach(s -> s.setStepEnd(currentState.getTime()));
 
         // search for next events that may occur during the step
         final int orderingSign = interpolator.isForward() ? +1 : -1;
@@ -322,7 +323,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
             // Evaluate all event detectors and end steps for events
             occurringEvents.clear();
-            final AbstractODEStateInterpolator finalRestricted = restricted;
+            final ODEStateInterpolator finalRestricted = restricted;
             Stream.concat(detectorBasedEventsStates.stream(), stepEndEventsStates.stream()).
             forEach(s -> { if (s.evaluateStep(finalRestricted)) {
                     // the event occurs during the current step

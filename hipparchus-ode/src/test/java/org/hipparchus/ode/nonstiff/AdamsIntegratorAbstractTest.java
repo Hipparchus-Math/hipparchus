@@ -451,6 +451,10 @@ public abstract class AdamsIntegratorAbstractTest {
             return new ODEStateAndDerivative(time, y, yDot);
         }
 
+        @Override
+        public ODEStateInterpolator restrictStep(ODEStateAndDerivative previousState, ODEStateAndDerivative currentState) {
+            return this;
+        }
     }
 
 }

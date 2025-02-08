@@ -26,6 +26,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.EulerFieldStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -97,7 +98,7 @@ public class EulerFieldIntegrator<T extends CalculusFieldElement<T>> extends Fix
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new EulerFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new EulerFieldStateInterpolator<>(getField(), forward, yDotK,
                                                  globalPreviousState, globalCurrentState,
                                                  globalPreviousState, globalCurrentState,
                                                  mapper);

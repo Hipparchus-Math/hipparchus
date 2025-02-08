@@ -23,6 +23,7 @@ import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.GraggBulirschStoerStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 /**
