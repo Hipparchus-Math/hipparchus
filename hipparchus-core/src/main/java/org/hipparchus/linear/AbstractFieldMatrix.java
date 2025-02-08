@@ -529,7 +529,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldVector<T> getRowVector(final int row)
         throws MathIllegalArgumentException {
-        return new ArrayFieldVector<T>(field, getRow(row), false);
+        return new ArrayFieldVector<>(field, getRow(row), false);
     }
 
     /** {@inheritDoc} */
@@ -553,7 +553,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldVector<T> getColumnVector(final int column)
         throws MathIllegalArgumentException {
-        return new ArrayFieldVector<T>(field, getColumn(column), false);
+        return new ArrayFieldVector<>(field, getColumn(column), false);
     }
 
     /** {@inheritDoc} */
@@ -724,7 +724,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public FieldVector<T> operate(final FieldVector<T> v)
         throws MathIllegalArgumentException {
         if (v instanceof ArrayFieldVector) {
-            return new ArrayFieldVector<T>(field, operate(((ArrayFieldVector<T>) v).getDataRef()), false);
+            return new ArrayFieldVector<>(field, operate(((ArrayFieldVector<T>) v).getDataRef()), false);
         } else {
             final int nRows = getRowDimension();
             final int nCols = getColumnDimension();
@@ -742,7 +742,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
                 out[row] = sum;
             }
 
-            return new ArrayFieldVector<T>(field, out, false);
+            return new ArrayFieldVector<>(field, out, false);
         }
     }
 
@@ -774,7 +774,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public FieldVector<T> preMultiply(final FieldVector<T> v)
         throws MathIllegalArgumentException {
         if (v instanceof ArrayFieldVector) {
-            return new ArrayFieldVector<T>(field, preMultiply(((ArrayFieldVector<T>) v).getDataRef()), false);
+            return new ArrayFieldVector<>(field, preMultiply(((ArrayFieldVector<T>) v).getDataRef()), false);
         } else {
             final int nRows = getRowDimension();
             final int nCols = getColumnDimension();
@@ -792,7 +792,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
                 out[col] = sum;
             }
 
-            return new ArrayFieldVector<T>(field, out, false);
+            return new ArrayFieldVector<>(field, out, false);
         }
     }
 

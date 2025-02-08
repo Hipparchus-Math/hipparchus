@@ -279,7 +279,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                 }
             };
 
-            Collections.sort(observations, cmp);
+            observations.sort(cmp);
             return observations;
         }
 

@@ -412,8 +412,8 @@ public class DiagonalMatrix extends AbstractRealMatrix
      * @return {@code true} if the matrix is singular, {@code false} otherwise
      */
     public boolean isSingular(double threshold) {
-        for (int i = 0; i < data.length; i++) {
-            if (Precision.equals(data[i], 0.0, threshold)) {
+        for (double datum : data) {
+            if (Precision.equals(datum, 0.0, threshold)) {
                 return true;
             }
         }

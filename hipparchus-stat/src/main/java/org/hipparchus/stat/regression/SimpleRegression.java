@@ -260,12 +260,12 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * greater than or equal to 2
      */
     public void addData(final double[][] data) throws MathIllegalArgumentException {
-        for (int i = 0; i < data.length; i++) {
-            if( data[i].length < 2 ){
-               throw new MathIllegalArgumentException(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION,
-                    data[i].length, 2);
+        for (double[] datum : data) {
+            if (datum.length < 2) {
+                throw new MathIllegalArgumentException(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION,
+                        datum.length, 2);
             }
-            addData(data[i][0], data[i][1]);
+            addData(datum[0], datum[1]);
         }
     }
 
@@ -302,8 +302,8 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
         MathUtils.checkNotNull(y, LocalizedCoreFormats.INPUT_ARRAY);
         MathUtils.checkDimension(x.length, y.length);
         boolean obsOk = true;
-        for( int i = 0 ; i < x.length; i++){
-            if( x[i] == null || x[i].length == 0 ){
+        for (double[] doubles : x) {
+            if (doubles == null || doubles.length == 0) {
                 obsOk = false;
             }
         }

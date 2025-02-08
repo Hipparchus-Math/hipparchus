@@ -91,7 +91,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
         int index = 0;
         for (Entry<Integer, Integer> entry : dataMap.entrySet()) {
             values[index] = entry.getKey();
-            probabilities[index] = entry.getValue().intValue() / denom;
+            probabilities[index] = entry.getValue() / denom;
             index++;
         }
         innerDistribution =

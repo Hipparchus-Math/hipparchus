@@ -88,44 +88,36 @@ public class ExampleUtils {
      * @param frame frame to display
      */
     public static void showExampleFrame(final ExampleFrame frame) {
-        Runnable r = new Runnable() {
-            public void run() {
-                JMenuItem screenshot = new JMenuItem("Screenshot (png)");
-                screenshot.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, InputEvent.CTRL_DOWN_MASK));
-                screenshot.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent ae) {
-                        JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
-                        if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-                          File file = fileChooser.getSelectedFile();
-                          BufferedImage img = getScreenShot(frame.getMainPanel());
-                          try {
-                              // write the image as a PNG
-                              ImageIO.write(img, "png", file);
-                          } catch (IOException e) {
-                              e.printStackTrace();
-                          }
-                        }
-                    }
-                });
+        Runnable r = () -> {
+            JMenuItem screenshot = new JMenuItem("Screenshot (png)");
+            screenshot.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, InputEvent.CTRL_DOWN_MASK));
+            screenshot.addActionListener(ae -> {
+                JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+                if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+                  File file = fileChooser.getSelectedFile();
+                  BufferedImage img = getScreenShot(frame.getMainPanel());
+                  try {
+                      // write the image as a PNG
+                      ImageIO.write(img, "png", file);
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+                }
+            });
 
-                JMenuItem exit = new JMenuItem("Exit");
-                exit.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        System.exit(0);
-                    }
-                });
+            JMenuItem exit = new JMenuItem("Exit");
+            exit.addActionListener(e -> System.exit(0));
 
-                JMenu menu = new JMenu("File");
-                menu.add(screenshot);
-                menu.add(exit);
-                JMenuBar mb = new JMenuBar();
-                mb.add(menu);
-                frame.setJMenuBar(mb);
+            JMenu menu = new JMenu("File");
+            menu.add(screenshot);
+            menu.add(exit);
+            JMenuBar mb = new JMenuBar();
+            mb.add(menu);
+            frame.setJMenuBar(mb);
 
-                frame.setLocationRelativeTo(null);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-            }
+            frame.setLocationRelativeTo(null);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
         };
         SwingUtilities.invokeLater(r);
     }

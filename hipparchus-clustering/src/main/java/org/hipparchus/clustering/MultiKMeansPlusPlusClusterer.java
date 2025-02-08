@@ -52,7 +52,7 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
      */
     public MultiKMeansPlusPlusClusterer(final KMeansPlusPlusClusterer<T> clusterer,
                                         final int numTrials) {
-        this(clusterer, numTrials, new SumOfClusterVariances<T>(clusterer.getDistanceMeasure()));
+        this(clusterer, numTrials, new SumOfClusterVariances<>(clusterer.getDistanceMeasure()));
     }
 
     /** Build a clusterer.

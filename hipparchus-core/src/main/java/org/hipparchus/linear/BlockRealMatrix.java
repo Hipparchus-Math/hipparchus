@@ -205,11 +205,11 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         final int blockColumns = (columns + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
         // safety checks
-        for (int i = 0; i < rawData.length; ++i) {
-            final int length = rawData[i].length;
+        for (double[] rawDatum : rawData) {
+            final int length = rawDatum.length;
             if (length != columns) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       columns, length);
+                        columns, length);
             }
         }
 
@@ -925,8 +925,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public double getFrobeniusNorm() {
         double sum2 = 0;
-        for (int blockIndex = 0; blockIndex < blocks.length; ++blockIndex) {
-            for (final double entry : blocks[blockIndex]) {
+        for (double[] block : blocks) {
+            for (final double entry : block) {
                 sum2 += entry * entry;
             }
         }

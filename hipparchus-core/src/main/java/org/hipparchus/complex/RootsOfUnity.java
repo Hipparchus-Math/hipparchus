@@ -167,9 +167,9 @@ public class RootsOfUnity implements Serializable {
             if ((k < 0) || (k >= omegaCount)) {
                 throw new MathIllegalArgumentException(
                                                        LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
-                                                       Integer.valueOf(k),
-                                                       Integer.valueOf(0),
-                                                       Integer.valueOf(omegaCount - 1));
+                        k,
+                        0,
+                        omegaCount - 1);
             }
 
             return omegaReal[k];
@@ -195,9 +195,9 @@ public class RootsOfUnity implements Serializable {
             if ((k < 0) || (k >= omegaCount)) {
                 throw new MathIllegalArgumentException(
                                                        LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
-                                                       Integer.valueOf(k),
-                                                       Integer.valueOf(0),
-                                                       Integer.valueOf(omegaCount - 1));
+                        k,
+                        0,
+                        omegaCount - 1);
             }
 
             return isCounterClockWise ? omegaImaginaryCounterClockwise[k] :

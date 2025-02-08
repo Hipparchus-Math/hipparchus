@@ -253,8 +253,8 @@ public class EigenDecompositionNonSymmetric {
      */
     public Complex getDeterminant() {
         Complex determinant = Complex.ONE;
-        for (int i = 0; i < eigenvalues.length; ++i) {
-            determinant = determinant.multiply(eigenvalues[i]);
+        for (Complex eigenvalue : eigenvalues) {
+            determinant = determinant.multiply(eigenvalue);
         }
         return determinant;
     }

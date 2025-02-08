@@ -22,6 +22,8 @@
 package org.hipparchus.util;
 
 
+import java.util.Objects;
+
 /**
  * Generic pair.
  * <p>
@@ -111,10 +113,8 @@ public class Pair<K, V> {
             return false;
         }
         Pair<?, ?> other = (Pair<?, ?>) o;
-        return (key == null ? other.key == null :
-                              key.equals(other.key)) &&
-               (value == null ? other.value == null :
-                                value.equals(other.value));
+        return (Objects.equals(key, other.key)) &&
+               (Objects.equals(value, other.value));
     }
 
     /**
@@ -149,6 +149,6 @@ public class Pair<K, V> {
      * @return a new {@code Pair} containing {@code k} and {@code v}.
      */
     public static <K, V> Pair<K, V> create(K k, V v) {
-        return new Pair<K, V>(k, v);
+        return new Pair<>(k, v);
     }
 }

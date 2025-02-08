@@ -355,7 +355,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
             final MultivariateNormalDistribution mvn
                 = new MultivariateNormalDistribution(columnMeans, covMat);
 
-            components.add(new Pair<Double, MultivariateNormalDistribution>(weight, mvn));
+            components.add(new Pair<>(weight, mvn));
         }
 
         return new MixtureMultivariateNormalDistribution(components);
@@ -397,8 +397,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
             row = data; // NOPMD - storing a reference to the array is intentional and documented here
             // Compute mean.
             mean = 0d;
-            for (int i = 0; i < data.length; i++) {
-                mean += data[i];
+            for (double datum : data) {
+                mean += datum;
             }
             mean /= data.length;
         }

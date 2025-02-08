@@ -91,7 +91,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * @see #FieldLUDecomposition(FieldMatrix, Predicate, boolean)
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
-        this(matrix, e -> e.isZero());
+        this(matrix, FieldElement::isZero);
     }
 
     /**
@@ -364,7 +364,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                     }
                 }
 
-                return new ArrayFieldVector<T>(field, bp, false);
+                return new ArrayFieldVector<>(field, bp, false);
 
             }
         }
@@ -410,7 +410,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
             }
 
-            return new ArrayFieldVector<T>(bp, false);
+            return new ArrayFieldVector<>(bp, false);
         }
 
         /** {@inheritDoc} */
@@ -465,7 +465,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
             }
 
-            return new Array2DRowFieldMatrix<T>(field, bp, false);
+            return new Array2DRowFieldMatrix<>(field, bp, false);
 
         }
 

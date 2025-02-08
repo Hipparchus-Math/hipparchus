@@ -168,11 +168,11 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
         // compute coefficients
         FieldMatrix<T> bigP = buildP(rows);
         FieldDecompositionSolver<T> pSolver =
-            new FieldLUDecomposition<T>(bigP).getSolver();
+                new FieldLUDecomposition<>(bigP).getSolver();
 
         T[] u = MathArrays.buildArray(field, rows);
         Arrays.fill(u, field.getOne());
-        c1 = pSolver.solve(new ArrayFieldVector<T>(u, false)).toArray();
+        c1 = pSolver.solve(new ArrayFieldVector<>(u, false)).toArray();
 
         // update coefficients are computed by combining transform from
         // Nordsieck to multistep, then shifting rows to represent step advance
@@ -184,7 +184,7 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
         }
         shiftedP[0] = MathArrays.buildArray(field, rows);
         Arrays.fill(shiftedP[0], field.getZero());
-        update = new Array2DRowFieldMatrix<>(pSolver.solve(new Array2DRowFieldMatrix<T>(shiftedP, false)).getData());
+        update = new Array2DRowFieldMatrix<>(pSolver.solve(new Array2DRowFieldMatrix<>(shiftedP, false)).getData());
 
     }
 
@@ -199,11 +199,7 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
     getInstance(final Field<T> field, final int nSteps) {
         synchronized(CACHE) {
             Map<Field<? extends CalculusFieldElement<?>>,
-                      AdamsNordsieckFieldTransformer<? extends CalculusFieldElement<?>>> map = CACHE.get(nSteps);
-            if (map == null) {
-                map = new HashMap<>();
-                CACHE.put(nSteps, map);
-            }
+                    AdamsNordsieckFieldTransformer<? extends CalculusFieldElement<?>>> map = CACHE.computeIfAbsent(nSteps, k -> new HashMap<>());
             @SuppressWarnings("unchecked")
             AdamsNordsieckFieldTransformer<T> t = (AdamsNordsieckFieldTransformer<T>) map.get(field);
             if (t == null) {
@@ -244,7 +240,7 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(pData, false);
+        return new Array2DRowFieldMatrix<>(pData, false);
 
     }
 
@@ -308,8 +304,8 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
 
         // solve the linear system to get the best estimate of the Nordsieck vector [s2 ... sk],
         // with the additional terms s(k+1) and c grabbing the parts after the truncated Taylor expansion
-        final FieldLUDecomposition<T> decomposition = new FieldLUDecomposition<>(new Array2DRowFieldMatrix<T>(a, false));
-        final FieldMatrix<T> x = decomposition.getSolver().solve(new Array2DRowFieldMatrix<T>(b, false));
+        final FieldLUDecomposition<T> decomposition = new FieldLUDecomposition<>(new Array2DRowFieldMatrix<>(a, false));
+        final FieldMatrix<T> x = decomposition.getSolver().solve(new Array2DRowFieldMatrix<>(b, false));
 
         // extract just the Nordsieck vector [s2 ... sk]
         final Array2DRowFieldMatrix<T> truncatedX =

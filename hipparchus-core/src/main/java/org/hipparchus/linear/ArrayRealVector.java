@@ -138,7 +138,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     public ArrayRealVector(Double[] d) {
         data = new double[d.length];
         for (int i = 0; i < d.length; i++) {
-            data[i] = d[i].doubleValue();
+            data[i] = d[i];
         }
     }
 
@@ -163,7 +163,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
         }
         data = new double[size];
         for (int i = pos; i < pos + size; i++) {
-            data[i - pos] = d[i].doubleValue();
+            data[i - pos] = d[i];
         }
     }
 

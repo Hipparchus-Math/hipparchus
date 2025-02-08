@@ -397,8 +397,8 @@ public class SimplexSolver extends LinearOptimizer {
         final PointValuePair solution = tableau.getSolution();
         if (isRestrictedToNonNegative()) {
             final double[] coeff = solution.getPoint();
-            for (int i = 0; i < coeff.length; i++) {
-                if (Precision.compareTo(coeff[i], 0, epsilon) < 0) {
+            for (double v : coeff) {
+                if (Precision.compareTo(v, 0, epsilon) < 0) {
                     throw new MathIllegalStateException(LocalizedOptimFormats.NO_FEASIBLE_SOLUTION);
                 }
             }

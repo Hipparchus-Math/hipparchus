@@ -207,13 +207,13 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     public FieldMatrix<T> createMatrix(final int rowDimension,
                                        final int columnDimension)
         throws MathIllegalArgumentException {
-        return new Array2DRowFieldMatrix<T>(getField(), rowDimension, columnDimension);
+        return new Array2DRowFieldMatrix<>(getField(), rowDimension, columnDimension);
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> copy() {
-        return new Array2DRowFieldMatrix<T>(getField(), copyOut(), false);
+        return new Array2DRowFieldMatrix<>(getField(), copyOut(), false);
     }
 
     /**
@@ -241,7 +241,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(getField(), outData, false);
+        return new Array2DRowFieldMatrix<>(getField(), outData, false);
     }
 
     /**
@@ -269,7 +269,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(getField(), outData, false);
+        return new Array2DRowFieldMatrix<>(getField(), outData, false);
 
     }
 
@@ -302,7 +302,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(getField(), outData, false);
+        return new Array2DRowFieldMatrix<>(getField(), outData, false);
 
     }
 

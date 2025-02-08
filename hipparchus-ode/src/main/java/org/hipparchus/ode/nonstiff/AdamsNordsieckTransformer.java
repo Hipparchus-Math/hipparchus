@@ -157,11 +157,11 @@ public class AdamsNordsieckTransformer {
         // compute exact coefficients
         FieldMatrix<BigFraction> bigP = buildP(rows);
         FieldDecompositionSolver<BigFraction> pSolver =
-            new FieldLUDecomposition<BigFraction>(bigP).getSolver();
+                new FieldLUDecomposition<>(bigP).getSolver();
 
         BigFraction[] u = new BigFraction[rows];
         Arrays.fill(u, BigFraction.ONE);
-        BigFraction[] bigC1 = pSolver.solve(new ArrayFieldVector<BigFraction>(u, false)).toArray();
+        BigFraction[] bigC1 = pSolver.solve(new ArrayFieldVector<>(u, false)).toArray();
 
         // update coefficients are computed by combining transform from
         // Nordsieck to multistep, then shifting rows to represent step advance
@@ -174,7 +174,7 @@ public class AdamsNordsieckTransformer {
         shiftedP[0] = new BigFraction[rows];
         Arrays.fill(shiftedP[0], BigFraction.ZERO);
         FieldMatrix<BigFraction> bigMSupdate =
-            pSolver.solve(new Array2DRowFieldMatrix<BigFraction>(shiftedP, false));
+            pSolver.solve(new Array2DRowFieldMatrix<>(shiftedP, false));
 
         // convert coefficients to double
         update         = MatrixUtils.bigFractionMatrixToRealMatrix(bigMSupdate);
@@ -230,7 +230,7 @@ public class AdamsNordsieckTransformer {
             }
         }
 
-        return new Array2DRowFieldMatrix<BigFraction>(pData, false);
+        return new Array2DRowFieldMatrix<>(pData, false);
 
     }
 

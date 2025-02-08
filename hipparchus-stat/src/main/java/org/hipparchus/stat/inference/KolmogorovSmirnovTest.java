@@ -809,7 +809,7 @@ public class KolmogorovSmirnovTest { // NOPMD - this is not a Junit test class, 
                 }
             }
         }
-        return new Array2DRowFieldMatrix<BigFraction>(BigFractionField.getInstance(), Hdata);
+        return new Array2DRowFieldMatrix<>(BigFractionField.getInstance(), Hdata);
     }
 
     /***
@@ -1155,16 +1155,16 @@ public class KolmogorovSmirnovTest { // NOPMD - this is not a Junit test class, 
      */
     private static boolean hasTies(double[] x, double[] y) {
         final HashSet<Double> values = new HashSet<>();
-            for (int i = 0; i < x.length; i++) {
-                if (!values.add(x[i])) {
-                    return true;
-                }
+        for (double value : x) {
+            if (!values.add(value)) {
+                return true;
             }
-            for (int i = 0; i < y.length; i++) {
-                if (!values.add(y[i])) {
-                    return true;
-                }
+        }
+        for (double v : y) {
+            if (!values.add(v)) {
+                return true;
             }
+        }
         return false;
     }
 

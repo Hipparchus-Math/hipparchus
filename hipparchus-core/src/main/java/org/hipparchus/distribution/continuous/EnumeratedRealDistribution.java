@@ -77,7 +77,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
         int index = 0;
         for (Entry<Double, Integer> entry : dataMap.entrySet()) {
             values[index] = entry.getKey();
-            probabilities[index] = entry.getValue().intValue() / denom;
+            probabilities[index] = entry.getValue() / denom;
             index++;
         }
         innerDistribution =

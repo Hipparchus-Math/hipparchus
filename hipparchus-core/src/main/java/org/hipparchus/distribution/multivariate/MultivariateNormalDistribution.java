@@ -199,8 +199,8 @@ public class MultivariateNormalDistribution
         // Eigenvalues of the covariance matrix.
         final double[] covMatEigenvalues = covMatDec.getEigenvalues();
 
-        for (int i = 0; i < covMatEigenvalues.length; i++) {
-            if (covMatEigenvalues[i] < 0) {
+        for (double covMatEigenvalue : covMatEigenvalues) {
+            if (covMatEigenvalue < 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX);
             }
         }

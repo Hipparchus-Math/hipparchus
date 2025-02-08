@@ -123,13 +123,13 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> copy() {
-        return new SparseFieldMatrix<T>(this);
+        return new SparseFieldMatrix<>(this);
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> createMatrix(int rowDimension, int columnDimension) {
-        return new SparseFieldMatrix<T>(getField(), rowDimension, columnDimension);
+        return new SparseFieldMatrix<>(getField(), rowDimension, columnDimension);
     }
 
     /** {@inheritDoc} */

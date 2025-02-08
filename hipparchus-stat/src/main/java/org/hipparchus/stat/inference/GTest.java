@@ -269,15 +269,15 @@ public class GTest { // NOPMD - this is not a Junit test class, PMD false positi
     private double entropy(final long[][] k) {
         double h = 0d;
         double sum_k = 0d;
-        for (int i = 0; i < k.length; i++) {
-            for (int j = 0; j < k[i].length; j++) {
-                sum_k += k[i][j];
+        for (long[] value : k) {
+            for (int j = 0; j < value.length; j++) {
+                sum_k += value[j];
             }
         }
-        for (int i = 0; i < k.length; i++) {
-            for (int j = 0; j < k[i].length; j++) {
-                if (k[i][j] != 0) {
-                    final double p_ij = k[i][j] / sum_k;
+        for (long[] longs : k) {
+            for (int j = 0; j < longs.length; j++) {
+                if (longs[j] != 0) {
+                    final double p_ij = longs[j] / sum_k;
                     h += p_ij * FastMath.log(p_ij);
                 }
             }
@@ -299,12 +299,12 @@ public class GTest { // NOPMD - this is not a Junit test class, PMD false positi
     private double entropy(final long[] k) {
         double h = 0d;
         double sum_k = 0d;
-        for (int i = 0; i < k.length; i++) {
-            sum_k += k[i];
+        for (long value : k) {
+            sum_k += value;
         }
-        for (int i = 0; i < k.length; i++) {
-            if (k[i] != 0) {
-                final double p_i = k[i] / sum_k;
+        for (long l : k) {
+            if (l != 0) {
+                final double p_i = l / sum_k;
                 h += p_i * FastMath.log(p_i);
             }
         }

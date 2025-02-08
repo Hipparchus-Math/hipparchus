@@ -99,8 +99,8 @@ public class RealDistributionComparison {
      */
     public static void addPDFSeries(Chart chart, RealDistribution distribution, String desc, int lowerBound, int upperBound) {
         // generates Log data
-        List<Number> xData = new ArrayList<Number>();
-        List<Number> yData = new ArrayList<Number>();
+        List<Number> xData = new ArrayList<>();
+        List<Number> yData = new ArrayList<>();
         int samples = 100;
         double stepSize = (upperBound - lowerBound) / (double) samples;
         for (double x = lowerBound; x <= upperBound; x += stepSize) {
@@ -130,8 +130,8 @@ public class RealDistributionComparison {
      */
     public static void addCDFSeries(Chart chart, RealDistribution distribution, String desc, int lowerBound, int upperBound) {
         // generates Log data
-        List<Number> xData = new ArrayList<Number>();
-        List<Number> yData = new ArrayList<Number>();
+        List<Number> xData = new ArrayList<>();
+        List<Number> yData = new ArrayList<>();
         int samples = 100;
         double stepSize = (upperBound - lowerBound) / (double) samples;
         for (double x = lowerBound; x <= upperBound; x += stepSize) {

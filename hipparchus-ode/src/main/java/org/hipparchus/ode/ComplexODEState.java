@@ -184,11 +184,11 @@ public class ComplexODEState implements Serializable {
         System.arraycopy(primaryState, 0, completeState, 0, primaryState.length);
         int offset = primaryState.length;
         if (secondaryState != null) {
-            for (int index = 0; index < secondaryState.length; ++index) {
-                System.arraycopy(secondaryState[index], 0,
-                                 completeState, offset,
-                                 secondaryState[index].length);
-                offset += secondaryState[index].length;
+            for (Complex[] complexes : secondaryState) {
+                System.arraycopy(complexes, 0,
+                        completeState, offset,
+                        complexes.length);
+                offset += complexes.length;
             }
         }
         return completeState;

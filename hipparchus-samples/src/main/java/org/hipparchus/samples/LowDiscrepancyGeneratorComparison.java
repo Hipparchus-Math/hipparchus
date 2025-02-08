@@ -75,7 +75,7 @@ public class LowDiscrepancyGeneratorComparison {
      * @return generated points
      */
     public static List<Vector2D> makeCircle(int samples, final RandomVectorGenerator generator) {
-        List<Vector2D> points = new ArrayList<Vector2D>();
+        List<Vector2D> points = new ArrayList<>();
         for (double i = 0; i < samples; i++) {
             double[] vector = generator.nextVector();
             Vector2D point = new Vector2D(vector);
@@ -86,7 +86,7 @@ public class LowDiscrepancyGeneratorComparison {
         points = normalize(points);
 
         // now test if the sample is within the unit circle
-        List<Vector2D> circlePoints = new ArrayList<Vector2D>();
+        List<Vector2D> circlePoints = new ArrayList<>();
         for (Vector2D p : points) {
             if (p.getNorm() < 1.0) {
                 circlePoints.add(p);
@@ -102,7 +102,7 @@ public class LowDiscrepancyGeneratorComparison {
      * @return generated points
      */
     public static List<Vector2D> makeRandom(int samples, RandomVectorGenerator generator) {
-        List<Vector2D> points = new ArrayList<Vector2D>();
+        List<Vector2D> points = new ArrayList<>();
         for (double i = 0; i < samples; i++) {
             double[] vector = generator.nextVector();
             Vector2D point = new Vector2D(vector);
@@ -139,7 +139,7 @@ public class LowDiscrepancyGeneratorComparison {
 
         double rangeX = maxX - minX;
         double rangeY = maxY - minY;
-        List<Vector2D> points = new ArrayList<Vector2D>();
+        List<Vector2D> points = new ArrayList<>();
         for (Vector2D p : input) {
             double[] arr = p.toArray();
             // normalize to the range [-1, 1]
@@ -163,15 +163,15 @@ public class LowDiscrepancyGeneratorComparison {
             setLayout(new GridBagLayout());
 
             int[] datasets = new int[] { 256, 1000, 2500, 1000 };
-            List<Pair<String, RandomVectorGenerator>> generators = new ArrayList<Pair<String, RandomVectorGenerator>>();
+            List<Pair<String, RandomVectorGenerator>> generators = new ArrayList<>();
 
-            generators.add(new Pair<String, RandomVectorGenerator>("Uncorrelated\nUniform(JDK)",
+            generators.add(new Pair<>("Uncorrelated\nUniform(JDK)",
                     new UncorrelatedRandomVectorGenerator(2, new UniformRandomGenerator(new JDKRandomGenerator()))));
-            generators.add(new Pair<String, RandomVectorGenerator>("Independent\nRandom(MT)", new RandomVectorGenerator() {
+            generators.add(new Pair<>("Independent\nRandom(MT)", new RandomVectorGenerator() {
 
-                private final RandomGenerator[] rngs = new RandomGenerator[] {
-                    new MersenneTwister(0),
-                    new MersenneTwister(1)
+                private final RandomGenerator[] rngs = new RandomGenerator[]{
+                        new MersenneTwister(0),
+                        new MersenneTwister(1)
                 };
 
                 public double[] nextVector() {
@@ -182,8 +182,8 @@ public class LowDiscrepancyGeneratorComparison {
                 }
 
             }));
-            generators.add(new Pair<String, RandomVectorGenerator>("HaltonSequence", new HaltonSequenceGenerator(2)));
-            generators.add(new Pair<String, RandomVectorGenerator>("SobolSequence", new SobolSequenceGenerator(2)));
+            generators.add(new Pair<>("HaltonSequence", new HaltonSequenceGenerator(2)));
+            generators.add(new Pair<>("SobolSequence", new SobolSequenceGenerator(2)));
 
             GridBagConstraints c = new GridBagConstraints();
             c.fill = GridBagConstraints.VERTICAL;

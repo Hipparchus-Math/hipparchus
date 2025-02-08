@@ -79,11 +79,10 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
         final int numComp = components.size();
         final int dim = getDimension();
         double weightSum = 0;
-        for (int i = 0; i < numComp; i++) {
-            final Pair<Double, T> comp = components.get(i);
+        for (final Pair<Double, T> comp : components) {
             if (comp.getSecond().getDimension() != dim) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       comp.getSecond().getDimension(), dim);
+                        comp.getSecond().getDimension(), dim);
             }
             if (comp.getFirst() < 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, comp.getFirst(), 0);

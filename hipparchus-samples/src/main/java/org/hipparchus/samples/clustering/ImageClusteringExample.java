@@ -142,17 +142,13 @@ public class ImageClusteringExample {
 
             add(bar);
 
-            startButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    clusterImage();
-                }
-            });
+            startButton.addActionListener(e -> clusterImage());
         }
 
         /** Display clusters.
          */
         private void clusterImage() {
-            List<PixelClusterable> pixels = new ArrayList<PixelClusterable>();
+            List<PixelClusterable> pixels = new ArrayList<>();
             for (int row = 0; row < referenceImage.getHeight(); row++) {
                 for (int col = 0; col < referenceImage.getWidth(); col++) {
                     pixels.add(new PixelClusterable(col, row));
@@ -161,7 +157,7 @@ public class ImageClusteringExample {
 
             int clusterSize = ((Number) clusterSizeSpinner.getValue()).intValue();
             KMeansPlusPlusClusterer<PixelClusterable> clusterer =
-                    new KMeansPlusPlusClusterer<PixelClusterable>(clusterSize);
+                    new KMeansPlusPlusClusterer<>(clusterSize);
             List<CentroidCluster<PixelClusterable>> clusters = clusterer.cluster(pixels);
 
             WritableRaster raster = clusterImage.getRaster();

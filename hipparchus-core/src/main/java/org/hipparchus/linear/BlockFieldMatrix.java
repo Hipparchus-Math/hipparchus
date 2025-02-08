@@ -213,11 +213,11 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
         final int blockColumns = (columns + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
         // safety checks
-        for (int i = 0; i < rawData.length; ++i) {
-            final int length = rawData[i].length;
+        for (T[] rawDatum : rawData) {
+            final int length = rawDatum.length;
             if (length != columns) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       columns, length);
+                        columns, length);
             }
         }
 
@@ -295,8 +295,8 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public FieldMatrix<T> createMatrix(final int rowDimension,
                                        final int columnDimension)
         throws MathIllegalArgumentException {
-        return new BlockFieldMatrix<T>(getField(), rowDimension,
-                                       columnDimension);
+        return new BlockFieldMatrix<>(getField(), rowDimension,
+                columnDimension);
     }
 
     /** {@inheritDoc} */
@@ -1270,7 +1270,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             outIndex += jWidth;
         }
 
-        return new ArrayFieldVector<T>(getField(), outData, false);
+        return new ArrayFieldVector<>(getField(), outData, false);
     }
 
     /** {@inheritDoc} */
@@ -1304,7 +1304,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             }
         }
 
-        return new ArrayFieldVector<T>(getField(), outData, false);
+        return new ArrayFieldVector<>(getField(), outData, false);
     }
 
     /** {@inheritDoc} */

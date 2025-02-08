@@ -160,7 +160,7 @@ public class TransformUtils {
         int index = Arrays.binarySearch(TransformUtils.POWERS_OF_TWO, n);
         if (index < 0) {
             throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
-                                                   Integer.valueOf(n));
+                    n);
         }
         return index;
     }

@@ -640,8 +640,8 @@ public class SingularValueDecomposition {
      */
     public int getRank() {
         int r = 0;
-        for (int i = 0; i < singularValues.length; i++) {
-            if (singularValues[i] > tol) {
+        for (double singularValue : singularValues) {
+            if (singularValue > tol) {
                 r++;
             }
         }

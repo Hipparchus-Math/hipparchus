@@ -212,8 +212,8 @@ public class ComplexEigenDecomposition {
      * @return true if there are complex eigen values.
      */
     public boolean hasComplexEigenvalues() {
-        for (int i = 0; i < eigenvalues.length; i++) {
-            if (!Precision.equals(eigenvalues[i].getImaginary(), 0.0, epsilon)) {
+        for (Complex eigenvalue : eigenvalues) {
+            if (!Precision.equals(eigenvalue.getImaginary(), 0.0, epsilon)) {
                 return true;
             }
         }

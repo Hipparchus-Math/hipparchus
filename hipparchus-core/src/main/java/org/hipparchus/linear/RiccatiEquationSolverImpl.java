@@ -167,7 +167,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         final FieldMatrix<Complex> u21 = u.getSubMatrix(m11.getRowDimension(),
                                                         2 * m11.getRowDimension() - 1, 0, m11.getColumnDimension() - 1);
 
-        final FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<Complex>(u11).getSolver();
+        final FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<>(u11).getSolver();
 
         if (!solver.isNonSingular()) {
             throw new MathRuntimeException(LocalizedCoreFormats.SINGULAR_MATRIX);

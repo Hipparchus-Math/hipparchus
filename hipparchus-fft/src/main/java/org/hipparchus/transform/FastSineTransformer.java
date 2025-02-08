@@ -145,12 +145,12 @@ public class FastSineTransformer implements RealTransformer, Serializable {
         if (!ArithmeticUtils.isPowerOfTwo(f.length)) {
             throw new MathIllegalArgumentException(
                     LocalizedFFTFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
-                    Integer.valueOf(f.length));
+                    f.length);
         }
         if (f[0] != 0.0) {
             throw new MathIllegalArgumentException(
                     LocalizedFFTFormats.FIRST_ELEMENT_NOT_ZERO,
-                    Double.valueOf(f[0]));
+                    f[0]);
         }
         final int n = f.length;
         if (n == 1) {       // trivial case
