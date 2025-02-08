@@ -460,7 +460,6 @@ public class QRDecomposition {
          * {@code raise} is {@code true}.
          */
         private boolean checkSingular(double[] diag, double min, boolean raise) {
-            final int len = diag.length;
             for (final double d : diag) {
                 if (FastMath.abs(d) <= min) {
                     if (raise) {

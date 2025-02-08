@@ -475,7 +475,6 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
         private boolean checkSingular(T[] diag,
                                              T min,
                                              boolean raise) {
-            final int len = diag.length;
             for (final T d : diag) {
                 if (FastMath.abs(d.getReal()) <= min.getReal()) {
                     if (raise) {

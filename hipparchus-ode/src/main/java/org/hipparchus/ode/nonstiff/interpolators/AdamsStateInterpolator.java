@@ -139,7 +139,7 @@ public class AdamsStateInterpolator extends AbstractODEStateInterpolator {
      * @return Nordsieck vector
      */
     public Array2DRowRealMatrix getNordsieck() {
-        return nordsieck;
+        return new Array2DRowRealMatrix(nordsieck.getData());
     }
 
     /** {@inheritDoc} */
