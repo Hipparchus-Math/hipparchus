@@ -26,6 +26,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.MidpointFieldStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -96,10 +97,8 @@ public class MidpointFieldIntegrator<T extends CalculusFieldElement<T>> extends 
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new MidpointFieldStateInterpolator<T>(getField(), forward, yDotK,
-                                                    globalPreviousState, globalCurrentState,
-                                                    globalPreviousState, globalCurrentState,
-                                                    mapper);
+        return new MidpointFieldStateInterpolator<>(getField(), forward, yDotK, globalPreviousState, globalCurrentState,
+                                                    globalPreviousState, globalCurrentState, mapper);
     }
 
 }

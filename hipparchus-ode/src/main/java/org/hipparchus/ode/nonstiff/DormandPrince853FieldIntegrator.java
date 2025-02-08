@@ -26,6 +26,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.DormandPrince853FieldStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -318,7 +319,7 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState, final FieldEquationsMapper<T> mapper) {
-        return new DormandPrince853FieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new DormandPrince853FieldStateInterpolator<>(getField(), forward, yDotK,
                                                             globalPreviousState, globalCurrentState,
                                                             globalPreviousState, globalCurrentState,
                                                             mapper);

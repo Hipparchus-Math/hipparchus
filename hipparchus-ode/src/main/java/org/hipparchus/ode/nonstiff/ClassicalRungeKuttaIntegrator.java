@@ -19,6 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.ClassicalRungeKuttaStateInterpolator;
 
 /**
  * This class implements the classical fourth order Runge-Kutta
@@ -85,15 +86,12 @@ public class ClassicalRungeKuttaIntegrator extends FixedStepRungeKuttaIntegrator
 
     /** {@inheritDoc} */
     @Override
-    protected ClassicalRungeKuttaStateInterpolator
-    createInterpolator(final boolean forward, double[][] yDotK,
-                       final ODEStateAndDerivative globalPreviousState,
-                       final ODEStateAndDerivative globalCurrentState,
-                       final EquationsMapper mapper) {
-        return new ClassicalRungeKuttaStateInterpolator(forward, yDotK,
-                                                       globalPreviousState, globalCurrentState,
-                                                       globalPreviousState, globalCurrentState,
-                                                       mapper);
+    protected ClassicalRungeKuttaStateInterpolator createInterpolator(final boolean forward, final double[][] yDotK,
+                                                                      final ODEStateAndDerivative globalPreviousState,
+                                                                      final ODEStateAndDerivative globalCurrentState,
+                                                                      final EquationsMapper mapper) {
+        return new ClassicalRungeKuttaStateInterpolator(forward, yDotK, globalPreviousState, globalCurrentState,
+                                                       globalPreviousState, globalCurrentState, mapper);
     }
 
 }

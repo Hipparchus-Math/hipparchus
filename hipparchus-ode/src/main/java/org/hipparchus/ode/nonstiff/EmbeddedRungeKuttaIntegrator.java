@@ -24,6 +24,7 @@ import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.RungeKuttaStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -163,9 +164,9 @@ public abstract class EmbeddedRungeKuttaIntegrator
      * @return external weights for the high order method from Butcher array
      */
     protected abstract RungeKuttaStateInterpolator createInterpolator(boolean forward, double[][] yDotK,
-                                                                     ODEStateAndDerivative globalPreviousState,
-                                                                     ODEStateAndDerivative globalCurrentState,
-                                                                     EquationsMapper mapper);
+                                                                      ODEStateAndDerivative globalPreviousState,
+                                                                      ODEStateAndDerivative globalCurrentState,
+                                                                      EquationsMapper mapper);
     /** Get the order of the method.
      * @return order of the method
      */

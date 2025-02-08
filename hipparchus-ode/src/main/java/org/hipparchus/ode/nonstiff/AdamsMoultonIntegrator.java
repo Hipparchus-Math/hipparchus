@@ -27,6 +27,7 @@ import org.hipparchus.linear.RealMatrixPreservingVisitor;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.AdamsStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 

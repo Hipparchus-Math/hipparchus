@@ -19,6 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.ThreeEighthesStateInterpolator;
 
 /**
  * This class implements the 3/8 fourth order Runge-Kutta
@@ -83,15 +84,12 @@ public class ThreeEighthesIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected ThreeEighthesStateInterpolator
-    createInterpolator(final boolean forward, double[][] yDotK,
-                       final ODEStateAndDerivative globalPreviousState,
-                       final ODEStateAndDerivative globalCurrentState,
-                       final EquationsMapper mapper) {
-        return new ThreeEighthesStateInterpolator(forward, yDotK,
-                                                 globalPreviousState, globalCurrentState,
-                                                 globalPreviousState, globalCurrentState,
-                                                 mapper);
+    protected ThreeEighthesStateInterpolator createInterpolator(final boolean forward, final double[][] yDotK,
+                                                                final ODEStateAndDerivative globalPreviousState,
+                                                                final ODEStateAndDerivative globalCurrentState,
+                                                                final EquationsMapper mapper) {
+        return new ThreeEighthesStateInterpolator(forward, yDotK, globalPreviousState, globalCurrentState,
+                                                 globalPreviousState, globalCurrentState, mapper);
     }
 
 }

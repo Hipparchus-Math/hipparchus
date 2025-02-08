@@ -26,6 +26,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.LutherFieldStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 
@@ -147,7 +148,7 @@ public class LutherFieldIntegrator<T extends CalculusFieldElement<T>>
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new LutherFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new LutherFieldStateInterpolator<>(getField(), forward, yDotK,
                                                   globalPreviousState, globalCurrentState,
                                                   globalPreviousState, globalCurrentState,
                                                   mapper);

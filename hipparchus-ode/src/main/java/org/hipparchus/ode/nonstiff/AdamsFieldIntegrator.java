@@ -34,6 +34,7 @@ import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.MultistepFieldIntegrator;
+import org.hipparchus.ode.nonstiff.interpolators.AdamsFieldStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 

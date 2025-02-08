@@ -26,6 +26,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.ClassicalRungeKuttaFieldStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -111,7 +112,7 @@ public class ClassicalRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new ClassicalRungeKuttaFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new ClassicalRungeKuttaFieldStateInterpolator<>(getField(), forward, yDotK,
                                                                globalPreviousState, globalCurrentState,
                                                                globalPreviousState, globalCurrentState,
                                                                mapper);

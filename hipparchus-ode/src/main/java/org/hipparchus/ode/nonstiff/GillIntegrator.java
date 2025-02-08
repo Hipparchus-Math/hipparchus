@@ -19,6 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.GillStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 
@@ -86,15 +87,12 @@ public class GillIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected GillStateInterpolator
-    createInterpolator(final boolean forward, double[][] yDotK,
-                       final ODEStateAndDerivative globalPreviousState,
-                       final ODEStateAndDerivative globalCurrentState,
-                       final EquationsMapper mapper) {
-        return new GillStateInterpolator(forward, yDotK,
-                                        globalPreviousState, globalCurrentState,
-                                        globalPreviousState, globalCurrentState,
-                                        mapper);
+    protected GillStateInterpolator createInterpolator(final boolean forward, final double[][] yDotK,
+                                                       final ODEStateAndDerivative globalPreviousState,
+                                                       final ODEStateAndDerivative globalCurrentState,
+                                                       final EquationsMapper mapper) {
+        return new GillStateInterpolator(forward, yDotK, globalPreviousState, globalCurrentState,
+                                        globalPreviousState, globalCurrentState, mapper);
     }
 
 }

@@ -19,6 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.MidpointStateInterpolator;
 
 /**
  * This class implements a second order Runge-Kutta integrator for
@@ -80,15 +81,12 @@ public class MidpointIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected MidpointStateInterpolator
-    createInterpolator(final boolean forward, double[][] yDotK,
-                       final ODEStateAndDerivative globalPreviousState,
-                       final ODEStateAndDerivative globalCurrentState,
-                       final EquationsMapper mapper) {
-        return new MidpointStateInterpolator(forward, yDotK,
-                                            globalPreviousState, globalCurrentState,
-                                            globalPreviousState, globalCurrentState,
-                                            mapper);
+    protected MidpointStateInterpolator createInterpolator(final boolean forward, final double[][] yDotK,
+                                                           final ODEStateAndDerivative globalPreviousState,
+                                                           final ODEStateAndDerivative globalCurrentState,
+                                                           final EquationsMapper mapper) {
+        return new MidpointStateInterpolator(forward, yDotK, globalPreviousState, globalCurrentState,
+                                            globalPreviousState, globalCurrentState, mapper);
     }
 
 }

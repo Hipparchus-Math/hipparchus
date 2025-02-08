@@ -19,6 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.EulerStateInterpolator;
 
 /**
  * This class implements a simple Euler integrator for Ordinary
@@ -80,15 +81,12 @@ public class EulerIntegrator extends FixedStepRungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected EulerStateInterpolator
-        createInterpolator(final boolean forward, double[][] yDotK,
-                           final ODEStateAndDerivative globalPreviousState,
-                           final ODEStateAndDerivative globalCurrentState,
-                           final EquationsMapper mapper) {
-        return new EulerStateInterpolator(forward, yDotK,
-                                         globalPreviousState, globalCurrentState,
-                                         globalPreviousState, globalCurrentState,
-                                         mapper);
+    protected EulerStateInterpolator createInterpolator(final boolean forward, final double[][] yDotK,
+                                                        final ODEStateAndDerivative globalPreviousState,
+                                                        final ODEStateAndDerivative globalCurrentState,
+                                                        final EquationsMapper mapper) {
+        return new EulerStateInterpolator(forward, yDotK, globalPreviousState, globalCurrentState,
+                                         globalPreviousState, globalCurrentState, mapper);
     }
 
 }
