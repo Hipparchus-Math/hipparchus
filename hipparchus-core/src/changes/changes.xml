@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="serrof" type="add" issue="issues/260">
+        Added FieldPolynomialFunctionLagrangeForm.
+      </action>
       <action dev="serrof" type="add" issue="issues/370">
         Added native way to stack an independent variable in (Field)Gradient.
       </action>
