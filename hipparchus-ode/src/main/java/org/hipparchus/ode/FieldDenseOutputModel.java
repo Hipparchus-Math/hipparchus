@@ -157,9 +157,7 @@ public class FieldDenseOutputModel<T extends CalculusFieldElement<T>>
 
         }
 
-        for (FieldODEStateInterpolator<T> interpolator : model.steps) {
-            steps.add(interpolator);
-        }
+        steps.addAll(model.steps);
 
         index = steps.size() - 1;
         finalTime = (steps.get(index)).getCurrentState().getTime();

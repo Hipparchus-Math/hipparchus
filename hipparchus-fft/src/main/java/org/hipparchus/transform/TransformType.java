@@ -30,5 +30,5 @@ public enum TransformType {
     FORWARD,
 
     /** The type to be specified for inverse transforms. */
-    INVERSE;
+    INVERSE
 }

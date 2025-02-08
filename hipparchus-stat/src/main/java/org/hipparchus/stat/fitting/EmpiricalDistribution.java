@@ -292,7 +292,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Provides methods for computing <code>sampleStats</code> and
      * <code>beanStats</code> abstracting the source of data.
      */
-    private abstract class DataAdapter implements Closeable {
+    private abstract static class DataAdapter implements Closeable {
 
         /**
          * Compute bin stats.

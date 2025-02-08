@@ -231,7 +231,7 @@ public class RealDistributionComparison {
             c.gridy = 0;
             c.insets = new Insets(2, 2, 2, 2);
 
-            JComponent comp = null;
+            JComponent comp;
 
             comp = createComponent("Normal", -5, 5,
                                    new String[] { MU_0_SIGMA_02, MU_0_SIGMA_1, MU_0_SIGMA_5, MU_M2_SIGMA_05 },

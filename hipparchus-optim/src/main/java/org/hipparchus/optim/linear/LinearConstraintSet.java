@@ -43,9 +43,7 @@ public class LinearConstraintSet implements OptimizationData {
      */
     public LinearConstraintSet(LinearConstraint... constraints) {
         linearConstraints = new LinkedHashSet<>();
-        for (LinearConstraint c : constraints) {
-            linearConstraints.add(c);
-        }
+        Collections.addAll(linearConstraints, constraints);
     }
 
     /**

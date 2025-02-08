@@ -143,7 +143,7 @@ public class ComplexFormat {
         if (imaginaryCharacter == null) {
             throw new NullArgumentException();
         }
-        if (imaginaryCharacter.length() == 0) {
+        if (imaginaryCharacter.isEmpty()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         MathUtils.checkNotNull(imaginaryFormat, LocalizedCoreFormats.IMAGINARY_FORMAT);
@@ -376,7 +376,7 @@ public class ComplexFormat {
         // parse sign
         int startIndex = pos.getIndex();
         char c = CompositeFormat.parseNextCharacter(source, pos);
-        int sign = 0;
+        int sign;
         switch (c) {
         case 0 :
             // no sign
