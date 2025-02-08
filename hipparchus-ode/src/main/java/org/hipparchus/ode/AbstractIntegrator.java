@@ -131,7 +131,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
     /** {@inheritDoc} */
     @Override
     public List<ODEEventDetector> getEventDetectors() {
-        return detectorBasedEventsStates.stream().map(es -> es.getEventDetector()).collect(Collectors.toList());
+        return detectorBasedEventsStates.stream().map(DetectorBasedEventState::getEventDetector).collect(Collectors.toList());
     }
 
     /** {@inheritDoc} */
@@ -149,7 +149,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
     /** {@inheritDoc} */
     @Override
     public List<ODEStepEndHandler> getStepEndHandlers() {
-        return stepEndEventsStates.stream().map(es -> es.getHandler()).collect(Collectors.toList());
+        return stepEndEventsStates.stream().map(StepEndEventState::getHandler).collect(Collectors.toList());
     }
 
     /** {@inheritDoc} */

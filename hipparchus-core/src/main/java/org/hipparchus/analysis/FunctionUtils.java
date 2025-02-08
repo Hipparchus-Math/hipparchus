@@ -327,7 +327,7 @@ public class FunctionUtils {
         if (n <= 0) {
             throw new MathIllegalArgumentException(
                     LocalizedCoreFormats.NOT_POSITIVE_NUMBER_OF_SAMPLES,
-                    Integer.valueOf(n));
+                    n);
         }
         if (min >= max) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,

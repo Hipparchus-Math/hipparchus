@@ -954,8 +954,8 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
         for (int k = 0; k < nC; ++k) {
             permutation[k] = k;
             double norm2 = 0;
-            for (int i = 0; i < nR; ++i) {
-                double akk = weightedJacobian[i][k];
+            for (double[] doubles : weightedJacobian) {
+                double akk = doubles[k];
                 norm2 += akk * akk;
             }
             jacNorm[k] = FastMath.sqrt(norm2);

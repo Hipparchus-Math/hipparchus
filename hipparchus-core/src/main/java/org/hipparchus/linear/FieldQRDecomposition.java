@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -90,7 +91,7 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
      * @param threshold Singularity threshold.
      */
     public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold) {
-        this(matrix, threshold, e -> e.isZero());
+        this(matrix, threshold, FieldElement::isZero);
     }
 
     /**
@@ -367,7 +368,7 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
                 }
             }
 
-            return new ArrayFieldVector<T>(x, false);
+            return new ArrayFieldVector<>(x, false);
         }
 
         /** {@inheritDoc} */
@@ -447,7 +448,7 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
                 }
             }
 
-            return new BlockFieldMatrix<T>(n, columns, xBlocks, false);
+            return new BlockFieldMatrix<>(n, columns, xBlocks, false);
         }
 
         /**
@@ -475,8 +476,7 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
                                              T min,
                                              boolean raise) {
             final int len = diag.length;
-            for (int i = 0; i < len; i++) {
-                final T d = diag[i];
+            for (final T d : diag) {
                 if (FastMath.abs(d.getReal()) <= min.getReal()) {
                     if (raise) {
                         throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);

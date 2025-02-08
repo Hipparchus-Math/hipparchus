@@ -104,8 +104,8 @@ public class IntegerDistributionComparison {
      */
     public static void addPDFSeries(Chart chart, IntegerDistribution distribution, String desc, int lowerBound, int upperBound) {
         // generates Log data
-        List<Number> xData = new ArrayList<Number>();
-        List<Number> yData = new ArrayList<Number>();
+        List<Number> xData = new ArrayList<>();
+        List<Number> yData = new ArrayList<>();
         for (int x = lowerBound; x <= upperBound; x += 1) {
             try {
                 double probability = distribution.probability(x);
@@ -134,8 +134,8 @@ public class IntegerDistributionComparison {
     public static void addCDFSeries(Chart chart, IntegerDistribution distribution, String desc,
                                     int lowerBound, int upperBound) {
         // generates Log data
-        List<Number> xData = new ArrayList<Number>();
-        List<Number> yData = new ArrayList<Number>();
+        List<Number> xData = new ArrayList<>();
+        List<Number> yData = new ArrayList<>();
         for (int x = lowerBound; x <= upperBound; x += 1) {
           double density = distribution.cumulativeProbability(x);
           if (! Double.isInfinite(density) && ! Double.isNaN(density)) {

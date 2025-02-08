@@ -248,7 +248,7 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
 
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
             throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO,
-                                                   Integer.valueOf(n));
+                    n);
         }
 
         /*
@@ -298,7 +298,7 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
 
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
             throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO,
-                                                   Integer.valueOf(n));
+                    n);
         }
 
         /*

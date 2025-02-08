@@ -218,7 +218,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> copy() {
-        return new SparseFieldVector<T>(this);
+        return new SparseFieldVector<>(this);
     }
 
     /** {@inheritDoc} */

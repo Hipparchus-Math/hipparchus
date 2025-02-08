@@ -160,12 +160,7 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
         final SparseGradient out = new SparseGradient(value + a.value, derivatives);
         for (Map.Entry<Integer, Double> entry : a.derivatives.entrySet()) {
             final int id = entry.getKey();
-            final Double old = out.derivatives.get(id);
-            if (old == null) {
-                out.derivatives.put(id, entry.getValue());
-            } else {
-                out.derivatives.put(id, old + entry.getValue());
-            }
+            out.derivatives.merge(id, entry.getValue(), Double::sum);
         }
 
         return out;
@@ -187,12 +182,7 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
         value += a.value;
         for (final Map.Entry<Integer, Double> entry : a.derivatives.entrySet()) {
             final int id = entry.getKey();
-            final Double old = derivatives.get(id);
-            if (old == null) {
-                derivatives.put(id, entry.getValue());
-            } else {
-                derivatives.put(id, old + entry.getValue());
-            }
+            derivatives.merge(id, entry.getValue(), Double::sum);
         }
     }
 
@@ -224,12 +214,7 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
         }
         for (Map.Entry<Integer, Double> entry : a.derivatives.entrySet()) {
             final int id = entry.getKey();
-            final Double old = out.derivatives.get(id);
-            if (old == null) {
-                out.derivatives.put(id, value * entry.getValue());
-            } else {
-                out.derivatives.put(id, old + value * entry.getValue());
-            }
+            out.derivatives.merge(id, value * entry.getValue(), Double::sum);
         }
         return out;
     }
@@ -248,17 +233,10 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
      */
     public void multiplyInPlace(final SparseGradient a) {
         // Derivatives.
-        for (Map.Entry<Integer, Double> entry : derivatives.entrySet()) {
-            derivatives.put(entry.getKey(), a.value * entry.getValue());
-        }
+        derivatives.replaceAll((k, v) -> a.value * v);
         for (Map.Entry<Integer, Double> entry : a.derivatives.entrySet()) {
             final int id = entry.getKey();
-            final Double old = derivatives.get(id);
-            if (old == null) {
-                derivatives.put(id, value * entry.getValue());
-            } else {
-                derivatives.put(id, old + value * entry.getValue());
-            }
+            derivatives.merge(id, value * entry.getValue(), Double::sum);
         }
         value *= a.value;
     }

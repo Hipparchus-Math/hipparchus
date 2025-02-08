@@ -98,11 +98,11 @@ public class ComplexODEStateAndDerivative extends ComplexODEState {
         System.arraycopy(primaryDerivative, 0, completeDerivative, 0, primaryDerivative.length);
         int offset = primaryDerivative.length;
         if (secondaryDerivative != null) {
-            for (int index = 0; index < secondaryDerivative.length; ++index) {
-                System.arraycopy(secondaryDerivative[index], 0,
-                                 completeDerivative, offset,
-                                 secondaryDerivative[index].length);
-                offset += secondaryDerivative[index].length;
+            for (Complex[] complexes : secondaryDerivative) {
+                System.arraycopy(complexes, 0,
+                        completeDerivative, offset,
+                        complexes.length);
+                offset += complexes.length;
             }
         }
         return completeDerivative;

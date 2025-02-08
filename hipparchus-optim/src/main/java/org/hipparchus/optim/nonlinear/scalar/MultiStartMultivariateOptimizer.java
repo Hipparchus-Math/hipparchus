@@ -73,7 +73,7 @@ public class MultiStartMultivariateOptimizer
      */
     @Override
     public PointValuePair[] getOptima() {
-        Collections.sort(optima, getPairComparator());
+        optima.sort(getPairComparator());
         return optima.toArray(new PointValuePair[0]);
     }
 

@@ -451,8 +451,8 @@ public class LoessInterpolator
      * if one of the values is not a finite real number.
      */
     private static void checkAllFiniteReal(final double[] values) {
-        for (int i = 0; i < values.length; i++) {
-            MathUtils.checkFinite(values[i]);
+        for (double value : values) {
+            MathUtils.checkFinite(value);
         }
     }
 }

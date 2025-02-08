@@ -74,7 +74,7 @@ public final class MathUtils {
      * @return {@code Double.valueOf(x).equals(Double.valueOf(y))}
      */
     public static boolean equals(double x, double y) {
-        return Double.valueOf(x).equals(Double.valueOf(y));
+        return Double.valueOf(x).equals(y);
     }
 
     /**
@@ -289,8 +289,7 @@ public final class MathUtils {
      */
     public static void checkFinite(final double[] val)
         throws MathIllegalArgumentException {
-        for (int i = 0; i < val.length; i++) {
-            final double x = val[i];
+        for (final double x : val) {
             if (Double.isInfinite(x) || Double.isNaN(x)) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_FINITE_NUMBER, x);
             }

@@ -298,8 +298,8 @@ public class EigenDecompositionSymmetric {
      */
     public double getDeterminant() {
         double determinant = 1;
-        for (int i = 0; i < eigenvalues.length; ++i) {
-            determinant *= eigenvalues[i];
+        for (double eigenvalue : eigenvalues) {
+            determinant *= eigenvalue;
         }
         return determinant;
     }
@@ -428,17 +428,17 @@ public class EigenDecompositionSymmetric {
             double largestEigenvalueNorm = 0.0;
             // Looping over all values (in case they are not sorted in decreasing
             // order of their norm).
-            for (int i = 0; i < eigenvalues.length; ++i) {
-                largestEigenvalueNorm = FastMath.max(largestEigenvalueNorm, FastMath.abs(eigenvalues[i]));
+            for (double v : eigenvalues) {
+                largestEigenvalueNorm = FastMath.max(largestEigenvalueNorm, FastMath.abs(v));
             }
             // Corner case: zero matrix, all exactly 0 eigenvalues
             if (largestEigenvalueNorm == 0.0) {
                 return false;
             }
-            for (int i = 0; i < eigenvalues.length; ++i) {
+            for (double eigenvalue : eigenvalues) {
                 // Looking for eigenvalues that are 0, where we consider anything much much smaller
                 // than the largest eigenvalue to be effectively 0.
-                if (Precision.equals(FastMath.abs(eigenvalues[i]) / largestEigenvalueNorm, 0, epsilon)) {
+                if (Precision.equals(FastMath.abs(eigenvalue) / largestEigenvalueNorm, 0, epsilon)) {
                     return false;
                 }
             }

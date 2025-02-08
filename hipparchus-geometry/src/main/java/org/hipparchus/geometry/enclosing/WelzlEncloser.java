@@ -66,7 +66,7 @@ public class WelzlEncloser<S extends Space, P extends Point<S>> implements Enclo
 
         if (points == null || !points.iterator().hasNext()) {
             // return an empty ball
-            return generator.ballOnSupport(new ArrayList<P>());
+            return generator.ballOnSupport(new ArrayList<>());
         }
 
         // Emo Welzl algorithm with Bernd Gärtner and Linus Källberg improvements

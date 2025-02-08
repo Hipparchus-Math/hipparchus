@@ -102,11 +102,11 @@ public class FieldODEStateAndDerivative<T extends CalculusFieldElement<T>> exten
         System.arraycopy(primaryDerivative, 0, completeDerivative, 0, primaryDerivative.length);
         int offset = primaryDerivative.length;
         if (secondaryDerivative != null) {
-            for (int index = 0; index < secondaryDerivative.length; ++index) {
-                System.arraycopy(secondaryDerivative[index], 0,
-                                 completeDerivative, offset,
-                                 secondaryDerivative[index].length);
-                offset += secondaryDerivative[index].length;
+            for (T[] ts : secondaryDerivative) {
+                System.arraycopy(ts, 0,
+                        completeDerivative, offset,
+                        ts.length);
+                offset += ts.length;
             }
         }
         return completeDerivative;

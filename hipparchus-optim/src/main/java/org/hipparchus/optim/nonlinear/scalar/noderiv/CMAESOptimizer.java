@@ -292,9 +292,9 @@ public class CMAESOptimizer
          */
         public Sigma(double[] s)
             throws MathIllegalArgumentException {
-            for (int i = 0; i < s.length; i++) {
-                if (s[i] < 0) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, s[i], 0);
+            for (double v : s) {
+                if (v < 0) {
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, v, 0);
                 }
             }
 
@@ -1287,9 +1287,9 @@ public class CMAESOptimizer
      */
     private static double max(final double[] m) {
         double max = -Double.MAX_VALUE;
-        for (int r = 0; r < m.length; r++) {
-            if (max < m[r]) {
-                max = m[r];
+        for (double v : m) {
+            if (max < v) {
+                max = v;
             }
         }
         return max;
@@ -1301,9 +1301,9 @@ public class CMAESOptimizer
      */
     private static double min(final double[] m) {
         double min = Double.MAX_VALUE;
-        for (int r = 0; r < m.length; r++) {
-            if (min > m[r]) {
-                min = m[r];
+        for (double v : m) {
+            if (min > v) {
+                min = v;
             }
         }
         return min;

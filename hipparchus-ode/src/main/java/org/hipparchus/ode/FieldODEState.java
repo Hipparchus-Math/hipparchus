@@ -179,11 +179,11 @@ public class FieldODEState<T extends CalculusFieldElement<T>> {
         System.arraycopy(primaryState, 0, completeState, 0, primaryState.length);
         int offset = primaryState.length;
         if (secondaryState != null) {
-            for (int index = 0; index < secondaryState.length; ++index) {
-                System.arraycopy(secondaryState[index], 0,
-                                 completeState, offset,
-                                 secondaryState[index].length);
-                offset += secondaryState[index].length;
+            for (T[] ts : secondaryState) {
+                System.arraycopy(ts, 0,
+                        completeState, offset,
+                        ts.length);
+                offset += ts.length;
             }
         }
         return completeState;

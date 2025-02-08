@@ -465,11 +465,11 @@ public class MannWhitneyUTest { // NOPMD - this is not a Junit test class, PMD f
      */
     private Map<Double, Integer> tiesMap(final double[] x, final double[] y) {
         final Map<Double, Integer> tiesMap = new TreeMap<>(); // NOPMD - no concurrent access in the callers context
-        for (int i = 0; i < x.length; i++) {
-            tiesMap.merge(x[i], 1, Integer::sum);
+        for (double value : x) {
+            tiesMap.merge(value, 1, Integer::sum);
         }
-        for (int i = 0; i < y.length; i++) {
-            tiesMap.merge(y[i], 1, Integer::sum);
+        for (double v : y) {
+            tiesMap.merge(v, 1, Integer::sum);
         }
         tiesMap.entrySet().removeIf(e -> e.getValue() == 1);
         return tiesMap;

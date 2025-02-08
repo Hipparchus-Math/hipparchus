@@ -332,9 +332,9 @@ public abstract class MultistepFieldIntegrator<T extends CalculusFieldElement<T>
 
         final T[][] nData = nordsieck.getDataRef();
         T power = ratio;
-        for (int i = 0; i < nData.length; ++i) {
+        for (T[] nDatum : nData) {
             power = power.multiply(ratio);
-            final T[] nDataI = nData[i];
+            final T[] nDataI = nDatum;
             for (int j = 0; j < nDataI.length; ++j) {
                 nDataI[j] = nDataI[j].multiply(power);
             }

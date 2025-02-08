@@ -626,7 +626,7 @@ public class LegendreEllipticIntegral {
     public static double bigF(final double phi, final double m) {
 
         // argument reduction
-        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigK(n));
+        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, LegendreEllipticIntegral::bigK);
 
         // integrate part between 0 and π/2
         final double cM1 = ar.csc2 - 1.0;
@@ -660,7 +660,7 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> T bigF(final T phi, final T m) {
 
         // argument reduction
-        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
+        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigK);
 
         // integrate part between 0 and π/2
         final T cM1        = ar.csc2.subtract(1);
@@ -699,7 +699,7 @@ public class LegendreEllipticIntegral {
     public static Complex bigF(final Complex phi, final Complex m) {
 
         // argument reduction
-        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
+        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigK);
 
         // integrate part between 0 and π/2
         final Complex cM1        = ar.csc2.subtract(1);
@@ -773,7 +773,7 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigF(final FieldComplex<T> phi, final FieldComplex<T> m) {
 
         // argument reduction
-        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
+        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigK);
 
         // integrate part between 0 and π/2
         final FieldComplex<T> cM1        = ar.csc2.subtract(1);
@@ -842,7 +842,7 @@ public class LegendreEllipticIntegral {
     public static double bigE(final double phi, final double m) {
 
         // argument reduction
-        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigE(n));
+        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, LegendreEllipticIntegral::bigE);
 
         // integrate part between 0 and π/2
         final double cM1        = ar.csc2 - 1.0;
@@ -877,7 +877,7 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> T bigE(final T phi, final T m) {
 
         // argument reduction
-        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
+        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigE);
 
         // integrate part between 0 and π/2
         final T cM1        = ar.csc2.subtract(1);
@@ -917,7 +917,7 @@ public class LegendreEllipticIntegral {
     public static Complex bigE(final Complex phi, final Complex m) {
 
         // argument reduction
-        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
+        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigE);
 
         // integrate part between 0 and π/2
         final Complex cM1        = ar.csc2.subtract(1);
@@ -992,7 +992,7 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigE(final FieldComplex<T> phi, final FieldComplex<T> m) {
 
         // argument reduction
-        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
+        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigE);
 
         // integrate part between 0 and π/2
         final FieldComplex<T> cM1        = ar.csc2.subtract(1);
@@ -1060,7 +1060,7 @@ public class LegendreEllipticIntegral {
     public static double bigD(final double phi, final double m) {
 
         // argument reduction
-        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigD(n));
+        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, LegendreEllipticIntegral::bigD);
 
         // integrate part between 0 and π/2
         final double cM1        = ar.csc2 - 1.0;
@@ -1092,7 +1092,7 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> T bigD(final T phi, final T m) {
 
         // argument reduction
-        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigD(n));
+        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigD);
 
         // integrate part between 0 and π/2
         final T cM1        = ar.csc2.subtract(1);
@@ -1129,7 +1129,7 @@ public class LegendreEllipticIntegral {
     public static Complex bigD(final Complex phi, final Complex m) {
 
         // argument reduction
-        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigD(n));
+        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigD);
 
         // integrate part between 0 and π/2
         final Complex cM1        = ar.csc2.subtract(1);
@@ -1167,7 +1167,7 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigD(final FieldComplex<T> phi, final FieldComplex<T> m) {
 
         // argument reduction
-        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigD(n));
+        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, LegendreEllipticIntegral::bigD);
 
         // integrate part between 0 and π/2
         final FieldComplex<T> cM1        = ar.csc2.subtract(1);

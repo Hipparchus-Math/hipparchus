@@ -419,7 +419,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
                 normal.setEntry(i, j, normal.getEntry(j, i));
             }
         }
-        return new Pair<RealMatrix, RealVector>(normal, jTr);
+        return new Pair<>(normal, jTr);
     }
 
     /** Combine Jacobian matrices

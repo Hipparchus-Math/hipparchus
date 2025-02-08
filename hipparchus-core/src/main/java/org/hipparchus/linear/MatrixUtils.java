@@ -161,7 +161,7 @@ public class MatrixUtils {
                                                                                final int rows,
                                                                                final int columns) {
         return (rows * columns <= 4096) ?
-                new Array2DRowFieldMatrix<T>(field, rows, columns) : new BlockFieldMatrix<T>(field, rows, columns);
+                new Array2DRowFieldMatrix<>(field, rows, columns) : new BlockFieldMatrix<>(field, rows, columns);
     }
 
     /**
@@ -219,7 +219,7 @@ public class MatrixUtils {
             throw new NullArgumentException();
         }
         return (data.length * data[0].length <= 4096) ?
-                new Array2DRowFieldMatrix<T>(data) : new BlockFieldMatrix<T>(data);
+                new Array2DRowFieldMatrix<>(data) : new BlockFieldMatrix<>(data);
     }
 
     /**
@@ -256,7 +256,7 @@ public class MatrixUtils {
             Arrays.fill(dRow, zero);
             dRow[row] = one;
         }
-        return new Array2DRowFieldMatrix<T>(field, d, false);
+        return new Array2DRowFieldMatrix<>(field, d, false);
     }
 
     /**
@@ -337,7 +337,7 @@ public class MatrixUtils {
         if (data.length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
-        return new ArrayFieldVector<T>(data[0].getField(), data, true);
+        return new ArrayFieldVector<>(data[0].getField(), data, true);
     }
 
     /**

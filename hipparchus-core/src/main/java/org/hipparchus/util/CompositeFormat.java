@@ -121,7 +121,7 @@ public class CompositeFormat {
         final int endIndex = startIndex + n;
         if (endIndex < source.length() &&
             source.substring(startIndex, endIndex).compareTo(sb.toString()) == 0) {
-            ret = Double.valueOf(value);
+            ret = value;
             pos.setIndex(endIndex);
         }
 
@@ -150,8 +150,8 @@ public class CompositeFormat {
             final double[] special = {
                 Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY
             };
-            for (int i = 0; i < special.length; ++i) {
-                number = parseNumber(source, special[i], pos);
+            for (double v : special) {
+                number = parseNumber(source, v, pos);
                 if (number != null) {
                     break;
                 }

@@ -85,8 +85,8 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
      * @param increment the amount by which the value should be incremented
      */
     public void incrementValue(T v, long increment) {
-        Long count = freqTable.getOrDefault(v, Long.valueOf(0));
-        freqTable.put(v, Long.valueOf(count.longValue() + increment));
+        Long count = freqTable.getOrDefault(v, 0L);
+        freqTable.put(v, count.longValue() + increment);
     }
 
     /** Clears the frequency table */
@@ -232,7 +232,7 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
         return freqTable.entrySet()
                         .stream()
                         .filter(entry -> entry.getValue() == mostPopular)
-                        .map(entry -> entry.getKey())
+                        .map(Map.Entry::getKey)
                         .collect(Collectors.toList());
     }
 
@@ -252,7 +252,7 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
         Iterator<? extends Map.Entry<? extends T, Long>> iter = other.entrySetIterator();
         while (iter.hasNext()) {
             final Map.Entry<? extends T, Long> entry = iter.next();
-            incrementValue(entry.getKey(), entry.getValue().longValue());
+            incrementValue(entry.getKey(), entry.getValue());
         }
     }
 
@@ -285,17 +285,15 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
         NumberFormat nf = NumberFormat.getPercentInstance();
         StringBuilder outBuffer = new StringBuilder(200); // this size is just a wild guess
         outBuffer.append("Value \tFreq. \tPct. \tCum Pct. \n");
-        Iterator<T> iter = freqTable.keySet().iterator();
-        while (iter.hasNext()) {
-            T value = iter.next();
+        for (T value : freqTable.keySet()) {
             outBuffer.append(value).
-                      append('\t').
-                      append(getCount(value)).
-                      append('\t').
-                      append(nf.format(getPct(value))).
-                      append('\t').
-                      append(nf.format(getCumPct(value))).
-                      append('\n');
+                    append('\t').
+                    append(getCount(value)).
+                    append('\t').
+                    append(nf.format(getPct(value))).
+                    append('\t').
+                    append(nf.format(getCumPct(value))).
+                    append('\n');
         }
         return outBuffer.toString();
     }

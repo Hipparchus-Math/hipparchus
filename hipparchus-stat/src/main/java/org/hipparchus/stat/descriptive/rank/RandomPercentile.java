@@ -289,9 +289,7 @@ public class RandomPercentile
         double max = Double.NEGATIVE_INFINITY;
         double bMin;
         double bMax;
-        Iterator<Buffer> bufferIterator = bufferMap.iterator();
-        while (bufferIterator.hasNext()) {
-            Buffer buffer = bufferIterator.next();
+        for (Buffer buffer : bufferMap) {
             bMin = buffer.min();
             if (bMin < min) {
                 min = bMin;
@@ -362,9 +360,7 @@ public class RandomPercentile
      */
     public double getRank(double value) {
         double rankSum = 0;
-        Iterator<Buffer> bufferIterator = bufferMap.iterator();
-        while (bufferIterator.hasNext()) {
-            Buffer buffer = bufferIterator.next();
+        for (Buffer buffer : bufferMap) {
             rankSum += buffer.rankOf(value) * FastMath.pow(2, buffer.level);
         }
         return rankSum;
@@ -751,9 +747,7 @@ public class RandomPercentile
             this.count = 0;
             this.randomGenerator = original.randomGenerator;
             this.registry = new HashMap<>();
-            Iterator<Buffer> iterator = original.iterator();
-            while (iterator.hasNext()) {
-                final Buffer current = iterator.next();
+            for (Buffer current : original) {
                 // Create and register a new buffer at the same level
                 final Buffer newCopy = create(current.getLevel());
                 // Consume the data
@@ -781,11 +775,7 @@ public class RandomPercentile
             }
             count++;
             Buffer buffer = new Buffer(bufferSize, level, randomGenerator);
-            List<Buffer> bufferList = registry.get(level);
-            if (bufferList == null) {
-                bufferList = new ArrayList<>();
-                registry.put(level, bufferList);
-            }
+            List<Buffer> bufferList = registry.computeIfAbsent(level, k -> new ArrayList<>());
             bufferList.add(buffer);
             if (level > maxLevel) {
                 maxLevel = level;
@@ -1004,9 +994,7 @@ public class RandomPercentile
         public void absorb(BufferMap other) {
             // Add all of other's buffers to the map - possibly exceeding cap
             boolean full = true;
-            Iterator<Buffer> otherIterator = other.iterator();
-            while (otherIterator.hasNext()) {
-                Buffer buffer = otherIterator.next();
+            for (Buffer buffer : other) {
                 if (buffer.hasCapacity()) {
                     full = false;
                 }
@@ -1176,9 +1164,8 @@ public class RandomPercentile
      */
     public double getAggregateRank(double value, Collection<RandomPercentile> aggregates) {
         double result = 0;
-        final Iterator<RandomPercentile> iterator = aggregates.iterator();
-        while (iterator.hasNext()) {
-            result += iterator.next().getRank(value);
+        for (RandomPercentile aggregate : aggregates) {
+            result += aggregate.getRank(value);
         }
         return result;
     }
@@ -1205,9 +1192,8 @@ public class RandomPercentile
      */
     public double getAggregateN(Collection<RandomPercentile> aggregates) {
         double result = 0;
-        final Iterator<RandomPercentile> iterator = aggregates.iterator();
-        while (iterator.hasNext()) {
-            result += iterator.next().getN();
+        for (RandomPercentile aggregate : aggregates) {
+            result += aggregate.getN();
         }
         return result;
     }

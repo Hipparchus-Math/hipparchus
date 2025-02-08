@@ -194,7 +194,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                     final EnumeratedRealDistribution edist =
                             (EnumeratedRealDistribution) dist;
                     EnumeratedDistributionSampler<Double> sampler =
-                            generator.new EnumeratedDistributionSampler<Double>(edist.getPmf());
+                            generator.new EnumeratedDistributionSampler<>(edist.getPmf());
                     return sampler.sample();
                 });
 
@@ -218,7 +218,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                                     final EnumeratedIntegerDistribution edist =
                                             (EnumeratedIntegerDistribution) dist;
                                     EnumeratedDistributionSampler<Integer> sampler =
-                                            generator.new EnumeratedDistributionSampler<Integer>(edist.getPmf());
+                                            generator.new EnumeratedDistributionSampler<>(edist.getPmf());
                                     return sampler.sample();
                                 });
     }
@@ -738,15 +738,15 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
         randomGenerator.nextBytes(randomBytes);
 
         // Convert each byte to 2 hex digits
-        for (int i = 0; i < randomBytes.length; i++) {
-            Integer c = Integer.valueOf(randomBytes[i]);
+        for (byte randomByte : randomBytes) {
+            Integer c = Integer.valueOf(randomByte);
 
             /*
              * Add 128 to byte value to make interval 0-255 before doing hex
              * conversion. This guarantees <= 2 hex digits from toHexString()
              * toHexString would otherwise add 2^32 to negative arguments.
              */
-            String hex = Integer.toHexString(c.intValue() + 128);
+            String hex = Integer.toHexString(c + 128);
 
             // Make sure we add 2 hex digits for each byte
             if (hex.length() == 1) {

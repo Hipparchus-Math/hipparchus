@@ -146,7 +146,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public List<FieldODEEventDetector<T>> getEventDetectors() {
-        return detectorBasedEventsStates.stream().map(es -> es.getEventDetector()).collect(Collectors.toList());
+        return detectorBasedEventsStates.stream().map(FieldDetectorBasedEventState::getEventDetector).collect(Collectors.toList());
     }
 
     /** {@inheritDoc} */
@@ -164,7 +164,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public List<FieldODEStepEndHandler<T>> getStepEndHandlers() {
-        return stepEndEventsStates.stream().map(es -> es.getHandler()).collect(Collectors.toList());
+        return stepEndEventsStates.stream().map(FieldStepEndEventState::getHandler).collect(Collectors.toList());
     }
 
     /** {@inheritDoc} */

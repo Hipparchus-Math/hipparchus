@@ -548,7 +548,7 @@ public final class CombinatoricsUtils {
             return builder.add(partition).build();
         }
 
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PartitionsIterator<T>(list),
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PartitionsIterator<>(list),
                                                                         Spliterator.DISTINCT | Spliterator.NONNULL |
                                                                         Spliterator.IMMUTABLE | Spliterator.ORDERED),
                                     false);
@@ -572,7 +572,7 @@ public final class CombinatoricsUtils {
             return Stream.of(list);
         }
 
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PermutationsIterator<T>(list),
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PermutationsIterator<>(list),
                                                                         Spliterator.DISTINCT | Spliterator.NONNULL |
                                                                         Spliterator.IMMUTABLE | Spliterator.ORDERED),
                                     false);

@@ -707,10 +707,10 @@ public class MathArrays {
      */
     public static void checkPositive(final double[] in)
         throws MathIllegalArgumentException {
-        for (int i = 0; i < in.length; i++) {
-            if (in[i] <= 0) {
+        for (double v : in) {
+            if (v <= 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
-                                                       in[i], 0);
+                        v, 0);
             }
         }
     }
@@ -738,9 +738,9 @@ public class MathArrays {
      */
     public static void checkNonNegative(final long[] in)
         throws MathIllegalArgumentException {
-        for (int i = 0; i < in.length; i++) {
-            if (in[i] < 0) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, in[i], 0);
+        for (long l : in) {
+            if (l < 0) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, l, 0);
             }
         }
     }
@@ -753,10 +753,10 @@ public class MathArrays {
      */
     public static void checkNonNegative(final long[][] in)
         throws MathIllegalArgumentException {
-        for (int i = 0; i < in.length; i ++) {
-            for (int j = 0; j < in[i].length; j++) {
-                if (in[i][j] < 0) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, in[i][j], 0);
+        for (long[] longs : in) {
+            for (int j = 0; j < longs.length; j++) {
+                if (longs[j] < 0) {
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, longs[j], 0);
                 }
             }
         }
@@ -834,13 +834,13 @@ public class MathArrays {
         double x3max = 0;
         double floatn = v.length;
         double agiant = rgiant / floatn;
-        for (int i = 0; i < v.length; i++) {
-            double xabs = FastMath.abs(v[i]);
+        for (double value : v) {
+            double xabs = FastMath.abs(value);
             if (xabs < rdwarf || xabs > agiant) {
                 if (xabs > rdwarf) {
                     if (xabs > x1max) {
                         double r = x1max / xabs;
-                        s1= 1 + s1 * r * r;
+                        s1 = 1 + s1 * r * r;
                         x1max = xabs;
                     } else {
                         double r = xabs / x1max;
@@ -849,7 +849,7 @@ public class MathArrays {
                 } else {
                     if (xabs > x3max) {
                         double r = x3max / xabs;
-                        s3= 1 + s3 * r * r;
+                        s3 = 1 + s3 * r * r;
                         x3max = xabs;
                     } else {
                         if (xabs != 0) {
@@ -957,14 +957,13 @@ public class MathArrays {
         final int yListLen = yList.length;
         final int len = x.length;
 
-        for (int j = 0; j < yListLen; j++) {
-            final double[] y = yList[j];
+        for (final double[] y : yList) {
             if (y == null) {
                 throw new NullArgumentException();
             }
             if (y.length != len) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       y.length, len);
+                        y.length, len);
             }
         }
 
@@ -995,7 +994,7 @@ public class MathArrays {
             };
 
         // Sort.
-        Collections.sort(list, comp);
+        list.sort(comp);
 
         // Modify the original array so that its elements are in
         // the prescribed order.
@@ -1009,9 +1008,8 @@ public class MathArrays {
 
         // In each of the associated arrays, move the
         // elements to their new location.
-        for (int j = 0; j < yListLen; j++) {
+        for (final double[] yInPlace : yList) {
             // Input array will be modified in place.
-            final double[] yInPlace = yList[j];
             final double[] yOrig = yInPlace.clone();
 
             for (int i = 0; i < len; i++) {
@@ -1952,16 +1950,16 @@ public class MathArrays {
         MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
 
         if (begin < 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, begin);
         }
 
         if (length < 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, length);
         }
 
         if (begin + length > values.length) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
-                    Integer.valueOf(begin + length), Integer.valueOf(values.length), true);
+                    begin + length, values.length, true);
         }
 
         if (length == 0 && !allowEmpty) {
@@ -2048,13 +2046,13 @@ public class MathArrays {
         for (int i = begin; i < begin + length; i++) {
             final double weight = weights[i];
             if (Double.isNaN(weight)) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_ELEMENT_AT_INDEX, Integer.valueOf(i));
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_ELEMENT_AT_INDEX, i);
             }
             if (Double.isInfinite(weight)) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_ARRAY_ELEMENT, Double.valueOf(weight), Integer.valueOf(i));
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_ARRAY_ELEMENT, weight, i);
             }
             if (weight < 0) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_ELEMENT_AT_INDEX, Integer.valueOf(i), Double.valueOf(weight));
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_ELEMENT_AT_INDEX, i, weight);
             }
             if (!containsPositiveWeight && weight > 0.0) {
                 containsPositiveWeight = true;
@@ -2085,9 +2083,9 @@ public class MathArrays {
         }
         int offset = 0;
         final double[] combined = new double[combinedLength];
-        for (int i = 0; i < x.length; i++) {
-            final int curLength = x[i].length;
-            System.arraycopy(x[i], 0, combined, offset, curLength);
+        for (double[] doubles : x) {
+            final int curLength = doubles.length;
+            System.arraycopy(doubles, 0, combined, offset, curLength);
             offset += curLength;
         }
         return combined;
@@ -2108,8 +2106,8 @@ public class MathArrays {
      */
     public static double[] unique(double[] data) {
         TreeSet<Double> values = new TreeSet<>();
-        for (int i = 0; i < data.length; i++) {
-            values.add(data[i]);
+        for (double datum : data) {
+            values.add(datum);
         }
         final int count = values.size();
         final double[] out = new double[count];

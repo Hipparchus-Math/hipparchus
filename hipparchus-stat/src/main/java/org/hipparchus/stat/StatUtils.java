@@ -748,8 +748,8 @@ public final class StatUtils {
         DescriptiveStatistics stats = new DescriptiveStatistics();
 
         // Add the data from the series to stats
-        for (int i = 0; i < sample.length; i++) {
-            stats.addValue(sample[i]);
+        for (double v : sample) {
+            stats.addValue(v);
         }
 
         // Compute mean and standard deviation
@@ -817,11 +817,11 @@ public final class StatUtils {
         MathUtils.checkNotNull(sample, LocalizedCoreFormats.INPUT_ARRAY);
 
         if (begin < 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, begin);
         }
 
         if (length < 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, length);
         }
 
         return getMode(sample, begin, length);

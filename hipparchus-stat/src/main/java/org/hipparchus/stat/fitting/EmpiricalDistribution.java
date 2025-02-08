@@ -382,18 +382,18 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         @Override
         public void computeStats() {
             sampleStats = new StreamingStatistics();
-            for (int i = 0; i < inputArray.length; i++) {
-                sampleStats.addValue(inputArray[i]);
+            for (double v : inputArray) {
+                sampleStats.addValue(v);
             }
         }
 
         /** {@inheritDoc} */
         @Override
         public void computeBinStats() {
-            for (int i = 0; i < inputArray.length; i++) {
+            for (double v : inputArray) {
                 StreamingStatistics stats =
-                    binStats.get(findBin(inputArray[i]));
-                stats.addValue(inputArray[i]);
+                        binStats.get(findBin(v));
+                stats.addValue(v);
             }
         }
 

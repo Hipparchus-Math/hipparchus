@@ -241,7 +241,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
                 } else {
                     newCenter = centroidOf(cluster.getPoints(), cluster.getCenter().getPoint().length);
                 }
-                newClusters.add(new CentroidCluster<T>(newCenter));
+                newClusters.add(new CentroidCluster<>(newCenter));
             }
             int changes = assignPointsToClusters(newClusters, points, assignments);
             clusters = newClusters;
@@ -292,7 +292,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // Convert to list for indexed access. Make it unmodifiable, since removal of items
         // would screw up the logic of this method.
-        final List<T> pointList = Collections.unmodifiableList(new ArrayList<T> (points));
+        final List<T> pointList = Collections.unmodifiableList(new ArrayList<>(points));
 
         // The number of points in the list.
         final int numPoints = pointList.size();
@@ -309,7 +309,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         final T firstPoint = pointList.get(firstPointIndex);
 
-        resultSet.add(new CentroidCluster<T>(firstPoint));
+        resultSet.add(new CentroidCluster<>(firstPoint));
 
         // Must mark it as taken
         taken[firstPointIndex] = true;
@@ -376,7 +376,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
                 final T p = pointList.get(nextPointIndex);
 
-                resultSet.add(new CentroidCluster<T> (p));
+                resultSet.add(new CentroidCluster<>(p));
 
                 // Mark it as taken.
                 taken[nextPointIndex] = true;

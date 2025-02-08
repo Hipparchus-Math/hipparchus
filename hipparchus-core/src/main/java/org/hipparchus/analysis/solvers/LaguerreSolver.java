@@ -158,9 +158,9 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
             double r = Double.NaN;
             // Solve all roots and select the one we are seeking.
             Complex[] root = complexSolver.solveAll(c, initial);
-            for (int i = 0; i < root.length; i++) {
-                if (complexSolver.isRoot(lo, hi, root[i])) {
-                    r = root[i].getReal();
+            for (Complex complex : root) {
+                if (complexSolver.isRoot(lo, hi, complex)) {
+                    r = complex.getReal();
                     break;
                 }
             }

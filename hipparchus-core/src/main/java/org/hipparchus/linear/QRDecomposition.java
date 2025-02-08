@@ -461,8 +461,7 @@ public class QRDecomposition {
          */
         private boolean checkSingular(double[] diag, double min, boolean raise) {
             final int len = diag.length;
-            for (int i = 0; i < len; i++) {
-                final double d = diag[i];
+            for (final double d : diag) {
                 if (FastMath.abs(d) <= min) {
                     if (raise) {
                         throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);

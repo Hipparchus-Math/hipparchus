@@ -93,7 +93,7 @@ public class GeometryExample {
         RandomGenerator random = new MersenneTwister();
 
         // create the cloud container
-        List<Vector2D> points = new ArrayList<Vector2D>(size);
+        List<Vector2D> points = new ArrayList<>(size);
         // fill the cloud with a random distribution of points
         for (int i = 0; i < size; i++) {
             points.add(new Vector2D(FastMath.round(random.nextDouble() * 400 + 100),
@@ -108,7 +108,7 @@ public class GeometryExample {
      * @return vectors describing the sprite
      */
     public static List<Vector2D> createCircle(int samples) {
-        List<Vector2D> points = new ArrayList<Vector2D>();
+        List<Vector2D> points = new ArrayList<>();
         final Vector2D center = new Vector2D(300, 300);
         double range = 2.0 * FastMath.PI;
         double step = range / (samples + 1);
@@ -124,7 +124,7 @@ public class GeometryExample {
      * @return vectors describing the sprite
      */
     public static List<Vector2D> createCross() {
-        List<Vector2D> points = new ArrayList<Vector2D>();
+        List<Vector2D> points = new ArrayList<>();
 
         for (int i = 100; i < 500; i += 10) {
             points.add(new Vector2D(300, i));
@@ -220,44 +220,35 @@ public class GeometryExample {
             JButton random = new JButton("Randomize");
             controlPanel.add(random);
 
-            random.addActionListener(new ActionListener() {
+            //                @Override
+            random.addActionListener(e -> {
+                                canvas.getLayer().removeAllChildren();
 
-//                @Override
-                public void actionPerformed(ActionEvent e) {
-                    canvas.getLayer().removeAllChildren();
-
-                    points = createRandomPoints(1000);
-                    paintConvexHull();
-                }
-            });
+                                points = createRandomPoints(1000);
+                                paintConvexHull();
+                            });
 
             JButton circle = new JButton("Circle");
             controlPanel.add(circle);
 
-            circle.addActionListener(new ActionListener() {
+            //                @Override
+            circle.addActionListener(e -> {
+                                canvas.getLayer().removeAllChildren();
 
-//                @Override
-                public void actionPerformed(ActionEvent e) {
-                    canvas.getLayer().removeAllChildren();
-
-                    points = createCircle(100);
-                    paintConvexHull();
-                }
-            });
+                                points = createCircle(100);
+                                paintConvexHull();
+                            });
 
             JButton cross = new JButton("Cross");
             controlPanel.add(cross);
 
-            cross.addActionListener(new ActionListener() {
+            //                @Override
+            cross.addActionListener(e -> {
+                                canvas.getLayer().removeAllChildren();
 
-//                @Override
-                public void actionPerformed(ActionEvent e) {
-                    canvas.getLayer().removeAllChildren();
-
-                    points = createCross();
-                    paintConvexHull();
-                }
-            });
+                                points = createCross();
+                                paintConvexHull();
+                            });
 
             JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, container,
                                                   controlPanel);
@@ -312,7 +303,7 @@ public class GeometryExample {
             canvas.getLayer().addChild(hullNode);
 
             Encloser<Euclidean2D, Vector2D> encloser =
-                    new WelzlEncloser<Euclidean2D, Vector2D>(1e-10, new DiskGenerator());
+                    new WelzlEncloser<>(1e-10, new DiskGenerator());
             EnclosingBall<Euclidean2D, Vector2D> ball = encloser.enclose(points);
 
             final double radius = ball.getRadius();

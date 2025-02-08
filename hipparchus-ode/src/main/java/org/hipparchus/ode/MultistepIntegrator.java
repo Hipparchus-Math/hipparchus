@@ -325,9 +325,9 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
 
         final double[][] nData = nordsieck.getDataRef();
         double power = ratio;
-        for (int i = 0; i < nData.length; ++i) {
+        for (double[] nDatum : nData) {
             power = power * ratio;
-            final double[] nDataI = nData[i];
+            final double[] nDataI = nDatum;
             for (int j = 0; j < nDataI.length; ++j) {
                 nDataI[j] = nDataI[j] * power;
             }

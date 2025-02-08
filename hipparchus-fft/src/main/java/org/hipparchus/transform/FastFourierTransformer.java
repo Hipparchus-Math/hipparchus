@@ -222,7 +222,7 @@ public class FastFourierTransformer implements Serializable {
         final int n = dataR.length;
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
             throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
-                                                   Integer.valueOf(n));
+                    n);
         }
 
         if (n == 1) {
