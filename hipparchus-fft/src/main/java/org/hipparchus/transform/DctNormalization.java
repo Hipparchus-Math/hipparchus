@@ -66,5 +66,5 @@ public enum DctNormalization {
      * </ul>
      * which makes the transform orthogonal. N is the size of the data sample.
      */
-    ORTHOGONAL_DCT_I;
+    ORTHOGONAL_DCT_I
 }

@@ -71,6 +71,6 @@ public enum AllowedSolution {
      * acceptable as solutions for root-finding. So, if a function f(x) has
      * a root at x = x0, then the root-finding result s must satisfy f(s) &gt;= 0.
      */
-    ABOVE_SIDE;
+    ABOVE_SIDE
 
 }

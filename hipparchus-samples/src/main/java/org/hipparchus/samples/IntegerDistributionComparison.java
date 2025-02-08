@@ -234,7 +234,7 @@ public class IntegerDistributionComparison {
             c.gridy = 0;
             c.insets = new Insets(2, 2, 2, 2);
 
-            JComponent comp = null;
+            JComponent comp;
 
             comp = createComponent("Binomial", 0, 40,
                                    new String[] { "p=0.5,n=20", "p=0.7,n=20", "p=0.5,n=40" },

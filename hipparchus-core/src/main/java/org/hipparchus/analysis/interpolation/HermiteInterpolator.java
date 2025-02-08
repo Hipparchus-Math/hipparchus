@@ -90,7 +90,7 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * than 20, which prevents computation of a factorial
      */
     public void addSamplePoint(final double x, final double[] ... value)
-        throws MathIllegalArgumentException, MathRuntimeException {
+        throws MathRuntimeException {
 
         for (int i = 0; i < value.length; ++i) {
 

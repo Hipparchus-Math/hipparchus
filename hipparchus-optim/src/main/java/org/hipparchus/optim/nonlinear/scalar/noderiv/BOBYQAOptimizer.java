@@ -1431,7 +1431,7 @@ public class BOBYQAOptimizer
 
         final double bigstp = adelt + adelt;
         int iflag = 0;
-        double cauchy = Double.NaN;
+        double cauchy;
         double csave = ZERO;
         while (true) {
             double wfixsq = ZERO;

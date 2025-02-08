@@ -67,6 +67,6 @@ public enum Action {
      * the {@link ODEEventDetector#g(org.hipparchus.ode.ODEStateAndDerivative)}
      * function of another event handler.
      */
-    RESET_EVENTS;
+    RESET_EVENTS
 
 }

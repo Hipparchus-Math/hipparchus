@@ -213,7 +213,7 @@ public class LowDiscrepancyGeneratorComparison {
                 c.gridx = 1;
 
                 for (Pair<String, RandomVectorGenerator> pair : generators) {
-                    List<Vector2D> points = null;
+                    List<Vector2D> points;
                     int samples = datasets[type];
                     switch (type) {
                         case 0:

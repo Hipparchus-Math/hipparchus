@@ -1425,7 +1425,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public double cosine(RealVector w)
-                throws MathIllegalArgumentException, MathRuntimeException {
+                throws MathRuntimeException {
                 return v.cosine(w);
             }
 

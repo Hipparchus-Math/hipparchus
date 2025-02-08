@@ -1594,7 +1594,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      * @return the IEEE flag if an exception occurred
      */
     protected int round(int n) {
-        boolean inc = false;
+        boolean inc;
         switch (field.getRoundingMode()) {
             case ROUND_DOWN:
                 inc = false;
@@ -2032,9 +2032,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
 
             /* move the remainder into the dividend while left shifting */
             dividend[0] = 0;
-            for (int i = 0; i < mant.length; i++) {
-                dividend[i + 1] = remainder[i];
-            }
+            System.arraycopy(remainder, 0, dividend, 1, mant.length);
         }
 
         /* Find the most sig digit */

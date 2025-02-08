@@ -55,7 +55,7 @@ public class DfpField implements Field<Dfp> {
         ROUND_CEIL,
 
         /** Rounds towards negative infinity. */
-        ROUND_FLOOR;
+        ROUND_FLOOR
 
     }
 

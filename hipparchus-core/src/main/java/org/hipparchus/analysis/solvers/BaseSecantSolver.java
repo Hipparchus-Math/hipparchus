@@ -265,7 +265,7 @@ public abstract class BaseSecantSolver
         ILLINOIS,
 
         /** The {@link PegasusSolver <em>Pegasus</em>} method. */
-        PEGASUS;
+        PEGASUS
 
     }
 }

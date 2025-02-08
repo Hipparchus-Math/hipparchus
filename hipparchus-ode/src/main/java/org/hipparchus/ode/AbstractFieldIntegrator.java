@@ -320,7 +320,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
         }
 
         // set end of step
-        stepEndEventsStates.stream().forEach(s -> s.setStepEnd(currentState.getTime()));
+        stepEndEventsStates.forEach(s -> s.setStepEnd(currentState.getTime()));
 
         // search for next events that may occur during the step
         final int orderingSign = interpolator.isForward() ? +1 : -1;

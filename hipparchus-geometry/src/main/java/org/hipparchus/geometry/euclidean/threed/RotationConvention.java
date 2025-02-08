@@ -78,6 +78,6 @@ public enum RotationConvention {
      * rotation angle. This is how things were done up to version 3.5.
      * </p>
      */
-    FRAME_TRANSFORM;
+    FRAME_TRANSFORM
 
 }

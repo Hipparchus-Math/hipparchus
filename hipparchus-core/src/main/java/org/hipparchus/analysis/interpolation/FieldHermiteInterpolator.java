@@ -91,7 +91,7 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
      */
     @SafeVarargs
     public final void addSamplePoint(final T x, final T[] ... value)
-        throws MathIllegalArgumentException, MathRuntimeException,
+        throws MathRuntimeException,
                NullArgumentException {
 
         MathUtils.checkNotNull(x);

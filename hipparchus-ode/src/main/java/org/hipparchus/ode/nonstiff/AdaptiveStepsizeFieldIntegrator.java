@@ -27,7 +27,6 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
-import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -195,14 +194,12 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
      * @param order order of the method
      * @param scale scaling vector for the state vector (can be shorter than state vector)
      * @param state0 state at integration start time
-     * @param mapper mapper for all the equations
      * @return first integration step
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public double initializeStep(final boolean forward, final int order, final T[] scale,
-                                 final FieldODEStateAndDerivative<T> state0,
-                                 final FieldEquationsMapper<T> mapper)
+                                 final FieldODEStateAndDerivative<T> state0)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (stepsizeHelper.getInitialStep() > 0) {

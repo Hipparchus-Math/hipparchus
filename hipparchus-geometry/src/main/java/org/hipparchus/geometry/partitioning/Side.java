@@ -36,6 +36,6 @@ public enum Side {
     BOTH,
 
     /** Code for the hyperplane itself. */
-    HYPER;
+    HYPER
 
 }
