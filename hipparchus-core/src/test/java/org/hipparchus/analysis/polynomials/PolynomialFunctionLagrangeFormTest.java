@@ -24,6 +24,7 @@ package org.hipparchus.analysis.polynomials;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -36,6 +37,43 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  */
 final class PolynomialFunctionLagrangeFormTest {
+
+    @Test
+    void testGetter() {
+        // GIVEN
+        double[] x = { 1., 2. };
+        double[] y = { -1., 4. };
+        final PolynomialFunctionLagrangeForm lagrangeForm = new PolynomialFunctionLagrangeForm(x, y);
+        // WHEN & THEN
+        assertArrayEquals(x, lagrangeForm.getInterpolatingPoints());
+        assertArrayEquals(y, lagrangeForm.getInterpolatingValues());
+        assertArrayEquals(new double[] { -6., 5. }, lagrangeForm.getCoefficients());
+    }
+
+    @Test
+    void testGetCoefficients() {
+        // GIVEN
+        double[] x = { 1., 2. };
+        double[] y = { -1., 4. };
+        final PolynomialFunctionLagrangeForm lagrangeForm = new PolynomialFunctionLagrangeForm(x, y);
+        // WHEN
+        final double[] coefficients = lagrangeForm.getCoefficients();
+        // WHEN & THEN
+        assertArrayEquals(lagrangeForm.getCoefficients(), coefficients);
+    }
+
+    @Test
+    void testEvaluate() {
+        // GIVEN
+        double[] x = { 1., 2. };
+        double[] y = { -1., 4. };
+        final double point = 3.;
+        // WHEN
+        final double value = PolynomialFunctionLagrangeForm.evaluate(x, y, point);
+        // THEN
+        final PolynomialFunctionLagrangeForm lagrangeForm = new PolynomialFunctionLagrangeForm(x, y);
+        assertEquals(lagrangeForm.value(point), value);
+    }
 
     /**
      * Test of polynomial for the linear function.

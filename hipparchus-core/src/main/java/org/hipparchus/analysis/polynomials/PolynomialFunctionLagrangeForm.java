@@ -211,16 +211,16 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
         final int n = x.length;
         final double[] c = new double[n];
         final double[] d = new double[n];
-        double min_dist = Double.POSITIVE_INFINITY;
+        double minDist = Double.POSITIVE_INFINITY;
         for (int i = 0; i < n; i++) {
             // initialize the difference arrays
             c[i] = y[i];
             d[i] = y[i];
             // find out the abscissa closest to z
             final double dist = FastMath.abs(z - x[i]);
-            if (dist < min_dist) {
+            if (dist < minDist) {
                 nearest = i;
-                min_dist = dist;
+                minDist = dist;
             }
         }
 
