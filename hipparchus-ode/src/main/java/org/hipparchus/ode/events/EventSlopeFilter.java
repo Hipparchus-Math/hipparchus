@@ -141,6 +141,7 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
     /**  {@inheritDoc} */
     @Override
     public void init(final ODEStateAndDerivative initialState, double finalTime) {
+        super.init(initialState, finalTime);
 
         // delegate to raw handler
         rawDetector.init(initialState, finalTime);
@@ -155,12 +156,25 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
 
     /**  {@inheritDoc} */
     @Override
+    public void reset(final ODEStateAndDerivative intermediateState, final double finalTime) {
+        super.reset(intermediateState, finalTime);
+        rawDetector.reset(intermediateState, finalTime);
+    }
+
+    /**  {@inheritDoc} */
+    @Override
+    public boolean isForward() {
+        return forward;
+    }
+
+    /**  {@inheritDoc} */
+    @Override
     public double g(final ODEStateAndDerivative state) {
 
         final double rawG = rawDetector.g(state);
 
         // search which transformer should be applied to g
-        if (forward) {
+        if (isForward()) {
             final int last = transformers.length - 1;
             if (extremeT < state.getTime()) {
                 // we are at the forward end of the history

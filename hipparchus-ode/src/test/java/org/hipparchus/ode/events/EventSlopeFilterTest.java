@@ -21,69 +21,102 @@
  */
 package org.hipparchus.ode.events;
 
-import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.Field;
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
-import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FieldODEIntegrator;
-import org.hipparchus.ode.FieldODEState;
-import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
-import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
+
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
-import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EventSlopeFilterTest {
+
+    @Test
+    void testInit() {
+        // GIVEN
+        final TestDetector detector = new TestDetector();
+        final EventSlopeFilter<?> eventSlopeFilter = new EventSlopeFilter<>(detector,
+                FilterType.TRIGGER_ONLY_DECREASING_EVENTS);
+        // WHEN
+        eventSlopeFilter.init(Mockito.mock(ODEStateAndDerivative.class), 1);
+        // THEN
+        assertTrue(detector.initialized);
+        assertFalse(detector.resetted);
+    }
+
+    @ParameterizedTest
+    @EnumSource(FilterType.class)
+    void testReset(final FilterType type) {
+        // GIVEN
+        final TestDetector detector = new TestDetector();
+        final EventSlopeFilter<?> eventSlopeFilter = new EventSlopeFilter<>(detector, type);
+        // WHEN
+        eventSlopeFilter.reset(Mockito.mock(ODEStateAndDerivative.class), 1);
+        // THEN
+        assertTrue(detector.resetted);
+        assertFalse(detector.initialized);
+    }
+
+    private static class TestDetector extends AbstractODEDetector<TestDetector> {
+        boolean initialized = false;
+        boolean resetted = false;
+
+        protected TestDetector() {
+            super((state, isForward) -> 0, 1, new BracketingNthOrderBrentSolver(), (s, e, d) -> Action.CONTINUE);
+        }
+
+        @Override
+        public void init(ODEStateAndDerivative s0, double t) {
+            super.init(s0, t);
+            initialized = true;
+        }
+
+        @Override
+        public void reset(ODEStateAndDerivative intermediateState, double finalTime) {
+            super.reset(intermediateState, finalTime);
+            resetted = true;
+        }
+
+        @Override
+        protected TestDetector create(AdaptableInterval newMaxCheck, int newmaxIter, BracketedUnivariateSolver<UnivariateFunction> newSolver, ODEEventHandler newHandler) {
+            return null;
+        }
+
+        @Override
+        public double g(ODEStateAndDerivative state) {
+            return 1;
+        }
+    }
 
     @Test
     void testHistoryIncreasingForward() {
 
         // start point: g > 0
         testHistory(FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                    0.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, -1);
+                0.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, -1);
 
         // start point: g = 0
         testHistory(FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                    0, 30.5 * FastMath.PI, FastMath.PI, -1);
+                0, 30.5 * FastMath.PI, FastMath.PI, -1);
 
         // start point: g < 0
         testHistory(FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                    1.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, +1);
-
-    }
-
-    @Test
-    void testHistoryIncreasingForwardField() {
-
-        // start point: g > 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                         0.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, -1);
-
-        // start point: g = 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                         0, 30.5 * FastMath.PI, FastMath.PI, -1);
-
-        // start point: g < 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                         1.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, +1);
+                1.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, +1);
 
     }
 
@@ -105,23 +138,6 @@ class EventSlopeFilterTest {
     }
 
     @Test
-    void testHistoryIncreasingBackwardField() {
-
-        // start point: g > 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                         0.5 * FastMath.PI, -30.5 * FastMath.PI, FastMath.PI, -1);
-
-        // start point: g = 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                         0, -30.5 * FastMath.PI, FastMath.PI, +1);
-
-        // start point: g < 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
-                         1.5 * FastMath.PI, -30.5 * FastMath.PI, FastMath.PI, -1);
-
-    }
-
-    @Test
     void testHistoryDecreasingForward() {
 
         // start point: g > 0
@@ -139,23 +155,6 @@ class EventSlopeFilterTest {
     }
 
     @Test
-    void testHistoryDecreasingForwardField() {
-
-        // start point: g > 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
-                         0.5 * FastMath.PI, 30.5 * FastMath.PI, 0, +1);
-
-        // start point: g = 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
-                         0, 30.5 * FastMath.PI, 0, +1);
-
-        // start point: g < 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
-                         1.5 * FastMath.PI, 30.5 * FastMath.PI, 0, +1);
-
-    }
-
-    @Test
     void testHistoryDecreasingBackward() {
 
         // start point: g > 0
@@ -169,23 +168,6 @@ class EventSlopeFilterTest {
         // start point: g < 0
         testHistory(FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
                     1.5 * FastMath.PI, -30.5 * FastMath.PI, 0, +1);
-
-    }
-
-    @Test
-    void testHistoryDecreasingBackwardField() {
-
-        // start point: g > 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
-                         0.5 * FastMath.PI, -30.5 * FastMath.PI, 0, -1);
-
-        // start point: g = 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
-                         0, -30.5 * FastMath.PI, 0, -1);
-
-        // start point: g < 0
-        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
-                         1.5 * FastMath.PI, -30.5 * FastMath.PI, 0, +1);
 
     }
 
@@ -224,46 +206,6 @@ class EventSlopeFilterTest {
 
     }
 
-    private <T extends CalculusFieldElement<T>> void testHistoryField(Field<T> field, FilterType type, double t0, double t1, double refSwitch, double signEven) {
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(Double.POSITIVE_INFINITY,
-                                                        field.getZero().newInstance(1.0e-10), 1000, false, true);
-        FieldEventSlopeFilter<FieldEvent<T>, T> eventFilter = new FieldEventSlopeFilter<>(field, onlyIncreasing, type);
-        eventFilter.init(buildStateAndDerivative(field, t0), field.getZero().add(t1));
-
-        // first pass to set up switches history for a long period
-        double h = FastMath.copySign(0.05, t1 - t0);
-        double n = (int) FastMath.floor((t1 - t0) / h);
-        for (int i = 0; i < n; ++i) {
-            double t = t0 + i * h;
-            eventFilter.g(buildStateAndDerivative(field, t));
-        }
-
-        // verify old events are preserved, even if randomly accessed
-        RandomGenerator rng = new Well19937a(0xb0e7401265af8cd3l);
-        for (int i = 0; i < 5000; i++) {
-            double t = t0 + (t1 - t0) * rng.nextDouble();
-            double g = eventFilter.g(buildStateAndDerivative(field, t)).getReal();
-            int turn = (int) FastMath.floor((t - refSwitch) / (2 * FastMath.PI));
-            if (turn % 2 == 0) {
-                assertEquals( signEven * FastMath.sin(t), g, 1.0e-10);
-            } else {
-                assertEquals(-signEven * FastMath.sin(t), g, 1.0e-10);
-            }
-        }
-
-    }
-
-    private <T extends CalculusFieldElement<T>> FieldODEStateAndDerivative<T> buildStateAndDerivative(Field<T> field, double t0) {
-        T t0F      = field.getZero().add(t0);
-        T[] y0F    = MathArrays.buildArray(field, 2);
-        y0F[0]     = FastMath.sin(t0F);
-        y0F[1]     = FastMath.cos(t0F);
-        T[] y0DotF = MathArrays.buildArray(field, 2);
-        y0DotF[0]  = FastMath.cos(t0F);
-        y0DotF[1]  = FastMath.sin(t0F).negate();
-        return new FieldODEStateAndDerivative<>(t0F, y0F, y0DotF);
-    }
-
     @Test
     void testIncreasingOnly()
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -285,33 +227,6 @@ class EventSlopeFilterTest {
     }
 
     @Test
-    void testIncreasingOnlyField() {
-        doTestIncreasingOnlyField(Binary64Field.getInstance());
-    }
-
-    private <T extends CalculusFieldElement<T>> void doTestIncreasingOnlyField(Field<T> field) {
-        FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, true);
-        integrator.addEventDetector(allEvents);
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, false, true);
-        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyIncreasing,
-                                                                FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
-        T t0   = field.getZero().add(0.5 * FastMath.PI);
-        T tEnd = field.getZero().add(5.5 * FastMath.PI);
-        T[] y  = MathArrays.buildArray(field, 2);
-        y[0]   = field.getZero();
-        y[1]   = field.getOne();
-        assertEquals(tEnd.getReal(),
-                            integrator.integrate(new FieldExpandableODE<>(new FieldSineCosine<T>()),
-                                                 new FieldODEState<>(t0, y), tEnd).getTime().getReal(),
-                            1.0e-7);
-
-        assertEquals(5, allEvents.getEventCount());
-        assertEquals(2, onlyIncreasing.getEventCount());
-
-    }
-
-    @Test
     void testDecreasingOnly()
         throws MathIllegalArgumentException, MathIllegalStateException {
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
@@ -324,33 +239,6 @@ class EventSlopeFilterTest {
         double[] y = { 0.0, 1.0 };
         assertEquals(tEnd,
                             integrator.integrate(new SineCosine(), new ODEState(t0, y), tEnd).getTime(),
-                            1.0e-7);
-
-        assertEquals(5, allEvents.getEventCount());
-        assertEquals(3, onlyDecreasing.getEventCount());
-
-    }
-
-    @Test
-    void testDecreasingOnlyField() {
-        doTestDecreasingOnlyField(Binary64Field.getInstance());
-    }
-
-    private <T extends CalculusFieldElement<T>> void doTestDecreasingOnlyField(Field<T> field) {
-        FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, true);
-        integrator.addEventDetector(allEvents);
-        FieldEvent<T> onlyDecreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, false);
-        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyDecreasing,
-                                                                FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
-        T t0   = field.getZero().add(0.5 * FastMath.PI);
-        T tEnd = field.getZero().add(5.5 * FastMath.PI);
-        T[] y  = MathArrays.buildArray(field, 2);
-        y[0]   = field.getZero();
-        y[1]   = field.getOne();
-        assertEquals(tEnd.getReal(),
-                            integrator.integrate(new FieldExpandableODE<>(new FieldSineCosine<T>()),
-                                                 new FieldODEState<>(t0, y), tEnd).getTime().getReal(),
                             1.0e-7);
 
         assertEquals(5, allEvents.getEventCount());
@@ -381,38 +269,6 @@ class EventSlopeFilterTest {
 
     }
 
-    @Test
-    void testTwoOppositeFiltersField() {
-        doestTwoOppositeFiltersField(Binary64Field.getInstance());
-    }
-
-    private <T extends CalculusFieldElement<T>> void doestTwoOppositeFiltersField(Field<T> field)
-        throws MathIllegalArgumentException, MathIllegalStateException {
-        FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, true);
-        integrator.addEventDetector(allEvents);
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, false, true);
-        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyIncreasing,
-                                                                FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
-        FieldEvent<T> onlyDecreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, false);
-        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyDecreasing,
-                                                                FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
-        T t0   = field.getZero().add(0.5 * FastMath.PI);
-        T tEnd = field.getZero().add(5.5 * FastMath.PI);
-        T[] y  = MathArrays.buildArray(field, 2);
-        y[0]   = field.getZero();
-        y[1]   = field.getOne();
-        assertEquals(tEnd.getReal(),
-                            integrator.integrate(new FieldExpandableODE<>(new FieldSineCosine<T>()),
-                                                 new FieldODEState<>(t0, y), tEnd).getTime().getReal(),
-                            1.0e-7);
-
-        assertEquals(5, allEvents.getEventCount());
-        assertEquals(2, onlyIncreasing.getEventCount());
-        assertEquals(3, onlyDecreasing.getEventCount());
-
-    }
-
     private static class SineCosine implements OrdinaryDifferentialEquation {
         public int getDimension() {
             return 2;
@@ -420,19 +276,6 @@ class EventSlopeFilterTest {
 
         public double[] computeDerivatives(double t, double[] y) {
             return new double[] { y[1], -y[0] };
-        }
-    }
-
-    private static class FieldSineCosine<T extends CalculusFieldElement<T>> implements FieldOrdinaryDifferentialEquation<T> {
-        public int getDimension() {
-            return 2;
-        }
-
-        public T[] computeDerivatives(T t, T[] y) {
-            final T[] yDot = MathArrays.buildArray(t.getField(), getDimension());
-            yDot[0] = y[1];
-            yDot[1] = y[0].negate();
-            return yDot;
         }
     }
 
@@ -471,6 +314,7 @@ class EventSlopeFilterTest {
             return eventCount;
         }
 
+        @Override
         public void init(ODEStateAndDerivative s0, double t) {
             eventCount = 0;
         }
@@ -493,63 +337,4 @@ class EventSlopeFilterTest {
 
     }
 
-    /** State events for this unit test. */
-    protected static class FieldEvent<T extends CalculusFieldElement<T>> implements FieldODEEventDetector<T> {
-
-        private final FieldAdaptableInterval<T>             maxCheck;
-        private final int                                   maxIter;
-        private final BracketedRealFieldUnivariateSolver<T> solver;
-        private final boolean                               expectDecreasing;
-        private final boolean                               expectIncreasing;
-        private int                                         eventCount;
-
-        public FieldEvent(final double maxCheck, final T threshold, final int maxIter,
-                          boolean expectDecreasing, boolean expectIncreasing) {
-            this.maxCheck         = (s, isForward) -> maxCheck;
-            this.maxIter          = maxIter;
-            this.solver           = new FieldBracketingNthOrderBrentSolver<>(threshold.getField().getZero(),
-                                                                            threshold,
-                                                                            threshold.getField().getZero(),
-                                                                            5);
-            this.expectDecreasing = expectDecreasing;
-            this.expectIncreasing = expectIncreasing;
-        }
-
-        public FieldAdaptableInterval<T> getMaxCheckInterval() {
-            return maxCheck;
-        }
-
-        public int getMaxIterationCount() {
-            return maxIter;
-        }
-
-        public BracketedRealFieldUnivariateSolver<T> getSolver() {
-            return solver;
-        }
-
-        public int getEventCount() {
-            return eventCount;
-        }
-
-        public void init(FieldODEStateAndDerivative<T> s0, T t) {
-            eventCount = 0;
-        }
-
-        public T g(FieldODEStateAndDerivative<T> s) {
-            return s.getPrimaryState()[0];
-        }
-
-        public FieldODEEventHandler<T> getHandler() {
-            return (FieldODEStateAndDerivative<T> s, FieldODEEventDetector<T> detector, boolean increasing) -> {
-                if (increasing) {
-                    assertTrue(expectIncreasing);
-                } else {
-                    assertTrue(expectDecreasing);
-                }
-                eventCount++;
-                return Action.RESET_STATE;
-            };
-        }
-
-    }
 }

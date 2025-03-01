@@ -150,6 +150,7 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
     /**  {@inheritDoc} */
     @Override
     public void init(final FieldODEStateAndDerivative<E> initialState, E finalTime) {
+        super.init(initialState, finalTime);
 
         // delegate to raw handler
         rawDetector.init(initialState, finalTime);
@@ -164,12 +165,25 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
 
     /**  {@inheritDoc} */
     @Override
+    public void reset(final FieldODEStateAndDerivative<E> intermediateState, final E finalTime) {
+        super.reset(intermediateState, finalTime);
+        rawDetector.reset(intermediateState, finalTime);
+    }
+
+    /**  {@inheritDoc} */
+    @Override
+    public boolean isForward() {
+        return forward;
+    }
+
+    /**  {@inheritDoc} */
+    @Override
     public E g(final FieldODEStateAndDerivative<E> state) {
 
         final E rawG = rawDetector.g(state);
 
         // search which transformer should be applied to g
-        if (forward) {
+        if (isForward()) {
             final int last = transformers.length - 1;
             if (extremeT.subtract(state.getTime()).getReal() < 0) {
                 // we are at the forward end of the history

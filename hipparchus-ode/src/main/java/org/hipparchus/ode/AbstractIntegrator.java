@@ -399,7 +399,10 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
                         final double[] y = newState.getCompleteState();
                         final double[] yDot = computeDerivatives(newState.getTime(), y);
                         resetOccurred = true;
-                        return equations.getMapper().mapStateAndDerivative(newState.getTime(), y, yDot);
+                        final ODEStateAndDerivative newStateAndDerivative = equations.getMapper().mapStateAndDerivative(newState.getTime(),
+                                y, yDot);
+                        detectorBasedEventsStates.forEach(e -> e.getEventDetector().reset(newStateAndDerivative, tEnd));
+                        return newStateAndDerivative;
                     }
                     // at this point action == Action.CONTINUE or Action.RESET_EVENTS
 

@@ -80,7 +80,7 @@ class FieldDetectorBasedEventStateTest {
 
         @Override
         public FieldODEEventHandler<Complex> getHandler() {
-            return null;
+            return (s, e, d) -> Action.CONTINUE;
         }
 
         @Override
