@@ -418,7 +418,10 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                         final T[] y = newState.getCompleteState();
                         final T[] yDot = computeDerivatives(newState.getTime(), y);
                         resetOccurred = true;
-                        return equations.getMapper().mapStateAndDerivative(newState.getTime(), y, yDot);
+                        final FieldODEStateAndDerivative<T> newStateAndDerivative = equations.getMapper().mapStateAndDerivative(newState.getTime(),
+                                y, yDot);
+                        detectorBasedEventsStates.forEach(e -> e.getEventDetector().reset(newStateAndDerivative, tEnd));
+                        return newStateAndDerivative;
                     }
                     // at this point action == Action.CONTINUE or Action.RESET_EVENTS
 

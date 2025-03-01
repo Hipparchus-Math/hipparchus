@@ -31,13 +31,13 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
     implements FieldODEEventDetector<E> {
 
     /** Default maximum checking interval (s). */
-    public static final double DEFAULT_MAX_CHECK = 600;
+    public static final double DEFAULT_MAX_CHECK = AbstractODEDetector.DEFAULT_MAX_CHECK;
 
     /** Default convergence threshold (s). */
-    public static final double DEFAULT_THRESHOLD = 1.e-6;
+    public static final double DEFAULT_THRESHOLD = AbstractODEDetector.DEFAULT_THRESHOLD;
 
     /** Default maximum number of iterations in the event time search. */
-    public static final int DEFAULT_MAX_ITER = 100;
+    public static final int DEFAULT_MAX_ITER = AbstractODEDetector.DEFAULT_MAX_ITER;
 
     /** Max check interval. */
     private final FieldAdaptableInterval<E> maxCheck;
@@ -79,13 +79,9 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      */
     @Override
     public void init(final FieldODEStateAndDerivative<E> s0, final E t) {
+        FieldODEEventDetector.super.init(s0, t);
         forward = t.subtract(s0.getTime()).getReal() >= 0;
-        getHandler().init(s0, t, this);
     }
-
-    /** {@inheritDoc} */
-    @Override
-    public abstract E g(FieldODEStateAndDerivative<E> s);
 
     /** {@inheritDoc} */
     @Override
@@ -114,7 +110,7 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxCheck(final E newMaxCheck) {
-        return withMaxCheck((s, isForward) -> newMaxCheck.getReal());
+        return withMaxCheck(FieldAdaptableInterval.of(newMaxCheck.getReal()));
     }
 
     /**

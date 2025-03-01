@@ -81,19 +81,34 @@ public interface ODEEventDetector  {
      */
     ODEEventHandler getHandler();
 
-    /** Initialize event handler at the start of an ODE integration.
+    /** Initialize event detector at the start of an ODE integration.
      * <p>
      * This method is called once at the start of the integration. It
-     * may be used by the event handler to initialize some internal data
+     * may be used by the event detector to initialize some internal data
      * if needed.
      * </p>
      * <p>
-     * The default implementation does nothing
+     * The default implementation initializes the handler
      * </p>
      * @param initialState initial time, state vector and derivative
      * @param finalTime target time for the integration
      */
     default void init(ODEStateAndDerivative initialState, double finalTime) {
+        getHandler().init(initialState, finalTime, this);
+    }
+
+    /** Reset event detector during integration.
+     * <p>
+     * This method is called during integration if the derivatives or the state variables themselves are reset.
+     * </p>
+     * <p>
+     * The default implementation does nothing.
+     * </p>
+     * @param intermediateState intermediate time, state vector and derivative
+     * @param finalTime target time for the integration
+     * @since 4.0
+     */
+    default void reset(ODEStateAndDerivative intermediateState, double finalTime) {
         // nothing by default
     }
 

@@ -38,4 +38,14 @@ public interface FieldAdaptableInterval<T extends CalculusFieldElement<T>> {
      */
     double currentInterval(FieldODEStateAndDerivative<T> state, boolean isForward);
 
+    /**
+     * Create a constant interval from the input.
+     * @param <W> field type
+     * @param maxCheck maximum check value
+     * @return constant interval
+     * @since 4.0
+     */
+    static <W extends CalculusFieldElement<W>> FieldAdaptableInterval<W> of(final double maxCheck) {
+        return (state, isForward) -> maxCheck;
+    }
 }

@@ -77,13 +77,9 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
      */
     @Override
     public void init(final ODEStateAndDerivative s0, final double t) {
+        ODEEventDetector.super.init(s0, t);
         forward = t >= s0.getTime();
-        getHandler().init(s0, t, this);
     }
-
-    /** {@inheritDoc} */
-    @Override
-    public abstract double g(ODEStateAndDerivative s);
 
     /** {@inheritDoc} */
     @Override
@@ -112,7 +108,7 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxCheck(final double newMaxCheck) {
-        return withMaxCheck((s, isForward) -> newMaxCheck);
+        return withMaxCheck(AdaptableInterval.of(newMaxCheck));
     }
 
     /**

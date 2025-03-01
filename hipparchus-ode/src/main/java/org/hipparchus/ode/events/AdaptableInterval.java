@@ -37,4 +37,13 @@ public interface AdaptableInterval {
      */
     double currentInterval(ODEStateAndDerivative state, boolean isForward);
 
+    /**
+     * Create a constant interval from the input.
+     * @param maxCheck maximum check value
+     * @return constant interval
+     * @since 4.0
+     */
+    static AdaptableInterval of(final double maxCheck) {
+        return (state, isForward) -> maxCheck;
+    }
 }
