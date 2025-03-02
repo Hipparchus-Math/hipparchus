@@ -463,6 +463,21 @@ public class Plane
         return point.dotProduct(w) + originOffset;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Vector3D moveToOffset(final Vector3D point, final double offset) {
+        final double delta = offset - getOffset(point);
+        return new Vector3D(point.getX() + delta * w.getX(),
+                            point.getY() + delta * w.getY(),
+                            point.getZ() + delta * w.getZ());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector3D arbitraryPoint() {
+        return origin;
+    }
+
     /** Check if the instance has the same orientation as another hyperplane.
      * @param other other hyperplane to check against the instance
      * @return true if the instance and the other hyperplane have

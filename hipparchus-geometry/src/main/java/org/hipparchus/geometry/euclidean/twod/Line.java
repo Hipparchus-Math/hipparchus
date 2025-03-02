@@ -123,7 +123,7 @@ public class Line
     }
 
     /** Copy constructor.
-     * <p>The created instance is completely independent from the
+     * <p>The created instance is completely independent of the
      * original instance, it is a deep copy.</p>
      * @param line line to copy
      */
@@ -308,6 +308,19 @@ public class Line
     @Override
     public double getOffset(final Vector2D point) {
         return MathArrays.linearCombination(sin, point.getX(), -cos, point.getY(), 1.0, originOffset);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector2D moveToOffset(final Vector2D point, final double offset) {
+        final double delta = offset - getOffset(point);
+        return new Vector2D(point.getX() + delta * sin, point.getY() - delta * cos);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector2D arbitraryPoint() {
+        return getPointAt(Vector1D.ZERO, 0);
     }
 
     /** {@inheritDoc} */

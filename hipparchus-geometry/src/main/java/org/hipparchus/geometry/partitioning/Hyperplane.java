@@ -71,6 +71,23 @@ public interface Hyperplane<S extends Space,
      */
     double getOffset(P point);
 
+    /** Move point up to specified offset.
+     * <p>
+     * Motion is <em>orthogonal</em> to the hyperplane
+     * </p>
+     * @param point point to move
+     * @param offset desired offset
+     * @return moved point at desired offset
+     * @since 4.0
+     */
+    P moveToOffset(P point, double offset);
+
+    /** Get an arbitrary point in the hyperplane.
+     * @return arbirary point in the hyperplane
+     * @since 4.0
+     */
+    P arbitraryPoint();
+
     /** Project a point to the hyperplane.
      * @param point point to project
      * @return projected point

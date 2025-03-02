@@ -304,6 +304,22 @@ public class Circle
 
     /** {@inheritDoc} */
     @Override
+    public S2Point moveToOffset(final S2Point point, final double offset) {
+        final SinCos scOld = FastMath.sinCos(getOffset(point));
+        final SinCos scNew = FastMath.sinCos(offset);
+        final double ratio = scNew.cos() / scOld.cos();
+        return new S2Point(new Vector3D(ratio * scOld.sin() - scNew.sin(), pole,
+                                        ratio, point.getVector()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public S2Point arbitraryPoint() {
+        return new S2Point(pole.orthogonal());
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public boolean sameOrientationAs(final Circle other) {
         return Vector3D.dotProduct(pole, other.pole) >= 0.0;
     }

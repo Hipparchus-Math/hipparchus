@@ -22,6 +22,7 @@
 package org.hipparchus.geometry.euclidean.oned;
 
 import org.hipparchus.geometry.partitioning.BSPTree;
+import org.hipparchus.geometry.partitioning.InteriorChecker;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.util.FastMath;
@@ -70,6 +71,7 @@ class IntervalsSetTest {
         assertEquals(Region.Location.INSIDE, set.checkPoint(new Vector1D(-Double.MAX_VALUE)));
         assertEquals(Region.Location.INSIDE, set.checkPoint(new Vector1D(+Double.MAX_VALUE)));
         assertTrue(Double.isInfinite(set.getSize()));
+        checkInterior(-1000, 1000, 10, set, 1.0e-10);
     }
 
     @Test
@@ -94,11 +96,10 @@ class IntervalsSetTest {
     @Test
     void testMultiple() {
         RegionFactory<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> factory = new RegionFactory<>();
-        IntervalsSet set = (IntervalsSet)
-        factory.intersection(factory.union(factory.difference(new IntervalsSet(1.0, 6.0, 1.0e-10),
-                                                              new IntervalsSet(3.0, 5.0, 1.0e-10)),
-                                                              new IntervalsSet(9.0, Double.POSITIVE_INFINITY, 1.0e-10)),
-                                                              new IntervalsSet(Double.NEGATIVE_INFINITY, 11.0, 1.0e-10));
+        IntervalsSet set = (IntervalsSet) factory.intersection(factory.union(factory.difference(new IntervalsSet(1.0, 6.0, 1.0e-10),
+                                                                                                new IntervalsSet(3.0, 5.0, 1.0e-10)),
+                                                                             new IntervalsSet(9.0, Double.POSITIVE_INFINITY, 1.0e-10)),
+                                                               new IntervalsSet(Double.NEGATIVE_INFINITY, 11.0, 1.0e-10));
         assertEquals(5.0, set.getSize(), 1.0e-10);
         assertEquals(5.9, set.getBarycenter().getX(), 1.0e-10);
         assertEquals(Region.Location.OUTSIDE,  set.checkPoint(new Vector1D(0.0)));
@@ -121,6 +122,8 @@ class IntervalsSetTest {
         assertEquals( 6.0, list.get(1).getSup(), 1.0e-10);
         assertEquals( 9.0, list.get(2).getInf(), 1.0e-10);
         assertEquals(11.0, list.get(2).getSup(), 1.0e-10);
+
+        checkInterior(-20, 20, 0.125, set, 1.0e-15);
 
     }
 
@@ -155,6 +158,9 @@ class IntervalsSetTest {
                                     final double a2, final double a3,
                                     final double tol) {
 
+        final double min = FastMath.min(FastMath.min(a0, a1), FastMath.min(a2, a3));
+        final double max = FastMath.max(FastMath.max(a0, a1), FastMath.max(a2, a3));
+
         // intervals set [ a0 ; a1 ] U [ a2 ; a3 ]
         final IntervalsSet setA =
                         new IntervalsSet(new BSPTree<>(new OrientedPoint(new Vector1D(a0), false, tol).wholeHyperplane(),
@@ -177,6 +183,7 @@ class IntervalsSetTest {
         assertEquals(a1, setA.asList().get(0).getSup(), 1.0e-15);
         assertEquals(a2, setA.asList().get(1).getInf(), 1.0e-15);
         assertEquals(a3, setA.asList().get(1).getSup(), 1.0e-15);
+        checkInterior(2 * min - max, 2 * max - min, 0.1 * (max - min), setA, tol);
 
         // same intervals set [ a0 ; a1 ] U [ a2 ; a3 ], but with a different tree organization
         final IntervalsSet setB =
@@ -200,6 +207,7 @@ class IntervalsSetTest {
         assertEquals(a1, setB.asList().get(0).getSup(), 1.0e-15);
         assertEquals(a2, setB.asList().get(1).getInf(), 1.0e-15);
         assertEquals(a3, setB.asList().get(1).getSup(), 1.0e-15);
+        checkInterior(2 * min - max, 2 * max - min, 0.1 * (max - min), setB, tol);
 
         final IntervalsSet intersection = (IntervalsSet) new RegionFactory<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>().
                                           intersection(setA, setB);
@@ -209,7 +217,15 @@ class IntervalsSetTest {
         assertEquals(a1, intersection.asList().get(0).getSup(), 1.0e-15);
         assertEquals(a2, intersection.asList().get(1).getInf(), 1.0e-15);
         assertEquals(a3, intersection.asList().get(1).getSup(), 1.0e-15);
+        checkInterior(2 * min - max, 2 * max - min, 0.1 * (max - min), intersection, tol);
 
+    }
+
+    private void checkInterior(final double min, final double max, final double step,
+                               final IntervalsSet set, final double tolerance) {
+        for (double start = min; start < max; start += step) {
+            set.getTree(false).visit(new InteriorChecker<>(new Vector1D(start), tolerance));
+        }
     }
 
 }

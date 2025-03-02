@@ -23,6 +23,7 @@ package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.Hyperplane;
+import org.hipparchus.geometry.spherical.twod.S2Point;
 
 
 /** This class represents a 1D oriented hyperplane on the circle.
@@ -70,6 +71,18 @@ public class LimitAngle implements Hyperplane<Sphere1D, S1Point, LimitAngle, Sub
     public double getOffset(final S1Point point) {
         final double delta = point.getAlpha() - location.getAlpha();
         return direct ? delta : -delta;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public S1Point moveToOffset(final S1Point point, final double offset) {
+        return new S1Point(location.getAlpha() + (direct ? offset : -offset));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public S1Point arbitraryPoint() {
+        return location;
     }
 
     /** Check if the hyperplane orientation is direct.

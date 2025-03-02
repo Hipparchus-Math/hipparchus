@@ -33,6 +33,7 @@ import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryAttribute;
+import org.hipparchus.geometry.partitioning.InteriorChecker;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.RegionDumper;
 import org.hipparchus.geometry.partitioning.RegionFactory;
@@ -97,6 +98,7 @@ class PolyhedronsSetTest {
             new Vector3D(1.2, 1.2, 0.0),
             new Vector3D(1.2, 1.2, 1.0)
         });
+        checkInterior(-0.5, 1.5, 0.25, 0.0, 1.5, 0.25, 0.0, 1.5, 0.25, tree, 1.0e-10);
     }
 
     @Test
@@ -212,6 +214,7 @@ class PolyhedronsSetTest {
             new Vector3D(2, 3, 4),
             new Vector3D(1, 3, 3)
         });
+        checkInterior(0.0, 2.5, 0.125, 1.5, 3.5, 0.75, 2.5, 4.5, 0.75, tree, 1.0e-12);
     }
 
     @Test
@@ -307,6 +310,7 @@ class PolyhedronsSetTest {
         assertEquals(z, barycenter.getZ(), 1.0e-10);
         assertEquals(8 * l * w * w, tree.getSize(), 1.0e-10);
         assertEquals(8 * w * (2 * l + w), tree.getBoundarySize(), 1.0e-10);
+        checkInterior(0.0, 2.5, 0.125, 1.5, 3.5, 0.75, 2.5, 4.5, 0.75, tree, 1.0e-12);
     }
 
     @Test
@@ -332,7 +336,7 @@ class PolyhedronsSetTest {
         assertEquals(z, barycenter.getZ(), 1.0e-10);
         assertEquals(8 * w * w * (3 * l - 2 * w), tree.getSize(), 1.0e-10);
         assertEquals(24 * w * (2 * l - w), tree.getBoundarySize(), 1.0e-10);
-
+        checkInterior(0.0, 2.5, 0.125, 1.5, 3.5, 0.75, 2.5, 4.5, 0.75, tree, 1.0e-12);
     }
 
     @Test
@@ -381,13 +385,12 @@ class PolyhedronsSetTest {
         PolyhedronsSet polyhedronsSet = new PolyhedronsSet(subHyperplaneList, 1.0e-10);
         assertEquals( 8.0, polyhedronsSet.getSize(), 3.0e-6);
         assertEquals(24.0, polyhedronsSet.getBoundarySize(), 5.0e-6);
+
     }
 
     @Test
     void testTooThinBox() {
-        assertEquals(0.0,
-                            new PolyhedronsSet(0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0e-10).getSize(),
-                            1.0e-10);
+        assertEquals(0.0, new PolyhedronsSet(0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0e-10).getSize(), 1.0e-10);
     }
 
     @Test
@@ -520,30 +523,26 @@ class PolyhedronsSetTest {
         SubPlane upFromOutsideResult = (SubPlane) polySet.firstIntersection(new Vector3D(-1, -1, -1), upDiagonal);
         assertNotNull(upFromOutsideResult);
         assertEquals(0.0,
-                            Vector3D.distance(lowerCorner,
-                                              upFromOutsideResult.getHyperplane().intersection(upDiagonal)),
-                            1.0e-15);
+                     Vector3D.distance(lowerCorner, upFromOutsideResult.getHyperplane().intersection(upDiagonal)),
+                     1.0e-15);
 
         SubPlane upFromCenterResult = (SubPlane) polySet.firstIntersection(center, upDiagonal);
         assertNotNull(upFromCenterResult);
         assertEquals(0.0,
-                            Vector3D.distance(upperCorner,
-                                              upFromCenterResult.getHyperplane().intersection(upDiagonal)),
-                            1.0e-15);
+                     Vector3D.distance(upperCorner, upFromCenterResult.getHyperplane().intersection(upDiagonal)),
+                     1.0e-15);
 
         SubPlane downFromOutsideResult = (SubPlane) polySet.firstIntersection(new Vector3D(2, 2, 2), downDiagonal);
         assertNotNull(downFromOutsideResult);
         assertEquals(0.0,
-                            Vector3D.distance(upperCorner,
-                            downFromOutsideResult.getHyperplane().intersection(downDiagonal)),
-                            1.0e-15);
+                     Vector3D.distance(upperCorner, downFromOutsideResult.getHyperplane().intersection(downDiagonal)),
+                     1.0e-15);
 
         SubPlane downFromCenterResult = (SubPlane) polySet.firstIntersection(center, downDiagonal);
         assertNotNull(downFromCenterResult);
         assertEquals(0.0,
-                            Vector3D.distance(lowerCorner,
-                                              downFromCenterResult.getHyperplane().intersection(downDiagonal)),
-                            1.0e-15);
+                     Vector3D.distance(lowerCorner, downFromCenterResult.getHyperplane().intersection(downDiagonal)),
+                     1.0e-15);
     }
 
     @Test
@@ -581,6 +580,19 @@ class PolyhedronsSetTest {
     private void checkPoints(Region.Location expected, PolyhedronsSet tree, Vector3D[] points) {
         for (final Vector3D point : points) {
             assertEquals(expected, tree.checkPoint(point));
+        }
+    }
+
+    private void checkInterior(final double xmin, final double xmax, final double xstep,
+                               final double ymin, final double ymax, final double ystep,
+                               final double zmin, final double zmax, final double zstep,
+                               final PolyhedronsSet set, final double tolerance) {
+        for (double startX = xmin; startX < xmax; startX += xstep) {
+            for (double startY = ymin; startY < ymax; startY += ystep) {
+                for (double startZ = zmin; startZ < zmax; startZ += zstep) {
+                    set.getTree(false).visit(new InteriorChecker<>(new Vector3D(startX, startY, startZ), tolerance));
+                }
+            }
         }
     }
 

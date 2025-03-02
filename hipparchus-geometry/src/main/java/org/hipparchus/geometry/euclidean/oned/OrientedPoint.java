@@ -68,6 +68,18 @@ public class OrientedPoint implements Hyperplane<Euclidean1D, Vector1D, Oriented
         return direct ? delta : -delta;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Vector1D moveToOffset(final Vector1D point, final double offset) {
+        return new Vector1D(location.getX() + (direct ? offset : -offset));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector1D arbitraryPoint() {
+        return location;
+    }
+
     /** Build a region covering the whole hyperplane.
      * <p>Since this class represent zero dimension spaces which does
      * not have lower dimension sub-spaces, this method returns a dummy
