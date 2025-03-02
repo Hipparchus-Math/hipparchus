@@ -99,7 +99,12 @@ public enum LocalizedGeometryFormats implements Localizable {
     TOO_SMALL_TOLERANCE("tolerance {0,number,0.00000E00} is not computationally feasible, it is smaller than {1} ({2,number,0.00000E00})"),
 
     /** INVALID_ROTATION_ORDER_NAME. */
-    INVALID_ROTATION_ORDER_NAME("the value {0} does not correspond to a rotation order");
+    INVALID_ROTATION_ORDER_NAME("the value {0} does not correspond to a rotation order"),
+
+    /** CANNOT_FIND_INSIDE_POINT.
+     * @since 4.0
+     */
+    CANNOT_FIND_INSIDE_POINT("cannot find an inside point after {0} iterations");
 
     /** Source English format. */
     private final String sourceFormat;

@@ -796,7 +796,7 @@ class SphericalPolygonsSetTest {
 
         // no points
         SphericalPolygonsSet sps = new SphericalPolygonsSet(tol, new S2Point[0]);
-        assertEquals(sps.getSize(), 4*FastMath.PI, tol);
+        assertEquals(4*FastMath.PI, sps.getSize(), tol);
 
         // one point, does not define a valid boundary
         points.add(new S2Point(circle.getPointAt(0)));
@@ -810,18 +810,18 @@ class SphericalPolygonsSetTest {
         // two points, defines hemisphere but not orientation
         points.add(new S2Point(circle.getPointAt(FastMath.PI / 2)));
         sps = new SphericalPolygonsSet(tol, points.toArray(new S2Point[0]));
-        assertEquals(sps.getSize(), 2*FastMath.PI, tol);
+        assertEquals(2*FastMath.PI, sps.getSize(), tol);
 
         // three points
         points.add(0, new S2Point(circle.getPointAt(FastMath.PI)));
         sps = new SphericalPolygonsSet(tol, points.toArray(new S2Point[0]));
-        assertEquals(sps.getSize(), 2*FastMath.PI, tol);
+        assertEquals(2*FastMath.PI, sps.getSize(), tol);
         assertEquals(0, sps.getBarycenter().distance(new S2Point(Vector3D.PLUS_K)), tol);
 
         // four points
         points.add(1, new S2Point(circle.getPointAt(3 * FastMath.PI / 2)));
         sps = new SphericalPolygonsSet(tol, points.toArray(new S2Point[0]));
-        assertEquals(sps.getSize(), 2*FastMath.PI, tol);
+        assertEquals(2 * FastMath.PI, sps.getSize(), tol);
         assertEquals(0, sps.getBarycenter().distance(new S2Point(Vector3D.PLUS_K)), tol);
 
         // many points in semi-circle
@@ -830,7 +830,7 @@ class SphericalPolygonsSetTest {
                 new S2Point(circle.getPointAt(-0.3)),
                 new S2Point(circle.getPointAt(-0.2)),
                 new S2Point(circle.getPointAt(-0.1)));
-        assertEquals(sps.getSize(), 2*FastMath.PI, tol);
+        assertEquals(2 * FastMath.PI, sps.getSize(), tol);
         assertEquals(0, sps.getBarycenter().distance(new S2Point(Vector3D.PLUS_K)), tol);
     }
 

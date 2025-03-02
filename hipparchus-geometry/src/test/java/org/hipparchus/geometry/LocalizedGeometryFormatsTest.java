@@ -32,7 +32,7 @@ public class LocalizedGeometryFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
     protected int getExpectedNumber() {
-        return 20;
+        return 21;
     }
 
 }

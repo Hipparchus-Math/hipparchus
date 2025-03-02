@@ -23,7 +23,6 @@ package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.Hyperplane;
-import org.hipparchus.geometry.spherical.twod.S2Point;
 
 
 /** This class represents a 1D oriented hyperplane on the circle.

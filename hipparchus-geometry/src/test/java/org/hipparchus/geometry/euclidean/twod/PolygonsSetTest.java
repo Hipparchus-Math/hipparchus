@@ -1395,7 +1395,7 @@ class PolygonsSetTest {
         assertEquals(FastMath.PI, set.getSize(), tol);
         assertEquals(0, set.getBarycenter().distance(Vector2D.ZERO), tol);
         // each segment is shorter than boundary, so error builds up
-        assertEquals(set.getBoundarySize(), length, 2 * tol);
+        assertEquals(length, set.getBoundarySize(), 2 * tol);
         for (Vector2D point : points) {
             assertEquals(Location.BOUNDARY, set.checkPoint(point));
         }

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
@@ -255,9 +256,16 @@ public class RegionFactory<S extends Space, P extends Point<S>, H extends Hyperp
         @Override
         public BSPTree<S, P, H, I> fixNode(final BSPTree<S, P, H, I> node) {
             // get a representative point in the degenerate cell
-            final BSPTree<S, P, H, I> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
-            final Region<S, P, H, I> r = region1.buildNew(cell);
-            final P p = r.getBarycenter();
+            P p;
+            try {
+                // fast search
+                p = node.pointInsideCell(node.getParent().getCut().getHyperplane().arbitraryPoint());
+            } catch (MathIllegalStateException mise) {
+                // fallback using a costly and numerically unstable computation
+                final BSPTree<S, P, H, I> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
+                final Region<S, P, H, I> r = region1.buildNew(cell);
+                p = r.getBarycenter();
+            }
             return new BSPTree<>(shouldBeInside(region1.checkPoint(p), region2.checkPoint(p)));
         }
 

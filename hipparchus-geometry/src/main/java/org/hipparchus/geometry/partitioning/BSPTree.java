@@ -24,7 +24,9 @@ package org.hipparchus.geometry.partitioning;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.util.FastMath;
@@ -73,6 +75,16 @@ public class BSPTree<S extends Space,
                      P extends Point<S>,
                      H extends Hyperplane<S, P, H, I>,
                      I extends SubHyperplane<S, P, H, I>> {
+
+    /** Maximum number of target offset stages for inside points search.
+     * @since 4.0
+     */
+    private static final int MAX_STAGES = 500;
+
+    /** Factor at each stage for inside points search.
+     * @since 4.0
+     */
+    private static final int FACTOR = 20;
 
     /** Cut sub-hyperplane. */
     private I cut;
@@ -132,6 +144,18 @@ public class BSPTree<S extends Space,
         this.attribute = attribute;
         plus.parent    = this;
         minus.parent   = this;
+    }
+
+    /** Get the depth of a node.
+     * @return depth of the instance node, starting from 0 at root
+     * @since 4.0
+     */
+    public int getDepth() {
+        int depth = 0;
+        for (BSPTree<S, P, H, I> node = this; node.parent != null; node = node.parent) {
+            depth++;
+        }
+        return depth;
     }
 
     /** Insert a cut sub-hyperplane in a node.
@@ -417,7 +441,9 @@ public class BSPTree<S extends Space,
      * since all connections have already been established
      */
     public BSPTree<S, P, H, I> merge(final BSPTree<S, P, H, I> tree, final LeafMerger<S, P, H, I> leafMerger) {
-        return merge(tree, leafMerger, null, false);
+        final BSPTree<S, P, H, I> merged = merge(tree, leafMerger, null, false);
+        merged.fixCuts();
+        return merged;
     }
 
     /** Merge a BSP tree with the instance.
@@ -436,7 +462,7 @@ public class BSPTree<S extends Space,
      * since all connections have already been established
      */
     private BSPTree<S, P, H, I> merge(final BSPTree<S, P, H, I> tree, final LeafMerger<S, P, H, I> leafMerger,
-                             final BSPTree<S, P, H, I> parentTree, final boolean isPlusChild) {
+                                      final BSPTree<S, P, H, I> parentTree, final boolean isPlusChild) {
         if (cut == null) {
             // cell/tree operation
             return leafMerger.merge(this, tree, parentTree, isPlusChild, true);
@@ -465,6 +491,31 @@ public class BSPTree<S extends Space,
 
             return merged;
 
+        }
+    }
+
+    /** Fix cut sub-hyperplanes.
+     * <p>
+     * In some cases, cut sub-hyperplanes boundaries in a tree may be inconsistent.
+     * One cause can be merge operations, where some cuts are inherited from one of
+     * the merged tree, because the trees returned by {@link #split(SubHyperplane)}
+     * are not upward-consistent. Another cause can be trees built bottom-up.
+     * </p>
+     * <p>
+     * This method recomputes the sub-hyperplanes once the full tree has been built
+     * </p>
+     */
+    private void fixCuts() {
+        if (cut != null) {
+            final I fit = fitToCell(cut.getHyperplane().wholeHyperplane());
+            if (fit == null) {
+                // cut sub-hyperplane vanished
+                cut = cut.getHyperplane().emptyHyperplane();
+            } else {
+                cut = fit;
+            }
+            plus.fixCuts();
+            minus.fixCuts();
         }
     }
 
@@ -560,7 +611,7 @@ public class BSPTree<S extends Space,
      * sub-trees cut sub-hyperplanes (including its own cut
      * sub-hyperplane) are bounded to the current cell, it is <em>not</em>
      * attached to any parent tree yet. This tree is intended to be
-     * later inserted into an higher level tree.</p>
+     * later inserted into a higher level tree.</p>
      * <p>The algorithm used here is the one given in Naylor, Amanatides
      * and Thibault paper (section III, Binary Partitioning of a BSP
      * Tree).</p>
@@ -742,7 +793,74 @@ public class BSPTree<S extends Space,
             }
         }
 
+        // fix the cuts so the pruned tree is consistent
+        tree.fixCuts();
+
         return tree;
+
+    }
+
+    /** Find a point inside a cell.
+     * <p>
+     * This method searches for a point inside a cell by moving around
+     * starting from a specified point
+     * </p>
+     * @param start starting point for the search
+     * @return point inside the convex cell corresponding to the instance
+     * @since 4.0
+     */
+    public P pointInsideCell(final P start) {
+
+        // special handling for tree root
+        if (parent == null) {
+            return start;
+        }
+
+        P point = start;
+        final int depth = getDepth();
+
+        // for each stage (i.e. multiplication factor wrt tolerance), we allow as many
+        // attempts as there are parent nodes to move the test point. The goal is
+        // to avoid infinite loops (same point/hyperplane again and again)
+        // when we exhaust the number of attempts, we change the stage factor (reducing it)
+        for (int stage = 0; stage < MAX_STAGES; ++stage) {
+
+            // the last stage factor (the smallest one), should be 2
+            final int k           = MAX_STAGES - 1 - stage;
+            final int stageFactor = 2 + FACTOR * k * k;
+
+            for (int attempt = 0; attempt < depth; ++attempt) {
+                // look for the maximum offset for current point
+                H      maxHyperplane = null;
+                double maxSign       = 1;
+                double maxOffset     = Double.NEGATIVE_INFINITY;
+                for (BSPTree<S, P, H, I> node = this; node.parent != null; node = node.parent) {
+                    if (node.parent.cut != null) {
+                        // we want negative offsets within the cell, positive offsets outside the cell
+                        final H      hyperplane = node.parent.cut.getHyperplane();
+                        final double sign       = node == node.parent.minus ? 1 : -1;
+                        final double offset     = sign * hyperplane.getOffset(point);
+                        if (offset > maxOffset) {
+                            maxHyperplane = hyperplane;
+                            maxSign       = sign;
+                            maxOffset     = offset;
+                        }
+                    }
+                }
+
+                if (maxHyperplane == null || maxOffset < -maxHyperplane.getTolerance()) {
+                    // the maximum offset is negative enough to ensure the current point is inside the cell
+                    return point;
+                } else {
+                    // move the point in an attempt to reduce maximum offset
+                    final double tolerance = maxSign * maxHyperplane.getTolerance();
+                    point = maxHyperplane.moveToOffset(point, -stageFactor * tolerance);
+                }
+            }
+        }
+
+        // we were not able to find an inside point after many iterations
+        throw new MathIllegalStateException(LocalizedGeometryFormats.CANNOT_FIND_INSIDE_POINT, MAX_STAGES);
 
     }
 

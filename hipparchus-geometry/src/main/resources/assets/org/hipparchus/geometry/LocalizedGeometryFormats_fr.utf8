@@ -36,3 +36,4 @@ ZERO_NORM_FOR_ROTATION_AXIS = norme nulle pour un axe de rotation
 ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR = norme nulle pour un axe de définition de rotation
 TOO_SMALL_TOLERANCE = la tolérance {0,number,0.00000E00} n''est pas réaliste en termes de calcul, elle est plus petite que {1} ({2,number,0.00000E00})
 INVALID_ROTATION_ORDER_NAME = la valeur {0} ne correspond pas à une séquence de rotation connue
+CANNOT_FIND_INSIDE_POINT = impossible de trouver un point intérieur après {0} itérations

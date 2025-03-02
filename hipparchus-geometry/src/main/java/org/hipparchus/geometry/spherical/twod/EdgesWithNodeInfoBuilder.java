@@ -94,11 +94,9 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D, S2Point, Circ
             final BSPTree<Sphere2D, S2Point, Circle, SubCircle> endN   = selectClosest(endS.getLocation(), splitters);
 
             if (reversed) {
-                edges.add(new EdgeWithNodeInfo(endS, startS, a.getSize(), circle.getReverse(),
-                                              node, endN, startN));
+                edges.add(new EdgeWithNodeInfo(endS, startS, a.getSize(), circle.getReverse(), node, endN, startN));
             } else {
-                edges.add(new EdgeWithNodeInfo(startS, endS, a.getSize(), circle,
-                                              node, startN, endN));
+                edges.add(new EdgeWithNodeInfo(startS, endS, a.getSize(), circle, node, startN, endN));
             }
 
         }
