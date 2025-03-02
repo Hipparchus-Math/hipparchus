@@ -49,6 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -1399,6 +1400,44 @@ class PolygonsSetTest {
         for (Vector2D point : points) {
             assertEquals(Location.BOUNDARY, set.checkPoint(point));
         }
+    }
+
+    @Test
+    public void testWholeSpace() {
+        PolygonsSet set = new PolygonsSet(1.0e-10, new Vector2D[0]);
+        assertEquals(Double.POSITIVE_INFINITY, set.getSize());
+        assertTrue(set.isFull());
+        assertFalse(set.isEmpty());
+    }
+
+    @Test
+    public void testOpenLoops() {
+        PolygonsSet negativeXHalfPlane =
+                new PolygonsSet(Collections.singleton(new SubLine(new Line(Vector2D.ZERO, MathUtils.SEMI_PI, 1.0e-10),
+                                                                  new IntervalsSet(1.0e-10))),
+                                1.0e-10);
+        PolygonsSet positiveYHalfPlane =
+                new PolygonsSet(Collections.singleton(new SubLine(new Line(Vector2D.ZERO, 0.0, 1.0e-10),
+                                                                  new IntervalsSet(1.0e-10))),
+                                1.0e-10);
+        RegionFactory<Euclidean2D, Vector2D, Line, SubLine> factory = new RegionFactory<>();
+        PolygonsSet xNegYposQuadrant = (PolygonsSet) factory.intersection(negativeXHalfPlane, positiveYHalfPlane);
+        assertEquals(Location.OUTSIDE, xNegYposQuadrant.checkPoint(new Vector2D( 1,  1)));
+        assertEquals(Location.INSIDE,  xNegYposQuadrant.checkPoint(new Vector2D(-1,  1)));
+        assertEquals(Location.OUTSIDE, xNegYposQuadrant.checkPoint(new Vector2D(-1, -1)));
+        assertEquals(Location.OUTSIDE, xNegYposQuadrant.checkPoint(new Vector2D( 1, -1)));
+
+        Vector2D[][] vertices = xNegYposQuadrant.getVertices();
+        assertEquals(1, vertices.length);
+        assertEquals(5, vertices[0].length);
+        assertNull(vertices[0][0]);
+        assertEquals(-1.0, vertices[0][1].getX(), 1.0e-15);
+        assertEquals( 0.0, vertices[0][1].getY(), 1.0e-15);
+        assertEquals( 0.0, vertices[0][2].getX(), 1.0e-15);
+        assertEquals( 0.0, vertices[0][2].getY(), 1.0e-15);
+        assertEquals( 0.0, vertices[0][3].getX(), 1.0e-15);
+        assertEquals( 1.0, vertices[0][3].getY(), 1.0e-15);
+        assertNull(vertices[0][4]);
     }
 
     private static class Counter {

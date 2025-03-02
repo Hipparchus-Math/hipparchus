@@ -651,7 +651,7 @@ public class PolygonsSet
                 final ArrayList<List<Segment>> loops = new ArrayList<>();
                 for (ConnectableSegment s = getUnprocessed(segments); s != null; s = getUnprocessed(segments)) {
                     final List<Segment> loop = followLoop(s);
-                    if (loop != null) {
+                    if (loop != null && !loop.isEmpty()) {
                         if (loop.get(0).getStart() == null) {
                             // this is an open loop, we put it on the front
                             loops.add(0, loop);
@@ -667,8 +667,7 @@ public class PolygonsSet
                 int i = 0;
 
                 for (final List<Segment> loop : loops) {
-                    if (loop.size() < 2 ||
-                        (loop.size() == 2 && loop.get(0).getStart() == null && loop.get(1).getEnd() == null)) {
+                    if (loop.size() < 2) {
                         // single infinite line
                         final Line line = loop.get(0).getLine();
                         vertices[i++] = new Vector2D[] {
@@ -678,7 +677,7 @@ public class PolygonsSet
                         };
                     } else if (loop.get(0).getStart() == null) {
                         // open loop with at least one real point
-                        final Vector2D[] array = new Vector2D[loop.size() + 2];
+                        final Vector2D[] array = new Vector2D[loop.size() + 3];
                         int j = 0;
                         for (Segment segment : loop) {
 
@@ -688,18 +687,19 @@ public class PolygonsSet
                                 x -= FastMath.max(1.0, FastMath.abs(x / 2));
                                 array[j++] = null;
                                 array[j++] = segment.getLine().toSpace(new Vector1D(x));
-                            }
+                            } else {
 
-                            if (j < (array.length - 1)) {
-                                // current point
-                                array[j++] = segment.getEnd();
-                            }
+                                if (j < (array.length - 2)) {
+                                    // current point
+                                    array[j++] = segment.getStart();
+                                }
 
-                            if (j == (array.length - 1)) {
-                                // last dummy point
-                                double x = segment.getLine().toSubSpace(segment.getStart()).getX();
-                                x += FastMath.max(1.0, FastMath.abs(x / 2));
-                                array[j++] = segment.getLine().toSpace(new Vector1D(x));
+                                if (j == (array.length - 2)) {
+                                    // last dummy point
+                                    double x = segment.getLine().toSubSpace(segment.getStart()).getX();
+                                    x += FastMath.max(1.0, FastMath.abs(x / 2));
+                                    array[j++] = segment.getLine().toSpace(new Vector1D(x));
+                                }
                             }
 
                         }
