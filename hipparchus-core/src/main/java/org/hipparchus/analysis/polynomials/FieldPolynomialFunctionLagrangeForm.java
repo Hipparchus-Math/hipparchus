@@ -34,7 +34,7 @@ import org.hipparchus.util.MathArrays;
  * to work well. Otherwise, consider using splines instead.</p>
  * @see PolynomialFunctionLagrangeForm
  * @since 4.0
- *
+ * @param <T> type of the field elements
  */
 public class FieldPolynomialFunctionLagrangeForm<T extends CalculusFieldElement<T>>
         implements CalculusFieldUnivariateFunction<T> {
