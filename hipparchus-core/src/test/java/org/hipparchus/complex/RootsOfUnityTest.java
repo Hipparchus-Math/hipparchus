@@ -21,9 +21,11 @@
  */
 package org.hipparchus.complex;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,6 +84,52 @@ class RootsOfUnityTest {
         assertEquals(5, roots.getNumberOfRoots(), "");
         roots.computeRoots(6);
         assertEquals(6, roots.getNumberOfRoots(), "");
+    }
+
+    @Test
+    public void testErrorConditions() {
+        final RootsOfUnity roots = new RootsOfUnity();
+        roots.computeRoots(5);
+        try {
+            roots.getReal(-2);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                         e.getSpecifier());
+            assertEquals(-2, e.getParts()[0]);
+            assertEquals( 0, e.getParts()[1]);
+            assertEquals( 4, e.getParts()[2]);
+        }
+        try {
+            roots.getImaginary(-2);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                         e.getSpecifier());
+            assertEquals(-2, e.getParts()[0]);
+            assertEquals( 0, e.getParts()[1]);
+            assertEquals( 4, e.getParts()[2]);
+        }
+        try {
+            roots.getReal(5);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                         e.getSpecifier());
+            assertEquals( 5, e.getParts()[0]);
+            assertEquals( 0, e.getParts()[1]);
+            assertEquals( 4, e.getParts()[2]);
+        }
+        try {
+            roots.getImaginary(5);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                         e.getSpecifier());
+            assertEquals( 5, e.getParts()[0]);
+            assertEquals( 0, e.getParts()[1]);
+            assertEquals( 4, e.getParts()[2]);
+        }
     }
 
     @Test

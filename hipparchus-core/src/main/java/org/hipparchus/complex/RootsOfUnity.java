@@ -87,8 +87,7 @@ public class RootsOfUnity implements Serializable {
             throws MathIllegalStateException {
         synchronized (this) {
             if (omegaCount == 0) {
-                throw new MathIllegalStateException(
-                        LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+                throw new MathIllegalStateException(LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
             }
             return isCounterClockWise;
         }
@@ -114,8 +113,7 @@ public class RootsOfUnity implements Serializable {
     public void computeRoots(int n) throws MathIllegalArgumentException {
 
         if (n == 0) {
-            throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.CANNOT_COMPUTE_0TH_ROOT_OF_UNITY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_COMPUTE_0TH_ROOT_OF_UNITY);
         }
 
         synchronized (this) {
@@ -161,15 +159,11 @@ public class RootsOfUnity implements Serializable {
 
         synchronized (this) {
             if (omegaCount == 0) {
-                throw new MathIllegalStateException(
-                                                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+                throw new MathIllegalStateException(LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
             }
             if ((k < 0) || (k >= omegaCount)) {
-                throw new MathIllegalArgumentException(
-                                                       LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
-                        k,
-                        0,
-                        omegaCount - 1);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                                                       k, 0, omegaCount - 1);
             }
 
             return omegaReal[k];
@@ -189,19 +183,16 @@ public class RootsOfUnity implements Serializable {
 
         synchronized (this) {
             if (omegaCount == 0) {
-                throw new MathIllegalStateException(
-                                                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+                throw new MathIllegalStateException(LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
             }
             if ((k < 0) || (k >= omegaCount)) {
-                throw new MathIllegalArgumentException(
-                                                       LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
-                        k,
-                        0,
-                        omegaCount - 1);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                                                       k, 0, omegaCount - 1);
             }
 
-            return isCounterClockWise ? omegaImaginaryCounterClockwise[k] :
-                omegaImaginaryClockwise[k];
+            return isCounterClockWise ?
+                   omegaImaginaryCounterClockwise[k] :
+                   omegaImaginaryClockwise[k];
         }
     }
 
