@@ -43,7 +43,7 @@ import org.hipparchus.geometry.Space;
  * @param <S> Space type.
  * @param <P> Point type.
  */
-public class WelzlEncloser<S extends Space, P extends Point<S>> implements Encloser<S, P> {
+public class WelzlEncloser<S extends Space, P extends Point<S, P>> implements Encloser<S, P> {
 
     /** Tolerance below which points are consider to be identical. */
     private final double tolerance;

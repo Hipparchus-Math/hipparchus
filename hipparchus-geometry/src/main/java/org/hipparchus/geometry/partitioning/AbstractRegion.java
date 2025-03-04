@@ -45,10 +45,10 @@ import org.hipparchus.geometry.Space;
 
  */
 public abstract class AbstractRegion<S extends Space,
-                                     P extends Point<S>,
+                                     P extends Point<S, P>,
                                      H extends Hyperplane<S, P, H, I>,
                                      I extends SubHyperplane<S, P, H, I>,
-                                     T extends Space, Q extends Point<T>,
+                                     T extends Space, Q extends Point<T, Q>,
                                      F extends Hyperplane<T, Q, F, J>,
                                      J extends SubHyperplane<T, Q, F, J>>
     implements Region<S, P, H, I> {

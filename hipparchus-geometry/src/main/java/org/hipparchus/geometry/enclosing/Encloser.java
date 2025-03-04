@@ -29,7 +29,7 @@ import org.hipparchus.geometry.Space;
  * @param <P> Point type.
  * @see EnclosingBall
  */
-public interface Encloser<S extends Space, P extends Point<S>> {
+public interface Encloser<S extends Space, P extends Point<S, P>> {
 
     /** Find a ball enclosing a list of points.
      * @param points points to enclose

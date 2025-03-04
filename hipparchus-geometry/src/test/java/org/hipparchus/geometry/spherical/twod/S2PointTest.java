@@ -128,4 +128,23 @@ class S2PointTest {
         assertInstanceOf(Sphere1D.class, a.getSpace().getSubSpace());
     }
 
+    @Test
+    void testMoveTowards() {
+        final S2Point s1 = new S2Point(2.0, 0.5);
+        final S2Point s2 = new S2Point(4.0, 2.5);
+        for (double r = 0.0; r <= 1.0; r += FastMath.scalb(1.0, -10)) {
+            // motion should be linear according to angles
+            assertEquals(r * s1.distance(s2), s1.distance(s1.moveTowards(s2, r)), 1.0e-14);
+        }
+    }
+
+    @Test
+    void testMoveTowardsSpecialCase() {
+        final S2Point s = new S2Point(2.0, 0.5);
+        for (double r = 0.0; r <= 1.0; r += FastMath.scalb(1.0, -10)) {
+            // motion should be linear according to angles
+            assertEquals(0.0, s.distance(s.moveTowards(s, r)), 1.0e-20);
+        }
+    }
+
 }

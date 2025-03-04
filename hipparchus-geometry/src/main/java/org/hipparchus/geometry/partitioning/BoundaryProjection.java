@@ -32,7 +32,7 @@ import org.hipparchus.geometry.Space;
  * @param <P> Type of the points in space.
  * @see AbstractRegion#projectToBoundary(Point)
  */
-public class BoundaryProjection<S extends Space, P extends Point<S>> {
+public class BoundaryProjection<S extends Space, P extends Point<S, P>> {
 
     /** Original point. */
     private final P original;

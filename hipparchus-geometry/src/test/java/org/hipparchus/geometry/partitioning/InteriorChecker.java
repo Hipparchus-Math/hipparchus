@@ -20,7 +20,7 @@ import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.junit.jupiter.api.Assertions;
 
-public class InteriorChecker<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>>
+public class InteriorChecker<S extends Space, P extends Point<S, P>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>>
     implements BSPTreeVisitor<S, P, H, I> {
 
     private final P start;

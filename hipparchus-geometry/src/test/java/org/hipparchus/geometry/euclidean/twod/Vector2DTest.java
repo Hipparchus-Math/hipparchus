@@ -316,6 +316,13 @@ class Vector2DTest {
         check(blendedVector, 2.4, 3.4, 1e-12);
     }
 
+    @Test
+    void testMoveTowards() {
+        check(new Vector2D(5.0, -1.0).moveTowards(new Vector2D(3.0, 4.0), 0.0), 5.0, -1.0, 1.0e-15);
+        check(new Vector2D(5.0, -1.0).moveTowards(new Vector2D(3.0, 4.0), 0.5), 4.0,  1.5, 1.0e-15);
+        check(new Vector2D(5.0, -1.0).moveTowards(new Vector2D(3.0, 4.0), 1.0), 3.0,  4.0, 1.0e-15);
+    }
+
     private void check(final Vector2D v, final double x, final double y, final double tol) {
         assertEquals(x, v.getX(), tol);
         assertEquals(y, v.getY(), tol);

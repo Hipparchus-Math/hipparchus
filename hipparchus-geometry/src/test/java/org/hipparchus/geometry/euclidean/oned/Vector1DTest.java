@@ -257,7 +257,15 @@ class Vector1DTest {
         checkVector(blendedVector, 1.7);
     }
 
+    @Test
+    void testMoveTowards() {
+        checkVector(new Vector1D(5.0).moveTowards(new Vector1D(3.0), 0.0), 5.0);
+        checkVector(new Vector1D(5.0).moveTowards(new Vector1D(3.0), 0.5), 4.0);
+        checkVector(new Vector1D(5.0).moveTowards(new Vector1D(3.0), 1.0), 3.0);
+    }
+
     private void checkVector(Vector1D v, double x) {
         assertEquals(x, v.getX(), 1.0e-12);
     }
+
 }

@@ -26,7 +26,6 @@ import java.text.NumberFormat;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.util.FastMath;
@@ -230,30 +229,26 @@ public class Vector2D implements Vector<Euclidean2D, Vector2D> {
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D add(Vector<Euclidean2D, Vector2D> v) {
-        Vector2D v2 = (Vector2D) v;
-        return new Vector2D(x + v2.getX(), y + v2.getY());
+    public Vector2D add(Vector2D v) {
+        return new Vector2D(x + v.getX(), y + v.getY());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D add(double factor, Vector<Euclidean2D, Vector2D> v) {
-        Vector2D v2 = (Vector2D) v;
-        return new Vector2D(x + factor * v2.getX(), y + factor * v2.getY());
+    public Vector2D add(double factor, Vector2D v) {
+        return new Vector2D(x + factor * v.getX(), y + factor * v.getY());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D subtract(Vector<Euclidean2D, Vector2D> p) {
-        Vector2D p3 = (Vector2D) p;
-        return new Vector2D(x - p3.x, y - p3.y);
+    public Vector2D subtract(Vector2D p) {
+        return new Vector2D(x - p.x, y - p.y);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D subtract(double factor, Vector<Euclidean2D, Vector2D> v) {
-        Vector2D v2 = (Vector2D) v;
-        return new Vector2D(x - factor * v2.getX(), y - factor * v2.getY());
+    public Vector2D subtract(double factor, Vector2D v) {
+        return new Vector2D(x - factor * v.getX(), y - factor * v.getY());
     }
 
     /** Compute the angular separation between two vectors.
@@ -316,45 +311,40 @@ public class Vector2D implements Vector<Euclidean2D, Vector2D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distance1(Vector<Euclidean2D, Vector2D> p) {
-        Vector2D p3 = (Vector2D) p;
-        final double dx = FastMath.abs(p3.x - x);
-        final double dy = FastMath.abs(p3.y - y);
+    public double distance1(Vector2D p) {
+        final double dx = FastMath.abs(p.x - x);
+        final double dy = FastMath.abs(p.y - y);
         return dx + dy;
     }
 
     /** {@inheritDoc} */
     @Override
-    public double distance(Point<Euclidean2D> p) {
-        Vector2D p3 = (Vector2D) p;
-        final double dx = p3.x - x;
-        final double dy = p3.y - y;
+    public double distance(Vector2D p) {
+        final double dx = p.x - x;
+        final double dy = p.y - y;
         return FastMath.sqrt(dx * dx + dy * dy);
     }
 
     /** {@inheritDoc} */
     @Override
-    public double distanceInf(Vector<Euclidean2D, Vector2D> p) {
-        Vector2D p3 = (Vector2D) p;
-        final double dx = FastMath.abs(p3.x - x);
-        final double dy = FastMath.abs(p3.y - y);
+    public double distanceInf(Vector2D p) {
+        final double dx = FastMath.abs(p.x - x);
+        final double dy = FastMath.abs(p.y - y);
         return FastMath.max(dx, dy);
     }
 
     /** {@inheritDoc} */
     @Override
-    public double distanceSq(Vector<Euclidean2D, Vector2D> p) {
-        Vector2D p3 = (Vector2D) p;
-        final double dx = p3.x - x;
-        final double dy = p3.y - y;
+    public double distanceSq(Vector2D p) {
+        final double dx = p.x - x;
+        final double dy = p.y - y;
         return dx * dx + dy * dy;
     }
 
     /** {@inheritDoc} */
     @Override
-    public double dotProduct(final Vector<Euclidean2D, Vector2D> v) {
-        final Vector2D v2 = (Vector2D) v;
-        return MathArrays.linearCombination(x, v2.x, y, v2.y);
+    public double dotProduct(final Vector2D v) {
+        return MathArrays.linearCombination(x, v.x, y, v.y);
     }
 
     /**
@@ -434,7 +424,14 @@ public class Vector2D implements Vector<Euclidean2D, Vector2D> {
         return p1.distanceSq(p2);
     }
 
-    /** Compute the orientation of a triplet of points.
+    /** {@inheritDoc} */
+    @Override
+    public Vector2D moveTowards(final Vector2D other, final double ratio) {
+        return new Vector2D(x + ratio * (other.x - x),
+                            y + ratio * (other.y - y));
+    }
+
+     /** Compute the orientation of a triplet of points.
      * @param p first vector of the triplet
      * @param q second vector of the triplet
      * @param r third vector of the triplet

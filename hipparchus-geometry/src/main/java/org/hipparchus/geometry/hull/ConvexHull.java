@@ -33,7 +33,7 @@ import org.hipparchus.geometry.partitioning.SubHyperplane;
  * @param <H> Type of the hyperplane.
  * @param <I> Type of the sub-hyperplane.
 */
-public interface ConvexHull<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>>
+public interface ConvexHull<S extends Space, P extends Point<S, P>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>>
         extends Serializable {
 
     /**

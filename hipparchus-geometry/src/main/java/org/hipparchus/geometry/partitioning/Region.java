@@ -57,7 +57,7 @@ import org.hipparchus.geometry.Space;
  * @param <I> Type of the sub-hyperplane.
 
  */
-public interface Region<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>> {
+public interface Region<S extends Space, P extends Point<S, P>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>> {
 
     /** Enumerate for the location of a point with respect to the region. */
     enum Location {

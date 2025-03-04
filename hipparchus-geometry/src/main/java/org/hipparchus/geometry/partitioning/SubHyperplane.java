@@ -48,7 +48,7 @@ import org.hipparchus.geometry.Space;
 
  */
 public interface SubHyperplane<S extends Space,
-                               P extends Point<S>,
+                               P extends Point<S, P>,
                                H extends Hyperplane<S, P, H, I>,
                                I extends SubHyperplane<S, P, H, I>> {
 
@@ -98,7 +98,7 @@ public interface SubHyperplane<S extends Space,
      * @param <F> Type of the hyperplane.
      * @param <J> Type of the sub-hyperplane.
      */
-    class SplitSubHyperplane<U extends Space, R extends Point<U>, F extends Hyperplane<U, R, F, J>, J extends SubHyperplane<U, R, F, J>> {
+    class SplitSubHyperplane<U extends Space, R extends Point<U, R>, F extends Hyperplane<U, R, F, J>, J extends SubHyperplane<U, R, F, J>> {
 
         /** Part of the sub-hyperplane on the plus side of the splitting hyperplane. */
         private final J plus;

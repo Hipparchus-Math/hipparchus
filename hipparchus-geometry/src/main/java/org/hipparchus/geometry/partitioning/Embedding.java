@@ -53,8 +53,8 @@ import org.hipparchus.geometry.Space;
 
  * @see Hyperplane
  */
-public interface Embedding<S extends Space, P extends Point<S>,
-                           T extends Space, Q extends Point<T>> {
+public interface Embedding<S extends Space, P extends Point<S, P>,
+                           T extends Space, Q extends Point<T, Q>> {
 
     /** Transform a space point into a sub-space point.
      * @param point n-dimension point of the space

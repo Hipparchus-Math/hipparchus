@@ -181,7 +181,7 @@ public class RegionDumper {
      * @param <I> Type of the sub-hyperplane.
      */
     private abstract static class TreeDumper<S extends Space,
-                                             P extends Point<S>,
+                                             P extends Point<S, P>,
                                              H extends Hyperplane<S, P, H, I>,
                                              I extends SubHyperplane<S, P, H, I>>
         implements BSPTreeVisitor<S, P, H, I> {

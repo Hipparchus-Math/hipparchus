@@ -100,4 +100,14 @@ class S1PointTest {
         }
     }
 
+    @Test
+    void testMoveTowards() {
+        final S1Point s1 = new S1Point(2.0);
+        final S1Point s2 = new S1Point(4.0);
+        for (double r = 0.0; r <= 1.0; r += FastMath.scalb(1.0, -10)) {
+            // motion should be linear according to angles
+            assertEquals(r * s1.distance(s2), s1.distance(s1.moveTowards(s2, r)), 1.0e-14);
+        }
+    }
+
 }

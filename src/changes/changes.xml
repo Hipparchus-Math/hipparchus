@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="luc" type="update">
+        Added moveTowards method to Point interface.
+      </action>
       <action dev="luc" type="fix" issue="issues/384">
         Fixed issue with open boundaries in Euclidean 2D-polygons.
       </action>

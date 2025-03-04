@@ -23,7 +23,6 @@ package org.hipparchus.geometry.euclidean.oned;
 
 import java.text.NumberFormat;
 
-import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.util.FastMath;
@@ -168,30 +167,26 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D add(Vector<Euclidean1D, Vector1D> v) {
-        Vector1D v1 = (Vector1D) v;
-        return new Vector1D(x + v1.getX());
+    public Vector1D add(Vector1D v) {
+        return new Vector1D(x + v.getX());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D add(double factor, Vector<Euclidean1D, Vector1D> v) {
-        Vector1D v1 = (Vector1D) v;
-        return new Vector1D(x + factor * v1.getX());
+    public Vector1D add(double factor, Vector1D v) {
+        return new Vector1D(x + factor * v.getX());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D subtract(Vector<Euclidean1D, Vector1D> p) {
-        Vector1D p3 = (Vector1D) p;
-        return new Vector1D(x - p3.x);
+    public Vector1D subtract(Vector1D p) {
+        return new Vector1D(x - p.x);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D subtract(double factor, Vector<Euclidean1D, Vector1D> v) {
-        Vector1D v1 = (Vector1D) v;
-        return new Vector1D(x - factor * v1.getX());
+    public Vector1D subtract(double factor, Vector1D v) {
+        return new Vector1D(x - factor * v.getX());
     }
 
     /** {@inheritDoc} */
@@ -220,38 +215,33 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distance1(Vector<Euclidean1D, Vector1D> p) {
-        Vector1D p3 = (Vector1D) p;
-        return FastMath.abs(p3.x - x);
+    public double distance1(Vector1D p) {
+        return FastMath.abs(p.x - x);
     }
 
     /** {@inheritDoc} */
     @Override
-    public double distance(Point<Euclidean1D> p) {
-        Vector1D p3 = (Vector1D) p;
-        return FastMath.abs(p3.x - x);
+    public double distance(Vector1D p) {
+        return FastMath.abs(p.x - x);
     }
 
     /** {@inheritDoc} */
     @Override
-    public double distanceInf(Vector<Euclidean1D, Vector1D> p) {
-        Vector1D p3 = (Vector1D) p;
-        return FastMath.abs(p3.x - x);
+    public double distanceInf(Vector1D p) {
+        return FastMath.abs(p.x - x);
     }
 
     /** {@inheritDoc} */
     @Override
-    public double distanceSq(Vector<Euclidean1D, Vector1D> p) {
-        Vector1D p3 = (Vector1D) p;
-        final double dx = p3.x - x;
+    public double distanceSq(Vector1D p) {
+        final double dx = p.x - x;
         return dx * dx;
     }
 
     /** {@inheritDoc} */
     @Override
-    public double dotProduct(final Vector<Euclidean1D, Vector1D> v) {
-        final Vector1D v1 = (Vector1D) v;
-        return x * v1.x;
+    public double dotProduct(final Vector1D v) {
+        return x * v.x;
     }
 
     /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
@@ -288,6 +278,12 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
      */
     public static double distanceSq(Vector1D p1, Vector1D p2) {
         return p1.distanceSq(p2);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector1D moveTowards(final Vector1D other, final double ratio) {
+        return new Vector1D(x + ratio * (other.x - x));
     }
 
     /**

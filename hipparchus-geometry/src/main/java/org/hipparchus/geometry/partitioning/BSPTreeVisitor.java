@@ -55,7 +55,7 @@ import org.hipparchus.geometry.Space;
  * @see SubHyperplane
 
  */
-public interface BSPTreeVisitor<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>> {
+public interface BSPTreeVisitor<S extends Space, P extends Point<S, P>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>> {
 
     /** Enumerate for visit order with respect to plus sub-tree, minus sub-tree and cut sub-hyperplane. */
     enum Order {

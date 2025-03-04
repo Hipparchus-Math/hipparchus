@@ -31,7 +31,7 @@ import org.hipparchus.util.SinCos;
 /** This class represents a point on the 1-sphere.
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class S1Point implements Point<Sphere1D> {
+public class S1Point implements Point<Sphere1D, S1Point> {
 
    // CHECKSTYLE: stop ConstantName
     /** A vector with all coordinates set to NaN. */
@@ -94,8 +94,8 @@ public class S1Point implements Point<Sphere1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distance(final Point<Sphere1D> point) {
-        return distance(this, (S1Point) point);
+    public double distance(final S1Point point) {
+        return distance(this, point);
     }
 
     /** Compute the distance (angular separation) between two points.
@@ -105,6 +105,12 @@ public class S1Point implements Point<Sphere1D> {
      */
     public static double distance(S1Point p1, S1Point p2) {
         return Vector2D.angle(p1.vector, p2.vector);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public S1Point moveTowards(final S1Point other, final double ratio) {
+        return new S1Point(alpha + ratio * (other.alpha - alpha));
     }
 
     /**

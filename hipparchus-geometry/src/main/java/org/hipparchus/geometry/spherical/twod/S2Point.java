@@ -40,7 +40,7 @@ import org.hipparchus.util.SinCos;
  * </p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class S2Point implements Point<Sphere2D> {
+public class S2Point implements Point<Sphere2D, S2Point> {
 
     /** +I (coordinates: \( \theta = 0, \varphi = \pi/2 \)). */
     public static final S2Point PLUS_I = new S2Point(0, MathUtils.SEMI_PI, Vector3D.PLUS_I);
@@ -173,8 +173,8 @@ public class S2Point implements Point<Sphere2D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distance(final Point<Sphere2D> point) {
-        return distance(this, (S2Point) point);
+    public double distance(final S2Point point) {
+        return distance(this, point);
     }
 
     /** Compute the distance (angular separation) between two points.
@@ -184,6 +184,21 @@ public class S2Point implements Point<Sphere2D> {
      */
     public static double distance(S2Point p1, S2Point p2) {
         return Vector3D.angle(p1.vector, p2.vector);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public S2Point moveTowards(final S2Point other, final double ratio) {
+        final double alpha = Vector3D.angle(vector, other.vector);
+        if (alpha == 0) {
+            // special case to avoid division by zero in normalization below
+            return this;
+        }
+        else {
+            final double sA = (FastMath.sin((1 - ratio) * alpha));
+            final double sB = FastMath.sin(ratio * alpha);
+            return new S2Point(new Vector3D(sA, vector, sB, other.vector));
+        }
     }
 
     /**

@@ -36,7 +36,7 @@ import org.hipparchus.geometry.Space;
  * @param <I> Type of the sub-hyperplane.
  */
 class Characterization<S extends Space,
-                       P extends Point<S>,
+                       P extends Point<S, P>,
                        H extends Hyperplane<S, P, H, I>,
                        I extends SubHyperplane<S, P, H, I>> {
 

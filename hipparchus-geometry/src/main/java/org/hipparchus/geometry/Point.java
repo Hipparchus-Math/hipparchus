@@ -25,10 +25,11 @@ import java.io.Serializable;
 
 /** This interface represents a generic geometrical point.
  * @param <S> Type of the space.
+ * @param <P> Type of the points in space.
  * @see Space
  * @see Vector
  */
-public interface Point<S extends Space> extends Serializable {
+public interface Point<S extends Space, P extends Point<S, P>> extends Serializable {
 
     /** Get the space to which the point belongs.
      * @return containing space
@@ -45,6 +46,19 @@ public interface Point<S extends Space> extends Serializable {
      * @param p second point
      * @return the distance between the instance and p
      */
-    double distance(Point<S> p);
+    double distance(P p);
+
+    /** Move towards another point.
+     * <p>
+     * Motion is linear (along space curvature) and based on a ratio
+     * where 0.0 stands for not moving at all, 0.5 stands for moving halfway
+     * towards other point, and 1.0 stands for moving fully to the other point.
+     * </p>
+     * @param other other point
+     * @param ratio motion ratio,
+     * @return moved point
+     * @since 4.0
+     */
+    P moveTowards(P other, double ratio);
 
 }

@@ -72,7 +72,7 @@ import org.hipparchus.util.FastMath;
 
  */
 public class BSPTree<S extends Space,
-                     P extends Point<S>,
+                     P extends Point<S, P>,
                      H extends Hyperplane<S, P, H, I>,
                      I extends SubHyperplane<S, P, H, I>> {
 
@@ -539,7 +539,7 @@ public class BSPTree<S extends Space,
      * @param <I> Type of the sub-hyperplane.
      */
     public interface LeafMerger<S extends Space,
-                                P extends Point<S>,
+                                P extends Point<S, P>,
                                 H extends Hyperplane<S, P, H, I>,
                                 I extends SubHyperplane<S, P, H, I>> {
 
@@ -592,7 +592,7 @@ public class BSPTree<S extends Space,
      * @param <I> Type of the sub-hyperplane.
      */
     public interface VanishingCutHandler<S extends Space,
-                                         P extends Point<S>,
+                                         P extends Point<S, P>,
                                          H extends Hyperplane<S, P, H, I>,
                                          I extends SubHyperplane<S, P, H, I>> {
 

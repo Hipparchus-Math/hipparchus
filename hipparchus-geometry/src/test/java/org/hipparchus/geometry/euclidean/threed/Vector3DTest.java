@@ -377,7 +377,7 @@ class Vector3DTest {
     void testDotProduct() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
-        Well1024a random = new Well1024a(553267312521321234l);
+        Well1024a random = new Well1024a(553267312521321234L);
         for (int i = 0; i < 10000; ++i) {
             double ux = 10000 * random.nextDouble();
             double uy = 10000 * random.nextDouble();
@@ -419,7 +419,7 @@ class Vector3DTest {
     void testCrossProduct() {
         // we compare accurate versus naive cross product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
-        Well1024a random = new Well1024a(885362227452043214l);
+        Well1024a random = new Well1024a(885362227452043214L);
         for (int i = 0; i < 10000; ++i) {
             double ux = 10000 * random.nextDouble();
             double uy = 10000 * random.nextDouble();
@@ -447,6 +447,13 @@ class Vector3DTest {
 
         // Then
         checkVector(blendedVector, 3.1, 4.1, 5.1);
+    }
+
+    @Test
+    void testMoveTowards() {
+        checkVector(new Vector3D(5.0, -1.0, 2.0).moveTowards(new Vector3D(3.0, 4.0, 6.0), 0.0), 5.0, -1.0, 2.0);
+        checkVector(new Vector3D(5.0, -1.0, 2.0).moveTowards(new Vector3D(3.0, 4.0, 6.0), 0.5), 4.0,  1.5, 4.0);
+        checkVector(new Vector3D(5.0, -1.0, 2.0).moveTowards(new Vector3D(3.0, 4.0, 6.0), 1.0), 3.0,  4.0, 6.0);
     }
 
     private void checkVector(Vector3D v, double x, double y, double z) {

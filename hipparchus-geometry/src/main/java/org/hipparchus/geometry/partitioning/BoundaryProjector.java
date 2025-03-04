@@ -40,11 +40,11 @@ import org.hipparchus.util.FastMath;
  * @param <J> Type of the sub-hyperplane in the destination sub-space.
  */
 class BoundaryProjector<S extends Space,
-                        P extends Point<S>,
+                        P extends Point<S, P>,
                         H extends Hyperplane<S, P, H, I>,
                         I extends SubHyperplane<S, P, H, I>,
                         T extends Space,
-                        Q extends Point<T>,
+                        Q extends Point<T, Q>,
                         F extends Hyperplane<T, Q, F, J>,
                         J extends SubHyperplane<T, Q, F, J>>
     implements BSPTreeVisitor<S, P, H, I> {
@@ -175,7 +175,6 @@ class BoundaryProjector<S extends Space,
      */
     private void addRegion(final SubHyperplane<S, P, H, I> sub, final List<Region<T, Q, F, J>> list) {
         if (sub != null) {
-            @SuppressWarnings("unchecked")
             final Region<T, Q, F, J> region = ((AbstractSubHyperplane<S, P, H, I, T, Q, F, J>) sub).getRemainingRegion();
             if (region != null) {
                 list.add(region);

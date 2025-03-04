@@ -41,7 +41,7 @@ import org.hipparchus.geometry.partitioning.SubHyperplane.SplitSubHyperplane;
  * @param <I> Type of the sub-hyperplane.
 
  */
-public class RegionFactory<S extends Space, P extends Point<S>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>> {
+public class RegionFactory<S extends Space, P extends Point<S, P>, H extends Hyperplane<S, P, H, I>, I extends SubHyperplane<S, P, H, I>> {
 
     /** Visitor removing internal nodes attributes. */
     private final NodesCleaner nodeCleaner;

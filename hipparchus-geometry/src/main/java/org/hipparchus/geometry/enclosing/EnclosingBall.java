@@ -33,7 +33,7 @@ import org.hipparchus.geometry.Space;
  * @see Point
  * @see Encloser
  */
-public class EnclosingBall<S extends Space, P extends Point<S>> implements Serializable {
+public class EnclosingBall<S extends Space, P extends Point<S, P>> implements Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20140126L;
