@@ -22,7 +22,7 @@ import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 
 /**
- * This class findex points that are inside a convex cell.
+ * This class find points that are inside a convex cell.
  * @param <S> Type of the space.
  * @param <P> Type of the points in space.
  * @param <H> Type of the hyperplane.
@@ -78,14 +78,18 @@ class InsideCellFinder<S extends Space,
             final int stageFactor = 2 + FACTOR * k * k;
 
             for (int attempt = 0; attempt < depth; ++attempt) {
-                // look for the hyperplane that gives maximum offset for current point
-                // i.e. the worst cell boundary for current point
-                Selection<S, P, H, I> max = null;
+                // look for the two hyperplanes that give maximum offsets for current point
+                // i.e. the worst cell boundaries for current point
+                Selection<S, P, H, I> max  = null;
+                Selection<S, P, H, I> next = null;
                 for (BSPTree<S, P, H, I> node = cell; node.getParent() != null; node = node.getParent()) {
                     if (node.getParent().getCut() != null) {
                         final Selection<S, P, H, I> current = new Selection<>(node, point);
                         if (max == null || current.offset > max.offset) {
-                            max = current;
+                            next = max;
+                            max  = current;
+                        } else if (next == null || current.offset > next.offset) {
+                            next = current;
                         }
                     }
                 }
@@ -97,8 +101,23 @@ class InsideCellFinder<S extends Space,
                     return point;
                 }
 
-                 // move the point in an attempt to reduce maximum offset
-                point = max.movePoint(point, stageFactor);
+                // move the point in an attempt to reduce maximum offset
+                if (next == null || next.pointIsInside()) {
+                    // we have only one bad hyperplane
+                    // we target a point on the interior side of the cell wrt this bad hyperplane
+                    point = max.movePoint(point, stageFactor);
+                } else {
+                    // we have two bad hyperplanes
+                    // we target a point on the bisector
+                    // this is an attempt to work around cases where two hyperplanes
+                    // form a very thin wedge and their tolerances create an overlapping
+                    // zone where we can't find any interior points;
+                    // using a single hyperplane in this case (as per the alternative above)
+                    // would result in ping-pong test points
+                    final P point1 = max.movePoint(point, stageFactor);
+                    final P point2 = next.movePoint(point, stageFactor);
+                    point = point1.moveTowards(point2, 0.5);
+                }
 
             }
         }
