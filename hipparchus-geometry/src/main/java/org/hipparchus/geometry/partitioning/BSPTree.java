@@ -24,9 +24,7 @@ package org.hipparchus.geometry.partitioning;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.util.FastMath;
@@ -75,16 +73,6 @@ public class BSPTree<S extends Space,
                      P extends Point<S, P>,
                      H extends Hyperplane<S, P, H, I>,
                      I extends SubHyperplane<S, P, H, I>> {
-
-    /** Maximum number of target offset stages for inside points search.
-     * @since 4.0
-     */
-    private static final int MAX_STAGES = 500;
-
-    /** Factor at each stage for inside points search.
-     * @since 4.0
-     */
-    private static final int FACTOR = 20;
 
     /** Cut sub-hyperplane. */
     private I cut;
@@ -810,58 +798,7 @@ public class BSPTree<S extends Space,
      * @since 4.0
      */
     public P pointInsideCell(final P start) {
-
-        // special handling for tree root
-        if (parent == null) {
-            return start;
-        }
-
-        P point = start;
-        final int depth = getDepth();
-
-        // for each stage (i.e. multiplication factor wrt tolerance), we allow as many
-        // attempts as there are parent nodes to move the test point. The goal is
-        // to avoid infinite loops (same point/hyperplane again and again)
-        // when we exhaust the number of attempts, we change the stage factor (reducing it)
-        for (int stage = 0; stage < MAX_STAGES; ++stage) {
-
-            // the last stage factor (the smallest one), should be 2
-            final int k           = MAX_STAGES - 1 - stage;
-            final int stageFactor = 2 + FACTOR * k * k;
-
-            for (int attempt = 0; attempt < depth; ++attempt) {
-                // look for the maximum offset for current point
-                H      maxHyperplane = null;
-                double maxSign       = 1;
-                double maxOffset     = Double.NEGATIVE_INFINITY;
-                for (BSPTree<S, P, H, I> node = this; node.parent != null; node = node.parent) {
-                    if (node.parent.cut != null) {
-                        // we want negative offsets within the cell, positive offsets outside the cell
-                        final H      hyperplane = node.parent.cut.getHyperplane();
-                        final double sign       = node == node.parent.minus ? 1 : -1;
-                        final double offset     = sign * hyperplane.getOffset(point);
-                        if (offset > maxOffset) {
-                            maxHyperplane = hyperplane;
-                            maxSign       = sign;
-                            maxOffset     = offset;
-                        }
-                    }
-                }
-
-                if (maxHyperplane == null || maxOffset < -maxHyperplane.getTolerance()) {
-                    // the maximum offset is negative enough to ensure the current point is inside the cell
-                    return point;
-                } else {
-                    // move the point in an attempt to reduce maximum offset
-                    final double tolerance = maxSign * maxHyperplane.getTolerance();
-                    point = maxHyperplane.moveToOffset(point, -stageFactor * tolerance);
-                }
-            }
-        }
-
-        // we were not able to find an inside point after many iterations
-        throw new MathIllegalStateException(LocalizedGeometryFormats.CANNOT_FIND_INSIDE_POINT, MAX_STAGES);
-
+        return new InsideCellFinder<>(this).findInsidePoint(start);
     }
 
     /** Chop off parts of the tree.

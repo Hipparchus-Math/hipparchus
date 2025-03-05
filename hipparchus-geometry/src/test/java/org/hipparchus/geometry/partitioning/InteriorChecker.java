@@ -49,7 +49,6 @@ public class InteriorChecker<S extends Space, P extends Point<S, P>, H extends H
     private void check(final BSPTree<S, P, H, I> node) {
         final P point = node.pointInsideCell(start);
         final BSPTree<S, P, H, I> convex = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
-        //System.out.println(start + " " + point);
         Assertions.assertTrue((Boolean) convex.getCell(point, tolerance).getAttribute());
     }
 
