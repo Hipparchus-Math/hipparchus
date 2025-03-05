@@ -917,8 +917,7 @@ class SphericalPolygonsSetTest {
             { 17.769418792522664, -77.13876029654094 },
             { 17.747659863099422, -77.14334087084347 },
             { 17.67571798336192,  -77.15846791369165 },
-//            adding 1.0e-4 to the second coordinate of the following point
-//            generates an open outline boundary error
+//            adding 1.0e-4 to the second coordinate of the following point triggers an exception
             { 17.624293265977183, -77.16938381433733 },
             { 17.5485398681768,   -77.18520934447962 },
             { 17.526779103104783, -77.1897823275402  },
