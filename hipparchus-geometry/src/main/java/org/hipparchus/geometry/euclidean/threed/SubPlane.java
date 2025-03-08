@@ -51,6 +51,12 @@ public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Vector3D, Plane
         return new SubPlane(hyperplane, remainingRegion);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Vector3D getInteriorPoint() {
+        return isEmpty() ? null : getHyperplane().toSpace(getRemainingRegion().getInteriorPoint());
+    }
+
     /** Split the instance in two parts by an hyperplane.
      * @param hyperplane splitting hyperplane
      * @return an object containing both the part of the instance

@@ -37,6 +37,7 @@ import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryAttribute;
+import org.hipparchus.geometry.partitioning.InteriorPointFinder;
 import org.hipparchus.geometry.partitioning.Side;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.util.FastMath;
@@ -545,6 +546,16 @@ public class PolygonsSet
     @Override
     public PolygonsSet buildNew(final BSPTree<Euclidean2D, Vector2D, Line, SubLine> tree) {
         return new PolygonsSet(tree, getTolerance());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector2D getInteriorPoint() {
+        final InteriorPointFinder<Euclidean2D, Vector2D, Line, SubLine> finder =
+                new InteriorPointFinder<>(Vector2D.ZERO);
+        getTree(false).visit(finder);
+        final BSPTree.InteriorPoint<Euclidean2D, Vector2D> interior = finder.getPoint();
+        return interior == null ? null : interior.getPoint();
     }
 
     /** {@inheritDoc} */

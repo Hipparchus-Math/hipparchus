@@ -92,6 +92,12 @@ public interface SubHyperplane<S extends Space,
      */
     I reunite(I other);
 
+    /** Get an interior point.
+     * @return an arbitrary interior point, or null if sub-hyperplane is empty
+     * @since 4.0
+     */
+    P getInteriorPoint();
+
     /** Class holding the results of the {@link #split split} method.
      * @param <U> Type of the embedding space.
      * @param <R> Type of the points in the embedding space.

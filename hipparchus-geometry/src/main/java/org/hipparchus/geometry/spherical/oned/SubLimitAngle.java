@@ -25,7 +25,6 @@ import org.hipparchus.geometry.partitioning.AbstractSubHyperplane;
 import org.hipparchus.geometry.partitioning.Region;
 
 /** This class represents sub-hyperplane for {@link LimitAngle}.
- * <p>Instances of this class are guaranteed to be immutable.</p>
  */
 public class SubLimitAngle
     extends AbstractSubHyperplane<Sphere1D, S1Point, LimitAngle, SubLimitAngle, Sphere1D, S1Point, LimitAngle, SubLimitAngle> {
@@ -54,6 +53,12 @@ public class SubLimitAngle
     @Override
     protected SubLimitAngle buildNew(final LimitAngle hyperplane, final Region<Sphere1D, S1Point, LimitAngle, SubLimitAngle> remainingRegion) {
         return new SubLimitAngle(hyperplane, remainingRegion);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public S1Point getInteriorPoint() {
+        return getHyperplane().getLocation();
     }
 
     /** {@inheritDoc} */

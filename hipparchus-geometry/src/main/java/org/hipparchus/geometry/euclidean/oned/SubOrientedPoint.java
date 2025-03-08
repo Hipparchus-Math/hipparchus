@@ -27,7 +27,6 @@ import org.hipparchus.geometry.partitioning.Region;
 /** This class represents sub-hyperplane for {@link OrientedPoint}.
  * <p>An hyperplane in 1D is a simple point, its orientation being a
  * boolean.</p>
- * <p>Instances of this class are guaranteed to be immutable.</p>
  */
 public class SubOrientedPoint
     extends AbstractSubHyperplane<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint,
@@ -59,6 +58,12 @@ public class SubOrientedPoint
     protected SubOrientedPoint buildNew(final OrientedPoint hyperplane,
                                         final Region<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> remainingRegion) {
         return new SubOrientedPoint(hyperplane, remainingRegion);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector1D getInteriorPoint() {
+        return getHyperplane().getLocation();
     }
 
     /** {@inheritDoc} */

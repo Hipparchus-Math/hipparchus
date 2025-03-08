@@ -61,6 +61,7 @@ class ArcsSetTest {
         assertEquals(1, set.asList().size());
         assertEquals(2.3, set.asList().get(0).getInf(), 1.0e-10);
         assertEquals(5.7, set.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -77,6 +78,7 @@ class ArcsSetTest {
         assertEquals(1, set.asList().size());
         assertEquals(5.7, set.asList().get(0).getInf(), 1.0e-10);
         assertEquals(2.3 + MathUtils.TWO_PI, set.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -94,6 +96,7 @@ class ArcsSetTest {
                 assertEquals(Location.OUTSIDE, split.getMinus().checkPoint(p));
             }
         }
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -144,6 +147,7 @@ class ArcsSetTest {
         assertEquals(0.0, set.asList().get(0).getInf(), 1.0e-10);
         assertEquals(2 * FastMath.PI, set.asList().get(0).getSup(), 1.0e-10);
         assertEquals(2 * FastMath.PI, set.getSize(), 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -158,6 +162,7 @@ class ArcsSetTest {
         assertEquals(0.0, set.asList().get(0).getInf(), 1.0e-10);
         assertEquals(2 * FastMath.PI, set.asList().get(0).getSup(), 1.0e-10);
         assertEquals(2 * FastMath.PI, set.getSize(), 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -166,6 +171,7 @@ class ArcsSetTest {
         assertEquals(1.0e-10, empty.getTolerance(), 1.0e-20);
         assertEquals(0.0, empty.getSize(), 1.0e-10);
         assertTrue(empty.asList().isEmpty());
+        assertNull(empty.getInteriorPoint());
     }
 
     @Test
@@ -176,6 +182,7 @@ class ArcsSetTest {
         assertEquals(1, tiny.asList().size());
         assertEquals(0.0, tiny.asList().get(0).getInf(), 1.0e-10);
         assertEquals(Precision.SAFE_MIN / 2, tiny.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(Location.BOUNDARY, tiny.checkPoint(tiny.getInteriorPoint()));
     }
 
     @Test
@@ -189,6 +196,7 @@ class ArcsSetTest {
         assertEquals(1, set.asList().size());
         assertEquals(0.0, set.asList().get(0).getInf(), 1.0e-10);
         assertEquals(MathUtils.TWO_PI, set.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -230,6 +238,7 @@ class ArcsSetTest {
         assertEquals(3.0, aMbList.get(0).getSup(), 1.0e-10);
         assertEquals(5.0, aMbList.get(1).getInf(), 1.0e-10);
         assertEquals(6.0, aMbList.get(1).getSup(), 1.0e-10);
+        assertEquals(Location.INSIDE, aMb.checkPoint(aMb.getInteriorPoint()));
 
 
     }
@@ -276,7 +285,7 @@ class ArcsSetTest {
         assertEquals(3.0, aMbList.get(0).getSup(), 1.0e-10);
         assertEquals(5.0, aMbList.get(1).getInf(), 1.0e-10);
         assertEquals(5.5, aMbList.get(1).getSup(), 1.0e-10);
-
+        assertEquals(Location.INSIDE, aMb.checkPoint(aMb.getInteriorPoint()));
 
     }
 
@@ -305,6 +314,7 @@ class ArcsSetTest {
         assertEquals( 3.0, list.get(0).getSup(), 1.0e-10);
         assertEquals( 5.0, list.get(1).getInf(), 1.0e-10);
         assertEquals( 5.5, list.get(1).getSup(), 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 

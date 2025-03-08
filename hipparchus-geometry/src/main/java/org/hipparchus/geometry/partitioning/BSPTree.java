@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.Geometry;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.util.FastMath;
@@ -176,7 +177,7 @@ public class BSPTree<S extends Space,
             minus.parent = null;
         }
 
-        final I chopped = fitToCell(hyperplane.wholeHyperplane());
+        final I chopped = fitToCell(hyperplane.wholeHyperplane(), null);
         if (chopped == null || chopped.isEmpty()) {
             cut          = null;
             plus         = null;
@@ -305,22 +306,64 @@ public class BSPTree<S extends Space,
 
     /** Fit a sub-hyperplane inside the cell defined by the instance.
      * <p>Fitting is done by chopping off the parts of the
-     * sub-hyperplane that lie outside of the cell using the
+     * sub-hyperplane that lie outside the cell using the
      * cut-hyperplanes of the parent nodes of the instance.</p>
      * @param sub sub-hyperplane to fit
+     * @param ignored tree node to ignore (null if all nodes should be considered)
      * @return a new sub-hyperplane, guaranteed to have no part outside
      * of the instance cell
      */
-    private I fitToCell(final I sub) {
+    private I fitToCell(final I sub, final BSPTree<S, P, H, I> ignored) {
         I s = sub;
         for (BSPTree<S, P, H, I> tree = this; tree.parent != null && s != null; tree = tree.parent) {
-            if (tree == tree.parent.plus) {
-                s = s.split(tree.parent.cut.getHyperplane()).getPlus();
-            } else {
-                s = s.split(tree.parent.cut.getHyperplane()).getMinus();
+            if (tree.parent != ignored) {
+                if (tree == tree.parent.plus) {
+                    s = s.split(tree.parent.cut.getHyperplane()).getPlus();
+                }
+                else {
+                    s = s.split(tree.parent.cut.getHyperplane()).getMinus();
+                }
             }
         }
         return s;
+    }
+
+    /** Get a point that is interior to the cell.
+     * @param defaultPoint default point to return if tree is empty
+     * @return point that is interior to the cell
+     * @since 4.0
+     */
+    public InteriorPoint<S, P> getInteriorPoint(final P defaultPoint) {
+
+        // find edges/facets interior points
+        final List<P> edgePoints = new ArrayList<>();
+        for (BSPTree<S, P, H, I> n = parent; n != null; n = n.getParent()) {
+            final I fit = fitToCell(n.getCut().getHyperplane().wholeHyperplane(), n);
+            if (fit != null) {
+                final P p = fit.getInteriorPoint();
+                if (p != null) {
+                    edgePoints.add(p);
+                }
+            }
+        }
+
+        if (edgePoints.isEmpty()) {
+            // there are no edges/facets interior points at all!
+            // we are in a cell representing the whole space
+            return new InteriorPoint<>(defaultPoint, Double.POSITIVE_INFINITY);
+        } else {
+            // compute barycenter of edges/facets interior point
+            final P barycenter = Geometry.barycenter(edgePoints);
+
+            // compute distance to the closest edge/facet
+            double min = Double.POSITIVE_INFINITY;
+            for (BSPTree<S, P, H, I> n = parent; n != null; n = n.getParent()) {
+                min = FastMath.min(min, FastMath.abs(n.getCut().getHyperplane().getOffset(barycenter)));
+            }
+
+            return new InteriorPoint<>(barycenter, min);
+        }
+
     }
 
     /** Get the cell to which a point belongs.
@@ -474,7 +517,7 @@ public class BSPTree<S extends Space,
             minus.merge(merged.minus, leafMerger, merged, false);
             merged.condense();
             if (merged.cut != null) {
-                merged.cut = merged.fitToCell(merged.cut.getHyperplane().wholeHyperplane());
+                merged.cut = merged.fitToCell(merged.cut.getHyperplane().wholeHyperplane(), null);
             }
 
             return merged;
@@ -495,7 +538,7 @@ public class BSPTree<S extends Space,
      */
     private void fixCuts() {
         if (cut != null) {
-            final I fit = fitToCell(cut.getHyperplane().wholeHyperplane());
+            final I fit = fitToCell(cut.getHyperplane().wholeHyperplane(), null);
             if (fit == null) {
                 // cut sub-hyperplane vanished
                 cut = cut.getHyperplane().emptyHyperplane();
@@ -788,19 +831,6 @@ public class BSPTree<S extends Space,
 
     }
 
-    /** Find a point inside a cell.
-     * <p>
-     * This method searches for a point inside a cell by moving around
-     * starting from a specified point
-     * </p>
-     * @param start starting point for the search
-     * @return point inside the convex cell corresponding to the instance
-     * @since 4.0
-     */
-    public P pointInsideCell(final P start) {
-        return new InsideCellFinder<>(this).findInsidePoint(start);
-    }
-
     /** Chop off parts of the tree.
      * <p>The instance is modified in place, all the parts that are on
      * the minus side of the chopping hyperplane are discarded, only the
@@ -853,6 +883,44 @@ public class BSPTree<S extends Space,
             minus     = fixed.minus;
             attribute = fixed.attribute;
         }
+    }
+
+    /** Container for cell interior points.
+     * @param <S> Type of the space.
+     * @param <P> Type of the points in space.
+     * @since 4.0
+     */
+    public static final class InteriorPoint <S extends Space, P extends Point<S, P>> {
+
+        /** Point. */
+        private final P point;
+
+        /** Distance to the closest edge/facet. */
+        private final double distance;
+
+        /** Simple constructor.
+         * @param point point
+         * @param distance d
+         */
+        InteriorPoint(final P point, final double distance) {
+            this.point    = point;
+            this.distance = distance;
+        }
+
+        /** Get the interior point.
+         * @return interior point
+         */
+        public P getPoint() {
+            return point;
+        }
+
+        /** Get the distance to the closest edge/facet.
+         * @return distance to the closest edge/facet.
+         */
+        public double getDistance() {
+            return distance;
+        }
+
     }
 
 }
