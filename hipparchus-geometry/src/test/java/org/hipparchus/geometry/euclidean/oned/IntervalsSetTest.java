@@ -201,9 +201,6 @@ class IntervalsSetTest {
                                     final double a2, final double a3,
                                     final double tol) {
 
-        final double min = FastMath.min(FastMath.min(a0, a1), FastMath.min(a2, a3));
-        final double max = FastMath.max(FastMath.max(a0, a1), FastMath.max(a2, a3));
-
         // intervals set [ a0 ; a1 ] U [ a2 ; a3 ]
         final IntervalsSet setA =
                         new IntervalsSet(new BSPTree<>(new OrientedPoint(new Vector1D(a0), false, tol).wholeHyperplane(),

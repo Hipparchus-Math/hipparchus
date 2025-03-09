@@ -135,18 +135,6 @@ public class BSPTree<S extends Space,
         minus.parent   = this;
     }
 
-    /** Get the depth of a node.
-     * @return depth of the instance node, starting from 0 at root
-     * @since 4.0
-     */
-    public int getDepth() {
-        int depth = 0;
-        for (BSPTree<S, P, H, I> node = this; node.parent != null; node = node.parent) {
-            depth++;
-        }
-        return depth;
-    }
-
     /** Insert a cut sub-hyperplane in a node.
      * <p>The sub-tree starting at this node will be completely
      * overwritten. The new cut sub-hyperplane will be built from the
@@ -394,48 +382,6 @@ public class BSPTree<S extends Space,
             return plus.getCell(point, tolerance);
         }
 
-    }
-
-    /** Get the cells whose cut sub-hyperplanes are close to the point.
-     * @param point point to check
-     * @param maxOffset offset below which a cut sub-hyperplane is considered
-     * close to the point (in absolute value)
-     * @return close cells (may be empty if all cut sub-hyperplanes are farther
-     * than maxOffset from the point)
-     */
-    public List<BSPTree<S, P, H, I>> getCloseCuts(final P point, final double maxOffset) {
-        final List<BSPTree<S, P, H, I>> close = new ArrayList<>();
-        recurseCloseCuts(point, maxOffset, close);
-        return close;
-    }
-
-    /** Get the cells whose cut sub-hyperplanes are close to the point.
-     * @param point point to check
-     * @param maxOffset offset below which a cut sub-hyperplane is considered
-     * close to the point (in absolute value)
-     * @param close list to fill
-     */
-    private void recurseCloseCuts(final P point, final double maxOffset,
-                                  final List<BSPTree<S, P, H, I>> close) {
-        if (cut != null) {
-
-            // position of the point with respect to the cut hyperplane
-            final double offset = cut.getHyperplane().getOffset(point);
-
-            if (offset < -maxOffset) {
-                // point is on the minus side of the cut hyperplane
-                minus.recurseCloseCuts(point, maxOffset, close);
-            } else if (offset > maxOffset) {
-                // point is on the plus side of the cut hyperplane
-                plus.recurseCloseCuts(point, maxOffset, close);
-            } else {
-                // point is close to the cut hyperplane
-                close.add(this);
-                minus.recurseCloseCuts(point, maxOffset, close);
-                plus.recurseCloseCuts(point, maxOffset, close);
-            }
-
-        }
     }
 
     /** Perform condensation on a tree.

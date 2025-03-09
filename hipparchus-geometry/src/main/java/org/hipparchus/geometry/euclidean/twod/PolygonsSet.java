@@ -27,6 +27,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.Interval;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
@@ -655,7 +657,7 @@ public class PolygonsSet
                     pending -= splitEdgeConnections(segments);
                 }
                 if (pending > 0) {
-                    closeVerticesConnections(segments);
+                    pending -= closeVerticesConnections(segments);
                 }
 
                 // create the segment loops
@@ -666,11 +668,17 @@ public class PolygonsSet
                         if (loop.get(0).getStart() == null) {
                             // this is an open loop, we put it on the front
                             loops.add(0, loop);
+                            --pending;
                         } else {
                             // this is a closed loop, we put it on the back
                             loops.add(loop);
                         }
                     }
+                }
+
+                if (pending != 0) {
+                    // this should not happen
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
                 }
 
                 // transform the loops in an array of arrays of points
@@ -839,7 +847,7 @@ public class PolygonsSet
      * </p>
      * @param defining segment used to define the loop
      * @return loop containing the segment (may be null if the loop is a
-     * degenerated infinitely thin 2 points loop
+     * degenerated infinitely thin 2 points loop)
      */
     private List<Segment> followLoop(final ConnectableSegment defining) {
 
