@@ -35,6 +35,8 @@ public class Geometry {
 
     /**
      * Compute the barycenter of n points.
+     * @param <S> Type of the space.
+     * @param <P> Type of the points in space.
      * @param points points generating the barycenter
      * @return barycenter of the points
      */

@@ -256,17 +256,7 @@ public class RegionFactory<S extends Space, P extends Point<S, P>, H extends Hyp
         public BSPTree<S, P, H, I> fixNode(final BSPTree<S, P, H, I> node) {
             // get a representative point in the degenerate cell
             final BSPTree.InteriorPoint<S, P> interior = node.getInteriorPoint(node.getParent().getCut().getHyperplane().arbitraryPoint());
-            final P p;
-            if (interior != null) {
-                // fast search worked
-                p = interior.getPoint();
-            } else {
-               // fallback using a costly and numerically unstable computation
-                final BSPTree<S, P, H, I> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
-                final Region<S, P, H, I>  r    = region1.buildNew(cell);
-                p = r.getBarycenter();
-            }
-            return new BSPTree<>(shouldBeInside(region1.checkPoint(p), region2.checkPoint(p)));
+            return new BSPTree<>(shouldBeInside(region1.checkPoint(interior.getPoint()), region2.checkPoint(interior.getPoint())));
         }
 
         /**
