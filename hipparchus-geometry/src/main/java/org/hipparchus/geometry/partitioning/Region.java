@@ -203,6 +203,12 @@ public interface Region<S extends Space, P extends Point<S, P>, H extends Hyperp
      */
     P getBarycenter();
 
+    /** Get an interior point.
+     * @return an arbitrary interior point, or null if region is empty
+     * @since 4.0
+     */
+    P getInteriorPoint();
+
     /** Get the parts of a sub-hyperplane that are contained in the region.
      * <p>The parts of the sub-hyperplane that belong to the boundary are
      * <em>not</em> included in the resulting parts.</p>

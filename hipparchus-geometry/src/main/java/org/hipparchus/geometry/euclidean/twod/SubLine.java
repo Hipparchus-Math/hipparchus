@@ -158,6 +158,13 @@ public class SubLine
 
     /** {@inheritDoc} */
     @Override
+    public Vector2D getInteriorPoint() {
+        final Vector1D v = getRemainingRegion().getInteriorPoint();
+        return isEmpty() ? null : getHyperplane().toSpace(v);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public SplitSubHyperplane<Euclidean2D, Vector2D, Line, SubLine> split(final Line hyperplane) {
 
         final Line    thisLine  = getHyperplane();

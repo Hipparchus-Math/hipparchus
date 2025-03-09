@@ -43,6 +43,7 @@ import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryAttribute;
+import org.hipparchus.geometry.partitioning.InteriorPointFinder;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
@@ -361,6 +362,16 @@ public class PolyhedronsSet
     @Override
     public PolyhedronsSet buildNew(final BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> tree) {
         return new PolyhedronsSet(tree, getTolerance());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector3D getInteriorPoint() {
+        final InteriorPointFinder<Euclidean3D, Vector3D, Plane, SubPlane> finder =
+                new InteriorPointFinder<>(Vector3D.ZERO);
+        getTree(false).visit(finder);
+        final BSPTree.InteriorPoint<Euclidean3D, Vector3D> interior = finder.getPoint();
+        return interior == null ? null : interior.getPoint();
     }
 
     /** Get the boundary representation of the instance.

@@ -43,6 +43,7 @@ import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BoundaryProjection;
+import org.hipparchus.geometry.partitioning.InteriorPointFinder;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.Arc;
@@ -494,6 +495,33 @@ public class SphericalPolygonsSet
     @Override
     public SphericalPolygonsSet buildNew(final BSPTree<Sphere2D, S2Point, Circle, SubCircle> tree) {
         return new SphericalPolygonsSet(tree, getTolerance());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public S2Point getInteriorPoint() {
+
+        final BSPTree<Sphere2D, S2Point, Circle, SubCircle> tree = getTree(false);
+
+        if (tree.getCut() == null) {
+            // full sphere or empty region
+            return ((Boolean) tree.getAttribute()) ? S2Point.PLUS_K : null;
+        }
+        else if (tree.getPlus().getCut() == null && tree.getMinus().getCut() == null) {
+            // half sphere
+            final Vector3D pole     = tree.getCut().getHyperplane().getPole();
+            final Vector3D interior = ((Boolean) tree.getMinus().getAttribute()) ? pole : pole.negate();
+            return new S2Point(interior);
+        }
+        else {
+            // regular case
+            final InteriorPointFinder<Sphere2D, S2Point, Circle, SubCircle> finder =
+                    new InteriorPointFinder<>(S2Point.PLUS_I);
+            tree.visit(finder);
+            final BSPTree.InteriorPoint<Sphere2D, S2Point> interior = finder.getPoint();
+            return interior == null ? null : interior.getPoint();
+        }
+
     }
 
     /** {@inheritDoc}

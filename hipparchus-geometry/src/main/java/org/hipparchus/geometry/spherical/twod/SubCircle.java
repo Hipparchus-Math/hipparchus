@@ -54,6 +54,12 @@ public class SubCircle
 
     /** {@inheritDoc} */
     @Override
+    public S2Point getInteriorPoint() {
+        return isEmpty() ? null : getHyperplane().toSpace(getRemainingRegion().getInteriorPoint());
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public SplitSubHyperplane<Sphere2D, S2Point, Circle, SubCircle> split(final Circle hyperplane) {
 
         final double angle = Vector3D.angle(getHyperplane().getPole(), hyperplane.getPole());

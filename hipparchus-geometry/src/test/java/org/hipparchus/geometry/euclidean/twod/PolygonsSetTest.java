@@ -28,7 +28,6 @@ import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryProjection;
-import org.hipparchus.geometry.partitioning.InteriorChecker;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.partitioning.RegionFactory;
@@ -96,7 +95,7 @@ class PolygonsSetTest {
             new Vector2D(34.0, 20.0)
         });
         checkVertices(set.getVertices(), vertices);
-        checkInterior(-2.0, 38.0, 0.5, set, 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -104,14 +103,14 @@ class PolygonsSetTest {
         PolygonsSet box = new PolygonsSet(0, 2, -1, 1, 1.0e-10);
         assertEquals(4.0, box.getSize(), 1.0e-10);
         assertEquals(8.0, box.getBoundarySize(), 1.0e-10);
-        checkInterior(-2.0, 3.0, 0.25, box, 1.0e-12);
+        assertEquals(Location.INSIDE, box.checkPoint(box.getInteriorPoint()));
     }
 
     @Test
     void testInfinite() {
         PolygonsSet box = new PolygonsSet(new BSPTree<>(Boolean.TRUE), 1.0e-10);
         assertTrue(Double.isInfinite(box.getSize()));
-        checkInterior(-2.0, 3.0, 0.25, box, 1.0e-12);
+        assertEquals(Location.INSIDE, box.checkPoint(box.getInteriorPoint()));
     }
 
     @Test
@@ -136,7 +135,7 @@ class PolygonsSetTest {
         checkVertices(set.getVertices(), vertices);
 
         assertEquals(1.1 + 0.95 * FastMath.sqrt(2.0), set.getSize(), 1.0e-10);
-        checkInterior(-2.0, 2.0, 0.75, set, 1.0e-12);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -155,24 +154,24 @@ class PolygonsSetTest {
                                     1.0e-10);
             }
         }
-        checkInterior(-2.0, 2.0, 0.75, empty, 1.0e-10);
+        assertNull(empty.getInteriorPoint());
     }
 
     @Test
     void testFull() {
-        PolygonsSet empty = new PolygonsSet(1.0e-10);
-        assertFalse(empty.isEmpty());
-        assertEquals(0, empty.getVertices().length);
-        assertEquals(0.0, empty.getBoundarySize(), 1.0e-10);
-        assertEquals(Double.POSITIVE_INFINITY, empty.getSize(), 1.0e-10);
+        PolygonsSet full = new PolygonsSet(1.0e-10);
+        assertFalse(full.isEmpty());
+        assertEquals(0, full.getVertices().length);
+        assertEquals(0.0, full.getBoundarySize(), 1.0e-10);
+        assertEquals(Double.POSITIVE_INFINITY, full.getSize(), 1.0e-10);
         for (double y = -1; y < 1; y += 0.1) {
             for (double x = -1; x < 1; x += 0.1) {
                 assertEquals(Double.NEGATIVE_INFINITY,
-                                    empty.projectToBoundary(new Vector2D(x, y)).getOffset(),
+                                    full.projectToBoundary(new Vector2D(x, y)).getOffset(),
                                     1.0e-10);
             }
         }
-        checkInterior(-2.0, 2.0, 0.75, empty, 1.0e-10);
+        assertEquals(Location.INSIDE, full.checkPoint(full.getInteriorPoint()));
     }
 
     @Test
@@ -251,7 +250,7 @@ class PolygonsSetTest {
 
         }
 
-        checkInterior(-1.0, 4.0, 0.25, set, 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -286,7 +285,7 @@ class PolygonsSetTest {
             new Vector2D(0.0, 1.0)
         });
         checkVertices(set.getVertices(), vertices);
-        checkInterior(-1.0, 6.0, 0.25, set, 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -304,7 +303,7 @@ class PolygonsSetTest {
         };
         PolygonsSet set = buildSet(vertices);
         checkVertices(set.getVertices(), vertices);
-        checkInterior(-1.0, 4.0, 0.25, set, 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -324,7 +323,7 @@ class PolygonsSetTest {
         };
         PolygonsSet set = buildSet(vertices);
         checkVertices(set.getVertices(), vertices);
-        checkInterior(-1.0, 4.0, 0.25, set, 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -374,6 +373,7 @@ class PolygonsSetTest {
         Vector2D p20Upper = l2.toSpace(new Vector1D(v20.getSup()));
         assertEquals(3.0, p20Upper.getX(), 1.0e-10);
         assertEquals(2.0, p20Upper.getY(), 1.0e-10);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -412,6 +412,7 @@ class PolygonsSetTest {
                 new Vector2D(0.0,  3.5)
             }
         });
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -476,7 +477,7 @@ class PolygonsSetTest {
             new Vector2D(3.0, 2.5)
         });
 
-        checkInterior(-1.0, 4.0, 0.25, set, 1.0e-12);
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
 
     }
 
@@ -527,6 +528,7 @@ class PolygonsSetTest {
             new Vector2D(1.0, 1.5),
             new Vector2D(1.5, 2.0)
         });
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -598,6 +600,7 @@ class PolygonsSetTest {
             new Vector2D(2.5, 1.0),
             new Vector2D(3.0, 2.5)
         });
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -661,6 +664,7 @@ class PolygonsSetTest {
             new Vector2D(0.5, 2.0),
             new Vector2D(2.0, 0.5)
         });
+        assertEquals(Location.INSIDE, set.checkPoint(set.getInteriorPoint()));
     }
 
     @Test
@@ -721,6 +725,7 @@ class PolygonsSetTest {
         assertEquals(Region.Location.OUTSIDE,
                             slice.checkPoint(new Vector2D(0.1, 0.5)));
         assertEquals(11.0 / 3.0, slice.getBoundarySize(), 1.0e-10);
+        assertEquals(Location.INSIDE, slice.checkPoint(slice.getInteriorPoint()));
 
     }
 
@@ -1558,15 +1563,6 @@ class PolygonsSetTest {
             }
         }
 
-    }
-
-    private void checkInterior(final double min, final double max, final double step,
-                               final PolygonsSet set, final double tolerance) {
-        for (double startX = min; startX < max; startX += step) {
-            for (double startY = min; startY < max; startY += step) {
-                set.getTree(false).visit(new InteriorChecker<>(new Vector2D(startX, startY), tolerance));
-            }
-        }
     }
 
 }

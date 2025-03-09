@@ -27,6 +27,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.Interval;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
@@ -37,6 +39,7 @@ import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryAttribute;
+import org.hipparchus.geometry.partitioning.InteriorPointFinder;
 import org.hipparchus.geometry.partitioning.Side;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.util.FastMath;
@@ -549,6 +552,16 @@ public class PolygonsSet
 
     /** {@inheritDoc} */
     @Override
+    public Vector2D getInteriorPoint() {
+        final InteriorPointFinder<Euclidean2D, Vector2D, Line, SubLine> finder =
+                new InteriorPointFinder<>(Vector2D.ZERO);
+        getTree(false).visit(finder);
+        final BSPTree.InteriorPoint<Euclidean2D, Vector2D> interior = finder.getPoint();
+        return interior == null ? null : interior.getPoint();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     protected void computeGeometricalProperties() {
 
         final Vector2D[][] v = getVertices();
@@ -644,7 +657,7 @@ public class PolygonsSet
                     pending -= splitEdgeConnections(segments);
                 }
                 if (pending > 0) {
-                    closeVerticesConnections(segments);
+                    pending -= closeVerticesConnections(segments);
                 }
 
                 // create the segment loops
@@ -655,11 +668,17 @@ public class PolygonsSet
                         if (loop.get(0).getStart() == null) {
                             // this is an open loop, we put it on the front
                             loops.add(0, loop);
+                            --pending;
                         } else {
                             // this is a closed loop, we put it on the back
                             loops.add(loop);
                         }
                     }
+                }
+
+                if (pending != 0) {
+                    // this should not happen
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
                 }
 
                 // transform the loops in an array of arrays of points
@@ -828,7 +847,7 @@ public class PolygonsSet
      * </p>
      * @param defining segment used to define the loop
      * @return loop containing the segment (may be null if the loop is a
-     * degenerated infinitely thin 2 points loop
+     * degenerated infinitely thin 2 points loop)
      */
     private List<Segment> followLoop(final ConnectableSegment defining) {
 

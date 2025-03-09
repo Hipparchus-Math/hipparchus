@@ -471,6 +471,26 @@ public class ArcsSet extends AbstractRegion<Sphere1D, S1Point, LimitAngle, SubLi
 
     /** {@inheritDoc} */
     @Override
+    public S1Point getInteriorPoint() {
+
+        // look for the midpoint of the longest arc
+        double selectedPoint  = Double.NaN;
+        double selectedLength = 0;
+        for (final double[] a : this) {
+            final double length = a[1] - a[0];
+            if (length > selectedLength) {
+                // this arc is longer than the selected one, change selection
+                selectedPoint  = 0.5 * (a[0] + a[1]);
+                selectedLength = length;
+            }
+        }
+
+        return Double.isNaN(selectedPoint) ? null : new S1Point(selectedPoint);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
     protected void computeGeometricalProperties() {
         if (getTree(false).getCut() == null) {
             setBarycenter(S1Point.NaN);

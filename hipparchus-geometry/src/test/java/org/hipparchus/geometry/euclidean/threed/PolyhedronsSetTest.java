@@ -33,7 +33,6 @@ import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryAttribute;
-import org.hipparchus.geometry.partitioning.InteriorChecker;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.RegionDumper;
 import org.hipparchus.geometry.partitioning.RegionFactory;
@@ -42,6 +41,7 @@ import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -56,6 +56,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -98,7 +99,7 @@ class PolyhedronsSetTest {
             new Vector3D(1.2, 1.2, 0.0),
             new Vector3D(1.2, 1.2, 1.0)
         });
-        checkInterior(-0.5, 1.5, 0.25, 0.0, 1.5, 0.25, 0.0, 1.5, 0.25, tree, 1.0e-10);
+        assertEquals(Region.Location.INSIDE, tree.checkPoint(tree.getInteriorPoint()));
     }
 
     @Test
@@ -113,6 +114,10 @@ class PolyhedronsSetTest {
         PolyhedronsSet.BRep brep = polyhedron.getBRep();
         assertEquals(6, brep.getFacets().size());
         assertEquals(8, brep.getVertices().size());
+        Assertions.assertEquals(0.0,
+                                Vector3D.distance(new Vector3D(x, y, z), polyhedron.getInteriorPoint()),
+                                1.0e-15);
+        assertEquals(Region.Location.INSIDE, polyhedron.checkPoint(polyhedron.getInteriorPoint()));
     }
 
     @Test
@@ -124,6 +129,7 @@ class PolyhedronsSetTest {
         PolyhedronsSet.BRep brep = empty.getBRep();
         assertEquals(0, brep.getFacets().size());
         assertEquals(0, brep.getVertices().size());
+        assertNull(empty.getInteriorPoint());
     }
 
     @Test
@@ -214,7 +220,6 @@ class PolyhedronsSetTest {
             new Vector3D(2, 3, 4),
             new Vector3D(1, 3, 3)
         });
-        checkInterior(0.0, 2.5, 0.125, 1.5, 3.5, 0.75, 2.5, 4.5, 0.75, tree, 1.0e-12);
     }
 
     @Test
@@ -310,7 +315,6 @@ class PolyhedronsSetTest {
         assertEquals(z, barycenter.getZ(), 1.0e-10);
         assertEquals(8 * l * w * w, tree.getSize(), 1.0e-10);
         assertEquals(8 * w * (2 * l + w), tree.getBoundarySize(), 1.0e-10);
-        checkInterior(0.0, 2.5, 0.125, 1.5, 3.5, 0.75, 2.5, 4.5, 0.75, tree, 1.0e-12);
     }
 
     @Test
@@ -336,7 +340,6 @@ class PolyhedronsSetTest {
         assertEquals(z, barycenter.getZ(), 1.0e-10);
         assertEquals(8 * w * w * (3 * l - 2 * w), tree.getSize(), 1.0e-10);
         assertEquals(24 * w * (2 * l - w), tree.getBoundarySize(), 1.0e-10);
-        checkInterior(0.0, 2.5, 0.125, 1.5, 3.5, 0.75, 2.5, 4.5, 0.75, tree, 1.0e-12);
     }
 
     @Test
@@ -580,19 +583,6 @@ class PolyhedronsSetTest {
     private void checkPoints(Region.Location expected, PolyhedronsSet tree, Vector3D[] points) {
         for (final Vector3D point : points) {
             assertEquals(expected, tree.checkPoint(point));
-        }
-    }
-
-    private void checkInterior(final double xmin, final double xmax, final double xstep,
-                               final double ymin, final double ymax, final double ystep,
-                               final double zmin, final double zmax, final double zstep,
-                               final PolyhedronsSet set, final double tolerance) {
-        for (double startX = xmin; startX < xmax; startX += xstep) {
-            for (double startY = ymin; startY < ymax; startY += ystep) {
-                for (double startZ = zmin; startZ < zmax; startZ += zstep) {
-                    set.getTree(false).visit(new InteriorChecker<>(new Vector3D(startX, startY, startZ), tolerance));
-                }
-            }
         }
     }
 
