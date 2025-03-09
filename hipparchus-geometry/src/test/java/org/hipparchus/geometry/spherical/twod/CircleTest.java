@@ -213,15 +213,24 @@ class CircleTest {
         assertEquals(0.5, arc.getBarycenter(), tol);
         assertEquals(0, arc.getInf(), tol);
         assertEquals(1, arc.getSup(), tol);
-        assertEquals(arc.getTolerance(), tol, 0);
+        assertEquals(tol, arc.getTolerance(), 0);
 
         // action, crossing discontinuity
         arc = circle.getArc(new S2Point(circle.getPointAt(3)), new S2Point(circle.getPointAt(-3)));
         // verify
         assertEquals(FastMath.PI, arc.getBarycenter(), tol);
         assertEquals(3, arc.getInf(), tol);
-        assertEquals(arc.getSup(), 2 * FastMath.PI - 3, tol);
-        assertEquals(arc.getTolerance(), tol, 0);
+        assertEquals(2 * FastMath.PI - 3, arc.getSup(), tol);
+        assertEquals(tol, arc.getTolerance(), 0);
+    }
+
+    @Test
+    public void testMove() {
+        double tol = 1e-6;
+        Circle circle = new Circle(Vector3D.PLUS_K, tol);
+        assertEquals( 0.0, circle.getOffset(S2Point.PLUS_I), 1.0e-10);
+        assertEquals( 0.1, circle.getOffset(circle.moveToOffset(S2Point.PLUS_I,  0.1)), 1.0e-10);
+        assertEquals(-1.2, circle.getOffset(circle.moveToOffset(S2Point.PLUS_I, -1.2)), 1.0e-10);
     }
 
 }

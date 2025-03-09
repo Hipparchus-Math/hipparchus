@@ -136,4 +136,58 @@ class LineTest {
         assertEquals(1.5, p.getY(), 1.0e-10);
     }
 
+    @Test
+    public void testMove() {
+        Line    line = new Line(new Vector2D( 0, 1), new Vector2D(1, 2), 1.0e-10);
+        assertTrue(line.emptyHyperplane().isEmpty());
+        assertEquals( 0.0, line.getOffset(new Vector2D(-1, 0)), 1.0e-10);
+        assertEquals( 1.0, line.getOffset(line.moveToOffset(new Vector2D(-1, 0),  1.0)), 1.0e-10);
+        assertEquals(-2.0, line.getOffset(line.moveToOffset(new Vector2D(-1, 0), -2.0)), 1.0e-10);
+    }
+
+    @Test
+    public void testTranslate() {
+        Line    line = new Line(new Vector2D( 0, 1), new Vector2D(1, 2), 1.0e-10);
+        assertEquals(FastMath.sqrt(0.5), line.getOffset(Vector2D.ZERO), 1.0e-10);
+        line.translateToPoint(Vector2D.ZERO);
+        assertEquals(0.0, line.getOffset(Vector2D.ZERO), 1.0e-10);
+    }
+
+    @Test
+    public void testSetAngle() {
+        Vector2D p1 = new Vector2D(0, 1);
+        Vector2D p2 = new Vector2D(1, 2);
+        Line    line = new Line(p1, p2, 1.0e-10);
+        assertEquals(0.0, line.getOffset(p1), 1.0e-10);
+        assertEquals(0.0, line.getOffset(p2), 1.0e-10);
+        assertEquals(FastMath.sqrt(0.5), line.getOffset(Vector2D.ZERO), 1.0e-10);
+
+        line.setAngle(0.0);
+        // changing the angle does not change the offset
+        assertEquals(FastMath.sqrt(0.5), line.getOffset(Vector2D.ZERO), 1.0e-10);
+
+        // first point is not on the line anymore
+        assertEquals(FastMath.sqrt(0.5) - 1.0, line.getOffset(p1), 1.0e-10);
+
+    }
+
+    @Test
+    public void testSetOriginOffset() {
+        Vector2D p1 = new Vector2D(0, 1);
+        Vector2D p2 = new Vector2D(1, 2);
+        Line    line = new Line(p1, p2, 1.0e-10);
+        assertEquals(0.0, line.getOffset(p1), 1.0e-10);
+        assertEquals(0.0, line.getOffset(p2), 1.0e-10);
+        assertEquals(FastMath.sqrt(0.5), line.getOffset(Vector2D.ZERO), 1.0e-10);
+
+        line.setOriginOffset(0.0);
+        // changing the origin offset does not change the angle
+        assertEquals(FastMath.PI / 4, line.getAngle(), 1.0e-10);
+        assertEquals(0, line.getOffset(Vector2D.ZERO), 1.0e-10);
+
+        // first point is not on the line anymore
+        assertEquals(-FastMath.sqrt(0.5), line.getOffset(p1), 1.0e-10);
+
+    }
+
 }

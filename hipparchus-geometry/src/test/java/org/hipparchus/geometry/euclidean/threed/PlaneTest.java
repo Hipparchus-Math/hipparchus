@@ -21,7 +21,6 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +71,7 @@ class PlaneTest {
     }
 
     @Test
-    void testRotate() throws MathRuntimeException, MathIllegalArgumentException {
+    void testRotate() throws MathRuntimeException {
         Vector3D p1 = new Vector3D(1.2, 3.4, -5.8);
         Vector3D p2 = new Vector3D(3.4, -5.8, 1.2);
         Vector3D p3 = new Vector3D(-2.0, 4.3, 0.7);
@@ -121,7 +120,7 @@ class PlaneTest {
     }
 
     @Test
-    void testIntersection() throws MathRuntimeException, MathIllegalArgumentException {
+    void testIntersection() throws MathRuntimeException {
         Plane p = new Plane(new Vector3D(1, 2, 3), new Vector3D(-4, 1, -5), 1.0e-10);
         Line  l = new Line(new Vector3D(0.2, -3.5, 0.7), new Vector3D(1.2, -2.5, -0.3), 1.0e-10);
         Vector3D point = p.intersection(l);
@@ -171,6 +170,37 @@ class PlaneTest {
             p3.add(shift),
             p2.add(shift),
             1.0e-10)));
+        assertTrue(pA.sameOrientationAs(pB));
+        Plane pC = pB.copySelf();
+        pC.revertSelf();
+        assertFalse(pA.sameOrientationAs(pC));
+    }
+
+    @Test
+    public void testEmptyHyperplane() {
+        Vector3D p1    = new Vector3D (1.2, 3.4, -5.8);
+        Vector3D p2    = new Vector3D (3.4, -5.8, 1.2);
+        Vector3D p3    = new Vector3D (-2.0, 4.3, 0.7);
+        Plane    plane = new Plane(p1, p2, p3, 1.0e-10);
+        SubPlane sp = plane.emptyHyperplane();
+        assertTrue(sp.isEmpty());
+    }
+
+    @Test
+    public void testMove() {
+        Vector3D p1    = new Vector3D (1.2, 3.4, -5.8);
+        Vector3D p2    = new Vector3D (3.4, -5.8, 1.2);
+        Vector3D p3    = new Vector3D (-2.0, 4.3, 0.7);
+        Plane    plane = new Plane(p1, p2, p3, 1.0e-10);
+        assertEquals(0.0, plane.getOffset(plane.arbitraryPoint()), 1.0e-10);
+        assertEquals(0.0, plane.getOffset(p1), 1.0e-10);
+        assertEquals(0.0, plane.getOffset(p2), 1.0e-10);
+        assertEquals(0.0, plane.getOffset(p3), 1.0e-10);
+
+        assertEquals( 1.5, plane.getOffset(plane.moveToOffset(p1,  1.5)), 1.0e-10);
+        assertEquals(-1.5, plane.getOffset(plane.moveToOffset(p2, -1.5)), 1.0e-10);
+        assertEquals(17.0, plane.getOffset(plane.moveToOffset(p3, 17.0)), 1.0e-10);
+
     }
 
 }
