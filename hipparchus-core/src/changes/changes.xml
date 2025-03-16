@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/367">
+        Added getHipparchusVersion method to MathUtils.
+      </action>
       <action dev="serrof" type="add" issue="issues/260">
         Added FieldPolynomialFunctionLagrangeForm.
       </action>
