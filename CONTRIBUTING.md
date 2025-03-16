@@ -36,7 +36,7 @@ Getting Started
 Making Changes
 --------------
 
-+ Create a topic branch from where you want to base your work (this is usually the master/trunk branch).
++ Create a topic branch from where you want to base your work (this is usually the main branch).
 + Make commits of logical units.
 + Respect the original code style:
   + Only use spaces for indentation.

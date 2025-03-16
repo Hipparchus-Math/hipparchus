@@ -105,7 +105,7 @@ Contributing
 
 There are some guidelines which
 will make applying contributions easier for us. Please read through our
-[contributing guidelines](https://github.com/Hipparchus-Math/hipparchus/blob/master/CONTRIBUTING.md).
+[contributing guidelines](https://github.com/Hipparchus-Math/hipparchus/blob/main/CONTRIBUTING.md).
 
 To contact us, use the shared [forum](https://forum.orekit.org/categories) where several categories
 are dedicated to Hipparchus.
