@@ -82,7 +82,7 @@ final class MathUtilsTest {
 
     @Test
     void testArrayHash() {
-        assertEquals(0, MathUtils.hash((double[]) null));
+        assertEquals(0, MathUtils.hash(null));
         assertEquals(MathUtils.hash(new double[] {
                                       Double.NaN, Double.POSITIVE_INFINITY,
                                       Double.NEGATIVE_INFINITY, 1d, 0d
@@ -91,10 +91,8 @@ final class MathUtilsTest {
                                       Double.NaN, Double.POSITIVE_INFINITY,
                                       Double.NEGATIVE_INFINITY, 1d, 0d
                                     }));
-        assertFalse(MathUtils.hash(new double[] { 1d }) ==
-                    MathUtils.hash(new double[] { FastMath.nextAfter(1d, 2d) }));
-        assertFalse(MathUtils.hash(new double[] { 1d }) ==
-                    MathUtils.hash(new double[] { 1d, 1d }));
+        assertNotEquals(MathUtils.hash(new double[]{1d}), MathUtils.hash(new double[]{FastMath.nextAfter(1d, 2d)}));
+        assertNotEquals(MathUtils.hash(new double[]{1d}), MathUtils.hash(new double[]{1d, 1d}));
     }
 
     /**
@@ -124,7 +122,7 @@ final class MathUtilsTest {
         } while (isIdentity);
 
         // Verify that permuted array has different hash
-        assertFalse(MathUtils.hash(original) == MathUtils.hash(permuted));
+        assertNotEquals(MathUtils.hash(original), MathUtils.hash(permuted));
     }
 
     @Test
@@ -376,9 +374,7 @@ final class MathUtilsTest {
 
     @Test
     void testCopySignByte2() {
-        assertThrows(MathRuntimeException.class, () -> {
-            MathUtils.copySign(Byte.MIN_VALUE, (byte) 1);
-        });
+        assertThrows(MathRuntimeException.class, () -> MathUtils.copySign(Byte.MIN_VALUE, (byte) 1));
     }
 
     @Test
