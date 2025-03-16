@@ -63,7 +63,7 @@ public interface Localizable extends Serializable {
             if (bundle.getLocale().getLanguage().equals(locale.getLanguage()))
             {
                 final String translated = bundle.getString(key);
-                if (!(translated.isEmpty() || translated.toLowerCase().contains("missing translation")))
+                if (!(translated.isEmpty() || translated.toLowerCase(locale).contains("missing translation")))
                 {
                     // the value of the resource is the translated format
                     return translated;

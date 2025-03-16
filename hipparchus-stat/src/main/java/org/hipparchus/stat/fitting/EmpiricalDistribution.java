@@ -221,7 +221,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             fillBinStats(new ArrayDataAdapter(in));
         } catch (IOException ex) {
             // Can't happen
-            throw MathRuntimeException.createInternalError();
+            throw MathRuntimeException.createInternalError(); // NOPMD - cannot happen
         }
         loaded = true;
 
@@ -433,10 +433,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         // Assign upperBounds based on bin counts
         upperBounds = new double[binCount];
         upperBounds[0] =
-        ((double) binStats.get(0).getN()) / (double) sampleStats.getN();
+        ((double) binStats.get(0).getN()) / sampleStats.getN();
         for (int i = 1; i < binCount-1; i++) {
             upperBounds[i] = upperBounds[i-1] +
-            ((double) binStats.get(i).getN()) / (double) sampleStats.getN();
+            ((double) binStats.get(i).getN()) / sampleStats.getN();
         }
         upperBounds[binCount-1] = 1.0d;
     }

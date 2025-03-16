@@ -487,7 +487,7 @@ public class BOBYQAOptimizer
             // label 650 or 680 with NTRITS=-1, instead of calculating F at XNEW.
 
         }
-        case 60: {
+        case 60: { // NOPMD
             final ArrayRealVector gnew = new ArrayRealVector(n);
             final ArrayRealVector xbdi = new ArrayRealVector(n);
             final ArrayRealVector s = new ArrayRealVector(n);
@@ -560,7 +560,7 @@ public class BOBYQAOptimizer
             // that do not depend on ZMAT. VLAG is used temporarily for working space.
 
         }
-        case 90: {
+        case 90: { // NOPMD
             if (dsq <= xoptsq * ONE_OVER_A_THOUSAND) {
                 final double fracsq = xoptsq * ONE_OVER_FOUR;
                 double sumpq = ZERO;
@@ -689,7 +689,7 @@ public class BOBYQAOptimizer
             // use when VQUAD is calculated.
 
         }
-        case 230: {
+        case 230: { // NOPMD
             for (int k = 0; k < npt; k++) {
                 double suma = ZERO;
                 double sumb = ZERO;
@@ -811,7 +811,7 @@ public class BOBYQAOptimizer
             //   the limit on the number of calculations of F has been reached.
 
         }
-        case 360: {
+        case 360: { // NOPMD
             for (int i = 0; i < n; i++) {
                 // Computing MIN
                 // Computing MAX
@@ -1121,7 +1121,7 @@ public class BOBYQAOptimizer
             final double d2 = TEN * rho;
             distsq = FastMath.max(d1 * d1, d2 * d2);
         }
-        case 650: {
+        case 650: { // NOPMD
             knew = -1;
             for (int k = 0; k < npt; k++) {
                 double sum = ZERO;
@@ -1172,7 +1172,7 @@ public class BOBYQAOptimizer
             // The calculations with the current value of RHO are complete. Pick the
             //   next values of RHO and DELTA.
         }
-        case 680: {
+        case 680: { // NOPMD
             if (rho > stoppingTrustRegionRadius) {
                 delta = HALF * rho;
                 ratio = rho / stoppingTrustRegionRadius;
@@ -1196,7 +1196,7 @@ public class BOBYQAOptimizer
                 state = 360; break;
             }
         }
-        case 720: {
+        case 720: { // NOPMD
             if (fAtInterpolationPoints.getEntry(trustRegionCenterInterpolationPointIndex) <= fsave) {
                 for (int i = 0; i < n; i++) {
                     // Computing MIN
@@ -1894,7 +1894,7 @@ public class BOBYQAOptimizer
         case 20: {
             beta = ZERO;
         }
-        case 30: {
+        case 30: { // NOPMD
             stepsq = ZERO;
             for (int i = 0; i < n; i++) {
                 if (xbdi.getEntry(i) != ZERO) {
@@ -2033,7 +2033,7 @@ public class BOBYQAOptimizer
                 state = 30; break;
             }
         }
-        case 90: {
+        case 90: { // NOPMD
             crvmin = ZERO;
 
             // Prepare for the alternative iteration by calculating some scalars
@@ -2041,7 +2041,7 @@ public class BOBYQAOptimizer
             // Q, where S holds the reduced D in the call of GGMULT.
 
         }
-        case 100: {
+        case 100: { // NOPMD
             if (nact >= n - 1) {
                 state = 190; break;
             }
@@ -2221,7 +2221,7 @@ public class BOBYQAOptimizer
                 state = 120; break;
             }
         }
-        case 190: {
+        case 190: { // NOPMD
             dsq = ZERO;
             for (int i = 0; i < n; i++) {
                 // Computing MAX

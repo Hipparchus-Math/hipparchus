@@ -146,7 +146,7 @@ public class BesselJ
     @Override
     public double value(double x)
         throws MathIllegalArgumentException, MathIllegalStateException {
-        return BesselJ.value(order, x);
+        return value(order, x);
     }
 
     /**
@@ -344,7 +344,7 @@ public class BesselJ
                 // ---------------------------------------------------------------------
                 // Argument reduction for SIN and COS routines.
                 // ---------------------------------------------------------------------
-                double t = (double) ((int) ((x / TWOPI) + 0.5));
+                double t = ((int) ((x / TWOPI) + 0.5));
                 final double z = x - t * TOWPI1 - t * TWOPI2 - (alpha + 0.5) / PI2;
                 final SinCos vsc = FastMath.sinCos(z);
                 double vsin = vsc.sin();

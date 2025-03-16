@@ -943,7 +943,7 @@ public class RandomPercentile
                 private final Iterator<Integer> levelIterator = registry.keySet().iterator();
 
                 /** List of buffers at current level. */
-                private List<Buffer> currentList = registry.get(levelIterator.next());
+                private List<Buffer> currentList = registry.get(levelIterator.next()); // NOPMD - cannot use local variable in anonymous class
 
                 /** Inner loop iterator, from buffer to buffer. */
                 private Iterator<Buffer> bufferIterator =

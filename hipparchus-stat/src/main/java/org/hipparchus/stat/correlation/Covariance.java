@@ -258,7 +258,7 @@ public class Covariance {
                 result += (xDev * yDev - result) / (i + 1);
             }
         }
-        return biasCorrected ? result * ((double) length / (double)(length - 1)) : result;
+        return biasCorrected ? result * (((double) length) / (length - 1)) : result;
     }
 
     /**

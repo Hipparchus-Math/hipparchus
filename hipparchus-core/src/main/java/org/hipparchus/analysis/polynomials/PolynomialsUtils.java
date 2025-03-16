@@ -114,7 +114,7 @@ public class PolynomialsUtils {
             /** {@inheritDoc} */
             @Override
             public BigFraction[] generate(int k) {
-                return coeffs;
+                return coeffs.clone();
             }
         });
     }

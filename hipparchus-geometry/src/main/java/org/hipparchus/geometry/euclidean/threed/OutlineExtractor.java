@@ -212,16 +212,14 @@ public class OutlineExtractor {
                         final Vector3D current3D = facet.getHyperplane().toSpace(loop[current]);
                         final Vector2D  cPoint    = new Vector2D(current3D.dotProduct(u),
                                                                  current3D.dotProduct(v));
-                        final org.hipparchus.geometry.euclidean.twod.Line line =
-                            new org.hipparchus.geometry.euclidean.twod.Line(pPoint, cPoint, tolerance);
+                        final Line line = new Line(pPoint, cPoint, tolerance);
                         SubLine edge = line.wholeHyperplane();
 
                         if (closed || (previous != 1)) {
                             // the previous point is a real vertex
                             // it defines one bounding point of the edge
                             final double angle = line.getAngle() + MathUtils.SEMI_PI;
-                            final org.hipparchus.geometry.euclidean.twod.Line l =
-                                new org.hipparchus.geometry.euclidean.twod.Line(pPoint, angle, tolerance);
+                            final Line l = new Line(pPoint, angle, tolerance);
                             edge = edge.split(l).getPlus();
                         }
 
@@ -229,8 +227,7 @@ public class OutlineExtractor {
                             // the current point is a real vertex
                             // it defines one bounding point of the edge
                             final double angle = line.getAngle() + MathUtils.SEMI_PI;
-                            final org.hipparchus.geometry.euclidean.twod.Line l =
-                                new org.hipparchus.geometry.euclidean.twod.Line(cPoint, angle, tolerance);
+                            final Line l = new Line(cPoint, angle, tolerance);
                             edge = edge.split(l).getMinus();
                         }
 

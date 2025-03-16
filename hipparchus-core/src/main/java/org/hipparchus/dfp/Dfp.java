@@ -2295,8 +2295,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
 
         if (p != rawdigits.length) {
             // there are non zero digits...
-            builder.append(rawdigits[p++]);
-            builder.append('.');
+            builder.append(rawdigits[p++]).append('.');
 
             while (p<rawdigits.length) {
                 builder.append(rawdigits[p++]);
@@ -2343,7 +2342,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         int e = exp;
         boolean pointInserted = false;
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder(23);
 
         if (e <= 0) {
             builder.append("0.");
@@ -2356,10 +2355,11 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         }
 
         for (int i = mant.length - 1; i >= 0; i--) {
-            builder.append((char) ((mant[i] / 1000) + '0'));
-            builder.append((char) (((mant[i] / 100) % 10) + '0'));
-            builder.append((char) (((mant[i] / 10) % 10) + '0'));
-            builder.append((char) (((mant[i]) % 10) + '0'));
+            builder.
+                append((char) ((mant[i] / 1000) + '0')).
+                append((char) (((mant[i] / 100) % 10) + '0')).
+                append((char) (((mant[i] / 10) % 10) + '0')).
+                append((char) (((mant[i]) % 10) + '0'));
             --e;
             if (e == 0) {
                 builder.append('.');

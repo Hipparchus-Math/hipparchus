@@ -179,7 +179,7 @@ public class CMAESOptimizer
     /** Coordinate system. */
     private RealMatrix B;
     /** Scaling. */
-    private RealMatrix D;
+    private RealMatrix D; // NOPMD
     /** B*D, stored for efficiency. */
     private RealMatrix BD;
     /** Diagonal of sqrt(D), stored for efficiency. */
@@ -377,7 +377,6 @@ public class CMAESOptimizer
         // number of objective variables/problem dimension
         dimension = guess.length;
         initializeCMA(guess);
-        iterations = 0;
         ValuePenaltyPair valuePenalty = fitfun.value(guess);
         double bestValue = valuePenalty.value+valuePenalty.penalty;
         push(fitnessHistory, bestValue);

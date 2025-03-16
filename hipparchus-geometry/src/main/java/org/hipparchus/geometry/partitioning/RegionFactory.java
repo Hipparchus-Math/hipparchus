@@ -265,7 +265,7 @@ public class RegionFactory<S extends Space, P extends Point<S, P>, H extends Hyp
          * @param location2 location of representative point in region2
          * @return true if node should be an inside node
          */
-        protected abstract boolean shouldBeInside(final Location location1, final Location location2);
+        protected abstract boolean shouldBeInside(Location location1, Location location2);
 
     }
 

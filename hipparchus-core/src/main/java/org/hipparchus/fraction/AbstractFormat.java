@@ -97,7 +97,7 @@ abstract class AbstractFormat extends NumberFormat implements Serializable {
      * @return the default number format specific to the given locale.
      */
     protected static NumberFormat getDefaultNumberFormat(final Locale locale) {
-        final NumberFormat nf = NumberFormat.getNumberInstance(locale);
+        final NumberFormat nf = NumberFormat.getNumberInstance(locale); // NOPMD - explicit class necessary to avoid infinite recursion
         nf.setMaximumFractionDigits(0);
         nf.setParseIntegerOnly(true);
         return nf;
@@ -171,7 +171,7 @@ abstract class AbstractFormat extends NumberFormat implements Serializable {
     @Override
     public StringBuffer format(final double value,
                                final StringBuffer buffer, final FieldPosition position) {
-        return format(Double.valueOf(value), buffer, position);
+        return format(Double.valueOf(value), buffer, position); // NOPMD
     }
 
 
@@ -188,7 +188,7 @@ abstract class AbstractFormat extends NumberFormat implements Serializable {
     @Override
     public StringBuffer format(final long value,
                                final StringBuffer buffer, final FieldPosition position) {
-        return format(Long.valueOf(value), buffer, position);
+        return format(Long.valueOf(value), buffer, position); // NOPMD
     }
 
 }

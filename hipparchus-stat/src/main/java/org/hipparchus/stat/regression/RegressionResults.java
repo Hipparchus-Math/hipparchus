@@ -124,19 +124,13 @@ public class RegressionResults implements Serializable {
         }
 
         this.globalFitInfo[SSE_IDX] = sse;
-        this.globalFitInfo[MSE_IDX] = this.globalFitInfo[SSE_IDX] /
-                (nobs - rank);
-        this.globalFitInfo[RSQ_IDX] = 1.0 -
-                this.globalFitInfo[SSE_IDX] /
-                this.globalFitInfo[SST_IDX];
+        this.globalFitInfo[MSE_IDX] = this.globalFitInfo[SSE_IDX] / (nobs - rank);
+        this.globalFitInfo[RSQ_IDX] = 1.0 - this.globalFitInfo[SSE_IDX] / this.globalFitInfo[SST_IDX];
 
         if (!containsConstant) {
-            this.globalFitInfo[ADJRSQ_IDX] = 1.0-
-                    (1.0 - this.globalFitInfo[RSQ_IDX]) *
-                    ( (double) nobs / ( (double) (nobs - rank)));
+            this.globalFitInfo[ADJRSQ_IDX] = 1.0 - (1.0 - this.globalFitInfo[RSQ_IDX]) * (((double) nobs) / (nobs - rank));
         } else {
-            this.globalFitInfo[ADJRSQ_IDX] = 1.0 - (sse * (nobs - 1.0)) /
-                    (globalFitInfo[SST_IDX] * (nobs - rank));
+            this.globalFitInfo[ADJRSQ_IDX] = 1.0 - (sse * (nobs - 1.0)) / (globalFitInfo[SST_IDX] * (nobs - rank));
         }
     }
 

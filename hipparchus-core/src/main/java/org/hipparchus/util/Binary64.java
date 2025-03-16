@@ -350,7 +350,7 @@ public class Binary64 extends Number implements CalculusFieldElement<Binary64>, 
     /** {@inheritDoc} */
     @Override
     public Binary64 getAddendum() {
-        return Binary64.ZERO;
+        return ZERO;
     }
 
     /** {@inheritDoc} */
@@ -465,7 +465,7 @@ public class Binary64 extends Number implements CalculusFieldElement<Binary64>, 
     @Override
     public Binary64 rootN(final int n) {
         if (value < 0) {
-            return (n % 2 == 0) ? Binary64.NAN : new Binary64(-FastMath.pow(-value, 1.0 / n));
+            return (n % 2 == 0) ? NAN : new Binary64(-FastMath.pow(-value, 1.0 / n));
         } else {
             return new Binary64(FastMath.pow(value, 1.0 / n));
         }

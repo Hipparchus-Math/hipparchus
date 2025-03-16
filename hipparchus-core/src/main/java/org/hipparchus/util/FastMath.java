@@ -872,7 +872,7 @@ public class FastMath {
      * @return inverse hyperbolic cosine of a
      */
     public static double acosh(final double a) {
-        return FastMath.log(a + FastMath.sqrt(a * a - 1));
+        return log(a + sqrt(a * a - 1));
     }
 
     /** Compute the inverse hyperbolic sine of a number.
@@ -888,7 +888,7 @@ public class FastMath {
 
         double absAsinh;
         if (a > 0.167) {
-            absAsinh = FastMath.log(FastMath.sqrt(a * a + 1) + a);
+            absAsinh = log(sqrt(a * a + 1) + a);
         } else {
             final double a2 = a * a;
             if (a > 0.097) {
@@ -918,7 +918,7 @@ public class FastMath {
 
         double absAtanh;
         if (a > 0.15) {
-            absAtanh = 0.5 * FastMath.log((1 + a) / (1 - a));
+            absAtanh = 0.5 * log((1 + a) / (1 - a));
         } else {
             final double a2 = a * a;
             if (a > 0.087) {
@@ -1746,13 +1746,13 @@ public class FastMath {
                         if ((yFullMantissa & integralMask) == yFullMantissa) {
                             // all fractional bits are 0, the number is really integral
                             final long l = yFullMantissa >> (1075 - yRawExp);
-                            return FastMath.pow(x, (y < 0) ? -l : l);
+                            return pow(x, (y < 0) ? -l : l);
                         }
                     } else {
                         // normal number with positive shift, always an integral value
                         // we know it fits in a primitive long because yRawExp > 1085 has been handled above
                         final long l =  yFullMantissa << (yRawExp - 1075);
-                        return FastMath.pow(x, (y < 0) ? -l : l);
+                        return pow(x, (y < 0) ? -l : l);
                     }
                 }
 
@@ -1954,16 +1954,16 @@ public class FastMath {
 
             if (Double.isNaN(result.full)) {
                 if (Double.isNaN(full)) {
-                    return Split.NAN;
+                    return NAN;
                 } else {
                     // some intermediate numbers exceeded capacity,
                     // and the low order bits became NaN (because infinity - infinity = NaN)
-                    if (FastMath.abs(full) < 1) {
-                        return new Split(FastMath.copySign(0.0, full), 0.0);
+                    if (abs(full) < 1) {
+                        return new Split(copySign(0.0, full), 0.0);
                     } else if (full < 0 && (e & 0x1) == 1) {
-                        return Split.NEGATIVE_INFINITY;
+                        return NEGATIVE_INFINITY;
                     } else {
-                        return Split.POSITIVE_INFINITY;
+                        return POSITIVE_INFINITY;
                     }
                 }
             } else {
@@ -4093,9 +4093,9 @@ public class FastMath {
             }
         } else {
             // we are in the general case
-            final double n         = FastMath.rint(dividend / divisor);
+            final double n         = rint(dividend / divisor);
             final double remainder = Double.isInfinite(n) ? 0.0 : dividend - divisor * n;
-            return (remainder == 0) ? FastMath.copySign(remainder, dividend) : remainder;
+            return (remainder == 0) ? copySign(remainder, dividend) : remainder;
         }
     }
 
@@ -4299,7 +4299,7 @@ public class FastMath {
      * @since 1.3
      */
     public static long multiplyFull(final int a, final int b) {
-        return ((long) a) * ((long) b);
+        return ((long) a) * ((long) b); // NOPMD - casts are intentional here
     }
 
     /** Multiply two long integers and give the 64 most significant bits of the result.
@@ -5503,23 +5503,23 @@ public class FastMath {
 
         static {
             if (RECOMPUTE_TABLES_AT_RUNTIME) {
-                EXP_INT_TABLE_A = new double[FastMath.EXP_INT_TABLE_LEN];
-                EXP_INT_TABLE_B = new double[FastMath.EXP_INT_TABLE_LEN];
+                EXP_INT_TABLE_A = new double[EXP_INT_TABLE_LEN];
+                EXP_INT_TABLE_B = new double[EXP_INT_TABLE_LEN];
 
                 final double[] tmp = new double[2];
                 final double[] recip = new double[2];
 
                 // Populate expIntTable
-                for (int i = 0; i < FastMath.EXP_INT_TABLE_MAX_INDEX; i++) {
+                for (int i = 0; i < EXP_INT_TABLE_MAX_INDEX; i++) {
                     FastMathCalc.expint(i, tmp);
-                    EXP_INT_TABLE_A[i + FastMath.EXP_INT_TABLE_MAX_INDEX] = tmp[0];
-                    EXP_INT_TABLE_B[i + FastMath.EXP_INT_TABLE_MAX_INDEX] = tmp[1];
+                    EXP_INT_TABLE_A[i + EXP_INT_TABLE_MAX_INDEX] = tmp[0];
+                    EXP_INT_TABLE_B[i + EXP_INT_TABLE_MAX_INDEX] = tmp[1];
 
                     if (i != 0) {
                         // Negative integer powers
                         FastMathCalc.splitReciprocal(tmp, recip);
-                        EXP_INT_TABLE_A[FastMath.EXP_INT_TABLE_MAX_INDEX - i] = recip[0];
-                        EXP_INT_TABLE_B[FastMath.EXP_INT_TABLE_MAX_INDEX - i] = recip[1];
+                        EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX - i] = recip[0];
+                        EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX - i] = recip[1];
                     }
                 }
             } else {
@@ -5543,8 +5543,8 @@ public class FastMath {
 
         static {
             if (RECOMPUTE_TABLES_AT_RUNTIME) {
-                EXP_FRAC_TABLE_A = new double[FastMath.EXP_FRAC_TABLE_LEN];
-                EXP_FRAC_TABLE_B = new double[FastMath.EXP_FRAC_TABLE_LEN];
+                EXP_FRAC_TABLE_A = new double[EXP_FRAC_TABLE_LEN];
+                EXP_FRAC_TABLE_B = new double[EXP_FRAC_TABLE_LEN];
 
                 final double[] tmp = new double[2];
 
@@ -5569,7 +5569,7 @@ public class FastMath {
 
         static {
             if (RECOMPUTE_TABLES_AT_RUNTIME) {
-                LN_MANT = new double[FastMath.LN_MANT_LEN][];
+                LN_MANT = new double[LN_MANT_LEN][];
 
                 // Populate lnMant table
                 for (int i = 0; i < LN_MANT.length; i++) {

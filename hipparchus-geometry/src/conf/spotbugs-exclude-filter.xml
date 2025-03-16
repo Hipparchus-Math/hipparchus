@@ -48,6 +48,7 @@
   <Match>
     <Class name="org.hipparchus.geometry.euclidean.oned.OrientedPoint"/>
     <Or>
+      <Method name="arbitraryPoint"/>
       <Method name="getLocation"/>
       <Method name="project"/>
     </Or>
@@ -84,6 +85,7 @@
   <Match>
     <Class name="org.hipparchus.geometry.euclidean.threed.Plane"/>
     <Or>
+      <Method name="arbitraryPoint"/>
       <Method name="getNormal"/>
       <Method name="getOrigin"/>
       <Method name="getU"/>

@@ -47,13 +47,13 @@ public final class CombinatoricsUtils {
 
     /** All long-representable factorials */
     static final long[] FACTORIALS = {
-                       1l,                  1l,                   2l,
-                       6l,                 24l,                 120l,
-                     720l,               5040l,               40320l,
-                  362880l,            3628800l,            39916800l,
-               479001600l,         6227020800l,         87178291200l,
-           1307674368000l,     20922789888000l,     355687428096000l,
-        6402373705728000l, 121645100408832000l, 2432902008176640000l };
+                       1L,                  1L,                   2L,
+                       6L,                 24L,                 120L,
+                     720L,               5040L,               40320L,
+                  362880L,            3628800L,            39916800L,
+               479001600L,         6227020800L,         87178291200L,
+           1307674368000L,     20922789888000L,     355687428096000L,
+        6402373705728000L, 121645100408832000L, 2432902008176640000L };
 
     /** Stirling numbers of the second kind. */
     static final AtomicReference<long[][]> STIRLING_S2 = new AtomicReference<> (null);
@@ -103,7 +103,7 @@ public final class CombinatoricsUtils {
      */
     public static long binomialCoefficient(final int n, final int k)
         throws MathIllegalArgumentException, MathRuntimeException {
-        CombinatoricsUtils.checkBinomial(n, k);
+        checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1;
         }
@@ -183,7 +183,7 @@ public final class CombinatoricsUtils {
      */
     public static double binomialCoefficientDouble(final int n, final int k)
         throws MathIllegalArgumentException, MathRuntimeException {
-        CombinatoricsUtils.checkBinomial(n, k);
+        checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1d;
         }
@@ -199,7 +199,7 @@ public final class CombinatoricsUtils {
 
         double result = 1d;
         for (int i = 1; i <= k; i++) {
-             result *= (double)(n - k + i) / (double)i;
+             result *= ((double) (n - k + i)) / i;
         }
 
         return FastMath.floor(result + 0.5);
@@ -227,7 +227,7 @@ public final class CombinatoricsUtils {
      */
     public static double binomialCoefficientLog(final int n, final int k)
         throws MathIllegalArgumentException, MathRuntimeException {
-        CombinatoricsUtils.checkBinomial(n, k);
+        checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 0;
         }
@@ -326,7 +326,7 @@ public final class CombinatoricsUtils {
         if (n < 21) {
             return FACTORIALS[n];
         }
-        return FastMath.floor(FastMath.exp(CombinatoricsUtils.factorialLog(n)) + 0.5);
+        return FastMath.floor(FastMath.exp(factorialLog(n)) + 0.5);
     }
 
     /**

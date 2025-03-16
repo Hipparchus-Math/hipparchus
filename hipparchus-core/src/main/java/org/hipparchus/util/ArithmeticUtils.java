@@ -50,7 +50,7 @@ public final class ArithmeticUtils {
      */
     public static int addAndCheck(int x, int y)
             throws MathRuntimeException {
-        long s = (long)x + (long)y;
+        long s = (long) x + (long) y; // NOPMD - casts are intentional here
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
             throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_ADDITION, x, y);
         }
@@ -316,10 +316,9 @@ public final class ArithmeticUtils {
         if (a == 0 || b == 0){
             return 0;
         }
-        int lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
+        int lcm = FastMath.abs(mulAndCheck(a / gcd(a, b), b));
         if (lcm == Integer.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_32_BITS,
-                                           a, b);
+            throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_32_BITS, a, b);
         }
         return lcm;
     }
@@ -348,10 +347,9 @@ public final class ArithmeticUtils {
         if (a == 0 || b == 0){
             return 0;
         }
-        long lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
+        long lcm = FastMath.abs(mulAndCheck(a / gcd(a, b), b));
         if (lcm == Long.MIN_VALUE){
-            throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_64_BITS,
-                                           a, b);
+            throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_64_BITS, a, b);
         }
         return lcm;
     }
@@ -366,7 +364,7 @@ public final class ArithmeticUtils {
      * represented as an {@code int}.
      */
     public static int mulAndCheck(int x, int y) throws MathRuntimeException {
-        long m = ((long)x) * ((long)y);
+        long m = ((long) x) * ((long) y);  // NOPMD - casts are intentional here
         if (m < Integer.MIN_VALUE || m > Integer.MAX_VALUE) {
             throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
         }
@@ -436,7 +434,7 @@ public final class ArithmeticUtils {
      * as an {@code int}.
      */
     public static int subAndCheck(int x, int y) throws MathRuntimeException {
-        long s = (long)x - (long)y;
+        long s = (long) x - (long) y; // NOPMD - casts are intentional here
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
             throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_SUBTRACTION, x, y);
         }

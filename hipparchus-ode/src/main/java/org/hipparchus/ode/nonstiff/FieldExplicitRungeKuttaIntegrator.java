@@ -144,13 +144,11 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
         yDotK[0] = fieldExpandableODE.computeDerivatives(t0, y0);
 
         if (isUsingFieldCoefficients()) {
-            FieldExplicitRungeKuttaIntegrator.applyInternalButcherWeights(fieldExpandableODE, t0, y0, h, getA(), getC(),
-                    yDotK);
-            return FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y0, yDotK, h, getB());
+            applyInternalButcherWeights(fieldExpandableODE, t0, y0, h, getA(), getC(), yDotK);
+            return applyExternalButcherWeights(y0, yDotK, h, getB());
         } else {
-            FieldExplicitRungeKuttaIntegrator.applyInternalButcherWeights(fieldExpandableODE, t0, y0, h,
-                    getRealA(), getRealC(), yDotK);
-            return FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y0, yDotK, h, getRealB());
+            applyInternalButcherWeights(fieldExpandableODE, t0, y0, h, getRealA(), getRealC(), yDotK);
+            return applyExternalButcherWeights(y0, yDotK, h, getRealB());
         }
     }
 

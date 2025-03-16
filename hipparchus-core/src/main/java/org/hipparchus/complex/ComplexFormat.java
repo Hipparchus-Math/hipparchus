@@ -207,13 +207,11 @@ public class ComplexFormat {
         if (im < 0.0) {
             toAppendTo.append(" - ");
             imAppendTo = formatImaginary(-im, new StringBuffer(), pos);
-            toAppendTo.append(imAppendTo);
-            toAppendTo.append(getImaginaryCharacter());
+            toAppendTo.append(imAppendTo).append(getImaginaryCharacter());
         } else if (im > 0.0 || Double.isNaN(im)) {
             toAppendTo.append(" + ");
             imAppendTo = formatImaginary(im, new StringBuffer(), pos);
-            toAppendTo.append(imAppendTo);
-            toAppendTo.append(getImaginaryCharacter());
+            toAppendTo.append(imAppendTo).append(getImaginaryCharacter());
         }
 
         return toAppendTo;

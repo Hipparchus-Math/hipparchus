@@ -392,7 +392,7 @@ public class GTest { // NOPMD - this is not a Junit test class, PMD false positi
             throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
         }
         final long[] rowSums = {countSum1, countSum2};
-        final double sum = (double) countSum1 + (double) countSum2;
+        final double sum = countSum1 + countSum2;
         return 2 * sum * (entropy(rowSums) + entropy(collSums) - entropy(k));
     }
 

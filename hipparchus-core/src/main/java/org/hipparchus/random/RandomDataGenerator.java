@@ -57,7 +57,7 @@ import org.hipparchus.util.ResizableDoubleArray;
  * A class for generating random data.
  */
 public class RandomDataGenerator extends ForwardingRandomGenerator
-    implements RandomGenerator, Serializable {
+    implements RandomGenerator, Serializable { // NOPMD - this class has a high number of methods, it is normal
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160529L;

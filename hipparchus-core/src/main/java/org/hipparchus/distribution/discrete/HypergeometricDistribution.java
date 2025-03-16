@@ -184,15 +184,11 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
         if (x < domain[0] || x > domain[1]) {
             ret = Double.NEGATIVE_INFINITY;
         } else {
-            double p = (double) sampleSize / (double) populationSize;
-            double q = (double) (populationSize - sampleSize) / (double) populationSize;
-            double p1 = SaddlePointExpansion.logBinomialProbability(x,
-                    numberOfSuccesses, p, q);
-            double p2 =
-                    SaddlePointExpansion.logBinomialProbability(sampleSize - x,
-                            populationSize - numberOfSuccesses, p, q);
-            double p3 =
-                    SaddlePointExpansion.logBinomialProbability(sampleSize, populationSize, p, q);
+            double p = ((double) sampleSize) / populationSize;
+            double q = ((double) (populationSize - sampleSize)) / populationSize;
+            double p1 = SaddlePointExpansion.logBinomialProbability(x, numberOfSuccesses, p, q);
+            double p2 = SaddlePointExpansion.logBinomialProbability(sampleSize - x, populationSize - numberOfSuccesses, p, q);
+            double p3 = SaddlePointExpansion.logBinomialProbability(sampleSize, populationSize, p, q);
             ret = p1 + p2 - p3;
         }
 

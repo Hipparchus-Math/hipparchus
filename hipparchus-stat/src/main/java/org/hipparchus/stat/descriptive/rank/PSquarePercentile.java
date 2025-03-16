@@ -207,9 +207,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         if (markers == null) {
             if (initialFive.add(observation)) {
                 Collections.sort(initialFive);
-                pValue =
-                        initialFive
-                                .get((int) (quantile * (initialFive.size() - 1)));
+                pValue = initialFive.get((int) (quantile * (initialFive.size() - 1)));
                 return;
             }
             // 1. Initialize once after 5th observation

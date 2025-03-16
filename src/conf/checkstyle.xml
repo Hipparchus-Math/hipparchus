@@ -198,14 +198,15 @@
     </module>
     <module name="SuppressionCommentFilter">
       <property name="offCommentFormat" value="CHECKSTYLE\: stop all"/>
-      <property name="onCommentFormat" value="CHECKSTYLE\: resume all"/>
+      <property name="onCommentFormat"  value="CHECKSTYLE\: resume all"/>
     </module>
 
   </module>
 
   <!-- Verify that EVERY source file has the appropriate license -->
   <module name="RegexpHeader">
-    <property name="headerFile" value="${checkstyle.header.file}"/>
+    <property name="fileExtensions" value="java"/>
+    <property name="headerFile"     value="${checkstyle.header.file}"/>
   </module>
 
   <!-- No tabs allowed! -->

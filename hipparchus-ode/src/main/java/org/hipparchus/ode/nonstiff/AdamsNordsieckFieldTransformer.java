@@ -195,8 +195,8 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
      * @return Nordsieck transformer for the specified field and number of steps
      * @param <T> the type of the field elements
      */
-    public static <T extends CalculusFieldElement<T>> AdamsNordsieckFieldTransformer<T> // NOPMD - PMD false positive
-    getInstance(final Field<T> field, final int nSteps) {
+    public static <T extends CalculusFieldElement<T>> AdamsNordsieckFieldTransformer<T>
+    getInstance(final Field<T> field, final int nSteps) { // NOPMD - PMD false positive
         synchronized(CACHE) {
             Map<Field<? extends CalculusFieldElement<?>>,
                     AdamsNordsieckFieldTransformer<? extends CalculusFieldElement<?>>> map = CACHE.computeIfAbsent(nSteps, k -> new HashMap<>());

@@ -586,7 +586,7 @@ public class KolmogorovSmirnovTest { // NOPMD - this is not a Junit test class, 
 
         double pFrac = Hpower.getEntry(k - 1, k - 1);
         for (int i = 1; i <= n; ++i) {
-            pFrac *= (double) i / (double) n;
+            pFrac *= ((double) i) / n;
         }
 
         return pFrac;
@@ -1034,7 +1034,7 @@ public class KolmogorovSmirnovTest { // NOPMD - this is not a Junit test class, 
             }
         }
         for (int i = 1; i < mm + 1; i++) {
-            final double w = (double) i / (double) (i + nn);
+            final double w = ((double) i) / (i + nn);
             u[1] = w * u[1];
             if (nn * i > k) {
                 u[1] = 0;

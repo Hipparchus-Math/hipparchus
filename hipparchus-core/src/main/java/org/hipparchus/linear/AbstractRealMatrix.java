@@ -23,6 +23,7 @@
 package org.hipparchus.linear;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -198,9 +199,9 @@ public abstract class AbstractRealMatrix
          * In general, the same approach is used for A^p.
          */
 
-        final char[] binaryRepresentation = Integer.toBinaryString(power).toCharArray();
-        final ArrayList<Integer> nonZeroPositions = new ArrayList<>();
-        int maxI = -1;
+        final char[]        binaryRepresentation = Integer.toBinaryString(power).toCharArray();
+        final List<Integer> nonZeroPositions     = new ArrayList<>();
+        int                 maxI                 = -1;
 
         for (int i = 0; i < binaryRepresentation.length; ++i) {
             if (binaryRepresentation[i] == '1') {

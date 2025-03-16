@@ -433,7 +433,7 @@ public class ChiSquareTest { // NOPMD - this is not a Junit test class, PMD fals
         double weight = 0.0;
         boolean unequalCounts = countSum1 != countSum2;
         if (unequalCounts) {
-            weight = FastMath.sqrt((double) countSum1 / (double) countSum2);
+            weight = FastMath.sqrt(((double) countSum1) / countSum2);
         }
         // Compute ChiSquare statistic
         double sumSq = 0.0d;

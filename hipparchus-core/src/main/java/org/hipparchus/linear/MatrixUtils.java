@@ -1032,12 +1032,12 @@ public class MatrixUtils {
         // Check that the input matrix is square
         if (!rm.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
-                    rm.getRowDimension(), rm.getColumnDimension());
+                                                   rm.getRowDimension(), rm.getColumnDimension());
         }
 
         // Copy input matrix
         int dim = rm.getRowDimension();
-        final RealMatrix identity = MatrixUtils.createRealIdentityMatrix(dim);
+        final RealMatrix identity = createRealIdentityMatrix(dim);
         RealMatrix scaledMatrix = rm.copy();
 
         // Select pade degree required
@@ -1058,11 +1058,11 @@ public class MatrixUtils {
 
             // Calculate scaling factor
             final double normScale = 5.371920351148152;
-            squaringCount = Math.max(0, Math.getExponent(l1Norm / normScale));
+            squaringCount = FastMath.max(0, FastMath.getExponent(l1Norm / normScale));
 
             // Scale matrix by power of 2
             final int finalSquaringCount = squaringCount;
-            scaledMatrix.mapToSelf(x -> Math.scalb(x, -finalSquaringCount));
+            scaledMatrix.mapToSelf(x -> FastMath.scalb(x, -finalSquaringCount));
         }
 
         // Calculate U and V using Horner
@@ -1072,14 +1072,14 @@ public class MatrixUtils {
         final int coeffLength = padeCoefficients.length;
 
         // Calculate V
-        RealMatrix padeV = MatrixUtils.createRealMatrix(dim, dim);
+        RealMatrix padeV = createRealMatrix(dim, dim);
         for (int i = coeffLength - 1; i > 1; i -= 2) {
             padeV = scaledMatrix2.multiply(padeV.add(identity.scalarMultiply(padeCoefficients[i])));
         }
         padeV = scaledMatrix.multiply(padeV.add(identity.scalarMultiply(padeCoefficients[1])));
 
         // Calculate U
-        RealMatrix padeU = MatrixUtils.createRealMatrix(dim, dim);
+        RealMatrix padeU = createRealMatrix(dim, dim);
         for (int i = coeffLength - 2; i > 1; i -= 2) {
             padeU = scaledMatrix2.multiply(padeU.add(identity.scalarMultiply(padeCoefficients[i])));
         }

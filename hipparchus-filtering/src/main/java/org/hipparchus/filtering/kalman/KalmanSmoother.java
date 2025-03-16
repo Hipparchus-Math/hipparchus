@@ -145,7 +145,7 @@ public class KalmanSmoother implements KalmanObserver {
         return smootherResults;
     }
 
-
+    /** Container for smoother data. */
     private static class SmootherData {
         /** Process time (typically the time or index of a measurement). */
         private final double time;

@@ -604,7 +604,7 @@ public class Precision {
      */
     public static boolean isMathematicalInteger(final float x) {
         final int bits   = Float.floatToRawIntBits(x);
-        final int rawExp = (int) ((bits & MASK_FLOAT_EXPONENT) >> 23);
+        final int rawExp = (bits & MASK_FLOAT_EXPONENT) >> 23;
         if (rawExp == 255) {
             // NaN or infinite
             return false;

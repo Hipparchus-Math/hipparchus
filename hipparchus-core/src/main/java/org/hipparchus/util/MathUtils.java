@@ -391,7 +391,7 @@ public final class MathUtils {
                 properties.load(stream);
                 version = properties.getProperty("hipparchus.version", version);
             }
-        } catch (IOException ioe) {
+        } catch (IOException ioe) { // NOPMD
             // ignored
         }
         return version;

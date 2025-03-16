@@ -110,6 +110,6 @@ public interface FieldODEStateInterpolator<T extends CalculusFieldElement<T>> {
      * @see #getPreviousState()
      * @see #getCurrentState()
      */
-    FieldODEStateInterpolator<T> restrictStep(final FieldODEStateAndDerivative<T> previousState,
-                                              final FieldODEStateAndDerivative<T> currentState);
+    FieldODEStateInterpolator<T> restrictStep(FieldODEStateAndDerivative<T> previousState,
+                                              FieldODEStateAndDerivative<T> currentState);
 }

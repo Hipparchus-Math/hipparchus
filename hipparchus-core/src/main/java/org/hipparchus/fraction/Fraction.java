@@ -372,7 +372,7 @@ public class Fraction
      */
     @Override
     public double doubleValue() {
-        return (double)numerator / (double)denominator;
+        return ((double) numerator) / denominator;
     }
 
     /**

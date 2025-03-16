@@ -385,14 +385,12 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
 
                 double absAi = FastMath.abs(coefficients[i]);
                 if ((absAi - 1) != 0) {
-                    s.append(toString(absAi));
-                    s.append(' ');
+                    s.append(toString(absAi)).append(' ');
                 }
 
                 s.append('x');
                 if (i > 1) {
-                    s.append('^');
-                    s.append(i);
+                    s.append('^').append(i);
                 }
             }
         }
@@ -470,7 +468,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
         @Override
         public double value(final double x, final double ... parameters)
             throws MathIllegalArgumentException {
-            return PolynomialFunction.evaluate(parameters, x);
+            return evaluate(parameters, x);
         }
     }
 }

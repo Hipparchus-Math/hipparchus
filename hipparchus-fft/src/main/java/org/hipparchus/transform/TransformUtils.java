@@ -157,7 +157,7 @@ public class TransformUtils {
     public static int exactLog2(final int n)
         throws MathIllegalArgumentException {
 
-        int index = Arrays.binarySearch(TransformUtils.POWERS_OF_TWO, n);
+        int index = Arrays.binarySearch(POWERS_OF_TWO, n);
         if (index < 0) {
             throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
                     n);

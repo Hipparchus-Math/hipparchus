@@ -40,9 +40,6 @@
     <!-- TODO: we should reactivate this rule -->
     <exclude name="CloneMethodMustImplementCloneable"/>
 
-    <!-- We should really activate this rule, but it is a tremendous amount of changes! -->
-    <exclude name="DataflowAnomalyAnalysis"/>
-
   </rule>
 
   <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
@@ -69,6 +66,9 @@
     <exclude name="AvoidReassigningParameters"/>
     <exclude name="AvoidReassigningLoopVariables"/>
     <exclude name="ForLoopCanBeForeach"/>
+
+    <!-- Many classes have many features -->
+    <exclude name="LooseCoupling"/>
 
     <!-- in mathematics, arrays are first-class citizens, they don't always serve the same purpose as varargs -->
     <exclude name="UseVarargs"/>
@@ -105,15 +105,12 @@
     <!-- Many mathematical classes have no fields at all, so we don't set up empty constructors -->
     <exclude name="AtLeastOneConstructor"/>
 
-    <exclude name="AvoidFinalLocalVariable"/>
     <exclude name="ClassNamingConventions"/>
-    <exclude name="VariableNamingConventions"/>
     <exclude name="LocalVariableNamingConventions"/>
     <exclude name="FieldNamingConventions"/>
     <exclude name="MethodNamingConventions"/>
     <exclude name="FormalParameterNamingConventions"/>
     <exclude name="ConfusingTernary"/>
-    <exclude name="DefaultPackage"/>
     <exclude name="CommentDefaultAccessModifier"/>
     <exclude name="PrematureDeclaration"/>
     <exclude name="CallSuperInConstructor"/>
@@ -124,7 +121,6 @@
   <rule ref="category/java/performance.xml">
     <exclude name="AvoidArrayLoops"/>
     <exclude name="AvoidInstantiatingObjectsInLoops"/>
-    <exclude name="AvoidUsingShortType"/>
   </rule>
 
   <rule ref="category/java/design.xml">
@@ -143,13 +139,13 @@
 
     <!-- All implementations of CalculusFieldElement *needs* to have many methods. -->
     <exclude name="ExcessivePublicCount"/>
-    <exclude name="ExcessiveClassLength"/>
     <exclude name="ExcessiveImports"/>
     <exclude name="TooManyMethods"/>
     <exclude name="TooManyFields"/>
 
     <!-- Many utility classes as well as linear algebra classes (matrices and vectors) have many features -->
     <exclude name="GodClass"/>
+    <exclude name="CouplingBetweenObjects"/>
 
     <!-- Some classes are intentionally DataClass, they are for example used to return several related values together -->
     <exclude name="DataClass"/>
@@ -159,7 +155,6 @@
     <exclude name="CyclomaticComplexity"/>
     <exclude name="NPathComplexity"/>
     <exclude name="NcssCount"/>
-    <exclude name="ExcessiveMethodLength"/>
     <exclude name="ExcessiveParameterList"/>
 
     <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
@@ -167,6 +162,9 @@
 
     <!-- This is a library, its classes are intended to be used from outside -->
     <exclude name="LoosePackageCoupling" />
+
+    <!-- the library intentionally checks for some explicit null objects and uses standard exception for this -->
+    <exclude name="AvoidThrowingNullPointerException"/>
 
     <!-- TODO: we should reactivate these rules -->
     <exclude name="ImmutableField"/>

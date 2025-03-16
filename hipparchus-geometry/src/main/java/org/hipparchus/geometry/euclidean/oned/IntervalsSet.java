@@ -30,7 +30,6 @@ import java.util.NoSuchElementException;
 import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BoundaryProjection;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.util.Precision;
 
 /** This class represents a 1D region: a set of intervals.
@@ -75,7 +74,7 @@ public class IntervalsSet
 
     /** Build an intervals set from a Boundary REPresentation (B-rep).
      * <p>The boundary is provided as a collection of {@link
-     * SubHyperplane sub-hyperplanes}. Each sub-hyperplane has the
+     * org.hipparchus.geometry.partitioning.SubHyperplane sub-hyperplanes}. Each sub-hyperplane has the
      * interior part of the region on its minus side and the exterior on
      * its plus side.</p>
      * <p>The boundary elements can be in any order, and can form

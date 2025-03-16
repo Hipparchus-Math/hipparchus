@@ -94,10 +94,10 @@ public interface ExplicitRungeKuttaIntegrator extends ButcherArrayProvider, ODEI
         yDotK[0] = expandableODE.computeDerivatives(t0, y0);
 
         // next stages
-        ExplicitRungeKuttaIntegrator.applyInternalButcherWeights(expandableODE, t0, y0, h, getA(), getC(), yDotK);
+        applyInternalButcherWeights(expandableODE, t0, y0, h, getA(), getC(), yDotK);
 
         // estimate the state at the end of the step
-        return ExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y0, yDotK, h, getB());
+        return applyExternalButcherWeights(y0, yDotK, h, getB());
 
     }
 

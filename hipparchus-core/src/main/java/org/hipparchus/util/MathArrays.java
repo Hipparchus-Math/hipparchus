@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 
 import org.hipparchus.Field;
@@ -1680,10 +1681,7 @@ public class MathArrays {
             T[] dummyRow = buildArray(field, 0);
             array = (T[][]) Array.newInstance(dummyRow.getClass(), rows);
         } else {
-            array = (T[][]) Array.newInstance(field.getRuntimeClass(),
-                                              new int[] {
-                                                  rows, columns
-                                              });
+            array = (T[][]) Array.newInstance(field.getRuntimeClass(), rows, columns);
             for (int i = 0; i < rows; ++i) {
                 Arrays.fill(array[i], field.getZero());
             }
@@ -1711,10 +1709,7 @@ public class MathArrays {
             T[] dummyRow = buildArray(field, 0);
             array = (T[][][]) Array.newInstance(dummyRow.getClass(), l1, l2);
         } else {
-            array = (T[][][]) Array.newInstance(field.getRuntimeClass(),
-                                                new int[] {
-                                                  l1, l2, l3
-                                                });
+            array = (T[][][]) Array.newInstance(field.getRuntimeClass(), l1, l2, l3);
             for (int i = 0; i < l1; ++i) {
                 for (int j = 0; j < l2; ++j) {
                     Arrays.fill(array[i][j], field.getZero());
@@ -2103,7 +2098,7 @@ public class MathArrays {
      * @throws NullPointerException if data is null
      */
     public static double[] unique(double[] data) {
-        TreeSet<Double> values = new TreeSet<>();
+        NavigableSet<Double> values = new TreeSet<>();
         for (double datum : data) {
             values.add(datum);
         }

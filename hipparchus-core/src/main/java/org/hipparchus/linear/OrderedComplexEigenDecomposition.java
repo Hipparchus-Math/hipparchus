@@ -35,10 +35,7 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
      * @param matrix real matrix.
      */
     public OrderedComplexEigenDecomposition(final RealMatrix matrix) {
-        this(matrix,
-             ComplexEigenDecomposition.DEFAULT_EIGENVECTORS_EQUALITY,
-             ComplexEigenDecomposition.DEFAULT_EPSILON,
-             ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK);
+        this(matrix, DEFAULT_EIGENVECTORS_EQUALITY, DEFAULT_EPSILON, DEFAULT_EPSILON_AV_VD_CHECK);
     }
 
     /**

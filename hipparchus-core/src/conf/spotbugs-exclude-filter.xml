@@ -43,9 +43,7 @@
   </Match>
   <Match>
     <Class name="org.hipparchus.distribution.discrete.SaddlePointExpansion" />
-    <Or>
-      <Method name="getDeviancePart" params="double,double" returns="double" />
-    </Or>
+    <Method name="getDeviancePart" params="double,double" returns="double" />
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
   <Match>
@@ -54,24 +52,24 @@
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
   <Match>
-    <Class name="org.hipparchus.analysis.solvers.MullerSolver" />
-    <Or>
-      <Method name="solve"  params="double,double,double,double" returns="double" />
-    </Or>
+    <Class name="org.hipparchus.analysis.solvers.MullerSolver" /><Method name="solve"  params="double,double,double,double" returns="double" />
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
   <Match>
     <Class name="org.hipparchus.analysis.solvers.MullerSolver2" />
-    <Or>
-      <Method name="doSolve"  params="" returns="double" />
-    </Or>
+    <Method name="doSolve"  params="" returns="double" />
+    <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.EigenDecompositionSymmetric" />
+    <Method name="findEigenVectors"/>
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
 
   <!-- The following equality test is intentional and needed for rounding purposes -->
   <Match>
     <Class name="org.hipparchus.util.Precision" />
-    <Method name="roundUnscaled" params="double,double,int" returns="double" />
+    <Method name="roundUnscaled" params="double,double,java.math.RoundingMode" />
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
 
@@ -234,12 +232,32 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
   <Match>
+    <Class name="org.hipparchus.dfp.DfpField"/>
+    <Or>
+      <Method name="clearIEEEFlags"/>
+      <Method name="setIEEEFlags"/>
+      <Method name="setIEEEFlagsBits"/>
+    </Or>
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
+  <Match>
     <Or>
       <Class name="org.hipparchus.fraction.ProperBigFractionFormat"/>
       <Class name="org.hipparchus.fraction.ProperFractionFormat"/>
     </Or>
     <Method name="getWholeFormat"/>
     <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.fraction.BigFractionFormat"/>
+      <Class name="org.hipparchus.fraction.FractionFormat"/>
+    </Or>
+    <Or>
+      <Method name="getAvailableLocales"/>
+      <Method name="getDefaultNumberFormat"/>
+    </Or>
+    <Bug pattern="HSM_HIDING_METHOD" />
   </Match>
   <Match>
     <Or>

@@ -86,7 +86,7 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
      */
     public void incrementValue(T v, long increment) {
         Long count = freqTable.getOrDefault(v, 0L);
-        freqTable.put(v, count.longValue() + increment);
+        freqTable.put(v, count + increment);
     }
 
     /** Clears the frequency table */
@@ -164,7 +164,7 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
         if (sumFreq == 0) {
             return Double.NaN;
         }
-        return (double) getCount(v) / (double) sumFreq;
+        return ((double) getCount(v)) / sumFreq;
     }
 
     //-----------------------------------------------------------------------------------------
@@ -212,7 +212,7 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
         if (sumFreq == 0) {
             return Double.NaN;
         }
-        return (double) getCumFreq(v) / (double) sumFreq;
+        return ((double) getCumFreq(v)) / sumFreq;
     }
 
     /**

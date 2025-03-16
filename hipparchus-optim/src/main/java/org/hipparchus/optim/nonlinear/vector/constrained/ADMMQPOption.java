@@ -98,18 +98,18 @@ public class ADMMQPOption implements OptimizationData {
     /** Simple constructor.
      */
     public ADMMQPOption() {
-        eps                = ADMMQPOption.DEFAULT_EPS;
-        epsInfeasible      = ADMMQPOption.DEFAULT_EPS_INFEASIBLE;
-        sigma              = ADMMQPOption.DEFAULT_SIGMA;
-        alpha              = ADMMQPOption.DEFAULT_ALPHA;
-        scaling            = ADMMQPOption.DEFAULT_SCALING;
-        scaleMaxIteration  = ADMMQPOption.DEFAULT_SCALING_MAX_ITERATION;
-        updateRho = ADMMQPOption.DEFAULT_RHO_UPDATE;
-        rhoMax             = ADMMQPOption.DEFAULT_RHO_MAX;
-        rhoMin             = ADMMQPOption.DEFAULT_RHO_MIN;
-        maxRhoIteration    = ADMMQPOption.DEFAULT_MAX_RHO_ITERATION;
-        polishing          = ADMMQPOption.DEFAULT_POLISHING;
-        polishingIteration = ADMMQPOption.DEFAULT_POLISHING_ITERATION;
+        eps                = DEFAULT_EPS;
+        epsInfeasible      = DEFAULT_EPS_INFEASIBLE;
+        sigma              = DEFAULT_SIGMA;
+        alpha              = DEFAULT_ALPHA;
+        scaling            = DEFAULT_SCALING;
+        scaleMaxIteration  = DEFAULT_SCALING_MAX_ITERATION;
+        updateRho          = DEFAULT_RHO_UPDATE;
+        rhoMax             = DEFAULT_RHO_MAX;
+        rhoMin             = DEFAULT_RHO_MIN;
+        maxRhoIteration    = DEFAULT_MAX_RHO_ITERATION;
+        polishing          = DEFAULT_POLISHING;
+        polishingIteration = DEFAULT_POLISHING_ITERATION;
     }
 
     /** Set absolute and Relative Tolerance for convergence.

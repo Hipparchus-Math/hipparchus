@@ -81,8 +81,6 @@ public class SemiDefinitePositiveCholeskyDecomposition {
             cachedL.setColumn(i, zeroArray);
         }
 
-        cachedLT = cachedL.transpose();
-
         for (int i = 0; i < order; ++i) {
             for (int j = 0; j < i + 1; j++) {
                 double s = lTData[i][j];
@@ -109,6 +107,8 @@ public class SemiDefinitePositiveCholeskyDecomposition {
             }
         }
 
+        cachedLT = cachedL.transpose();
+
         if (def < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_DEFINITE_MATRIX);
         }
@@ -131,8 +131,7 @@ public class SemiDefinitePositiveCholeskyDecomposition {
      * @return the transpose of the matrix L of the decomposition
      */
     public RealMatrix getLT() {
-        cachedLT = getL().transpose();
-        // return the cached matrix
+         // return the cached matrix
         return cachedLT;
     }
 

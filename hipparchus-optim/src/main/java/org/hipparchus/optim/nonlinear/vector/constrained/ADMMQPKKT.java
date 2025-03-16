@@ -58,7 +58,7 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
     private double alpha;
 
     /** Constrained problem KKT matrix. */
-    private RealMatrix M;
+    private RealMatrix M; // NOPMD
 
     /** Solver for M. */
     private DecompositionSolver dsX;

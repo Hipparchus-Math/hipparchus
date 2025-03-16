@@ -122,15 +122,17 @@
               license header -->
             <exclude>src/test/maxima/special/RealFunctionValidation/MANIFEST.txt</exclude>
 
-            <!-- the following are test data files with specific syntax that
-              cannot include Apache header (and the contained data is public, it is not
-              owned by Apache) -->
-            <exclude>src/test/resources/org/hipparchus/random/testData.txt</exclude>
+            <!-- the following are test files with specific syntax that cannot include Apache header -->
+            <exclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_en.utf8</exclude>
+            <exclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_fr.utf8</exclude>
             <exclude>src/test/resources/org/hipparchus/random/emptyFile.txt</exclude>
 
             <!-- direction numbers for Sobol generation from Frances Y. Kuo
               and Stephen Joe, available under a BSD-style license (see LICENSE.txt) -->
-            <exclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.1000</exclude>
+            <exclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.21201</exclude>
+
+            <!-- properties file without header -->
+            <exclude>src/main/resources/assets/org/hipparchus/hipparchus.properties</exclude>
 
           </excludes>
         </configuration>

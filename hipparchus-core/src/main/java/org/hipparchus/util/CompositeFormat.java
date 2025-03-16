@@ -209,9 +209,7 @@ public class CompositeFormat {
                                             final StringBuffer toAppendTo,
                                             final FieldPosition pos) {
         if( Double.isNaN(value) || Double.isInfinite(value) ) {
-            toAppendTo.append('(');
-            toAppendTo.append(value);
-            toAppendTo.append(')');
+            toAppendTo.append('(').append(value).append(')');
         } else {
             format.format(value, toAppendTo, pos);
         }

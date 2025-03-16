@@ -133,7 +133,7 @@ public abstract class AbstractOpenIntHashMap {
     /** Reset count.
      * @since 3.1
      */
-    protected void resetCount() {
+    protected final void resetCount() {
         count = 0;
     }
 

@@ -22,7 +22,6 @@
 package org.hipparchus.geometry.spherical.twod;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.Embedding;
@@ -345,7 +344,7 @@ public class Circle
      * Transform} embedding a 3D rotation.
      * @param rotation rotation to use
      * @return a new transform that can be applied to either {@link
-     * Point Point}, {@link Circle Line} or {@link
+     * org.hipparchus.geometry.Point Point}, {@link Circle Line} or {@link
      * org.hipparchus.geometry.partitioning.SubHyperplane
      * SubHyperplane} instances
      */

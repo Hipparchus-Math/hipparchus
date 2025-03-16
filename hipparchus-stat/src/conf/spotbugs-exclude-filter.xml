@@ -78,6 +78,14 @@
     <Bug pattern="EI_EXPOSE_REP2" />
   </Match>
 
+  <!--  the following equality tests are part of the reference algorithms -->
+  <!--  which already know about limited precision of the double numbers -->
+  <Match>
+    <Class name="org.hipparchus.stat.descriptive.rank.RandomPercentile" />
+    <Method name="reduce"/>
+    <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
+  </Match>
+
   <!-- the following expositions of internal representation are intentional and documented -->
   <Match>
     <Class name="org.hipparchus.stat.regression.RegressionResults"/>
@@ -125,6 +133,21 @@
     <Class name="org.hipparchus.stat.inference.KolmogorovSmirnovTest" />
     <Method name="pelzGood"/>
     <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+  </Match>
+
+  <!-- False positive warning from SpotBugs, no synchronization at all -->
+  <Match>
+    <Class name="org.hipparchus.stat.descriptive.rank.PSquarePercentile" />
+    <Or>
+      <Method name="increment"/>
+      <Method name="clear"/>
+    </Or>
+    <Bug pattern="AT_NONATOMIC_64BIT_PRIMITIVE" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.stat.descriptive.rank.PSquarePercentile" />
+    <Method name="increment"/>
+    <Bug pattern="AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE" />
   </Match>
 
 </FindBugsFilter>

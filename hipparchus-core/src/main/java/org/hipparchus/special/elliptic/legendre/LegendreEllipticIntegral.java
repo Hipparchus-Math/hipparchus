@@ -71,7 +71,7 @@ import org.hipparchus.util.MathUtils;
  * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
  * @since 2.0
  */
-public class LegendreEllipticIntegral {
+public class LegendreEllipticIntegral { // NOPMD - this class has a high number of methods, it is normal
 
     /** Private constructor for a utility class.
      */
