@@ -25,6 +25,8 @@ import org.hipparchus.util.MathUtils.FieldSumAndResidual;
 import org.hipparchus.util.MathUtils.SumAndResidual;
 import org.junit.jupiter.api.Test;
 
+import java.util.regex.Pattern;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -377,6 +379,12 @@ final class MathUtilsTest {
         assertThrows(MathRuntimeException.class, () -> {
             MathUtils.copySign(Byte.MIN_VALUE, (byte) 1);
         });
+    }
+
+    @Test
+    public void testHipparchusVersion() {
+        final Pattern pattern = Pattern.compile("unknown|[0-9.]*(?:-SNAPSHOT)?");
+        assertTrue(pattern.matcher(MathUtils.getHipparchusVersion()).matches());
     }
 
     /**

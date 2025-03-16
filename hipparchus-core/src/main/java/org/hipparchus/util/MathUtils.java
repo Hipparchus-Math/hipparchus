@@ -22,7 +22,10 @@
 
 package org.hipparchus.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Properties;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.FieldElement;
@@ -368,6 +371,30 @@ public final class MathUtils {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    dimension, otherDimension);
         }
+    }
+
+    /**
+     * Get Hipparchus version.
+     * <p>
+     * The version is automatically retrieved from a properties file generated
+     * at maven compilation time. When using an IDE not configured to use
+     * maven, then a default value {@code "unknown"} will be returned.
+     * </p>
+     * @return hipparchus version
+     * @since 4.0
+     */
+    public static String getHipparchusVersion() {
+        String version = "unknown";
+        final Properties properties = new Properties();
+        try (InputStream stream = MathUtils.class.getResourceAsStream("/assets/org/hipparchus/hipparchus.properties")) {
+            if (stream != null) {
+                properties.load(stream);
+                version = properties.getProperty("hipparchus.version", version);
+            }
+        } catch (IOException ioe) {
+            // ignored
+        }
+        return version;
     }
 
     /**
