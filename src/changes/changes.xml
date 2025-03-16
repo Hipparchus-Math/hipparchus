@@ -49,9 +49,19 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="4.0" date="TBD" description="TBD">
+    <release version="4.0" date="2025-03-20"
+             description="This is a major release. It adds features to Kalman filtering,
+                          adds a reset mechanism in events and propagation direction in
+                          (Field)AdaptableInterval, and improves numerical stability in
+                          BSP-tree operations.">
       <action dev="luc" type="fix" issue="issues/367">
         Added getHipparchusVersion method to MathUtils.
+      </action>
+      <action dev="mgrutten" type="add" issue="issues/363">
+        Add a (backwards) smoother counterpart to the linear Kalman, extended Kalman and unscented filters.
+      </action>
+      <action dev="maxime" type="add" issue="issues/328">
+        Add inverse transform method to UnscentedTransformProvider.
       </action>
       <action dev="luc" type="update">
         Added moveTowards method to Point interface.
@@ -75,12 +85,12 @@ If the output is not quite correct, check for invisible trailing spaces!
         Added point, hyperplane and sub-hyperplane types to geometry classes parameters
       </action>
       <action dev="luc" type="update" issue="issues/314">
-        Improved robustness of BSP tree operations
+        Improved robustness of BSP tree operations.
       </action>
       <action dev="serrof" type="update" issue="issues/361">
         Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK.
       </action>
-      <action dev="luc" type="fix" issue="issuers/360">
+      <action dev="luc" type="fix" issue="issues/360">
         Increased dimension of directions numbers in Sobol sequence generation.
       </action>
       <action dev="luc" type="fix" issue="issues/354">
@@ -102,8 +112,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Fixed JUnit pioneer dependency version not compatible with Java 8.
       </action>
       <action dev="luc" type="update" issue="issues/346">
-        Added getLocalizedString(baseName, key, locale) with default implementation
-        to Localizable interface
+        Added getLocalizedString(baseName, key, locale) with default implementation to Localizable interface.
       </action>
       <action dev="vincent" type="update" issue="issues/285">
         Migrated tests from JUnit 4 to JUnit 5.
