@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="4.0" date="TBD" description="TBD">
+    <release version="4.0" date="2025-03-20" description="This is a major release.">
       <action dev="vincent" type="update" issue="issues/285">
         Migrated tests from JUnit 4 to JUnit 5
       </action>

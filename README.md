@@ -41,7 +41,7 @@ Alternatively you can pull it from the central Maven repositories using `pom.xml
 <project>
   <properties>
     <!-- change the Hipparchus version number to the one suiting your needs -->
-    <myprojectname.hipparchus.version>3.1</myprojectname.hipparchus.version>
+    <myprojectname.hipparchus.version>4.0</myprojectname.hipparchus.version>
   </properties>
 
   <dependencies>
@@ -89,23 +89,12 @@ Alternatively you can pull it from the central Maven repositories using `pom.xml
 </project>
 ```
 
-If your project previously depended on [Apache Commons Math](https://commons.apache.org/proper/commons-math/)
-and you want to switch to Hipparchus, you can also add the temporary migration jar
-
-```xml
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-migration</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-```
-
 Contributing
 ------------
 
 There are some guidelines which
 will make applying contributions easier for us. Please read through our
-[contributing guidelines](https://github.com/Hipparchus-Math/hipparchus/blob/master/CONTRIBUTING.md).
+[contributing guidelines](https://github.com/Hipparchus-Math/hipparchus/blob/main/CONTRIBUTING.md).
 
 To contact us, use the shared [forum](https://forum.orekit.org/categories) where several categories
 are dedicated to Hipparchus.

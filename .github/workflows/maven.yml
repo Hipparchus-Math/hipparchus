@@ -30,7 +30,7 @@ jobs:
         SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
         SONARQUBE_HOST_URL: ${{ vars.SONARQUBE_HOST_URL }}
     - name: Deployment
-      if: ( github.repository == 'Hipparchus-Math/hipparchus' ) && ( ( github.ref == 'refs/heads/master' ) || startsWith( github.ref, 'refs/heads/release-' ) )
+      if: ( github.repository == 'Hipparchus-Math/hipparchus' ) && ( ( github.ref == 'refs/heads/main' ) || startsWith( github.ref, 'refs/heads/release-' ) )
       run: mvn -B -U -f pom.xml -s .CI/maven-settings.xml deploy -Pci-deploy -DskipTests=true
       env:
         NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
