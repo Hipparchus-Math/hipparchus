@@ -1,39 +1,43 @@
 
-              Hipparchus 3.1 RELEASE NOTES
+              Hipparchus 4.0 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus-3.1
+The Hipparchus team is pleased to announce the release of hipparchus-4.0
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
-This is a maintenance release. It includes several bugfixes and
-improvements, and adds one important feature: constrained
-optimization! Other additions are Gauss-Markov order 1 autoregressive
-process generation and GCD/LCM to {Big}Fraction.
+This is a major release. It adds features to Kalman filtering,
+adds a reset mechanism in events and propagation direction in (Field)AdaptableInterval,
+and improves numerical stability in BSP-tree operations.
 
 Changes in this version include:
 
 New features:
-o issues/269:  Add public, static access to integrators name.
-o issues/300:  Add possibility to use real coefficients for Butcher array based Field integrators.
-o issues/296:  Added constrained optimization. Thanks to Francesco Rocca.
-o issues/294:  Added GCD and LCM to {Big}Fraction. Thanks to Axel Kramer.
-o issues/281:  Add default implementations in CalculusFieldElement and inheritors.
-o issues/280:  Add square method to CalculusFieldElement.
+o issues/363:  Add a (backwards) smoother counterpart to the linear Kalman, extended Kalman and unscented filters. 
+o issues/328:  Add inverse transform method to UnscentedTransformProvider. 
+o issues/382:  Added reset mechanism in ODE event detection. 
+o issues/260:  Added FieldPolynomialFunctionLagrangeForm. 
+o issues/370:  Added native way to stack an independent variable in (Field)Gradient. 
+o issues/335:  Add boolean for propagation direction in (Field)AdaptableInterval. 
 
 Fixed Bugs:
-o issues/290:  Fixes regressions with Field in event detection.
-o issues/291:  Fix broken newInstance method for FieldTuple.
+o issues/367:  Added getHipparchusVersion method to MathUtils. 
+o issues/384:  Fixed issue with open boundaries in Euclidean 2D-polygons. 
+o issues/360:  Increased dimension of directions numbers in Sobol sequence generation. 
+o issues/354:  Added FieldBivariateGridInterpolator, FieldBilinearInterpolator and FieldBilinearInterpolatingFunction. 
+o issues/347:  Fixed JUnit pioneer dependency version not compatible with Java 8. 
+o issues/339:  Changed CDN for faster site load. 
 
 Changes:
-o issues/277:  Improved release guide. Thanks to Bryan.
-o issues/333:  Added Gauss-Markov order 1 autoregressive process generation.
-o issues/289:  Added equals and hashCode to OpenIntTo{Double|Field}HashMap.
-o issues/327:  Allow variable arguments for building PolynomialFunction.
-o issues/322:  Extracted class JacobiKey from PolynomialsUtils.
-o issues/304:  Allow retrieving correct Cardan/Euler angles even at singularity.
-o issues/302:  Improved performance of Gradient.
-o issues/288:  Replace uses of scalar multiplication on Field one.
-o issues/286:  Rework interfaces for Derivative and FieldDerivative.
+o              Added moveTowards method to Point interface. 
+o issues/372:  Rename RungeKutta(Field)Integrator as FixedStepRungeKutta(Field)Integrator. 
+o issues/314:  Improved robustness of BSP tree operations.
+o issues/361:  Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK. 
+o issues/330:  Made constructors of abstract classes protected when they were public. 
+o issues/350:  Removed obsolete hipparchus-migration module. 
+o issues/349:  Added getAddendum() to CalculusFieldElement interface. 
+o issues/346:  Added getLocalizedString(baseName, key, locale) with default implementation to Localizable interface.
+o issues/285:  Migrated tests from JUnit 4 to JUnit 5. 
+
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:

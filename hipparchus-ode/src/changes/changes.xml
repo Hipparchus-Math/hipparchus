@@ -49,7 +49,9 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="4.0" date="TBD" description="TBD">
+    <release version="4.0" date="2025-03-20"
+             description="This is a major release. It adds a reset mechanism in events and
+                          adds propagation direction in (Field)AdaptableInterval.">
       <action dev="serrof" type="add" issue="issues/382">
         Added reset mechanism in ODE event detection.
       </action>

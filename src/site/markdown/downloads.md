@@ -42,8 +42,18 @@ Maven's internal mechanism will automatically download any internal dependencies
 
 ---
 
-|     package       | link                                                              | hash | signature |
-|-------------------|-------------------------------------------------------------------|------|-----------|
+|     package       | link                                                               | hash | signature |
+|-------------------|--------------------------------------------------------------------|------|-----------|
+|  source (zip)     | [hipparchus-4.0-src.zip](downloads/hipparchus-4.0-src.zip)         | [md5](downloads/hipparchus-4.0-src.zip.md5)| [sig](downloads/hipparchus-4.0-src.zip.asc)|
+|  source (tar.bz2) | [hipparchus-4.0-src.tar.bz2](downloads/hipparchus-4.0-src.tar.bz2) | [md5](downloads/hipparchus-4.0-src.tar.bz2.md5) | [sig](downloads/hipparchus-4.0-src.tar.bz2.asc)|
+|  binary (zip)     | [hipparchus-4.0-bin.zip](downloads/hipparchus-4.0-bin.zip)         | [md5](downloads/hipparchus-4.0-bin.zip.md5) | [sig](downloads/hipparchus-4.0-bin.zip.asc)|
+|  binary (tar.bz2) | [hipparchus-4.0-bin.tar.bz2](downloads/hipparchus-4.0-bin.tar.bz2) | [md5](downloads/hipparchus-4.0-bin.tar.bz2.md5) | [sig](downloads/hipparchus-4.0-bin.tar.bz2.asc)
+version 4.0 downloads (release date: 2025-03-20)
+
+---
+
+|     package       | link                                                               | hash | signature |
+|-------------------|--------------------------------------------------------------------|------|-----------|
 |  source (zip)     | [hipparchus-3.1-src.zip](downloads/hipparchus-3.1-src.zip)         | [md5](downloads/hipparchus-3.1-src.zip.md5)| [sig](downloads/hipparchus-3.1-src.zip.asc)|
 |  source (tar.bz2) | [hipparchus-3.1-src.tar.bz2](downloads/hipparchus-3.1-src.tar.bz2) | [md5](downloads/hipparchus-3.1-src.tar.bz2.md5) | [sig](downloads/hipparchus-3.1-src.tar.bz2.asc)|
 |  binary (zip)     | [hipparchus-3.1-bin.zip](downloads/hipparchus-3.1-bin.zip)         | [md5](downloads/hipparchus-3.1-bin.zip.md5) | [sig](downloads/hipparchus-3.1-bin.zip.asc)|
@@ -52,8 +62,8 @@ version 3.1 downloads (release date: 2024-04-05)
 
 ---
 
-|     package       | link                                                              | hash | signature |
-|-------------------|-------------------------------------------------------------------|------|-----------|
+|     package       | link                                                               | hash | signature |
+|-------------------|--------------------------------------------------------------------|------|-----------|
 |  source (zip)     | [hipparchus-3.0-src.zip](downloads/hipparchus-3.0-src.zip)         | [md5](downloads/hipparchus-3.0-src.zip.md5)| [sig](downloads/hipparchus-3.0-src.zip.asc)|
 |  source (tar.bz2) | [hipparchus-3.0-src.tar.bz2](downloads/hipparchus-3.0-src.tar.bz2) | [md5](downloads/hipparchus-3.0-src.tar.bz2.md5) | [sig](downloads/hipparchus-3.0-src.tar.bz2.asc)|
 |  binary (zip)     | [hipparchus-3.0-bin.zip](downloads/hipparchus-3.0-bin.zip)         | [md5](downloads/hipparchus-3.0-bin.zip.md5) | [sig](downloads/hipparchus-3.0-bin.zip.asc)|

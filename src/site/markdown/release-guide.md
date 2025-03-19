@@ -39,7 +39,7 @@ team can add it.
 ## Prepare Git branch for release
 
 Release will be performed on a dedicated branch, not directly on
-master. So a new branch must be created as follows and used for
+main. So a new branch must be created as follows and used for
 everything else:
 
     git branch release-X.Y
@@ -332,12 +332,12 @@ verified and pushed:
     git tag -v X.Y
     git push --tags
 
-### Merging the release version into master
+### Merging the release version into main
 
 After the release branch has been completed, it should be merged back
-to the master branch:
+to the main branch:
 
-    git checkout master
+    git checkout main
     git merge --no-ff release-X.Y
     git push
 
@@ -377,7 +377,7 @@ The last step is to announce the release by creating a new topic in the announce
 
 ## Preparing next version
 
-After the release branch has been completed, it should be merged back to the master branch and the `pom.xml`
+After the release branch has been completed, it should be merged back to the main branch and the `pom.xml`
 must be updated with the `-SNAPSHOT`flag for the next release number. On a system with Unix utilities, you can do
 it with the single following line:
 

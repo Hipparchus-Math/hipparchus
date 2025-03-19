@@ -49,7 +49,14 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Filtering Release Notes</title>
   </properties>
   <body>
-    <release version="4.0" date="TBD" description="TBD">
+    <release version="4.0" date="2025-03-20"
+             description="This is a major release. It adds new features to Kalman filters">
+      <action dev="mgrutten" type="add" issue="issues/363">
+        Add a (backwards) smoother counterpart to the linear Kalman, extended Kalman and unscented filters.
+      </action>
+      <action dev="maxime" type="add" issue="issues/328">
+        Add inverse transform method to UnscentedTransformProvider.
+      </action>
       <action dev="vincent" type="update" issue="issues/285">
         Migrated tests from JUnit 4 to JUnit 5
       </action>
