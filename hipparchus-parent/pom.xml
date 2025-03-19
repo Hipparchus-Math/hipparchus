@@ -673,6 +673,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${hipparchus.maven-resources-plugin.version}</version>
+          <configuration>
+            <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
+          </configuration>
           <executions>
             <execution>
               <phase>process-resources</phase>

@@ -67,7 +67,7 @@ class ThirdMoment extends SecondMoment implements Serializable {
     protected double nDevSq;
 
     /**
-     * Create a FourthMoment instance.
+     * Create a ThirdMoment instance.
      */
     ThirdMoment() {
         super();
