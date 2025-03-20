@@ -39,9 +39,10 @@ team can add it.
 ## Prepare Git branch for release
 
 Release will be performed on a dedicated branch, not directly on
-main. So a new branch must be created as follows and used for
-everything else:
+the develop branch. So a new branch must be created as follows and
+used for everything else:
 
+    git checkout develop
     git branch release-X.Y
     git checkout release-X.Y
 
@@ -53,7 +54,7 @@ development, this version number has the form `X.Y-SNAPSHOT`. For release, the
 `-SNAPSHOT` part must be removed. On a system with Unix utilities, you can do
 it with the single following line:
 
-    for pom in pom.xml hipparchus-*/pom.xml ; do mv $pom $pom.old ; sed 's,-SNAPSHOT,,' < $pom.old > $pom ; rm $pom.old ; done
+    for pom in pom.xml hipparchus-*/pom.xml ; do sed -i 's,-SNAPSHOT,,' $pom ; done
 
 Commit the change:
 
@@ -377,13 +378,15 @@ The last step is to announce the release by creating a new topic in the announce
 
 ## Preparing next version
 
-After the release branch has been completed, it should be merged back to the main branch and the `pom.xml`
+After the release branch has been completed, it should be merged back to the develop branch and the `pom.xml`
 must be updated with the `-SNAPSHOT`flag for the next release number. On a system with Unix utilities, you can do
 it with the single following line:
 
-    for pom in pom.xml hipparchus-*/pom.xml ; do mv $pom $pom.old ; sed 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>,' < $pom.old > $pom ; rm $pom.old ; done
+    git checkout develop
+    for pom in pom.xml hipparchus-*/pom.xml ; do sed -i 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>,' $pom ; done
 
 Commit the change:
 
     git add pom.xml hipparchus-*/pom.xml
     git commit -m "Preparing development of next version."
+
