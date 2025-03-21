@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="4.0.1" date="2025-03-21" description="This is a patch release.">
+      <action dev="luc" type="fix" issue="issues/386">
+        Restores a Java 8 compatible mockito version, which is used only for tests purposes;
+        the library itself did not change.
+      </action>
+    </release>
     <release version="4.0" date="2025-03-20"
              description="This is a major release. It adds features to Kalman filtering,
                           adds a reset mechanism in events and propagation direction in

@@ -380,13 +380,14 @@ The last step is to announce the release by creating a new topic in the announce
 
 After the release branch has been completed, it should be merged back to the develop branch and the `pom.xml`
 must be updated with the `-SNAPSHOT`flag for the next release number. On a system with Unix utilities, you can do
-it with the single following line:
+it with the single following lines:
 
     git checkout develop
+    git merge --no-ff release-X.Y
     for pom in pom.xml hipparchus-*/pom.xml ; do sed -i 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>,' $pom ; done
 
 Commit the change:
 
     git add pom.xml hipparchus-*/pom.xml
     git commit -m "Preparing development of next version."
-
+    git push
