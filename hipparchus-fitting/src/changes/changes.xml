@@ -48,12 +48,18 @@ If the output is not quite correct, check for invisible trailing spaces!
   <properties>
     <title>Hipparchus Fitting Release Notes</title>
   </properties>
-  <release version="4.0" date="2025-03-20" description="This is a major release.">
-    <action dev="vincent" type="update" issue="issues/285">
-      Migrated tests from JUnit 4 to JUnit 5
-    </action>
-  </release>
   <body>
+    <release version="4.0.1" date="2025-03-21" description="This is a patch release.">
+      <action dev="luc" type="fix" issue="issues/386">
+        Restores a Java 8 compatible mockito version, which is used only for tests purposes;
+        the library itself did not change.
+      </action>
+    </release>
+    <release version="4.0" date="2025-03-20" description="This is a major release.">
+      <action dev="vincent" type="update" issue="issues/285">
+        Migrated tests from JUnit 4 to JUnit 5
+      </action>
+    </release>
     <release version="3.1" date="2024-04-05" description="This is a maintenance release.">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,
