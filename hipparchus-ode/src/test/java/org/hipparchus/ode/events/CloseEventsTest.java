@@ -28,6 +28,7 @@ import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -46,6 +47,15 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Evan Ward
  */
 class CloseEventsTest {
+
+    @Test
+    public void testEventAtFinalTime() {
+        DormandPrince853Integrator integrator = new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        IntervalDetector detector = new IntervalDetector(720, 1e-10, 100, Action.RESET_DERIVATIVES, 16296.238, 17016.238);
+        integrator.addEventDetector(detector);
+        integrator.integrate(new Equation(), new ODEState(0.0, new double[2]), 17016.238);
+        Assertions.assertEquals(2, detector.getEvents().size());
+    }
 
     @Test
     void testCloseEventsFirstOneIsReset() {
@@ -2136,6 +2146,30 @@ class CloseEventsTest {
                     return action;
                 }
             };
+        }
+
+    }
+
+    /** Trigger an event at a given time interval. */
+    private static class IntervalDetector extends BaseDetector implements ODEEventDetector {
+
+        /** Interval start. */
+        protected final double start;
+
+        /** Interval end. */
+        protected final double end;
+
+        public IntervalDetector(final double maxCheck, final double threshold, final int maxIter,
+                                final Action action, final double startTime, final double endTime) {
+            super(maxCheck, threshold, maxIter, action, new ArrayList<>());
+            this.start = startTime;
+            this.end = endTime;
+        }
+
+        @Override
+        public double g(final ODEStateAndDerivative state) {
+            final double t = state.getTime();
+            return (t - start) * (end - t);
         }
 
     }
