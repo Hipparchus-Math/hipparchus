@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
+    <release version="4.0.2" date="TBC" description="This is a patch release.">
+      <action dev="bryan" type="fix" issue="issues/416">
+        Fixed inconsistency between Abstract{Field}ODEStateInterpolator and {Field}DetectorBasedEventState for event time handling.
+      </action>
+    </release>
     <release version="4.0.1" date="2025-03-21" description="This is a patch release.">
       <action dev="luc" type="fix" issue="issues/386">
         Restores a Java 8 compatible mockito version, which is used only for tests purposes;

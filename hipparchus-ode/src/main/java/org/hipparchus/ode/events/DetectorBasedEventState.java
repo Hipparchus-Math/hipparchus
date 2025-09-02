@@ -502,7 +502,7 @@ public class DetectorBasedEventState implements EventState {
     public EventOccurrence doEvent(final ODEStateAndDerivative state) {
         // check event is pending and is at the same time
         check(pendingEvent);
-        check(state.getTime() == this.pendingEventTime);
+        check(FastMath.abs(state.getTime() - this.pendingEventTime) <= FastMath.ulp(state.getTime()));
 
         final Action action = handler.eventOccurred(state, detector, increasing == forward);
         final ODEState newState;

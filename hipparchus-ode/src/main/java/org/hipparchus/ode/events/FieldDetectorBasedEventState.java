@@ -514,7 +514,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
     public FieldEventOccurrence<T> doEvent(final FieldODEStateAndDerivative<T> state) {
         // check event is pending and is at the same time
         check(pendingEvent);
-        check(state.getTime() == this.pendingEventTime);
+        check(FastMath.abs(state.getTime().getReal() - this.pendingEventTime.getReal()) <= FastMath.ulp(state.getTime().getReal()));
 
         final Action action = handler.eventOccurred(state, detector, increasing == forward);
         final FieldODEState<T> newState;
