@@ -38,34 +38,34 @@ class FieldDetectorBasedEventStateTest {
 
     // Unit test reproducing https://gitlab.orekit.org/orekit/orekit/-/issues/1808
     @Test
-    public void testEpochComparisonAtLeastSignificantBit() throws NoSuchFieldException, IllegalAccessException {
-        Binary64Field field = Binary64Field.getInstance();
-        Binary64 zero = field.getZero();
+    void testEpochComparisonAtLeastSignificantBit() throws NoSuchFieldException, IllegalAccessException {
+        final Binary64Field field = Binary64Field.getInstance();
+        final Binary64 zero = field.getZero();
         // Epoch of event
-        Binary64 eventTime = zero.add(17016.237999999998);
+        final Binary64 eventTime = zero.add(17016.237999999998);
 
         // Get the interpolated state at event time
         // It will return globalCurrent at 17016.238 sec since the difference between current and previous state times is smaller than the least bit
-        Binary64[] array = MathArrays.buildArray(field, 2);
-        FieldODEStateAndDerivative<Binary64> globalCurrent = new FieldODEStateAndDerivative<>(zero.add(17016.238), array, array);
-        FieldODEStateAndDerivative<Binary64> globalPrevious = new FieldODEStateAndDerivative<>(zero.add(17016.237999999998), array, array);
-        ClassicalRungeKuttaFieldStateInterpolator<Binary64> interpolator = new ClassicalRungeKuttaFieldStateInterpolator<>(field, true, MathArrays.buildArray(field, 2, 2),
-                                                                                                                           globalPrevious, globalCurrent,
-                                                                                                                           globalPrevious, globalCurrent, null);
-        FieldODEStateAndDerivative<Binary64> interpolatedState = interpolator.getInterpolatedState(eventTime);
+        final Binary64[] array = MathArrays.buildArray(field, 2);
+        final FieldODEStateAndDerivative<Binary64> globalCurrent = new FieldODEStateAndDerivative<>(zero.add(17016.238), array, array);
+        final FieldODEStateAndDerivative<Binary64> globalPrevious = new FieldODEStateAndDerivative<>(zero.add(17016.237999999998), array, array);
+        final ClassicalRungeKuttaFieldStateInterpolator<Binary64> interpolator = new ClassicalRungeKuttaFieldStateInterpolator<>(field, true, MathArrays.buildArray(field, 2, 2),
+                                                                                                                                 globalPrevious, globalCurrent,
+                                                                                                                                 globalPrevious, globalCurrent, null);
+        final FieldODEStateAndDerivative<Binary64> interpolatedState = interpolator.getInterpolatedState(eventTime);
         Assertions.assertEquals(interpolatedState.getTime().getReal(), globalCurrent.getTime().getReal());
         Assertions.assertNotEquals(interpolatedState.getTime().getReal(), globalPrevious.getTime().getReal());
 
         // Configure the event state (failing before the fix)
         // Since detecting the event causing the numerical issue is tricky; we access the private field to simplify the workflow and directly set the necessary values causing the issue
-        FieldDetectorBasedEventState<Binary64> es = new FieldDetectorBasedEventState<>(new TestFieldDetector<>(field, true));
-        java.lang.reflect.Field pendingEvent = FieldDetectorBasedEventState.class.getDeclaredField("pendingEvent");
+        final FieldDetectorBasedEventState<Binary64> es = new FieldDetectorBasedEventState<>(new TestFieldDetector<>(field, true));
+        final java.lang.reflect.Field pendingEvent = FieldDetectorBasedEventState.class.getDeclaredField("pendingEvent");
         pendingEvent.setAccessible(true);
         pendingEvent.set(es, true);
-        java.lang.reflect.Field pendingEventTime = FieldDetectorBasedEventState.class.getDeclaredField("pendingEventTime");
+        final java.lang.reflect.Field pendingEventTime = FieldDetectorBasedEventState.class.getDeclaredField("pendingEventTime");
         pendingEventTime.setAccessible(true);
         pendingEventTime.set(es, eventTime);
-        java.lang.reflect.Field afterG = FieldDetectorBasedEventState.class.getDeclaredField("afterG");
+        final java.lang.reflect.Field afterG = FieldDetectorBasedEventState.class.getDeclaredField("afterG");
         afterG.setAccessible(true);
         afterG.set(es, zero); // Dummy value (this value is not interesting in that case)
 

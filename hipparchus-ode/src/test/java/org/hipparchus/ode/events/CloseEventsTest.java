@@ -48,9 +48,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 class CloseEventsTest {
 
     @Test
-    public void testEventAtFinalTime() {
-        DormandPrince853Integrator integrator = new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
-        IntervalDetector detector = new IntervalDetector(720, 1e-10, 100, Action.RESET_DERIVATIVES, 16296.238, 17016.238);
+    void testEventAtFinalTime() {
+        final DormandPrince853Integrator integrator = new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        final IntervalDetector detector = new IntervalDetector(720, 1e-10, 100, Action.RESET_DERIVATIVES, 16296.238, 17016.238);
         integrator.addEventDetector(detector);
         integrator.integrate(new Equation(), new ODEState(0.0, new double[2]), 17016.238);
         assertEquals(2, detector.getEvents().size());

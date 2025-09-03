@@ -54,30 +54,30 @@ class DetectorBasedEventStateTest {
 
     // Unit test reproducing https://gitlab.orekit.org/orekit/orekit/-/issues/1808
     @Test
-    public void testEpochComparisonAtLeastSignificantBit() throws NoSuchFieldException, IllegalAccessException {
+    void testEpochComparisonAtLeastSignificantBit() throws NoSuchFieldException, IllegalAccessException {
         // Epoch of event
-        double eventTime = 17016.237999999998;
+        final double eventTime = 17016.237999999998;
 
         // Get the interpolated state at event time
         // It will return globalCurrent at 17016.238 sec since the difference between current and previous state times is smaller than the least bit
-        ODEStateAndDerivative globalCurrent = new ODEStateAndDerivative(17016.238, new double[2], new double[2]);
-        ODEStateAndDerivative globalPrevious = new ODEStateAndDerivative(17016.237999999998, new double[2], new double[2]);
-        ClassicalRungeKuttaStateInterpolator interpolator = new ClassicalRungeKuttaStateInterpolator(true, new double[2][2], globalPrevious, globalCurrent,
+        final ODEStateAndDerivative globalCurrent = new ODEStateAndDerivative(17016.238, new double[2], new double[2]);
+        final ODEStateAndDerivative globalPrevious = new ODEStateAndDerivative(17016.237999999998, new double[2], new double[2]);
+        final ClassicalRungeKuttaStateInterpolator interpolator = new ClassicalRungeKuttaStateInterpolator(true, new double[2][2], globalPrevious, globalCurrent,
                                                                                                      globalPrevious, globalCurrent, null);
-        ODEStateAndDerivative interpolatedState = interpolator.getInterpolatedState(eventTime);
+        final ODEStateAndDerivative interpolatedState = interpolator.getInterpolatedState(eventTime);
         Assertions.assertEquals(interpolatedState.getTime(), globalCurrent.getTime());
         Assertions.assertNotEquals(interpolatedState.getTime(), globalPrevious.getTime());
 
         // Configure the event state (failing before the fix)
         // Since detecting the event causing the numerical issue is tricky; we access the private field to simplify the workflow and directly set the necessary values causing the issue
-        DetectorBasedEventState es = new DetectorBasedEventState(new CloseEventsGenerator(16436.238, 17016.238, 720, 1e-10, 100));
-        Field pendingEvent = DetectorBasedEventState.class.getDeclaredField("pendingEvent");
+        final DetectorBasedEventState es = new DetectorBasedEventState(new CloseEventsGenerator(16436.238, 17016.238, 720, 1e-10, 100));
+        final Field pendingEvent = DetectorBasedEventState.class.getDeclaredField("pendingEvent");
         pendingEvent.setAccessible(true);
         pendingEvent.set(es, true);
-        Field pendingEventTime = DetectorBasedEventState.class.getDeclaredField("pendingEventTime");
+        final Field pendingEventTime = DetectorBasedEventState.class.getDeclaredField("pendingEventTime");
         pendingEventTime.setAccessible(true);
         pendingEventTime.set(es, eventTime);
-        Field afterG = DetectorBasedEventState.class.getDeclaredField("afterG");
+        final Field afterG = DetectorBasedEventState.class.getDeclaredField("afterG");
         afterG.setAccessible(true);
         afterG.set(es, 0.0); // Dummy value (this value is not interesting in that case)
 
