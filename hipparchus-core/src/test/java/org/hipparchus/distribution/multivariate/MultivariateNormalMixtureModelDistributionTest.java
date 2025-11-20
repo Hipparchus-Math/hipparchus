@@ -143,7 +143,7 @@ class MultivariateNormalMixtureModelDistributionTest {
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < samples[i].length; j++) {
-                assertEquals(correctSamples[i][j], samples[i][j], 1e-16);
+                assertEquals(correctSamples[i][j], samples[i][j], 2e-15);
             }
         }
     }

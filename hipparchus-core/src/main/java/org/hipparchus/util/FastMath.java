@@ -906,7 +906,7 @@ public class FastMath {
      * @return double e<sup>x</sup>
      */
     public static double exp(double x) {
-        return Math.exp(x);
+        return StrictMath.exp(x);
     }
 
     /**
@@ -1213,7 +1213,7 @@ public class FastMath {
      * @return log(x)
      */
     public static double log(final double x) {
-        return Math.log(x);
+        return StrictMath.log(x);
     }
 
     /**
@@ -1226,7 +1226,7 @@ public class FastMath {
      * @return {@code log(1 + x)}.
      */
     public static double log1p(final double x) {
-        return Math.log1p(x);
+        return StrictMath.log1p(x);
     }
 
     /** Compute the base 10 logarithm.<br>
@@ -1238,7 +1238,7 @@ public class FastMath {
      * @return log10(x)
      */
     public static double log10(final double x) {
-        return Math.log10(x);
+        return StrictMath.log10(x);
     }
 
     /**
@@ -1271,7 +1271,7 @@ public class FastMath {
      * @return double
      */
     public static double pow(final double x, final double y) {
-        return Math.pow(x, y);
+        return StrictMath.pow(x, y);
     }
 
     /**
@@ -1437,7 +1437,7 @@ public class FastMath {
      * @return sin(x)
      */
     public static double sin(double x) {
-        return Math.sin(x);
+        return StrictMath.sin(x);
     }
 
     /**
@@ -1450,7 +1450,7 @@ public class FastMath {
      * @return cos(x)
      */
     public static double cos(double x) {
-        return Math.cos(x);
+        return StrictMath.cos(x);
     }
 
     /**
@@ -1485,7 +1485,7 @@ public class FastMath {
      * @return tan(x)
      */
     public static double tan(double x) {
-        return Math.tan(x);
+        return StrictMath.tan(x);
     }
 
     /**
@@ -1916,7 +1916,7 @@ public class FastMath {
      * @return cubic root of x
      */
     public static double cbrt(double x) {
-        return Math.cbrt(x);
+        return StrictMath.cbrt(x);
     }
 
     /**
@@ -2035,7 +2035,7 @@ public class FastMath {
      * @return abs(x)
      */
     public static double abs(double x) {
-        return Math.abs(x);
+        return StrictMath.abs(x);
     }
 
     /**
@@ -2383,7 +2383,7 @@ public class FastMath {
      * @return a double number f such that f is an integer f &lt;= x &lt; f + 1.0
      */
     public static double floor(double x) {
-        return Math.floor(x);
+        return StrictMath.floor(x);
     }
 
     /** Get the smallest whole number larger than x.<br>
@@ -2395,7 +2395,7 @@ public class FastMath {
      * @return a double number c such that c is an integer c - 1.0 &lt; x &lt;= c
      */
     public static double ceil(double x) {
-        return Math.ceil(x);
+        return StrictMath.ceil(x);
     }
 
     /** Get the whole number that is the nearest to x, or the even one if x is exactly half way between two integers.
@@ -2626,7 +2626,7 @@ public class FastMath {
      * @return sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)
      */
     public static double hypot(final double x, final double y) {
-        return Math.hypot(x, y);
+        return StrictMath.hypot(x, y);
     }
 
     /**

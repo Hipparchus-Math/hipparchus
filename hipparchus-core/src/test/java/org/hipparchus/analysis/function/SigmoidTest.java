@@ -58,11 +58,11 @@ class SigmoidTest {
     @Test
     void testDerivativesHighOrder() {
         DerivativeStructure s = new Sigmoid(1, 3).value(new DSFactory(1, 5).variable(0, 1.2));
-        assertEquals(2.5370495669980352859, s.getPartialDerivative(0), 5.0e-16);
-        assertEquals(0.35578888129361140441, s.getPartialDerivative(1), 6.0e-17);
+        assertEquals(2.5370495669980352859,    s.getPartialDerivative(0), 5.0e-16);
+        assertEquals(0.35578888129361140441,   s.getPartialDerivative(1), 5.0e-16);
         assertEquals(-0.19107626464144938116,  s.getPartialDerivative(2), 6.0e-17);
         assertEquals(-0.02396830286286711696,  s.getPartialDerivative(3), 4.0e-17);
-        assertEquals(0.21682059798981049049,   s.getPartialDerivative(4), 3.0e-17);
+        assertEquals(0.21682059798981049049,   s.getPartialDerivative(4), 2.0e-16);
         assertEquals(-0.19186320234632658055,  s.getPartialDerivative(5), 2.0e-16);
     }
 

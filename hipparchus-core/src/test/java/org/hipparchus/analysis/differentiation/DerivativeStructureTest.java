@@ -274,7 +274,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                                                     x.getField().getZero() :
                                                     FastMath.pow(new DSFactory(3, maxOrder).constant(a), ds);
                     DerivativeStructure result = DerivativeStructure.pow(a, ds);
-                    checkEquals(reference, result, 1.0e-15);
+                    checkEquals(reference, result, 32 * Precision.EPSILON);
                 }
 
             }
@@ -571,7 +571,8 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testSqrtDefinition() {
-        double[] epsilon = new double[] { 5.0e-16, 5.0e-16, 2.7e-15, 5.7e-14, 2.0e-12 };
+        double[] epsilon = getEpsilons(4, 4, 24, 640, 16384);
+        
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -701,7 +702,8 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testPowReciprocalPow() {
-        double[] epsilon = new double[] { 2.0e-15, 2.0e-14, 3.0e-13, 8.0e-12, 3.0e-10 };
+        double[] epsilon = new double[] { 2.0e-15, 2.0e-14, 3.0e-13, 8.0e-12, 3.1e-10 };
+        
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.01) {
@@ -869,7 +871,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testExpm1Definition() {
-        double epsilon = 3.0e-16;
+        double epsilon = 4.0 * Precision.EPSILON;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -920,7 +922,10 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testLog10Definition() {
-        double[] epsilon = new double[] { 3.0e-16, 9.0e-16, 8.0e-15, 3.0e-13, 8.0e-12 };
+        double[] epsilon = getEpsilons(2, 8, 64,
+                                       2048,   // 2^11
+                                       65536); // 2^16
+        
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -934,10 +939,11 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             }
         }
     }
-
+    
     @Test
     void testLogExp() {
-        double[] epsilon = new double[] { 2.0e-16, 2.0e-16, 3.0e-16, 2.0e-15, 6.0e-15 };
+        double[] epsilon = getEpsilons(2, 1, 2, 8, 48);
+        
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -953,7 +959,8 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testLog1pExpm1() {
-        double[] epsilon = new double[] { 1.2e-16, 3.0e-16, 5.0e-16, 9.0e-16, 6.0e-15 };
+        double[] epsilon = getEpsilons(1, 2, 4, 8, 48);
+        
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -2319,4 +2326,15 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         assertArrayEquals(result, result2, tolerance);
     }
 
+    /** Return a {@code double[]} whose entries are the given integers times {@link Precision#EPSILON machEps}.<br>
+     * <br>
+     * 
+     * In other words, consider the input as a vector, the result is that vector multiplied by {@link Precision#EPSILON
+     * machEps}.
+     * 
+     * @param numMachEps a vector of desired mulitples of {@link Precision#EPSILON machEps}
+     * @return the epsilon array */
+    private static double[] getEpsilons(final int... numMachEps) {
+        return IntStream.of(numMachEps).mapToDouble(d -> d * Precision.EPSILON).toArray();
+    }
 }

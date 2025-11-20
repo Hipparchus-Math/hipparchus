@@ -232,10 +232,10 @@ public class GammaDistributionTest extends RealDistributionAbstractTest {
         final double meanOF, final double sdOF,
         final String resourceName) throws IOException {
         final GammaDistribution distribution = new GammaDistribution(shape, 1.0);
-        final UnitTestUtils.SimpleStatistics statOld = new UnitTestUtils.SimpleStatistics();
-        final UnitTestUtils.SimpleStatistics statNewNoOF = new UnitTestUtils.SimpleStatistics();
-        final UnitTestUtils.SimpleStatistics statNewOF = new UnitTestUtils.SimpleStatistics();
-
+        final UnitTestUtils.SimpleStatistics statOld      = new UnitTestUtils.SimpleStatistics();
+        final UnitTestUtils.SimpleStatistics statNewNoOF  = new UnitTestUtils.SimpleStatistics();
+        final UnitTestUtils.SimpleStatistics statNewOF    = new UnitTestUtils.SimpleStatistics();
+        
         final InputStream resourceAsStream;
         resourceAsStream = this.getClass().getResourceAsStream(resourceName);
         assertNotNull(resourceAsStream,
@@ -335,7 +335,7 @@ public class GammaDistributionTest extends RealDistributionAbstractTest {
 
     @Test
     void testMath753Shape1() throws IOException {
-        doTestMath753(1.0, 1.5, 0.5, 0.0, 0.0, "gamma-distribution-shape-1.csv");
+        doTestMath753(1.0, 1.5, 0.6, 0.0, 0.0, "gamma-distribution-shape-1.csv");
     }
 
     @Test
@@ -350,7 +350,7 @@ public class GammaDistributionTest extends RealDistributionAbstractTest {
 
     @Test
     void testMath753Shape100() throws IOException {
-        doTestMath753(100.0, 1.5, 1.0, 0.0, 0.0, "gamma-distribution-shape-100.csv");
+        doTestMath753(100.0, 1.9, 1.0, 0.0, 0.0, "gamma-distribution-shape-100.csv");
     }
 
     @Test

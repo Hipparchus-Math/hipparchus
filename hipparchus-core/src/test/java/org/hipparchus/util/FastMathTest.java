@@ -42,6 +42,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -348,7 +349,8 @@ class FastMathTest {
             }
         }
 
-        assertTrue(maxerrulp < MAX_ERROR_ULP, "log10() had errors in excess of " + MAX_ERROR_ULP + " ULP");
+        final double maxErrUlpLog10 = 0.61;
+        testUlpErr(maxErrUlpLog10, maxerrulp, "log10");
     }
 
     @Test
@@ -408,7 +410,10 @@ class FastMathTest {
         assertTrue(Double.isNaN(FastMath.exp(Double.NaN)), "exp of NaN should be NaN");
         assertEquals(Double.POSITIVE_INFINITY, FastMath.exp(Double.POSITIVE_INFINITY), 1.0, "exp of infinity should be infinity");
         assertEquals(0.0, FastMath.exp(Double.NEGATIVE_INFINITY), Precision.EPSILON, "exp of -infinity should be 0.0");
-        assertEquals(Math.E, FastMath.exp(1.0), Precision.EPSILON, "exp(1) should be Math.E");
+        
+        System.out.println(StrictMath.exp(0) == StrictMath.nextUp(Math.E));
+        
+        assertEquals(Math.E, FastMath.exp(1.0), 4 * Precision.EPSILON, "exp(1) should be Math.E");
     }
 
     @Test
@@ -739,8 +744,9 @@ class FastMathTest {
                 maxerrulp = Math.max(maxerrulp, Math.abs(errulp));
             }
         }
-
-        assertTrue(maxerrulp < MAX_ERROR_ULP, "pow() had errors in excess of " + MAX_ERROR_ULP + " ULP");
+        
+        final double maxErrUlpPow = 0.75;
+        testUlpErr(maxErrUlpPow, maxerrulp, "pow");
     }
 
     @Test
@@ -766,10 +772,11 @@ class FastMathTest {
                 maxerrulp = Math.max(maxerrulp, Math.abs(errulp));
             }
         }
-
-        assertTrue(maxerrulp < MAX_ERROR_ULP, "exp() had errors in excess of " + MAX_ERROR_ULP + " ULP");
+        
+        final double maxErrUlpExp = 0.75;
+        testUlpErr(maxErrUlpExp, maxerrulp, "exp");
     }
-
+    
     @Test
     void testSinCosSpecialCases() {
         for (double x : new double[] {
@@ -851,8 +858,9 @@ class FastMathTest {
                 maxerrulp = Math.max(maxerrulp, Math.abs(errulp));
             }
         }
-
-        assertTrue(maxerrulp < MAX_ERROR_ULP, "sin() had errors in excess of " + MAX_ERROR_ULP + " ULP");
+        
+        final double maxErrUlpSin = 0.70;
+        testUlpErr(maxErrUlpSin, maxerrulp, "sin");
     }
 
     @Test
@@ -881,7 +889,8 @@ class FastMathTest {
             }
         }
 
-        assertTrue(maxerrulp < MAX_ERROR_ULP, "cos() had errors in excess of " + MAX_ERROR_ULP + " ULP");
+        final double maxErrUlpCos = 0.60;
+        testUlpErr(maxErrUlpCos, maxerrulp, "cos");
     }
 
     @Test
@@ -909,8 +918,9 @@ class FastMathTest {
                 maxerrulp = Math.max(maxerrulp, Math.abs(errulp));
             }
         }
-
-        assertTrue(maxerrulp < MAX_ERROR_ULP, "tan() had errors in excess of " + MAX_ERROR_ULP + " ULP");
+        
+        final double maxErrUlpTan = 0.689;
+        testUlpErr(maxErrUlpTan, maxerrulp, "tan");
     }
 
     @Test
@@ -3088,4 +3098,18 @@ class FastMathTest {
 
     }
 
+    /** Assert that the actual max error in ULPs is less than the expected max error in ULPs
+     * 
+     * @param expectedMaxErrUlp the expected max error in ULPs
+     * @param actualMaxErrUlp the actual max error in ULPs
+     * @param funcBeingTested the name of the function being tested */
+    private static void testUlpErr(final double expectedMaxErrUlp,
+                                   final double actualMaxErrUlp,
+                                   final String funcBeingTested) {
+        final Supplier<String> msgSupp =
+                () -> "%s() had max error %e ULP, which is in excess of %e".formatted(funcBeingTested,
+                                                                                      actualMaxErrUlp,
+                                                                                      expectedMaxErrUlp);
+        assertTrue(actualMaxErrUlp < expectedMaxErrUlp, msgSupp);
+    }
 }
