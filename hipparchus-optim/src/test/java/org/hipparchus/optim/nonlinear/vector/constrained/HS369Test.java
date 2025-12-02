@@ -20,6 +20,7 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -93,6 +94,51 @@ public class HS369Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 8; }
     }
+    
+    private static class HS369IneqNoBounds extends InequalityConstraint {
+        // 22 inequality constraints total:
+        // - 3 linear
+        // - 3 nonlinear
+        // - 16 bounds (8 lower + 8 upper)
+        HS369IneqNoBounds() { super(new ArrayRealVector(22-16)); }
+
+       
+
+        @Override
+        public RealVector value(RealVector x) {
+            double[] g = new double[22-16];
+            double[] c = {
+                833.33252, 100.0, -83333.333,
+                1250.0, 1.0, -1250.0,
+                1250000.0, 1.0, -2500.0,
+                0.0025, 0.0025, 0.0025, 0.0025,
+                -0.0025, 0.01, -0.01
+            };
+
+            // Linear inequality constraints
+            g[0] = 1.0 - c[9]  * x.getEntry(3) - c[10] * x.getEntry(5);
+            g[1] = 1.0 - c[11] * x.getEntry(4) - c[12] * x.getEntry(6) - c[13] * x.getEntry(3);
+            g[2] = 1.0 - c[14] * x.getEntry(7) - c[15] * x.getEntry(4);
+
+            // Nonlinear inequality constraints with safe division
+            g[3] = 1.0 - c[0] * x.getEntry(3)/ (x.getEntry(0) * x.getEntry(5))
+                       - c[1]/ x.getEntry(5)
+                       - c[2]/( x.getEntry(0) * x.getEntry(5));
+
+            g[4] = 1.0 - c[3] * x.getEntry(4)/ (x.getEntry(1) * x.getEntry(6))
+                       - c[4] * x.getEntry(3)/ x.getEntry(6)
+                       - c[5] * x.getEntry(3)/( x.getEntry(1) * x.getEntry(6));
+
+            g[5] = 1.0 - c[6]/ (x.getEntry(2) * x.getEntry(7))
+                       - c[7] * x.getEntry(4)/ x.getEntry(7)
+                       - c[8] * x.getEntry(4)/ (x.getEntry(2) * x.getEntry(7));
+
+
+            return new ArrayRealVector(g, false);
+        }
+         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
+        @Override public int dim() { return 8; }
+    }
 
     @Test
     public void testHS369() {
@@ -106,7 +152,9 @@ public class HS369Test {
         InitialGuess guess = new InitialGuess(start);
 
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(s -> {});
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+          optimizer.setDebugPrinter(System.out::println);
+          }
 
         double val = 7049.2480;
         LagrangeSolution sol = optimizer.optimize(
@@ -117,5 +165,32 @@ public class HS369Test {
         );
 
         assertEquals(val, sol.getValue(), 1e-2); // tolleranza rilassata per robustezza
+    }
+    
+    @Test
+    public void testHS369Bound() {
+        SQPOption sqpOption = new SQPOption();
+        sqpOption.setMaxLineSearchIteration(50);
+        sqpOption.setB(0.5);
+        sqpOption.setMu(1.0e-4);
+        sqpOption.setEps(1e-10);
+
+        double[] start = {5000, 5000, 5000, 200, 350, 150, 225, 425};
+        InitialGuess guess = new InitialGuess(start);
+        double[] lb = {100.0, 1000.0, 1000.0, 10.0, 10.0, 10.0, 10.0, 10.0};
+         double[] ub = {10000.0, 10000.0, 10000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0};
+        SimpleBounds bounds=new SimpleBounds(lb,ub);
+        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        optimizer.setDebugPrinter(s -> {});
+
+        double val = 7049.2480;
+        LagrangeSolution sol = optimizer.optimize(
+            sqpOption,
+            guess,
+            new ObjectiveFunction(new HS369Obj()),
+            new HS369IneqNoBounds(),bounds
+        );
+
+        assertEquals(val, sol.getValue(), 1e-2);  
     }
 }

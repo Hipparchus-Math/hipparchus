@@ -52,8 +52,16 @@ public class HS047Test {
     public void testHS047() {
         InitialGuess guess = new InitialGuess(new double[]{2,FastMath.sqrt(2), -1,2.0-FastMath.sqrt(2.0),0.5});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
+         final SQPOption sqpOption = new SQPOption();
+        sqpOption.setMaxLineSearchIteration(50);
+        sqpOption.setB(0.5);
+        sqpOption.setMu(1.0e-4);
+        sqpOption.setEps(10e-11);
         double val = 0.0;
-        LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS047Obj()), new HS047Eq());
+        LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS047Obj()), new HS047Eq());
         assertEquals(val, sol.getValue(), 1e-5);
     }
 }

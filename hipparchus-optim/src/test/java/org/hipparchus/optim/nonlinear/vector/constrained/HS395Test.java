@@ -70,18 +70,16 @@ public class HS395Test {
         for (int i = 0; i < 50; i++) {
             start[i] = 2.0;
         }
-        final SQPOption sqpOption = new SQPOption();
-        sqpOption.setMaxLineSearchIteration(50);
-        sqpOption.setB(0.5);
-        sqpOption.setMu(1.0e-4);
-        sqpOption.setEps(10e-11);
+        
         InitialGuess guess = new InitialGuess(start);
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(s -> {});
+         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+          optimizer.setDebugPrinter(System.out::println);
+          }
         double val = 1.9166668;
 
         LagrangeSolution sol = optimizer.optimize(
-            guess,
+//            guess,
             new ObjectiveFunction(new HS395Obj()),
             new HS395Eq()
         );

@@ -20,6 +20,7 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -98,6 +99,37 @@ public class HS267Test {
             guess,
             new ObjectiveFunction(new HS267Obj()),
             new HS267Ineq()
+        );
+
+        assertEquals(val, sol.getValue(), 1e-6);
+    }
+    
+    @Test
+    public void testHS267Bound() {
+        SQPOption sqpOption = new SQPOption();
+        sqpOption.setMaxLineSearchIteration(50);
+        sqpOption.setB(0.5);
+        sqpOption.setMu(1.0e-4);
+        sqpOption.setEps(1e-11);
+          // 8 bounds in tutto:
+            // x[0] >= 0
+            // x[1] >= 0
+            // x[4] >= 0
+            // 15 - x[i] >= 0  for i = 0..4
+         double[] lb = {0.0, 0.0,Double.NEGATIVE_INFINITY, 0.0,Double.NEGATIVE_INFINITY};
+         double[] ub = {15,15, 15, 15, 15};
+        SimpleBounds bounds=new SimpleBounds(lb,ub);
+        InitialGuess guess = new InitialGuess(new double[]{2.0, 2.0, 2.0, 2.0, 2.0});
+
+        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        optimizer.setDebugPrinter(s -> {});
+
+        double val = 0.0;
+        LagrangeSolution sol = optimizer.optimize(
+            sqpOption,
+            guess,
+            new ObjectiveFunction(new HS267Obj()),
+            bounds
         );
 
         assertEquals(val, sol.getValue(), 1e-6);

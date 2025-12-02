@@ -1,0 +1,235 @@
+/*
+ * Licensed to the Hipparchus project under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ *
+ * The Hipparchus project licenses this file to You under the Apache License,
+ * Version 2.0.
+ */
+
+package org.hipparchus.optim.nonlinear.vector.constrained;
+
+import org.hipparchus.linear.Array2DRowRealMatrix;
+import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
+import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
+import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * HS248 (TP248)
+ *
+ * N    = 3
+ * NILI = 1  (one linear inequality)
+ * NINL = 0
+ * NELI = 0
+ * NENL = 1  (one nonlinear inequality)
+ *
+ * Variables:
+ *   x = (x1, x2, x3)
+ *
+ * Objective (MODE=2):
+ *   f(x) = -x2
+ *
+ * Fortran inequalities G(i) ≥ 0:
+ *   G1(x) = 1 - 2*x2 + x1
+ *   G2(x) = x1^2 + x2^2 + x3^2 - 1
+ *
+ * Here we pass c(x) = G(x) directly to the optimizer, with the
+ * convention c(x) ≥ 0.
+ *
+ * Gradients (Fortran GF at MODE=1):
+ *   ∂f/∂x1 = 0
+ *   ∂f/∂x2 = -1
+ *   ∂f/∂x3 = 0
+ *
+ * Reference solution (MODE=1):
+ *   x*  = (0.6, 0.8, 0)
+ *   f*  = -0.8
+ */
+public class HS248Test {
+
+    private static final int DIM      = 3;
+    private static final int NUM_INEQ = 1;
+    private static final int NUM_EQ   = 1;
+
+    // -------------------------------------------------------------------------
+    // Objective
+    // -------------------------------------------------------------------------
+    private static class HS248Obj extends TwiceDifferentiableFunction {
+
+        @Override
+        public int dim() {
+            return DIM;
+        }
+
+        @Override
+        public double value(RealVector x) {
+            double x2 = x.getEntry(1);
+            return -x2;
+        }
+
+        @Override
+        public RealVector gradient(RealVector x) {
+            // GF(1)=0, GF(2)=-1, GF(3)=0
+            return new ArrayRealVector(new double[]{
+                    0.0,  // df/dx1
+                    -1.0, // df/dx2
+                    0.0   // df/dx3
+            }, false);
+        }
+
+        @Override
+        public RealMatrix hessian(RealVector x) {
+            // Linear objective → Hessian = 0
+            return new Array2DRowRealMatrix(DIM, DIM);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Inequality constraints (c(x) ≥ 0)
+    // -------------------------------------------------------------------------
+    private static class HS248Ineq extends InequalityConstraint {
+
+        HS248Ineq() {
+            // RHS = 0 for all inequalities
+            super(new ArrayRealVector(new double[NUM_INEQ]));
+        }
+
+        @Override
+        public int dim() {
+            return DIM;
+        }
+
+        @Override
+        public RealVector value(RealVector x) {
+
+            double x1 = x.getEntry(0);
+            double x2 = x.getEntry(1);
+            double x3 = x.getEntry(2);
+
+            // Fortran G1 = 1 - 2*x2 + x1  (≥ 0)
+            double c1 = 1.0 - 2.0 * x2 + x1;
+
+            // Fortran G2 = x1^2 + x2^2 + x3^2 - 1  (≥ 0)
+            double c2 = x1 * x1 + x2 * x2 + x3 * x3 - 1.0;
+
+            // Optimizer convention: c(x) ≥ 0
+            return new ArrayRealVector(new double[]{c1}, false);
+        }
+
+        @Override
+        public RealMatrix jacobian(RealVector x) {
+
+            double x1 = x.getEntry(0);
+            double x2 = x.getEntry(1);
+            double x3 = x.getEntry(2);
+
+            RealMatrix J = new Array2DRowRealMatrix(NUM_INEQ, DIM);
+
+            // c1 = 1 - 2*x2 + x1 → grad = [1, -2, 0]
+            J.setEntry(0, 0, 1.0);
+            J.setEntry(0, 1, -2.0);
+            J.setEntry(0, 2, 0.0);
+
+//            // c2 = x1^2 + x2^2 + x3^2 - 1 → grad = [2*x1, 2*x2, 2*x3]
+//            J.setEntry(1, 0, 2.0 * x1);
+//            J.setEntry(1, 1, 2.0 * x2);
+//            J.setEntry(1, 2, 2.0 * x3);
+
+            return J;
+        }
+    }
+    
+    // -------------------------------------------------------------------------
+    // Inequality constraints (c(x) ≥ 0)
+    // -------------------------------------------------------------------------
+    private static class HS248eq extends EqualityConstraint {
+
+        HS248eq() {
+            // RHS = 0 for all inequalities
+            super(new ArrayRealVector(new double[NUM_EQ]));
+        }
+
+        @Override
+        public int dim() {
+            return DIM;
+        }
+
+        @Override
+        public RealVector value(RealVector x) {
+
+            double x1 = x.getEntry(0);
+            double x2 = x.getEntry(1);
+            double x3 = x.getEntry(2);
+
+//            // Fortran G1 = 1 - 2*x2 + x1  (≥ 0)
+//            double c1 = 1.0 - 2.0 * x2 + x1;
+
+            // Fortran G2 = x1^2 + x2^2 + x3^2 - 1  (≥ 0)
+            double c2 = x1 * x1 + x2 * x2 + x3 * x3 - 1.0;
+
+            // Optimizer convention: c(x) ≥ 0
+            return new ArrayRealVector(new double[]{ c2}, false);
+        }
+
+        @Override
+        public RealMatrix jacobian(RealVector x) {
+
+            double x1 = x.getEntry(0);
+            double x2 = x.getEntry(1);
+            double x3 = x.getEntry(2);
+
+            RealMatrix J = new Array2DRowRealMatrix(NUM_EQ, DIM);
+
+//            // c1 = 1 - 2*x2 + x1 → grad = [1, -2, 0]
+//            J.setEntry(0, 0, 1.0);
+//            J.setEntry(0, 1, -2.0);
+//            J.setEntry(0, 2, 0.0);
+
+            // c2 = x1^2 + x2^2 + x3^2 - 1 → grad = [2*x1, 2*x2, 2*x3]
+            J.setEntry(0, 0, 2.0 * x1);
+            J.setEntry(0, 1, 2.0 * x2);
+            J.setEntry(0, 2, 2.0 * x3);
+
+            return J;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Test
+    // -------------------------------------------------------------------------
+    @Test
+    public void testHS248_optimization() {
+
+        // Initial guess from Fortran (MODE=1):
+        //   X(1)=-0.1, X(2)=-1.0, X(3)=0.1
+        double[] x0 = new double[]{-0.1, -1.0, 0.1};
+
+        SQPOptimizerS2 opt = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
+
+        LagrangeSolution sol = opt.optimize(
+                new InitialGuess(x0),
+                new ObjectiveFunction(new HS248Obj()),
+                 new HS248eq(),            // no equalities
+                new HS248Ineq(), // 2 inequalities
+                null             // no bounds
+        );
+
+        double f = sol.getValue();
+
+        final double fExpected = -0.8; // FEX
+        final double tol = 1.0e-4 * (FastMath.abs(fExpected) + 1.0);
+
+        assertEquals(fExpected, f, tol);
+    }
+}
+

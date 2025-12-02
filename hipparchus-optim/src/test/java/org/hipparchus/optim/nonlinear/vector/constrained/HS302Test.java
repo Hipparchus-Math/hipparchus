@@ -73,11 +73,8 @@ public class HS302Test {
 
     @Test
     public void testHS302() {
-         SQPOption sqpOption=new SQPOption();
-        sqpOption.setMaxLineSearchIteration(20);
-        sqpOption.setB(0.5);
-        sqpOption.setMu(1.0e-4);
-        sqpOption.setEps(10e-11);
+        SQPOption sqpOption=new SQPOption();
+         sqpOption.setEps(10e-11);
         InitialGuess guess = new InitialGuess(new double[100]);
         
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
@@ -88,4 +85,8 @@ public class HS302Test {
         
         assertEquals(val, sol.getValue(), 1e-6);
     }
+    
+    
+    
+    
 }

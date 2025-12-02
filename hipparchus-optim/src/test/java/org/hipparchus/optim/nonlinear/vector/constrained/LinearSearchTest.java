@@ -51,7 +51,7 @@ class LinearSearchTest {
                         -1.5, -1.5, -1.5, -1.5
                 });
         final RealVector x = new ArrayRealVector(new double[] { startX, startY });
-        final MeritFunctionL2 f = new MeritFunctionL2(objective, null, iqConstraint, x);
+        final MeritFunctionL2 f = new MeritFunctionL2(objective, null, iqConstraint,null, x);
         f.update(objective.gradient(x),
                  null,
                  iqConstraint.gradient(x.toArray()),
