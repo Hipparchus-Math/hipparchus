@@ -127,7 +127,7 @@ class JacobiEllipticComplexTest {
         // so despite we don't provide the same result as Wolfram, we provide a correct result
         Complex wolframZ = new Complex(0.94236298773531348838, 1.92822841948038407820);
         Complex k = LegendreEllipticIntegral.bigK(je.getM());
-        UnitTestUtils.customAssertEquals(k.multiply(2).subtract(wolframZ), je.arcsn(new Complex(2.5, -0.1)), 1.0e-15);
+        UnitTestUtils.customAssertEquals(k.twice().subtract(wolframZ), je.arcsn(new Complex(2.5, -0.1)), 1.0e-15);
     }
 
     @Test
@@ -154,7 +154,7 @@ class JacobiEllipticComplexTest {
         // so despite we don't provide the same result as Wolfram, we provide a correct result
         final Complex wolframZ = new Complex(-3.0359823836145783448, -0.1010810531387431972);
         final Complex k        = LegendreEllipticIntegral.bigK(je.getM());
-        final Complex period   = k.multiply(2);
+        final Complex period   = k.twice();
         UnitTestUtils.customAssertEquals(wolframZ.add(period), je.arccs(new Complex(2.5, -0.1)), 1.0e-15);
     }
 
@@ -167,7 +167,7 @@ class JacobiEllipticComplexTest {
         final Complex wolframZ = new Complex(-3.29799820949072209724, -4.202477914142034207);
         final Complex k      = LegendreEllipticIntegral.bigK(je.getM());
         final Complex kPrime = LegendreEllipticIntegral.bigKPrime(je.getM());
-        final Complex period = k.add(kPrime.multiplyPlusI()).multiply(2);
+        final Complex period = k.add(kPrime.multiplyPlusI()).twice();
         UnitTestUtils.customAssertEquals(wolframZ.add(period), je.arcds(new Complex(2.5, -0.1)), 1.0e-15);
     }
 

@@ -360,6 +360,6 @@ public class GammaDistributionTest extends RealDistributionAbstractTest {
 
     @Test
     void testMath753Shape1000() throws IOException {
-        doTestMath753(1000.0, 1.0, 1.0, 158.0, 230.0, "gamma-distribution-shape-1000.csv");
+        doTestMath753(1000.0, 1.0, 1.0, 160.0, 220.0, "gamma-distribution-shape-1000.csv");
     }
 }

@@ -19,6 +19,7 @@ package org.hipparchus.analysis.differentiation;
 import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -115,6 +116,18 @@ class UnivariateDerivative2Test extends UnivariateDerivativeAbstractTest<Univari
         assertNotEquals(ud2, new UnivariateDerivative2(12, -43, 56));
         assertNotEquals(ud2, new UnivariateDerivative2(12, -34, 65));
         assertNotEquals(ud2, new UnivariateDerivative2(21, -43, 65));
+    }
+
+    @Test
+    void testIssue411() {
+        // GIVEN
+        final UnivariateDerivative2 y = new UnivariateDerivative2(1, 2, 3);
+        // WHEN
+        final UnivariateDerivative2 actual = y.atan2(new UnivariateDerivative2(0, 0, 0));
+        // THEN
+        assertEquals(MathUtils.SEMI_PI, actual.getValue(), 1.0e-15);
+        assertEquals(0., actual.getFirstDerivative(), 1.0e-15);
+        assertEquals(0., actual.getSecondDerivative());
     }
 
     @Test

@@ -30,13 +30,13 @@ import org.hipparchus.util.FastMath;
 
 /**
  * Sequential Quadratic Programming Optimizer.
- * <br/>
+ * <p>
  * min f(x)
- * <br/>
+ * <p>
  * q(x) = b1
- * <br/>
- * h(x)>=b2
- * <br/>
+ * <p>
+ * h(x)&gt;=b2
+ * <p>
  * Algorithm based on paper:"On the convergence of a sequential quadratic
  * programming method(Klaus Shittkowki,January 1982)"
  * @since 3.1

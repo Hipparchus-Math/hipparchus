@@ -493,8 +493,8 @@
       </dependency>
 
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
         <version>${hipparchus.junit.version}</version>
         <scope>test</scope>
       </dependency>
@@ -560,7 +560,6 @@
     <hipparchus.maven-surefire-plugin.version>3.5.2</hipparchus.maven-surefire-plugin.version>
     <hipparchus.maven-surefire-report-plugin.version>3.5.2</hipparchus.maven-surefire-report-plugin.version>
     <hipparchus.maven-enforcer-plugin.version>3.5.0</hipparchus.maven-enforcer-plugin.version>
-    <hipparchus.nexus-staging-maven-plugin.version>1.7.0</hipparchus.nexus-staging-maven-plugin.version>
     <hipparchus.maven-gpg-plugin.version>3.2.7</hipparchus.maven-gpg-plugin.version>
     <hipparchus.maven-install-plugin.version>3.1.4</hipparchus.maven-install-plugin.version>
     <hipparchus.apache-rat-plugin.version>0.16.1</hipparchus.apache-rat-plugin.version>
@@ -1034,16 +1033,6 @@
     </profile>
     <profile>
       <id>release</id>
-      <distributionManagement>
-        <snapshotRepository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-      </distributionManagement>
       <build>
         <plugins>
           <plugin>
@@ -1073,24 +1062,12 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>${hipparchus.nexus-staging-maven-plugin.version}</version>
-            <extensions>true</extensions>
-            <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>false</autoReleaseAfterClose>
-            </configuration>
-          </plugin>
-          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>${hipparchus.maven-gpg-plugin.version}</version>
             <configuration>
-              <gpgArguments>
-                <arg>--digest-algo=SHA512</arg>
-              </gpgArguments>
+              <signer>bc</signer>
+              <useAgent>false</useAgent>
             </configuration>
             <executions>
               <execution>

@@ -50,6 +50,24 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="ryan" type="update" issue="issues/413">
+        Reverted the FastMath reduction changes
+      </action>
+      <action dev="serrof" type="update" issue="issues/430">
+          Update UnivariateDifferentiableSolver with UnivariateDerivative1.
+      </action>
+      <action dev="serrof" type="add" issue="issues/428">
+        Added half and twice on CalculusFieldElement.
+      </action>
+      <action dev="bryan" type="add" issue="issues/424">
+        Added RANSAC algorithm for estimating the parameters of a mathematical model.
+      </action>
+      <action dev="luc" type="add" issue="issues/421">
+        Added random generators for exponential, gamma and Nakagami distributions.
+      </action>
+      <action dev="luc" type="add" due-to="Xavier Vasseur" issue="issues/419">
+        Added half Cauchy, half normal and inverse gamma distributions.
+      </action>
       <action dev="luc" type="add" issue="issues/406">
         Added AxisChecker helper class to check grid data consistency.
       </action>
@@ -69,6 +87,14 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="fix" issue="issues/394">
         Prevent stack overflow in digamma function.
+      </action>
+    </release>
+    <release version="4.0.2" date="TBC" description="This is a patch release.">
+      <action dev="bryan" type="fix" issue="issues/416">
+        Fixed inconsistency between Abstract{Field}ODEStateInterpolator and {Field}DetectorBasedEventState for event time handling.
+      </action>
+      <action dev="serrof" type="fix" issue="issues/411">
+        Fixes NaN appearing in second derivative for atan2 with (Field)UnivariateDerivative2 when argument has zero value.
       </action>
     </release>
     <release version="4.0.1" date="2025-03-21" description="This is a patch release.">

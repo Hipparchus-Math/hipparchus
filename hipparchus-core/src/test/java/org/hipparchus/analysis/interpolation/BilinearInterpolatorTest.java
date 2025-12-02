@@ -75,7 +75,7 @@ class BilinearInterpolatorTest {
         CalculusFieldBivariateFunction<Binary64> fT = new FieldBivariateFunction() {
             @Override
             public <T extends CalculusFieldElement<T>> T value(T x, T y) {
-                return x.multiply(2).subtract(y);
+                return x.twice().subtract(y);
             }
         }.toCalculusFieldBivariateFunction(Binary64Field.getInstance());
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);

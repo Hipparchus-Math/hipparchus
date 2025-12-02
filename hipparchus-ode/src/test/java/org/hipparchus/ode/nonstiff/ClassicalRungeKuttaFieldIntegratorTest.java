@@ -20,7 +20,9 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ClassicalRungeKuttaFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
@@ -120,4 +122,10 @@ class ClassicalRungeKuttaFieldIntegratorTest extends RungeKuttaFieldIntegratorAb
         doTestSecondaryEquations(Binary64Field.getInstance(), 1.1e-12, 5.6e-13);
     }
 
+    @Test
+    public void testFixedStepInitialization() {
+        Field<Binary64> field = Binary64Field.getInstance();
+        Binary64 step = field.getZero().add(60.0);
+        Assertions.assertEquals(step.getReal(), new ClassicalRungeKuttaFieldIntegrator<>(field, step).getCurrentSignedStepsize().getReal());
+    }
 }

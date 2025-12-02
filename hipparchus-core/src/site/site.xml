@@ -90,6 +90,7 @@
       <item name="3.1 API docs"                  href="https://hipparchus.org/apidocs-3.1/index.html"/>
       <item name="4.0 API docs"                  href="https://hipparchus.org/apidocs-4.0/index.html"/>
       <item name="4.0.1 API docs"                href="https://hipparchus.org/apidocs-4.0.1/index.html"/>
+      <item name="4.0.2 API docs"                href="https://hipparchus.org/apidocs-4.0.2/index.html"/>
       <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Global Coverage"               href="../hipparchus-coverage/jacoco-aggregate/index.html"/>
       <item name="Developers Guide"              href="../developers.html"/>

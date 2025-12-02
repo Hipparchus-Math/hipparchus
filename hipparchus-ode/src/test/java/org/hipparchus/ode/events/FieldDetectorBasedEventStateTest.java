@@ -16,25 +16,89 @@
  */
 package org.hipparchus.ode.events;
 
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexField;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.nonstiff.interpolators.ClassicalRungeKuttaFieldStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 class FieldDetectorBasedEventStateTest {
 
+    // Unit test reproducing https://gitlab.orekit.org/orekit/orekit/-/issues/1808
+    @Test
+    void testEpochComparisonAtLeastSignificantBit() throws NoSuchFieldException, IllegalAccessException {
+        final Binary64Field field = Binary64Field.getInstance();
+        final Binary64 zero = field.getZero();
+        // Epoch of event
+        final Binary64 eventTime = zero.add(17016.237999999998);
+
+        // Get the interpolated state at event time
+        // It will return globalCurrent at 17016.238 sec since the difference between current and previous state times is smaller than the least bit
+        final Binary64[] array = MathArrays.buildArray(field, 2);
+        final FieldODEStateAndDerivative<Binary64> globalCurrent = new FieldODEStateAndDerivative<>(zero.add(17016.238), array, array);
+        final FieldODEStateAndDerivative<Binary64> globalPrevious = new FieldODEStateAndDerivative<>(zero.add(17016.237999999998), array, array);
+        final ClassicalRungeKuttaFieldStateInterpolator<Binary64> interpolator = new ClassicalRungeKuttaFieldStateInterpolator<>(field, true, MathArrays.buildArray(field, 2, 2),
+                                                                                                                                 globalPrevious, globalCurrent,
+                                                                                                                                 globalPrevious, globalCurrent, null);
+        final FieldODEStateAndDerivative<Binary64> interpolatedState = interpolator.getInterpolatedState(eventTime);
+        Assertions.assertEquals(interpolatedState.getTime().getReal(), globalCurrent.getTime().getReal());
+        Assertions.assertNotEquals(interpolatedState.getTime().getReal(), globalPrevious.getTime().getReal());
+
+        // Configure the event state (failing before the fix)
+        // Since detecting the event causing the numerical issue is tricky; we access the private field to simplify the workflow and directly set the necessary values causing the issue
+        final FieldDetectorBasedEventState<Binary64> es = new FieldDetectorBasedEventState<>(new TestFieldDetector<>(field, true));
+        final java.lang.reflect.Field pendingEvent = FieldDetectorBasedEventState.class.getDeclaredField("pendingEvent");
+        pendingEvent.setAccessible(true);
+        pendingEvent.set(es, true);
+        final java.lang.reflect.Field pendingEventTime = FieldDetectorBasedEventState.class.getDeclaredField("pendingEventTime");
+        pendingEventTime.setAccessible(true);
+        pendingEventTime.set(es, eventTime);
+        final java.lang.reflect.Field afterG = FieldDetectorBasedEventState.class.getDeclaredField("afterG");
+        afterG.setAccessible(true);
+        afterG.set(es, zero); // Dummy value (this value is not interesting in that case)
+
+        // Action & verify
+        Assertions.assertNotNull(es.doEvent(interpolatedState));
+    }
+
+    @Test
+    void testDoEventThrowsIfTimeMismatch() throws NoSuchFieldException, IllegalAccessException {
+        final Binary64Field field = Binary64Field.getInstance();
+        final Binary64 zero = field.getZero();
+        // Initialization
+        final FieldODEEventDetector<Binary64> detector = new DummyDetector<>(field);
+        final FieldDetectorBasedEventState<Binary64> eventState = new FieldDetectorBasedEventState<>(detector);
+        java.lang.reflect.Field pendingEvent = FieldDetectorBasedEventState.class.getDeclaredField("pendingEvent");
+        pendingEvent.setAccessible(true);
+        pendingEvent.set(eventState, true);
+        final java.lang.reflect.Field pendingEventTime = FieldDetectorBasedEventState.class.getDeclaredField("pendingEventTime");
+        pendingEventTime.setAccessible(true);
+        pendingEventTime.set(eventState, field.getOne());
+        final Binary64[] array = MathArrays.buildArray(field, 1);
+        final FieldODEStateAndDerivative<Binary64> state = new FieldODEStateAndDerivative<>(zero.add(1.0001), array, array);
+        // Action & verify
+        Assertions.assertThrows(org.hipparchus.exception.MathRuntimeException.class, () -> {
+            eventState.doEvent(state);
+        });
+    }
+
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void testNextCheck(final boolean isForward) {
         // GIVEN
-        final TestFieldDetector detector = new TestFieldDetector(isForward);
+        final TestFieldDetector<Complex> detector = new TestFieldDetector<>(ComplexField.getInstance(), isForward);
         final FieldDetectorBasedEventState<Complex> eventState = new FieldDetectorBasedEventState<>(detector);
         final FieldODEStateInterpolator<Complex> mockedInterpolator = Mockito.mock(FieldODEStateInterpolator.class);
         final FieldODEStateAndDerivative<Complex> stateAndDerivative1 = getStateAndDerivative(1);
@@ -64,16 +128,18 @@ class FieldDetectorBasedEventStateTest {
         return new FieldODEStateAndDerivative<>(state[0], state, derivative);
     }
 
-    private static class TestFieldDetector implements FieldODEEventDetector<Complex> {
+    private static class TestFieldDetector<T extends CalculusFieldElement<T>> implements FieldODEEventDetector<T> {
 
+        private final Field<T> field;
         private final boolean failOnForward;
 
-        TestFieldDetector(final boolean failOnForward) {
+        TestFieldDetector(final Field<T> field, final boolean failOnForward) {
+            this.field = field;
             this.failOnForward = failOnForward;
         }
 
         @Override
-        public FieldAdaptableInterval<Complex> getMaxCheckInterval() {
+        public FieldAdaptableInterval<T> getMaxCheckInterval() {
             return (state, isForward) -> {
                 if (isForward && failOnForward) {
                     throw new AssertionError("forward");
@@ -90,18 +156,52 @@ class FieldDetectorBasedEventStateTest {
         }
 
         @Override
-        public BracketedRealFieldUnivariateSolver<Complex> getSolver() {
-            return new FieldBracketingNthOrderBrentSolver<>(Complex.ONE, Complex.ONE, Complex.ONE, 2);
+        public BracketedRealFieldUnivariateSolver<T> getSolver() {
+            return new FieldBracketingNthOrderBrentSolver<>(field.getOne(), field.getOne(), field.getOne(), 2);
         }
 
         @Override
-        public FieldODEEventHandler<Complex> getHandler() {
+        public FieldODEEventHandler<T> getHandler() {
             return (s, e, d) -> Action.CONTINUE;
         }
 
         @Override
-        public Complex g(FieldODEStateAndDerivative<Complex> state) {
+        public T g(FieldODEStateAndDerivative<T> state) {
             return state.getTime();
+        }
+    }
+
+    private static class DummyDetector<T extends CalculusFieldElement<T>> implements FieldODEEventDetector<T> {
+
+        private final Field<T> field;
+
+        public DummyDetector(final Field<T> field) {
+            this.field = field;
+        }
+
+        @Override
+        public FieldAdaptableInterval<T> getMaxCheckInterval() {
+            return (state, isForward) -> 1.0;
+        }
+
+        @Override
+        public int getMaxIterationCount() {
+            return 10;
+        }
+
+        @Override
+        public FieldBracketingNthOrderBrentSolver<T> getSolver() {
+            return new FieldBracketingNthOrderBrentSolver<>(field.getZero(), field.getZero(), field.getZero(), 2);
+        }
+
+        @Override
+        public FieldODEEventHandler<T> getHandler() {
+            return (state, detector, increasing) -> Action.CONTINUE;
+        }
+
+        @Override
+        public T g(FieldODEStateAndDerivative<T> state) {
+            return state.getTime().getField().getZero();
         }
     }
 

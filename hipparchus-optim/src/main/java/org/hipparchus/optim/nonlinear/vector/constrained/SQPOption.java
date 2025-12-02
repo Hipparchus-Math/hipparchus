@@ -105,7 +105,7 @@ public class SQPOption implements OptimizationData {
     }
 
      /** Set Gradient mode
-     * @param gradientMode
+     * @param gradientMode gradient mode
      */
     public void setGradientMode(final GradientMode gradientMode) {
         this.gradientMode = gradientMode;

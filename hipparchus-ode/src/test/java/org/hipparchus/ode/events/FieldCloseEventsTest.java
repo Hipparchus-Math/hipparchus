@@ -58,6 +58,15 @@ class FieldCloseEventsTest {
             new FieldODEState<>(zero, new Binary64[]{zero, zero});
 
     @Test
+    void testEventAtFinalTime() {
+        final DormandPrince853FieldIntegrator<Binary64> integrator = new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
+        final IntervalDetector detector = new IntervalDetector(720, 1e-10, 100, Action.RESET_DERIVATIVES, 16296.238, 17016.238);
+        integrator.addEventDetector(detector);
+        integrator.integrate(new Equation(), initialState, zero.add(17016.238));
+        assertEquals(2, detector.getEvents().size());
+    }
+
+    @Test
     void testCloseEventsFirstOneIsReset() {
         // setup
         // a fairly rare state to reproduce this bug. Two dates, d1 < d2, that
@@ -2178,6 +2187,30 @@ class FieldCloseEventsTest {
 
     }
 
+    /** Trigger an event at a given time interval. */
+    private static class IntervalDetector extends BaseDetector {
+
+        /** Interval start. */
+        protected final double start;
+
+        /** Interval end. */
+        protected final double end;
+
+        public IntervalDetector(final double maxCheck, final double threshold, final int maxIter,
+                                final Action action, final double startTime, final double endTime) {
+            super(maxCheck, threshold, maxIter, action, new ArrayList<>());
+            this.start = startTime;
+            this.end = endTime;
+        }
+
+        @Override
+        public Binary64 g(final FieldODEStateAndDerivative<Binary64> state) {
+            final Binary64 t = state.getTime();
+            return t.subtract(start).multiply(t.negate().add(end));
+        }
+
+    }
+
     /** Trigger an event at a particular time. */
     private static class TimeDetector extends BaseDetector {
 
@@ -2385,7 +2418,7 @@ class FieldCloseEventsTest {
 
         @Override
         public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
-            return new Binary64[]{one, one.multiply(2)};
+            return new Binary64[]{one, one.twice()};
         }
 
     }

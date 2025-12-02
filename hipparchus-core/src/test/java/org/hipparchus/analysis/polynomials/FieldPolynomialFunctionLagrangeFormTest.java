@@ -54,7 +54,7 @@ class FieldPolynomialFunctionLagrangeFormTest {
     void testGetter() {
         // GIVEN
         final Binary64Field field = Binary64Field.getInstance();
-        Binary64[] x = { field.getOne(), field.getOne().multiply(2) };
+        Binary64[] x = { field.getOne(), field.getOne().twice() };
         Binary64[] y = { field.getOne().negate(), field.getOne().multiply(4.) };
         final FieldPolynomialFunctionLagrangeForm<Binary64> lagrangeForm = new FieldPolynomialFunctionLagrangeForm<>(x, y);
         // WHEN & THEN
@@ -70,7 +70,7 @@ class FieldPolynomialFunctionLagrangeFormTest {
     void testGetCoefficients() {
         // GIVEN
         final Binary64Field field = Binary64Field.getInstance();
-        Binary64[] x = { field.getOne(), field.getOne().multiply(2) };
+        Binary64[] x = { field.getOne(), field.getOne().twice() };
         Binary64[] y = { field.getOne().negate(), field.getOne().multiply(4.) };
         final FieldPolynomialFunctionLagrangeForm<Binary64> lagrangeForm = new FieldPolynomialFunctionLagrangeForm<>(x, y);
         // WHEN

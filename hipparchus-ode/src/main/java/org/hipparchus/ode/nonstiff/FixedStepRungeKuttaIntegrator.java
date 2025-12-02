@@ -78,6 +78,7 @@ public abstract class FixedStepRungeKuttaIntegrator extends AbstractIntegrator
         this.a    = getA();
         this.b    = getB();
         this.step = FastMath.abs(step);
+        setStepSize(getDefaultStep());
     }
 
     /** Getter for the default, positive step-size assigned at constructor level.

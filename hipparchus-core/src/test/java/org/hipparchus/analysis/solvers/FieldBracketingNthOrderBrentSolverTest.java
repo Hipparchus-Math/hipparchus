@@ -70,7 +70,7 @@ final class FieldBracketingNthOrderBrentSolverTest {
         FieldUnivariateFunction f = new FieldUnivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(T x) {
                 T one     = x.getField().getOne();
-                T oneHalf = one.divide(2);
+                T oneHalf = one.half();
                 T xMo     = x.subtract(one);
                 T xMh     = x.subtract(oneHalf);
                 T xPh     = x.add(oneHalf);
@@ -117,7 +117,7 @@ final class FieldBracketingNthOrderBrentSolverTest {
         for (AllowedSolution allowed : AllowedSolution.values()) {
             check(new CalculusFieldUnivariateFunction<Dfp>() {
                 public Dfp value(Dfp x) {
-                    return DfpMath.sin(x).subtract(x.divide(2));
+                    return DfpMath.sin(x).subtract(x.half());
                 }
             }, 200, -2.0, 2.0, allowed);
 
@@ -164,7 +164,7 @@ final class FieldBracketingNthOrderBrentSolverTest {
         Dfp yResult = f.value(xResult);
         switch (allowedSolution) {
         case ANY_SIDE :
-            assertTrue(yResult.abs().lessThan(functionValueAccuracy.multiply(2)));
+            assertTrue(yResult.abs().lessThan(functionValueAccuracy.twice()));
             break;
         case LEFT_SIDE : {
             boolean increasing = f.value(xResult).add(absoluteAccuracy).greaterThan(yResult);

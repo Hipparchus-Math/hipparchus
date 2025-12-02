@@ -1,0 +1,45 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.hipparchus.fitting.ransac;
+
+import java.util.List;
+
+/**
+ * Base class for mathematical model fitter used with {@link RansacFitter}.
+ * @param <M> mathematical model representing the parameters to estimate
+ * @since 4.1
+ */
+public interface IModelFitter<M> {
+
+    /**
+     * Fits the mathematical model parameters based on the set of observed data.
+     * @param points set of observed data
+     * @return the fitted model parameters
+     */
+    M fitModel(final List<double[]> points);
+
+    /**
+     * Computes the error between the model and an observed data.
+     * <p>
+     * This method is used to determine if the observed data is an inlier or an outlier.
+     * </p>
+     * @param model fitted model
+     * @param point observed data
+     * @return the error between the model and the observed data
+     */
+    double computeModelError(final M model, final double[] point);
+}

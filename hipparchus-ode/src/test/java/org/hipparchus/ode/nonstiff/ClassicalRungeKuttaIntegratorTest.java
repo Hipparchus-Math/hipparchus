@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstractTest {
@@ -109,4 +110,9 @@ class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstractTest
         doTestSecondaryEquations(1.1e-12, 5.6e-13);
     }
 
+    @Test
+    public void testFixedStepInitialization() {
+        double step = 60.0;
+        Assertions.assertEquals(step, new ClassicalRungeKuttaIntegrator(step).getCurrentSignedStepsize());
+    }
 }

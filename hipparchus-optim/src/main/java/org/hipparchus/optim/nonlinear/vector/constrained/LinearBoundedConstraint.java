@@ -23,7 +23,7 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.OptimizationData;
 
-/** A set of linear inequality constraints expressed as ub>Ax>lb.
+/** A set of linear inequality constraints expressed as ub&gt;Ax&gt;lb.
  * @since 3.1
  */
 public class LinearBoundedConstraint extends BoundedConstraint implements OptimizationData {

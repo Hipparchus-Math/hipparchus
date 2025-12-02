@@ -2217,7 +2217,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             dx = newInstance(x);
             dx.sign = -1;
             dx = dx.add(this.divide(x));
-            dx = dx.divide(2);
+            dx = dx.half();
             ppx = px;
             px = x;
             x = x.add(dx);
@@ -2609,7 +2609,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
 
         Dfp tempDfp = DfpMath.pow(getTwo(), exponent);
         while (tempDfp.lessThan(y) || tempDfp.equals(y)) {
-            tempDfp = tempDfp.multiply(2);
+            tempDfp = tempDfp.twice();
             exponent++;
         }
         exponent--;
@@ -2993,7 +2993,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      */
     @Override
     public Dfp atanh() {
-        return getOne().add(this).divide(getOne().subtract(this)).log().divide(2);
+        return getOne().add(this).divide(getOne().subtract(this)).log().half();
     }
 
     /** {@inheritDoc} */

@@ -1,0 +1,133 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.hipparchus.fitting.ransac;
+
+import java.util.List;
+import java.util.stream.IntStream;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.linear.Array2DRowRealMatrix;
+import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
+import org.hipparchus.linear.SingularValueDecomposition;
+import org.hipparchus.util.FastMath;
+
+/**
+ * Fitter for polynomial model.
+ * @since 4.1
+ */
+public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter.Model> {
+
+    /** Class representing the polynomial model to fit. */
+    public static final class Model {
+
+        /** Coefficients of the polynomial model. */
+        private final double[] coefficients;
+
+        /**
+         * Constructor.
+         * @param coefficients coefficients of the polynomial model
+         */
+        public Model(final double[] coefficients) {
+            this.coefficients = coefficients.clone();
+        }
+
+        /**
+         * Predicts the model value for the input point.
+         * @param x point
+         * @return the model value for the given point
+         */
+        public double predict(final double x) {
+            return IntStream.range(0, coefficients.length).mapToDouble(i -> coefficients[i] * FastMath.pow(x, i)).sum();
+        }
+
+        /**
+         * Get the coefficients of the polynomial model.
+         * <p>
+         * The coefficients are sort by degree.
+         * For instance, for a quadratic equation the coefficients are as followed:
+         * <code>y = coefficients[2] * x * x + coefficients[1] * x + coefficients[0]</code>
+         * </p>
+         * @return the coefficients of the polynomial model
+         */
+        public double[] getCoefficients() {
+            return coefficients;
+        }
+    }
+
+    /** Degree of the polynomial to fit. */
+    private final int degree;
+
+    /**
+     * Constructor.
+     * @param degree degree of the polynomial to fit
+     */
+    public PolynomialModelFitter(final int degree) {
+        if (degree < 1) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, degree, 1);
+        }
+        this.degree = degree;
+    }
+
+    /** {@inheritDoc. */
+    @Override
+    public Model fitModel(final List<double[]> points) {
+        // Reference: Wikipedia page "Polynomial regression"
+        final int size = points.size();
+        checkSampleSize(size);
+
+        // Fill the data
+        final double[][] x = new double[size][degree + 1];
+        final double[] y = new double[size];
+        for (int i = 0; i < size; i++) {
+            final double currentX = points.get(i)[0];
+            final double currentY = points.get(i)[1];
+            double value = 1.0;
+            for (int j = 0; j <= degree; j++) {
+                x[i][j] = value;
+                value *= currentX;
+            }
+            y[i] = currentY;
+        }
+
+        // Computes (X^T.X)^-1 X^T.Y to determine the coefficients "C" of the polynomial (Y = X.C)
+        final RealMatrix matrixX = new Array2DRowRealMatrix(x);
+        final RealVector matrixY = new ArrayRealVector(y);
+        final RealMatrix matrixXTranspose = matrixX.transpose();
+        final RealMatrix xTx = matrixXTranspose.multiply(matrixX);
+        final RealVector xTy = matrixXTranspose.operate(matrixY);
+        final RealVector coefficients = new SingularValueDecomposition(xTx).getSolver().solve(xTy);
+        return new Model(coefficients.toArray());
+    }
+
+    /** {@inheritDoc}. */
+    @Override
+    public double computeModelError(final Model model, final double[] point) {
+        return FastMath.abs(point[1] - model.predict(point[0]));
+    }
+
+    /**
+     * Verifies that the size of the set of observed data is consistent with the degree of the polynomial to fit.
+     * @param size size of the set of observed data
+     */
+    private void checkSampleSize(final int size) {
+        if (size < degree + 1) {
+            throw new IllegalArgumentException(String.format("Not enough points to fit polynomial model, at least %d points are required", degree + 1));
+        }
+    }
+}

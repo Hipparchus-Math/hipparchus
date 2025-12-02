@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="4.0.2" date="2025-09-08" description="This is a patch release.">
+      <action dev="bryan" type="update">
+        No changes directly in this module. However, lower level Hipparchus modules did change,
+        hence a new release was needed.
+      </action>
+    </release>
     <release version="4.0.1" date="2025-03-21" description="This is a patch release.">
       <action dev="luc" type="fix" issue="issues/386">
         Restores a Java 8 compatible mockito version, which is used only for tests purposes;

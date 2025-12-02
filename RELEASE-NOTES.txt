@@ -1,42 +1,17 @@
 
-              Hipparchus 4.0 RELEASE NOTES
+              Hipparchus 4.0.2 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus-4.0
+The Hipparchus team is pleased to announce the release of hipparchus-4.0.2
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
-This is a major release. It adds features to Kalman filtering,
-adds a reset mechanism in events and propagation direction in (Field)AdaptableInterval,
-and improves numerical stability in BSP-tree operations.
+This is a patch release.
 
 Changes in this version include:
 
-New features:
-o issues/363:  Add a (backwards) smoother counterpart to the linear Kalman, extended Kalman and unscented filters. 
-o issues/328:  Add inverse transform method to UnscentedTransformProvider. 
-o issues/382:  Added reset mechanism in ODE event detection. 
-o issues/260:  Added FieldPolynomialFunctionLagrangeForm. 
-o issues/370:  Added native way to stack an independent variable in (Field)Gradient. 
-o issues/335:  Add boolean for propagation direction in (Field)AdaptableInterval. 
-
 Fixed Bugs:
-o issues/367:  Added getHipparchusVersion method to MathUtils. 
-o issues/384:  Fixed issue with open boundaries in Euclidean 2D-polygons. 
-o issues/360:  Increased dimension of directions numbers in Sobol sequence generation. 
-o issues/354:  Added FieldBivariateGridInterpolator, FieldBilinearInterpolator and FieldBilinearInterpolatingFunction. 
-o issues/347:  Fixed JUnit pioneer dependency version not compatible with Java 8. 
-o issues/339:  Changed CDN for faster site load. 
-
-Changes:
-o              Added moveTowards method to Point interface. 
-o issues/372:  Rename RungeKutta(Field)Integrator as FixedStepRungeKutta(Field)Integrator. 
-o issues/314:  Improved robustness of BSP tree operations.
-o issues/361:  Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK. 
-o issues/330:  Made constructors of abstract classes protected when they were public. 
-o issues/350:  Removed obsolete hipparchus-migration module. 
-o issues/349:  Added getAddendum() to CalculusFieldElement interface. 
-o issues/346:  Added getLocalizedString(baseName, key, locale) with default implementation to Localizable interface.
-o issues/285:  Migrated tests from JUnit 4 to JUnit 5. 
+o issues/416:  Fixed inconsistency between Abstract{Field}ODEStateInterpolator and {Field}DetectorBasedEventState for event time handling.
+o issues/411:  Fixes NaN appearing in second derivative for atan2 with (Field)UnivariateDerivative2 when argument has zero value.
 
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,

@@ -36,7 +36,7 @@ public interface Constraint extends VectorDifferentiableFunction, OptimizationDa
 
     /** Check how much a point overshoots the constraint.
      * <p>
-     * The overshoots is zero if the point fulfills the constraint, and
+     * The overshoot is zero if the point fulfills the constraint, and
      * positive if the {@link #value(RealVector) value} of the constraint
      * is on the wrong side of {@link #getLowerBound() lower} or {@link
      * #getUpperBound() upper} boundaries.

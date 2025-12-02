@@ -35,13 +35,11 @@ import org.hipparchus.exception.MathRuntimeException;
  * methods as is (using {@code FastMath.sin(x)} or {@code FastMath.cbrt(y)}
  * in the previous example).
  * <p>
- * FastMath's speed is achieved by relying heavily on JIT compiler optimization
- * to native code present in many JVMs today, and use of large tables.
+ * FastMath speed is achieved by relying heavily on optimizing compilers
+ * to native code present in many JVMs today and use of large tables.
  * The larger tables are lazily initialized on first use, so that the setup
  * time does not penalize methods that don't need them.
- *
- * TODO: where are the tables being lazily initialized?
- *
+ * 
  * <p>
  * Note that FastMath is
  * extensively used inside Hipparchus, so by calling some algorithms,
@@ -108,7 +106,113 @@ public class FastMath {
      */
     private static final boolean RECOMPUTE_TABLES_AT_RUNTIME = false;
 
+    /** log(2) (high bits). */
+    private static final double LN_2_A = 0.693147063255310059;
+
+    /** log(2) (low bits). */
+    private static final double LN_2_B = 1.17304635250823482e-7;
+
+    /** Coefficients for log, when input 0.99 < x < 1.01. */
+    private static final double[][] LN_QUICK_COEF = {
+        {1.0, 5.669184079525E-24},
+        {-0.25, -0.25},
+        {0.3333333134651184, 1.986821492305628E-8},
+        {-0.25, -6.663542893624021E-14},
+        {0.19999998807907104, 1.1921056801463227E-8},
+        {-0.1666666567325592, -7.800414592973399E-9},
+        {0.1428571343421936, 5.650007086920087E-9},
+        {-0.12502530217170715, -7.44321345601866E-11},
+        {0.11113807559013367, 9.219544613762692E-9},
+    };
+
+    /** Coefficients for log in the range of 1.0 < x < 1.0 + 2^-10. */
+    private static final double[][] LN_HI_PREC_COEF = {
+        {1.0, -6.032174644509064E-23},
+        {-0.25, -0.25},
+        {0.3333333134651184, 1.9868161777724352E-8},
+        {-0.2499999701976776, -2.957007209750105E-8},
+        {0.19999954104423523, 1.5830993332061267E-10},
+        {-0.16624879837036133, -2.6033824355191673E-8}
+    };
+
     /** Sine, Cosine, Tangent tables are for 0, 1/8, 2/8, ... 13/8 = PI/2 approx. */
+
+    /** Sine table (high bits). */
+    private static final double[] SINE_TABLE_A =
+        {
+        +0.0d,
+        +0.1246747374534607d,
+        +0.24740394949913025d,
+        +0.366272509098053d,
+        +0.4794255495071411d,
+        +0.5850973129272461d,
+        +0.6816387176513672d,
+        +0.7675435543060303d,
+        +0.8414709568023682d,
+        +0.902267575263977d,
+        +0.9489846229553223d,
+        +0.9808930158615112d,
+        +0.9974949359893799d,
+        +0.9985313415527344d,
+    };
+
+    /** Sine table (low bits). */
+    private static final double[] SINE_TABLE_B =
+        {
+        +0.0d,
+        -4.068233003401932E-9d,
+        +9.755392680573412E-9d,
+        +1.9987994582857286E-8d,
+        -1.0902938113007961E-8d,
+        -3.9986783938944604E-8d,
+        +4.23719669792332E-8d,
+        -5.207000323380292E-8d,
+        +2.800552834259E-8d,
+        +1.883511811213715E-8d,
+        -3.5997360512765566E-9d,
+        +4.116164446561962E-8d,
+        +5.0614674548127384E-8d,
+        -1.0129027912496858E-9d,
+    };
+
+    /** Cosine table (high bits). */
+    private static final double[] COSINE_TABLE_A =
+        {
+        +1.0d,
+        +0.9921976327896118d,
+        +0.9689123630523682d,
+        +0.9305076599121094d,
+        +0.8775825500488281d,
+        +0.8109631538391113d,
+        +0.7316888570785522d,
+        +0.6409968137741089d,
+        +0.5403022766113281d,
+        +0.4311765432357788d,
+        +0.3153223395347595d,
+        +0.19454771280288696d,
+        +0.07073719799518585d,
+        -0.05417713522911072d,
+    };
+
+    /** Cosine table (low bits). */
+    private static final double[] COSINE_TABLE_B =
+        {
+        +0.0d,
+        +3.4439717236742845E-8d,
+        +5.865827662008209E-8d,
+        -3.7999795083850525E-8d,
+        +1.184154459111628E-8d,
+        -3.43338934259355E-8d,
+        +1.1795268640216787E-8d,
+        +4.438921624363781E-8d,
+        +2.925681159240093E-8d,
+        -2.6437112632041807E-8d,
+        +2.2860509143963117E-8d,
+        -4.813899778443457E-9d,
+        +3.6725170580355583E-9d,
+        +2.0217439756338078E-10d,
+    };
+
 
     /** Tangent table, used by atan() (high bits). */
     private static final double[] TANGENT_TABLE_A =
@@ -148,12 +252,52 @@ public class FastMath {
         -3.356118100840571E-7d,
     };
 
+    /** Bits of 1/(2*pi), need for reducePayneHanek(). */
+    private static final long[] RECIP_2PI = {
+        (0x28be60dbL << 32) | 0x9391054aL,
+        (0x7f09d5f4L << 32) | 0x7d4d3770L,
+        (0x36d8a566L << 32) | 0x4f10e410L,
+        (0x7f9458eaL << 32) | 0xf7aef158L,
+        (0x6dc91b8eL << 32) | 0x909374b8L,
+        (0x01924bbaL << 32) | 0x82746487L,
+        (0x3f877ac7L << 32) | 0x2c4a69cfL,
+        (0xba208d7dL << 32) | 0x4baed121L,
+        (0x3a671c09L << 32) | 0xad17df90L,
+        (0x4e64758eL << 32) | 0x60d4ce7dL,
+        (0x272117e2L << 32) | 0xef7e4a0eL,
+        (0xc7fe25ffL << 32) | 0xf7816603L,
+        (0xfbcbc462L << 32) | 0xd6829b47L,
+        (0xdb4d9fb3L << 32) | 0xc9f2c26dL,
+        (0xd3d18fd9L << 32) | 0xa797fa8bL,
+        (0x5d49eeb1L << 32) | 0xfaf97c5eL,
+        (0xcf41ce7dL << 32) | 0xe294a4baL,
+         0x9afed7ecL << 32  };
+
+    /** Bits of pi/4, need for reducePayneHanek(). */
+    private static final long[] PI_O_4_BITS = {
+        (0xc90fdaa2L << 32) | 0x2168c234L,
+        (0xc4c6628bL << 32) | 0x80dc1cd1L };
+
     /** Eighths.
      * This is used by sinQ, because its faster to do a table lookup than
      * a multiply in this time-critical routine
      */
     private static final double[]
                     EIGHTHS = {0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.125, 1.25, 1.375, 1.5, 1.625};
+
+    /** Table of 2^((n+2)/3) */
+    private static final double[] CBRTTWO = { 0.6299605249474366,
+                                            0.7937005259840998,
+                                            1.0,
+                                            1.2599210498948732,
+                                            1.5874010519681994 };
+
+    /*
+     *  There are 52 bits in the mantissa of a double.
+     *  For additional precision, the code splits double numbers into two parts,
+     *  by clearing the low order 30 bits if possible, and then performs the arithmetic
+     *  on each half separately.
+     */
 
     /**
      * 0x40000000 - used to split a double into two parts, both with the low order bits cleared.
@@ -166,6 +310,21 @@ public class FastMath {
 
     /** Mask used to clear the non-sign part of an int. */
     private static final int MASK_NON_SIGN_INT = 0x7fffffff;
+
+    /** Mask used to clear the non-sign part of a long. */
+    private static final long MASK_NON_SIGN_LONG = 0x7fffffffffffffffl;
+
+    /** Mask used to extract exponent from double bits. */
+    private static final long MASK_DOUBLE_EXPONENT = 0x7ff0000000000000L;
+
+    /** Mask used to extract mantissa from double bits. */
+    private static final long MASK_DOUBLE_MANTISSA = 0x000fffffffffffffL;
+
+    /** Mask used to add implicit high order bit for normalized double. */
+    private static final long IMPLICIT_HIGH_BIT = 0x0010000000000000L;
+
+    /** 2^52 - double numbers this large must be integral (no fraction) or NaN or Infinite */
+    private static final double TWO_POWER_52 = 4503599627370496.0;
 
     /** Constant: {@value}. */
     private static final double F_1_3 = 1d / 3d;
@@ -897,16 +1056,27 @@ public class FastMath {
     }
 
     /**
-     * Exponential function.<br>
-     * <br>
+     * Exponential function.
      *
-     * Delegates to {@link Math#exp(double)}
+     * Computes exp(x), function result is nearly rounded.   It will be correctly
+     * rounded to the theoretical value for 99.9% of input values, otherwise it will
+     * have a 1 ULP error.
+     *
+     * Method:
+     *    Lookup intVal = exp(int(x))
+     *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
+     *    Compute z as the exponential of the remaining bits by a polynomial minus one
+     *    exp(x) = intVal * fracVal * (1 + z)
+     *
+     * Accuracy:
+     *    Calculation is done with 63 bits of precision, so result should be correctly
+     *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
      *
      * @param x   a double
      * @return double e<sup>x</sup>
      */
     public static double exp(double x) {
-        return Math.exp(x);
+        return exp(x, 0.0, null);
     }
 
     /**
@@ -1204,41 +1374,300 @@ public class FastMath {
     }
 
     /**
-     * Natural logarithm.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#log(double)}
+     * Natural logarithm.
      *
      * @param x   a double
      * @return log(x)
      */
     public static double log(final double x) {
-        return Math.log(x);
+        return log(x, null);
     }
 
     /**
-     * Computes log(1 + x).<br>
-     * <br>
-     *
-     * Delegates to {@link Math#log1p(double)}
+     * Internal helper method for natural logarithm function.
+     * @param x original argument of the natural logarithm function
+     * @param hiPrec extra bits of precision on output (To Be Confirmed)
+     * @return log(x)
+     */
+    private static double log(final double x, final double[] hiPrec) {
+        if (x==0) { // Handle special case of +0/-0
+            return Double.NEGATIVE_INFINITY;
+        }
+        long bits = Double.doubleToRawLongBits(x);
+
+        /* Handle special cases of negative input, and NaN */
+        if (((bits & 0x8000000000000000L) != 0 || Double.isNaN(x)) && x != 0.0) {
+            if (hiPrec != null) {
+                hiPrec[0] = Double.NaN;
+            }
+
+            return Double.NaN;
+        }
+
+        /* Handle special cases of Positive infinity. */
+        if (x == Double.POSITIVE_INFINITY) {
+            if (hiPrec != null) {
+                hiPrec[0] = Double.POSITIVE_INFINITY;
+            }
+
+            return Double.POSITIVE_INFINITY;
+        }
+
+        /* Extract the exponent */
+        int exp = (int)(bits >> 52)-1023;
+
+        if ((bits & 0x7ff0000000000000L) == 0) {
+            // Subnormal!
+            if (x == 0) {
+                // Zero
+                if (hiPrec != null) {
+                    hiPrec[0] = Double.NEGATIVE_INFINITY;
+                }
+
+                return Double.NEGATIVE_INFINITY;
+            }
+
+            /* Normalize the subnormal number. */
+            bits <<= 1;
+            while ( (bits & 0x0010000000000000L) == 0) {
+                --exp;
+                bits <<= 1;
+            }
+        }
+
+
+        if ((exp == -1 || exp == 0) && x < 1.01 && x > 0.99 && hiPrec == null) {
+            /* The normal method doesn't work well in the range [0.99, 1.01], so call do a straight
+           polynomial expansion in higer precision. */
+
+            /* Compute x - 1.0 and split it */
+            double xa = x - 1.0;
+            double tmp = xa * HEX_40000000;
+            double aa = xa + tmp - tmp;
+            double ab = xa - aa;
+            xa = aa;
+            double xb = ab;
+
+            final double[] lnCoef_last = LN_QUICK_COEF[LN_QUICK_COEF.length - 1];
+            double ya = lnCoef_last[0];
+            double yb = lnCoef_last[1];
+
+            for (int i = LN_QUICK_COEF.length - 2; i >= 0; i--) {
+                /* Multiply a = y * x */
+                aa = ya * xa;
+                ab = ya * xb + yb * xa + yb * xb;
+                /* split, so now y = a */
+                tmp = aa * HEX_40000000;
+                ya = aa + tmp - tmp;
+                yb = aa - ya + ab;
+
+                /* Add  a = y + lnQuickCoef */
+                final double[] lnCoef_i = LN_QUICK_COEF[i];
+                aa = ya + lnCoef_i[0];
+                ab = yb + lnCoef_i[1];
+                /* Split y = a */
+                tmp = aa * HEX_40000000;
+                ya = aa + tmp - tmp;
+                yb = aa - ya + ab;
+            }
+
+            /* Multiply a = y * x */
+            aa = ya * xa;
+            ab = ya * xb + yb * xa + yb * xb;
+            /* split, so now y = a */
+            tmp = aa * HEX_40000000;
+            ya = aa + tmp - tmp;
+            yb = aa - ya + ab;
+
+            return ya + yb;
+        }
+
+        // lnm is a log of a number in the range of 1.0 - 2.0, so 0 <= lnm < ln(2)
+        final double[] lnm = lnMant.LN_MANT[(int)((bits & 0x000ffc0000000000L) >> 42)];
+
+        /*
+    double epsilon = x / Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+
+    epsilon -= 1.0;
+         */
+
+        // y is the most significant 10 bits of the mantissa
+        //double y = Double.longBitsToDouble(bits & 0xfffffc0000000000L);
+        //double epsilon = (x - y) / y;
+        final double epsilon = (bits & 0x3ffffffffffL) / (TWO_POWER_52 + (bits & 0x000ffc0000000000L));
+
+        double lnza;
+        double lnzb = 0.0;
+
+        if (hiPrec != null) {
+            /* split epsilon -> x */
+            double tmp = epsilon * HEX_40000000;
+            double aa = epsilon + tmp - tmp;
+            double ab = epsilon - aa;
+            double xa = aa;
+            double xb = ab;
+
+            /* Need a more accurate epsilon, so adjust the division. */
+            final double numer = bits & 0x3ffffffffffL;
+            final double denom = TWO_POWER_52 + (bits & 0x000ffc0000000000L);
+            aa = numer - xa*denom - xb * denom;
+            xb += aa / denom;
+
+            /* Remez polynomial evaluation */
+            final double[] lnCoef_last = LN_HI_PREC_COEF[LN_HI_PREC_COEF.length-1];
+            double ya = lnCoef_last[0];
+            double yb = lnCoef_last[1];
+
+            for (int i = LN_HI_PREC_COEF.length - 2; i >= 0; i--) {
+                /* Multiply a = y * x */
+                aa = ya * xa;
+                ab = ya * xb + yb * xa + yb * xb;
+                /* split, so now y = a */
+                tmp = aa * HEX_40000000;
+                ya = aa + tmp - tmp;
+                yb = aa - ya + ab;
+
+                /* Add  a = y + lnHiPrecCoef */
+                final double[] lnCoef_i = LN_HI_PREC_COEF[i];
+                aa = ya + lnCoef_i[0];
+                ab = yb + lnCoef_i[1];
+                /* Split y = a */
+                tmp = aa * HEX_40000000;
+                ya = aa + tmp - tmp;
+                yb = aa - ya + ab;
+            }
+
+            /* Multiply a = y * x */
+            aa = ya * xa;
+            ab = ya * xb + yb * xa + yb * xb;
+
+            /* split, so now lnz = a */
+            /*
+      tmp = aa * 1073741824.0;
+      lnza = aa + tmp - tmp;
+      lnzb = aa - lnza + ab;
+             */
+            lnza = aa + ab;
+            lnzb = -(lnza - aa - ab);
+        } else {
+            /* High precision not required.  Eval Remez polynomial
+         using standard double precision */
+            lnza = -0.16624882440418567;
+            lnza = lnza * epsilon + 0.19999954120254515;
+            lnza = lnza * epsilon + -0.2499999997677497;
+            lnza = lnza * epsilon + 0.3333333333332802;
+            lnza = lnza * epsilon + -0.5;
+            lnza = lnza * epsilon + 1.0;
+            lnza *= epsilon;
+        }
+
+        /* Relative sizes:
+         * lnzb     [0, 2.33E-10]
+         * lnm[1]   [0, 1.17E-7]
+         * ln2B*exp [0, 1.12E-4]
+         * lnza      [0, 9.7E-4]
+         * lnm[0]   [0, 0.692]
+         * ln2A*exp [0, 709]
+         */
+
+        /* Compute the following sum:
+         * lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+         */
+
+        //return lnzb + lnm[1] + ln2B*exp + lnza + lnm[0] + ln2A*exp;
+        double a = LN_2_A*exp;
+        double b = 0.0;
+        double c = a+lnm[0];
+        double d = -(c-a-lnm[0]);
+        a = c;
+        b += d;
+
+        c = a + lnza;
+        d = -(c - a - lnza);
+        a = c;
+        b += d;
+
+        c = a + LN_2_B*exp;
+        d = -(c - a - LN_2_B*exp);
+        a = c;
+        b += d;
+
+        c = a + lnm[1];
+        d = -(c - a - lnm[1]);
+        a = c;
+        b += d;
+
+        c = a + lnzb;
+        d = -(c - a - lnzb);
+        a = c;
+        b += d;
+
+        if (hiPrec != null) {
+            hiPrec[0] = a;
+            hiPrec[1] = b;
+        }
+
+        return a + b;
+    }
+
+    /**
+     * Computes log(1 + x).
      *
      * @param x Number.
      * @return {@code log(1 + x)}.
      */
     public static double log1p(final double x) {
-        return Math.log1p(x);
+        if (x == -1) {
+            return Double.NEGATIVE_INFINITY;
+        }
+
+        if (x == Double.POSITIVE_INFINITY) {
+            return Double.POSITIVE_INFINITY;
+        }
+
+        if (x > 1e-6 ||
+            x < -1e-6) {
+            final double xpa = 1 + x;
+            final double xpb = -(xpa - 1 - x);
+
+            final double[] hiPrec = new double[2];
+            final double lores = log(xpa, hiPrec);
+            if (Double.isInfinite(lores)) { // Don't allow this to be converted to NaN
+                return lores;
+            }
+
+            // Do a taylor series expansion around xpa:
+            //   f(x+y) = f(x) + f'(x) y + f''(x)/2 y^2
+            final double fx1 = xpb / xpa;
+            final double epsilon = 0.5 * fx1 + 1;
+            return epsilon * fx1 + hiPrec[1] + hiPrec[0];
+        } else {
+            // Value is small |x| < 1e6, do a Taylor series centered on 1.
+            final double y = (x * F_1_3 - F_1_2) * x + 1;
+            return y * x;
+        }
     }
 
-    /** Compute the base 10 logarithm.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#log10(double)}
-     *
+    /** Compute the base 10 logarithm.
      * @param x a number
      * @return log10(x)
      */
     public static double log10(final double x) {
-        return Math.log10(x);
+        final double[] hiPrec = new double[2];
+
+        final double lores = log(x, hiPrec);
+        if (Double.isInfinite(lores)){ // don't allow this to be converted to NaN
+            return lores;
+        }
+
+        final double tmp = hiPrec[0] * HEX_40000000;
+        final double lna = hiPrec[0] + tmp - tmp;
+        final double lnb = hiPrec[0] - lna + hiPrec[1];
+
+        final double rln10a = 0.4342944622039795;
+        final double rln10b = 1.9699272335463627E-8;
+
+        return rln10b * lnb + rln10b * lna + rln10a * lnb + rln10a * lna;
     }
 
     /**
@@ -1261,17 +1690,144 @@ public class FastMath {
     }
 
     /**
-     * Power function.  Compute x^y.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#pow(double, double)}
+     * Power function.  Compute x^y.
      *
      * @param x   a double
      * @param y   a double
      * @return double
      */
     public static double pow(final double x, final double y) {
-        return Math.pow(x, y);
+
+        if (y == 0) {
+            // y = -0 or y = +0
+            return 1.0;
+        } else {
+
+            final long yBits        = Double.doubleToRawLongBits(y);
+            final int  yRawExp      = (int) ((yBits & MASK_DOUBLE_EXPONENT) >> 52);
+            final long yRawMantissa = yBits & MASK_DOUBLE_MANTISSA;
+            final long xBits        = Double.doubleToRawLongBits(x);
+            final int  xRawExp      = (int) ((xBits & MASK_DOUBLE_EXPONENT) >> 52);
+            final long xRawMantissa = xBits & MASK_DOUBLE_MANTISSA;
+
+            if (yRawExp > 1085) {
+                // y is either a very large integral value that does not fit in a long or it is a special number
+
+                if ((yRawExp == 2047 && yRawMantissa != 0) ||
+                    (xRawExp == 2047 && xRawMantissa != 0)) {
+                    // NaN
+                    return Double.NaN;
+                } else if (xRawExp == 1023 && xRawMantissa == 0) {
+                    // x = -1.0 or x = +1.0
+                    if (yRawExp == 2047) {
+                        // y is infinite
+                        return Double.NaN;
+                    } else {
+                        // y is a large even integer
+                        return 1.0;
+                    }
+                } else {
+                    // the absolute value of x is either greater or smaller than 1.0
+
+                    // if yRawExp == 2047 and mantissa is 0, y = -infinity or y = +infinity
+                    // if 1085 < yRawExp < 2047, y is simply a large number, however, due to limited
+                    // accuracy, at this magnitude it behaves just like infinity with regards to x
+                    if ((y > 0) ^ (xRawExp < 1023)) {
+                        // either y = +infinity (or large engouh) and abs(x) > 1.0
+                        // or     y = -infinity (or large engouh) and abs(x) < 1.0
+                        return Double.POSITIVE_INFINITY;
+                    } else {
+                        // either y = +infinity (or large engouh) and abs(x) < 1.0
+                        // or     y = -infinity (or large engouh) and abs(x) > 1.0
+                        return +0.0;
+                    }
+                }
+
+            } else {
+                // y is a regular non-zero number
+
+                if (yRawExp >= 1023) {
+                    // y may be an integral value, which should be handled specifically
+                    final long yFullMantissa = IMPLICIT_HIGH_BIT | yRawMantissa;
+                    if (yRawExp < 1075) {
+                        // normal number with negative shift that may have a fractional part
+                        final long integralMask = (-1L) << (1075 - yRawExp);
+                        if ((yFullMantissa & integralMask) == yFullMantissa) {
+                            // all fractional bits are 0, the number is really integral
+                            final long l = yFullMantissa >> (1075 - yRawExp);
+                            return pow(x, (y < 0) ? -l : l);
+                        }
+                    } else {
+                        // normal number with positive shift, always an integral value
+                        // we know it fits in a primitive long because yRawExp > 1085 has been handled above
+                        final long l =  yFullMantissa << (yRawExp - 1075);
+                        return pow(x, (y < 0) ? -l : l);
+                    }
+                }
+
+                // y is a non-integral value
+
+                if (x == 0) {
+                    // x = -0 or x = +0
+                    // the integer powers have already been handled above
+                    return y < 0 ? Double.POSITIVE_INFINITY : +0.0;
+                } else if (xRawExp == 2047) {
+                    if (xRawMantissa == 0) {
+                        // x = -infinity or x = +infinity
+                        return (y < 0) ? +0.0 : Double.POSITIVE_INFINITY;
+                    } else {
+                        // NaN
+                        return Double.NaN;
+                    }
+                } else if (x < 0) {
+                    // the integer powers have already been handled above
+                    return Double.NaN;
+                } else {
+
+                    // this is the general case, for regular fractional numbers x and y
+
+                    // Split y into ya and yb such that y = ya+yb
+                    final double tmp = y * HEX_40000000;
+                    final double ya = (y + tmp) - tmp;
+                    final double yb = y - ya;
+
+                    /* Compute ln(x) */
+                    final double[] lns = new double[2];
+                    final double lores = log(x, lns);
+                    if (Double.isInfinite(lores)) { // don't allow this to be converted to NaN
+                        return lores;
+                    }
+
+                    double lna = lns[0];
+                    double lnb = lns[1];
+
+                    /* resplit lns */
+                    final double tmp1 = lna * HEX_40000000;
+                    final double tmp2 = (lna + tmp1) - tmp1;
+                    lnb += lna - tmp2;
+                    lna = tmp2;
+
+                    // y*ln(x) = (aa+ab)
+                    final double aa = lna * ya;
+                    final double ab = lna * yb + lnb * ya + lnb * yb;
+
+                    lna = aa+ab;
+                    lnb = -(lna - aa - ab);
+
+                    double z = 1.0 / 120.0;
+                    z = z * lnb + (1.0 / 24.0);
+                    z = z * lnb + (1.0 / 6.0);
+                    z = z * lnb + 0.5;
+                    z = z * lnb + 1.0;
+                    z *= lnb;
+
+                    return exp(lna, z, null);
+
+                }
+            }
+
+        }
+
     }
 
     /**
@@ -1428,42 +1984,737 @@ public class FastMath {
     }
 
     /**
-     * Sine function.<br>
-     * <br>
+     *  Computes sin(x) - x, where |x| < 1/16.
+     *  Use a Remez polynomial approximation.
+     *  @param x a number smaller than 1/16
+     *  @return sin(x) - x
+     */
+    private static double polySine(final double x)
+    {
+        double x2 = x*x;
+
+        double p = 2.7553817452272217E-6;
+        p = p * x2 + -1.9841269659586505E-4;
+        p = p * x2 + 0.008333333333329196;
+        p = p * x2 + -0.16666666666666666;
+        //p *= x2;
+        //p *= x;
+        p = p * x2 * x;
+
+        return p;
+    }
+
+    /**
+     *  Computes cos(x) - 1, where |x| < 1/16.
+     *  Use a Remez polynomial approximation.
+     *  @param x a number smaller than 1/16
+     *  @return cos(x) - 1
+     */
+    private static double polyCosine(double x) {
+        double x2 = x*x;
+
+        double p = 2.479773539153719E-5;
+        p = p * x2 + -0.0013888888689039883;
+        p = p * x2 + 0.041666666666621166;
+        p = p * x2 + -0.49999999999999994;
+        p *= x2;
+
+        return p;
+    }
+
+    /**
+     *  Compute sine over the first quadrant (0 < x < pi/2).
+     *  Use combination of table lookup and rational polynomial expansion.
+     *  @param xa number from which sine is requested
+     *  @param xb extra bits for x (may be 0.0)
+     *  @return sin(xa + xb)
+     */
+    private static double sinQ(double xa, double xb) {
+        int idx = (int) ((xa * 8.0) + 0.5);
+        final double epsilon = xa - EIGHTHS[idx]; //idx*0.125;
+
+        // Table lookups
+        final double sintA = SINE_TABLE_A[idx];
+        final double sintB = SINE_TABLE_B[idx];
+        final double costA = COSINE_TABLE_A[idx];
+        final double costB = COSINE_TABLE_B[idx];
+
+        // Polynomial eval of sin(epsilon), cos(epsilon)
+        double sinEpsA = epsilon;
+        double sinEpsB = polySine(epsilon);
+        final double cosEpsA = 1.0;
+        final double cosEpsB = polyCosine(epsilon);
+
+        // Split epsilon   xa + xb = x
+        final double temp = sinEpsA * HEX_40000000;
+        double temp2 = (sinEpsA + temp) - temp;
+        sinEpsB +=  sinEpsA - temp2;
+        sinEpsA = temp2;
+
+        /* Compute sin(x) by angle addition formula */
+        double result;
+
+        /* Compute the following sum:
+         *
+         * result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+         *          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+         *
+         * Ranges of elements
+         *
+         * xxxtA   0            PI/2
+         * xxxtB   -1.5e-9      1.5e-9
+         * sinEpsA -0.0625      0.0625
+         * sinEpsB -6e-11       6e-11
+         * cosEpsA  1.0
+         * cosEpsB  0           -0.0625
+         *
+         */
+
+        //result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+        //          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+
+        //result = sintA + sintA*cosEpsB + sintB + sintB * cosEpsB;
+        //result += costA*sinEpsA + costA*sinEpsB + costB*sinEpsA + costB * sinEpsB;
+        double a = 0;
+        double b = 0;
+
+        double t = sintA;
+        double c = a + t;
+        double d = -(c - a - t);
+        a = c;
+        b += d;
+
+        t = costA * sinEpsA;
+        c = a + t;
+        d = -(c - a - t);
+        a = c;
+        b += d;
+
+        b = b + sintA * cosEpsB + costA * sinEpsB;
+        /*
+    t = sintA*cosEpsB;
+    c = a + t;
+    d = -(c - a - t);
+    a = c;
+    b = b + d;
+
+    t = costA*sinEpsB;
+    c = a + t;
+    d = -(c - a - t);
+    a = c;
+    b = b + d;
+         */
+
+        b = b + sintB + costB * sinEpsA + sintB * cosEpsB + costB * sinEpsB;
+        /*
+    t = sintB;
+    c = a + t;
+    d = -(c - a - t);
+    a = c;
+    b = b + d;
+
+    t = costB*sinEpsA;
+    c = a + t;
+    d = -(c - a - t);
+    a = c;
+    b = b + d;
+
+    t = sintB*cosEpsB;
+    c = a + t;
+    d = -(c - a - t);
+    a = c;
+    b = b + d;
+
+    t = costB*sinEpsB;
+    c = a + t;
+    d = -(c - a - t);
+    a = c;
+    b = b + d;
+         */
+
+        if (xb != 0.0) {
+            t = ((costA + costB) * (cosEpsA + cosEpsB) -
+                 (sintA + sintB) * (sinEpsA + sinEpsB)) * xb;  // approximate cosine*xb
+            c = a + t;
+            d = -(c - a - t);
+            a = c;
+            b += d;
+        }
+
+        result = a + b;
+
+        return result;
+    }
+
+    /**
+     * Compute cosine in the first quadrant by subtracting input from PI/2 and
+     * then calling sinQ.  This is more accurate as the input approaches PI/2.
+     *  @param xa number from which cosine is requested
+     *  @param xb extra bits for x (may be 0.0)
+     *  @return cos(xa + xb)
+     */
+    private static double cosQ(double xa, double xb) {
+        final double pi2a = 1.5707963267948966;
+        final double pi2b = 6.123233995736766E-17;
+
+        final double a = pi2a - xa;
+        double b = -(a - pi2a + xa);
+        b += pi2b - xb;
+
+        return sinQ(a, b);
+    }
+
+    /**
+     *  Compute tangent (or cotangent) over the first quadrant.   0 < x < pi/2
+     *  Use combination of table lookup and rational polynomial expansion.
+     *  @param xa number from which sine is requested
+     *  @param xb extra bits for x (may be 0.0)
+     *  @param cotanFlag if true, compute the cotangent instead of the tangent
+     *  @return tan(xa+xb) (or cotangent, depending on cotanFlag)
+     */
+    private static double tanQ(double xa, double xb, boolean cotanFlag) {
+
+        int idx = (int) ((xa * 8.0) + 0.5);
+        final double epsilon = xa - EIGHTHS[idx]; //idx*0.125;
+
+        // Table lookups
+        final double sintA = SINE_TABLE_A[idx];
+        final double sintB = SINE_TABLE_B[idx];
+        final double costA = COSINE_TABLE_A[idx];
+        final double costB = COSINE_TABLE_B[idx];
+
+        // Polynomial eval of sin(epsilon), cos(epsilon)
+        double sinEpsA = epsilon;
+        double sinEpsB = polySine(epsilon);
+        final double cosEpsA = 1.0;
+        final double cosEpsB = polyCosine(epsilon);
+
+        // Split epsilon   xa + xb = x
+        double temp = sinEpsA * HEX_40000000;
+        double temp2 = (sinEpsA + temp) - temp;
+        sinEpsB +=  sinEpsA - temp2;
+        sinEpsA = temp2;
+
+        /* Compute sin(x) by angle addition formula */
+
+        /* Compute the following sum:
+         *
+         * result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+         *          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+         *
+         * Ranges of elements
+         *
+         * xxxtA   0            PI/2
+         * xxxtB   -1.5e-9      1.5e-9
+         * sinEpsA -0.0625      0.0625
+         * sinEpsB -6e-11       6e-11
+         * cosEpsA  1.0
+         * cosEpsB  0           -0.0625
+         *
+         */
+
+        //result = sintA + costA*sinEpsA + sintA*cosEpsB + costA*sinEpsB +
+        //          sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+
+        //result = sintA + sintA*cosEpsB + sintB + sintB * cosEpsB;
+        //result += costA*sinEpsA + costA*sinEpsB + costB*sinEpsA + costB * sinEpsB;
+        double a = 0;
+        double b = 0;
+
+        // Compute sine
+        double t = sintA;
+        double c = a + t;
+        double d = -(c - a - t);
+        a = c;
+        b += d;
+
+        t = costA*sinEpsA;
+        c = a + t;
+        d = -(c - a - t);
+        a = c;
+        b += d;
+
+        b += sintA*cosEpsB + costA*sinEpsB;
+        b += sintB + costB*sinEpsA + sintB*cosEpsB + costB*sinEpsB;
+
+        double sina = a + b;
+        double sinb = -(sina - a - b);
+
+        // Compute cosine
+
+        a = 0.0;
+        b = 0.0;
+
+        t = costA*cosEpsA;
+        c = a + t;
+        d = -(c - a - t);
+        a = c;
+        b += d;
+
+        t = -sintA*sinEpsA;
+        c = a + t;
+        d = -(c - a - t);
+        a = c;
+        b += d;
+
+        b += costB*cosEpsA + costA*cosEpsB + costB*cosEpsB;
+        b -= sintB*sinEpsA + sintA*sinEpsB + sintB*sinEpsB;
+
+        double cosa = a + b;
+        double cosb = -(cosa - a - b);
+
+        if (cotanFlag) {
+            double tmp;
+            tmp = cosa; cosa = sina; sina = tmp;
+            tmp = cosb; cosb = sinb; sinb = tmp;
+        }
+
+
+        /* estimate and correct, compute 1.0/(cosa+cosb) */
+        /*
+    double est = (sina+sinb)/(cosa+cosb);
+    double err = (sina - cosa*est) + (sinb - cosb*est);
+    est += err/(cosa+cosb);
+    err = (sina - cosa*est) + (sinb - cosb*est);
+         */
+
+        // f(x) = 1/x,   f'(x) = -1/x^2
+
+        double est = sina/cosa;
+
+        /* Split the estimate to get more accurate read on division rounding */
+        temp = est * HEX_40000000;
+        double esta = (est + temp) - temp;
+        double estb =  est - esta;
+
+        temp = cosa * HEX_40000000;
+        double cosaa = (cosa + temp) - temp;
+        double cosab =  cosa - cosaa;
+
+        //double err = (sina - est*cosa)/cosa;  // Correction for division rounding
+        double err = (sina - esta*cosaa - esta*cosab - estb*cosaa - estb*cosab)/cosa;  // Correction for division rounding
+        err += sinb/cosa;                     // Change in est due to sinb
+        err += -sina * cosb / cosa / cosa;    // Change in est due to cosb
+
+        if (xb != 0.0) {
+            // tan' = 1 + tan^2      cot' = -(1 + cot^2)
+            // Approximate impact of xb
+            double xbadj = xb + est*est*xb;
+            if (cotanFlag) {
+                xbadj = -xbadj;
+            }
+
+            err += xbadj;
+        }
+
+        return est+err;
+    }
+
+    /** Reduce the input argument using the Payne and Hanek method.
+     *  This is good for all inputs 0.0 < x < inf
+     *  Output is remainder after dividing by PI/2
+     *  The result array should contain 3 numbers.
+     *  result[0] is the integer portion, so mod 4 this gives the quadrant.
+     *  result[1] is the upper bits of the remainder
+     *  result[2] is the lower bits of the remainder
      *
-     * Delegates to {@link Math#sin(double)}
+     * @param x number to reduce
+     * @param result placeholder where to put the result
+     */
+    private static void reducePayneHanek(double x, double[] result)
+    {
+        /* Convert input double to bits */
+        long inbits = Double.doubleToRawLongBits(x);
+        int exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+
+        /* Convert to fixed point representation */
+        inbits &= 0x000fffffffffffffL;
+        inbits |= 0x0010000000000000L;
+
+        /* Normalize input to be between 0.5 and 1.0 */
+        exponent++;
+        inbits <<= 11;
+
+        /* Based on the exponent, get a shifted copy of recip2pi */
+        long shpi0;
+        long shpiA;
+        long shpiB;
+        int idx = exponent >> 6;
+        int shift = exponent - (idx << 6);
+
+        if (shift != 0) {
+            shpi0 = (idx == 0) ? 0 : (RECIP_2PI[idx-1] << shift);
+            shpi0 |= RECIP_2PI[idx] >>> (64-shift);
+            shpiA = (RECIP_2PI[idx] << shift) | (RECIP_2PI[idx+1] >>> (64-shift));
+            shpiB = (RECIP_2PI[idx+1] << shift) | (RECIP_2PI[idx+2] >>> (64-shift));
+        } else {
+            shpi0 = (idx == 0) ? 0 : RECIP_2PI[idx-1];
+            shpiA = RECIP_2PI[idx];
+            shpiB = RECIP_2PI[idx+1];
+        }
+
+        /* Multiply input by shpiA */
+        long a = inbits >>> 32;
+        long b = inbits & 0xffffffffL;
+
+        long c = shpiA >>> 32;
+        long d = shpiA & 0xffffffffL;
+
+        long ac = a * c;
+        long bd = b * d;
+        long bc = b * c;
+        long ad = a * d;
+
+        long prodB = bd + (ad << 32);
+        long prodA = ac + (ad >>> 32);
+
+        boolean bita = (bd & 0x8000000000000000L) != 0;
+        boolean bitb = (ad & 0x80000000L ) != 0;
+        boolean bitsum = (prodB & 0x8000000000000000L) != 0;
+
+        /* Carry */
+        if ( (bita && bitb) ||
+                ((bita || bitb) && !bitsum) ) {
+            prodA++;
+        }
+
+        bita = (prodB & 0x8000000000000000L) != 0;
+        bitb = (bc & 0x80000000L ) != 0;
+
+        prodB += bc << 32;
+        prodA += bc >>> 32;
+
+        bitsum = (prodB & 0x8000000000000000L) != 0;
+
+        /* Carry */
+        if ( (bita && bitb) ||
+                ((bita || bitb) && !bitsum) ) {
+            prodA++;
+        }
+
+        /* Multiply input by shpiB */
+        c = shpiB >>> 32;
+        d = shpiB & 0xffffffffL;
+        ac = a * c;
+        bc = b * c;
+        ad = a * d;
+
+        /* Collect terms */
+        ac += (bc + ad) >>> 32;
+
+        bita = (prodB & 0x8000000000000000L) != 0;
+        bitb = (ac & 0x8000000000000000L ) != 0;
+        prodB += ac;
+        bitsum = (prodB & 0x8000000000000000L) != 0;
+        /* Carry */
+        if ( (bita && bitb) ||
+                ((bita || bitb) && !bitsum) ) {
+            prodA++;
+        }
+
+        /* Multiply by shpi0 */
+        c = shpi0 >>> 32;
+        d = shpi0 & 0xffffffffL;
+
+        bd = b * d;
+        bc = b * c;
+        ad = a * d;
+
+        prodA += bd + ((bc + ad) << 32);
+
+        /*
+         * prodA, prodB now contain the remainder as a fraction of PI.  We want this as a fraction of
+         * PI/2, so use the following steps:
+         * 1.) multiply by 4.
+         * 2.) do a fixed point muliply by PI/4.
+         * 3.) Convert to floating point.
+         * 4.) Multiply by 2
+         */
+
+        /* This identifies the quadrant */
+        int intPart = (int)(prodA >>> 62);
+
+        /* Multiply by 4 */
+        prodA <<= 2;
+        prodA |= prodB >>> 62;
+        prodB <<= 2;
+
+        /* Multiply by PI/4 */
+        a = prodA >>> 32;
+        b = prodA & 0xffffffffL;
+
+        c = PI_O_4_BITS[0] >>> 32;
+        d = PI_O_4_BITS[0] & 0xffffffffL;
+
+        ac = a * c;
+        bd = b * d;
+        bc = b * c;
+        ad = a * d;
+
+        long prod2B = bd + (ad << 32);
+        long prod2A = ac + (ad >>> 32);
+
+        bita = (bd & 0x8000000000000000L) != 0;
+        bitb = (ad & 0x80000000L ) != 0;
+        bitsum = (prod2B & 0x8000000000000000L) != 0;
+
+        /* Carry */
+        if ( (bita && bitb) ||
+                ((bita || bitb) && !bitsum) ) {
+            prod2A++;
+        }
+
+        bita = (prod2B & 0x8000000000000000L) != 0;
+        bitb = (bc & 0x80000000L ) != 0;
+
+        prod2B += bc << 32;
+        prod2A += bc >>> 32;
+
+        bitsum = (prod2B & 0x8000000000000000L) != 0;
+
+        /* Carry */
+        if ( (bita && bitb) ||
+                ((bita || bitb) && !bitsum) ) {
+            prod2A++;
+        }
+
+        /* Multiply input by pio4bits[1] */
+        c = PI_O_4_BITS[1] >>> 32;
+        d = PI_O_4_BITS[1] & 0xffffffffL;
+        ac = a * c;
+        bc = b * c;
+        ad = a * d;
+
+        /* Collect terms */
+        ac += (bc + ad) >>> 32;
+
+        bita = (prod2B & 0x8000000000000000L) != 0;
+        bitb = (ac & 0x8000000000000000L ) != 0;
+        prod2B += ac;
+        bitsum = (prod2B & 0x8000000000000000L) != 0;
+        /* Carry */
+        if ( (bita && bitb) ||
+                ((bita || bitb) && !bitsum) ) {
+            prod2A++;
+        }
+
+        /* Multiply inputB by pio4bits[0] */
+        a = prodB >>> 32;
+        b = prodB & 0xffffffffL;
+        c = PI_O_4_BITS[0] >>> 32;
+        d = PI_O_4_BITS[0] & 0xffffffffL;
+        ac = a * c;
+        bc = b * c;
+        ad = a * d;
+
+        /* Collect terms */
+        ac += (bc + ad) >>> 32;
+
+        bita = (prod2B & 0x8000000000000000L) != 0;
+        bitb = (ac & 0x8000000000000000L ) != 0;
+        prod2B += ac;
+        bitsum = (prod2B & 0x8000000000000000L) != 0;
+        /* Carry */
+        if ( (bita && bitb) ||
+                ((bita || bitb) && !bitsum) ) {
+            prod2A++;
+        }
+
+        /* Convert to double */
+        double tmpA = (prod2A >>> 12) / TWO_POWER_52;  // High order 52 bits
+        double tmpB = (((prod2A & 0xfffL) << 40) + (prod2B >>> 24)) / TWO_POWER_52 / TWO_POWER_52; // Low bits
+
+        double sumA = tmpA + tmpB;
+        double sumB = -(sumA - tmpA - tmpB);
+
+        /* Multiply by PI/2 and return */
+        result[0] = intPart;
+        result[1] = sumA * 2.0;
+        result[2] = sumB * 2.0;
+    }
+
+    /**
+     * Sine function.
      *
      * @param x Argument.
      * @return sin(x)
      */
     public static double sin(double x) {
-        return Math.sin(x);
+        boolean negative = false;
+        int quadrant = 0;
+        double xa;
+        double xb = 0.0;
+
+        /* Take absolute value of the input */
+        xa = x;
+        if (x < 0) {
+            negative = true;
+            xa = -xa;
+        }
+
+        /* Check for zero and negative zero */
+        if (xa == 0.0) {
+            long bits = Double.doubleToRawLongBits(x);
+            if (bits < 0) {
+                return -0.0;
+            }
+            return 0.0;
+        }
+
+        if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+            return Double.NaN;
+        }
+
+        /* Perform any argument reduction */
+        if (xa > 3294198.0) {
+            // PI * (2**20)
+            // Argument too big for CodyWaite reduction.  Must use
+            // PayneHanek.
+            double[] reduceResults = new double[3];
+            reducePayneHanek(xa, reduceResults);
+            quadrant = ((int) reduceResults[0]) & 3;
+            xa = reduceResults[1];
+            xb = reduceResults[2];
+        } else if (xa > 1.5707963267948966) {
+            final CodyWaite cw = new CodyWaite(xa);
+            quadrant = cw.getK() & 3;
+            xa = cw.getRemA();
+            xb = cw.getRemB();
+        }
+
+        if (negative) {
+            quadrant ^= 2;  // Flip bit 1
+        }
+
+        switch (quadrant) {
+            case 0:
+                return sinQ(xa, xb);
+            case 1:
+                return cosQ(xa, xb);
+            case 2:
+                return -sinQ(xa, xb);
+            case 3:
+                return -cosQ(xa, xb);
+            default:
+                return Double.NaN;
+        }
     }
 
     /**
-     * Cosine function.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#cos(double)}
+     * Cosine function.
      *
      * @param x Argument.
      * @return cos(x)
      */
     public static double cos(double x) {
-        return Math.cos(x);
+        int quadrant = 0;
+
+        /* Take absolute value of the input */
+        double xa = x;
+        if (x < 0) {
+            xa = -xa;
+        }
+
+        if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+            return Double.NaN;
+        }
+
+        /* Perform any argument reduction */
+        double xb = 0;
+        if (xa > 3294198.0) {
+            // PI * (2**20)
+            // Argument too big for CodyWaite reduction.  Must use
+            // PayneHanek.
+            double[] reduceResults = new double[3];
+            reducePayneHanek(xa, reduceResults);
+            quadrant = ((int) reduceResults[0]) & 3;
+            xa = reduceResults[1];
+            xb = reduceResults[2];
+        } else if (xa > 1.5707963267948966) {
+            final CodyWaite cw = new CodyWaite(xa);
+            quadrant = cw.getK() & 3;
+            xa = cw.getRemA();
+            xb = cw.getRemB();
+        }
+
+        //if (negative)
+        //  quadrant = (quadrant + 2) % 4;
+
+        switch (quadrant) {
+            case 0:
+                return cosQ(xa, xb);
+            case 1:
+                return -sinQ(xa, xb);
+            case 2:
+                return -cosQ(xa, xb);
+            case 3:
+                return sinQ(xa, xb);
+            default:
+                return Double.NaN;
+        }
     }
 
     /**
-     * Combined Sine and Cosine function.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#sin(double)} and {@link Math#cos(double)}
+     * Combined Sine and Cosine function.
      *
      * @param x Argument.
      * @return [sin(x), cos(x)]
      */
     public static SinCos sinCos(double x) {
-        return new SinCos(sin(x), cos(x));
+        boolean negative = false;
+        int quadrant = 0;
+        double xa;
+        double xb = 0.0;
+
+        /* Take absolute value of the input */
+        xa = x;
+        if (x < 0) {
+            negative = true;
+            xa = -xa;
+        }
+
+        /* Check for zero and negative zero */
+        if (xa == 0.0) {
+            long bits = Double.doubleToRawLongBits(x);
+            if (bits < 0) {
+                return new SinCos(-0.0, 1.0);
+            }
+            return new SinCos(0.0, 1.0);
+        }
+
+        if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+            return new SinCos(Double.NaN, Double.NaN);
+        }
+
+        /* Perform any argument reduction */
+        if (xa > 3294198.0) {
+            // PI * (2**20)
+            // Argument too big for CodyWaite reduction.  Must use
+            // PayneHanek.
+            double[] reduceResults = new double[3];
+            reducePayneHanek(xa, reduceResults);
+            quadrant = ((int) reduceResults[0]) & 3;
+            xa = reduceResults[1];
+            xb = reduceResults[2];
+        } else if (xa > 1.5707963267948966) {
+            final CodyWaite cw = new CodyWaite(xa);
+            quadrant = cw.getK() & 3;
+            xa = cw.getRemA();
+            xb = cw.getRemB();
+        }
+
+        switch (quadrant) {
+            case 0:
+                return new SinCos(negative ? -sinQ(xa, xb) :  sinQ(xa, xb),  cosQ(xa, xb));
+            case 1:
+                return new SinCos(negative ? -cosQ(xa, xb) :  cosQ(xa, xb), -sinQ(xa, xb));
+            case 2:
+                return new SinCos(negative ?  sinQ(xa, xb) : -sinQ(xa, xb), -cosQ(xa, xb));
+            case 3:
+                return new SinCos(negative ?  cosQ(xa, xb) : -cosQ(xa, xb),  sinQ(xa, xb));
+            default:
+                return new SinCos(Double.NaN, Double.NaN);
+        }
     }
 
     /**
@@ -1485,7 +2736,74 @@ public class FastMath {
      * @return tan(x)
      */
     public static double tan(double x) {
-        return Math.tan(x);
+        boolean negative = false;
+        int quadrant = 0;
+
+        /* Take absolute value of the input */
+        double xa = x;
+        if (x < 0) {
+            negative = true;
+            xa = -xa;
+        }
+
+        /* Check for zero and negative zero */
+        if (xa == 0.0) {
+            long bits = Double.doubleToRawLongBits(x);
+            if (bits < 0) {
+                return -0.0;
+            }
+            return 0.0;
+        }
+
+        if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+            return Double.NaN;
+        }
+
+        /* Perform any argument reduction */
+        double xb = 0;
+        if (xa > 3294198.0) {
+            // PI * (2**20)
+            // Argument too big for CodyWaite reduction.  Must use
+            // PayneHanek.
+            double[] reduceResults = new double[3];
+            reducePayneHanek(xa, reduceResults);
+            quadrant = ((int) reduceResults[0]) & 3;
+            xa = reduceResults[1];
+            xb = reduceResults[2];
+        } else if (xa > 1.5707963267948966) {
+            final CodyWaite cw = new CodyWaite(xa);
+            quadrant = cw.getK() & 3;
+            xa = cw.getRemA();
+            xb = cw.getRemB();
+        }
+
+        if (xa > 1.5) {
+            // Accuracy suffers between 1.5 and PI/2
+            final double pi2a = 1.5707963267948966;
+            final double pi2b = 6.123233995736766E-17;
+
+            final double a = pi2a - xa;
+            double b = -(a - pi2a + xa);
+            b += pi2b - xb;
+
+            xa = a + b;
+            xb = -(xa - a - b);
+            quadrant ^= 1;
+            negative ^= true;
+        }
+
+        double result;
+        if ((quadrant & 1) == 0) {
+            result = tanQ(xa, xb, false);
+        } else {
+            result = -tanQ(xa, xb, true);
+        }
+
+        if (negative) {
+            result = -result;
+        }
+
+        return result;
     }
 
     /**
@@ -1907,16 +3225,88 @@ public class FastMath {
       return atan(ra, rb, x<0);
     }
 
-    /** Compute the cubic root of a number.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#cbrt(double)}
-     *
+    /** Compute the cubic root of a number.
      * @param x number on which evaluation is done
      * @return cubic root of x
      */
     public static double cbrt(double x) {
-        return Math.cbrt(x);
+      /* Convert input double to bits */
+      long inbits = Double.doubleToRawLongBits(x);
+      int exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+      boolean subnormal = false;
+
+      if (exponent == -1023) {
+          if (x == 0) {
+              return x;
+          }
+
+          /* Subnormal, so normalize */
+          subnormal = true;
+          x *= 1.8014398509481984E16;  // 2^54
+          inbits = Double.doubleToRawLongBits(x);
+          exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+      }
+
+      if (exponent == 1024) {
+          // Nan or infinity.  Don't care which.
+          return x;
+      }
+
+      /* Divide the exponent by 3 */
+      int exp3 = exponent / 3;
+
+      /* p2 will be the nearest power of 2 to x with its exponent divided by 3 */
+      double p2 = Double.longBitsToDouble((inbits & 0x8000000000000000L) |
+                                          (long)(((exp3 + 1023) & 0x7ff)) << 52);
+
+      /* This will be a number between 1 and 2 */
+      final double mant = Double.longBitsToDouble((inbits & 0x000fffffffffffffL) | 0x3ff0000000000000L);
+
+      /* Estimate the cube root of mant by polynomial */
+      double est = -0.010714690733195933;
+      est = est * mant + 0.0875862700108075;
+      est = est * mant + -0.3058015757857271;
+      est = est * mant + 0.7249995199969751;
+      est = est * mant + 0.5039018405998233;
+
+      est *= CBRTTWO[exponent % 3 + 2];
+
+      // est should now be good to about 15 bits of precision.   Do 2 rounds of
+      // Newton's method to get closer,  this should get us full double precision
+      // Scale down x for the purpose of doing newtons method.  This avoids over/under flows.
+      final double xs = x / (p2*p2*p2);
+      est += (xs - est*est*est) / (3*est*est);
+      est += (xs - est*est*est) / (3*est*est);
+
+      // Do one round of Newton's method in extended precision to get the last bit right.
+      double temp = est * HEX_40000000;
+      double ya = est + temp - temp;
+      double yb = est - ya;
+
+      double za = ya * ya;
+      double zb = ya * yb * 2.0 + yb * yb;
+      temp = za * HEX_40000000;
+      double temp2 = za + temp - temp;
+      zb += za - temp2;
+      za = temp2;
+
+      zb = za * yb + ya * zb + zb * yb;
+      za *= ya;
+
+      double na = xs - za;
+      double nb = -(na - xs + za);
+      nb -= zb;
+
+      est += (na+nb)/(3*est*est);
+
+      /* Scale by a power of two, so this is exact. */
+      est *= p2;
+
+      if (subnormal) {
+          est *= 3.814697265625E-6;  // 2^-18
+      }
+
+      return est;
     }
 
     /**
@@ -2026,16 +3416,12 @@ public class FastMath {
     }
 
     /**
-     * Absolute value.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#abs(double)}
-     *
+     * Absolute value.
      * @param x number from which absolute value is requested
      * @return abs(x)
      */
     public static double abs(double x) {
-        return Math.abs(x);
+        return Double.longBitsToDouble(MASK_NON_SIGN_LONG & Double.doubleToRawLongBits(x));
     }
 
     /**
@@ -2374,28 +3760,56 @@ public class FastMath {
 
     }
 
-    /** Get the largest whole number smaller than x.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#floor(double)}
-     *
+    /** Get the largest whole number smaller than x.
      * @param x number from which floor is requested
      * @return a double number f such that f is an integer f &lt;= x &lt; f + 1.0
      */
     public static double floor(double x) {
-        return Math.floor(x);
+        long y;
+
+        if (Double.isNaN(x)) {
+            return x;
+        }
+
+        if (x >= TWO_POWER_52 || x <= -TWO_POWER_52) {
+            return x;
+        }
+
+        y = (long) x;
+        if (x < 0 && y != x) {
+            y--;
+        }
+
+        if (y == 0) {
+            return x*y;
+        }
+
+        return y;
     }
 
-    /** Get the smallest whole number larger than x.<br>
-     * <br>
-     *
-     * Delegates to {@link Math#ceil(double)}
-     *
+    /** Get the smallest whole number larger than x.
      * @param x number from which ceil is requested
      * @return a double number c such that c is an integer c - 1.0 &lt; x &lt;= c
      */
     public static double ceil(double x) {
-        return Math.ceil(x);
+        double y;
+
+        if (Double.isNaN(x)) {
+            return x;
+        }
+
+        y = floor(x);
+        if (y == x) {
+            return y;
+        }
+
+        y += 1.0;
+
+        if (y == 0) {
+            return x*y;
+        }
+
+        return y;
     }
 
     /** Get the whole number that is the nearest to x, or the even one if x is exactly half way between two integers.
@@ -2619,14 +4033,43 @@ public class FastMath {
      * <li> else, if either argument is NaN then the result is NaN.</li>
      * </ul>
      *
-     * Delegates to {@link Math#hypot(double, double)}
-     *
      * @param x a value
      * @param y a value
      * @return sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)
      */
     public static double hypot(final double x, final double y) {
-        return Math.hypot(x, y);
+        if (Double.isInfinite(x) || Double.isInfinite(y)) {
+            return Double.POSITIVE_INFINITY;
+        } else if (Double.isNaN(x) || Double.isNaN(y)) {
+            return Double.NaN;
+        } else {
+
+            final int expX = getExponent(x);
+            final int expY = getExponent(y);
+            if (expX > expY + 27) {
+                // y is neglectible with respect to x
+                return abs(x);
+            } else if (expY > expX + 27) {
+                // x is neglectible with respect to y
+                return abs(y);
+            } else {
+
+                // find an intermediate scale to avoid both overflow and underflow
+                final int middleExp = (expX + expY) / 2;
+
+                // scale parameters without losing precision
+                final double scaledX = scalb(x, -middleExp);
+                final double scaledY = scalb(y, -middleExp);
+
+                // compute scaled hypotenuse
+                final double scaledH = sqrt(scaledX * scaledX + scaledY * scaledY);
+
+                // remove scaling
+                return scalb(scaledH, middleExp);
+
+            }
+
+        }
     }
 
     /**
@@ -4127,4 +5570,95 @@ public class FastMath {
             }
         }
     }
+
+    /** Enclose large data table in nested static class so it's only loaded on first access. */
+    private static class lnMant {
+        /** Extended precision logarithm table over the range 1 - 2 in increments of 2^-10. */
+        private static final double[][] LN_MANT;
+
+        static {
+            if (RECOMPUTE_TABLES_AT_RUNTIME) {
+                LN_MANT = new double[LN_MANT_LEN][];
+
+                // Populate lnMant table
+                for (int i = 0; i < LN_MANT.length; i++) {
+                    final double d = Double.longBitsToDouble( (((long) i) << 42) | 0x3ff0000000000000L );
+                    LN_MANT[i] = FastMathCalc.slowLog(d);
+                }
+            } else {
+                LN_MANT = FastMathLiteralArrays.loadLnMant();
+            }
+        }
+    }
+
+    /** Enclose the Cody/Waite reduction (used in "sin", "cos" and "tan"). */
+    private static class CodyWaite {
+        /** k */
+        private final int finalK;
+        /** remA */
+        private final double finalRemA;
+        /** remB */
+        private final double finalRemB;
+
+        /**
+         * @param xa Argument.
+         */
+        CodyWaite(double xa) {
+            // Estimate k.
+            //k = (int)(xa / 1.5707963267948966);
+            int k = (int)(xa * 0.6366197723675814);
+
+            // Compute remainder.
+            double remA;
+            double remB;
+            while (true) {
+                double a = -k * 1.570796251296997;
+                remA = xa + a;
+                remB = -(remA - xa - a);
+
+                a = -k * 7.549789948768648E-8;
+                double b = remA;
+                remA = a + b;
+                remB += -(remA - b - a);
+
+                a = -k * 6.123233995736766E-17;
+                b = remA;
+                remA = a + b;
+                remB += -(remA - b - a);
+
+                if (remA > 0) {
+                    break;
+                }
+
+                // Remainder is negative, so decrement k and try again.
+                // This should only happen if the input is very close
+                // to an even multiple of pi/2.
+                --k;
+            }
+
+            this.finalK = k;
+            this.finalRemA = remA;
+            this.finalRemB = remB;
+        }
+
+        /**
+         * @return k
+         */
+        int getK() {
+            return finalK;
+        }
+        /**
+         * @return remA
+         */
+        double getRemA() {
+            return finalRemA;
+        }
+        /**
+         * @return remB
+         */
+        double getRemB() {
+            return finalRemB;
+        }
+    }
+
 }

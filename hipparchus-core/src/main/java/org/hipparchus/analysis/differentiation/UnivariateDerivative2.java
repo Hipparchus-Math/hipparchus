@@ -509,16 +509,14 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
     /** {@inheritDoc} */
     @Override
     public UnivariateDerivative2 atan2(final UnivariateDerivative2 x) {
-        final double x2    = x.f0 * x.f0;
-        final double f02   = f0 + f0;
-        final double inv   = 1.0 / (f0 * f0 + x2);
         final double atan0 = FastMath.atan2(f0, x.f0);
-        final double atan1 = MathArrays.linearCombination(x.f0, f1, -x.f1, f0) * inv;
-        final double c     = MathArrays.linearCombination(f2, x2,
-                                                          -2 * f1, x.f0 * x.f1,
-                                                          f02, x.f1 * x.f1,
-                                                          -f0, x.f0 * x.f2) * inv;
-        return new UnivariateDerivative2(atan0, atan1, (c - f02 * atan1 * atan1) / x.f0);
+        final UnivariateDerivative2 result;
+        if (x.getValue() != 0.) {
+            result = (this.divide(x)).atan();
+        } else {
+            result = (x.divide(this).negate()).atan();
+        }
+        return new UnivariateDerivative2(atan0, result.f1, result.f2);
     }
 
     /** {@inheritDoc} */

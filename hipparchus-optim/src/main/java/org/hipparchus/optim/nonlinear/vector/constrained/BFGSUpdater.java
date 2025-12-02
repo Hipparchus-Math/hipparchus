@@ -19,7 +19,6 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposition;
-import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
@@ -29,6 +28,7 @@ import org.hipparchus.util.Precision;
  * BFGS Hessian updater with dynamic damping and robustness improvements.
  * <p>
  * Manages Hessian updates for SQP solvers by:
+ * </p>
  * <ul>
  *   <li>Checking curvature condition</li>
  *   <li>Applying dynamic damping if necessary</li>
@@ -36,7 +36,6 @@ import org.hipparchus.util.Precision;
  *   <li>Soft regularization of diagonal entries on repeated failures</li>
  *   <li>Automatic Hessian reset after configurable failures</li>
  * </ul>
- * </p>
  *
  * @since 4.1
  */
@@ -133,23 +132,6 @@ public class BFGSUpdater {
             }
         }
         return y;
-    }
-
-    /**
-     * Computes the inverse of a lower‐triangular matrix via forward substitution.
-     *
-     * @return inverse of L
-     */
-    private RealMatrix inverseLowerTriangular() {
-        int n = L.getRowDimension();
-        RealMatrix Linv = MatrixUtils.createRealMatrix(n, n);
-        for (int i = 0; i < n; i++) {
-            RealVector e = new ArrayRealVector(n);
-            e.setEntry(i, 1.0);
-            MatrixUtils.solveLowerTriangularSystem(L, e);
-            Linv.setColumnVector(i, e);
-        }
-        return Linv;
     }
 
     /**

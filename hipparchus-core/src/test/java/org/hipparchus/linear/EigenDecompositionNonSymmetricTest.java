@@ -272,7 +272,7 @@ public class EigenDecompositionNonSymmetricTest {
         Complex isqrt2 = new Complex(1 / FastMath.sqrt(2.0));
         checkEigenVector((new Complex[] { new Complex(0.0), isqrt2.negate(), isqrt2.negate() }), ed, 1E-12);
         Complex isqrt6 = new Complex(1 / FastMath.sqrt(6.0));
-        checkEigenVector((new Complex[] { isqrt6.multiply(2), isqrt6.negate(), isqrt6 }), ed, 1E-12);
+        checkEigenVector((new Complex[] { isqrt6.twice(), isqrt6.negate(), isqrt6 }), ed, 1E-12);
     }
 
     /** test eigenvalues for a big matrix. */

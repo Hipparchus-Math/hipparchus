@@ -27,13 +27,13 @@ import org.hipparchus.util.FastMath;
 
 /**
  * Sequential Quadratic Programming Optimizer.
- * <br/>
+ * <p>
  * min f(x)
- * <br/>
+ * <p>
  * q(x) = b1
- * <br/>
- * h(x)>=b2
- * <br/>
+ * <p>
+ * h(x)&gt;=b2
+ * <p>
  * Algorithm based on paper:"Some Theoretical properties of an augmented lagrangian merit function
  * (Gill,Murray,Sauders,Wriht,April 1986)"
  * @since 3.1

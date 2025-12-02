@@ -100,10 +100,7 @@ public class LineSearch {
         this.maxBadSteps         = maxBadSteps;
         this.history             = new LinkedList<>();
         this.nonMonotoneEnabled  = false;
-        this.monotoneFailures    = 0;
-        this.badStepCount        = 0;
-        this.badStepDetected     = false;
-        this.badStepFailed       = false;
+        resetBadStepCount();
     }
 
     /** Check if bad step has been detected.
@@ -113,8 +110,8 @@ public class LineSearch {
         return badStepDetected;
     }
 
-    /** Check if too many conscutive bad step have been detected.
-     * @return true if too many conscutive bad step have been detected
+    /** Check if too many consecutive bad step have been detected.
+     * @return true if too many consecutive bad step have been detected
      */
     public boolean isBadStepFailed() {
         return badStepFailed;
@@ -132,7 +129,6 @@ public class LineSearch {
     public void resetBadStepCount() {
         badStepCount = 0;
         monotoneFailures = 0;
-
         badStepDetected = false;
         badStepFailed = false;
     }
@@ -149,12 +145,12 @@ public class LineSearch {
         }
     }
 
-    /** Verify Armjo condition for accept step.
+    /** Verify Armijo condition for accept step.
      * @param fxNew penalty at candidate point x+dx*alpha
      * @param fxCurrent penalty at the current point
      * @param alpha step length
      * @param directionalDeriv penalty gradient
-     * @return true o false
+     * @return true or false
      */
     public boolean acceptStep(double fxNew, double fxCurrent, double alpha, double directionalDeriv) {
         double ref = fxCurrent;
@@ -163,7 +159,7 @@ public class LineSearch {
                 ref = FastMath.max(ref, v);
             }
         }
-        // alfaPenalty - currentPenalty) > getSettings().getMu() * alpha * currentPenaltyGrad
+        // alfaPenalty - currentPenalty > getSettings().getMu() * alpha * currentPenaltyGrad
         return fxNew < ref + sigma * alpha * directionalDeriv;
     }
 
@@ -250,7 +246,7 @@ public class LineSearch {
 
     }
 
-    /** Iterativ search (either monotone or non-monotone).
+    /** Iterative search (either monotone or non-monotone).
      * @param f penalty function
      * @param fxCurrent penalty function at current point
      * @param directionalDeriv directional derivative

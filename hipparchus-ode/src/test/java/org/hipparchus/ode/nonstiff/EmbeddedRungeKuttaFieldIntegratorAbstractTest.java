@@ -762,8 +762,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         T o2   = FieldVector3D.dotProduct(o0, a2);
         T o3   = FieldVector3D.dotProduct(o0, a3);
         T e    = i1.multiply(o1).multiply(o1).add(i2.multiply(o2).multiply(o2)).add(i3.multiply(o3).multiply(o3)).multiply(0.5);
-        T r1   = FastMath.sqrt(e.multiply(i1).multiply(2));
-        T r3   = FastMath.sqrt(e.multiply(i3).multiply(2));
+        T r1   = FastMath.sqrt(e.multiply(i1).twice());
+        T r3   = FastMath.sqrt(e.multiply(i3).twice());
         int n = 50;
         for (int i = 0; i < n; ++i) {
             SinCos sc = FastMath.sinCos(-0.5 * FastMath.PI * (i + 50) / 200);

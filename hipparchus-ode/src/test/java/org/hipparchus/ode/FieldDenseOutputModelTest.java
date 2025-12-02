@@ -56,8 +56,8 @@ public class FieldDenseOutputModelTest {
         integ.addStepHandler(new FieldDenseOutputModel<T>());
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
         FieldDenseOutputModel<T> cm = (FieldDenseOutputModel<T>) integ.getStepHandlers().iterator().next();
-        cm.getInterpolatedState(pb.getInitialState().getTime().multiply(2).subtract(pb.getFinalTime()));
-        cm.getInterpolatedState(pb.getFinalTime().multiply(2).subtract(pb.getInitialState().getTime()));
+        cm.getInterpolatedState(pb.getInitialState().getTime().twice().subtract(pb.getFinalTime()));
+        cm.getInterpolatedState(pb.getFinalTime().twice().subtract(pb.getInitialState().getTime()));
         cm.getInterpolatedState(pb.getInitialState().getTime().add(pb.getFinalTime()).multiply(0.5));
     }
 

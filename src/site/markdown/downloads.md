@@ -42,6 +42,16 @@ Maven's internal mechanism will automatically download any internal dependencies
 
 ---
 
+|     package       | link                                                                   | hash                                               | signature                                         |
+|-------------------|------------------------------------------------------------------------|----------------------------------------------------|---------------------------------------------------|
+|  source (zip)     | [hipparchus-4.0.2-src.zip](downloads/hipparchus-4.0.2-src.zip)         | [md5](downloads/hipparchus-4.0.2-src.zip.md5)      | [sig](downloads/hipparchus-4.0.2-src.zip.asc)     |
+|  source (tar.bz2) | [hipparchus-4.0.2-src.tar.bz2](downloads/hipparchus-4.0.2-src.tar.bz2) | [md5](downloads/hipparchus-4.0.2-src.tar.bz2.md5)  | [sig](downloads/hipparchus-4.0.2-src.tar.bz2.asc) |
+|  binary (zip)     | [hipparchus-4.0.2-bin.zip](downloads/hipparchus-4.0.2-bin.zip)         | [md5](downloads/hipparchus-4.0.2-bin.zip.md5)      | [sig](downloads/hipparchus-4.0.2-bin.zip.asc)     |
+|  binary (tar.bz2) | [hipparchus-4.0.2-bin.tar.bz2](downloads/hipparchus-4.0.2-bin.tar.bz2) | [md5](downloads/hipparchus-4.0.2-bin.tar.bz2.md5) | [sig](downloads/hipparchus-4.0.2-bin.tar.bz2.asc) 
+version 4.0.2 downloads (release date: 2025-09-08)
+
+---
+
 |     package       | link                                                                   | hash | signature |
 |-------------------|------------------------------------------------------------------------|------|-----------|
 |  source (zip)     | [hipparchus-4.0.1-src.zip](downloads/hipparchus-4.0.1-src.zip)         | [md5](downloads/hipparchus-4.0.1-src.zip.md5)| [sig](downloads/hipparchus-4.0.1-src.zip.asc)|

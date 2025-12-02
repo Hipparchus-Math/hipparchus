@@ -223,7 +223,6 @@ public class MeritFunctionL2 {
             RealVector yi = yAlpha.getSubVector(me, mi);
 
             RealVector yk = yAlpha.getSubVector(me, mi);
-            //RealVector yk = y.getSubVector(me, mi);
 
             iqEval = iqConstraint.value(xAlpha);
             RealVector gk = iqEval.subtract(iqConstraint.getLowerBound());
@@ -305,7 +304,7 @@ public class MeritFunctionL2 {
         RealVector partial = new ArrayRealVector(y.getDimension());
         if (eqConstraint != null) {
             me = eqConstraint.dimY();
-             RealVector g = this.eqEval.subtract(eqConstraint.getLowerBound());
+            RealVector g = this.eqEval.subtract(eqConstraint.getLowerBound());
             partial.setSubVector(0, g.mapMultiply(-1.0));
         }
 
@@ -330,7 +329,7 @@ public class MeritFunctionL2 {
     }
 
     /**
-     * Update Weight Vector Rj.
+     * Update weight vector Rj.
      * called after QP solution before update the penalty function
      * @param H hessina Matrix (updated after line search)
      * @param newY last estimate of multiplier (updated after line search)
@@ -340,7 +339,7 @@ public class MeritFunctionL2 {
      * @param iterations current iteration
      */
      public void updateRj(RealMatrix H, RealVector newY, RealVector newDx, RealVector newU, double sigmaValue, int iterations) {
-        //calculate sigma vector that depends on iterations
+        // calculate sigma vector that depends on iterations
         if (newY.getDimension() == 0) {
             return;
         }

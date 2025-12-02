@@ -106,8 +106,7 @@ class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
                       0.0, 1.6e-13,
                       new ObjectiveFunction(new RosenbrockFunction()),
                       new double[] { 2, 2 },
-                      new RosenbrookConstraint(MatrixUtils.createRealMatrix(5, 2),
-                                               MatrixUtils.createRealVector(new double[]{ -2, -1.5, -1.5, -1.5, -1.5 })));
+                      new RosenbrookConstraint(new double[]{ -2, -1.5, -1.5, -1.5, -1.5 }));
     }
 
     @Test

@@ -162,6 +162,22 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
     T hypot(T y)
         throws MathIllegalArgumentException;
 
+    /** Compute this divided by two.
+     * @return a new element representing it halved
+     * @since 4.1
+     */
+    default T half() {
+        return divide(2);
+    }
+
+    /** Compute this &times; two.
+     * @return a new element representing it doubled
+     * @since 4.1
+     */
+    default T twice() {
+        return multiply(2);
+    }
+
     /** {@inheritDoc} */
     @Override
     default T divide(T a) {

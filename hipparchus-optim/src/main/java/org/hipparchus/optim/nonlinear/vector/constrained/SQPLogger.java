@@ -98,11 +98,11 @@ public class SQPLogger {
      * @param iter     iteration number
      * @param alpha    step length
      * @param lsCount  line search iteration
-     * @param dxNorm
-     * @param dxHdx
+     * @param dxNorm   || dX ||
+     * @param dxHdx    dX H dX
      * @param kkt      Lagrangian norm
      * @param viol     constraints violations
-     * @param sigma
+     * @param sigma    solution of the additional variable in QP subproblem
      * @param penalty  penalty
      * @param fx       objective function evaluation
      * @return formatted row
@@ -151,11 +151,11 @@ public class SQPLogger {
      * @param iter     iteration number
      * @param alpha    step length
      * @param lsCount  line search iteration
-     * @param dxNorm
-     * @param dxHdx
+     * @param dxNorm   || dX ||
+     * @param dxHdx    dX H dX
      * @param kkt      Lagrangian norm
      * @param viol     constraints violations
-     * @param sigma
+     * @param sigma    solution of the additional variable in QP subproblem
      * @param penalty  penalty
      * @param fx       objective function evaluation
      */

@@ -116,7 +116,7 @@ class FiniteDifferencesDifferentiatorTest {
         UnivariateDifferentiableFunction f =
                 differentiator.differentiate(gaussian);
         double[] expectedError = new double[] {
-            6.939e-18, 1.284e-15, 2.385e-13, 1.168e-11, 2.668e-9, 7.971e-8
+            6.939e-18, 1.284e-15, 2.477e-13, 1.168e-11, 2.840e-9, 7.971e-8
         };
         double[] maxError = new double[expectedError.length];
         DSFactory factory = new DSFactory(1, maxError.length - 1);
@@ -423,7 +423,7 @@ class FiniteDifferencesDifferentiatorTest {
            for (double y = -2; y < 2; y += 0.1) {
                DerivativeStructure dsX  = factory.variable(0, x);
                DerivativeStructure dsY  = factory.variable(1, y);
-               DerivativeStructure dsT  = dsX.multiply(3).subtract(dsY.multiply(2));
+               DerivativeStructure dsT  = dsX.multiply(3).subtract(dsY.twice());
                DerivativeStructure sRef = sine.value(dsT);
                DerivativeStructure s    = f.value(dsT);
                for (int xOrder = 0; xOrder <= sRef.getOrder(); ++xOrder) {

@@ -20,3 +20,4 @@
 The fitting module provides curve fitting implementations for different functions:
 
   * [Curve fitting](fitting.html)
+  * [RANSAC fitting](fitting.html)

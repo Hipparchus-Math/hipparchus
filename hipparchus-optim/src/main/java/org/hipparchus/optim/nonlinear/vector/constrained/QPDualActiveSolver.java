@@ -41,8 +41,8 @@ import java.util.Set;
  * <pre>
  * minimize   (1/2) x^T G x + g0^T x
  * subject to CE^T x  =  ce0     (equality constraints)
- *            CI^T x  >= ci0     (inequality constraints)
- *            lb<= Ax <= ub      (bounded constraints)
+ *            CI^T x  &gt;= ci0     (inequality constraints)
+ *            lb &lt;= Ax &lt;= ub      (bounded constraints)
  * </pre> <p>
  * Uses an incremental QR factorization updater (QRUpdater) for managing active
  * constraints and maintains multipliers for dual and primal steps.
@@ -429,9 +429,7 @@ public class QPDualActiveSolver extends QPOptimizer {
                     t2 = dualStep.getValue();
                     dropIndex = dualStep.getKey();
                     t = FastMath.min(t1, t2);
-                    if (t >= Double.POSITIVE_INFINITY) {
-                        return new LagrangeSolution(new ArrayRealVector(0,0), new ArrayRealVector(0,0), 0.0); // infeasible
-                    } else if (t == t1) {
+                    if (t == t1) {
                         break; // primal full step (exit from dual step loop)
                     } else {
                         //Manage dual step

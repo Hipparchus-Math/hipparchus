@@ -1529,7 +1529,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
             for (int j =0; j < 11; j++) {
                 theta = theta.add(FastMath.PI / 12);
                 FieldComplex<Binary64> z = ComplexUtils.polar2Complex(r, theta);
-                FieldComplex<Binary64> sqrtz = ComplexUtils.polar2Complex(FastMath.sqrt(r), theta.divide(2));
+                FieldComplex<Binary64> sqrtz = ComplexUtils.polar2Complex(FastMath.sqrt(r), theta.half());
                 UnitTestUtils.customAssertEquals(sqrtz, z.sqrt(), 10e-12);
             }
         }

@@ -222,7 +222,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 //NEW LAGRANGIAN GRADIENT UPDATE WITH NEW MULTIPLIER AND NEW VALUES
                 RealVector lagnew = lagrangianGradX(J, JE, JI, x, u);
 
-//            //CONVERGENCE CHECK
+                //CONVERGENCE CHECK
                 //STATIONARITY
                 double kkt = lagnew.getNorm();
                 double step1 = dx.mapMultiply(alpha).dotProduct(H.operate(dx.mapMultiply(alpha)));

@@ -367,7 +367,7 @@ public class LegendreEllipticIntegral { // NOPMD - this class has a high number 
     public static <T extends CalculusFieldElement<T>> T bigE(final T m) {
         final T zero = m.getField().getZero();
         final T one  = m.getField().getOne();
-        return CarlsonEllipticIntegral.rG(zero, one.subtract(m), one).multiply(2);
+        return CarlsonEllipticIntegral.rG(zero, one.subtract(m), one).twice();
     }
 
     /** Get the complete elliptic integral of the second kind E(m).
@@ -390,7 +390,7 @@ public class LegendreEllipticIntegral { // NOPMD - this class has a high number 
     public static Complex bigE(final Complex m) {
         return CarlsonEllipticIntegral.rG(Complex.ZERO,
                                           Complex.ONE.subtract(m),
-                                          Complex.ONE).multiply(2);
+                                          Complex.ONE).twice();
     }
 
     /** Get the complete elliptic integral of the second kind E(m).
@@ -414,7 +414,7 @@ public class LegendreEllipticIntegral { // NOPMD - this class has a high number 
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigE(final FieldComplex<T> m) {
         final FieldComplex<T> zero = m.getField().getZero();
         final FieldComplex<T> one  = m.getField().getOne();
-        return CarlsonEllipticIntegral.rG(zero, one.subtract(m), one).multiply(2);
+        return CarlsonEllipticIntegral.rG(zero, one.subtract(m), one).twice();
     }
 
     /** Get the complete elliptic integral D(m) = [K(m) - E(m)]/m.

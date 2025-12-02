@@ -71,28 +71,10 @@ at fork time.
 
  ---
 
-## 4.0 Release is out!
+## 4.0.2 Release is out!
 
-Hipparchus 4.0 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 4.0 release are:
+Hipparchus 4.0.2 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 4.0.2 release are:
 
-   * Add inverse transform method to UnscentedTransformProvider. 
-   * Added reset mechanism in ODE event detection. 
-   * Added FieldPolynomialFunctionLagrangeForm. 
-   * Added native way to stack an independent variable in (Field)Gradient. 
-   * Add boolean for propagation direction in (Field)AdaptableInterval. 
-   * Added getHipparchusVersion method to MathUtils. 
-   * Fixed issue with open boundaries in Euclidean 2D-polygons. 
-   * Increased dimension of directions numbers in Sobol sequence generation. 
-   * Added FieldBivariateGridInterpolator, FieldBilinearInterpolator and FieldBilinearInterpolatingFunction. 
-   * Fixed JUnit pioneer dependency version not compatible with Java 8. 
-   * Changed CDN for faster site load. 
-   * Added moveTowards method to Point interface. 
-   * Rename RungeKutta(Field)Integrator as FixedStepRungeKutta(Field)Integrator. 
-   * Improved robustness of BSP tree operations.
-   * Rename DEFAULT_MAXCHECK as DEFAULT_MAX_CHECK. 
-   * Made constructors of abstract classes protected when they were public. 
-   * Removed obsolete hipparchus-migration module. 
-   * Added getAddendum() to CalculusFieldElement interface. 
-   * Added getLocalizedString(baseName, key, locale) with default implementation to Localizable interface.
-   * Migrated tests from JUnit 4 to JUnit 5. 
+   * Fixed inconsistency between Abstract{Field}ODEStateInterpolator and {Field}DetectorBasedEventState for event time handling. 
+   * Fixes NaN appearing in second derivative for atan2 with (Field)UnivariateDerivative2 when argument has zero value.
