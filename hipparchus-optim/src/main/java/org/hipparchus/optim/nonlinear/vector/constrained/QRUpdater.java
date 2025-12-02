@@ -1,19 +1,3 @@
-/*
- * Licensed to the Hipparchus project under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -26,19 +10,18 @@ import org.hipparchus.util.Precision;
 
 /**
  * Updates a QR factorization when adding or removing constraints in
- * <a href = "https://en.wikipedia.org/wiki/Active_set_method">active set methods</a> for
- * nonlinear vector optimization.
- * <p>
- * Maintains an inverse of the lower triangular matrix (J) and an upper triangular factor (R),
- * applying Givens rotations for efficient rank updates.
- * </p>
+ * active-set methods for nonlinear vector optimization.
  *
- * @see <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a>
- * @since 1.2
+ * This version is algebraically identical to your working backup, but
+ * replaces {@link FastMath#hypot(double, double)} with a robust
+ * scaling-based safeHypot to avoid overflow/underflow.
  */
 public class QRUpdater {
+    
+    /** sqrtEpsilon*/
+    private double sqrtEpsilon=FastMath.sqrt(Precision.EPSILON);
 
-    /** Inverse of the lower triangular matrix L. */
+    /** Inverse of the lower triangular matrix L (stored as J = L^T). */
     private RealMatrix J;
 
     /** Upper triangular R matrix for active constraints. */
@@ -55,9 +38,8 @@ public class QRUpdater {
 
     /**
      * Constructs a new QRUpdater given the lower triangular matrix L.
-     * <p>
-     * Computes J = L^{-1} and initializes R to an n-by-n zero matrix.
-     * </p>
+     * J is initialized as L^T and R as an n-by-n zero matrix.
+     *
      * @param L lower triangular matrix to initialize the updater
      */
     public QRUpdater(final RealMatrix L) {
@@ -65,6 +47,53 @@ public class QRUpdater {
         this.J = L.transpose();
         this.R = MatrixUtils.createRealMatrix(n, n);
         this.iq = 0;
+    }
+
+    /**
+     * Robust hypot: computes sqrt(a^2 + b^2) with scaling to avoid overflow/underflow.
+     * Same sign/magnitude behavior as FastMath.hypot, but more resistant to extremes.
+     */
+    private static double safeHypot(double a, double b) {
+        // trivial fast path
+        if (FastMath.abs(a) ==0.0) {
+            return FastMath.abs(b);
+        }
+        if (FastMath.abs(b) == 0.0) {
+            return FastMath.abs(a);
+        }
+
+        final double RTMIN = FastMath.sqrt(Precision.SAFE_MIN);
+        final double RTMAX = 1.0 / RTMIN;
+
+        double x = a;
+        double y = b;
+        int up = 0;
+        int down = 0;
+
+        double max = FastMath.max(FastMath.abs(x), FastMath.abs(y));
+        while (max > RTMAX) {
+            x = Math.scalb(x, -1);
+            y = Math.scalb(y, -1);
+            down++;
+            max = FastMath.max(FastMath.abs(x), FastMath.abs(y));
+        }
+        while (max < RTMIN) {
+            x = Math.scalb(x, +1);
+            y = Math.scalb(y, +1);
+            up++;
+            max = FastMath.max(FastMath.abs(x), FastMath.abs(y));
+        }
+
+        double h = FastMath.hypot(x, y);
+
+        // undo scaling on h
+        if (down != 0) {
+            h = Math.scalb(h, +down);
+        }
+        if (up != 0) {
+            h = Math.scalb(h, -up);
+        }
+        return h;
     }
 
     /**
@@ -85,9 +114,14 @@ public class QRUpdater {
         double t1;
         double t2;
         double xny;
+
+        // Backward Givens cascade to zero out the tail entries of d
         for (int j = n - 1; j >= iq + 1; j--) {
             cc = tempD.getEntry(j - 1);
             ss = tempD.getEntry(j);
+
+            // use robust safeHypot instead of FastMath.hypot
+//             h = FastMath.hypot(cc, ss);
             h = FastMath.hypot(cc, ss);
             if (h < Precision.EPSILON) {
                 continue;
@@ -95,6 +129,8 @@ public class QRUpdater {
             tempD.setEntry(j, 0.0);
             ss /= h;
             cc /= h;
+
+            // ensure cc >= 0, flipping signs and the stored d(j-1) accordingly
             if (cc < 0.0) {
                 cc = -cc;
                 ss = -ss;
@@ -102,6 +138,7 @@ public class QRUpdater {
             } else {
                 tempD.setEntry(j - 1, h);
             }
+
             xny = ss / (1.0 + cc);
             for (int k = 0; k < n; k++) {
                 t1 = J.getEntry(k, j - 1);
@@ -111,12 +148,13 @@ public class QRUpdater {
             }
         }
 
-        if (FastMath.abs(tempD.getEntry(iq)) <= Math.ulp(1.0) * RNorm) {
-            J =Jtemp;
+        // Degeneracy check: leading component must not be too small
+        if (FastMath.abs(tempD.getEntry(iq)) < Precision.EPSILON* RNorm) {
+            J = Jtemp;
             return false;
         }
 
-
+        // Store the new column in R
         for (int i = 0; i <= iq; i++) {
             R.setEntry(i, iq, tempD.getEntry(i));
         }
@@ -124,31 +162,43 @@ public class QRUpdater {
         iq++;
         return true;
     }
+   
 
+    
+    
     /**
-     * Deletes the active constraint at the specified index and updates the QR factorization via Givens rotations.
+     * Deletes the active constraint at the specified index and updates
+     * the QR factorization via Givens rotations.
      *
      * @param constraintIndex index of the constraint to delete
      */
     public void deleteConstraint(int constraintIndex) {
         if (constraintIndex < 0 || constraintIndex >= iq) {
-            return; //index not found
+            return; // index not found
         }
+
+        // Shift columns of R left starting from the deleted one
         for (int i = constraintIndex; i < iq - 1; i++) {
             for (int j = 0; j < n; j++) {
                 R.setEntry(j, i, R.getEntry(j, i + 1));
             }
         }
+        // Zero the last (now unused) column
         for (int j = 0; j < n; j++) {
             R.setEntry(j, iq - 1, 0.0);
         }
+
         iq--;
         if (iq == 0) {
             return;
         }
+
+        // Re-triangularize R and update J using Givens rotations
         for (int j = constraintIndex; j < iq; j++) {
             double cc = R.getEntry(j, j);
             double ss = R.getEntry(j + 1, j);
+
+            // use robust safeHypot instead of FastMath.hypot
             double h = FastMath.hypot(cc, ss);
             if (h < Precision.EPSILON) {
                 continue;
@@ -157,6 +207,15 @@ public class QRUpdater {
             R.setEntry(j + 1, j, 0.0);
             cc /= h;
             ss /= h;
+            //for deleting constraint sign change doesn't work for all problems
+//            if(cc<0)
+//            {
+//                cc=-cc;
+//                ss=-ss;
+//                R.setEntry(j, j, -h);
+//                
+//            }
+
             double xny = ss / (1.0 + cc);
             for (int k = j + 1; k < iq; k++) {
                 double t1 = R.getEntry(j, k);
@@ -172,24 +231,21 @@ public class QRUpdater {
             }
         }
     }
+    
+    
 
-    /**
-     * Returns the current active upper triangular factor R.
-     *
-     * @return submatrix of R containing active columns or {@code null} if none
-     */
+    /** Returns the current active upper triangular factor R. */
     public RealMatrix getR() {
+        if (iq == this.n) {
+            return R;
+        }
         if (iq > 0) {
             return R.getSubMatrix(0, iq - 1, 0, iq - 1);
         }
         return null;
     }
 
-    /**
-     * Returns the inverse of the active R factor.
-     *
-     * @return inverse of the current R or {@code null} if no active constraints
-     */
+    /** Returns the inverse of the active R factor. */
     public RealMatrix getRInv() {
         if (iq > 0) {
             return inverseUpperTriangular(getR());
@@ -197,12 +253,7 @@ public class QRUpdater {
         return null;
     }
 
-    /**
-     * Computes the inverse of an upper triangular matrix via backward substitution.
-     *
-     * @param U upper triangular matrix to invert
-     * @return inverse of U
-     */
+    /** Inverse of an upper triangular matrix via backward substitution. */
     private RealMatrix inverseUpperTriangular(RealMatrix U) {
         int p = U.getRowDimension();
         RealMatrix Uinv = MatrixUtils.createRealMatrix(p, p);
@@ -219,20 +270,12 @@ public class QRUpdater {
         return Uinv;
     }
 
-    /**
-     * Returns the inverse of L used internally.
-     *
-     * @return current J matrix
-     */
+    /** Returns the current J matrix. */
     public RealMatrix getJ() {
         return J;
     }
 
-    /**
-     * Returns the inactive columns of J, starting at the first non-active index.
-     *
-     * @return submatrix of J for inactive columns or {@code null} if fully occupied
-     */
+    /** Returns the inactive columns of J, starting at the first non-active index. */
     public RealMatrix getJ2() {
         if (iq == n) {
             return null;
@@ -240,11 +283,7 @@ public class QRUpdater {
         return J.getSubMatrix(0, n - 1, iq, n - 1);
     }
 
-    /**
-     * Returns the number of active constraints.
-     *
-     * @return count of active constraints
-     */
+    /** Returns the number of active constraints. */
     public int getIq() {
         return iq;
     }

@@ -48,7 +48,7 @@ public class SQPOption implements OptimizationData {
     public static final  boolean DEFAULT_USE_FUNCTION_HESSIAN = false;
 
     /** Default max iteration before reset hessian. */
-    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 50;
+    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 20;
 
     /** Default Gradient mode. */
     public static final GradientMode DEFAULT_GRADIENT_MODE = GradientMode.FORWARD;

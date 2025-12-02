@@ -200,7 +200,6 @@ public class QPDualActiveSolver extends QPOptimizer {
             v.set(partial);
             return v;
         }
-
         return u.add(r.mapMultiply(-alpha)).append(partial);
 
     }
@@ -240,7 +239,7 @@ public class QPDualActiveSolver extends QPOptimizer {
      * @return the violation value and index
      */
     private Pair<Integer, Double> mostViolatedConstraint(RealVector sv, Set<Integer> blackList, List<Integer> activeSet, int me) {
-        double maxViolation = 0;
+        double maxViolation = 0.0;
         int mostViolated = -1;
         for (int i = 0; i < sv.getDimension(); i++) {
             if (blackList.contains(me + i) || activeSet.contains(me + i)) {
@@ -314,9 +313,11 @@ public class QPDualActiveSolver extends QPOptimizer {
                 L = cholesky.getL();
                 L1 = inverseLowerTriangular(L);
                 //c1 trace of G matrix
-               double c1 = FastMath.sqrt(G.getTrace());
+               //double c1 = FastMath.sqrt(G.getTrace());
+               double c1 = G.getTrace();
                //c2 trace of inverse of cholesky factorization
-               double c2 = FastMath.sqrt(L1.getTrace());
+               //double c2 = FastMath.sqrt(L1.getTrace());
+               double c2 = L1.getTrace();
                tol = m * c1 * c2 * Precision.EPSILON * 100.0;
                 qrUpdater = new QRUpdater(L1);
             } catch (MathIllegalArgumentException ex) {
@@ -373,10 +374,11 @@ public class QPDualActiveSolver extends QPOptimizer {
             active.add(i);
         }
         int iteration = 0;
-
+        
+        
         // Active-set loop for inequalities
         while (m != 0 && iteration++ < maxIter) {
-
+            
             RealVector sv;
             //store solution in case constraint can't be added because dependent
             RealVector xOld = x;
@@ -394,12 +396,14 @@ public class QPDualActiveSolver extends QPOptimizer {
             if (FastMath.abs(sum) <= tol) {
                 break;// Optimal solution found
             }
-
+            
             // Evaluate most violated constraint, excluding dependent/active loop
             while (iteration++ < maxIter) {
+                
                 final Pair<Integer, Double> mostViolated = mostViolatedConstraint(sv, blacklist, active, p);
                 if (mostViolated.getValue() >= 0) {
                     blacklist.clear();
+      
                     break; // reavaluate constraints and optimal condition;
                 }
 
@@ -437,17 +441,16 @@ public class QPDualActiveSolver extends QPOptimizer {
                             // step is also in primal
                             x = x.add(z.mapMultiply(t));
                         }
-                        uPartial += t;
-                        u = updateMultipliersOnRemoval(u, r, t, dropIndex);
+                        uPartial += t;              
+                        u = updateMultipliersOnRemoval(u, r, t, dropIndex);                    
                         qrUpdater.deleteConstraint(dropIndex);
-
+                        
                         active.remove(dropIndex);
 
                     }
                 }
                 // Manage full step
-                if (qrUpdater.addConstraint(d)&& active.size()<n) {
-
+                if (active.size()<n && qrUpdater.addConstraint(d) ) {
                     active.add(p + mostViolated.getKey());
                     x = x.add(z.mapMultiply(t));
                     uPartial += t;
