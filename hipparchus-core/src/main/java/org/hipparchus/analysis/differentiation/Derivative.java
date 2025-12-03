@@ -103,19 +103,19 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
     /** {@inheritDoc} */
     @Override
     default T cosh() {
-        return (exp().add(negate().exp())).divide(2);
+        return (exp().add(negate().exp())).half();
     }
 
     /** {@inheritDoc} */
     @Override
     default T sinh() {
-        return (exp().subtract(negate().exp())).divide(2);
+        return (exp().subtract(negate().exp())).half();
     }
 
     /** {@inheritDoc} */
     @Override
     default T acos() {
-        return asin().negate().add(getPi().divide(2));
+        return asin().negate().add(getPi().half());
     }
 
     /** {@inheritDoc} */

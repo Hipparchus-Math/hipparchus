@@ -2418,7 +2418,7 @@ class FieldCloseEventsTest {
 
         @Override
         public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
-            return new Binary64[]{one, one.multiply(2)};
+            return new Binary64[]{one, one.twice()};
         }
 
     }

@@ -357,8 +357,8 @@ public class DfpMath {
 
         spy[0] = a.newInstance("1.33333");    // Use spy[0] for comparison
         while (spx[0].add(spx[1]).greaterThan(spy[0])) {
-            spx[0] = spx[0].divide(2);
-            spx[1] = spx[1].divide(2);
+            spx[0] = spx[0].half();
+            spx[1] = spx[1].half();
             p2++;
         }
 
@@ -742,7 +742,7 @@ public class DfpMath {
         boolean neg = false;
 
         /* First reduce the argument to the range of +/- PI */
-        Dfp x = a.remainder(pi.multiply(2));
+        Dfp x = a.remainder(pi.twice());
 
         /* if x < 0 then apply identity sin(-x) = -sin(x) */
         /* This puts x in the range 0 < x < PI            */
@@ -755,7 +755,7 @@ public class DfpMath {
          * 0 < x < pi/2
          */
 
-        if (x.greaterThan(pi.divide(2))) {
+        if (x.greaterThan(pi.half())) {
             x = pi.subtract(x);
         }
 
@@ -765,8 +765,8 @@ public class DfpMath {
         } else {
             final Dfp[] c = new Dfp[2];
             final Dfp[] piSplit = a.getField().getPiSplit();
-            c[0] = piSplit[0].divide(2).subtract(x);
-            c[1] = piSplit[1].divide(2);
+            c[0] = piSplit[0].half().subtract(x);
+            c[1] = piSplit[1].half();
             y = cosInternal(c);
         }
 
@@ -788,7 +788,7 @@ public class DfpMath {
         boolean neg = false;
 
         /* First reduce the argument to the range of +/- PI */
-        Dfp x = a.remainder(pi.multiply(2));
+        Dfp x = a.remainder(pi.twice());
 
         /* if x < 0 then apply identity cos(-x) = cos(x) */
         /* This puts x in the range 0 < x < PI           */
@@ -800,7 +800,7 @@ public class DfpMath {
          * 0 < x < pi/2
          */
 
-        if (x.greaterThan(pi.divide(2))) {
+        if (x.greaterThan(pi.half())) {
             x = pi.subtract(x);
             neg = true;
         }
@@ -815,8 +815,8 @@ public class DfpMath {
         } else {
             final Dfp[] c = new Dfp[2];
             final Dfp[] piSplit = a.getField().getPiSplit();
-            c[0] = piSplit[0].divide(2).subtract(x);
-            c[1] = piSplit[1].divide(2);
+            c[0] = piSplit[0].half().subtract(x);
+            c[1] = piSplit[1].half();
             y = sinInternal(c);
         }
 
@@ -924,7 +924,7 @@ public class DfpMath {
         }
 
         if (recp) {
-            y = piSplit[0].divide(2).subtract(y).add(piSplit[1].divide(2));
+            y = piSplit[0].half().subtract(y).add(piSplit[1].half());
         }
 
         if (neg) {

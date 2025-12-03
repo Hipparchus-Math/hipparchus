@@ -244,7 +244,7 @@ class AkimaSplineInterpolatorTest {
         final double interpolationTolerance = 1e-15;
         final double maxTolerance = 1e-15;
 
-        CalculusFieldUnivariateFunction<Binary64> f = x -> x.multiply(2).subtract(5);
+        CalculusFieldUnivariateFunction<Binary64> f = x -> x.twice().subtract(5);
 
         testInterpolation( minimumX, maximumX, numberOfElements, numberOfSamples, f, interpolationTolerance,
                            maxTolerance );

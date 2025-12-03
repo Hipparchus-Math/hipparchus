@@ -529,7 +529,7 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
         if (x.value >= 0) {
 
             // compute atan2(y, x) = 2 atan(y / (r + x))
-            a = divide(r.add(x)).atan().multiply(2);
+            a = divide(r.add(x)).atan().twice();
 
         } else {
 

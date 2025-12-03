@@ -106,9 +106,9 @@ public class ClassicalRungeKuttaFieldStateInterpolator<T extends CalculusFieldEl
 
         final T one                       = time.getField().getOne();
         final T oneMinusTheta             = one.subtract(theta);
-        final T oneMinus2Theta            = one.subtract(theta.multiply(2));
+        final T oneMinus2Theta            = one.subtract(theta.twice());
         final T coeffDot1                 = oneMinusTheta.multiply(oneMinus2Theta);
-        final T coeffDot23                = theta.multiply(oneMinusTheta).multiply(2);
+        final T coeffDot23                = theta.multiply(oneMinusTheta).twice();
         final T coeffDot4                 = theta.multiply(oneMinus2Theta).negate();
         final T[] interpolatedState;
         final T[] interpolatedDerivatives;

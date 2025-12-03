@@ -110,10 +110,10 @@ public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
 
         }
 
-        return new FieldTheta<>(sum1.multiply(qFourth.multiply(2)),
-                                sum2.multiply(qFourth.multiply(2)),
-                                sum3.multiply(2).add(1),
-                                sum4.multiply(2).add(1));
+        return new FieldTheta<>(sum1.multiply(qFourth.twice()),
+                                sum2.multiply(qFourth.twice()),
+                                sum3.twice().add(1),
+                                sum4.twice().add(1));
 
     }
 

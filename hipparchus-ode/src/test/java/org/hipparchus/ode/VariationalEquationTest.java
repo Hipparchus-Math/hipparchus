@@ -92,8 +92,8 @@ class VariationalEquationTest {
         assertTrue(residualsP0.getStandardDeviation() < 0.004);
         assertTrue((residualsP1.getMax() - residualsP1.getMin()) > 0.04);
         assertTrue((residualsP1.getMax() - residualsP1.getMin()) < 0.05);
-        assertTrue(residualsP1.getStandardDeviation() > 0.0069);
-        assertTrue(residualsP1.getStandardDeviation() < 0.007);
+        assertTrue(residualsP1.getStandardDeviation() > 0.007);
+        assertTrue(residualsP1.getStandardDeviation() < 0.008);
     }
 
     @Test

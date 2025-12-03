@@ -30,11 +30,11 @@ class FieldFunctionsTest {
     void testScalarUnivariateFunctionConversion() {
         FieldUnivariateFunction f1 = new FieldUnivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(T x) {
-                return x.multiply(2);
+                return x.twice();
             }
         };
         CalculusFieldUnivariateFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateFunction(Binary64Field.getInstance());
-        CalculusFieldUnivariateFunction<Binary64> f2 = x -> x.multiply(2);
+        CalculusFieldUnivariateFunction<Binary64> f2 = x -> x.twice();
 
         for (double x = 0; x < 1; x += 0.01) {
             assertEquals(f2.value(new Binary64(x)).getReal(),
@@ -47,11 +47,11 @@ class FieldFunctionsTest {
     void testScalarMultivariateFunctionConversion() {
         FieldMultivariateFunction f1 = new FieldMultivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(@SuppressWarnings("unchecked") T... x) {
-                return x[0].multiply(2).add(x[1]);
+                return x[0].twice().add(x[1]);
             }
         };
         CalculusFieldMultivariateFunction<Binary64> f1Converted = f1.toCalculusFieldMultivariateFunction(Binary64Field.getInstance());
-        CalculusFieldMultivariateFunction<Binary64> f2 = x -> x[0].multiply(2).add(x[1]);
+        CalculusFieldMultivariateFunction<Binary64> f2 = x -> x[0].twice().add(x[1]);
 
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
@@ -68,14 +68,14 @@ class FieldFunctionsTest {
             public <T extends CalculusFieldElement<T>> T[] value(T x) {
                 T[] y = MathArrays.buildArray(x.getField(), 3);
                 y[0] = x.add(1);
-                y[1] = x.multiply(2);
+                y[1] = x.twice();
                 y[2] = x.square();
                 return y;
             }
         };
         CalculusFieldUnivariateVectorFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateVectorFunction(Binary64Field.getInstance());
         CalculusFieldUnivariateVectorFunction<Binary64> f2 = x -> new Binary64[] {
-            x.add(1), x.multiply(2), x.square()
+            x.add(1), x.twice(), x.square()
         };
 
         for (double x = 0; x < 1; x += 0.01) {
@@ -93,14 +93,14 @@ class FieldFunctionsTest {
             public <T extends CalculusFieldElement<T>> T[] value(@SuppressWarnings("unchecked") T... x) {
                 T[] y = MathArrays.buildArray(x[0].getField(), 3);
                 y[0] = x[0].add(1);
-                y[1] = x[1].multiply(2);
+                y[1] = x[1].twice();
                 y[2] = x[0].multiply(x[1]);
                 return y;
             }
         };
         CalculusFieldMultivariateVectorFunction<Binary64> f1Converted = f1.toCalculusFieldMultivariateVectorFunction(Binary64Field.getInstance());
         CalculusFieldMultivariateVectorFunction<Binary64> f2 = x -> new Binary64[] {
-            x[0].add(1), x[1].multiply(2), x[0].multiply(x[1])
+            x[0].add(1), x[1].twice(), x[0].multiply(x[1])
         };
 
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
@@ -120,7 +120,7 @@ class FieldFunctionsTest {
             public <T extends CalculusFieldElement<T>> T[][] value(T x) {
                 T[][] y = MathArrays.buildArray(x.getField(), 2, 2);
                 y[0][0] = x.add(1);
-                y[0][1] = x.multiply(2);
+                y[0][1] = x.twice();
                 y[1][0] = x.square();
                 y[1][1] = x.sin();
                 return y;
@@ -128,7 +128,7 @@ class FieldFunctionsTest {
         };
         CalculusFieldUnivariateMatrixFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateMatrixFunction(Binary64Field.getInstance());
         CalculusFieldUnivariateMatrixFunction<Binary64> f2 = x -> new Binary64[][] {
-            { x.add(1), x.multiply(2) },
+            { x.add(1), x.twice() },
             { x.square(), x.sin() }
         };
 
@@ -149,7 +149,7 @@ class FieldFunctionsTest {
             public <T extends CalculusFieldElement<T>> T[][] value(@SuppressWarnings("unchecked") T... x) {
                 T[][] y = MathArrays.buildArray(x[0].getField(), 2, 2);
                 y[0][0] = x[0].add(1);
-                y[0][1] = x[1].multiply(2);
+                y[0][1] = x[1].twice();
                 y[1][0] = x[0].multiply(x[1]);
                 y[1][1] = x[1].sin();
                 return y;
@@ -157,7 +157,7 @@ class FieldFunctionsTest {
         };
         CalculusFieldMultivariateMatrixFunction<Binary64> f1Converted = f1.toCalculusFieldMultivariateMatrixFunction(Binary64Field.getInstance());
         CalculusFieldMultivariateMatrixFunction<Binary64> f2 = x -> new Binary64[][] {
-            { x[0].add(1), x[1].multiply(2) },
+            { x[0].add(1), x[1].twice() },
             { x[0].multiply(x[1]), x[1].sin() }
         };
 

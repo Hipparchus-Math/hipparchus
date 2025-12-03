@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Fitting Release Notes</title>
   </properties>
   <body>
+    <release version="4.1" date="TBD" description="TBD">
+      <action dev="bryan" type="add" issue="issues/424">
+        Added RANSAC algorithm for estimating the parameters of a mathematical model.
+      </action>
+    </release>
     <release version="4.0.2" date="2025-09-08" description="This is a patch release.">
       <action dev="bryan" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,

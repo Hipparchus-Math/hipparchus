@@ -313,7 +313,7 @@ public class AkimaSplineInterpolator
                     divide(t2.multiply(t2).subtract(t1.multiply(t2)));
         final T b = x1.subtract(x0).subtract(a.multiply(t1).multiply(t1)).divide(t1);
 
-        return a.multiply(t).multiply(2).add(b);
+        return a.multiply(t).twice().add(b);
     }
 
     /**

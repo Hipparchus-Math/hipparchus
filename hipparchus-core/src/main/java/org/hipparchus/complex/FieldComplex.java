@@ -1314,7 +1314,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
 
         if (x.real.getReal() >= 0) {
             // compute atan2(y, x) = 2 atan(y / (r + x))
-            return divide(r.add(x)).atan().multiply(2);
+            return divide(r.add(x)).atan().twice();
         } else {
             // compute atan2(y, x) = +/- pi - 2 atan(y / (r - x))
             return divide(r.subtract(x)).atan().multiply(-2).add(x.real.getPi());
@@ -1458,9 +1458,9 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
 
         T t = FastMath.sqrt((FastMath.abs(real).add(FastMath.hypot(real, imaginary))).multiply(0.5));
         if (real.getReal() >= 0.0) {
-            return createComplex(t, imaginary.divide(t.multiply(2)));
+            return createComplex(t, imaginary.divide(t.twice()));
         } else {
-            return createComplex(FastMath.abs(imaginary).divide(t.multiply(2)),
+            return createComplex(FastMath.abs(imaginary).divide(t.twice()),
                                  FastMath.copySign(t, imaginary));
         }
     }
@@ -1553,8 +1553,8 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
             return getMinusI(getPartsField());
         }
 
-        final FieldSinCos<T> sc2r = FastMath.sinCos(real.multiply(2));
-        T imaginary2 = imaginary.multiply(2);
+        final FieldSinCos<T> sc2r = FastMath.sinCos(real.twice());
+        T imaginary2 = imaginary.twice();
         T d = sc2r.cos().add(FastMath.cosh(imaginary2));
 
         return createComplex(sc2r.sin().divide(d), FastMath.sinh(imaginary2).divide(d));
@@ -1603,8 +1603,8 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
         if (real.getReal() < -20.0) {
             return getMinusOne(getPartsField());
         }
-        T real2 = real.multiply(2);
-        final FieldSinCos<T> sc2i = FastMath.sinCos(imaginary.multiply(2));
+        T real2 = real.twice();
+        final FieldSinCos<T> sc2i = FastMath.sinCos(imaginary.twice());
         T d = FastMath.cosh(real2).add(sc2i.cos());
 
         return createComplex(FastMath.sinh(real2).divide(d), sc2i.sin().divide(d));

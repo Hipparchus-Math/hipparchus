@@ -114,7 +114,7 @@ public class GillFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                                                    final T thetaH, final T oneMinusThetaH) {
 
         final T one        = time.getField().getOne();
-        final T twoTheta   = theta.multiply(2);
+        final T twoTheta   = theta.twice();
         final T fourTheta2 = twoTheta.multiply(twoTheta);
         final T coeffDot1  = theta.multiply(twoTheta.subtract(3)).add(1);
         final T cDot23     = twoTheta.multiply(one.subtract(theta));

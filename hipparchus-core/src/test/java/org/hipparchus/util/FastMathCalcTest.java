@@ -93,6 +93,23 @@ class FastMathCalcTest {
     }
 
     @Test
+    void testLnMantTables() {
+        final double[][] fmTable  = getD2("lnMant", "LN_MANT");
+        final int      len        = getInt("LN_MANT_LEN");
+        assertEquals(len, fmTable.length);
+
+        for (int i = 0; i < len; i++) {
+            final double d = Double.longBitsToDouble( (((long) i) << 42) | 0x3ff0000000000000L );
+            final double[] tmp = FastMathCalc.slowLog(d);
+            assertEquals(fmTable[i].length, tmp.length);
+            for (int j = 0; j < fmTable[i].length; ++j) {
+                assertEquals(fmTable[i][j], tmp[j], FastMath.ulp(fmTable[i][j]));
+            }
+        }
+
+    }
+
+    @Test
     void testSplit() {
         checkSplit(0x3ffe0045dab7321fl, 0x3ffe0045c0000000l, 0x3e7ab7321f000000l);
         checkSplit(0x3ffe0045fab7321fl, 0x3ffe004600000000l, 0xbe55233784000000l);
@@ -112,6 +129,40 @@ class FastMathCalcTest {
             assertEquals(bits, Double.doubleToRawLongBits(result[0] + result[1]));
             assertEquals(high, Double.doubleToRawLongBits(result[0]));
             assertEquals(low,  Double.doubleToRawLongBits(result[1]));
+
+        } catch (NoSuchMethodException | SecurityException | IllegalArgumentException |
+                 IllegalAccessException | InvocationTargetException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    void testSinCosTanTables() {
+        try {
+            final double[] sinA = getFastMathTable("SINE_TABLE_A");
+            final double[] sinB = getFastMathTable("SINE_TABLE_B");
+            final double[] cosA = getFastMathTable("COSINE_TABLE_A");
+            final double[] cosB = getFastMathTable("COSINE_TABLE_B");
+            final double[] tanA = getFastMathTable("TANGENT_TABLE_A");
+            final double[] tanB = getFastMathTable("TANGENT_TABLE_B");
+            Method buildSinCosTables = FastMathCalc.class.getDeclaredMethod("buildSinCosTables",
+                                                                            double[].class, double[].class, double[].class, double[].class,
+                                                                            Integer.TYPE,
+                                                                            double[].class, double[].class);
+            buildSinCosTables.setAccessible(true);
+            final double[] calcSinA = new double[sinA.length];
+            final double[] calcSinB = new double[sinB.length];
+            final double[] calcCosA = new double[cosA.length];
+            final double[] calcCosB = new double[cosB.length];
+            final double[] calcTanA = new double[tanA.length];
+            final double[] calcTanB = new double[tanB.length];
+            buildSinCosTables.invoke(null, calcSinA, calcSinB, calcCosA, calcCosB, sinA.length, calcTanA, calcTanB);
+            checkTable(sinA, calcSinA, 0);
+            checkTable(sinB, calcSinB, 0);
+            checkTable(cosA, calcCosA, 0);
+            checkTable(cosB, calcCosB, 0);
+            checkTable(tanA, calcTanA, 0);
+            checkTable(tanB, calcTanB, 0);
 
         } catch (NoSuchMethodException | SecurityException | IllegalArgumentException |
                  IllegalAccessException | InvocationTargetException e) {

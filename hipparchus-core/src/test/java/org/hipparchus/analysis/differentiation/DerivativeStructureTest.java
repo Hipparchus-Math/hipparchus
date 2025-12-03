@@ -953,7 +953,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testLog1pExpm1() {
-        double[] epsilon = new double[] { 1.2e-16, 3.0e-16, 5.0e-16, 9.0e-16, 6.0e-15 };
+        double[] epsilon = new double[] { 6.0e-17, 3.0e-16, 5.0e-16, 9.0e-16, 6.0e-15 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -2096,7 +2096,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     void testReciprocalVersusAlternativeImplementation() {
         final DSFactory factory = new DSFactory(2, 15);
         final DerivativeStructure operand = factory.variable(0, 1.).
-                add(factory.variable(1, 0.).multiply(2.));
+                add(factory.variable(1, 0.).twice());
         compareReciprocalToVersionViaPower(operand, 1e-15);
     }
 

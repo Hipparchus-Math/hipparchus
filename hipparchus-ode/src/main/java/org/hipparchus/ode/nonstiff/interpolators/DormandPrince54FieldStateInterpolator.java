@@ -133,7 +133,7 @@ public class DormandPrince54FieldStateInterpolator<T extends CalculusFieldElemen
         // interpolate
         final T one      = time.getField().getOne();
         final T eta      = one.subtract(theta);
-        final T twoTheta = theta.multiply(2);
+        final T twoTheta = theta.twice();
         final T dot2     = one.subtract(twoTheta);
         final T dot3     = theta.multiply(theta.multiply(-3).add(2));
         final T dot4     = twoTheta.multiply(theta.multiply(twoTheta.subtract(3)).add(1));
@@ -146,46 +146,46 @@ public class DormandPrince54FieldStateInterpolator<T extends CalculusFieldElemen
             final T f4        = f3.multiply(eta);
             final T coeff0    = f1.multiply(a70).
                                 subtract(f2.multiply(a70.subtract(1))).
-                                add(f3.multiply(a70.multiply(2).subtract(1))).
+                                add(f3.multiply(a70.twice().subtract(1))).
                                 add(f4.multiply(d0));
             final T coeff1    = time.getField().getZero();
             final T coeff2    = f1.multiply(a72).
                                 subtract(f2.multiply(a72)).
-                                add(f3.multiply(a72.multiply(2))).
+                                add(f3.multiply(a72.twice())).
                                 add(f4.multiply(d2));
             final T coeff3    = f1.multiply(a73).
                                 subtract(f2.multiply(a73)).
-                                add(f3.multiply(a73.multiply(2))).
+                                add(f3.multiply(a73.twice())).
                                 add(f4.multiply(d3));
             final T coeff4    = f1.multiply(a74).
                                 subtract(f2.multiply(a74)).
-                                add(f3.multiply(a74.multiply(2))).
+                                add(f3.multiply(a74.twice())).
                                 add(f4.multiply(d4));
             final T coeff5    = f1.multiply(a75).
                                 subtract(f2.multiply(a75)).
-                                add(f3.multiply(a75.multiply(2))).
+                                add(f3.multiply(a75.twice())).
                                 add(f4.multiply(d5));
             final T coeff6    = f4.multiply(d6).subtract(f3);
             final T coeffDot0 = a70.
                                 subtract(dot2.multiply(a70.subtract(1))).
-                                add(dot3.multiply(a70.multiply(2).subtract(1))).
+                                add(dot3.multiply(a70.twice().subtract(1))).
                                 add(dot4.multiply(d0));
             final T coeffDot1 = time.getField().getZero();
             final T coeffDot2 = a72.
                                 subtract(dot2.multiply(a72)).
-                                add(dot3.multiply(a72.multiply(2))).
+                                add(dot3.multiply(a72.twice())).
                                 add(dot4.multiply(d2));
             final T coeffDot3 = a73.
                                 subtract(dot2.multiply(a73)).
-                                add(dot3.multiply(a73.multiply(2))).
+                                add(dot3.multiply(a73.twice())).
                                 add(dot4.multiply(d3));
             final T coeffDot4 = a74.
                                 subtract(dot2.multiply(a74)).
-                                add(dot3.multiply(a74.multiply(2))).
+                                add(dot3.multiply(a74.twice())).
                                 add(dot4.multiply(d4));
             final T coeffDot5 = a75.
                                 subtract(dot2.multiply(a75)).
-                                add(dot3.multiply(a75.multiply(2))).
+                                add(dot3.multiply(a75.twice())).
                                 add(dot4.multiply(d5));
             final T coeffDot6 = dot4.multiply(d6).subtract(dot3);
             interpolatedState       = previousStateLinearCombination(coeff0, coeff1, coeff2, coeff3,
@@ -199,46 +199,46 @@ public class DormandPrince54FieldStateInterpolator<T extends CalculusFieldElemen
             final T f4        = f3.multiply(eta);
             final T coeff0    = f1.multiply(a70).
                                 subtract(f2.multiply(a70.subtract(1))).
-                                add(f3.multiply(a70.multiply(2).subtract(1))).
+                                add(f3.multiply(a70.twice().subtract(1))).
                                 add(f4.multiply(d0));
             final T coeff1    = time.getField().getZero();
             final T coeff2    = f1.multiply(a72).
                                 subtract(f2.multiply(a72)).
-                                add(f3.multiply(a72.multiply(2))).
+                                add(f3.multiply(a72.twice())).
                                 add(f4.multiply(d2));
             final T coeff3    = f1.multiply(a73).
                                 subtract(f2.multiply(a73)).
-                                add(f3.multiply(a73.multiply(2))).
+                                add(f3.multiply(a73.twice())).
                                 add(f4.multiply(d3));
             final T coeff4    = f1.multiply(a74).
                                 subtract(f2.multiply(a74)).
-                                add(f3.multiply(a74.multiply(2))).
+                                add(f3.multiply(a74.twice())).
                                 add(f4.multiply(d4));
             final T coeff5    = f1.multiply(a75).
                                 subtract(f2.multiply(a75)).
-                                add(f3.multiply(a75.multiply(2))).
+                                add(f3.multiply(a75.twice())).
                                 add(f4.multiply(d5));
             final T coeff6    = f4.multiply(d6).subtract(f3);
             final T coeffDot0 = a70.
                                 subtract(dot2.multiply(a70.subtract(1))).
-                                add(dot3.multiply(a70.multiply(2).subtract(1))).
+                                add(dot3.multiply(a70.twice().subtract(1))).
                                 add(dot4.multiply(d0));
             final T coeffDot1 = time.getField().getZero();
             final T coeffDot2 = a72.
                                 subtract(dot2.multiply(a72)).
-                                add(dot3.multiply(a72.multiply(2))).
+                                add(dot3.multiply(a72.twice())).
                                 add(dot4.multiply(d2));
             final T coeffDot3 = a73.
                                 subtract(dot2.multiply(a73)).
-                                add(dot3.multiply(a73.multiply(2))).
+                                add(dot3.multiply(a73.twice())).
                                 add(dot4.multiply(d3));
             final T coeffDot4 = a74.
                                 subtract(dot2.multiply(a74)).
-                                add(dot3.multiply(a74.multiply(2))).
+                                add(dot3.multiply(a74.twice())).
                                 add(dot4.multiply(d4));
             final T coeffDot5 = a75.
                                 subtract(dot2.multiply(a75)).
-                                add(dot3.multiply(a75.multiply(2))).
+                                add(dot3.multiply(a75.twice())).
                                 add(dot4.multiply(d5));
             final T coeffDot6 = dot4.multiply(d6).subtract(dot3);
             interpolatedState       = currentStateLinearCombination(coeff0, coeff1, coeff2, coeff3,

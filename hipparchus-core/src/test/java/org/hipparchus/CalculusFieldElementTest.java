@@ -330,6 +330,30 @@ class CalculusFieldElementTest {
     }
 
     @Test
+    void testTwice() {
+        // GIVEN
+        final double value = 3.6;
+        final TestCalculusFieldElement testElement = new TestCalculusFieldElement(value);
+        // WHEN
+        final TestCalculusFieldElement actualOperation = testElement.twice();
+        // THEN
+        final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value * 2);
+        assertEquals(expectedOperation, actualOperation);
+    }
+
+    @Test
+    void testHalf() {
+        // GIVEN
+        final double value = 3.6;
+        final TestCalculusFieldElement testElement = new TestCalculusFieldElement(value);
+        // WHEN
+        final TestCalculusFieldElement actualOperation = testElement.half();
+        // THEN
+        final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value / 2);
+        assertEquals(expectedOperation, actualOperation);
+    }
+
+    @Test
     void testToDegrees() {
         // GIVEN
         final double value = 3.;

@@ -855,7 +855,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
              pinf,
              0, "Multiply #18.1");
 
-        test(field.newDfp("5e131071").multiply(2),
+        test(field.newDfp("5e131071").twice(),
              pinf,
              DfpField.FLAG_OVERFLOW, "Multiply #19");
 
@@ -863,7 +863,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
              field.newDfp("9.9999999999999950000e131071"),
              0, "Multiply #20");
 
-        test(field.newDfp("-5e131071").multiply(2),
+        test(field.newDfp("-5e131071").twice(),
              ninf,
              DfpField.FLAG_OVERFLOW, "Multiply #22");
 
@@ -1881,7 +1881,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         Dfp one = field.getOne();
         Dfp ulp = one.ulp();
         assertTrue(one.add(ulp).greaterThan(one));
-        assertFalse(one.add(ulp.divide(2)).greaterThan(one));
+        assertFalse(one.add(ulp.half()).greaterThan(one));
     }
 
     @Test

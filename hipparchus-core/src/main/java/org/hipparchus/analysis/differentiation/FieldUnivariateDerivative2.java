@@ -432,9 +432,9 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     @Override
     public FieldUnivariateDerivative2<T> sqrt() {
         final T s0 = FastMath.sqrt(f0);
-        final T s0twice = s0.multiply(2);
+        final T s0twice = s0.twice();
         final T s1 = f1.divide(s0twice);
-        final T s2 = (f2.subtract(s1.square().multiply(2))).divide(s0twice);
+        final T s2 = (f2.subtract(s1.square().twice())).divide(s0twice);
         return new FieldUnivariateDerivative2<>(s0, s1, s2);
     }
 

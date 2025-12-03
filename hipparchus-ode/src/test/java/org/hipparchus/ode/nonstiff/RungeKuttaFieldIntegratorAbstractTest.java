@@ -630,7 +630,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                     // a proper example of this is for example optimal control when
                     // the secondary equations handle co-state, which changes control,
                     // and the control changes the primary state
-                    primaryDot[i] = primaryDot[i].multiply(2);
+                    primaryDot[i] = primaryDot[i].twice();
                 }
                 T[] secondaryDot = secondary.clone();
                 secondaryDot[0] = t.getField().getOne().negate();

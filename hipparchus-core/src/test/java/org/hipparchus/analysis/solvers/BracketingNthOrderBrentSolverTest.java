@@ -24,7 +24,6 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -258,7 +257,7 @@ final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTe
 
     }
 
-    private static abstract class TestFunction implements UnivariateDifferentiableFunction {
+    private abstract static class TestFunction implements UnivariateDifferentiableFunction {
 
         private final double root;
 
@@ -283,10 +282,6 @@ final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTe
 
         public double getMax() {
             return max;
-        }
-
-        public double value(final double x) {
-            return value(new DSFactory(0, 0).constant(x)).getValue();
         }
 
         public abstract <T extends Derivative<T>> T value(final T t);

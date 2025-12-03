@@ -50,6 +50,15 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="ryan" type="update" issue="issues/413">
+        Reverted the FastMath reduction changes
+      </action>
+      <action dev="serrof" type="update" issue="issues/430">
+        Update UnivariateDifferentiableSolver with UnivariateDerivative1.
+      </action>
+      <action dev="serrof" type="add" issue="issues/428">
+        Added half and twice on CalculusFieldElement.
+      </action>
       <action dev="luc" type="add" issue="issues/421">
         Added random generators for exponential, gamma and Nakagami distributions.
       </action>

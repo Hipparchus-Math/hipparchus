@@ -50,7 +50,7 @@ class FieldJacobiThetaTest {
         final T t3Ref  = field.getOne().add(q.
                                             add(FastMath.pow(q, 4)).
                                             add(FastMath.pow(q, 9)).
-                                            add(FastMath.pow(q, 16)).multiply(2));
+                                            add(FastMath.pow(q, 16)).twice());
         final T theta3 = new FieldJacobiTheta<>(q).values(field.getZero()).theta3();
         assertEquals(t3Ref.getReal(), theta3.getReal(), 1.0e-12);
     }

@@ -44,4 +44,8 @@ public interface UnivariateDifferentiableFunction extends UnivariateFunction {
      */
     <T extends Derivative<T>> T value(T x) throws MathIllegalArgumentException;
 
+    @Override
+    default double value(double x) {
+        return value(new UnivariateDerivative1(x, 0)).getValue();
+    }
 }

@@ -1183,7 +1183,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
 
         if (FastMath.copySign(1.0, x.real) >= 0) {
             // compute atan2(y, x) = 2 atan(y / (r + x))
-            return divide(r.add(x)).atan().multiply(2);
+            return divide(r.add(x)).atan().twice();
         } else {
             // compute atan2(y, x) = +/- pi - 2 atan(y / (r - x))
             return divide(r.subtract(x)).atan().multiply(-2).add(FastMath.PI);
