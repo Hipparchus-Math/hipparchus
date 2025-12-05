@@ -21,11 +21,16 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.analysis.FieldTrivariateFunction;
 import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Function that implements the
@@ -39,7 +44,7 @@ import org.hipparchus.util.MathUtils;
  *
  */
 public class TricubicInterpolatingFunction
-    implements TrivariateFunction {
+    implements TrivariateFunction, FieldTrivariateFunction {
     /**
      * Matrix to compute the spline coefficients from the function values
      * and function derivatives values
@@ -361,6 +366,36 @@ public class TricubicInterpolatingFunction
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @throws MathIllegalArgumentException if any of the variables is outside its interpolation range.
+     */
+    @Override
+    public <T extends CalculusFieldElement<T>> T value(T x, T y, T z) throws MathIllegalArgumentException {
+        final int i = searchIndex(x.getReal(), xval);
+        if (i == -1) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
+                    x.getReal(), xval[0], xval[xval.length - 1]);
+        }
+        final int j = searchIndex(y.getReal(), yval);
+        if (j == -1) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
+                    y.getReal(), yval[0], yval[yval.length - 1]);
+        }
+        final int k = searchIndex(z.getReal(), zval);
+        if (k == -1) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
+                    z.getReal(), zval[0], zval[zval.length - 1]);
+        }
+
+        final T xN = x.subtract(xval[i]).divide(xval[i + 1] - xval[i]);
+        final T yN = y.subtract(yval[j]).divide(yval[j + 1] - yval[j]);
+        final T zN = z.subtract(zval[k]).divide(zval[k + 1] - zval[k]);
+
+        return splines[i][j][k].value(xN, yN, zN);
+    }
+
+    /**
      * Indicates whether a point is within the interpolation range.
      *
      * @param x First coordinate.
@@ -472,7 +507,7 @@ public class TricubicInterpolatingFunction
  *
  */
 class TricubicFunction
-    implements TrivariateFunction {
+    implements TrivariateFunction, FieldTrivariateFunction {
     /** Number of points. */
     private static final short N = 4;
     /** Coefficients */
@@ -522,6 +557,44 @@ class TricubicFunction
             for (int j = 0; j < N; j++) {
                 for (int k = 0; k < N; k++) {
                     result += a[i][j][k] * pX[i] * pY[j] * pZ[k];
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * @param x x-coordinate of the interpolation point.
+     * @param y y-coordinate of the interpolation point.
+     * @param z z-coordinate of the interpolation point.
+     * @return the interpolated value.
+     * @throws MathIllegalArgumentException if {@code x}, {@code y} or
+     * {@code z} are not in the interval {@code [0, 1]}.
+     */
+    @Override
+    public <T extends CalculusFieldElement<T>> T value(T x, T y, T z) throws MathIllegalArgumentException {
+        MathUtils.checkRangeInclusive(x.getReal(), 0, 1);
+        MathUtils.checkRangeInclusive(y.getReal(), 0, 1);
+        MathUtils.checkRangeInclusive(z.getReal(), 0, 1);
+
+        final T x2 = x.multiply(x);
+        final T x3 = x2.multiply(x);
+        final List<T> pX = Arrays.asList(x.getField().getOne(), x, x2, x3);
+
+        final T y2 = y.multiply(y);
+        final T y3 = y2.multiply(y);
+        final List<T> pY = Arrays.asList(y.getField().getOne(), y, y2, y3);
+
+        final T z2 = z.multiply(z);
+        final T z3 = z2.multiply(z);
+        final List<T> pZ = Arrays.asList(z.getField().getOne(), z, z2, z3);
+
+        T result = x.getField().getZero();
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                for (int k = 0; k < N; k++) {
+                    result = result.add(pX.get(i).multiply(pY.get(j)).multiply(pZ.get(k)).multiply(a[i][j][k]));
                 }
             }
         }
