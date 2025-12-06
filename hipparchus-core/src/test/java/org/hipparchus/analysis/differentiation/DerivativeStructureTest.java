@@ -69,23 +69,17 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testWrongVariableIndex() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new DSFactory(3, 1).variable(3, 1.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new DSFactory(3, 1).variable(3, 1.0));
     }
 
     @Test
     void testMissingOrders() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(0, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(0, 1));
     }
 
     @Test
     void testTooLargeOrder() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(1, 1, 2);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(1, 1, 2));
     }
 
     @Test
@@ -1518,9 +1512,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     void testComposeMismatchedDimensions() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new DSFactory(1, 3).variable(0, 1.2).compose(new double[3]);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new DSFactory(1, 3).variable(0, 1.2).compose(new double[3]));
     }
 
     @Test

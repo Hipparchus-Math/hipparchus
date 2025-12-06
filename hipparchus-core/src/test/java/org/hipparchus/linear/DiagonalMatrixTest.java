@@ -445,9 +445,7 @@ class DiagonalMatrixTest {
 
     @Test
     void testNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            new DiagonalMatrix(null, false);
-        });
+        assertThrows(NullArgumentException.class, () -> new DiagonalMatrix(null, false));
     }
 
     @Test

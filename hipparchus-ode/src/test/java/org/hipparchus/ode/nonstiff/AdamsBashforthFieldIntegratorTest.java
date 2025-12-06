@@ -49,9 +49,7 @@ class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest
 
     @Test
     public void testMinStep() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doDimensionCheck(Binary64Field.getInstance());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doDimensionCheck(Binary64Field.getInstance()));
     }
 
     @Test
@@ -64,9 +62,7 @@ class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest
 
     @Test
     public void exceedMaxEvaluations() {
-        assertThrows(MathIllegalStateException.class, () -> {
-            doExceedMaxEvaluations(Binary64Field.getInstance(), 650);
-        });
+        assertThrows(MathIllegalStateException.class, () -> doExceedMaxEvaluations(Binary64Field.getInstance(), 650));
     }
 
     @Test
@@ -86,9 +82,7 @@ class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest
 
     @Test
     public void testStartFailure() {
-        assertThrows(MathIllegalStateException.class, () -> {
-            doTestStartFailure(Binary64Field.getInstance());
-        });
+        assertThrows(MathIllegalStateException.class, () -> doTestStartFailure(Binary64Field.getInstance()));
     }
 
 }

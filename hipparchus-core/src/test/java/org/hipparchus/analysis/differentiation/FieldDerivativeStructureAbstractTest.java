@@ -78,9 +78,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
     @Test
     public void testWrongFieldVariableIndex() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            buildFactory(3, 1).variable(3, buildScalar(1.0));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> buildFactory(3, 1).variable(3, buildScalar(1.0)));
     }
 
     @Test

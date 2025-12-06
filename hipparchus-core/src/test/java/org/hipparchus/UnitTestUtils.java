@@ -153,9 +153,7 @@ public class UnitTestUtils {
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
             ObjectInputStream si = new ObjectInputStream(bis);
             return si.readObject();
-        } catch (IOException ioe) {
-            return null;
-        } catch (ClassNotFoundException cnfe) {
+        } catch (IOException | ClassNotFoundException ioe) {
             return null;
         }
     }

@@ -66,36 +66,26 @@ public abstract class BinomialProportionAbstractTest {
 
     @Test
     public void testZeroConfidencelevel() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            testMethod.calculate(trials, probabilityOfSuccess, 0d);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> testMethod.calculate(trials, probabilityOfSuccess, 0d));
     }
 
     @Test
     public void testOneConfidencelevel() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            testMethod.calculate(trials, probabilityOfSuccess, 1d);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> testMethod.calculate(trials, probabilityOfSuccess, 1d));
     }
 
     @Test
     public void testZeroTrials() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            testMethod.calculate(0, 0, confidenceLevel);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> testMethod.calculate(0, 0, confidenceLevel));
     }
 
     @Test
     public void testNegativeSuccesses() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            testMethod.calculate(trials, -1, confidenceLevel);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> testMethod.calculate(trials, -1, confidenceLevel));
     }
 
     @Test
     public void testSuccessesExceedingTrials() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            testMethod.calculate(trials, trials + 1, confidenceLevel);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> testMethod.calculate(trials, trials + 1, confidenceLevel));
     }
 }

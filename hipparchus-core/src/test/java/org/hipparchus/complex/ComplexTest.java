@@ -543,16 +543,12 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
 
     @Test
     void testFloatingPointEqualsPrecondition1() {
-        assertThrows(NullPointerException.class, () -> {
-            Complex.equals(new Complex(3.0, 4.0), null, 3);
-        });
+        assertThrows(NullPointerException.class, () -> Complex.equals(new Complex(3.0, 4.0), null, 3));
     }
 
     @Test
     void testFloatingPointEqualsPrecondition2() {
-        assertThrows(NullPointerException.class, () -> {
-            Complex.equals(null, new Complex(3.0, 4.0), 3);
-        });
+        assertThrows(NullPointerException.class, () -> Complex.equals(null, new Complex(3.0, 4.0), 3));
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -1276,9 +1272,7 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
 
     @Test
     void testpowNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            Complex.ONE.pow(null);
-        });
+        assertThrows(NullArgumentException.class, () -> Complex.ONE.pow(null));
     }
 
     @Test

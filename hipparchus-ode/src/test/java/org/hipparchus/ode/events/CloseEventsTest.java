@@ -2137,13 +2137,9 @@ class CloseEventsTest {
 
         @Override
         public ODEEventHandler getHandler() {
-            return new ODEEventHandler() {
-                @Override
-                public Action eventOccurred(ODEStateAndDerivative state,
-                                            ODEEventDetector detector, boolean increasing) {
-                    events.add(new Event(state, detector, increasing));
-                    return action;
-                }
+            return (state, detector, increasing) -> {
+                events.add(new Event(state, detector, increasing));
+                return action;
             };
         }
 

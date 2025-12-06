@@ -49,7 +49,7 @@ class FieldIterativeLegendreGaussIntegratorTest {
         double expected = 2;
         double tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                                         FastMath.abs(expected * integrator.getRelativeAccuracy()));
-        double result = integrator.integrate(10000, x -> x.sin(), min, max).getReal();
+        double result = integrator.integrate(10000, Binary64::sin, min, max).getReal();
         assertEquals(expected, result, tolerance);
 
         min = new Binary64(-FastMath.PI/3);
@@ -57,7 +57,7 @@ class FieldIterativeLegendreGaussIntegratorTest {
         expected = -0.5;
         tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                                  FastMath.abs(expected * integrator.getRelativeAccuracy()));
-        result = integrator.integrate(10000, x -> x.sin(), min, max).getReal();
+        result = integrator.integrate(10000, Binary64::sin, min, max).getReal();
         assertEquals(expected, result, tolerance);
     }
 

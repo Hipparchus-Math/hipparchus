@@ -119,9 +119,7 @@ public class FieldDenseOutputModelTest {
             public int getDimension() {
                 return 2;
             }
-            public void init(T t0, T[] y0, T finalTime) {
-            }
-        };
+                        };
 
         // integrate backward from &pi; to 0;
         FieldDenseOutputModel<T> cm1 = new FieldDenseOutputModel<T>();
@@ -212,8 +210,7 @@ public class FieldDenseOutputModelTest {
             public int getDimension() {
                 return s0.getPrimaryStateDimension();
             }
-            public void init(T t0, T[] y0, T finalTime) {
-            }
+
             public T[] computeDerivatives(T t, T[] y) {
                 return y;
             }

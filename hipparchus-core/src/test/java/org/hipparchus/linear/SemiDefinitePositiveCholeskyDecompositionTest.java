@@ -47,23 +47,19 @@ class SemiDefinitePositiveCholeskyDecompositionTest {
     /** test non-square matrix */
     @Test
     void testNonSquare() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2])));
     }
 
     /** test negative definite matrix */
     @Test
     void testNotPositiveDefinite() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][]{
-                {-14, 11, 13, 15, 24},
-                {11, 34, 13, 8, 25},
-                {-13, 13, 14, 15, 21},
-                {15, 8, -15, 18, 23},
-                {24, 25, 21, 23, -45}
-            }));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][]{
+            {-14, 11, 13, 15, 24},
+            {11, 34, 13, 8, 25},
+            {-13, 13, 14, 15, 21},
+            {15, 8, -15, 18, 23},
+            {24, 25, 21, 23, -45}
+        })));
     }
 
     /** test A = LLT */

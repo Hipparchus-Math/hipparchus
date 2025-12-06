@@ -122,9 +122,7 @@ public class ExponentialDistributionTest extends RealDistributionAbstractTest {
 
     @Test
     void testPreconditions() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new ExponentialDistribution(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new ExponentialDistribution(0));
     }
 
     @Test

@@ -60,7 +60,7 @@ class FieldMatrixTest {
     @Test
     void testDefaultMap() {
         FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
-        FieldMatrix<Binary64> result = a.add(a.map(x -> x.negate()));
+        FieldMatrix<Binary64> result = a.add(a.map(Binary64::negate));
         result.walkInOptimizedOrder(new FieldMatrixPreservingVisitor<Binary64>() {
             
             @Override

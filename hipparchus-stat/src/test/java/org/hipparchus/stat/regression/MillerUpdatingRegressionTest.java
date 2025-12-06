@@ -113,9 +113,7 @@ public class MillerUpdatingRegressionTest {
             fail("Should throw MathIllegalArgumentException");
         }
         MillerUpdatingRegression finalInstance = instance;
-        assertDoesNotThrow(() -> {
-            finalInstance.addObservation(new double[]{ 1.0, 1.0, 1.0}, 0.0);
-        }, "Should throw MathIllegalArgumentException");
+        assertDoesNotThrow(() -> finalInstance.addObservation(new double[]{ 1.0, 1.0, 1.0}, 0.0), "Should throw MathIllegalArgumentException");
 
         //now we try it without an intercept
         instance = new MillerUpdatingRegression(3, false);
@@ -134,9 +132,7 @@ public class MillerUpdatingRegressionTest {
             fail("Should throw MathIllegalArgumentException [NOINTERCEPT]");
         }
         MillerUpdatingRegression finalInstance1 = instance;
-        assertDoesNotThrow(() -> {
-            finalInstance1.addObservation(new double[]{ 1.0, 1.0, 1.0}, 0.0);
-        }, "Should throw MathIllegalArgumentException [NOINTERCEPT]");
+        assertDoesNotThrow(() -> finalInstance1.addObservation(new double[]{ 1.0, 1.0, 1.0}, 0.0), "Should throw MathIllegalArgumentException [NOINTERCEPT]");
     }
 
     @Test

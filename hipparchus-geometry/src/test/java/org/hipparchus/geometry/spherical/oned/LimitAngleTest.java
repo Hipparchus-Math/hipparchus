@@ -47,9 +47,7 @@ class LimitAngleTest {
 
     @Test
     void testTooSmallTolerance() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LimitAngle(new S1Point(1.0), false, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LimitAngle(new S1Point(1.0), false, 0.9 * Sphere1D.SMALLEST_TOLERANCE));
     }
 
 }

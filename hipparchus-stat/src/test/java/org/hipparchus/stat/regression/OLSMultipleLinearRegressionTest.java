@@ -512,16 +512,12 @@ class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTe
 
     @Test
     void testNewSampleDataYNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            createRegression().newSampleData(null, new double[][]{});
-        });
+        assertThrows(NullArgumentException.class, () -> createRegression().newSampleData(null, new double[][]{}));
     }
 
     @Test
     void testNewSampleDataXNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            createRegression().newSampleData(new double[]{}, null);
-        });
+        assertThrows(NullArgumentException.class, () -> createRegression().newSampleData(new double[]{}, null));
     }
 
     /*

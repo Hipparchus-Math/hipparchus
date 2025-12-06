@@ -1846,7 +1846,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     @Test
     public void testLinearCombinationReference() {
         final DfpField field25 = new DfpField(25);
-        doTestLinearCombinationReference(x -> field25.newDfp(x), 4.15e-9, 4.21e-9);
+        doTestLinearCombinationReference(field25::newDfp, 4.15e-9, 4.21e-9);
     }
 
     @Test

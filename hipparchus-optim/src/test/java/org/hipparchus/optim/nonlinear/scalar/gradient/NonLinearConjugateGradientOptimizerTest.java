@@ -228,18 +228,16 @@ class NonLinearConjugateGradientOptimizerTest {
         }, new double[] { 2, -9, 2, 2, 1 + epsilon * epsilon, 2});
 
         final Preconditioner preconditioner
-            = new Preconditioner() {
-                    public double[] precondition(double[] point, double[] r) {
-                        double[] d = r.clone();
-                        d[0] /=  72.0;
-                        d[1] /=  30.0;
-                        d[2] /= 314.0;
-                        d[3] /= 260.0;
-                        d[4] /= 2 * (1 + epsilon * epsilon);
-                        d[5] /= 4.0;
-                        return d;
-                    }
-                };
+            = (point, r) -> {
+                double[] d = r.clone();
+                d[0] /=  72.0;
+                d[1] /=  30.0;
+                d[2] /= 314.0;
+                d[3] /= 260.0;
+                d[4] /= 2 * (1 + epsilon * epsilon);
+                d[5] /= 4.0;
+                return d;
+            };
 
         NonLinearConjugateGradientOptimizer optimizer
            = new NonLinearConjugateGradientOptimizer(NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
@@ -455,33 +453,29 @@ class NonLinearConjugateGradientOptimizerTest {
         }
 
         public ObjectiveFunction getObjectiveFunction() {
-            return new ObjectiveFunction(new MultivariateFunction() {
-                    public double value(double[] point) {
-                        double[] y = factors.operate(point);
-                        double sum = 0;
-                        for (int i = 0; i < y.length; ++i) {
-                            double ri = y[i] - target[i];
-                            sum += ri * ri;
-                        }
-                        return sum;
-                    }
-                });
+            return new ObjectiveFunction(point -> {
+                double[] y = factors.operate(point);
+                double sum = 0;
+                for (int i = 0; i < y.length; ++i) {
+                    double ri = y[i] - target[i];
+                    sum += ri * ri;
+                }
+                return sum;
+            });
         }
 
         public ObjectiveFunctionGradient getObjectiveFunctionGradient() {
-            return new ObjectiveFunctionGradient(new MultivariateVectorFunction() {
-                    public double[] value(double[] point) {
-                        double[] r = factors.operate(point);
-                        for (int i = 0; i < r.length; ++i) {
-                            r[i] -= target[i];
-                        }
-                        double[] p = factors.transpose().operate(r);
-                        for (int i = 0; i < p.length; ++i) {
-                            p[i] *= 2;
-                        }
-                        return p;
-                    }
-                });
+            return new ObjectiveFunctionGradient(point -> {
+                double[] r = factors.operate(point);
+                for (int i = 0; i < r.length; ++i) {
+                    r[i] -= target[i];
+                }
+                double[] p = factors.transpose().operate(r);
+                for (int i = 0; i < p.length; ++i) {
+                    p[i] *= 2;
+                }
+                return p;
+            });
         }
     }
 }

@@ -165,30 +165,22 @@ class LoessInterpolatorTest {
 
     @Test
     void testUnequalSizeArguments() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LoessInterpolator().smooth(new double[]{1, 2, 3}, new double[]{1, 2, 3, 4});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LoessInterpolator().smooth(new double[]{1, 2, 3}, new double[]{1, 2, 3, 4}));
     }
 
     @Test
     void testEmptyData() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LoessInterpolator().smooth(new double[]{}, new double[]{});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LoessInterpolator().smooth(new double[]{}, new double[]{}));
     }
 
     @Test
     void testNonStrictlyIncreasing1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LoessInterpolator().smooth(new double[]{4, 3, 1, 2}, new double[]{3, 4, 5, 6});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LoessInterpolator().smooth(new double[]{4, 3, 1, 2}, new double[]{3, 4, 5, 6}));
     }
 
     @Test
     void testNonStrictlyIncreasing2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LoessInterpolator().smooth(new double[]{1, 2, 2, 3}, new double[]{3, 4, 5, 6});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LoessInterpolator().smooth(new double[]{1, 2, 2, 3}, new double[]{3, 4, 5, 6}));
     }
 
     @Test
@@ -256,16 +248,12 @@ class LoessInterpolatorTest {
 
     @Test
     void testCompletelyIncorrectBandwidth1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LoessInterpolator(-0.2, 3, 1e-12);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LoessInterpolator(-0.2, 3, 1e-12));
     }
 
     @Test
     void testCompletelyIncorrectBandwidth2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LoessInterpolator(1.1, 3, 1e-12);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LoessInterpolator(1.1, 3, 1e-12));
     }
 
     @Test

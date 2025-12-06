@@ -153,9 +153,7 @@ public class ParetoDistributionTest extends RealDistributionAbstractTest {
 
     @Test
     void testPreconditions() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new ParetoDistribution(1, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new ParetoDistribution(1, 0));
     }
 
     @Test

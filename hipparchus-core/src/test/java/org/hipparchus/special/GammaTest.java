@@ -153,16 +153,12 @@ class GammaTest {
 
     @Test
     void testRegularizedGammaPMaxNumberOfIterationsExceeded(){
-        assertThrows(MathIllegalStateException.class, () -> {
-            testRegularizedGamma(0.632120558828558, 1.0, 1.0, 1e-15, 1);
-        });
+        assertThrows(MathIllegalStateException.class, () -> testRegularizedGamma(0.632120558828558, 1.0, 1.0, 1e-15, 1));
     }
 
     @Test
     void testRegularizedGammaPMaxNumberOfIterationsExceededField(){
-        assertThrows(MathIllegalStateException.class, () -> {
-            testRegularizedGammaField(0.632120558828558, one, one, 1e-15, 1);
-        });
+        assertThrows(MathIllegalStateException.class, () -> testRegularizedGammaField(0.632120558828558, one, one, 1e-15, 1));
     }
 
     @Test
@@ -661,34 +657,22 @@ class GammaTest {
 
     @Test
     void testInvGamma1pm1Precondition1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.invGamma1pm1(-0.51);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.invGamma1pm1(-0.51));
     }
 
     @Test
     void testInvGamma1pm1Precondition2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.invGamma1pm1(1.51);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.invGamma1pm1(1.51));
     }
 
     @Test
     void testInvGamma1pm1Precondition1Field() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.invGamma1pm1(new Binary64(-0.51));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.invGamma1pm1(new Binary64(-0.51)));
     }
 
     @Test
     void testInvGamma1pm1Precondition2Field() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.invGamma1pm1(new Binary64(1.51));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.invGamma1pm1(new Binary64(1.51)));
     }
 
     private static final double[][] LOG_GAMMA1P_REF = {
@@ -741,34 +725,22 @@ class GammaTest {
 
     @Test
     void testLogGamma1pPrecondition1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.logGamma1p(-0.51);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.logGamma1p(-0.51));
     }
 
     @Test
     void testLogGamma1pPrecondition1Field() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.logGamma1p(new Binary64(-0.51));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.logGamma1p(new Binary64(-0.51)));
     }
 
     @Test
     void testLogGamma1pPrecondition2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.logGamma1p(1.51);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.logGamma1p(1.51));
     }
 
     @Test
     void testLogGamma1pPrecondition2Field() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            Gamma.logGamma1p(new Binary64(1.51));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> Gamma.logGamma1p(new Binary64(1.51)));
     }
 
     /**

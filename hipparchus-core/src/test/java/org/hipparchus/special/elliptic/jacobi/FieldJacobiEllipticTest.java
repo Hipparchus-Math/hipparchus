@@ -271,37 +271,37 @@ class FieldJacobiEllipticTest {
     private <T extends CalculusFieldElement<T>> void doTestInverseCopolarN(final Field<T> field) {
         final double m = 0.7;
         final FieldJacobiElliptic<T> je = build(field, m);
-        doTestInverse(-0.80,  0.80, 100, field, u -> je.valuesN(u).sn(), x -> je.arcsn(x), x -> je.arcsn(x), 1.0e-14);
-        doTestInverse(-1.00,  1.00, 100, field, u -> je.valuesN(u).cn(), x -> je.arccn(x), x -> je.arccn(x), 1.0e-14);
-        doTestInverse( 0.55,  1.00, 100, field, u -> je.valuesN(u).dn(), x -> je.arcdn(x), x -> je.arcdn(x), 1.0e-14);
+        doTestInverse(-0.80,  0.80, 100, field, u -> je.valuesN(u).sn(), je::arcsn, je::arcsn, 1.0e-14);
+        doTestInverse(-1.00,  1.00, 100, field, u -> je.valuesN(u).cn(), je::arccn, je::arccn, 1.0e-14);
+        doTestInverse( 0.55,  1.00, 100, field, u -> je.valuesN(u).dn(), je::arcdn, je::arcdn, 1.0e-14);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInverseCopolarS(final Field<T> field) {
         final double m = 0.7;
         final FieldJacobiElliptic<T> je = build(field, m);
-        doTestInverse(-2.00,  2.00, 100, field, u -> je.valuesS(u).cs(), x -> je.arccs(x), x -> je.arccs(x), 1.0e-14);
-        doTestInverse( 0.55,  2.00, 100, field, u -> je.valuesS(u).ds(), x -> je.arcds(x), x -> je.arcds(x), 1.0e-14);
-        doTestInverse(-2.00, -0.55, 100, field, u -> je.valuesS(u).ds(), x -> je.arcds(x), x -> je.arcds(x), 1.0e-14);
-        doTestInverse( 1.00,  2.00, 100, field, u -> je.valuesS(u).ns(), x -> je.arcns(x), x -> je.arcns(x), 1.0e-11);
-        doTestInverse(-2.00, -1.00, 100, field, u -> je.valuesS(u).ns(), x -> je.arcns(x), x -> je.arcns(x), 1.0e-11);
+        doTestInverse(-2.00,  2.00, 100, field, u -> je.valuesS(u).cs(), je::arccs, je::arccs, 1.0e-14);
+        doTestInverse( 0.55,  2.00, 100, field, u -> je.valuesS(u).ds(), je::arcds, je::arcds, 1.0e-14);
+        doTestInverse(-2.00, -0.55, 100, field, u -> je.valuesS(u).ds(), je::arcds, je::arcds, 1.0e-14);
+        doTestInverse( 1.00,  2.00, 100, field, u -> je.valuesS(u).ns(), je::arcns, je::arcns, 1.0e-11);
+        doTestInverse(-2.00, -1.00, 100, field, u -> je.valuesS(u).ns(), je::arcns, je::arcns, 1.0e-11);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInverseCopolarC(final Field<T> field) {
         final double m = 0.7;
         final FieldJacobiElliptic<T> je = build(field, m);
-        doTestInverse( 1.00,  2.00, 100, field, u -> je.valuesC(u).dc(), x -> je.arcdc(x), x -> je.arcdc(x), 1.0e-14);
-        doTestInverse(-2.00, -1.00, 100, field, u -> je.valuesC(u).dc(), x -> je.arcdc(x), x -> je.arcdc(x), 1.0e-14);
-        doTestInverse( 1.00,  2.00, 100, field, u -> je.valuesC(u).nc(), x -> je.arcnc(x), x -> je.arcnc(x), 1.0e-14);
-        doTestInverse(-2.00, -1.00, 100, field, u -> je.valuesC(u).nc(), x -> je.arcnc(x), x -> je.arcnc(x), 1.0e-14);
-        doTestInverse(-2.00,  2.00, 100, field, u -> je.valuesC(u).sc(), x -> je.arcsc(x), x -> je.arcsc(x), 1.0e-14);
+        doTestInverse( 1.00,  2.00, 100, field, u -> je.valuesC(u).dc(), je::arcdc, je::arcdc, 1.0e-14);
+        doTestInverse(-2.00, -1.00, 100, field, u -> je.valuesC(u).dc(), je::arcdc, je::arcdc, 1.0e-14);
+        doTestInverse( 1.00,  2.00, 100, field, u -> je.valuesC(u).nc(), je::arcnc, je::arcnc, 1.0e-14);
+        doTestInverse(-2.00, -1.00, 100, field, u -> je.valuesC(u).nc(), je::arcnc, je::arcnc, 1.0e-14);
+        doTestInverse(-2.00,  2.00, 100, field, u -> je.valuesC(u).sc(), je::arcsc, je::arcsc, 1.0e-14);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInverseCopolarD(final Field<T> field) {
         final double m = 0.7;
         final FieldJacobiElliptic<T> je = build(field, m);
-        doTestInverse( 1.00,  1.80, 100, field, u -> je.valuesD(u).nd(), x -> je.arcnd(x), x -> je.arcnd(x), 1.0e-14);
-        doTestInverse(-1.80,  1.80, 100, field, u -> je.valuesD(u).sd(), x -> je.arcsd(x), x -> je.arcsd(x), 1.0e-14);
-        doTestInverse(-1.00,  1.00, 100, field, u -> je.valuesD(u).cd(), x -> je.arccd(x), x -> je.arccd(x), 1.0e-14);
+        doTestInverse( 1.00,  1.80, 100, field, u -> je.valuesD(u).nd(), je::arcnd, je::arcnd, 1.0e-14);
+        doTestInverse(-1.80,  1.80, 100, field, u -> je.valuesD(u).sd(), je::arcsd, je::arcsd, 1.0e-14);
+        doTestInverse(-1.00,  1.00, 100, field, u -> je.valuesD(u).cd(), je::arccd, je::arccd, 1.0e-14);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInverse(final double xMin, final double xMax, final int n,

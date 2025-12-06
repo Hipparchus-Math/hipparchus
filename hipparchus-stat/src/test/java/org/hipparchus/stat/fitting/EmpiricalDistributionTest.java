@@ -97,9 +97,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     // MATH-1279
     @Test
     void testPrecondition1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new EmpiricalDistribution(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new EmpiricalDistribution(0));
     }
 
     /**
@@ -251,23 +249,17 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
 
     @Test
     void testLoadNullDoubleArray() {
-        assertThrows(NullArgumentException.class, () -> {
-            new EmpiricalDistribution().load((double[]) null);
-        });
+        assertThrows(NullArgumentException.class, () -> new EmpiricalDistribution().load((double[]) null));
     }
 
     @Test
     void testLoadNullURL() throws Exception {
-        assertThrows(NullArgumentException.class, () -> {
-            new EmpiricalDistribution().load((URL) null);
-        });
+        assertThrows(NullArgumentException.class, () -> new EmpiricalDistribution().load((URL) null));
     }
 
     @Test
     void testLoadNullFile() throws Exception {
-        assertThrows(NullArgumentException.class, () -> {
-            new EmpiricalDistribution().load((File) null);
-        });
+        assertThrows(NullArgumentException.class, () -> new EmpiricalDistribution().load((File) null));
     }
 
     /**
@@ -419,12 +411,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         final double tol = 1.0e-9;
         final BaseAbstractUnivariateIntegrator integrator =
             new IterativeLegendreGaussIntegrator(5, 1.0e-12, 1.0e-10);
-        final UnivariateFunction d = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return distribution.density(x);
-            }
-        };
+        final UnivariateFunction d = x -> distribution.density(x);
         final double[] lower = {0, 5, 1000, 5001, 9995};
         final double[] upper = {5, 12, 1030, 5010, 10000};
         for (int i = 1; i < 5; i++) {

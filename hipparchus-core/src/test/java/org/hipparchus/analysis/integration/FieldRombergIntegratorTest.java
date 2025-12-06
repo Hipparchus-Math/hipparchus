@@ -54,7 +54,7 @@ final class FieldRombergIntegratorTest {
         Binary64 max = new Binary64(FastMath.PI);
         double expected = 2;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
-        double result = integrator.integrate(100, x -> x.sin(), min, max).getReal();
+        double result = integrator.integrate(100, Binary64::sin, min, max).getReal();
         assertTrue(integrator.getEvaluations() < 50);
         assertTrue(integrator.getIterations()  < 10);
         assertEquals(expected, result, tolerance);
@@ -63,7 +63,7 @@ final class FieldRombergIntegratorTest {
         max = new Binary64(0);
         expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
-        result = integrator.integrate(100, x -> x.sin(), min, max).getReal();
+        result = integrator.integrate(100, Binary64::sin, min, max).getReal();
         assertTrue(integrator.getEvaluations() < 50);
         assertTrue(integrator.getIterations()  < 10);
         assertEquals(expected, result, tolerance);
@@ -114,7 +114,7 @@ final class FieldRombergIntegratorTest {
 
         try {
             // bad interval
-            new FieldRombergIntegrator<>(Binary64Field.getInstance()).integrate(1000, x -> x.sin(),
+            new FieldRombergIntegrator<>(Binary64Field.getInstance()).integrate(1000, Binary64::sin,
                                                                                  new Binary64(1), new Binary64(-1));
             fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {

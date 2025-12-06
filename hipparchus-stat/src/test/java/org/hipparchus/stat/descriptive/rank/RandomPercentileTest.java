@@ -679,16 +679,12 @@ public class RandomPercentileTest extends
 
     @Test
     void testMaxValuesRetained0Epsilon() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            RandomPercentile.maxValuesRetained(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> RandomPercentile.maxValuesRetained(0));
     }
 
     @Test
     void testMaxValuesRetained1Epsilon() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            RandomPercentile.maxValuesRetained(1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> RandomPercentile.maxValuesRetained(1));
     }
 
 

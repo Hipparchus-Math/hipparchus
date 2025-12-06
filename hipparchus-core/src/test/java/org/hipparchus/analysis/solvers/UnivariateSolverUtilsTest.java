@@ -41,13 +41,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UnivariateSolverUtilsTest {
 
     private UnivariateFunction sin = new Sin();
-    private CalculusFieldUnivariateFunction<Binary64> fieldSin = x -> x.sin();
+    private CalculusFieldUnivariateFunction<Binary64> fieldSin = Binary64::sin;
 
     @Test
     void testSolveNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            UnivariateSolverUtils.solve(null, 0.0, 4.0);
-        });
+        assertThrows(NullArgumentException.class, () -> UnivariateSolverUtils.solve(null, 0.0, 4.0));
     }
 
     @Test
@@ -92,9 +90,7 @@ class UnivariateSolverUtilsTest {
 
     @Test
     void testSolveNoRoot() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.solve(sin, 1.0, 1.5);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.solve(sin, 1.0, 1.5));
     }
 
     @Test
@@ -137,22 +133,12 @@ class UnivariateSolverUtilsTest {
 
     @Test
     void testBracketLinear(){
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(new UnivariateFunction() {
-                public double value(double x) {
-                    return 1 - x;
-                }
-            }, 1000, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 100);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(x -> 1 - x, 1000, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 100));
     }
 
     @Test
     void testBracketExponential(){
-        double[] result = UnivariateSolverUtils.bracket(new UnivariateFunction() {
-            public double value(double x) {
-                return 1 - x;
-            }
-        }, 1000, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0, 2.0, 10);
+        double[] result = UnivariateSolverUtils.bracket(x -> 1 - x, 1000, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0, 2.0, 10);
         assertTrue(result[0] <= 1);
         assertTrue(result[1] >= 1);
     }
@@ -166,30 +152,22 @@ class UnivariateSolverUtilsTest {
 
     @Test
     void testNullFunction() {
-        assertThrows(NullArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(null, 1.5, 0, 2.0);
-        });
+        assertThrows(NullArgumentException.class, () -> UnivariateSolverUtils.bracket(null, 1.5, 0, 2.0));
     }
 
     @Test
     void testBadInitial() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(sin, 2.5, 0, 2.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(sin, 2.5, 0, 2.0));
     }
 
     @Test
     void testBadAdditive() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(sin, 1.0, -2.0, 3.0, -1.0, 1.0, 100);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(sin, 1.0, -2.0, 3.0, -1.0, 1.0, 100));
     }
 
     @Test
     void testIterationExceeded() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(sin, 1.0, -2.0, 3.0, 1.0e-5, 1.0, 100);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(sin, 1.0, -2.0, 3.0, 1.0e-5, 1.0, 100));
     }
 
     @Test
@@ -257,25 +235,15 @@ class UnivariateSolverUtilsTest {
 
     @Test
     void testFieldBracketLinear(){
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Binary64>() {
-                    public Binary64 value(Binary64 x) {
-                        return x.negate().add(1);
-                    }
-                },
-                new Binary64(1000),
-                new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY),
-                new Binary64(1.0), new Binary64(1.0), 100);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(x -> x.negate().add(1),
+            new Binary64(1000),
+            new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY),
+            new Binary64(1.0), new Binary64(1.0), 100));
     }
 
     @Test
     void testFieldBracketExponential(){
-        Binary64[] result = UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Binary64>() {
-            public Binary64 value(Binary64 x) {
-                return x.negate().add(1);
-            }
-        },
+        Binary64[] result = UnivariateSolverUtils.bracket(x -> x.negate().add(1),
         new Binary64(1000),
         new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY),
         new Binary64(1.0), new Binary64(2.0), 10);
@@ -294,32 +262,24 @@ class UnivariateSolverUtilsTest {
 
     @Test
     void testFieldNullFunction() {
-        assertThrows(NullArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(null, new Binary64(1.5), new Binary64(0), new Binary64(2.0));
-        });
+        assertThrows(NullArgumentException.class, () -> UnivariateSolverUtils.bracket(null, new Binary64(1.5), new Binary64(0), new Binary64(2.0)));
     }
 
     @Test
     void testFieldBadInitial() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(fieldSin, new Binary64(2.5), new Binary64(0), new Binary64(2.0));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(fieldSin, new Binary64(2.5), new Binary64(0), new Binary64(2.0)));
     }
 
     @Test
     void testFieldBadAdditive() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.0), new Binary64(-2.0), new Binary64(3.0),
-                new Binary64(-1.0), new Binary64(1.0), 100);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.0), new Binary64(-2.0), new Binary64(3.0),
+            new Binary64(-1.0), new Binary64(1.0), 100));
     }
 
     @Test
     void testFieldIterationExceeded() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.0), new Binary64(-2.0), new Binary64(3.0),
-                new Binary64(1.0e-5), new Binary64(1.0), 100);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.0), new Binary64(-2.0), new Binary64(3.0),
+            new Binary64(1.0e-5), new Binary64(1.0), 100));
     }
 
     @Test

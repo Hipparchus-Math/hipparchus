@@ -107,56 +107,50 @@ class CircleProblem {
     }
 
     public MultivariateVectorFunction getModelFunction() {
-        return new MultivariateVectorFunction() {
-            public double[] value(double[] params) {
-                final double cx = params[0];
-                final double cy = params[1];
-                final double r = params[2];
+        return params -> {
+            final double cx = params[0];
+            final double cy = params[1];
+            final double r = params[2];
 
-                final double[] model = new double[points.size() * 2];
+            final double[] model = new double[points.size() * 2];
 
-                final double deltaTheta = MathUtils.TWO_PI / resolution;
-                for (int i = 0; i < points.size(); i++) {
-                    final double[] p = points.get(i);
-                    final double px = p[0];
-                    final double py = p[1];
+            final double deltaTheta = MathUtils.TWO_PI / resolution;
+            for (int i = 0; i < points.size(); i++) {
+                final double[] p = points.get(i);
+                final double px = p[0];
+                final double py = p[1];
 
-                    double bestX = 0;
-                    double bestY = 0;
-                    double dMin = Double.POSITIVE_INFINITY;
+                double bestX = 0;
+                double bestY = 0;
+                double dMin = Double.POSITIVE_INFINITY;
 
-                    // Find the angle for which the circle passes closest to the
-                    // current point (using a resolution of 100 points along the
-                    // circumference).
-                    for (double theta = 0; theta <= MathUtils.TWO_PI; theta += deltaTheta) {
-                        final double currentX = cx + r * FastMath.cos(theta);
-                        final double currentY = cy + r * FastMath.sin(theta);
-                        final double dX = currentX - px;
-                        final double dY = currentY - py;
-                        final double d = dX * dX + dY * dY;
-                        if (d < dMin) {
-                            dMin = d;
-                            bestX = currentX;
-                            bestY = currentY;
-                        }
+                // Find the angle for which the circle passes closest to the
+                // current point (using a resolution of 100 points along the
+                // circumference).
+                for (double theta = 0; theta <= MathUtils.TWO_PI; theta += deltaTheta) {
+                    final double currentX = cx + r * FastMath.cos(theta);
+                    final double currentY = cy + r * FastMath.sin(theta);
+                    final double dX = currentX - px;
+                    final double dY = currentY - py;
+                    final double d = dX * dX + dY * dY;
+                    if (d < dMin) {
+                        dMin = d;
+                        bestX = currentX;
+                        bestY = currentY;
                     }
-
-                    final int index = i * 2;
-                    model[index] = bestX;
-                    model[index + 1] = bestY;
                 }
 
-                return model;
+                final int index = i * 2;
+                model[index] = bestX;
+                model[index + 1] = bestY;
             }
+
+            return model;
         };
     }
 
     public MultivariateMatrixFunction getModelFunctionJacobian() {
-        return new MultivariateMatrixFunction() {
-            public double[][] value(double[] point) {
-                return jacobian(point);
-            }
-        };
+        return point -> jacobian(point);
     }
 
     private double[][] jacobian(double[] params) {

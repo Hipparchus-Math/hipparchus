@@ -38,44 +38,32 @@ class StepFunctionTest {
 
     @Test
     void testPreconditions1() {
-        assertThrows(NullArgumentException.class, () -> {
-            new StepFunction(null, new double[]{0, -1, -2});
-        });
+        assertThrows(NullArgumentException.class, () -> new StepFunction(null, new double[]{0, -1, -2}));
     }
 
     @Test
     void testPreconditions2() {
-        assertThrows(NullArgumentException.class, () -> {
-            new StepFunction(new double[]{0, 1}, null);
-        });
+        assertThrows(NullArgumentException.class, () -> new StepFunction(new double[]{0, 1}, null));
     }
 
     @Test
     void testPreconditions3() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new StepFunction(new double[]{0}, new double[]{});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new StepFunction(new double[]{0}, new double[]{}));
     }
 
     @Test
     void testPreconditions4() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new StepFunction(new double[]{}, new double[]{0});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new StepFunction(new double[]{}, new double[]{0}));
     }
 
     @Test
     void testPreconditions5() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new StepFunction(new double[]{0, 1}, new double[]{0, -1, -2});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new StepFunction(new double[]{0, 1}, new double[]{0, -1, -2}));
     }
 
     @Test
     void testPreconditions6() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new StepFunction(new double[]{1, 0, 1}, new double[]{0, -1, -2});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new StepFunction(new double[]{1, 0, 1}, new double[]{0, -1, -2}));
     }
 
     @Test

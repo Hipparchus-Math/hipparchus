@@ -72,7 +72,7 @@ final class FieldMidPointIntegratorTest {
         Binary64 max = new Binary64(FastMath.PI);
         double expected = 2;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
-        double result = integrator.integrate(Integer.MAX_VALUE, x -> x.sin(), min, max).getReal();
+        double result = integrator.integrate(Integer.MAX_VALUE, Binary64::sin, min, max).getReal();
         assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
         assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
         assertEquals(expected, result, tolerance);
@@ -81,7 +81,7 @@ final class FieldMidPointIntegratorTest {
         max = new Binary64(0);
         expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
-        result = integrator.integrate(Integer.MAX_VALUE, x -> x.sin(), min, max).getReal();
+        result = integrator.integrate(Integer.MAX_VALUE, Binary64::sin, min, max).getReal();
         assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
         assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
         assertEquals(expected, result, tolerance);
@@ -134,7 +134,7 @@ final class FieldMidPointIntegratorTest {
 
         try {
             // bad interval
-            new FieldMidPointIntegrator<>(Binary64Field.getInstance()).integrate(1000, x -> x.sin(),
+            new FieldMidPointIntegrator<>(Binary64Field.getInstance()).integrate(1000, Binary64::sin,
                                                                                   new Binary64(1), new Binary64(-1));
             fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {

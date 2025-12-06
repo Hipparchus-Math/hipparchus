@@ -91,9 +91,7 @@ class QuaternionTest {
 
     @Test
     void testWrongDimension() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Quaternion(new double[]{1, 2});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Quaternion(new double[]{1, 2}));
     }
 
     @Test

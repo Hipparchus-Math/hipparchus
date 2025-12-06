@@ -155,10 +155,8 @@ public abstract class CertifiedDataAbstractTest {
             }
         } catch (NoSuchMethodException nsme) {
             // ignored
-        } catch (InvocationTargetException ite) {
+        } catch (InvocationTargetException | IllegalAccessException ite) {
             fail(ite.getMessage());
-        } catch (IllegalAccessException iae) {
-            fail(iae.getMessage());
         }
         return null;
     }

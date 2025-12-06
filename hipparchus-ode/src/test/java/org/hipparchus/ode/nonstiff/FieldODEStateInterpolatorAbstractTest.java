@@ -375,8 +375,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         public int getDimension() {
             return 2;
         }
-        public void init(final T t0, final T[] y0, final T finalTime) {
-        }
+
         public T[] computeDerivatives(final T t, final T[] y) {
             T[] yDot = MathArrays.buildArray(field, 2);
             yDot[0] = y[1];

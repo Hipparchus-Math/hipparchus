@@ -74,30 +74,22 @@ public class MathArraysTest {
 
     @Test
     void testEbeAddPrecondition() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            MathArrays.ebeAdd(new double[3], new double[4]);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> MathArrays.ebeAdd(new double[3], new double[4]));
     }
 
     @Test
     void testEbeSubtractPrecondition() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            MathArrays.ebeSubtract(new double[3], new double[4]);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> MathArrays.ebeSubtract(new double[3], new double[4]));
     }
 
     @Test
     void testEbeMultiplyPrecondition() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            MathArrays.ebeMultiply(new double[3], new double[4]);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> MathArrays.ebeMultiply(new double[3], new double[4]));
     }
 
     @Test
     void testEbeDividePrecondition() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            MathArrays.ebeDivide(new double[3], new double[4]);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> MathArrays.ebeDivide(new double[3], new double[4]));
     }
 
     @Test
@@ -495,10 +487,8 @@ public class MathArraysTest {
 
     @Test
     void testCheckEqualLength1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            MathArrays.checkEqualLength(new double[]{1, 2, 3},
-                new double[]{1, 2, 3, 4});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> MathArrays.checkEqualLength(new double[]{1, 2, 3},
+            new double[]{1, 2, 3, 4}));
     }
 
     @Test
@@ -1339,9 +1329,7 @@ public class MathArraysTest {
 
     @Test
     void testUniqueNullArgument() {
-        assertThrows(NullPointerException.class, () -> {
-            MathArrays.unique(null);
-        });
+        assertThrows(NullPointerException.class, () -> MathArrays.unique(null));
     }
 
     @Test

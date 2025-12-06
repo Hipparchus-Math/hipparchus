@@ -235,16 +235,12 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
 
     @Test
     public void testNextIntPrecondition1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            generator.nextInt(-1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> generator.nextInt(-1));
     }
 
     @Test
     public void testNextIntPrecondition2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            generator.nextInt(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> generator.nextInt(0));
     }
 
     @Test

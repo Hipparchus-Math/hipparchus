@@ -38,9 +38,7 @@ class Sphere1Test {
 
     @Test
     void testSubSpace() {
-        assertThrows(Sphere1D.NoSubSpaceException.class, () -> {
-            Sphere1D.getInstance().getSubSpace();
-        });
+        assertThrows(Sphere1D.NoSubSpaceException.class, () -> Sphere1D.getInstance().getSubSpace());
     }
 
     @Test

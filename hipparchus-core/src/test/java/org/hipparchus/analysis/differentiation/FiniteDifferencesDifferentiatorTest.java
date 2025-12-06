@@ -46,16 +46,12 @@ class FiniteDifferencesDifferentiatorTest {
 
     @Test
     void testWrongNumberOfPoints() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FiniteDifferencesDifferentiator(1, 1.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FiniteDifferencesDifferentiator(1, 1.0));
     }
 
     @Test
     void testWrongStepSize() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FiniteDifferencesDifferentiator(3, 0.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FiniteDifferencesDifferentiator(3, 0.0));
     }
 
     @Test
@@ -73,12 +69,7 @@ class FiniteDifferencesDifferentiatorTest {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(5, 0.01);
         UnivariateDifferentiableFunction f =
-                differentiator.differentiate(new UnivariateFunction() {
-                    @Override
-                    public double value(double x) {
-                        return 42.0;
-                    }
-                });
+                differentiator.differentiate((UnivariateFunction) x -> 42.0);
         DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
             DerivativeStructure y = f.value(factory.variable(0, x));
@@ -93,12 +84,7 @@ class FiniteDifferencesDifferentiatorTest {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(5, 0.01);
         UnivariateDifferentiableFunction f =
-                differentiator.differentiate(new UnivariateFunction() {
-                    @Override
-                    public double value(double x) {
-                        return 2 - 3 * x;
-                    }
-                });
+                differentiator.differentiate((UnivariateFunction) x -> 2 - 3 * x);
         DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
             DerivativeStructure y = f.value(factory.variable(0, x));
@@ -184,13 +170,10 @@ class FiniteDifferencesDifferentiatorTest {
     void testWrongOrder() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             UnivariateDifferentiableFunction f =
-                new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateFunction() {
-                    @Override
-                    public double value(double x) {
-                        // this exception should not be thrown because wrong order
-                        // should be detected before function call
-                        throw MathRuntimeException.createInternalError();
-                    }
+                new FiniteDifferencesDifferentiator(3, 0.01).differentiate((UnivariateFunction) x -> {
+                    // this exception should not be thrown because wrong order
+                    // should be detected before function call
+                    throw MathRuntimeException.createInternalError();
                 });
             f.value(new DSFactory(1, 3).variable(0, 1.0));
         });
@@ -200,13 +183,10 @@ class FiniteDifferencesDifferentiatorTest {
     void testWrongOrderVector() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             UnivariateDifferentiableVectorFunction f =
-                new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateVectorFunction() {
-                    @Override
-                    public double[] value(double x) {
-                        // this exception should not be thrown because wrong order
-                        // should be detected before function call
-                        throw MathRuntimeException.createInternalError();
-                    }
+                new FiniteDifferencesDifferentiator(3, 0.01).differentiate((UnivariateVectorFunction) x -> {
+                    // this exception should not be thrown because wrong order
+                    // should be detected before function call
+                    throw MathRuntimeException.createInternalError();
                 });
             f.value(new DSFactory(1, 3).variable(0, 1.0));
         });
@@ -216,13 +196,10 @@ class FiniteDifferencesDifferentiatorTest {
     void testWrongOrderMatrix() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             UnivariateDifferentiableMatrixFunction f =
-                new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateMatrixFunction() {
-                    @Override
-                    public double[][] value(double x) {
-                        // this exception should not be thrown because wrong order
-                        // should be detected before function call
-                        throw MathRuntimeException.createInternalError();
-                    }
+                new FiniteDifferencesDifferentiator(3, 0.01).differentiate((UnivariateMatrixFunction) x -> {
+                    // this exception should not be thrown because wrong order
+                    // should be detected before function call
+                    throw MathRuntimeException.createInternalError();
                 });
             f.value(new DSFactory(1, 3).variable(0, 1.0));
         });
@@ -230,27 +207,22 @@ class FiniteDifferencesDifferentiatorTest {
 
     @Test
     void testTooLargeStep() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FiniteDifferencesDifferentiator(3, 2.5, 0.0, 1.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FiniteDifferencesDifferentiator(3, 2.5, 0.0, 1.0));
     }
 
     @Test
     void testBounds() {
 
         final double slope = 2.5;
-        UnivariateFunction f = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                if (x < 0) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
-                                                           x, 0);
-                } else if (x > 1) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
-                                                           x, 1);
-                } else {
-                    return slope * x;
-                }
+        UnivariateFunction f = x -> {
+            if (x < 0) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
+                                                       x, 0);
+            } else if (x > 1) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
+                                                       x, 1);
+            } else {
+                return slope * x;
             }
         };
 
@@ -301,12 +273,7 @@ class FiniteDifferencesDifferentiatorTest {
 
         UnivariateFunctionDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(9, 1.0 / 32, 0.0, Double.POSITIVE_INFINITY);
-        UnivariateDifferentiableFunction sqrt = differentiator.differentiate(new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return FastMath.sqrt(x);
-            }
-        });
+        UnivariateDifferentiableFunction sqrt = differentiator.differentiate(x -> FastMath.sqrt(x));
 
         // we are able to compute derivative near 0, but the accuracy is much poorer there
         DSFactory factory = new DSFactory(1, 1);
@@ -325,14 +292,7 @@ class FiniteDifferencesDifferentiatorTest {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(7, 0.01);
         UnivariateDifferentiableVectorFunction f =
-                differentiator.differentiate(new UnivariateVectorFunction() {
-
-            @Override
-            public double[] value(double x) {
-                return new double[] { FastMath.cos(x), FastMath.sin(x) };
-            }
-
-        });
+                differentiator.differentiate((UnivariateVectorFunction) x -> new double[] { FastMath.cos(x), FastMath.sin(x) });
 
         DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
@@ -362,17 +322,10 @@ class FiniteDifferencesDifferentiatorTest {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(7, 0.01);
         UnivariateDifferentiableMatrixFunction f =
-                differentiator.differentiate(new UnivariateMatrixFunction() {
-
-            @Override
-            public double[][] value(double x) {
-                return new double[][] {
+                differentiator.differentiate((UnivariateMatrixFunction) x -> new double[][] {
                     { FastMath.cos(x),  FastMath.sin(x)  },
                     { FastMath.cosh(x), FastMath.sinh(x) }
-                };
-            }
-
-        });
+                });
 
         DSFactory factory = new DSFactory(1, 2);
         for (double x = -1; x < 1; x += 0.02) {

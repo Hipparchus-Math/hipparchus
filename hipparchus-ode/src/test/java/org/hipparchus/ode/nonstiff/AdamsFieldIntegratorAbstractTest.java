@@ -355,26 +355,23 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
         FieldODEIntegrator<T> integrator = createIntegrator(field, 6, 0.001, 1.0, 1.0e-12, 1.0e-12);
         final double[] max = new double[2];
-        integrator.addStepHandler(new FieldODEStepHandler<T>() {
-            @Override
-            public void handleStep(FieldODEStateInterpolator<T> interpolator) {
-                for (int i = 0; i <= 10; ++i) {
-                    T tPrev = interpolator.getPreviousState().getTime();
-                    T tCurr = interpolator.getCurrentState().getTime();
-                    T t     = tPrev.multiply(10 - i).add(tCurr.multiply(i)).divide(10);
-                    FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
-                    assertEquals(2, state.getPrimaryStateDimension());
-                    assertEquals(1, state.getNumberOfSecondaryStates());
-                    assertEquals(2, state.getSecondaryStateDimension(0));
-                    assertEquals(1, state.getSecondaryStateDimension(1));
-                    assertEquals(3, state.getCompleteStateDimension());
-                    max[0] = FastMath.max(max[0],
-                                          t.sin().subtract(state.getPrimaryState()[0]).norm());
-                    max[0] = FastMath.max(max[0],
-                                          t.cos().subtract(state.getPrimaryState()[1]).norm());
-                    max[1] = FastMath.max(max[1],
-                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm());
-                }
+        integrator.addStepHandler(interpolator -> {
+            for (int i = 0; i <= 10; ++i) {
+                T tPrev = interpolator.getPreviousState().getTime();
+                T tCurr = interpolator.getCurrentState().getTime();
+                T t     = tPrev.multiply(10 - i).add(tCurr.multiply(i)).divide(10);
+                FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
+                assertEquals(2, state.getPrimaryStateDimension());
+                assertEquals(1, state.getNumberOfSecondaryStates());
+                assertEquals(2, state.getSecondaryStateDimension(0));
+                assertEquals(1, state.getSecondaryStateDimension(1));
+                assertEquals(3, state.getCompleteStateDimension());
+                max[0] = FastMath.max(max[0],
+                                      t.sin().subtract(state.getPrimaryState()[0]).norm());
+                max[0] = FastMath.max(max[0],
+                                      t.cos().subtract(state.getPrimaryState()[1]).norm());
+                max[1] = FastMath.max(max[1],
+                                      field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm());
             }
         });
 

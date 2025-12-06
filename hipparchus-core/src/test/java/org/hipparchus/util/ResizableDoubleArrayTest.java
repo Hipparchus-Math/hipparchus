@@ -513,9 +513,7 @@ class ResizableDoubleArrayTest {
 
         assertEquals(11, da.getNumElements(), "Number of elements should be 11");
 
-        assertDoesNotThrow(() -> {
-            da.discardMostRecentElements(10);
-        }, "Trying to discard a negative number of element is not allowed");
+        assertDoesNotThrow(() -> da.discardMostRecentElements(10), "Trying to discard a negative number of element is not allowed");
 
         da.substituteMostRecentElement(24);
 

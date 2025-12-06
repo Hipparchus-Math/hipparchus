@@ -135,22 +135,18 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
                 .target(new double[]{1})
                 .weight(new DiagonalMatrix(new double[]{1}))
                 .start(new double[]{3})
-                .model(new MultivariateJacobianFunction() {
-                    public Pair<RealVector, RealMatrix> value(final RealVector point) {
-                        return new Pair<RealVector, RealMatrix>(
-                                new ArrayRealVector(
-                                        new double[]{
-                                                FastMath.pow(point.getEntry(0), 4)
-                                        },
-                                        false),
-                                new Array2DRowRealMatrix(
-                                        new double[][]{
-                                                {0.25 * FastMath.pow(point.getEntry(0), 3)}
-                                        },
-                                        false)
-                        );
-                    }
-                })
+                .model(point -> new Pair<RealVector, RealMatrix>(
+                        new ArrayRealVector(
+                                new double[]{
+                                        FastMath.pow(point.getEntry(0), 4)
+                                },
+                                false),
+                        new Array2DRowRealMatrix(
+                                new double[][]{
+                                        {0.25 * FastMath.pow(point.getEntry(0), 3)}
+                                },
+                                false)
+                ))
                 .build();
 
         Optimum optimum = optimizer.optimize(lsp);
@@ -249,9 +245,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
             optimizer.optimize(problem.getBuilder().build());
 
             customFail(optimizer);
-        } catch (MathIllegalArgumentException miae) {
-            // expected
-        } catch (MathIllegalStateException mise) {
+        } catch (MathIllegalArgumentException | MathIllegalStateException miae) {
             // expected
         }
     }
@@ -555,16 +549,14 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
         final boolean[] checked = {false};
 
         final LeastSquaresBuilder builder = problem.getBuilder()
-                .checker(new ConvergenceChecker<Evaluation>() {
-                    public boolean converged(int iteration, Evaluation previous, Evaluation current) {
-                        assertThat(
-                                previous.getPoint(),
-                                not(sameInstance(current.getPoint())));
-                        assertArrayEquals(new double[3], previous.getPoint().toArray(), 0);
-                        assertArrayEquals(new double[] {1, 2, 3}, current.getPoint().toArray(), TOl);
-                        checked[0] = true;
-                        return true;
-                    }
+                .checker((iteration, previous, current) -> {
+                    assertThat(
+                            previous.getPoint(),
+                            not(sameInstance(current.getPoint())));
+                    assertArrayEquals(new double[3], previous.getPoint().toArray(), 0);
+                    assertArrayEquals(new double[] {1, 2, 3}, current.getPoint().toArray(), TOl);
+                    checked[0] = true;
+                    return true;
                 });
         optimizer.optimize(builder.build());
 
@@ -585,19 +577,11 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
         }
 
         public MultivariateVectorFunction getModelFunction() {
-            return new MultivariateVectorFunction() {
-                public double[] value(double[] params) {
-                    return factors.operate(params);
-                }
-            };
+            return params -> factors.operate(params);
         }
 
         public MultivariateMatrixFunction getModelFunctionJacobian() {
-            return new MultivariateMatrixFunction() {
-                public double[][] value(double[] params) {
-                    return factors.getData();
-                }
-            };
+            return params -> factors.getData();
         }
 
         public LeastSquaresBuilder getBuilder() {

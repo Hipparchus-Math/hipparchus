@@ -34,12 +34,7 @@ class SqrtTest {
     @Test
     void testComparison() {
        final Sqrt s = new Sqrt();
-       final UnivariateFunction f = new UnivariateFunction() {
-           @Override
-           public double value(double x) {
-               return FastMath.sqrt(x);
-           }
-       };
+       final UnivariateFunction f = x -> FastMath.sqrt(x);
 
        for (double x = 1e-30; x < 1e10; x *= 2) {
            final double fX = f.value(x);
@@ -51,12 +46,7 @@ class SqrtTest {
     @Test
     void testDerivativeComparison() {
        final UnivariateDifferentiableFunction sPrime = new Sqrt();
-       final UnivariateFunction f = new UnivariateFunction() {
-               @Override
-            public double value(double x) {
-                   return 1 / (2 * FastMath.sqrt(x));
-               }
-           };
+       final UnivariateFunction f = x -> 1 / (2 * FastMath.sqrt(x));
 
        DSFactory factory = new DSFactory(1, 1);
        for (double x = 1e-30; x < 1e10; x *= 2) {

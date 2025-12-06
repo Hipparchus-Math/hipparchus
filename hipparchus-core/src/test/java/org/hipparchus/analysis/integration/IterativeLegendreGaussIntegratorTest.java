@@ -133,12 +133,7 @@ class IterativeLegendreGaussIntegratorTest {
     @Test
     void testIssue464() {
         final double value = 0.2;
-        UnivariateFunction f = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return (x >= 0 && x <= 5) ? value : 0.0;
-            }
-        };
+        UnivariateFunction f = x -> (x >= 0 && x <= 5) ? value : 0.0;
         IterativeLegendreGaussIntegrator gauss
             = new IterativeLegendreGaussIntegrator(5, 3, 100);
 

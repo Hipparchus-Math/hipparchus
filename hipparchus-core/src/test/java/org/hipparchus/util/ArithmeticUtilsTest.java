@@ -465,9 +465,7 @@ class ArithmeticUtilsTest {
 
     @Test
     void testPowIntOverflow() {
-        assertThrows(MathRuntimeException.class, () -> {
-            ArithmeticUtils.pow(21, 8);
-        });
+        assertThrows(MathRuntimeException.class, () -> ArithmeticUtils.pow(21, 8));
     }
 
     @Test
@@ -482,9 +480,7 @@ class ArithmeticUtilsTest {
 
     @Test
     void testPowNegativeIntOverflow() {
-        assertThrows(MathRuntimeException.class, () -> {
-            ArithmeticUtils.pow(-21, 8);
-        });
+        assertThrows(MathRuntimeException.class, () -> ArithmeticUtils.pow(-21, 8));
     }
 
     @Test
@@ -517,9 +513,7 @@ class ArithmeticUtilsTest {
 
     @Test
     void testPowLongOverflow() {
-        assertThrows(MathRuntimeException.class, () -> {
-            ArithmeticUtils.pow(21, 15);
-        });
+        assertThrows(MathRuntimeException.class, () -> ArithmeticUtils.pow(21, 15));
     }
 
     @Test
@@ -534,9 +528,7 @@ class ArithmeticUtilsTest {
 
     @Test
     void testPowNegativeLongOverflow() {
-        assertThrows(MathRuntimeException.class, () -> {
-            ArithmeticUtils.pow(-21L, 15);
-        });
+        assertThrows(MathRuntimeException.class, () -> ArithmeticUtils.pow(-21L, 15));
     }
 
     @Test
