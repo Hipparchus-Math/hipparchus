@@ -21,8 +21,13 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.analysis.CalculusFieldTrivariateFunction;
+import org.hipparchus.analysis.FieldTrivariateFunction;
 import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
@@ -131,12 +136,13 @@ public final class TricubicInterpolatorTest {
         double[] zval = new double[] {-12, -8, -5.5, -3, 0, 2.5};
 
         // Function values
-        TrivariateFunction f = new TrivariateFunction() {
-                @Override
-                public double value(double x, double y, double z) {
-                    return 2 * x - 3 * y - 4 * z + 5;
-                }
-            };
+        TrivariateFunction f = (x, y, z) -> 2 * x - 3 * y - 4 * z + 5;
+        CalculusFieldTrivariateFunction<Binary64> fT = new FieldTrivariateFunction() {
+            @Override
+            public <T extends CalculusFieldElement<T>> T value(T x, T y, T z) {
+                return x.twice().add(y.multiply(-3)).add(z.multiply(-4)).add(5);
+            }
+        }.toCalculusFieldTrivariateFunction(Binary64Field.getInstance());
 
         double[][][] fval = new double[xval.length][yval.length][zval.length];
 
@@ -148,12 +154,14 @@ public final class TricubicInterpolatorTest {
             }
         }
 
-        TrivariateFunction tcf = new TricubicInterpolator().interpolate(xval,
-                                                                        yval,
-                                                                        zval,
-                                                                        fval);
+        TricubicInterpolatingFunction tcf = new TricubicInterpolator().interpolate(xval,
+                yval,
+                zval,
+                fval);
         double x, y, z;
         double expected, result;
+        Binary64 x64, y64, z64;
+        Binary64 expectedT, resultT;
 
         x = 4;
         y = -3;
@@ -162,12 +170,26 @@ public final class TricubicInterpolatorTest {
         result = tcf.value(x, y, z);
         assertEquals(expected, result, 1e-15, "On sample point");
 
+        x64 = new Binary64(x);
+        y64 = new Binary64(y);
+        z64 = new Binary64(z);
+        expectedT = fT.value(x64, y64, z64);
+        resultT = tcf.value(x64, y64, z64);
+        assertEquals(expectedT.getReal(), resultT.getReal(), 1e-15, "On sample point with CalculusFieldElement");
+
         x = 4.5;
         y = -1.5;
         z = -4.25;
         expected = f.value(x, y, z);
         result = tcf.value(x, y, z);
         assertEquals(expected, result, 1e-14, "Half-way between sample points (middle of the patch)");
+
+        x64 = new Binary64(x);
+        y64 = new Binary64(y);
+        z64 = new Binary64(z);
+        expectedT = fT.value(x64, y64, z64);
+        resultT = tcf.value(x64, y64, z64);
+        assertEquals(expectedT.getReal(), resultT.getReal(), 1e-14, "Half-way between sample points (middle of the patch) with CalculusFieldElement");
     }
 
     /**
@@ -189,12 +211,9 @@ public final class TricubicInterpolatorTest {
         final double ky = 1;
 
         // Function values
-        TrivariateFunction f = new TrivariateFunction() {
-                @Override
-                public double value(double x, double y, double z) {
-                    return a * FastMath.cos(omega * z - kx * x - ky * y);
-                }
-            };
+        TrivariateFunction f = (x, y, z) -> a * FastMath.cos(omega * z - kx * x - ky * y);
+        CalculusFieldTrivariateFunction<Binary64> fT = (x, y, z) ->
+            z.multiply(omega).subtract(x.multiply(kx)).subtract(y.multiply(ky)).cos().multiply(a);
 
         double[][][] fval = new double[xval.length][yval.length][zval.length];
         for (int i = 0; i < xval.length; i++) {
@@ -205,13 +224,15 @@ public final class TricubicInterpolatorTest {
             }
         }
 
-        TrivariateFunction tcf = new TricubicInterpolator().interpolate(xval,
-                                                                        yval,
-                                                                        zval,
-                                                                        fval);
+        TricubicInterpolatingFunction tcf = new TricubicInterpolator().interpolate(xval,
+                yval,
+                zval,
+                fval);
 
         double x, y, z;
         double expected, result;
+        Binary64 x64, y64, z64;
+        Binary64 expectedT, resultT;
 
         x = 4;
         y = -3;
@@ -220,11 +241,25 @@ public final class TricubicInterpolatorTest {
         result = tcf.value(x, y, z);
         assertEquals(expected, result, 1e-14, "On sample point");
 
+        x64 = new Binary64(x);
+        y64 = new Binary64(y);
+        z64 = new Binary64(z);
+        expectedT = fT.value(x64, y64, z64);
+        resultT = tcf.value(x64, y64, z64);
+        assertEquals(expectedT.getReal(), resultT.getReal(), 1e-14, "On sample point with CalculusFieldElement");
+
         x = 4.5;
         y = -1.5;
         z = -4.25;
         expected = f.value(x, y, z);
         result = tcf.value(x, y, z);
         assertEquals(expected, result, 1e-1, "Half-way between sample points (middle of the patch)"); // XXX Too high tolerance!
+
+        x64 = new Binary64(x);
+        y64 = new Binary64(y);
+        z64 = new Binary64(z);
+        expectedT = fT.value(x64, y64, z64);
+        resultT = tcf.value(x64, y64, z64);
+        assertEquals(expectedT.getReal(), resultT.getReal(), 1e-1, "Half-way between sample points (middle of the patch) with CalculusFieldElement"); // XXX Too high tolerance!
     }
 }
