@@ -155,6 +155,7 @@ public class BicubicInterpolatingFunction
 
     /**
      * {@inheritDoc}
+     * @since 4.1
      */
     @Override
     public <T extends CalculusFieldElement<T>> T value(T x, T y)
@@ -327,6 +328,7 @@ class BicubicFunction implements BivariateFunction, FieldBivariateFunction {
 
     /**
      * {@inheritDoc}
+     * @since 4.1
      */
     @Override
     public <T extends CalculusFieldElement<T>> T value(T x, T y) {
@@ -351,6 +353,7 @@ class BicubicFunction implements BivariateFunction, FieldBivariateFunction {
      * @param pY Powers of the y-coordinate.
      * @param coeff Spline coefficients.
      * @return the interpolated value.
+     * @since 4.1
      */
     private <T extends CalculusFieldElement<T>> T apply(T[] pX, T[] pY, double[][] coeff) {
         T result = pX[0].getField().getZero();

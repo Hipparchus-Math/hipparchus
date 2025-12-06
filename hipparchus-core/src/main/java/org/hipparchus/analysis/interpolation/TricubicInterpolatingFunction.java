@@ -369,6 +369,7 @@ public class TricubicInterpolatingFunction
      * {@inheritDoc}
      *
      * @throws MathIllegalArgumentException if any of the variables is outside its interpolation range.
+     * @since 4.1
      */
     @Override
     public <T extends CalculusFieldElement<T>> T value(T x, T y, T z) throws MathIllegalArgumentException {
@@ -571,6 +572,7 @@ class TricubicFunction
      * @return the interpolated value.
      * @throws MathIllegalArgumentException if {@code x}, {@code y} or
      * {@code z} are not in the interval {@code [0, 1]}.
+     * @since 4.1
      */
     @Override
     public <T extends CalculusFieldElement<T>> T value(T x, T y, T z) throws MathIllegalArgumentException {
