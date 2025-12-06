@@ -31,6 +31,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
+import static org.hipparchus.util.MathArrays.buildArray;
+
 /**
  * Function that implements the
  * <a href="http://en.wikipedia.org/wiki/Bicubic_interpolation">
@@ -337,11 +339,19 @@ class BicubicFunction implements BivariateFunction, FieldBivariateFunction {
 
         final T x2 = x.multiply(x);
         final T x3 = x2.multiply(x);
-        final T[] pX = asArray(x.getField().getOne(), x, x2, x3);
+        final T[] pX = buildArray(x.getField(), 4);
+        pX[0] = x.getField().getOne();
+        pX[1] = x;
+        pX[2] = x2;
+        pX[3] = x3;
 
         final T y2 = y.multiply(y);
         final T y3 = y2.multiply(y);
-        final T[] pY = asArray(y.getField().getOne(), y, y2, y3);
+        final T[] pY = buildArray(y.getField(), 4);
+        pY[0] = y.getField().getOne();
+        pY[1] = y;
+        pY[2] = y2;
+        pY[3] = y3;
 
         return apply(pX, pY, a);
     }
@@ -364,10 +374,4 @@ class BicubicFunction implements BivariateFunction, FieldBivariateFunction {
 
         return result;
     }
-
-    @SafeVarargs
-    private static <T extends CalculusFieldElement<T>> T[] asArray(T... elements) {
-        return elements;
-    }
-
 }
