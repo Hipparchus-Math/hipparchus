@@ -91,12 +91,7 @@ final class BicubicInterpolatorTest {
      */
     @Test
     void testPlane() {
-        BivariateFunction f = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 2 * x - 3 * y + 5;
-                }
-            };
+        BivariateFunction f = (x, y) -> 2 * x - 3 * y + 5;
         CalculusFieldBivariateFunction<Binary64> fT = new FieldBivariateFunction() {
             @Override
             public <T extends CalculusFieldElement<T>> T value(T x, T y) {
@@ -118,12 +113,7 @@ final class BicubicInterpolatorTest {
      */
     @Test
     void testParaboloid() {
-        BivariateFunction f = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 2 * x * x - 3 * y * y + 4 * x * y - 5;
-                }
-            };
+        BivariateFunction f = (x, y) -> 2 * x * x - 3 * y * y + 4 * x * y - 5;
         CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> x.multiply(x).twice()
                 .add(y.multiply(y).multiply(-3))
                 .add(x.multiply(y).multiply(4))

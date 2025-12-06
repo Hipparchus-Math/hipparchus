@@ -142,16 +142,12 @@ class DSCompilerTest {
 
     @Test
     void testIncompatibleParams() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            DSCompiler.getCompiler(3, 2).checkCompatibility(DSCompiler.getCompiler(4, 2));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> DSCompiler.getCompiler(3, 2).checkCompatibility(DSCompiler.getCompiler(4, 2)));
     }
 
     @Test
     void testIncompatibleOrder() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            DSCompiler.getCompiler(3, 3).checkCompatibility(DSCompiler.getCompiler(3, 2));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> DSCompiler.getCompiler(3, 3).checkCompatibility(DSCompiler.getCompiler(3, 2)));
     }
 
     @Test

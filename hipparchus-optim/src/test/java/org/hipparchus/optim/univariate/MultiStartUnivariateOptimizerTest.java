@@ -114,14 +114,12 @@ class MultiStartUnivariateOptimizerTest {
 
     @Test
     void testBadFunction() {
-        UnivariateFunction f = new UnivariateFunction() {
-                public double value(double x) {
-                    if (x < 0) {
-                        throw new LocalException();
-                    }
-                    return 0;
-                }
-            };
+        UnivariateFunction f = x -> {
+            if (x < 0) {
+                throw new LocalException();
+            }
+            return 0;
+        };
         UnivariateOptimizer underlying = new BrentOptimizer(1e-9, 1e-14);
         JDKRandomGenerator g = new JDKRandomGenerator();
         g.setSeed(4312000053L);

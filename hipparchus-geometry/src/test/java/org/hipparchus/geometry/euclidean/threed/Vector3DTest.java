@@ -174,9 +174,7 @@ class Vector3DTest {
 
     @Test
     void testWrongDimension() throws MathIllegalArgumentException {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Vector3D(new double[]{2, 5});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Vector3D(new double[]{2, 5}));
     }
 
     @Test

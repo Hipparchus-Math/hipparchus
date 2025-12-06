@@ -2174,14 +2174,9 @@ class FieldCloseEventsTest {
 
         @Override
         public FieldODEEventHandler<Binary64> getHandler() {
-            return new FieldODEEventHandler<Binary64>() {
-                @Override
-                public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
-                                            FieldODEEventDetector<Binary64> detector,
-                                            boolean increasing) {
-                    events.add(new Event(state, detector, increasing));
-                    return action;
-                }
+            return (state, detector, increasing) -> {
+                events.add(new Event(state, detector, increasing));
+                return action;
             };
         }
 

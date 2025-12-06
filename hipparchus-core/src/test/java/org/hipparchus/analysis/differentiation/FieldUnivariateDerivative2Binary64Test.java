@@ -41,6 +41,6 @@ class FieldUnivariateDerivative2Binary64Test extends FieldUnivariateDerivative2A
     @Override
     @Test
     public void testLinearCombinationReference() {
-        doTestLinearCombinationReference(x -> build(x), 5.0e-16, 1.0);
+        doTestLinearCombinationReference(this::build, 5.0e-16, 1.0);
     }
 }

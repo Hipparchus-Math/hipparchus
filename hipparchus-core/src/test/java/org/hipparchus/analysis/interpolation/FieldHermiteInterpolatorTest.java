@@ -263,16 +263,12 @@ class FieldHermiteInterpolatorTest {
 
     @Test
     void testEmptySampleValue() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FieldHermiteInterpolator<BigFraction>().value(BigFraction.ZERO);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FieldHermiteInterpolator<BigFraction>().value(BigFraction.ZERO));
     }
 
     @Test
     void testEmptySampleDerivative() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FieldHermiteInterpolator<BigFraction>().derivatives(BigFraction.ZERO, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FieldHermiteInterpolator<BigFraction>().derivatives(BigFraction.ZERO, 1));
     }
 
     @Test

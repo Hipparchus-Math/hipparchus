@@ -44,16 +44,12 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
 
     @Test
     void testPreconditions1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new ZipfDistribution(0, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new ZipfDistribution(0, 1));
     }
 
     @Test
     void testPreconditions2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new ZipfDistribution(1, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new ZipfDistribution(1, 0));
     }
 
     //-------------- Implementations for abstract methods -----------------------

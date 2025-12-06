@@ -34,7 +34,7 @@ class FieldFunctionsTest {
             }
         };
         CalculusFieldUnivariateFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateFunction(Binary64Field.getInstance());
-        CalculusFieldUnivariateFunction<Binary64> f2 = x -> x.twice();
+        CalculusFieldUnivariateFunction<Binary64> f2 = CalculusFieldElement::twice;
 
         for (double x = 0; x < 1; x += 0.01) {
             assertEquals(f2.value(new Binary64(x)).getReal(),

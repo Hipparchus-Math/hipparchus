@@ -598,16 +598,12 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     void testFloatingPointEqualsPrecondition1() {
-        assertThrows(NullPointerException.class, () -> {
-            FieldComplex.equals(build(3.0, 4.0), null, 3);
-        });
+        assertThrows(NullPointerException.class, () -> FieldComplex.equals(build(3.0, 4.0), null, 3));
     }
 
     @Test
     void testFloatingPointEqualsPrecondition2() {
-        assertThrows(NullPointerException.class, () -> {
-            FieldComplex.equals(null, build(3.0, 4.0), 3);
-        });
+        assertThrows(NullPointerException.class, () -> FieldComplex.equals(null, build(3.0, 4.0), 3));
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -1363,9 +1359,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     void testpowNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            FieldComplex.getOne(Binary64Field.getInstance()).pow((FieldComplex<Binary64>) null);
-        });
+        assertThrows(NullArgumentException.class, () -> FieldComplex.getOne(Binary64Field.getInstance()).pow((FieldComplex<Binary64>) null));
     }
 
     @Test

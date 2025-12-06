@@ -159,33 +159,25 @@ public class TriangularDistributionTest extends RealDistributionAbstractTest {
     /** Test pre-condition for equal lower/upper limit. */
     @Test
     void testPreconditions1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new TriangularDistribution(0, 0, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new TriangularDistribution(0, 0, 0));
     }
 
     /** Test pre-condition for lower limit larger than upper limit. */
     @Test
     void testPreconditions2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new TriangularDistribution(1, 1, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new TriangularDistribution(1, 1, 0));
     }
 
     /** Test pre-condition for mode larger than upper limit. */
     @Test
     void testPreconditions3() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new TriangularDistribution(0, 2, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new TriangularDistribution(0, 2, 1));
     }
 
     /** Test pre-condition for mode smaller than lower limit. */
     @Test
     void testPreconditions4() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new TriangularDistribution(2, 1, 3);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new TriangularDistribution(2, 1, 3));
     }
 
     /** Test mean/variance. */

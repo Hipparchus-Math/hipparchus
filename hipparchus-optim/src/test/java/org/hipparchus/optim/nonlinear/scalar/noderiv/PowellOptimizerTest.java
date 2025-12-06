@@ -87,13 +87,11 @@ class PowellOptimizerTest {
 
     @Test
     void testQuadratic() {
-        final MultivariateFunction func = new MultivariateFunction() {
-                public double value(double[] x) {
-                    final double a = x[0] - 1;
-                    final double b = x[1] - 1;
-                    return a * a + b * b + 1;
-                }
-            };
+        final MultivariateFunction func = x -> {
+            final double a = x[0] - 1;
+            final double b = x[1] - 1;
+            return a * a + b * b + 1;
+        };
 
         int dim = 2;
         final double[] minPoint = new double[dim];
@@ -118,13 +116,11 @@ class PowellOptimizerTest {
 
     @Test
     void testMaximizeQuadratic() {
-        final MultivariateFunction func = new MultivariateFunction() {
-                public double value(double[] x) {
-                    final double a = x[0] - 1;
-                    final double b = x[1] - 1;
-                    return -a * a - b * b + 1;
-                }
-            };
+        final MultivariateFunction func = x -> {
+            final double a = x[0] - 1;
+            final double b = x[1] - 1;
+            return -a * a - b * b + 1;
+        };
 
         int dim = 2;
         final double[] maxPoint = new double[dim];
@@ -156,13 +152,11 @@ class PowellOptimizerTest {
      */
     @Test
     void testRelativeToleranceOnScaledValues() {
-        final MultivariateFunction func = new MultivariateFunction() {
-                public double value(double[] x) {
-                    final double a = x[0] - 1;
-                    final double b = x[1] - 1;
-                    return a * a * FastMath.sqrt(FastMath.abs(a)) + b * b + 1;
-                }
-            };
+        final MultivariateFunction func = x -> {
+            final double a = x[0] - 1;
+            final double b = x[1] - 1;
+            return a * a * FastMath.sqrt(FastMath.abs(a)) + b * b + 1;
+        };
 
         int dim = 2;
         final double[] minPoint = new double[dim];
@@ -191,11 +185,7 @@ class PowellOptimizerTest {
         final int funcEvaluations = optim.getEvaluations();
 
         final double scale = 1e10;
-        final MultivariateFunction funcScaled = new MultivariateFunction() {
-                public double value(double[] x) {
-                    return scale * func.value(x);
-                }
-            };
+        final MultivariateFunction funcScaled = x -> scale * func.value(x);
 
         final PointValuePair funcScaledResult = optim.optimize(new MaxEval(maxEval),
                                                                new ObjectiveFunction(funcScaled),

@@ -71,7 +71,7 @@ class LinearKalmanFilterTest {
 
         // sequentially process all measurements and check against the reference estimated state and covariance
         measurements.
-        map(measurement -> filter.estimationStep(measurement)).
+        map(filter::estimationStep).
         forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
@@ -159,7 +159,7 @@ class LinearKalmanFilterTest {
 
         // sequentially process all measurements and check against the reference estimate
         measurements.
-        map(measurement -> filter.estimationStep(measurement)).
+        map(filter::estimationStep).
         forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
@@ -259,7 +259,7 @@ class LinearKalmanFilterTest {
 
         // sequentially process all measurements and check against the reference estimate
         measurements.
-        map(measurement -> filter.estimationStep(measurement)).
+        map(filter::estimationStep).
         map(estimate -> {
             final ProcessEstimate p = filter.getPredicted();
             final ProcessEstimate c = filter.getCorrected();
@@ -338,7 +338,7 @@ class LinearKalmanFilterTest {
 
         // sequentially process all measurements and get only the last one
         final ProcessEstimate finalEstimate = measurements.
-                        map(measurement -> filter.estimationStep(measurement)).
+                        map(filter::estimationStep).
                         reduce((first, second) -> second).get();
 
         assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);

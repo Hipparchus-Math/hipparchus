@@ -90,9 +90,6 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
         this.rate = rate;
     }
 
-    public void init(T t0, T[] y0, T t) {
-    }
-
     public void init(FieldODEStateAndDerivative<T> state0, T t) {
     }
 

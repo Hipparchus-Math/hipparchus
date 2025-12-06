@@ -129,9 +129,7 @@ public class TDistributionTest extends RealDistributionAbstractTest {
 
     @Test
     void testPreconditions() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new TDistribution(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new TDistribution(0));
     }
 
     @Test

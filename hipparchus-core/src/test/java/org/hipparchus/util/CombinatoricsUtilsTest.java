@@ -311,23 +311,17 @@ class CombinatoricsUtilsTest {
 
     @Test
     void testStirlingS2NegativeN() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            CombinatoricsUtils.stirlingS2(3, -1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> CombinatoricsUtils.stirlingS2(3, -1));
     }
 
     @Test
     void testStirlingS2LargeK() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            CombinatoricsUtils.stirlingS2(3, 4);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> CombinatoricsUtils.stirlingS2(3, 4));
     }
 
     @Test
     void testStirlingS2Overflow() {
-        assertThrows(MathRuntimeException.class, () -> {
-            CombinatoricsUtils.stirlingS2(26, 9);
-        });
+        assertThrows(MathRuntimeException.class, () -> CombinatoricsUtils.stirlingS2(26, 9));
     }
 
     @Test

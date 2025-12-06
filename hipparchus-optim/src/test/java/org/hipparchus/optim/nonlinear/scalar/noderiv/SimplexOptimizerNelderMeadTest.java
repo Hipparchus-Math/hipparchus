@@ -187,11 +187,7 @@ class SimplexOptimizerNelderMeadTest {
                     { 1, 0 },
                     { 0, 1 }
                 }, false);
-        LeastSquaresConverter ls = new LeastSquaresConverter(new MultivariateVectorFunction() {
-                public double[] value(double[] variables) {
-                    return factors.operate(variables);
-                }
-            }, new double[] { 2.0, -3.0 });
+        LeastSquaresConverter ls = new LeastSquaresConverter(variables -> factors.operate(variables), new double[] { 2.0, -3.0 });
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-6);
         PointValuePair optimum =
             optimizer.optimize(new MaxEval(200),
@@ -213,11 +209,7 @@ class SimplexOptimizerNelderMeadTest {
                     { 1, 0 },
                     { 0, 1 }
                 }, false);
-        LeastSquaresConverter ls = new LeastSquaresConverter(new MultivariateVectorFunction() {
-                public double[] value(double[] variables) {
-                    return factors.operate(variables);
-                }
-            }, new double[] { 2, -3 }, new double[] { 10, 0.1 });
+        LeastSquaresConverter ls = new LeastSquaresConverter(variables -> factors.operate(variables), new double[] { 2, -3 }, new double[] { 10, 0.1 });
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-6);
         PointValuePair optimum =
             optimizer.optimize(new MaxEval(200),
@@ -239,11 +231,7 @@ class SimplexOptimizerNelderMeadTest {
                     { 1, 0 },
                     { 0, 1 }
                 }, false);
-        LeastSquaresConverter ls = new LeastSquaresConverter(new MultivariateVectorFunction() {
-                public double[] value(double[] variables) {
-                    return factors.operate(variables);
-                }
-            }, new double[] { 2, -3 }, new Array2DRowRealMatrix(new double [][] {
+        LeastSquaresConverter ls = new LeastSquaresConverter(variables -> factors.operate(variables), new double[] { 2, -3 }, new Array2DRowRealMatrix(new double [][] {
                     { 1, 1.2 }, { 1.2, 2 }
                 }));
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-6);

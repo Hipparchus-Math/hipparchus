@@ -347,13 +347,11 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         final double finalTime = 5.0;
         final double step = 1.23456;
         FixedStepRungeKuttaIntegrator integ = createIntegrator(step);
-        integ.addStepHandler(new ODEStepHandler() {
-            public void handleStep(ODEStateInterpolator interpolator) {
-                if (interpolator.getCurrentState().getTime() < finalTime - 0.001) {
-                    assertEquals(step,
-                                        interpolator.getCurrentState().getTime() - interpolator.getPreviousState().getTime(),
-                                        epsilon);
-                }
+        integ.addStepHandler(interpolator -> {
+            if (interpolator.getCurrentState().getTime() < finalTime - 0.001) {
+                assertEquals(step,
+                                    interpolator.getCurrentState().getTime() - interpolator.getPreviousState().getTime(),
+                                    epsilon);
             }
         });
         integ.integrate(new ExpandableODE(new OrdinaryDifferentialEquation() {
@@ -495,26 +493,23 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
         ODEIntegrator integrator = createIntegrator(0.001);
         final double[] max = new double[2];
-        integrator.addStepHandler(new ODEStepHandler() {
-            @Override
-            public void handleStep(ODEStateInterpolator interpolator) {
-                for (int i = 0; i <= 10; ++i) {
-                    double tPrev = interpolator.getPreviousState().getTime();
-                    double tCurr = interpolator.getCurrentState().getTime();
-                    double t     = (tPrev * (10 - i) + tCurr * i) / 10;
-                    ODEStateAndDerivative state = interpolator.getInterpolatedState(t);
-                    assertEquals(2, state.getPrimaryStateDimension());
-                    assertEquals(1, state.getNumberOfSecondaryStates());
-                    assertEquals(2, state.getSecondaryStateDimension(0));
-                    assertEquals(1, state.getSecondaryStateDimension(1));
-                    assertEquals(3, state.getCompleteStateDimension());
-                    max[0] = FastMath.max(max[0],
-                                          FastMath.abs(FastMath.sin(t) - state.getPrimaryState()[0]));
-                    max[0] = FastMath.max(max[0],
-                                          FastMath.abs(FastMath.cos(t) - state.getPrimaryState()[1]));
-                    max[1] = FastMath.max(max[1],
-                                          FastMath.abs(1 - t - state.getSecondaryState(1)[0]));
-                }
+        integrator.addStepHandler(interpolator -> {
+            for (int i = 0; i <= 10; ++i) {
+                double tPrev = interpolator.getPreviousState().getTime();
+                double tCurr = interpolator.getCurrentState().getTime();
+                double t     = (tPrev * (10 - i) + tCurr * i) / 10;
+                ODEStateAndDerivative state = interpolator.getInterpolatedState(t);
+                assertEquals(2, state.getPrimaryStateDimension());
+                assertEquals(1, state.getNumberOfSecondaryStates());
+                assertEquals(2, state.getSecondaryStateDimension(0));
+                assertEquals(1, state.getSecondaryStateDimension(1));
+                assertEquals(3, state.getCompleteStateDimension());
+                max[0] = FastMath.max(max[0],
+                                      FastMath.abs(FastMath.sin(t) - state.getPrimaryState()[0]));
+                max[0] = FastMath.max(max[0],
+                                      FastMath.abs(FastMath.cos(t) - state.getPrimaryState()[1]));
+                max[1] = FastMath.max(max[1],
+                                      FastMath.abs(1 - t - state.getSecondaryState(1)[0]));
             }
         });
 

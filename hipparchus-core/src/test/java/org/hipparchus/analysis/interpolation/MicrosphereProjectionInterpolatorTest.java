@@ -53,14 +53,11 @@ final class MicrosphereProjectionInterpolatorTest {
      */
     @Test
     void testLinearFunction2D() {
-        MultivariateFunction f = new MultivariateFunction() {
-            @Override
-            public double value(double[] x) {
-                if (x.length != 2) {
-                    throw new IllegalArgumentException();
-                }
-                return 2 * x[0] - 3 * x[1] + 5;
+        MultivariateFunction f = x -> {
+            if (x.length != 2) {
+                throw new IllegalArgumentException();
             }
+            return 2 * x[0] - 3 * x[1] + 5;
         };
 
         final double darkFraction = 0.5;

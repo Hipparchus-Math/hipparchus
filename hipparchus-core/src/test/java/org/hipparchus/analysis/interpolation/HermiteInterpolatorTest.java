@@ -274,9 +274,7 @@ class HermiteInterpolatorTest {
 
     @Test
     void testEmptySample() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new HermiteInterpolator().value(0.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new HermiteInterpolator().value(0.0));
     }
 
     @Test

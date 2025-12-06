@@ -102,16 +102,13 @@ class SynchronizedRandomGeneratorTest {
 
         final List<Callable<Double>> tasks = new ArrayList<Callable<Double>>();
         for (int i = 0; i < numGenerators; i++) {
-            tasks.add(new Callable<Double>() {
-                    @Override
-                    public Double call() {
-                        Double lastValue = 0d;
-                        for (int j = 0; j < numSamples; j++) {
-                            lastValue = wrapper.nextGaussian();
-                        }
-                        return lastValue;
-                    }
-                });
+            tasks.add(() -> {
+                Double lastValue = 0d;
+                for (int j = 0; j < numSamples; j++) {
+                    lastValue = wrapper.nextGaussian();
+                }
+                return lastValue;
+            });
         }
 
         final ExecutorService exec = Executors.newFixedThreadPool(numThreads);

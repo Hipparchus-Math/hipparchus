@@ -2287,16 +2287,12 @@ class FastMathTest {
 
     @Test
     void testToIntExactTooLow() {
-        assertThrows(MathRuntimeException.class, () -> {
-            FastMath.toIntExact(-1L + Integer.MIN_VALUE);
-        });
+        assertThrows(MathRuntimeException.class, () -> FastMath.toIntExact(-1L + Integer.MIN_VALUE));
     }
 
     @Test
     void testToIntExactTooHigh() {
-        assertThrows(MathRuntimeException.class, () -> {
-            FastMath.toIntExact(+1L + Integer.MAX_VALUE);
-        });
+        assertThrows(MathRuntimeException.class, () -> FastMath.toIntExact(+1L + Integer.MAX_VALUE));
     }
 
     @Test

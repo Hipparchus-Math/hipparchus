@@ -46,19 +46,19 @@ public class RealVectorTest extends RealVectorAbstractTest {
     @Test
     @Override
     public void testAppendVector() {
-        checkUnsupported(() -> super.testAppendVector());
+        checkUnsupported(super::testAppendVector);
     }
 
     @Test
     @Override
     public void testAppendScalar() {
-        checkUnsupported(() -> super.testAppendScalar());
+        checkUnsupported(super::testAppendScalar);
     }
 
     @Test
     @Override
     public void testGetSubVector() {
-        checkUnsupported(() -> super.testGetSubVector());
+        checkUnsupported(super::testGetSubVector);
     }
 
     @Test
@@ -100,89 +100,79 @@ public class RealVectorTest extends RealVectorAbstractTest {
     @Test
     @Override
     public void testSetSubVectorSameType() {
-        checkUnsupported(() -> super.testSetSubVectorSameType());
+        checkUnsupported(super::testSetSubVectorSameType);
     }
 
     @Test
     @Override
     public void testSetSubVectorMixedType() {
-        checkUnsupported(() -> super.testSetSubVectorMixedType());
+        checkUnsupported(super::testSetSubVectorMixedType);
     }
 
     @Test
     @Override
     public void testSetSubVectorInvalidIndex1() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            create(new double[10]).setSubVector(-1, create(new double[2]));
-        });
+        assertThrows(UnsupportedOperationException.class, () -> create(new double[10]).setSubVector(-1, create(new double[2])));
     }
 
     @Test
     @Override
     public void testSetSubVectorInvalidIndex2() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            create(new double[10]).setSubVector(10, create(new double[2]));
-        });
+        assertThrows(UnsupportedOperationException.class, () -> create(new double[10]).setSubVector(10, create(new double[2])));
     }
 
     @Test
     @Override
     public void testSetSubVectorInvalidIndex3() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            create(new double[10]).setSubVector(9, create(new double[2]));
-        });
+        assertThrows(UnsupportedOperationException.class, () -> create(new double[10]).setSubVector(9, create(new double[2])));
     }
 
     @Test
     @Override
     public void testIsNaN() {
-        checkUnsupported(() -> super.testIsNaN());
+        checkUnsupported(super::testIsNaN);
     }
 
     @Test
     @Override
     public void testIsInfinite() {
-        checkUnsupported(() -> super.testIsInfinite());
+        checkUnsupported(super::testIsInfinite);
     }
 
     @Test
     @Override
     public void testEbeMultiplySameType() {
-        checkUnsupported(() -> super.testEbeMultiplySameType());
+        checkUnsupported(super::testEbeMultiplySameType);
     }
 
     @Test
     @Override
     public void testEbeMultiplyMixedTypes() {
-        checkUnsupported(() -> super.testEbeMultiplyMixedTypes());
+        checkUnsupported(super::testEbeMultiplyMixedTypes);
     }
 
     @Test
     @Override
     public void testEbeMultiplyDimensionMismatch() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.MUL);
-        });
+        assertThrows(UnsupportedOperationException.class, () -> doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.MUL));
     }
 
     @Test
     @Override
     public void testEbeDivideSameType() {
-        checkUnsupported(() -> super.testEbeDivideSameType());
+        checkUnsupported(super::testEbeDivideSameType);
     }
 
     @Test
     @Override
     public void testEbeDivideMixedTypes() {
-        checkUnsupported(() -> super.testEbeDivideMixedTypes());
+        checkUnsupported(super::testEbeDivideMixedTypes);
     }
 
     @Test
     @Override
     public void testEbeDivideDimensionMismatch() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.DIV);
-        });
+        assertThrows(UnsupportedOperationException.class, () -> doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.DIV));
     }
 
     @Test
@@ -217,13 +207,13 @@ public class RealVectorTest extends RealVectorAbstractTest {
     @Test
     @Override
     public void testSerial() {
-        checkUnsupported(() -> super.testSerial());
+        checkUnsupported(super::testSerial);
     }
 
     @Test
     @Override
     public void testEquals() {
-        checkUnsupported(() -> super.testEquals());
+        checkUnsupported(super::testEquals);
     }
 
     interface Thunk {

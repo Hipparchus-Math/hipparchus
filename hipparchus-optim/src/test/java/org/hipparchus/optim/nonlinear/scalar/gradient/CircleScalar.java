@@ -53,38 +53,34 @@ public class CircleScalar {
     }
 
     public ObjectiveFunction getObjectiveFunction() {
-        return new ObjectiveFunction(new MultivariateFunction() {
-                public double value(double[] params)  {
-                    Vector2D center = new Vector2D(params[0], params[1]);
-                    double radius = getRadius(center);
-                    double sum = 0;
-                    for (Vector2D point : points) {
-                        double di = point.distance(center) - radius;
-                        sum += di * di;
-                    }
-                    return sum;
-                }
-            });
+        return new ObjectiveFunction(params -> {
+            Vector2D center = new Vector2D(params[0], params[1]);
+            double radius = getRadius(center);
+            double sum = 0;
+            for (Vector2D point : points) {
+                double di = point.distance(center) - radius;
+                sum += di * di;
+            }
+            return sum;
+        });
     }
 
     public ObjectiveFunctionGradient getObjectiveFunctionGradient() {
-        return new ObjectiveFunctionGradient(new MultivariateVectorFunction() {
-                public double[] value(double[] params) {
-                    Vector2D center = new Vector2D(params[0], params[1]);
-                    double radius = getRadius(center);
-                    // gradient of the sum of squared residuals
-                    double dJdX = 0;
-                    double dJdY = 0;
-                    for (Vector2D pk : points) {
-                        double dk = pk.distance(center);
-                        dJdX += (center.getX() - pk.getX()) * (dk - radius) / dk;
-                        dJdY += (center.getY() - pk.getY()) * (dk - radius) / dk;
-                    }
-                    dJdX *= 2;
-                    dJdY *= 2;
+        return new ObjectiveFunctionGradient(params -> {
+            Vector2D center = new Vector2D(params[0], params[1]);
+            double radius = getRadius(center);
+            // gradient of the sum of squared residuals
+            double dJdX = 0;
+            double dJdY = 0;
+            for (Vector2D pk : points) {
+                double dk = pk.distance(center);
+                dJdX += (center.getX() - pk.getX()) * (dk - radius) / dk;
+                dJdY += (center.getY() - pk.getY()) * (dk - radius) / dk;
+            }
+            dJdX *= 2;
+            dJdY *= 2;
 
-                    return new double[] { dJdX, dJdY };
-                }
-            });
+            return new double[] { dJdX, dJdY };
+        });
     }
 }

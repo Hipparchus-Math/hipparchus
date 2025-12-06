@@ -211,9 +211,7 @@ class FieldExpandableODETest {
 
     @Test
     void testExtractDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestExtractDimensionMismatch(Binary64Field.getInstance());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestExtractDimensionMismatch(Binary64Field.getInstance()));
     }
 
     private <T extends CalculusFieldElement<T>> void doTestExtractDimensionMismatch(final Field<T> field)
@@ -229,9 +227,7 @@ class FieldExpandableODETest {
 
     @Test
     void testInsertTooShortComplete() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestInsertTooShortComplete(Binary64Field.getInstance());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestInsertTooShortComplete(Binary64Field.getInstance()));
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInsertTooShortComplete(final Field<T> field)
@@ -248,9 +244,7 @@ class FieldExpandableODETest {
 
     @Test
     void testInsertWrongEquationData() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestInsertWrongEquationData(Binary64Field.getInstance());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestInsertWrongEquationData(Binary64Field.getInstance()));
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInsertWrongEquationData(final Field<T> field)
@@ -267,9 +261,7 @@ class FieldExpandableODETest {
 
     @Test
     void testNegativeIndex() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestNegativeIndex(Binary64Field.getInstance());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestNegativeIndex(Binary64Field.getInstance()));
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNegativeIndex(final Field<T> field)
@@ -283,9 +275,7 @@ class FieldExpandableODETest {
 
     @Test
     void testTooLargeIndex() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestTooLargeIndex(Binary64Field.getInstance());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestTooLargeIndex(Binary64Field.getInstance()));
     }
 
     private <T extends CalculusFieldElement<T>> void doTestTooLargeIndex(final Field<T> field)

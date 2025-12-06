@@ -181,18 +181,14 @@ public class PSquarePercentileTest extends
 
     @Test
     void testMarkersOORLow() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            PSquarePercentile.newMarkers(
-                Arrays.asList(new Double[]{0.02, 1.18, 9.15, 21.91, 38.62}), 0.5).estimate(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> PSquarePercentile.newMarkers(
+            Arrays.asList(new Double[]{0.02, 1.18, 9.15, 21.91, 38.62}), 0.5).estimate(0));
     }
 
     @Test
     void testMarkersOORHigh() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            PSquarePercentile.newMarkers(
-                Arrays.asList(new Double[]{0.02, 1.18, 9.15, 21.91, 38.62}), 0.5).estimate(5);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> PSquarePercentile.newMarkers(
+            Arrays.asList(new Double[]{0.02, 1.18, 9.15, 21.91, 38.62}), 0.5).estimate(5));
     }
 
     @Test
@@ -396,9 +392,7 @@ public class PSquarePercentileTest extends
 
     @Test
     void testInitial() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            PSquarePercentile.newMarkers(new ArrayList<Double>(), 0.5);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> PSquarePercentile.newMarkers(new ArrayList<Double>(), 0.5));
     }
 
     @Test

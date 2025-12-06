@@ -101,27 +101,21 @@ class StraightLineProblem {
     }
 
     public MultivariateVectorFunction getModelFunction() {
-        return new MultivariateVectorFunction() {
-            public double[] value(double[] params) {
-                final Model line = new Model(params[0], params[1]);
+        return params -> {
+            final Model line = new Model(params[0], params[1]);
 
-                final double[] model = new double[points.size()];
-                for (int i = 0; i < points.size(); i++) {
-                    final double[] p = points.get(i);
-                    model[i] = line.value(p[0]);
-                }
-
-                return model;
+            final double[] model = new double[points.size()];
+            for (int i = 0; i < points.size(); i++) {
+                final double[] p = points.get(i);
+                model[i] = line.value(p[0]);
             }
+
+            return model;
         };
     }
 
     public MultivariateMatrixFunction getModelFunctionJacobian() {
-        return new MultivariateMatrixFunction() {
-            public double[][] value(double[] point) {
-                return jacobian(point);
-            }
-        };
+        return point -> jacobian(point);
     }
 
     /**

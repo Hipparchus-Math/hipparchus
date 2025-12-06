@@ -48,11 +48,9 @@ class HermiteTest {
         //   N(x, mu, sigma)
         // is transformed to
         //   f(y) * exp(-y^2)
-        final UnivariateFunction f = new UnivariateFunction() {
-                public double value(double y) {
-                    return oneOverSqrtPi; // Constant function.
-                }
-            };
+        final UnivariateFunction f = y -> {
+            return oneOverSqrtPi; // Constant function.
+        };
 
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
@@ -75,11 +73,7 @@ class HermiteTest {
         //   x * N(x, mu, sigma)
         // is transformed to
         //   f(y) * exp(-y^2)
-        final UnivariateFunction f = new UnivariateFunction() {
-                public double value(double y) {
-                    return oneOverSqrtPi * (sqrtTwo * sigma * y + mu);
-                }
-            };
+        final UnivariateFunction f = y -> oneOverSqrtPi * (sqrtTwo * sigma * y + mu);
 
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
@@ -101,11 +95,7 @@ class HermiteTest {
         //   (x - mu)^2 * N(x, mu, sigma)
         // is transformed to
         //   f(y) * exp(-y^2)
-        final UnivariateFunction f = new UnivariateFunction() {
-                public double value(double y) {
-                    return twoOverSqrtPi * sigma2 * y * y;
-                }
-            };
+        final UnivariateFunction f = y -> twoOverSqrtPi * sigma2 * y * y;
 
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);

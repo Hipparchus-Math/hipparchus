@@ -35,9 +35,7 @@ class FactorialLogTest {
 
     @Test
     void testPrecondition1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            CombinatoricsUtils.FactorialLog.create().withCache(-1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> CombinatoricsUtils.FactorialLog.create().withCache(-1));
     }
 
     @Test

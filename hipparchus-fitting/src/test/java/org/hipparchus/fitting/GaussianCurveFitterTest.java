@@ -243,9 +243,7 @@ class GaussianCurveFitterTest {
      */
     @Test
     void testFit02() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            GaussianCurveFitter.create().fit(new WeightedObservedPoints().toList());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> GaussianCurveFitter.create().fit(new WeightedObservedPoints().toList()));
     }
 
     /**

@@ -226,23 +226,17 @@ class FunctionUtilsTest {
 
     @Test
     void testSampleWrongBounds(){
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            FunctionUtils.sample(new Sin(), FastMath.PI, 0.0, 10);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> FunctionUtils.sample(new Sin(), FastMath.PI, 0.0, 10));
     }
 
     @Test
     void testSampleNegativeNumberOfPoints(){
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, -1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, -1));
     }
 
     @Test
     void testSampleNullNumberOfPoints(){
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, 0));
     }
 
     @Test
@@ -260,24 +254,9 @@ class FunctionUtilsTest {
     @Test
     void testToDifferentiableUnivariate() {
 
-        final UnivariateFunction f0 = new UnivariateFunction() {
-            @Override
-            public double value(final double x) {
-                return x * x;
-            }
-        };
-        final UnivariateFunction f1 = new UnivariateFunction() {
-            @Override
-            public double value(final double x) {
-                return 2 * x;
-            }
-        };
-        final UnivariateFunction f2 = new UnivariateFunction() {
-            @Override
-            public double value(final double x) {
-                return 2;
-            }
-        };
+        final UnivariateFunction f0 = x -> x * x;
+        final UnivariateFunction f1 = x -> 2 * x;
+        final UnivariateFunction f2 = x -> 2;
         final UnivariateDifferentiableFunction f = FunctionUtils.toDifferentiable(f0, f1, f2);
 
         DSFactory factory = new DSFactory(1, 2);
@@ -306,18 +285,8 @@ class FunctionUtilsTest {
 
         final double a = 1.5;
         final double b = 0.5;
-        final MultivariateFunction f = new MultivariateFunction() {
-            @Override
-            public double value(final double[] point) {
-                return a * point[0] + b * point[1];
-            }
-        };
-        final MultivariateVectorFunction gradient = new MultivariateVectorFunction() {
-            @Override
-            public double[] value(final double[] point) {
-                return new double[] { a, b };
-            }
-        };
+        final MultivariateFunction f = point -> a * point[0] + b * point[1];
+        final MultivariateVectorFunction gradient = point -> new double[] { a, b };
         final MultivariateDifferentiableFunction mdf = FunctionUtils.toDifferentiable(f, gradient);
 
         DSFactory factory11 = new DSFactory(1, 1);
@@ -358,18 +327,8 @@ class FunctionUtilsTest {
 
         final double a = 1.5;
         final double b = 0.5;
-        final MultivariateFunction f = new MultivariateFunction() {
-            @Override
-            public double value(final double[] point) {
-                return a * point[0] + b * point[1];
-            }
-        };
-        final MultivariateVectorFunction gradient = new MultivariateVectorFunction() {
-            @Override
-            public double[] value(final double[] point) {
-                return new double[] { a, b, 0.0 };
-            }
-        };
+        final MultivariateFunction f = point -> a * point[0] + b * point[1];
+        final MultivariateVectorFunction gradient = point -> new double[] { a, b, 0.0 };
         final MultivariateDifferentiableFunction mdf = FunctionUtils.toDifferentiable(f, gradient);
 
         DSFactory factory = new DSFactory(1, 1);

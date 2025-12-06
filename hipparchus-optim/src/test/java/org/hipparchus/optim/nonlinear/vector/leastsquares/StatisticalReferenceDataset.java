@@ -148,29 +148,24 @@ public abstract class StatisticalReferenceDataset {
 
     class LeastSquaresProblem {
         public MultivariateVectorFunction getModelFunction() {
-            return new MultivariateVectorFunction() {
-                public double[] value(final double[] a) {
-                    final int n = getNumObservations();
-                    final double[] yhat = new double[n];
-                    for (int i = 0; i < n; i++) {
-                        yhat[i] = getModelValue(getX(i), a);
-                    }
-                    return yhat;
+            return a -> {
+                final int n = getNumObservations();
+                final double[] yhat = new double[n];
+                for (int i = 0; i < n; i++) {
+                    yhat[i] = getModelValue(getX(i), a);
                 }
+                return yhat;
             };
         }
 
         public MultivariateMatrixFunction getModelFunctionJacobian() {
-            return new MultivariateMatrixFunction() {
-                public double[][] value(final double[] a)
-                    throws IllegalArgumentException {
-                    final int n = getNumObservations();
-                    final double[][] j = new double[n][];
-                    for (int i = 0; i < n; i++) {
-                        j[i] = getModelDerivatives(getX(i), a);
-                    }
-                    return j;
+            return a -> {
+                final int n = getNumObservations();
+                final double[][] j = new double[n][];
+                for (int i = 0; i < n; i++) {
+                    j[i] = getModelDerivatives(getX(i), a);
                 }
+                return j;
             };
         }
     }

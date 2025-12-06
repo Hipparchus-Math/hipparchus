@@ -38,9 +38,7 @@ class Euclidean1DTest {
 
     @Test
     void testSubSpace() {
-        assertThrows(Euclidean1D.NoSubSpaceException.class, () -> {
-            Euclidean1D.getInstance().getSubSpace();
-        });
+        assertThrows(Euclidean1D.NoSubSpaceException.class, () -> Euclidean1D.getInstance().getSubSpace());
     }
 
     @Test

@@ -46,12 +46,10 @@ final class FieldBracketingNthOrderBrentSolverTest {
 
     @Test
     void testInsufficientOrder3() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy,
-                                                        absoluteAccuracy,
-                                                        functionValueAccuracy,
-                                                        1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy,
+                                                    absoluteAccuracy,
+                                                    functionValueAccuracy,
+                                                    1));
     }
 
     @Test
@@ -115,41 +113,17 @@ final class FieldBracketingNthOrderBrentSolverTest {
         // intern J. Computer Math Vol 23 pp 265-282
         // available here: http://www.math.nps.navy.mil/~bneta/SeveralNewMethods.PDF
         for (AllowedSolution allowed : AllowedSolution.values()) {
-            check(new CalculusFieldUnivariateFunction<Dfp>() {
-                public Dfp value(Dfp x) {
-                    return DfpMath.sin(x).subtract(x.half());
-                }
-            }, 200, -2.0, 2.0, allowed);
+            check(x -> DfpMath.sin(x).subtract(x.half()), 200, -2.0, 2.0, allowed);
 
-            check(new CalculusFieldUnivariateFunction<Dfp>() {
-                public Dfp value(Dfp x) {
-                    return DfpMath.pow(x, 5).add(x).subtract(field.newDfp(10000));
-                }
-            }, 200, -5.0, 10.0, allowed);
+            check(x -> DfpMath.pow(x, 5).add(x).subtract(field.newDfp(10000)), 200, -5.0, 10.0, allowed);
 
-            check(new CalculusFieldUnivariateFunction<Dfp>() {
-                public Dfp value(Dfp x) {
-                    return x.sqrt().subtract(field.getOne().divide(x)).subtract(field.newDfp(3));
-                }
-            }, 200, 0.001, 10.0, allowed);
+            check(x -> x.sqrt().subtract(field.getOne().divide(x)).subtract(field.newDfp(3)), 200, 0.001, 10.0, allowed);
 
-            check(new CalculusFieldUnivariateFunction<Dfp>() {
-                public Dfp value(Dfp x) {
-                    return DfpMath.exp(x).add(x).subtract(field.newDfp(20));
-                }
-            }, 200, -5.0, 5.0, allowed);
+            check(x -> DfpMath.exp(x).add(x).subtract(field.newDfp(20)), 200, -5.0, 5.0, allowed);
 
-            check(new CalculusFieldUnivariateFunction<Dfp>() {
-                public Dfp value(Dfp x) {
-                    return DfpMath.log(x).add(x.sqrt()).subtract(field.newDfp(5));
-                }
-            }, 200, 0.001, 10.0, allowed);
+            check(x -> DfpMath.log(x).add(x.sqrt()).subtract(field.newDfp(5)), 200, 0.001, 10.0, allowed);
 
-            check(new CalculusFieldUnivariateFunction<Dfp>() {
-                public Dfp value(Dfp x) {
-                    return x.subtract(field.getOne()).multiply(x).multiply(x).subtract(field.getOne());
-                }
-            }, 200, -0.5, 1.5, allowed);
+            check(x -> x.subtract(field.getOne()).multiply(x).multiply(x).subtract(field.getOne()), 200, -0.5, 1.5, allowed);
         }
 
     }

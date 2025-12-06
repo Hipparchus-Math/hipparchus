@@ -47,7 +47,7 @@ class FieldGradientDfpTest extends FieldGradientAbstractTest<Dfp> {
     @Override
     @Test
     public void testLinearCombinationReference() {
-        doTestLinearCombinationReference(x -> build(x), 5.0e-9, 4.212e-9);
+        doTestLinearCombinationReference(this::build, 5.0e-9, 4.212e-9);
     }
 
     @Override

@@ -41,12 +41,7 @@ class LaguerreTest {
         for (int i = 2; i < 10; i += 1) {
             final double t = i;
 
-            final UnivariateFunction f = new UnivariateFunction() {
-                @Override
-                public double value(double x) {
-                    return FastMath.pow(x, t - 1);
-                }
-            };
+            final UnivariateFunction f = x -> FastMath.pow(x, t - 1);
 
             final GaussIntegrator integrator = factory.laguerre(7);
             final double s = integrator.integrate(f);
