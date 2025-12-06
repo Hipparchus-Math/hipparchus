@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="krys06" type="add" issue="issues/355">
+        Added evaluation of bicubic and tricubic interpolation functions with CalculusFieldElement
+      </action>
       <action dev="ryan" type="update" issue="issues/413">
         Reverted the FastMath reduction changes
       </action>
