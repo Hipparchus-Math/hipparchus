@@ -19,8 +19,10 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.linear.LUDecomposer;
 import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -300,6 +302,57 @@ class TaylorMapTest {
                 DerivativeStructureTest.checkEquals(yDS, idMap.getFunction(1), 2.8e-9);
             }
         }
+    }
+
+    @Test
+    public void testIssue423() {
+        final DSFactory factory = new DSFactory(3, 8);
+
+        final double mu = 1.0;
+        final double a  = 1.0;
+        final double e  = 0.5;
+        final double dt = FastMath.PI / 2.0;
+
+        final DerivativeStructure[] identity = {
+                factory.variable(0, 0), factory.variable(1, 0)
+        };
+
+        final DerivativeStructure aDs = identity[0].add(a);
+        final DerivativeStructure eDs = identity[1].add(e);
+
+        final DerivativeStructure nDs = aDs.pow(3).reciprocal().multiply(mu).sqrt();
+        final DerivativeStructure MDs = nDs.multiply(dt);
+
+        // just a few arbitrary iterations for test purposes
+        double E = MDs.getValue();
+        for (int i = 0; i < 10; ++i) {
+            E = MDs.getValue() + e * FastMath.sin(E);
+        }
+
+        DerivativeStructure       EDs = factory.variable(2, E);
+        final DerivativeStructure fDs = EDs.subtract(eDs.multiply(EDs.sin())).subtract(MDs);
+
+        final TaylorMap directMap = new TaylorMap(new double[3],
+                                                  new DerivativeStructure[] {
+                                                          identity[0], identity[1], fDs
+                                                  });
+        final TaylorMap inverseMap = directMap.invert(new LUDecomposer(0.0));
+
+        final TaylorMap zeroMap = new TaylorMap(new double[3],
+                                                new DerivativeStructure[] {
+                                                        identity[0], identity[1], aDs.getField().getZero()
+                                                });
+        final TaylorMap evalMap = inverseMap.compose(zeroMap);
+
+        final TaylorMap EMap = new TaylorMap(new double[3],
+                                             new DerivativeStructure[]{
+                                                     identity[0], identity[1], EDs
+                                             }).
+                compose(evalMap);
+
+        EDs = EMap.getFunction(2);
+        Assertions.assertEquals(2.020979881, EDs.getValue(), 1.0e-9);
+
     }
 
 }

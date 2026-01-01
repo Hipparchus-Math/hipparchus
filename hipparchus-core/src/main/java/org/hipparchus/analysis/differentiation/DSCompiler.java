@@ -53,8 +53,8 @@ import org.hipparchus.util.SinhCosh;
  * value and partial derivatives. The class does not hold these arrays, which remains under
  * the responsibility of the caller. For each combination of number of free parameters and
  * derivation order, only one compiler is necessary, and this compiler will be used to
- * perform computations on all arrays provided to it, which can represent hundreds or
- * thousands of different parameters kept together with all their partial derivatives.
+ * perform computations on all arrays provided to it. This can represent hundreds or
+ * thousands of independent parameters kept together with all their partial derivatives.
  * </p>
  * <p>
  * The arrays on which compilers operate contain only the partial derivatives together
@@ -71,7 +71,7 @@ import org.hipparchus.util.SinhCosh;
  * given 2 parameters x and y, df/dy is stored at index 2 when derivation order is set to 1 (in
  * this case the array has three elements: f, df/dx and df/dy). If derivation order is set to
  * 2, then df/dy will be stored at index 3 (in this case the array has six elements: f, df/dx,
- * d²f/dxdx, df/dy, d²f/dxdy and d²f/dydy).
+ * d²f/dx², df/dy, d²f/dxdy and d²f/dy²).
  * </p>
  * <p>
  * Given this structure, users can perform some simple operations like adding, subtracting
@@ -136,7 +136,7 @@ import org.hipparchus.util.SinhCosh;
 public class DSCompiler {
 
     /** Array of all compilers created so far. */
-    private static AtomicReference<DSCompiler[][]> compilers = new AtomicReference<>(null);
+    private static final AtomicReference<DSCompiler[][]> compilers = new AtomicReference<>(null);
 
     /** Number of free parameters. */
     private final int parameters;
@@ -570,18 +570,18 @@ public class DSCompiler {
 
                             for (int i = 0; i < parameters; ++i) {
                                 // differentiate the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ part
-                                row.add(differentiateFPart(lowerTerm, i, qIndex, baseCompiler));
+                                addTerm(row, differentiateFPart(lowerTerm, i, qIndex, baseCompiler));
                             }
 
                             // differentiate the products ∂pᵤ/∂qⱼ⋯∂qₖ ⋯ ∂pᵥ/∂qⱼ⋯∂qₖ
                             for (int j = 0; j < lowerTerm.productIndices.length; ++j) {
-                                row.add(differentiateProductPart(lowerTerm, j, qIndex, baseCompiler));
+                                addTerm(row, differentiateProductPart(lowerTerm, j, qIndex, baseCompiler));
                             }
 
                         }
 
-                        // simplifies and store the completed entry
-                        rebaser[k] = combineSimilarTerms(row);
+                        // store the completed entry
+                        rebaser[k] = row.toArray(new MultivariateCompositionMapper[0]);
 
                     }
 
@@ -3756,7 +3756,7 @@ public class DSCompiler {
     }
 
     /** Combine terms with similar derivation orders.
-     * @param <T> type of the field elements
+     * @param <T> type of the elements
      * @param terms list of terms
      * @return combined array
      */
@@ -3785,8 +3785,30 @@ public class DSCompiler {
 
     }
 
+    /** Add a term to a list, taking care of combining similar partial derivatives.
+     * @param <T> type of the elements
+     * @param terms list of terms to be updated
+     * @param newTerm new term to add to the list
+     * @since 4.1
+     */
+    private static <T extends AbstractMapper<T>> void addTerm(final List<T> terms, T newTerm) {
+
+        for (final T termJ : terms) {
+            if (termJ.isSimilar(newTerm)) {
+                // the list already contains a term with the same partial derivatives
+                // we just update the coefficient and don't increase the list size
+                termJ.setCoeff(termJ.getCoeff() + newTerm.getCoeff());
+                return;
+            }
+        }
+
+        // the term is a new one, we have to extend the list
+        terms.add(newTerm);
+
+    }
+
     /** Base mapper.
-     * @param <T> type of the field elements
+     * @param <T> type of the elements
      * @since 2.2
      */
     private abstract static class AbstractMapper<T extends AbstractMapper<T>> {
