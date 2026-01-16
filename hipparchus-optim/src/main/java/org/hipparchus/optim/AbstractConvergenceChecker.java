@@ -63,12 +63,4 @@ public abstract class AbstractConvergenceChecker<P>
     public double getAbsoluteThreshold() {
         return absoluteThreshold;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public abstract boolean converged(int iteration,
-                                      P previous,
-                                      P current);
 }

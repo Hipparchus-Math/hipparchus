@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="serror" type="add" issue="issues/446">
+        Add convergence checker provider for Fielded scalar.
+      </action>
       <action dev="axkr" type="add" issue="issues/442">
         Added Complex Schur transformer
       </action>
