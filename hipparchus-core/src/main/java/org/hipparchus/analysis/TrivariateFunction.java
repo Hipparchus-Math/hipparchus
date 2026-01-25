@@ -26,6 +26,7 @@ package org.hipparchus.analysis;
  * An interface representing a trivariate real function.
  *
  */
+@FunctionalInterface
 public interface TrivariateFunction {
     /**
      * Compute the value for the function.

@@ -24,6 +24,7 @@ import org.hipparchus.Field;
  * @see MultivariateVectorFunction
  * @since 2.2
  */
+@FunctionalInterface
 public interface FieldMultivariateVectorFunction {
 
     /** Convert to a {@link CalculusFieldMultivariateVectorFunction} with a specific type.

@@ -24,6 +24,7 @@ import org.hipparchus.CalculusFieldElement;
  *
  * @since 1.3
  */
+@FunctionalInterface
 public interface FieldUnivariateVectorFunction {
 
     /** Convert to a {@link CalculusFieldUnivariateVectorFunction} with a specific type.

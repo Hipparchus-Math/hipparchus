@@ -52,6 +52,7 @@ public class Incrementor {
      * Defines a method to be called at counter exhaustion.
      * The {@link #trigger(int) trigger} method should usually throw an exception.
      */
+    @FunctionalInterface
     public interface MaxCountExceededCallback {
         /**
          * Function called when the maximal count has been reached.

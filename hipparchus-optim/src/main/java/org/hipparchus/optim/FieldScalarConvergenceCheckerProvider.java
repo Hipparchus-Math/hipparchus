@@ -15,11 +15,6 @@
  * limitations under the License.
  */
 
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
-
 package org.hipparchus.optim;
 
 import org.hipparchus.CalculusFieldElement;
@@ -31,12 +26,14 @@ import org.hipparchus.Field;
  * @see ConvergenceChecker
  * @since 4.1
  */
+@FunctionalInterface
 public interface FieldScalarConvergenceCheckerProvider {
 
     /**
      * Method returning a checker for given field.
      *
      * @param field calculus field
+     * @param <T> field type
      * @return convergence checker for input field
      */
     <T extends CalculusFieldElement<T>> ConvergenceChecker<T> getChecker(Field<T> field);

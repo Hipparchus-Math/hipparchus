@@ -29,6 +29,7 @@ import org.hipparchus.Field;
  * @see CalculusFieldUnivariateFunction
  * @since 1.3
  */
+@FunctionalInterface
 public interface FieldUnivariateFunction {
 
     /** Convert to a {@link CalculusFieldUnivariateFunction} with a specific type.

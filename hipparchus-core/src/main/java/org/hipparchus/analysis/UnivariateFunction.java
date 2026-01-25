@@ -69,6 +69,7 @@ package org.hipparchus.analysis;
  * that Hipparchus will not catch it.
  *
  */
+@FunctionalInterface
 public interface UnivariateFunction {
     /**
      * Compute the value of the function.

@@ -29,6 +29,7 @@ import org.hipparchus.exception.NullArgumentException;
  * Interface representing a univariate real interpolating function.
  *
  */
+@FunctionalInterface
 public interface MultivariateInterpolator {
 
     /**

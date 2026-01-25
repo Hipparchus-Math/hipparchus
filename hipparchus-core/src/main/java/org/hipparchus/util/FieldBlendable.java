@@ -27,6 +27,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @param <B> blendable class
  * @param <T> type of the field element
  */
+@FunctionalInterface
 public interface FieldBlendable<B, T extends FieldElement<T>> {
 
     /**

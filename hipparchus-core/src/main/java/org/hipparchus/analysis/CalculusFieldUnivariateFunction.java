@@ -74,6 +74,7 @@ import org.hipparchus.CalculusFieldElement;
  * @see UnivariateFunction
  * @see FieldUnivariateFunction
  */
+@FunctionalInterface
 public interface CalculusFieldUnivariateFunction<T extends CalculusFieldElement<T>> {
     /**
      * Compute the value of the function.

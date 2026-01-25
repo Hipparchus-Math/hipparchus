@@ -22,6 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /** Interface for all algorithms providing matrix decomposition.
  * @since 1.3
  */
+@FunctionalInterface
 public interface MatrixDecomposer {
 
     /**

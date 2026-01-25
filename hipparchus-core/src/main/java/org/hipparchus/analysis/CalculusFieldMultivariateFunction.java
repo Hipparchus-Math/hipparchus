@@ -24,6 +24,7 @@ import org.hipparchus.CalculusFieldElement;
  * @see MultivariateFunction
  * @since 2.2
  */
+@FunctionalInterface
 public interface CalculusFieldMultivariateFunction<T extends CalculusFieldElement<T>> {
     /**
      * Compute the value of the function.

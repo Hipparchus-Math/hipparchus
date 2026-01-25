@@ -23,6 +23,7 @@ import org.hipparchus.CalculusFieldElement;
  * An interface representing a bivariate field function.
  * @since 1.5
  */
+@FunctionalInterface
 public interface FieldBivariateFunction {
 
     /** Convert to a {@link CalculusFieldBivariateFunction} with a specific type.
