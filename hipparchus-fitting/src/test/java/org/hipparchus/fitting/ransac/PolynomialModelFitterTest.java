@@ -1,0 +1,38 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.hipparchus.fitting.ransac;
+
+import java.util.ArrayList;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
+class PolynomialModelFitterTest {
+
+    @Test
+    void testExceptions() {
+        assertThrows(MathIllegalArgumentException.class, () -> new PolynomialModelFitter(0), "0 is smaller than the minimum (1)");
+        assertThrows(IllegalArgumentException.class, () -> new PolynomialModelFitter(1).fitModel(new ArrayList<>()), "Not enough points to fit polynomial model, at least 2 points are required");
+    }
+
+    private static <T extends Throwable> void assertThrows(final Class<T> expectedType, final Executable executable, final String message) {
+        final T exception = Assertions.assertThrows(expectedType, executable);
+        Assertions.assertEquals(message, exception.getMessage());
+    }
+
+}
