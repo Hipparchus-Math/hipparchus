@@ -90,9 +90,11 @@ public class QPDualActiveSolver extends QPOptimizer {
     private MatrixDecompositionTolerance matrixDecompositionTolerance;
 
      /**
-     * Inverse of Cholesky factorization if passed from external.
-     */
-    private RealMatrix inverseL;
+    * If true, function.getP() is interpreted as Cholesky lower factor L (H = L*L^T),
+    * not as the Hessian H itself.
+    */
+    private boolean isCholesky=false;
+    private ArrayRealVector ciColNorm;
 
     /**
      * Parses optimization data to extract the objective function and various
@@ -109,7 +111,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         this.iqConstraints = null;
         this.bConstraints = null;
         this.matrixDecompositionTolerance = new MatrixDecompositionTolerance(EPS);
-        this.inverseL = null;
+        this.isCholesky=false;
         for (OptimizationData data : optData) {
             if (data instanceof ObjectiveFunction) {
                 function = (QuadraticFunction) ((ObjectiveFunction) data).getObjectiveFunction();
@@ -119,8 +121,8 @@ public class QPDualActiveSolver extends QPOptimizer {
                 iqConstraints = (LinearInequalityConstraint) data;
             } else if (data instanceof LinearBoundedConstraint) {
                 bConstraints = (LinearBoundedConstraint) data;
-            } else if (data instanceof InverseCholesky) {
-                inverseL = ((InverseCholesky) data).getInverseL();
+            } else if (data instanceof IsCholesky) {
+                isCholesky = ((IsCholesky) data).isCholesky();
             } else if (data instanceof MatrixDecompositionTolerance) {
                 matrixDecompositionTolerance = (MatrixDecompositionTolerance) data;
             }
@@ -143,6 +145,9 @@ public class QPDualActiveSolver extends QPOptimizer {
         }
 
         double denom = ai.dotProduct(z);
+        if (FastMath.abs(denom) < Precision.EPSILON) {
+            return Double.POSITIVE_INFINITY;
+        }
         double alpha = -sv / denom;
         //step for inequality should be positive
         if (!equality && alpha < 0) {
@@ -254,6 +259,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         return new Pair<>(mostViolated, maxViolation);
     }
 
+
     /**
      * Main optimization routine.
      *
@@ -261,7 +267,13 @@ public class QPDualActiveSolver extends QPOptimizer {
      */
     @Override
     public LagrangeSolution doOptimize() {
-        RealMatrix G = function.getP();
+        RealMatrix G;
+        
+        if(!this.isCholesky)
+        
+             G = function.getP();
+        else
+             G=function.getP().multiplyTransposed(function.getP());
         RealVector g0 = function.getQ();
         double g = function.getD();
         int n = G.getColumnDimension();
@@ -304,14 +316,19 @@ public class QPDualActiveSolver extends QPOptimizer {
         RealMatrix L1;
         QRUpdater qrUpdater;
         double tol;
-        if (this.inverseL == null) {
+        if (!this.isCholesky) {
             try {
                 final double eps = matrixDecompositionTolerance.getEpsMatrixDecomposition();
                 final CholeskyDecomposition cholesky = new CholeskyDecomposition(G, eps, eps);
                 DecompositionSolver solver = cholesky.getSolver();
                 x = solver.solve(g0).mapMultiply(-1.0);
                 L = cholesky.getL();
+//                L=factorizeLQp(G,null);
+                 
                 L1 = inverseLowerTriangular(L);
+                
+//                x = L1.preMultiply(L1.operate(g0)).mapMultiply(-1.0);
+//                G=L.multiplyTransposed(L);
                 //c1 trace of G matrix
                //double c1 = FastMath.sqrt(G.getTrace());
                double c1 = G.getTrace();
@@ -322,17 +339,18 @@ public class QPDualActiveSolver extends QPOptimizer {
                 qrUpdater = new QRUpdater(L1);
             } catch (MathIllegalArgumentException ex) {
                 // matrix is not positive definite return empty solution
+                System.out.println("CHOLESKY DECOMPOSITION FAILED");
                 return new LagrangeSolution(new ArrayRealVector(0,0), new ArrayRealVector(0,0), 0.0);
             }
         } else {
-            L = this.inverseL;
+            L = function.getP();
             L1 = inverseLowerTriangular(L);
-            RealMatrix G1 = L1.multiplyTransposed(L1);
-            x = L.preMultiply(L.operate(g0)).mapMultiply(-1.0);
-            double c1 = FastMath.sqrt(G1.getTrace());
-            double c2 = FastMath.sqrt(L.getTrace());
+            
+            x = L1.preMultiply(L1.operate(g0)).mapMultiply(-1.0);
+            double c1 = G.getTrace();
+            double c2 = L1.getTrace();
             tol = m * c1 * c2 * Precision.EPSILON * 100.0;
-            qrUpdater = new QRUpdater(L);
+            qrUpdater = new QRUpdater(L1);
         }
         if (m + p == 0) {
             return new LagrangeSolution(x,
@@ -374,7 +392,10 @@ public class QPDualActiveSolver extends QPOptimizer {
             active.add(i);
         }
         int iteration = 0;
-        
+        ciColNorm = new ArrayRealVector(m);
+        for (int j = 0; j < m; j++) {
+             ciColNorm.setEntry(j, CI.getColumnVector(j).getNorm());
+}
         
         // Active-set loop for inequalities
         while (m != 0 && iteration++ < maxIter) {
@@ -390,12 +411,15 @@ public class QPDualActiveSolver extends QPOptimizer {
             double sum = 0;
             for (int k = 0; k < sv.getDimension(); k++) {
                 sum += FastMath.min(0.0, sv.getEntry(k));
+//            double viol=FastMath.min(0.0, sv.getEntry(k));
+//            sum+=(FastMath.abs(viol)>Precision.EPSILON)?viol:0.0;
             }
 
-            // Evaluate convergence
+//            // Evaluate convergence
             if (FastMath.abs(sum) <= tol) {
                 break;// Optimal solution found
             }
+            
             
             // Evaluate most violated constraint, excluding dependent/active loop
             while (iteration++ < maxIter) {
@@ -471,6 +495,8 @@ public class QPDualActiveSolver extends QPOptimizer {
                                         new ArrayRealVector(0,0),
                                         0.0); // no optimal solution is found
         }
+        
+//    
         return buildSolution(x, u, active, G, g0, g, p, m);
     }
 
@@ -516,5 +542,5 @@ public class QPDualActiveSolver extends QPOptimizer {
         }
         return Linv;
     }
-
+    
 }

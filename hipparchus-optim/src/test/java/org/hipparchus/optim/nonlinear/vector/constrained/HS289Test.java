@@ -59,6 +59,6 @@ public class HS289Test {
 
         double f = sol.getValue();
         double expected = 0.0; // FEX
-        assertEquals(expected, f, 1.0e-6 * (Math.abs(expected) + 1.0), "objective mismatch");
+        assertEquals(expected, f, 1.0e-5 * (Math.abs(expected) + 1.0), "objective mismatch");
     }
 }

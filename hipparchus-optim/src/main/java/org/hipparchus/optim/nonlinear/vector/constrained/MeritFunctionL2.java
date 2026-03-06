@@ -114,6 +114,7 @@ public class MeritFunctionL2 {
      * @param objective Objective function
      * @param eqConstraint Equality constraint (may be null)
      * @param iqConstraint Inequality constraint (may be null)
+     * @param bounds constraint (may be null)
      * @param x current point
      */
     public MeritFunctionL2(final TwiceDifferentiableFunction objective,
@@ -480,6 +481,7 @@ public class MeritFunctionL2 {
         final double rj = r.getEntry(j);
         final double diff = newU.getEntry(j) - newY.getEntry(j);  
         final double rNew =  Math.min(rMax,dbdsigma * diff*diff);
+        
         
         
         

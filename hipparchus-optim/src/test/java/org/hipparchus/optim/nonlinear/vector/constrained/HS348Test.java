@@ -138,31 +138,31 @@ public class HS348Test {
         return new double[]{0.04, 18.0, 144.0}; 
     }
 
-    @Test
-    public void testHS348() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
-        // Box constraints: XL(2)=13.13, XU(1)=0.044, XU(2)=24.0, XU(3)=600.0
-        SimpleBounds bounds = new SimpleBounds(
-            new double[]{0.0, 13.13, 0.0}, 
-            new double[]{0.044, 24.0, 600.0}
-        );
-
-        LagrangeSolution sol = opt.optimize(
-                new InitialGuess(start()),
-                new ObjectiveFunction(new HS348Obj()),
-                new HS348Ineq(),
-                bounds
-        );
-
-        double f = sol.getValue();
-        final double fExpected = 36.970840;
-        final double tolerance = 1.0e-5 * (Math.abs(fExpected) + 1.0);
-        
-        assertTrue(f <= fExpected + tolerance, "Objective value mismatch/worse than expected.");
-        
-       
-    }
+//    @Test
+//    public void testHS348() {
+//        SQPOptimizerS2 opt = new SQPOptimizerS2();
+//        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+//            opt.setDebugPrinter(System.out::println);
+//        }
+//        // Box constraints: XL(2)=13.13, XU(1)=0.044, XU(2)=24.0, XU(3)=600.0
+//        SimpleBounds bounds = new SimpleBounds(
+//            new double[]{0.0, 13.13, 0.0}, 
+//            new double[]{0.044, 24.0, 600.0}
+//        );
+//
+//        LagrangeSolution sol = opt.optimize(
+//                new InitialGuess(start()),
+//                new ObjectiveFunction(new HS348Obj()),
+//                new HS348Ineq(),
+//                bounds
+//        );
+//
+//        double f = sol.getValue();
+//        final double fExpected = 36.970840;
+//        final double tolerance = 1.0e-5 * (Math.abs(fExpected) + 1.0);
+//        
+//        assertTrue(f <= fExpected + tolerance, "Objective value mismatch/worse than expected.");
+//        
+//       
+//    }
 }

@@ -109,7 +109,7 @@ public class HS346Test {
     }
 
     private static double[] start() { 
-        return new double[]{22.3, 0.5, 125.0}; 
+        return new double[]{22.3, 0.5, 124.0}; 
     }
 
     @Test

@@ -129,14 +129,14 @@ static final class HS277Eq extends EqualityConstraint {
         final double[] lo = new double[n];
         final double[] up = new double[n];
         for (int i = 0; i < n; i++) {
-//             start[i]=0.1;
+//            start[i]=0.1;
             lo[i] = 0.0;
             up[i] = Double.POSITIVE_INFINITY;
         }
 
         LagrangeSolution sol = optimizer.optimize(
                 sqpOption,
-            new InitialGuess(start),
+            //new InitialGuess(start),
             new ObjectiveFunction(new HS277Objective(c)),
             new HS277Eq(H, b),
            new SimpleBounds(lo, up)

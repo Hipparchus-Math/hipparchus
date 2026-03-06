@@ -49,53 +49,7 @@ public class QRUpdater {
         this.iq = 0;
     }
 
-    /**
-     * Robust hypot: computes sqrt(a^2 + b^2) with scaling to avoid overflow/underflow.
-     * Same sign/magnitude behavior as FastMath.hypot, but more resistant to extremes.
-     */
-    private static double safeHypot(double a, double b) {
-        // trivial fast path
-        if (FastMath.abs(a) ==0.0) {
-            return FastMath.abs(b);
-        }
-        if (FastMath.abs(b) == 0.0) {
-            return FastMath.abs(a);
-        }
-
-        final double RTMIN = FastMath.sqrt(Precision.SAFE_MIN);
-        final double RTMAX = 1.0 / RTMIN;
-
-        double x = a;
-        double y = b;
-        int up = 0;
-        int down = 0;
-
-        double max = FastMath.max(FastMath.abs(x), FastMath.abs(y));
-        while (max > RTMAX) {
-            x = Math.scalb(x, -1);
-            y = Math.scalb(y, -1);
-            down++;
-            max = FastMath.max(FastMath.abs(x), FastMath.abs(y));
-        }
-        while (max < RTMIN) {
-            x = Math.scalb(x, +1);
-            y = Math.scalb(y, +1);
-            up++;
-            max = FastMath.max(FastMath.abs(x), FastMath.abs(y));
-        }
-
-        double h = FastMath.hypot(x, y);
-
-        // undo scaling on h
-        if (down != 0) {
-            h = Math.scalb(h, +down);
-        }
-        if (up != 0) {
-            h = Math.scalb(h, -up);
-        }
-        return h;
-    }
-
+   
     /**
      * Adds a constraint vector and updates the QR factorization via Givens rotations.
      *
@@ -135,6 +89,7 @@ public class QRUpdater {
                 cc = -cc;
                 ss = -ss;
                 tempD.setEntry(j - 1, -h);
+                
             } else {
                 tempD.setEntry(j - 1, h);
             }
@@ -165,6 +120,8 @@ public class QRUpdater {
    
 
     
+    
+
     
     /**
      * Deletes the active constraint at the specified index and updates
@@ -208,13 +165,14 @@ public class QRUpdater {
             cc /= h;
             ss /= h;
             //for deleting constraint sign change doesn't work for all problems
-//            if(cc<0)
-//            {
-//                cc=-cc;
-//                ss=-ss;
-//                R.setEntry(j, j, -h);
-//                
-//            }
+            if(cc<0)
+            {
+                cc=-cc;
+                ss=-ss;
+                R.setEntry(j, j, -h);
+               
+                
+            }
 
             double xny = ss / (1.0 + cc);
             for (int k = j + 1; k < iq; k++) {
@@ -230,6 +188,12 @@ public class QRUpdater {
                 J.setEntry(k, j + 1, xny * (t1 + J.getEntry(k, j)) - t2);
             }
         }
+         // ---- Aggiornamento RNorm ----
+    double maxD = 0.0;
+    for (int i = 0; i < iq; i++) {
+        maxD = FastMath.max(maxD, FastMath.abs(R.getEntry(i, i)));
+    }
+    RNorm = (maxD > 0.0 ? maxD : 1.0);
     }
     
     

@@ -209,6 +209,7 @@ public class LineSearch {
             for (double v : history) {
                 ref = FastMath.max(ref, v);
             }
+            
         }
         // alfaPenalty - currentPenalty > getSettings().getMu() * alpha * currentPenaltyGrad
         return fxNew - ref <= sigma * alpha * directionalDeriv;
@@ -251,7 +252,8 @@ public class LineSearch {
             final double directionalDeriv) {
         double numerator = alpha * directionalDeriv;
         double denominator = alpha * directionalDeriv - fxNew + fxCurrent;
-        if (alpha == alphaMax || nonMonotoneEnabled) {
+        if (alpha == alphaMax ) {
+//        if (alpha == alphaMax || nonMonotoneEnabled) {
             return alpha * beta;
         }
         if (FastMath.abs(denominator) < Precision.SAFE_MIN) {
@@ -288,7 +290,7 @@ public class LineSearch {
         if (!Double.isNaN(alpha)) {
             // monotone search succeeded
             return alpha;
-        } else {
+        } else  {
             // Non-monotone search
             nonMonotoneEnabled = true;
             alpha = searchLoop(f, fxCurrent, directionalDeriv);

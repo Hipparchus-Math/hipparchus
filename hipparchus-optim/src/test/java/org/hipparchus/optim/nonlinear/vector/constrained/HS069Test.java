@@ -69,7 +69,7 @@ public class HS069Test {
         }
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
     }
-
+    
     @Test
     public void testHS069() {
         final InitialGuess guess = new InitialGuess(new double[]{ 1.0, 1.0, 1.0, 1.0 });
