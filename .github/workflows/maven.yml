@@ -22,12 +22,3 @@ jobs:
       # Usiamo -pl e -am per isolare il modulo optimization
       run: mvn -B -U -f pom.xml test -pl hipparchus-optim -am
 
-
-
-    
-
-    
-      # Usiamo -U per forzare l'aggiornamento delle dipendenze (come nell'originale)
-      # Usiamo -pl e -am per isolare il modulo optimization
-      run: mvn -B -U -f pom.xml test -pl hipparchus-optim -am
-      run: mvn -B -U -f pom.xml test -pl hipparchus-optim -am
