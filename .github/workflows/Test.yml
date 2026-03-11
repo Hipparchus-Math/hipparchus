@@ -1,0 +1,38 @@
+name: Java CI with Maven - Constrained Optimization Test
+
+on:
+  push:
+    branches: [ "develop1" ]
+  pull_request:
+    branches: [ "develop1" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: develop1
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build and Test Constrained Nonlinear Vector
+      # Spiegazione flag:
+      # -pl hipparchus-optim: esegue solo questo modulo
+      # -am: compila le dipendenze necessarie (es. hipparchus-core)
+      # -Dtest="...": filtra ed esegue solo i test nel package 'constrained'
+      run: >
+        mvn -B -U -f pom.xml test 
+        -pl hipparchus-optim 
+        -am 
+        -Dtest="org.hipparchus.optim.nonlinear.vector.constrained.**"
+
+    - name: Update dependency graph
+      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
