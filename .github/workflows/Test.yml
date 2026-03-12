@@ -4,10 +4,10 @@
 name: Java CI with Maven - Constrained Optimization Test
 
 on:
-  push:
-    branches: [ "develop1" ]
-  pull_request:
-    branches: [ "develop1" ]
+ # push:
+  #  branches: [ "develop1" ]
+ # pull_request:
+  #  branches: [ "develop1" ]
   workflow_dispatch: # Permette l'avvio manuale dalla tab Actions
 
 jobs:
