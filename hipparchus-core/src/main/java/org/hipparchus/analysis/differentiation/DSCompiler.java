@@ -549,24 +549,28 @@ public class DSCompiler {
                         // it is an entry of the form ∂ⁿf/∂qⱼ⋯∂qₖ∂qₗ where n is max order
                         final List<MultivariateCompositionMapper> row = new ArrayList<>();
 
-                        // find a variable with respect to which we have a derivative
-                        // we select the minimum non-zero derivation order to speed up computation
+                        // find a variable with respect to which we have a non-zero derivative
+                        // we select the row with the smallest number of terms to speed up computation
                         final int[] orders = baseCompiler.derivativesOrders[k].clone();
-                        int minNonZeroOrder = Integer.MAX_VALUE;
+                        MultivariateCompositionMapper[] lowerRow = null;
+                        int nbTerms = -1;
                         int qIndex = -1;
                         for (int j = 0; j < orders.length; ++j) {
-                            final int oj = orders[j];
-                            if (oj > 0 && oj < minNonZeroOrder) {
-                                minNonZeroOrder = oj;
-                                qIndex = j;
+                            if (orders[j] > 0) {
+                                orders[j]--;
+                                final MultivariateCompositionMapper[] mcmRow = rebaser[baseCompiler.getPartialDerivativeIndex(orders)];
+                                orders[j]++;
+                                int n = 0;
+                                for (final MultivariateCompositionMapper lowerTerm : mcmRow) {
+                                    n += lowerTerm.productIndices.length;
+                                }
+                                if (nbTerms < 0 || n < nbTerms) {
+                                    lowerRow = mcmRow;
+                                    nbTerms  = n;
+                                    qIndex   = j;
+                                }
                             }
                         }
-
-                        // find the entry corresponding to differentiating one order less with respect to this variable
-                        // ∂fⁿ⁻¹/∂qⱼ⋯∂qₖ
-                        orders[qIndex]--;
-                        final MultivariateCompositionMapper[] lowerRow =
-                                        rebaser[baseCompiler.getPartialDerivativeIndex(orders)];
 
                         // apply recursion formula
                         for (final MultivariateCompositionMapper lowerTerm : lowerRow) {
