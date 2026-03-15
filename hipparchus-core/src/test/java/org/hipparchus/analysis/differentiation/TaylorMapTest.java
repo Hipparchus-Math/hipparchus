@@ -25,6 +25,9 @@ import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -302,6 +305,61 @@ class TaylorMapTest {
                 DerivativeStructureTest.checkEquals(yDS, idMap.getFunction(1), 2.8e-9);
             }
         }
+    }
+
+    @Test
+    public void testCountRebaseMappers22() throws NoSuchFieldException, IllegalAccessException {
+        doTestCountRebaseMappers(2, 2, 21, 2);
+    }
+
+    @Test
+    public void testCountRebaseMappers36() throws NoSuchFieldException, IllegalAccessException {
+        doTestCountRebaseMappers(3, 6, 44884, 180);
+    }
+
+    @Test
+    public void testCountRebaseMappers37() throws NoSuchFieldException, IllegalAccessException {
+        doTestCountRebaseMappers(3, 7, 182323, 1260);
+    }
+
+    @Test
+    public void testCountRebaseMappers38() throws NoSuchFieldException, IllegalAccessException {
+        doTestCountRebaseMappers(3, 8, 702847, 5040);
+    }
+
+    private void doTestCountRebaseMappers(final int parameters, final int order,
+                                          final int expectedCount, final int expectedMaxCoeff)
+            throws NoSuchFieldException, IllegalAccessException {
+        final DSFactory factory = new DSFactory(parameters, order);
+        final double[] point = new double[parameters];
+        final DerivativeStructure[] function = new DerivativeStructure[parameters];
+        for (int i = 0; i < parameters; ++i) {
+            function[i] = factory.variable(i, 0);
+        }
+        final TaylorMap map = new TaylorMap(point, function).invert(new QRDecomposer(1.0e-10));
+        Assertions.assertNotNull(map);
+        Field rbi = DSCompiler.class.getDeclaredField("rebaseIndirection");
+        rbi.setAccessible(true);
+        Field coeff = null;
+        for (final Class<?> c : DSCompiler.class.getDeclaredClasses()) {
+            if (c.getName().endsWith("AbstractMapper")) {
+                coeff = c.getDeclaredField("coeff");
+                coeff.setAccessible(true);
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        List<Object[][]> list = (List<Object[][]>) rbi.get(DSCompiler.getCompiler(parameters, order));
+        int count = 0;
+        int maxCoeff = 0;
+        for (final Object[] m : list.get(parameters)) {
+            for (final Object mcm : m) {
+                ++count;
+                maxCoeff = FastMath.max(maxCoeff, (Integer) coeff.get(mcm));
+            }
+        }
+        Assertions.assertEquals(expectedCount, count);
+        Assertions.assertEquals(expectedMaxCoeff, maxCoeff);
     }
 
     @Test

@@ -550,12 +550,15 @@ public class DSCompiler {
                         final List<MultivariateCompositionMapper> row = new ArrayList<>();
 
                         // find a variable with respect to which we have a derivative
+                        // we select the minimum non-zero derivation order to speed up computation
                         final int[] orders = baseCompiler.derivativesOrders[k].clone();
+                        int minNonZeroOrder = Integer.MAX_VALUE;
                         int qIndex = -1;
                         for (int j = 0; j < orders.length; ++j) {
-                            if (orders[j] > 0) {
+                            final int oj = orders[j];
+                            if (oj > 0 && oj < minNonZeroOrder) {
+                                minNonZeroOrder = oj;
                                 qIndex = j;
-                                break;
                             }
                         }
 
