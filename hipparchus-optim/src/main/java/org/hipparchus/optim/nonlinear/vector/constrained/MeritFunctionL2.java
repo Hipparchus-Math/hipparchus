@@ -232,14 +232,83 @@ public class MeritFunctionL2 {
     double getPenaltyEval() {
         return this.pEval;
     }
+    
+    public double value0() {
+        RealVector xAlpha = x;
+        RealVector yAlpha = null;
+        if (y.getDimension() > 0) {
+            yAlpha = y;
+        }
 
-    /**
-     * Evaluate penalty function at x + alpha * dx.
-     *
-     * @param alpha Step length
-     * @return penalty value
-     */
-    public double value(double alpha) {
+        
+        double penalty =objEval;
+
+        int me = 0;
+        if (eqConstraint != null) {
+            me = eqConstraint.dimY();
+            RealVector re = r.getSubVector(0, me);
+            RealVector ye = yAlpha.getSubVector(0, me);
+            
+            RealVector g = eqEval.subtract(eqConstraint.getLowerBound());
+
+            RealVector g2 = g.ebeMultiply(g);
+            penalty -= ye.dotProduct(g) - 0.5 * re.dotProduct(g2);
+        }
+
+        int mi = 0;
+        if (iqConstraint != null) {
+            mi = iqConstraint.dimY();
+            RealVector ri = r.getSubVector(me, mi);
+            RealVector yi = yAlpha.getSubVector(me, mi);
+
+            RealVector yk = yAlpha.getSubVector(me, mi);
+
+            
+            RealVector gk = iqEval.subtract(iqConstraint.getLowerBound());
+
+            RealVector g = new ArrayRealVector(gk);
+            RealVector mask = new ArrayRealVector(g.getDimension(), 1.0);
+
+            for (int i = 0; i < gk.getDimension(); i++) {
+                if (gk.getEntry(i) > (yk.getEntry(i) / ri.getEntry(i))) {
+                    mask.setEntry(i, 0.0);
+                    penalty -= 0.5 * yi.getEntry(i) * yi.getEntry(i) / ri.getEntry(i);
+                }
+            }
+
+            RealVector g2 = g.ebeMultiply(g.ebeMultiply(mask));
+            penalty -= yi.dotProduct(g.ebeMultiply(mask)) - 0.5 * ri.dotProduct(g2);
+        }
+        
+        int mb = 0;
+        if (bounds != null) {
+            mb = bounds.dimY();
+            RealVector ri = r.getSubVector(me+mi, mb);
+            RealVector yi = yAlpha.getSubVector(me+mi, mb);
+
+            RealVector yk = yAlpha.getSubVector(me+mi, mb);
+
+            
+            RealVector gk = bEval.subtract(bounds.getLowerBound());
+
+            RealVector g = new ArrayRealVector(gk);
+            RealVector mask = new ArrayRealVector(g.getDimension(), 1.0);
+
+            for (int i = 0; i < gk.getDimension(); i++) {
+                if (gk.getEntry(i) > (yk.getEntry(i) / ri.getEntry(i))) {
+                    mask.setEntry(i, 0.0);
+                    penalty -= 0.5 * yi.getEntry(i) * yi.getEntry(i) / ri.getEntry(i);
+                }
+            }
+
+            RealVector g2 = g.ebeMultiply(g.ebeMultiply(mask));
+            penalty -= yi.dotProduct(g.ebeMultiply(mask)) - 0.5 * ri.dotProduct(g2);
+        }
+        
+        return penalty;
+    }
+
+   public double value(double alpha) {
         RealVector xAlpha = x.add(dx.mapMultiply(alpha));
         RealVector yAlpha = null;
         if (y.getDimension() > 0) {
@@ -313,7 +382,6 @@ public class MeritFunctionL2 {
         pEval = penalty;
         return penalty;
     }
-
     /**
      * Get penalty gradient at current x.
      *

@@ -91,8 +91,7 @@ public class HS114Test {
 
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = opt.optimize(
             guess,
@@ -103,7 +102,7 @@ public class HS114Test {
         );
 
         // FEX = -0.176880696344D+04
-        assertEquals(-1768.80696344, sol.getValue(), 1e-4);
+        HSProblemTestUtils.assertExpectedObjective(-1768.80696344, sol);
     }
 }
 

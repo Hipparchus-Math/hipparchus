@@ -58,10 +58,10 @@ public class HS034Test {
 //    @Test
 //    public void testHS034() {
 //        InitialGuess guess = new InitialGuess(new double[]{0, 1.05, 2.9});
-//        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+//        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer()
 //        double val = (-FastMath.log(FastMath.log(10)));
 //        LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS034Obj()), new HS034Ineq());
-//        assertEquals(val, sol.getValue(), 1e-6);
+//        HSProblemTestUtils.assertExpectedObjective(val, sol);
 //    }
 //    
      @Test
@@ -71,12 +71,9 @@ public class HS034Test {
                 new double[]{ 0.0, 0.0,0.0 },
                 new double[]{ 100.0,100.0,10.0 }
         );
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = (-FastMath.log(FastMath.log(10)));
         LagrangeSolution sol = optimizer.optimize(bounds,guess, new ObjectiveFunction(new HS034Obj()), new HS034Ineq());
-        assertEquals(val, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

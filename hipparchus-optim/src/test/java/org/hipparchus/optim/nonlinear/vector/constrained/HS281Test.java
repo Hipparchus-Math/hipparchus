@@ -57,7 +57,7 @@ public class HS281Test {
         double[] start = new double[10]; // x(i) = 0
         InitialGuess guess = new InitialGuess(start);
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         optimizer.setDebugPrinter(s -> {});
         
         double val = 0.0;
@@ -67,6 +67,6 @@ public class HS281Test {
             new ObjectiveFunction(new HS281Obj())
         );
 
-        assertEquals(val, sol.getValue(), 1e-4);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

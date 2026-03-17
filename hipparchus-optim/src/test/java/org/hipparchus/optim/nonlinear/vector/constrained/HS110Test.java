@@ -120,8 +120,7 @@ public class HS110Test {
         final double[] lo = {LO,LO,LO,LO,LO,LO,LO,LO,LO,LO};
         final double[] up = {UP,UP,UP,UP,UP,UP,UP,UP,UP,UP};
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         return optimizer.optimize(
                 new InitialGuess(x0),
@@ -135,7 +134,7 @@ public class HS110Test {
         final LagrangeSolution sol = solve();
 
         // Objective value
-        assertEquals(F_REF, sol.getValue(), 1e-6 * (abs(F_REF) + 1.0), "objective mismatch");
+        HSProblemTestUtils.assertExpectedObjective(F_REF, sol);
 
     
         

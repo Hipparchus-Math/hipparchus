@@ -107,30 +107,30 @@ public class HS338Test {
         return new double[]{0.0, 0.0, 0.0}; 
     }
 
-//    @Test
-//    public void testHS338() {
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
-//
-//        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-//            opt.setDebugPrinter(System.out::println);
-//        }
-//        
-//       
-//
-//        LagrangeSolution sol = opt.optimize(
-//                new InitialGuess(start()),
-//                new ObjectiveFunction(new HS338Obj()),
-//                new HS338Eq()
-//                
-//        );
-//
-//        double f = sol.getValue();
-//        final double fExpected = -10.992806;
-//        
-//        // The problem is a maximization of distance from origin subject to constraints.
-//        // It has multiple local optima. We test for the minimum provided in the Fortran code.
-//        assertEquals(fExpected, f, 1.0e-5 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-//        
-//       
-//    }
+    @Test
+    public void testHS338() {
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
+        
+       
+
+        LagrangeSolution sol = opt.optimize(
+                new InitialGuess(start()),
+                new ObjectiveFunction(new HS338Obj()),
+                new HS338Eq()
+                
+        );
+
+        double f = sol.getValue();
+        final double fExpected = -10.992806;
+        
+        // The problem is a maximization of distance from origin subject to constraints.
+        // It has multiple local optima. We test for the minimum provided in the Fortran code.
+        assertEquals(fExpected, f, 1.0e-5 * (Math.abs(fExpected) + 1.0), "objective mismatch");
+        
+       
+    }
 }

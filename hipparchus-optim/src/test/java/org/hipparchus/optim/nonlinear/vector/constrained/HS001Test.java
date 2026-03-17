@@ -71,13 +71,10 @@ public class HS001Test {
         SQPOption sqpOption=new SQPOption();
         sqpOption.setGradientMode(gradientMode);
         InitialGuess guess = new InitialGuess(new double[]{-2, 1});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 0.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption, guess, new ObjectiveFunction(new HS001Obj()));
         
-        assertEquals(val, sol.getValue(), sqpOption.getEps()*10.0*(1.0+val));
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

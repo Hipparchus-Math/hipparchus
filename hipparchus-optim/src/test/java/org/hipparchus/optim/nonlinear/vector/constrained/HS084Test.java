@@ -94,22 +94,22 @@ public class HS084Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
     }
 
-//    @Test
-//    public void testHS084() {
-//        final InitialGuess guess = new InitialGuess(X0);
-//        final SimpleBounds bounds = new SimpleBounds(LB, UB);
-//
-//        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-//        optimizer.setDebugPrinter(System.out::println);
-//
-//        final LagrangeSolution sol = optimizer.optimize(
-//            guess,
-//            new ObjectiveFunction(new TP84Obj()),
-//            new TP84Ineq(),
-//            bounds
-//        );
-//
-//        // best known objective = -5280335.133
-//        assertEquals(-5280335.133, sol.getValue(), 1e-3);
-//    }
+    @Test
+    public void testHS084() {
+        final InitialGuess guess = new InitialGuess(X0);
+        final SimpleBounds bounds = new SimpleBounds(LB, UB);
+
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
+        optimizer.setDebugPrinter(System.out::println);
+
+        final LagrangeSolution sol = optimizer.optimize(
+            guess,
+            new ObjectiveFunction(new TP84Obj()),
+            new TP84Ineq(),
+            bounds
+        );
+
+        // best known objective = -5280335.133
+        HSProblemTestUtils.assertExpectedObjective(-5280335.133, sol);
+    }
 }

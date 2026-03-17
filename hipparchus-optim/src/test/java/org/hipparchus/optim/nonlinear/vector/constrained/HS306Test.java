@@ -55,7 +55,7 @@ public class HS306Test {
 
 //    @Test
 //    public void testHS306() {
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
+//        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer()
 //        opt.setDebugPrinter(System.out::println);
 //        SQPOption sqpOption=new SQPOption();
 //        sqpOption.setGradientMode(GradientMode.FORWARD);

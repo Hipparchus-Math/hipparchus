@@ -266,10 +266,7 @@ public class HS366Test {
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
         // Optimization setup (using the provided SQPOptimizerS2 for compatibility)
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
             new InitialGuess(x0),

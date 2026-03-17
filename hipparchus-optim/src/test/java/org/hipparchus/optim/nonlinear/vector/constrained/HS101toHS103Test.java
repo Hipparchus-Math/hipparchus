@@ -273,8 +273,7 @@ public class HS101toHS103Test {
 
     // -------- Solve utility --------
     static LagrangeSolution solve(Problem p, double[] start, double[] lo, double[] up) {
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         return optimizer.optimize(
                 new InitialGuess(start),

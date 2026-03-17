@@ -282,11 +282,7 @@ public class HS361Test {
 
     @Test
     public void testHS361Optimization() {
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Bounds: traduzione diretta da LXL/LXU, XL, XU.
         final double[] lowerBounds = {
@@ -306,9 +302,11 @@ public class HS361Test {
         };
 
         final SimpleBounds bounds = new SimpleBounds(lowerBounds, upperBounds);
-
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         final LagrangeSolution sol = opt.optimize(
-//                new InitialGuess(X_START),
+                option,
+                new InitialGuess(X_START),
                 new ObjectiveFunction(new HS361Obj()),
                 new HS361Ineq(),
                 bounds

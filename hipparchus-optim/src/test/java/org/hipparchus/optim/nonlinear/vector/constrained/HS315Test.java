@@ -107,8 +107,7 @@ public class HS315Test {
 
     @Test
     public void testHS315() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); 
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer() ;
         
         final double fExpected = -0.8;
         

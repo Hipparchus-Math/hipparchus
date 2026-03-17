@@ -61,8 +61,7 @@ public class HS201Test {
         final double SUP = Double.POSITIVE_INFINITY;
         final double INF = Double.NEGATIVE_INFINITY;
 
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         return optimizer.optimize(
             new InitialGuess(start),

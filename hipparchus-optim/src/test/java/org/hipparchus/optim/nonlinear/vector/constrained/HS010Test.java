@@ -16,6 +16,7 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
@@ -33,28 +34,39 @@ public class HS010Test {
         @Override public double value(RealVector x) {
             return (x.getEntry(0) - x.getEntry(1));
         }
-        @Override public RealVector gradient(RealVector x) { throw new UnsupportedOperationException(); }
+        @Override public RealVector gradient(RealVector x) { 
+           return  new ArrayRealVector(new double[]{1.0,-1.0}); }
         @Override public RealMatrix hessian(RealVector x) { throw new UnsupportedOperationException(); }
     }
 
     private static class HS010Ineq extends InequalityConstraint {
         HS010Ineq() { super(new ArrayRealVector(new double[]{ 0.0 })); }
         @Override public RealVector value(RealVector x) {
-            return new ArrayRealVector(new double[]{ (((((-3) * FastMath.pow(x.getEntry(0), 2)) + ((2 * x.getEntry(0)) * x.getEntry(1))) - FastMath.pow(x.getEntry(1), 2))) - ((-1)) });
+            double x1=x.getEntry(0);
+            double x2=x.getEntry(1);
+            return new ArrayRealVector(new double[]{(-3.0*x1*x1+2.0*x1*x2-x2*x2+1.0 )});
         }
-        @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
+        @Override public RealMatrix jacobian(RealVector x) { 
+            double x1=x.getEntry(0);
+            double x2=x.getEntry(1);
+            double g1=-6.0*x1+2.0*x2;      
+            double g2=2.0*(x1-x2);  
+            RealMatrix J = new Array2DRowRealMatrix(1, 2);
+            J.setEntry(0, 0, g1);
+            J.setEntry(0, 1, g2);
+            return  J;}
+        
         @Override public int dim() { return 2; }
     }
 
     @Test
     public void testHS010() {
-        InitialGuess guess = new InitialGuess(new double[]{-10, 10});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        InitialGuess guess = new InitialGuess(new double[]{-10.0, 10.0});
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.EXTERNAL);
         double val = -1.0;
-        LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS010Obj()), new HS010Ineq());
-        assertEquals(val, sol.getValue(), 1e-6);
+        LagrangeSolution sol = optimizer.optimize(option,guess, new ObjectiveFunction(new HS010Obj()), new HS010Ineq());
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

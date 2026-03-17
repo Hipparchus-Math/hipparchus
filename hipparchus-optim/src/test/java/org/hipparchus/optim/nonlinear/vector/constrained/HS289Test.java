@@ -49,8 +49,7 @@ public class HS289Test {
         final int n = 30;
         double[] x0 = tp289Init(n);
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
             new InitialGuess(x0),

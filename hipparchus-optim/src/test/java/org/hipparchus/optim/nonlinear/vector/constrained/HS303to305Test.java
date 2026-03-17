@@ -72,8 +72,7 @@ public class HS303to305Test {
     }
 
     private void runCase(int n) {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(initX(n)),

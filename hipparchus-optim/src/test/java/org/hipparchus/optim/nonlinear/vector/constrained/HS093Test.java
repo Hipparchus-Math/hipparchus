@@ -98,8 +98,7 @@ public class HS093Test {
         System.out.printf("TP93 objective at XEX = %.12f (expected %.12f)%n", fAtXex, fex);
         assertEquals(fex, fAtXex, 1e-5);
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = optimizer.optimize(
                 new InitialGuess(x0),
@@ -110,7 +109,7 @@ public class HS093Test {
 
         System.out.printf("TP93 optimizer f* = %.12f%n", sol.getValue());
         // Tightish tolerance (these problems are well-scaled)
-        assertEquals(fex, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(fex, sol);
     }
 }
 

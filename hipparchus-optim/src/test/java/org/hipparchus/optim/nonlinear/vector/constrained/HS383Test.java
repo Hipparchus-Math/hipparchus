@@ -31,6 +31,7 @@ import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 
 /**
  * HS383 (TP383) – Linear-fractional type problem (14 variables) with
@@ -194,43 +195,42 @@ public class HS383Test {
             return J;
         }
     }
+//    @Disabled
+    @Test
+    public void testHS383_optimization() {
 
-//    @Test
-//    public void testHS383_optimization() {
-//
-//        // X(i) iniziale = 0.01
-//        double[] x0 = new double[DIM];
-//        for (int i = 0; i < DIM; i++) {
-//            x0[i] = 0.01;
-//        }
-//
-//        // Bounds: XL = 1e-4, XU = 1/B(i)
-//        double[] lower = new double[DIM];
-//        double[] upper = new double[DIM];
-//        for (int i = 0; i < DIM; i++) {
-//            lower[i] = XL;
-//            upper[i] = 1.0 / B[i];
-//        }
-//        SimpleBounds bounds = new SimpleBounds(lower, upper);
-//
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
-//        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-//            opt.setDebugPrinter(System.out::println);
-//        }
-//
-//        LagrangeSolution sol = opt.optimize(
-//                new InitialGuess(x0),
-//                new ObjectiveFunction(new HS383Obj()),
-//                new HS383Eq(),
-//                bounds
-//        );
-//
-//        double f = sol.getValue();
-//
-//        final double fExpected = 0.728566e6;
-//        final double tolF      = 1.0e-4 * (FastMath.abs(fExpected) + 1.0);
-//
-//        assertTrue(fExpected + tolF >= f,
-//                   "HS383: expected F <= " + (fExpected + tolF) + " but got F = " + f);
-//    }
+        // X(i) iniziale = 0.01
+        double[] x0 = new double[DIM];
+        for (int i = 0; i < DIM; i++) {
+            x0[i] = 0.01;
+        }
+
+        // Bounds: XL = 1e-4, XU = 1/B(i)
+        double[] lower = new double[DIM];
+        double[] upper = new double[DIM];
+        for (int i = 0; i < DIM; i++) {
+            lower[i] = XL;
+            upper[i] = 1.0 / B[i];
+        }
+        SimpleBounds bounds = new SimpleBounds(lower, upper);
+
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
+        SQPOption option =new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
+        LagrangeSolution sol = opt.optimize(
+                option,
+                new InitialGuess(x0),
+                new ObjectiveFunction(new HS383Obj()),
+                new HS383Eq(),
+                bounds
+        );
+
+        double f = sol.getValue();
+
+        final double val = 0.728566e6;
+         HSProblemTestUtils.assertBetterObjective(val, sol);
+    }
 }

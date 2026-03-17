@@ -60,13 +60,10 @@ public class HS020Test {
         SQPOption sqpOption=new SQPOption();
         sqpOption.setMaxLineSearchIteration(20);
         InitialGuess guess = new InitialGuess(new double[]{0.1, 1.0});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 81.5-25*FastMath.sqrt(3.0);
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS020Obj()), new HS020Ineq());
-        assertEquals(val, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
     double[]lb=new double[]{-1.0/2.0,Double.NEGATIVE_INFINITY};
     double[]ub=new double[]{1.0/2.0,Double.POSITIVE_INFINITY};
@@ -76,12 +73,9 @@ public class HS020Test {
         
         InitialGuess guess = new InitialGuess(new double[]{0.1, 1.0});
         SQPOption sqpOption=new SQPOption();
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 81.5-25*FastMath.sqrt(3.0);  //(81.5D0-25.D0*DSQRT(3.D0))
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS020Obj()), new HS020Ineq1(),new SimpleBounds(lb, ub));
-        assertEquals(val, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

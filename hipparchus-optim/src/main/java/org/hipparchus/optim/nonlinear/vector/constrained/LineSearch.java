@@ -134,7 +134,8 @@ public class LineSearch {
         this.maxHistory = maxHistory;
         this.sigma = mu;
         this.beta = beta;
-        this.alphaMin = FastMath.min(1.0e-12, eps);
+        //this.alphaMin = FastMath.min(1.0e-12, eps);
+        this.alphaMin =1.0e-14;
         this.maxMonotoneFailures = maxMonotoneFailures;
         this.maxBadSteps = maxBadSteps;
         this.history = new LinkedList<>();
@@ -250,18 +251,17 @@ public class LineSearch {
      */
     private double updateStepLength(final double alpha, final double fxCurrent, final double fxNew,
             final double directionalDeriv) {
+     
         double numerator = alpha * directionalDeriv;
         double denominator = alpha * directionalDeriv - fxNew + fxCurrent;
-        if (alpha == alphaMax ) {
-//        if (alpha == alphaMax || nonMonotoneEnabled) {
-            return alpha * beta;
-        }
+       
         if (FastMath.abs(denominator) < Precision.SAFE_MIN) {
             return alpha * beta;
         }
 
         double alphaStar = 0.5 * alpha * numerator / denominator;
-        return FastMath.min(FastMath.max(alphaStar, alpha * beta), alphaMax);
+        
+        return FastMath.max( alpha * beta, FastMath.min(alphaStar,0.5*alpha));
 
     }
 
@@ -273,15 +273,10 @@ public class LineSearch {
      */
     public double search(final MeritFunctionL2 f) {
         searchCount = 0;
-        double fxCurrent = f.getPenaltyEval();
+        double fxCurrent = f.value0();
         double directionalDeriv = f.getGradient();
 
         alphaMax = 1.0;
-//       alphaMin = FastMath.min(1.0, 1e-6 / FastMath.max(1.0, 1.0e-6/(1+FastMath.abs(directionalDeriv))));
-        alphaMin = 1.0e-6 * (1.0) / FastMath.max(1.0, f.getDx().getNorm());
-        
-        alphaMin = FastMath.max(1.0e-12, alphaMin);
-        
         
 
         // Monotone Search
@@ -308,7 +303,12 @@ public class LineSearch {
                 } else {
                     markBadStep();
                 }
-                return alphaMin;
+                if(this.badStepFailed)
+                {
+                   f.value(0.0);
+                   return 0.0;
+                }
+                else return alphaMin;
 
             }
         }

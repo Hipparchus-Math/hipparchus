@@ -100,11 +100,13 @@ public class HS288Test {
                 g[i5]  += 2.0 * f3 * df3_d_xi5;
                 g[i10] += 2.0 * f3 * df3_d_xi10;
 
-                // f4 = sqrt(10)*(xi - xi15)^2
-                // df4/dxi   = sqrt(10)*2*(xi - xi15) = 2*sqrt(10)*t4
-                // df4/dxi15 = -2*sqrt(10)*t4
-                double df4_d_xi   =  2.0 * SQRT10 * t4;
-                double df4_d_xi15 = -2.0 * SQRT10 * t4;
+                // In value():
+                //   f4 = (sqrt(10) * (xi - xi15))^2 = 10 * (xi - xi15)^2
+                // So:
+                //   df4/dxi   =  20 * (xi - xi15)
+                //   df4/dxi15 = -20 * (xi - xi15)
+                double df4_d_xi   =  20.0 * t4;
+                double df4_d_xi15 = -20.0 * t4;
                 g[i0]  += 2.0 * f4 * df4_d_xi;
                 g[i15] += 2.0 * f4 * df4_d_xi15;
             }
@@ -119,10 +121,9 @@ public class HS288Test {
     }
 
     private static LagrangeSolution solve(double[] x0) {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); // obbligatorio per il tracing
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer() ;// obbligatorio per il tracing;
         SQPOption sqpOption=new SQPOption();
-        sqpOption.setGradientMode(GradientMode.EXTERNAL);
+        sqpOption.setGradientMode(GradientMode.FORWARD);
         return opt.optimize(
                 sqpOption,
                 new InitialGuess(x0),
@@ -149,4 +150,3 @@ public class HS288Test {
                      "objective mismatch at optimum");
     }
 }
-

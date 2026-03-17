@@ -93,8 +93,7 @@ public class HS294toHS299Test {
 
     private static void runCase(int n) {
         double[] x0 = initX(n);
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(x0),

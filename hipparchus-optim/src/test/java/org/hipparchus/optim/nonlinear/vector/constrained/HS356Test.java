@@ -238,11 +238,7 @@ public class HS356Test {
     
     @Test
     public void testHS356() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         
         // Box constraints: X1 >= 0.125, X2 >= 0.0, X3 >= 0.0, X4 unconstrained
         SimpleBounds bounds = new SimpleBounds(

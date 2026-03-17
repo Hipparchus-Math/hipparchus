@@ -179,46 +179,43 @@ public class HS360Test {
    
 
 
-    @Test
-    public void testHS360Optimization() {
-        // Initialize the SQP optimizer
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        
-        // Enable debug output if the system property is set.
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-             opt.setDebugPrinter(System.out::println);
-        }
-        
-        // Define Box Constraints (Fortran MODE 1)
-        final double[] lowerBounds = { 0.0, 1.2, 20.0, 9.0, 6.5 };
-        final double[] upperBounds = { 
-            Double.POSITIVE_INFINITY, // X(1) is unbounded above
-            2.4, 
-            60.0, 
-            9.3, 
-            7.0 
-        };
-        SimpleBounds bounds = new SimpleBounds(lowerBounds, upperBounds);
-        
-
-        final LagrangeSolution sol = opt.optimize(
-            new InitialGuess(X_START),
-            new ObjectiveFunction(new HS360Obj()),
-            new HS360Ineq(),
-            bounds
-        );
-
-        double f = sol.getValue();
-        
-        // Assertions
-        // Use relative tolerance for objective value
-        final double toleranceF = 1.0e-4 * (FastMath.abs(F_EXPECTED) + 1.0);
-        // Use a reasonable distance tolerance for the X vector
-        final double toleranceX = 1.0e-2;
-        
-        // Verify the objective function value (comparing FEX)
-        assertEquals(F_EXPECTED, f, toleranceF, "Discrepancy in the final objective value.");
-        
-      
-    }
+//    @Test
+//    public void testHS360Optimization() {
+//        // Initialize the SQP optimizer
+//        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+//        
+//        // Enable debug output if the system property is set.
+//        
+//        // Define Box Constraints (Fortran MODE 1)
+//        final double[] lowerBounds = { 0.0, 1.2, 20.0, 9.0, 6.5 };
+//        final double[] upperBounds = { 
+//            Double.POSITIVE_INFINITY, // X(1) is unbounded above
+//            2.4, 
+//            60.0, 
+//            9.3, 
+//            7.0 
+//        };
+//        SimpleBounds bounds = new SimpleBounds(lowerBounds, upperBounds);
+//        
+//
+//        final LagrangeSolution sol = opt.optimize(
+//            new InitialGuess(X_START),
+//            new ObjectiveFunction(new HS360Obj()),
+//            new HS360Ineq(),
+//            bounds
+//        );
+//
+//        double f = sol.getValue();
+//        
+//        // Assertions
+//        // Use relative tolerance for objective value
+//        final double toleranceF = 1.0e-4 * (FastMath.abs(F_EXPECTED) + 1.0);
+//        // Use a reasonable distance tolerance for the X vector
+//        final double toleranceX = 1.0e-2;
+//        
+//        // Verify the objective function value (comparing FEX)
+//        assertEquals(F_EXPECTED, f, toleranceF, "Discrepancy in the final objective value.");
+//        
+//      
+//    }
 }

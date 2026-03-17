@@ -103,7 +103,7 @@ public class HS335Test {
 
 //    @Test
 //    public void testHS335() {
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
+//        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer()
 //        SQPOption sqpOpt=new SQPOption();
 //        sqpOpt.setGradientMode(GradientMode.EXTERNAL);
 //        if (Boolean.getBoolean("hipparchus.debug.sqp")) {

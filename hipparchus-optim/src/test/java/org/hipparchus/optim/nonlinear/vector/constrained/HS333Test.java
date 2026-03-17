@@ -105,19 +105,17 @@ public class HS333Test {
 
     @Test
     public void testHS333() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         
        
         SimpleBounds bounds = new SimpleBounds(
             new double[]{Double.NEGATIVE_INFINITY, 0.0, Double.NEGATIVE_INFINITY}, 
             new double[]{Double.POSITIVE_INFINITY, 0.07, Double.POSITIVE_INFINITY}
         );
-
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.EXTERNAL);
         LagrangeSolution sol = opt.optimize(
+                option,
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS333Obj()),
                 bounds

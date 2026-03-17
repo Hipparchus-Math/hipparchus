@@ -174,12 +174,9 @@ public class HS351Test {
     @Test
     public void testHS351() {
         // SQPOptimizerS2 is a placeholder for an unconstrained/SQP optimizer.
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         
         // RECOVERY: Added conditional debug printing
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
         
         // The HS351 problem is unconstrained.
         

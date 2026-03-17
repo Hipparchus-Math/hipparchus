@@ -54,8 +54,7 @@ public class HS209Test {
         InitialGuess guess = new InitialGuess(new double[]{ -1.2, 1.0 });
 
         // Optimizer instance
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         // Unconstrained optimize: only objective
         LagrangeSolution sol = optimizer.optimize(
                 guess,
@@ -63,7 +62,7 @@ public class HS209Test {
         );
 
         // Expect optimum at (1,1) and f* = 0
-        assertEquals(0.0, sol.getValue(), 1e-7);
+        HSProblemTestUtils.assertExpectedObjective(0.0, sol);
         
     }
 }

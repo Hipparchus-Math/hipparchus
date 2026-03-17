@@ -22,6 +22,7 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 
@@ -73,10 +74,9 @@ public class HS310Test {
     }
 
     private LagrangeSolution solve() {
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); // richiesto
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer(); // richiesto;
          SQPOption sqpOption=new SQPOption();
-         sqpOption.setGradientMode(GradientMode.EXTERNAL);
+         sqpOption.setGradientMode(GradientMode.CENTRAL);
         // 
         final double[] x0 = { -1.2, 1.0 };
 
@@ -90,9 +90,9 @@ public class HS310Test {
 
     @Test
     public void testHS310_valueOnly() {
-        final double fExpected = 0.0;
+        final double val = 0.0;
         final LagrangeSolution sol = solve();
         final double f = sol.getValue();
-        assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

@@ -96,8 +96,7 @@ public class HS087Test {
                 new double[]{ 400.0, 1000.0, 420.0, 420.0, 1000.0, 0.5236 }
         );
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println); // richiesto
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer(); // richiesto;
 
         double expected = 0.892759773493e4; // FEX
 
@@ -108,6 +107,6 @@ public class HS087Test {
                 bounds
         );
 
-        assertEquals(expected, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(expected, sol);
     }
 }

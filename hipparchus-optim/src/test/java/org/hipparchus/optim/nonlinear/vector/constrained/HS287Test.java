@@ -101,8 +101,7 @@ public class HS287Test {
     }
 
     private static LagrangeSolution solve(double[] x0) {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         SQPOption sqpOption=new SQPOption();
         sqpOption.setGradientMode(GradientMode.EXTERNAL);
         return opt.optimize(

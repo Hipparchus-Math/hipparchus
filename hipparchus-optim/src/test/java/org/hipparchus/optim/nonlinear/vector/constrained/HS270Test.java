@@ -191,10 +191,7 @@ public class HS270Test {
 
         double[] x0 = new double[]{1.1, 2.1, 3.1, 4.1, -1.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Bounds: x1 ≥1, x2 ≥2, x3 ≥3, x4 ≥4, x5 free
         SimpleBounds bounds = new SimpleBounds(

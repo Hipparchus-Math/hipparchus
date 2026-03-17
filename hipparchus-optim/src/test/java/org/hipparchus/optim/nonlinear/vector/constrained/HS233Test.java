@@ -137,12 +137,11 @@ public class HS233Test {
         // Initial guess (MODE=1): X(1)=1.2, X(2)=1
         double[] x0 = new double[]{1.2, 1.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
-
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         LagrangeSolution sol = opt.optimize(
+                option,
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS233Obj()),
                 null,              // no equalities

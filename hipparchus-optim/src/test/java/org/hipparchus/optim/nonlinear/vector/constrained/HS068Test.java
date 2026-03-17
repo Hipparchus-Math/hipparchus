@@ -106,8 +106,7 @@ public class HS068Test {
     @Test
     public void testHS068() {
         final InitialGuess guess = new InitialGuess(new double[] { 1, 1, 1, 1 });
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         final double expected = -0.920425020704; // FEX dal Fortran
         final SimpleBounds bounds = new SimpleBounds(lb, ub);
@@ -115,6 +114,6 @@ public class HS068Test {
         final LagrangeSolution sol =
             optimizer.optimize(guess, new ObjectiveFunction(new HS068Obj()), new HS068Eq(), bounds);
 
-        assertEquals(expected, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(expected, sol);
     }
 }

@@ -264,31 +264,28 @@ public class HS236Test {
     public void testHS236_optimization() {
 
         // Initial guess (MODE=1): X(1)=10, X(2)=10
-        double[] x0 = new double[]{10.0, 10.0};
+        double[] x0 = new double[]{5.0, 5.0};
 
         // Bounds:
         double[] lower = new double[]{0.0, 0.0};
         double[] upper = new double[]{75.0, 65.0};
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
-
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         LagrangeSolution sol = opt.optimize(
+                option,
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS236Obj()),
                 null,               // no equalities
                 new HS236Ineq(),    // 2 inequalities
-                bounds              // box bounds
+                bounds             // box bounds
         );
 
         double f = sol.getValue();
 
-        final double fExpected = -58.9034360;
-        final double tol = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
-
-        assertEquals(fExpected, f, tol);
+        final double val = -58.9034360;
+       HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

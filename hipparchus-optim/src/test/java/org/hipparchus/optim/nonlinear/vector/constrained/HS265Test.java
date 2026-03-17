@@ -161,7 +161,7 @@ public class HS265Test {
 //        // Initial guess: x = (0, 0, 0, 0)
 //        double[] x0 = new double[]{0.0, 0.0, 0.0, 0.0};
 //
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
+//        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer()
 //        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
 //            opt.setDebugPrinter(System.out::println);
 //        }

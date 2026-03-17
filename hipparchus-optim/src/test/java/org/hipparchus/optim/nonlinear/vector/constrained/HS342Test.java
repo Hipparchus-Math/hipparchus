@@ -105,11 +105,7 @@ public class HS342Test { // Identical to HS341 in problem definition
 
     @Test
     public void testHS342() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         
         // Box constraints: X1, X2, X3 >= 0.0
         SimpleBounds bounds = new SimpleBounds(

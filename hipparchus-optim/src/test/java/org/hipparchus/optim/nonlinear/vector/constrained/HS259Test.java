@@ -128,10 +128,7 @@ public class HS259Test {
         // Initial guess from Fortran:
         double[] x0 = new double[]{0.0, 0.0, 0.0, 0.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Only x4 has an upper bound: x4 ≤ 1
         SimpleBounds bounds = new SimpleBounds(

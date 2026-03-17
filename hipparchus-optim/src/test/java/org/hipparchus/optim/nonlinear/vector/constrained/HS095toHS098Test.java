@@ -91,8 +91,7 @@ public class HS095toHS098Test {
 
     @Test
     public void testHS095() {
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         // KN1 = 1 → B1..B4 as below
         final double B1 = 4.97,  B2 = -1.88,  B3 = -29.08,  B4 = -78.02;
@@ -106,13 +105,12 @@ public class HS095toHS098Test {
 
         // Expected f*
         final double fExpected = 0.0156195144282;
-        assertEquals(fExpected, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
     }
 
     @Test
     public void testHS096() {
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         // KN1 = 2
         final double B1 = 4.97,  B2 = -1.88,  B3 = -69.08,  B4 = -118.02;
@@ -125,13 +123,12 @@ public class HS095toHS098Test {
         );
 
         final double fExpected = 0.0156195134384;
-        assertEquals(fExpected, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
     }
 
     @Test
     public void testHS097() {
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         // KN1 = 3
         final double B1 = 32.97,  B2 = 25.12,  B3 = -29.08,  B4 = -78.02;
@@ -144,13 +141,12 @@ public class HS095toHS098Test {
         );
 
         final double fExpected = 3.1358089;
-        assertEquals(fExpected, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
     }
 
     @Test
     public void testHS098() {
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         // KN1 = 4
         final double B1 = 32.97,  B2 = 25.12,  B3 = -124.08,  B4 = -173.02;
@@ -163,7 +159,7 @@ public class HS095toHS098Test {
         );
 
         final double fExpected = 3.1358089;
-        assertEquals(fExpected, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
     }
 
     // Utility: quick check of f(x) at a given point (can help during debugging)

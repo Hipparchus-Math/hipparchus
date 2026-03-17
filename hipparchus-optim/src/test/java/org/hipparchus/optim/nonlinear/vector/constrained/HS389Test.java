@@ -260,10 +260,7 @@ public class HS389Test {
         }
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
             new InitialGuess(x0),
@@ -276,11 +273,7 @@ public class HS389Test {
         double f = sol.getValue();
 
         // LEX = .FALSE. → FEX is only an upper bound: FEX >= f*.
-        final double fExpected = -0.58097197e4;
-        final double tolF = 1.0e-4 * (FastMath.abs(fExpected) + 1.0);
-
-        // Check that the solution is at least as good as the reference value, up to tol.
-        assertTrue(fExpected + tolF >= f,
-                   "HS389: expected F <= " + (fExpected + tolF) + " but got F = " + f);
+        final double val = -0.58097197e4;
+       HSProblemTestUtils.assertBetterObjective(val, sol);
     }
 }

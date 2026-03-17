@@ -65,8 +65,7 @@ public class HS205Test {
     }
 
     private static LagrangeSolution solve() {
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         final double[] x0 = { 0.0, 0.0 }; // Fortran start
         return opt.optimize(

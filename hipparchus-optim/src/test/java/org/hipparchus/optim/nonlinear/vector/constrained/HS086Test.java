@@ -112,7 +112,7 @@
 //                             Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY}
 //        );
 //
-//        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+//        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer()
 //        optimizer.setDebugPrinter(System.out::println);  // <—— debug printer richiesto
 //
 //        double expected = -32.3486789716;
@@ -124,6 +124,6 @@
 //                bounds
 //        );
 //
-//        assertEquals(expected, sol.getValue(), 1e-5);
+//        HSProblemTestUtils.assertExpectedObjective(expected, sol);
 //    }
 //}

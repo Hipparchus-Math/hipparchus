@@ -79,10 +79,7 @@ public class HS355Test {
         final InitialGuess guess = new InitialGuess(new double[]{ 0.1, 0.1, 0.1, 0.1 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-          opt.setDebugPrinter(System.out::println);
-          }
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = opt.optimize(
             guess,
@@ -93,7 +90,7 @@ public class HS355Test {
 
         
         final double expected = 69.675463;
-        assertEquals(expected, sol.getValue(), 1e-5);
+        HSProblemTestUtils.assertExpectedObjective(expected, sol);
 
         
        

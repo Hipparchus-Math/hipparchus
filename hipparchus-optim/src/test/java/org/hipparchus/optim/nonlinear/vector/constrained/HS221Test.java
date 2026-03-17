@@ -122,12 +122,11 @@ public class HS221Test {
         double[] upper = new double[]{1.0, 1.0};
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
-
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         LagrangeSolution sol = opt.optimize(
+                option,
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS221Obj()),
                 null,
@@ -138,8 +137,8 @@ public class HS221Test {
         double f = sol.getValue();
 
         final double fExpected = -1.0;
-        final double tol = 1e-4 * (FastMath.abs(fExpected) + 1.0);
+       
 
-        assertEquals(fExpected, f, tol);
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
     }
 }

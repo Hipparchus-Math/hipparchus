@@ -48,12 +48,9 @@ public class HS050Test {
     @Test
     public void testHS050() {
         InitialGuess guess = new InitialGuess(new double[]{35, -31, 11, 5, -5});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 0.0;
         LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS050Obj()), new HS050Eq());
-        assertEquals(val, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

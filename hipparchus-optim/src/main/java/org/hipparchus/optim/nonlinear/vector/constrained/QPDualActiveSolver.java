@@ -52,6 +52,24 @@ import java.util.Set;
  * @since 1.11
  */
 public class QPDualActiveSolver extends QPOptimizer {
+    
+    /** No-error code. */
+    public static final double ERROR_NONE = 0.0;
+
+    /** Error code reported in lambda[0] when the Hessian decomposition fails. */
+    public static final double ERROR_CHOLESKY_DECOMPOSITION = -1.0;
+
+    /** Error code reported in lambda[0] when equality constraints are dependent. */
+    public static final double ERROR_DEPENDENT_EQUALITIES = -2.0;
+
+    /** Error code reported in lambda[0] when max iterations are reached. */
+    public static final double ERROR_MAX_ITERATIONS = -3.0;
+
+    /** Error code reported when numerical issue. */
+    public static final double ERROR_NUMERICAL = -4.0;
+    
+    /** Error no Solution Found. */
+    public static final double ERROR_INFEASIBLE= -5.0;
 
     /**
      * Machine epsilon for tolerance checks.
@@ -94,7 +112,7 @@ public class QPDualActiveSolver extends QPOptimizer {
     * not as the Hessian H itself.
     */
     private boolean isCholesky=false;
-    private ArrayRealVector ciColNorm;
+    
 
     /**
      * Parses optimization data to extract the objective function and various
@@ -145,7 +163,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         }
 
         double denom = ai.dotProduct(z);
-        if (FastMath.abs(denom) < Precision.EPSILON) {
+        if (FastMath.abs(denom) < Precision.SAFE_MIN) {
             return Double.POSITIVE_INFINITY;
         }
         double alpha = -sv / denom;
@@ -178,7 +196,7 @@ public class QPDualActiveSolver extends QPOptimizer {
             double ui = u.getEntry(i);
             double ri = r.getEntry(i);
             //consider only inequality constraint in the active set
-            if (ri > 0 && activeSet.get(i) >= me) {
+            if (ri > Precision.SAFE_MIN && activeSet.get(i) >= me) {
                 double cand = ui / ri;
                 if (cand < alpha) {
                     alpha = cand;
@@ -321,8 +339,11 @@ public class QPDualActiveSolver extends QPOptimizer {
                 final double eps = matrixDecompositionTolerance.getEpsMatrixDecomposition();
                 final CholeskyDecomposition cholesky = new CholeskyDecomposition(G, eps, eps);
                 DecompositionSolver solver = cholesky.getSolver();
+                
                 x = solver.solve(g0).mapMultiply(-1.0);
                 L = cholesky.getL();
+//                if(cholesky.getDiagonalShift()!=0.0)
+//                    G=L.multiplyTransposed(L);
 //                L=factorizeLQp(G,null);
                  
                 L1 = inverseLowerTriangular(L);
@@ -339,8 +360,8 @@ public class QPDualActiveSolver extends QPOptimizer {
                 qrUpdater = new QRUpdater(L1);
             } catch (MathIllegalArgumentException ex) {
                 // matrix is not positive definite return empty solution
-                System.out.println("CHOLESKY DECOMPOSITION FAILED");
-                return new LagrangeSolution(new ArrayRealVector(0,0), new ArrayRealVector(0,0), 0.0);
+                
+                return buildFailureSolution(ERROR_DEPENDENT_EQUALITIES );
             }
         } else {
             L = function.getP();
@@ -357,7 +378,7 @@ public class QPDualActiveSolver extends QPOptimizer {
                                         new ArrayRealVector(0,0),
                                         0.5 * x.dotProduct(G.operate(x)) + g0.dotProduct(x) + g);
         }
-        //max iteration adjusted in base of problem dimension
+//max iteration adjusted in base of problem dimension
         this.maxIter = 40 * (n + m + p);
 
         //convergence threshold calculated in base at the matrix conditioning
@@ -374,36 +395,30 @@ public class QPDualActiveSolver extends QPOptimizer {
         for (int i = 0; i < p; i++) {
             RealVector ai = CE.getColumnVector(i);
             double sve = ai.dotProduct(x) + ce0.getEntry(i);
-            RealMatrix Q = qrUpdater.getJ();
-            d = Q.transpose().operate(ai);
-            RealMatrix J2 = qrUpdater.getJ2();
-            z = (n - active.size() > 0) ?
-                J2.operate(d.getSubVector(active.size(), n - active.size())) :
-                new ArrayRealVector(n);
-            if (!active.isEmpty()) {
-                r = qrUpdater.getRInv().operate(d.getSubVector(0, active.size()));
-            }
+            d=qrUpdater.computeD(ai);
+            z=qrUpdater.computeZ(d);
+            r = qrUpdater.solveR(d);
+           
             double alpha = findPrimalStep(z, ai, sve, true);
             x = x.add(z.mapMultiply(alpha));
             u = updateMultipliersOnAddition(u, r, alpha, alpha);
             if (!qrUpdater.addConstraint(d)) {
-                return null;//equality constraint are linearly dependent
+                //equality constraint are linearly dependent
+                
+                return buildFailureSolution(ERROR_INFEASIBLE);
             }
             active.add(i);
         }
         int iteration = 0;
-        ciColNorm = new ArrayRealVector(m);
-        for (int j = 0; j < m; j++) {
-             ciColNorm.setEntry(j, CI.getColumnVector(j).getNorm());
-}
+        
         
         // Active-set loop for inequalities
         while (m != 0 && iteration++ < maxIter) {
             
             RealVector sv;
             //store solution in case constraint can't be added because dependent
-            RealVector xOld = x;
-            RealVector uOld = u;
+            RealVector xOld = x.copy();
+            RealVector uOld = u.copy();
             //evaluate inequality constraints
             sv = CI.transpose().operate(x).add(ci0);
 
@@ -411,15 +426,12 @@ public class QPDualActiveSolver extends QPOptimizer {
             double sum = 0;
             for (int k = 0; k < sv.getDimension(); k++) {
                 sum += FastMath.min(0.0, sv.getEntry(k));
-//            double viol=FastMath.min(0.0, sv.getEntry(k));
-//            sum+=(FastMath.abs(viol)>Precision.EPSILON)?viol:0.0;
             }
 
-//            // Evaluate convergence
+            // Evaluate convergence
             if (FastMath.abs(sum) <= tol) {
                 break;// Optimal solution found
             }
-            
             
             // Evaluate most violated constraint, excluding dependent/active loop
             while (iteration++ < maxIter) {
@@ -441,22 +453,17 @@ public class QPDualActiveSolver extends QPOptimizer {
                 // Dual step loop update multiplier and x (if step is also in primal) until primal step is not done
                 while (iteration++ < maxIter) {
                     np = CI.getColumnVector(mostViolated.getKey());
-                    sv.setEntry(mostViolated.getKey(), np.dotProduct(x) + ci0.getEntry(mostViolated.getKey()));
-                    d = qrUpdater.getJ().transpose().operate(np);
-                    J2 = qrUpdater.getJ2();
-                    z = (n - active.size() > 0) ?
-                        J2.operate(d.getSubVector(active.size(), n - active.size())) :
-                        new ArrayRealVector(n);
-
-                    if (!active.isEmpty()) {
-                        r = qrUpdater.getRInv().operate(d.getSubVector(0, active.size()));
-                    }
+                    sv.setEntry(mostViolated.getKey(), np.dotProduct(x) + ci0.getEntry(mostViolated.getKey()));                   
+                    d=qrUpdater.computeD(np);
+                    z=qrUpdater.computeZ(d);
+                    r = qrUpdater.solveR(d);
 
                     t1 = findPrimalStep(z, np, sv.getEntry(mostViolated.getKey()), false);
                     Pair<Integer, Double> dualStep = findDualBlockingConstraint(u, r, active, p);
                     t2 = dualStep.getValue();
                     dropIndex = dualStep.getKey();
                     t = FastMath.min(t1, t2);
+                    if(!Double.isFinite(t)) return buildFailureSolution(ERROR_INFEASIBLE);
                     if (t == t1) {
                         break; // primal full step (exit from dual step loop)
                     } else {
@@ -482,21 +489,17 @@ public class QPDualActiveSolver extends QPOptimizer {
                     blacklist.clear();
                     break; //revaluate convergence (exit from most violated constraint loop)
                 } else {
-                    // dependent constraint -> add in blacklist and revert state
+                    // dependent constraint -> add in blacklist 
                     // revaluate only violated constraint without recalculate them;
                     blacklist.add(p + mostViolated.getKey());
-                    x = xOld;
-                    u = uOld;
+//                    x=xOld;
+//                    u=uOld;
                 }
             }
         }
         if (iteration == maxIter) {
-            return new LagrangeSolution(new ArrayRealVector(0,0),
-                                        new ArrayRealVector(0,0),
-                                        0.0); // no optimal solution is found
+            return buildFailureSolution(ERROR_MAX_ITERATIONS );
         }
-        
-//    
         return buildSolution(x, u, active, G, g0, g, p, m);
     }
 
@@ -518,6 +521,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         if (!activeSet.isEmpty()) {
             for (int i = 0; i < activeSet.size(); i++) {
                 lambda.setEntry(activeSet.get(i), u.getEntry(i));
+                if(i>=p && u.getEntry(i)<0) lambda.setEntry(activeSet.get(i), 0.0);
             }
         }
         final double value = 0.5 * x.dotProduct(G.operate(x)) +
@@ -542,5 +546,11 @@ public class QPDualActiveSolver extends QPOptimizer {
         }
         return Linv;
     }
-    
+
+    private LagrangeSolution buildFailureSolution(double ERROR_CHOLESKY_DECOMPOSITION) {
+        return new LagrangeSolution(new ArrayRealVector(0,0),
+                new ArrayRealVector(1,ERROR_CHOLESKY_DECOMPOSITION),0);
+        
+    }
+
 }

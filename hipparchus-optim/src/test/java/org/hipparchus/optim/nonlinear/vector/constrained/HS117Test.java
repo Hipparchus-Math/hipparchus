@@ -129,8 +129,7 @@ public class HS117Test {
         final InitialGuess guess = new InitialGuess(x0);
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = opt.optimize(
                 guess,
@@ -140,6 +139,6 @@ public class HS117Test {
         );
 
         // Best known objective ≈ 32.34867897
-        assertEquals(32.34867897, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(32.34867897, sol);
     }
 }

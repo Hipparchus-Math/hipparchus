@@ -6,6 +6,7 @@ import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Disabled;
 
 public class HS099Test {
 
@@ -117,8 +118,8 @@ public class HS099Test {
     }
 
     /** Inequalities: G1=Q(8)-1e5 >= 0, G2=S(8)-1e3 >= 0. */
-    private static final class HS099Ineq extends InequalityConstraint {
-        HS099Ineq() {
+    private static final class HS099Eq extends EqualityConstraint {
+        HS099Eq() {
             super(new ArrayRealVector(new double[] {0.0, 0.0}));
         }
 
@@ -150,20 +151,20 @@ public class HS099Test {
         final double[] up = {1.58,1.58,1.58,1.58,1.58,1.58,1.58};
         return new SimpleBounds(lo, up);
     }
-
+//    @Disabled
     @Test
     public void testHS099() {
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
-
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         final LagrangeSolution sol = optimizer.optimize(
                 guess(),
                 new ObjectiveFunction(new HS099Objective()),
-                new HS099Ineq(),
+                new HS099Eq(),
                 bounds()
         );
 
         // Fortran FEX: -0.831079891516D+09
-        assertEquals(-0.831079891516e9, sol.getValue(), 1e5); // tolerant: large magnitude
+        HSProblemTestUtils.assertExpectedObjective(-0.831079891516e9, sol); // tolerant: large magnitude
     }
 }

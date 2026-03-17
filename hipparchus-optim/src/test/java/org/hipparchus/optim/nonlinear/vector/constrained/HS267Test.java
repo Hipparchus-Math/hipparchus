@@ -90,7 +90,7 @@ public class HS267Test {
 
         InitialGuess guess = new InitialGuess(new double[]{2.0, 2.0, 2.0, 2.0, 2.0});
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         optimizer.setDebugPrinter(s -> {});
 
         double val = 0.0;
@@ -101,7 +101,7 @@ public class HS267Test {
             new HS267Ineq()
         );
 
-        assertEquals(val, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
     
     @Test
@@ -121,7 +121,7 @@ public class HS267Test {
         SimpleBounds bounds=new SimpleBounds(lb,ub);
         InitialGuess guess = new InitialGuess(new double[]{2.0, 2.0, 2.0, 2.0, 2.0});
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         optimizer.setDebugPrinter(s -> {});
 
         double val = 0.0;
@@ -132,6 +132,6 @@ public class HS267Test {
             bounds
         );
 
-        assertEquals(val, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

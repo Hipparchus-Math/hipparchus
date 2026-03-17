@@ -42,13 +42,13 @@ public class SQPOption implements OptimizationData {
     public static final  double DEFAULT_MU = 1.0e-4;//[0,0.5]
 
     /** Default parameter for quadratic line search. */
-    public static final  double DEFAULT_B = 0.5;//[0;1]
+    public static final  double DEFAULT_B = 0.1;//[0;1]
 
     /** Default flag for using BFGS update formula. */
     public static final  boolean DEFAULT_USE_FUNCTION_HESSIAN = false;
 
     /** Default max iteration before reset hessian. */
-    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 20;
+    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 40;
 
     /** Default Gradient mode. */
     public static final GradientMode DEFAULT_GRADIENT_MODE = GradientMode.FORWARD;

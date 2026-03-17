@@ -167,7 +167,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         MeritFunctionL2 penalty = new MeritFunctionL2(this.getObj(), this.getEqConstraint(), this.getIqConstraint(), this.bounds, x);
 
         LineSearch lineSearch = new LineSearch(getSettings().getEps(), 10, getSettings().getMu(), getSettings().getB(),
-                getSettings().getMaxLineSearchIteration(), 2);
+                getSettings().getMaxLineSearchIteration(), 1);
         
 
         //INITIAL VALUES
@@ -187,8 +187,11 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         computeGradients();
         double gamma = 1.0;
         H = MatrixUtils.createRealIdentityMatrix(x.getDimension()).scalarMultiply(FastMath.sqrt(gamma));
+        
+       
 
-        BFGSUpdater1 bfgs = new BFGSUpdater1(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
+        BFGSUpdater bfgs = new BFGSUpdater(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
+        
         L=bfgs.getL();
         RealVector dx = new ArrayRealVector(x.getDimension());
         RealVector u = new ArrayRealVector(y.getDimension());
@@ -211,16 +214,17 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         boolean FALLBACK = false;
         boolean RECOVERYMODE=false;
         double VIOLATION = constraintViolation();
+        double COMPLEMENTARY=Double.POSITIVE_INFINITY;
         double KKT = Double.POSITIVE_INFINITY;
         double DHD = 0.0;
         double XNORM = 0.0;
         double FUNDIFF=0.0;
         int BFGSUPDATE=0;
-        for (int i = 0; i < this.getMaxIterations(); i++) {
+        for (int i = 0; i < 300; i++) {
 
             sigma = getSettings().getSigmaMax() * 10.0;
             while ((sigma > getSettings().getSigmaMax() || sigma < 0.0) && rho < 1.0e9 && !FALLBACK) {
-
+               
                 qpSolution = (QPMODE == QPMode.QP_AUGMENTED) ? solveAugmentedQP(y, rho) : solveQP();
                 sigma = (qpSolution == null || qpSolution.getX().getDimension() == 0 || Double.isInfinite(qpSolution.getX().getMaxValue()) ||  Double.isInfinite(qpSolution.getX().getMinValue())) ? getSettings().getSigmaMax() * 10.0 : qpSolution.getValue();
                 if ((sigma > getSettings().getSigmaMax() || sigma < 0.0)) {
@@ -267,6 +271,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                
                 sigma = qpSolution.getValue();
                 projectDirectionInPlace(x, dx, true);
+                
                 penalty.updateRj(H, y, dx, u, sigma, iterations.getCount());
                 //switch to normal QP if additional variable is small enough
                 if (QPMODE == QPMode.QP_AUGMENTED && FastMath.abs(sigma) < getSettings().getEps() && !GRADFAIL) {
@@ -284,12 +289,34 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
 //                penalty.rUp();
 //                rmax = penalty.getR().getMaxValue();
 //            }
+            RealVector lagqp = lagrangianGradX(J, JE, JI, x, u);
+            
+//              CONVERGENCE CHECK BEFORE LINE SEARCH
+                KKT = lagqp.getNorm()*lagqp.getNorm();
+                DHD = dx.dotProduct(H.operate(dx));
+                COMPLEMENTARY=complementarySlackness(u,me);
+                XNORM = dx.getNorm();
+                
+               
+                crit0 = KKT <= EPS;
+               
+                //crit1 = DHD <= EPS2;
+                crit1 = COMPLEMENTARY <= EPS;
+                crit2 = XNORM <= EPS *  (1.0 + x.getNorm());
+                
+                      
+                if (crit0 && crit1  && crit3) {
+                    
+                    break;
+                }
+               
             
              if(penalty.getGradient()>=0 )
             {
                 if (QPMODE == QPMode.QP_AUGMENTED)  rho = rhoUp(rho);
                 QPMODE = QPMode.QP_AUGMENTED;
                 GRADFAIL = true;
+                
                 
             }    
             //if penalty gradient is > 0 skip line search and try again with augmented QP
@@ -309,6 +336,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 lagOld = lagrangianGradX(J, JE, JI, x, u);
                 if (m > 0) {
                     y = y.add(u.subtract(y).mapMultiply(alpha));
+                   
                 }
                 
                 x = x.add(dx.mapMultiply(alpha));
@@ -325,23 +353,38 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 RealVector lagnew = lagrangianGradX(J, JE, JI, x, u);
 
 //              CONVERGENCE CHECK
-                KKT = lagnew.getNorm();
+                KKT = lagnew.getNorm()*lagnew.getNorm();
                 VIOLATION = constraintViolation();
+                COMPLEMENTARY=complementarySlackness(u,me);
                 //STEP LENGHT
                 DHD = dx.mapMultiply(alpha).dotProduct(H.operate(dx.mapMultiply(alpha)));
-                XNORM = alpha * dx.getNorm();
+                if(alpha>0)
+                  XNORM = alpha * dx.getNorm();
+                else
+                  XNORM =  dx.getNorm();
                 FUNDIFF=FastMath.abs(functionEval - functionEvalOld);              
-                crit0 = KKT <= sqrtEPS;
-                crit1 = DHD <= EPS2;
+                //crit0 = KKT <= sqrtEPS;
+//                maxU=(mi+mb!=0)?u.getSubVector(me, u.getDimension()).getLInfNorm():0;
+               
+                crit0 = KKT <= EPS;
+               
+                //crit1 = DHD <= EPS2;
+                crit1 = COMPLEMENTARY <= EPS;
                 crit2 = XNORM <= EPS * (1.0 + x.getNorm());
                 crit3 = VIOLATION <=sqrtEPS;
-                crit4 = FUNDIFF < EPS2* FastMath.max(1.0 ,FastMath.abs(functionEval));
                 
+                crit4 = FUNDIFF < EPS*(1.0+FastMath.abs(functionEval));
                 
-//                if ((crit0 || crit4 ) && crit3) {
-                if ((crit0  || crit4 || ( crit1 && crit2)) && crit3) {
+                  if (!lineSearch.isBadStepDetected()&&crit0 && crit1  && crit3) {
+                    
                     break;
                 }
+                 if ( lineSearch.isBadStepDetected() && crit1 && crit3 && (crit4||crit2)) {
+                    
+                    break;
+                }
+               
+//              
 
                 //HESSIAN UPDATE WITH THE LOGIC OF LINE SEARCH AND WITH THE INTERNAL LOGIC(DUMPING)
                 if (lineSearch.isBadStepFailed()) {
@@ -350,30 +393,32 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                     bfgs.resetHessian();
                     H = bfgs.getHessian();
                     L=bfgs.getL();
-                    QPMODE = QPMode.QP_AUGMENTED;
+//                    QPMODE = QPMode.QP_AUGMENTED;
                     penalty.resetRj();
-                    if (m > 0) {
-                        y = u.copy();
-
-                    }
-                    penalty.update(J, JE, JI, x, y, dx, u);
+//                    if (m > 0) {
+//                        y = u.copy();
+//
+//                    }
+//                    penalty.update(J, JE, JI, x, y, dx, u);
                     lineSearch.resetBadStepCount();
                     BFGSUPDATE=-2;
                    
 
-                } else if (lineSearch.isBadStepDetected()) {
-//                    
+               } 
+                  else if (lineSearch.isBadStepDetected()) {
+////                    
                     BFGSUPDATE=-1;
                      L=bfgs.getL();
                      H = bfgs.getHessian();
-                    
-                } else {
+//                    
+                } 
+                    else {
                     BFGSUPDATE = bfgs.update(dx.mapMultiply(alpha), lagnew.subtract(lagOld));
                     //
                     if(BFGSUPDATE==1)
                     {
                         FALLBACK =true;
-                        bfgs.resetHessian();
+                        
                         QPMODE = QPMode.QP_AUGMENTED;
                         penalty.resetRj();
                         if (m > 0) {
@@ -392,14 +437,14 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 
                 formatter.logRow(iterations.getCount(),
                         alpha, lineSearch.getIteration(),
-                        XNORM, DHD, KKT, VIOLATION, sigma,
+                        XNORM, COMPLEMENTARY, KKT, VIOLATION, sigma,
                         penalty.getPenaltyEval(), functionEval,FUNDIFF,BFGSUPDATE);
 
             }
         }
         formatter.logRow(iterations.getCount(),
                         alpha, lineSearch.getIteration(),
-                        XNORM, DHD, KKT, VIOLATION, sigma,
+                        XNORM, COMPLEMENTARY, KKT, VIOLATION, sigma,
                         penalty.getPenaltyEval(), functionEval,FUNDIFF,-99);
         formatter.logRow(crit2, crit1, crit0, crit3,crit4);
 
@@ -441,29 +486,47 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 violated.setEntry(k, FastMath.min(0.0, violated.getEntry(k)));
             }
             crit = crit + violated.getL1Norm();
-        }
+        } 
+        if (this.bounds != null) {
+            RealVector violated = bEval.subtract(this.bounds.getLowerBound());
+            for (int k = 0; k < violated.getDimension(); k++) {
+                violated.setEntry(k, FastMath.min(0.0, violated.getEntry(k)));
+            }
+            crit = crit + violated.getL1Norm();
+        } 
         return crit;
     }
+    
+    
     
     /**
      * Compute constraints violations.
      *
      * @return constraints violations
      */
-    private double constraintViolationInfinity() {
-
+    private double complementarySlackness(RealVector u,int me) {
+       
+        if(u==null) return 0;
         double crit = 0;
-        if (this.getEqConstraint() != null) {
-            crit = eqEval.subtract(this.getEqConstraint().getLowerBound()).getLInfNorm();
+        int mi=0;
+         RealVector g=new ArrayRealVector(u.getDimension(),0.0);
+         if (this.getEqConstraint() != null) {
+            me=this.getEqConstraint().dimY();
+            g.setSubVector(0,eqEval.subtract(this.getEqConstraint().getLowerBound()));
+          
         }
+         
         if (this.getIqConstraint() != null) {
-            RealVector violated = ineqEval.subtract(this.getIqConstraint().getLowerBound());
-            for (int k = 0; k < violated.getDimension(); k++) {
-                violated.setEntry(k, FastMath.min(0.0, violated.getEntry(k)));
-            }
-            crit = FastMath.max(crit,violated.getLInfNorm());
+            mi=this.getIqConstraint().dimY();
+            g.setSubVector(me,ineqEval.subtract(this.getIqConstraint().getLowerBound()));
+          
         }
-        return crit;
+         if (this.bounds!= null) {
+             g.setSubVector(me+mi, bEval.subtract(this.bounds.getLowerBound()));
+          
+        }
+        
+        return g.ebeMultiply(u).getL1Norm();
     }
 
     private double rhoUp(double rho) {
@@ -613,22 +676,25 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
             bc = new LinearBoundedConstraint(sigmaA, lb, ub);
 
         }
-        RealMatrix L1=null;
-      if(add==1){
-          L1=new Array2DRowRealMatrix(L.getRowDimension()+1, L.getColumnDimension()+1);
-          L1.setSubMatrix(L.getData(), 0 ,0);
-          L1.setEntry(L.getRowDimension(), L.getColumnDimension(), FastMath.sqrt(rho));
-      }
-      else
-          L1=L;
+        
+      
           
-        //CholeskyDiagThresholdReg.Result res = CholeskyDiagThresholdReg.regularizeByDiagonalThreshold(L1);
-
-       // L1 = res.L;
-        QuadraticFunction q = new QuadraticFunction(H1, g1, 0);
-        IsCholesky isChol = new IsCholesky(false);
+        
+        QuadraticFunction q;
+        if(add==1){
+            RealMatrix L1=new Array2DRowRealMatrix(L.getRowDimension()+1, L.getColumnDimension()+1);
+            L1.setSubMatrix(L.getData(), 0 ,0);
+            L1.setEntry(L.getRowDimension(), L.getColumnDimension(), FastMath.sqrt(rho));
+            q=new QuadraticFunction(L1, g1, 0);
+        }
+        else{
+           
+            q=new QuadraticFunction(L, g, 0);
+        }
+        IsCholesky isChol = new IsCholesky(true);
         LagrangeSolution sol = this.getQPSolver().optimize(new ObjectiveFunction(q), iqc, eqc, bc,isChol);
-
+        //LagrangeSolution sol = this.getQPSolver().optimize(new ObjectiveFunction(q), iqc, eqc, bc,isChol);
+       
         // Solve the QP problem
         if (sol == null || sol.getX().getDimension() == 0) {
             return sol;
@@ -709,7 +775,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
 
       
        // RealMatrix L1 = res.L;
-        final QuadraticFunction q = new QuadraticFunction(L ,this.J, 0);
+        final QuadraticFunction q = new QuadraticFunction(L,this.J, 0);
         IsCholesky isChol = new IsCholesky(true);
         // Solve the QP problem
         LagrangeSolution sol = getQPSolver().optimize(new ObjectiveFunction(q), iqc, eqc,isChol);
@@ -717,8 +783,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         if (sol == null || sol.getX().getDimension() == 0) {
             return sol;
         }
-//        IQPRRefiner refiner = new  IQPRRefiner((QPDualActiveSolver) getQPSolver(), this.getSettings().getEps()*0.1, 1);
-//        sol=refiner.refine(q, iqc, eqc, sol,isChol);
+       
         // Extract primal and dual components
         RealVector solutionX = sol.getX();
         
@@ -1085,70 +1150,5 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
             }
         }
     }
-private double calculateRCOND(RealMatrix L) {
-    int n = L.getRowDimension();
-    // Norma 1 di L (max somma colonna)
-    double normL = 0;
-    for (int j = 0; j < n; j++) {
-        double colSum = 0;
-        for (int i = j; i < n; i++) colSum += Math.abs(L.getEntry(i, j));
-        normL = Math.max(normL, colSum);
-    }
-    // Stima della norma di L^-1 risolvendo L*y = e
-    double[] y = new double[n];
-    double maxValY = 0;
-    for (int i = 0; i < n; i++) {
-        double sum = 1.0;
-        for (int j = 0; j < i; j++) sum -= L.getEntry(i, j) * y[j];
-        y[i] = sum / L.getEntry(i, i);
-        maxValY = Math.max(maxValY, Math.abs(y[i]));
-    }
-    return 1.0 / (normL * maxValY);
-}
 
-/**
- * Schnabel-Eskow style Modified Cholesky Factorization.
- * Ensures the resulting L is well-conditioned for Dual QP solvers.
- */
-public static RealMatrix factorizeModifiedCholesky(RealMatrix H) {
-   int n = H.getRowDimension();
-    RealMatrix L = MatrixUtils.createRealMatrix(n, n);
-    
-    // 1. Calcolo della norma Frobenius per definire la scala del problema
-    double froNorm = H.getFrobeniusNorm();
-    double eps = Math.ulp(1.0);
-    // Soglia minima chirurgica: non deve spostare la soluzione del QP
-    double delta = eps * Math.max(froNorm, 1.0); 
-
-    for (int j = 0; j < n; j++) {
-        double sumSq = 0;
-        for (int k = 0; k < j; k++) {
-            double ljk = L.getEntry(j, k);
-            sumSq += ljk * ljk;
-        }
-        
-        // Pivot provvisorio
-        double ljj2 = H.getEntry(j, j) - sumSq;
-        
-        // INTERVENTO CHIRURGICO
-        // Se il pivot è "malato" (troppo piccolo o negativo), lo portiamo a delta.
-        // Questo garantisce che RCOND sia sufficiente per il Dual Solver.
-        if (ljj2 < delta) {
-            ljj2 = delta;
-        }
-        
-        double ljj = Math.sqrt(ljj2);
-        L.setEntry(j, j, ljj);
-
-        for (int i = j + 1; i < n; i++) {
-            double sumVal = 0;
-            for (int k = 0; k < j; k++) {
-                sumVal += L.getEntry(i, k) * L.getEntry(j, k);
-            }
-            // Sostituzione in avanti
-            L.setEntry(i, j, (H.getEntry(i, j) - sumVal) / ljj);
-        }
-    }
-    return L;
-}
 }

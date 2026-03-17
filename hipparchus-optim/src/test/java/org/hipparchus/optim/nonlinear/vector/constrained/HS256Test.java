@@ -122,10 +122,7 @@ public class HS256Test {
         // Initial guess (MODE=1): X = (3, -1, 0, 1)
         double[] x0 = new double[]{3.0, -1.0, 0.0, 1.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Unconstrained problem: no equalities, no inequalities, no bounds
         LagrangeSolution sol = opt.optimize(
@@ -139,9 +136,8 @@ public class HS256Test {
         double f = sol.getValue();
 
         // Reference optimum: x* = (0,0,0,0), f* = 0
-        double fExpected = 0.0;
-        double tol = 1e-6 * (FastMath.abs(fExpected) + 1.0);
-
-        assertEquals(fExpected, f, tol);
+        double val = 0.0;
+        
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

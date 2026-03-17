@@ -156,8 +156,7 @@ static final class HS112Eq extends EqualityConstraint {
             up[i]    = SUP;     // unbounded above
         }
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         return opt.optimize(
             new InitialGuess(start),
@@ -171,6 +170,6 @@ static final class HS112Eq extends EqualityConstraint {
     public void testHS112() {
         LagrangeSolution sol = solve();
         double f = sol.getValue();
-        assertEquals(F_REF, f, 1.0e-6 * (Math.abs(F_REF) + 1.0), "objective mismatch");
+        HSProblemTestUtils.assertExpectedObjective(F_REF , sol);
     }
 }

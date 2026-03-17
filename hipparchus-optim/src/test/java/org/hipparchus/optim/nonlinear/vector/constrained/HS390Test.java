@@ -28,6 +28,7 @@ import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 
 /**
  * HS390 (TP390) – Nonlinear process design problem with external subroutine TP390A.
@@ -332,10 +333,10 @@ public class HS390Test {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Test
-    // -------------------------------------------------------------------------
-
+//     -------------------------------------------------------------------------
+//     Test
+//     -------------------------------------------------------------------------
+//    @Disabled
     @Test
     public void testHS390_optimization() {
 
@@ -390,12 +391,11 @@ public class HS390Test {
 
         final SimpleBounds bounds = new SimpleBounds(lower, upper);
 
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
-
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+         SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.FORWARD);
         final LagrangeSolution sol = opt.optimize(
+                option,
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS390Obj()),
                 null,            // no equality constraints in this wrapper

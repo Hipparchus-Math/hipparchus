@@ -76,8 +76,7 @@ public class HS075Test {
         final InitialGuess guess = new InitialGuess(new double[]{ 0.0, 0.0, 0.0, 0.0 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = optimizer.optimize(
 //                guess,
@@ -88,6 +87,6 @@ public class HS075Test {
         );
 
         // Best known objective from your model: 5174.4129
-        assertEquals(5174.4129, sol.getValue(), 1e-2);
+        HSProblemTestUtils.assertExpectedObjective(5174.4129, sol);
     }
 }

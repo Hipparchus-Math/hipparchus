@@ -129,10 +129,7 @@ public class HS258Test {
         // X(1) = -3, X(2) = -1, X(3) = -3, X(4) = -1
         double[] x0 = new double[]{-3.0, -1.0, -3.0, -1.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // No constraints, no bounds in this problem
         LagrangeSolution sol = opt.optimize(

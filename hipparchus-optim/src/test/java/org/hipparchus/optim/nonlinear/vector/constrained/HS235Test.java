@@ -145,10 +145,7 @@ public class HS235Test {
         // Initial guess (MODE=1): X(1)=-2, X(2)=3, X(3)=1
         double[] x0 = new double[]{-2.0, 3.0, 1.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(x0),
@@ -160,9 +157,7 @@ public class HS235Test {
 
         double f = sol.getValue();
 
-        final double fExpected = 0.04;
-        final double tol = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
-
-        assertEquals(fExpected, f, tol);
+        final double val = 0.04;
+         HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

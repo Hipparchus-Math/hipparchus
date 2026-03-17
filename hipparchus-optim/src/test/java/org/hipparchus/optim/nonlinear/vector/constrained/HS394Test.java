@@ -86,11 +86,9 @@ public class HS394Test {
             ub[i] = Double.POSITIVE_INFINITY;
         }
 
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-          opt.setDebugPrinter(System.out::println);
-          }
-
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         final LagrangeSolution sol = opt.optimize(
             new InitialGuess(x0),
             new ObjectiveFunction(new TP394Obj()),
@@ -99,6 +97,6 @@ public class HS394Test {
         );
 
        
-        assertEquals(1.9166667, sol.getValue(), 1e-4);
+        HSProblemTestUtils.assertExpectedObjective(1.9166667, sol);
     }
 }

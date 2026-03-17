@@ -284,10 +284,7 @@ public class HS357Test {
         // X(1)=0.136D+3, X(2)=0, X(3)=0.748D+2, X(4)=0.757D+2
         double[] x0 = new double[]{136.0, 0.0, 74.8, 75.7};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Bounds from MODE=1:
         // 0 <= x1 <= 150; 0 <= x2 <= 50; 0 <= x3 <= 100; 0 <= x4 <= 100

@@ -46,8 +46,7 @@ public RealVector gradient(RealVector x) {
     }
 
     private LagrangeSolution solve() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); // richiesto
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer(); // richiesto;
 
         // Start: X(1)=0, X(2)=0 
         double[] x0 = {0.0, 0.0};

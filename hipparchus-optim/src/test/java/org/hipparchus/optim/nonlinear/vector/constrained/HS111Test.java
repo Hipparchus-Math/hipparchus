@@ -114,8 +114,7 @@ public class HS111Test {
         SQPOption sqpOption = new SQPOption();
         sqpOption.setMaxLineSearchIteration(50);
         sqpOption.setEps(1e-7);
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = optimizer.optimize(
             guess,
@@ -125,6 +124,6 @@ public class HS111Test {
         );
 
         final double expected = -47.7610902637; // FEX Fortran
-        assertEquals(expected, sol.getValue(), 1e-4);
+        HSProblemTestUtils.assertExpectedObjective(expected, sol);
     }
 }

@@ -133,10 +133,7 @@ public class HS380Test {
         final InitialGuess guess = new InitialGuess(x0);
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
          
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-          opt.setDebugPrinter(System.out::println);
-          }
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = opt.optimize(
             guess,
@@ -148,6 +145,6 @@ public class HS380Test {
 
         
         final double expected = 3.1682215;
-        assertEquals(expected, sol.getValue(), 1e-2);
+        HSProblemTestUtils.assertExpectedObjective(expected, sol);
     }
 }

@@ -253,8 +253,7 @@ private static class HS118Ineq extends InequalityConstraint {
             90, 120, 60
         };
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
             new InitialGuess(x0),
@@ -263,6 +262,6 @@ private static class HS118Ineq extends InequalityConstraint {
             new SimpleBounds(lb, ub)
         );
 //FEX=0.664820449993D+03 
-        assertEquals(664.820449993, sol.getValue(), 1e-4, "Optimal objective mismatch");
+        HSProblemTestUtils.assertExpectedObjective(664.820449993, sol);
     }
 }

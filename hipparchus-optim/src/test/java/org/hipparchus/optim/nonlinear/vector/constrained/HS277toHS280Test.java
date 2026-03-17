@@ -10,144 +10,157 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-import org.hipparchus.linear.*;
+import org.hipparchus.linear.Array2DRowRealMatrix;
+import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
-import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/** HS277–HS280: Hilbert-system linear objective with Ax=b and x ≥ 0.
- *  N = 4 (HS277), 6 (HS278), 8 (HS279), 10 (HS280).
+/**
+ * HS277–HS280 (TP277–TP280).
+ *
+ * <p>Fortran model summary:
+ * <ul>
+ *   <li>Objective: f(x) = Σ_i c_i x_i, with c_i = Σ_j 1 / (i + j - 1).</li>
+ *   <li>Inequalities: g_i(x) = Σ_j (x_j - 1) / (i + j - 1) >= 0, i = 1..N.</li>
+ *   <li>Lower bounds x_i >= 0 are declared, but they are redundant for this model.</li>
+ *   <li>Reference solution x* = 1, f* = Σ_i c_i.</li>
+ * </ul>
  */
 public class HS277toHS280Test {
 
-    /** Build the n×n Hilbert matrix H with H[i,j] = 1/(i+j+1) in 0-based indexing. */
     private static RealMatrix hilbert(final int n) {
-        double[][] a = new double[n][n];
+        final double[][] h = new double[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                a[i][j] = 1.0 / (i + j + 1.0 + 0.0); // i+j+1 in 1-based -> +1 in 0-based -> here (i+j+1)
+                h[i][j] = 1.0 / (i + j + 1.0);
             }
         }
-        return new Array2DRowRealMatrix(a, false);
+        return new Array2DRowRealMatrix(h, false);
     }
 
-    /** Row-sum vector c_i = sum_j H_{ij}. */
-    private static RealVector rowSums(final RealMatrix H) {
-        int n = H.getRowDimension();
-        double[] c = new double[n];
+    private static RealVector rowSums(final RealMatrix h) {
+        final int n = h.getRowDimension();
+        final double[] c = new double[n];
         for (int i = 0; i < n; i++) {
-            double s = 0.0;
+            double sum = 0.0;
             for (int j = 0; j < n; j++) {
-                s += H.getEntry(i, j);
+                sum += h.getEntry(i, j);
             }
-            c[i] = s;
+            c[i] = sum;
         }
         return new ArrayRealVector(c, false);
     }
 
-    /** Objective f(x) = cᵀx with constant gradient c. */
-    static final class HS277Objective extends TwiceDifferentiableFunction {
+    private static final class HS277Objective extends TwiceDifferentiableFunction {
         private final RealVector c;
-        HS277Objective(RealVector c){ this.c = c; }
-        @Override public int dim() { return c.getDimension(); }
-        @Override public double value(RealVector x) { return c.dotProduct(x); }
-        @Override public RealVector gradient(RealVector x) { return c.copy(); }
-        @Override public RealMatrix hessian(RealVector x) { return new Array2DRowRealMatrix(c.getDimension(), c.getDimension()); }
-    }
 
-    /** Equality constraints g_i(x) = sum_j (x_j - 1)/(i + j - 1) = 0. */
-static final class HS277Eq extends EqualityConstraint {
-    private final RealMatrix H;   // teniamo i campi per non toccare la firma
-    private final RealVector b;   // anche se non li usiamo più direttamente
-    private final int n;
-
-    HS277Eq(RealMatrix H, RealVector b) {
-        super(new ArrayRealVector(new double[H.getRowDimension()])); // placeholder RHS
-        this.H  = H;
-        this.b  = b;
-        this.n  = H.getColumnDimension();
-    }
-
-    @Override
-    public int dim() {
-        return n;
-    }
-
-    @Override
-    public RealVector value(RealVector x) {
-        // Fortran:
-        // DO I = 1,N
-        //   H = 0
-        //   DO J = 1,N
-        //     H = H + (X(J) - 1.D0)/DBLE(I+J-1)
-        //   G(I) = H
-        // END DO
-        final int m = H.getRowDimension(); // = n per Hilbert, ma lo ricaviamo da H
-        double[] g = new double[m];
-        for (int i = 0; i < m; i++) {
-            double sum = 0.0;
-            for (int j = 0; j < n; j++) {
-                // i,j in Fortran vanno da 1..N, qui 0..N-1 → denominatore (i+j+1)
-                sum += (x.getEntry(j) - 1.0) / (i + j + 1.0);
-            }
-            g[i] = sum;
+        HS277Objective(final RealVector c) {
+            this.c = c;
         }
-        return new ArrayRealVector(g, false);
-    }
 
-    @Override
-    public RealMatrix jacobian(RealVector x) {
-        // Derivata di g_i rispetto a x_j:
-        // ∂/∂x_j [ sum_k (x_k - 1)/(i+k-1) ] = 1/(i+j-1)
-        final int m = H.getRowDimension();
-        double[][] J = new double[m][n];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                J[i][j] = 1.0 / (i + j + 1.0); // Fortran i+j-1 → Java +1
-            }
+        @Override
+        public int dim() {
+            return c.getDimension();
         }
-        return new Array2DRowRealMatrix(J, false);
-    }
-}
 
+        @Override
+        public double value(final RealVector x) {
+            return c.dotProduct(x);
+        }
+
+        @Override
+        public RealVector gradient(final RealVector x) {
+            return c.copy();
+        }
+
+        @Override
+        public RealMatrix hessian(final RealVector x) {
+            return new Array2DRowRealMatrix(c.getDimension(), c.getDimension());
+        }
+    }
+
+    private static final class HS277Ineq extends InequalityConstraint {
+        private final int n;
+
+        HS277Ineq(final int n) {
+            super(new ArrayRealVector(n));
+            this.n = n;
+        }
+
+        @Override
+        public int dim() {
+            return n;
+        }
+
+        @Override
+        public RealVector value(final RealVector x) {
+            final double[] g = new double[n];
+            for (int i = 0; i < n; i++) {
+                double sum = 0.0;
+                for (int j = 0; j < n; j++) {
+                    sum += (x.getEntry(j) - 1.0) / (i + j + 1.0);
+                }
+                g[i] = sum;
+            }
+            return new ArrayRealVector(g, false);
+        }
+
+        @Override
+        public RealMatrix jacobian(final RealVector x) {
+            final double[][] j = new double[n][n];
+            for (int i = 0; i < n; i++) {
+                for (int k = 0; k < n; k++) {
+                    j[i][k] = 1.0 / (i + k + 1.0);
+                }
+            }
+            return new Array2DRowRealMatrix(j, false);
+        }
+    }
 
     private void runCase(final int n) {
-        final RealMatrix H = hilbert(n);
-        final RealVector c = rowSums(H);
-        final RealVector b = c.copy(); // b_i = sum_j H_{ij}
-        final double fEx = c.mapMultiply(1.0).dotProduct(new ArrayRealVector(n, 1.0)); // sum_i c_i
+        final RealMatrix h = hilbert(n);
+        final RealVector c = rowSums(h);
+        final double expected = c.dotProduct(new ArrayRealVector(n, 1.0));
 
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
-        SQPOption sqpOption=new SQPOption();
-        sqpOption.setGradientMode(GradientMode.FORWARD);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
+        final SQPOption option = new SQPOption();
+        option.setGradientMode(GradientMode.EXTERNAL);
 
-        final double[] start = new double[n]; // all zeros as in the Fortran setup
-        final double[] lo = new double[n];
-        final double[] up = new double[n];
-        for (int i = 0; i < n; i++) {
-//            start[i]=0.1;
-            lo[i] = 0.0;
-            up[i] = Double.POSITIVE_INFINITY;
-        }
+        final double[] start = new double[n]; // Fortran starts from 0.
 
-        LagrangeSolution sol = optimizer.optimize(
-                sqpOption,
-            //new InitialGuess(start),
-            new ObjectiveFunction(new HS277Objective(c)),
-            new HS277Eq(H, b),
-           new SimpleBounds(lo, up)
-        );
+        final LagrangeSolution sol = optimizer.optimize(
+                option,
+                new InitialGuess(start),
+                new ObjectiveFunction(new HS277Objective(c)),
+                null,
+                new HS277Ineq(n),
+                null);
 
-        double f = sol.getValue();
-        assertEquals(fEx, f, 1.0e-6 * (Math.abs(fEx) + 1.0), "objective mismatch");
+        assertEquals(expected, sol.getValue(), 1.0e-6 * (Math.abs(expected) + 1.0), "objective mismatch");
     }
 
-    @Test public void testHS277() { runCase(4); }
-    @Test public void testHS278() { runCase(6); }
-//   @Test public void testHS279() { runCase(8); }
-//   @Test public void testHS280() { runCase(10); }
+    @Test
+    public void testHS277() {
+        runCase(4);
+    }
+
+    @Test
+    public void testHS278() {
+        runCase(6);
+    }
+
+    @Test
+    public void testHS279() {
+        runCase(8);
+    }
+
+    @Test
+    public void testHS280() {
+        runCase(10);
+    }
 }

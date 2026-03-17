@@ -80,8 +80,7 @@ public class HS202Test {
         final double[] up = { 20.0, 5.0 };
         SQPOption sqpOption=new SQPOption();
         sqpOption.setGradientMode(GradientMode.FORWARD);
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         return optimizer.optimize(
             new InitialGuess(start),
@@ -99,6 +98,6 @@ public class HS202Test {
 
         final double fEx = 0.0; // reference optimum (at x* = [5, 4] within bounds)
         final double f   = sol.getValue();
-        assertEquals(fEx, f, 1.0e-6 * (fEx + 1.0), "objective mismatch");
+         HSProblemTestUtils.assertExpectedObjective(0.0, sol);
     }
 }

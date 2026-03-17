@@ -53,10 +53,7 @@ public class HS033Test {
         final InitialGuess guess = new InitialGuess(new double[]{ 0.1, 0.1, 3.0 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         SQPOption sqpOption=new SQPOption();
         sqpOption.setMaxLineSearchIteration(20);
         sqpOption.setEps(10e-11);
@@ -69,6 +66,6 @@ public class HS033Test {
         );
 
         final double expected = Math.sqrt(2.0) - 6.0;
-        assertEquals(expected, sol.getValue(), 1e-4);
+        HSProblemTestUtils.assertExpectedObjective(expected, sol);
     }
 }

@@ -86,8 +86,7 @@ public class HS083Test {
         final InitialGuess guess = new InitialGuess(new double[]{ 78.0, 33.0, 27.0, 27.0, 27.0 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = optimizer.optimize(
                 guess,
@@ -97,6 +96,6 @@ public class HS083Test {
         );
 
         // FEX (TP83): -0.306655386717D+05
-        assertEquals(-30665.5386717, sol.getValue(), 1e-4);
+        HSProblemTestUtils.assertExpectedObjective(-30665.5386717, sol);
     }
 }

@@ -26,6 +26,7 @@ import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 
 /**
  * HS362 / TP362 – time-to-speed car model with 5 gear ratios (N = 5).
@@ -245,35 +246,37 @@ public class HS362Test {
      * Test di ottimizzazione completo per HS362/TP362.
      * LEX = .FALSE. → si verifica solo che il valore trovato sia ≤ FEX.
      */
-//    @Test
-//    public void testHS362_optimization() {
-//
-//        // Punto iniziale (X0)
-//        double[] x0 = {15.0, 9.05, 6.14, 4.55, 3.61};
-//
-//        // Bound: XL(i)=3, XU(i)=20; con override XL(1)=15, XL(5)=2
-//        double[] lower = {15.0, 3.0, 3.0, 3.0, 2.0};
-//        double[] upper = {20.0, 20.0, 20.0, 20.0, 20.0};
-//
-//        SimpleBounds bounds = new SimpleBounds(lower, upper);
-//
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
-//        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-//            opt.setDebugPrinter(System.out::println);
-//        }
-//
-//        LagrangeSolution sol = opt.optimize(
-//            new InitialGuess(x0),
-//            new ObjectiveFunction(new TP362Obj()),
-//            new TP362Ineq(),
-//            bounds
-//        );
-//
-//        double f = sol.getValue();
-//
-//        // FEX = 0.418D-01; LEX = .FALSE. → si richiede solo FEX >= f
-//        final double fExpected = 0.0418;
-//        assertTrue(fExpected >= f,
-//                   "HS362: expected F <= " + fExpected + " but got F = " + f);
-//    }
+//    @Disabled
+    @Test
+    public void testHS362_optimization() {
+
+        // Punto iniziale (X0)
+        double[] x0 = {15.1, 9.05, 6.14, 4.55, 3.61};
+
+        // Bound: XL(i)=3, XU(i)=20; con override XL(1)=15, XL(5)=2
+        double[] lower = {15.0, 3.0, 3.0, 3.0, 2.0};
+        double[] upper = {20.0, 20.0, 20.0, 20.0, 20.0};
+
+        SimpleBounds bounds = new SimpleBounds(lower, upper);
+
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.EXTERNAL);
+        LagrangeSolution sol = opt.optimize(
+            new InitialGuess(x0),
+            new ObjectiveFunction(new TP362Obj()),
+            new TP362Ineq(),
+            bounds
+        );
+
+        double f = sol.getValue();
+
+        // FEX = 0.418D-01; LEX = .FALSE. → si richiede solo FEX >= f
+        final double fExpected = 0.0418;
+        assertTrue(fExpected >= f,
+                   "HS362: expected F <= " + fExpected + " but got F = " + f);
+    }
 }

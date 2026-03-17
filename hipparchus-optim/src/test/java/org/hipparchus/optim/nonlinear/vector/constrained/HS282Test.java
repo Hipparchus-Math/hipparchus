@@ -99,8 +99,7 @@ public class HS282Test {
     }
 
     private LagrangeSolution solve() {
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         final double[] start = new double[10];
         start[0] = -1.2; // as in Fortran; others 0

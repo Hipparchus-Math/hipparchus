@@ -205,8 +205,7 @@ public class HS088toHS092 {
         for (int i = 0; i < n; i++) { lo[i] = -10.0; hi[i] = 10.0; }
         lo[0] = 0.1;
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         // 1) Evaluate objective at the reported optimum XEX and print it
         double fAtXex = new Obj(n).value(new ArrayRealVector(xex));

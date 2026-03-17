@@ -84,10 +84,7 @@ public class HS332Test {
         InitialGuess guess = new InitialGuess(new double[]{ 0.75, 0.75 });
 
         // Optimizer instance
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-          optimizer.setDebugPrinter(System.out::println);
-          }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         // Bounds handled separately: 0 ≤ x_i ≤ 1.5
         SimpleBounds bounds = new SimpleBounds(
                 new double[]{ 0.0, 0.0 },
@@ -106,6 +103,6 @@ public class HS332Test {
         );
         
         
-        assertEquals(expectedF, sol.getValue(), 1e-5);
+        HSProblemTestUtils.assertExpectedObjective(expectedF, sol);
     }
 }

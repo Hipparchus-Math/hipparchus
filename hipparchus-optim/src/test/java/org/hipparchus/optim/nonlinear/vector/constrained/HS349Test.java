@@ -11,6 +11,7 @@ import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunc
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class HS349Test {
@@ -292,17 +293,16 @@ public class HS349Test {
         // X(1)=5000.0, X(2)=200.0, X(3)=100.0 (from Fortran initialization)
         return new double[]{5000.0, 200.0, 100.0}; 
     }
-
+//    @Disabled
     @Test
     public void testHS349() {
         // Poiché non sono disponibili derivate analitiche, è necessario utilizzare la stima numerica.
         // SQPOptimizerS2 è un segnaposto per un ottimizzatore di programmazione quadratica sequenziale/numerica.
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         
         // RECUPERO: Aggiunta la stampa di debug condizionale
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
         
         // Box constraints: 1000 <= X1 <= 8000, 100 <= X2 <= 500, X3 is unconstrained
         SimpleBounds bounds = new SimpleBounds(
@@ -311,6 +311,7 @@ public class HS349Test {
         );
 
         LagrangeSolution sol = opt.optimize(
+                option,
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS349Obj()),
                 new HS349Ineq(),

@@ -161,10 +161,7 @@ private static final double[][] A = new double[][]{
 
         double[] x0 = new double[]{0.0, 2.0, 0.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Bounds:
         // x1 ≥ 0, x2 ≥ 0, x3 ≥ 0

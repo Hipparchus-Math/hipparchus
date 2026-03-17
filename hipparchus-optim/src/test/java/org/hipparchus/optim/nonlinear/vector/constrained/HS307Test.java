@@ -84,12 +84,14 @@ public class HS307Test {
     private LagrangeSolution solve() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         opt.setDebugPrinter(System.out::println); // richiesto
-
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         final double[] x0 = {0.3, 0.4};     
         final double[] lo = {0.0, 0.0};     
         final double[] up = {1.0e10, 1.0e10}; 
 
         return opt.optimize(
+                option,
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS307Obj()),
                 new SimpleBounds(lo, up)

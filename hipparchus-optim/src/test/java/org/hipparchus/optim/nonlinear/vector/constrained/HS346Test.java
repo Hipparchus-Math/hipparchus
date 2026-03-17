@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 public class HS346Test {
 
     private static final int DIM = 3;
-    private static final double C_FACTOR = 0.0201e-6; // .201D-1 * .1D-6
+    private static final double C_FACTOR = 0.0201e-7; // .201D-1 * .1D-6 (Fortran .1D-6 = 1e-7)
 
     // --- Objective Function (MODE 2 and 3) ---
     static final class HS346Obj extends TwiceDifferentiableFunction {
@@ -78,7 +78,7 @@ public class HS346Test {
             double g1 = 675.0 - (x1 * x1 * x2);
             
             // G(2) = 0.419 - 1e-6 * X1^2 * X3^2 >= 0
-            double g2 = 0.419 - 1.0e-6 * (x1 * x1 * x3 * x3);
+            double g2 = 0.419 - 1.0e-7 * (x1 * x1 * x3 * x3);
             
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
@@ -100,9 +100,9 @@ public class HS346Test {
             
             // G2: dG2/dX1 = -2e-6*X1*X3^2, dG2/dX2 = 0, dG2/dX3 = -2e-6*X1^2*X3
             // The Fortran source implicitly assumes G2 is independent of X2 (GG(2,2)=0.0D+0)
-            J[1][0] = -2.0e-6 * x1 * x3_2;
+            J[1][0] = -2.0e-7 * x1 * x3_2;
             J[1][1] = 0.0;
-            J[1][2] = -2.0e-6 * x1_2 * x3;
+            J[1][2] = -2.0e-7 * x1_2 * x3;
 
             return MatrixUtils.createRealMatrix(J);
         }
@@ -114,10 +114,7 @@ public class HS346Test {
 
     @Test
     public void testHS346() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         // Box constraints: 0 <= X1 <= 36, 0 <= X2 <= 5, 0 <= X3 <= 125
         SimpleBounds bounds = new SimpleBounds(
             new double[]{0.0, 0.0, 0.0}, 
@@ -132,11 +129,10 @@ public class HS346Test {
         );
 
         double f = sol.getValue();
-        final double fExpected = -5.6847825; // FEX value
-        final double tolerance = 1.0e-5 * (Math.abs(fExpected) + 1.0);
+        final double val = -5.6847825; // FEX value
         
-        // Using assert for closeness OR better result (f <= fExpected + tolerance)
-        assertTrue(f <= fExpected + tolerance, "Objective value mismatch/worse than expected.");
+        
+         HSProblemTestUtils.assertExpectedObjective(val, sol);
         
        
     }

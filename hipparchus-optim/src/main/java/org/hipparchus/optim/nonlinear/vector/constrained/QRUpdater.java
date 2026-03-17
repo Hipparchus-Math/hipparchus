@@ -1,5 +1,7 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.MatrixUtils;
@@ -35,6 +37,7 @@ public class QRUpdater {
 
     /** Dimension of the optimization problem. */
     private final int n;
+    
 
     /**
      * Constructs a new QRUpdater given the lower triangular matrix L.
@@ -47,6 +50,8 @@ public class QRUpdater {
         this.J = L.transpose();
         this.R = MatrixUtils.createRealMatrix(n, n);
         this.iq = 0;
+        
+      
     }
 
    
@@ -216,6 +221,8 @@ public class QRUpdater {
         }
         return null;
     }
+    
+    
 
     /** Inverse of an upper triangular matrix via backward substitution. */
     private RealMatrix inverseUpperTriangular(RealMatrix U) {
@@ -251,4 +258,99 @@ public class QRUpdater {
     public int getIq() {
         return iq;
     }
+    
+    /**
+ * Computes the vector z used in the primal step without explicitly
+ * forming the J2 submatrix or the tail subvector of d.
+ *
+ * This replaces the sequence:
+ *
+ *   d = J^T * ai
+ *   J2 = J[:, iq:n-1]
+ *   z = J2 * d[iq:n-1]
+ *
+ * with a direct multiplication using the inactive columns of J.
+ *
+ * @param d vector d = J^T * ai
+ * @return z vector of length n
+ */
+public RealVector computeZ(final RealVector d) {
+
+    final int start = iq;
+    final int dim = n;
+
+//    // if all constraints are active there is no primal direction
+//    if (!(n-iq>0)) {
+//        return new ArrayRealVector(dim,0);
+//    }
+
+    final ArrayRealVector z = new ArrayRealVector(dim,0);
+
+    // z = J[:, start:n-1] * d[start:n-1]
+    for (int col = start; col < dim; ++col) {
+
+        final double dj = d.getEntry(col);
+        if (dj == 0.0) {
+            continue;
+        }
+
+        for (int row = 0; row < dim; ++row) {
+            z.addToEntry(row, J.getEntry(row, col) * dj);
+        }
+    }
+
+    return z;
+}
+   /**
+ * Computes d = J^T * a using Hipparchus preMultiply.
+ *
+ * @param a input vector
+ * @return d = J^T * a
+ */
+public RealVector computeD(final RealVector a) {
+    return J.preMultiply(a);
+}
+
+/**
+ * Solves R x = rhs using backward substitution on the active upper
+ * triangular factor.
+ *
+ * <p>Only the first iq entries of d are used; remaining entries
+ * are ignored.</p>
+ *
+ * @param d full vector whose first iq entries define the right-hand side
+ * @return solution vector of dimension iq, or null if R is singular
+ */
+public RealVector solveR(final RealVector d) {
+    if (iq == 0) {
+        return new ArrayRealVector(0, 0);
+    }
+
+    final ArrayRealVector x = new ArrayRealVector(iq);
+
+    for (int i = 0; i < iq; ++i) {
+        x.setEntry(i, d.getEntry(i));
+    }
+
+    for (int i = iq - 1; i >= 0; --i) {
+        double sum = 0.0;
+        for (int j = i + 1; j < iq; ++j) {
+            sum += R.getEntry(i, j) * x.getEntry(j);
+        }
+
+        final double rii = R.getEntry(i, i);
+        if (FastMath.abs(rii) < Precision.SAFE_MIN) {
+            
+            return null;
+        }
+
+        x.setEntry(i, (x.getEntry(i) - sum) / rii);
+    }
+
+    return x;
+    
+    
+  
+
+}
 }

@@ -171,10 +171,7 @@ public class HS251Test {
         // Initial guess (MODE=1): X(i) = 10
         double[] x0 = new double[]{10.0, 10.0, 10.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Box Constraints (Variable Bounds) from TP251:
         // 0 <= x1 <= 42

@@ -69,8 +69,7 @@ public class HS314Test {
 
     @Test
     public void testHS314() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); 
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer() ;
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),

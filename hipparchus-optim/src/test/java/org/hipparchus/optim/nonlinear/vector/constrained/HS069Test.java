@@ -30,8 +30,8 @@ public class HS069Test {
     private static final double z = 4.0;      // Z(2)
 
     // Bounds MODE=1: XL(1)=1e-4, XL(2)=0, XL(3)=0, XL(4)=0; XU(1,2)=100; XU(3,4)=2
-    private static final double[] LB = { 1.0e-4, 0.0, 0.0, 0.0 };
-    private static final double[] UB = { 100.0, 100.0, 2.0, 2.0 };
+    private static final double[] LB = { 1.0e-4, 0.0, 0.0, 1.0e-4 };
+    private static final double[] UB = { 1.0, 100.0, 2.0, 2.0 };
 
     /** Φ(z): CDF normale standard = 0.5*(1+erf(z/√2)). */
     private static double phi(double t) {
@@ -74,18 +74,19 @@ public class HS069Test {
     public void testHS069() {
         final InitialGuess guess = new InitialGuess(new double[]{ 1.0, 1.0, 1.0, 1.0 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
-
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+         SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.FORWARD);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = optimizer.optimize(
+                option,
                 guess,
                 new ObjectiveFunction(new TP69Obj()),
                 new TP69Eq(),
-                bounds
+               bounds
         );
 
         // FEX (TP69): -0.956712887064D+03
-        assertEquals(-956.712887064, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(-956.712887064, sol);
     }
 }

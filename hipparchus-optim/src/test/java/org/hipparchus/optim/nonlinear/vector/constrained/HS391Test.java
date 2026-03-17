@@ -99,10 +99,7 @@ public class HS391Test {
 
 
     private LagrangeSolution solve() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-          opt.setDebugPrinter(System.out::println);
-          }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         return opt.optimize(
             new InitialGuess(initialPoint()),

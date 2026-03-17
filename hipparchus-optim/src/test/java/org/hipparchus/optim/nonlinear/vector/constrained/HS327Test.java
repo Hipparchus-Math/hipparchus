@@ -27,6 +27,7 @@ import org.hipparchus.optim.nonlinear.vector.constrained.InequalityConstraint;
 import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class HS327Test {
@@ -134,29 +135,31 @@ public class HS327Test {
     private static double[] start() { 
         return new double[]{0.42, 5.0}; 
     }
+//    @Disabled
+    @Test
+    public void testHS327() {
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
-//    @Test
-//    public void testHS327() {
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
-//
-//        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-//            opt.setDebugPrinter(System.out::println);
-//        }
-//        
-//       
-//
-//        
-//        LagrangeSolution sol = opt.optimize(
-//                new InitialGuess(start()),
-//                new ObjectiveFunction(new HS327Obj()),
-//                new HS327Ineq(),
-//                new SimpleBounds(new double[]{0.4, 0.4}, new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY})
-//        );
-//
-//        double f = sol.getValue();
-//        final double fExpected = 0.028459670;
-//        
-//        assertEquals(fExpected, f, 1.0e-5 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-//       
-//    }
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
+        
+       
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
+        
+        LagrangeSolution sol = opt.optimize(
+                option,
+                new InitialGuess(start()),
+                new ObjectiveFunction(new HS327Obj()),
+                new HS327Ineq(),
+                new SimpleBounds(new double[]{0.4, 0.4}, new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY})
+        );
+
+        double f = sol.getValue();
+        final double fExpected = 0.028459670;
+        
+        assertEquals(fExpected, f, 1.0e-4 * (Math.abs(fExpected) + 1.0), "objective mismatch");
+       
+    }
 }

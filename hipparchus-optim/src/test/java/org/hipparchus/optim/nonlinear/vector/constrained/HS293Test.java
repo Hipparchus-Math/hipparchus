@@ -65,14 +65,13 @@ public class HS293Test {
         final InitialGuess guess = new InitialGuess(x0);
       
 
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = opt.optimize(
             guess,
             new ObjectiveFunction(new TP293Obj())     
         );
 
-        assertEquals(0.0, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(0.0, sol);
     }
 }

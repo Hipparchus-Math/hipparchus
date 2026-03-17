@@ -80,9 +80,7 @@ public class BFGSUpdater {
      */
     private RealMatrix L;
     private boolean DAMPED;
-    private int BADPHI=0;
-    private int iteration;
-
+    
     /**
      * Creates a new updater.
      *
@@ -128,7 +126,7 @@ public class BFGSUpdater {
         RealVector Hs = L.operate(L.preMultiply(s)); // al posto di getHessian().operate(s)
         double sHs = s.dotProduct(Hs);
         double sty=s.dotProduct(y1);
-        if (sHs <= 0.0) {
+        if (sHs <=0.0) {
            
            
            this.resetHessian();
@@ -140,39 +138,31 @@ public class BFGSUpdater {
         if (sty < GAMMA * sHs) {
            DAMPED=true;
             double den=(sHs - sty);
-            
-           
-
-            double phi = (sHs-GAMMA*sHs) / (den);
-            phi=FastMath.max(0.0,FastMath.min(1.0, phi));
-//          if(phi<1.0e-3)
-//          {    
-//              BADPHI+=1;
-//              if(BADPHI>=2)
-//              {    BADPHI=0;
-//                   this.resetHessian();
-//                    return 2;
-//              } 
-//           return 2;
-//          }  
-//             
+            double phi = (sHs-GAMMA*sHs) / (den);            
             y = (y1.mapMultiply(phi)).add(Hs.mapMultiply(1.0 - phi));
             sty =s.dotProduct(y);
             
-//           
-//            
+         
+           
          
         }
-//        if(!DAMPED && y.dotProduct(y)/sty<FastMath.sqrt(EPS))
-//        {   double gamma=1;
-//            if(!DAMPED ) gamma=y.dotProduct(y)/sty;
-//            double th=1.0e-3;
-//                gamma = FastMath.max(th, FastMath.min(1.0/th, gamma));
-//            this.resetHessian(gamma);
-//            return 3;
-//        }
+     
+        if(!(sty>0)) return 2;   
+          
+        
+//        if (SCALE ) {
 //           
-        if(!(sty>0)) return 2; 
+//            double yy = y.dotProduct(y);
+//            double gamma =yy /sty;
+//            if (gamma < FastMath.sqrt(EPS)) {
+//                gamma = FastMath.max(sqrtEPSmachine, FastMath.min(1/sqrtEPSmachine, gamma));
+//                this.resetHessian(gamma);
+//                return 3;
+//            }
+//        }
+        
+        
+      
         if (!rankOneUpdate(s, y, Hs, sHs,sty))  
         { 
             
@@ -190,7 +180,7 @@ public class BFGSUpdater {
     public void resetHessian() {
         final CholeskyDecomposition ch = new CholeskyDecomposition(initialH, decompositionEpsilon, decompositionEpsilon);
         L = ch.getL();
-        BADPHI=0;
+       
     }
 
     /**
@@ -201,7 +191,7 @@ public class BFGSUpdater {
     public void resetHessian(double gamma) {
         double sqrtGAMMA=FastMath.sqrt(gamma);
         L=MatrixUtils.createRealIdentityMatrix(L.getRowDimension()).scalarMultiply(sqrtGAMMA);
-        BADPHI=0;
+       
     }
     
 
@@ -215,30 +205,27 @@ public class BFGSUpdater {
      * @return true if update succeeded, false otherwise
      */
     private boolean rankOneUpdate(RealVector s, RealVector y, RealVector Hs, double sHs,double sty) {
-        RealMatrix Lcopy = new Array2DRowRealMatrix(L.getData());
+        
         double rho = 1.0 / (FastMath.sqrt(sty));
         double theta = 1.0 / (FastMath.sqrt(sHs));
-        double gamma1=FastMath.sqrt(sty/sHs);
+       
         RealVector v = y.mapMultiply(rho);
         RealVector w = Hs.mapMultiply(theta);
+        
+        
         
         cholupdateLower(v,+1);//upgrade
         
       
        if (!cholupdateLower(w,-1)) { //downdate    
-            double gamma = 1.0;
-//            
+            double gamma = 1.0;            
             double yy = y.dotProduct(y);
-            
-            if (!DAMPED) 
-                gamma =yy /sty;
-//                gamma = sty /sHs;
-                double th=1.0e-3;
-                gamma = FastMath.max(th, FastMath.min(1.0/th, gamma));
-                this.resetHessian(gamma);
-//           L.setSubMatrix(Lcopy.getData(), 0, 0);
-        return false;   
-            
+            if (!DAMPED && sty> Precision.SAFE_MIN ) gamma =yy /sty;                           
+            double th=1.0e-3;
+            gamma = FastMath.max(th, FastMath.min(1.0/th, gamma));
+            this.resetHessian(gamma);
+          
+            return false;        
         }
         
         return true;
@@ -260,7 +247,7 @@ public class BFGSUpdater {
             double lii = L.getEntry(i, i);
             double ui = temp.getEntry(i);
             double r2 = lii * lii + sigma * ui * ui;
-             if (sigma < 0 && r2 < 1.0e-12) return false;
+             if (sigma < 0 && r2 <  1.0e-12) return false;
             //skip or update 
            
            
@@ -319,55 +306,4 @@ public RealMatrix getL() {
     
     return L;
 }
-
-
-/**
- * Solves a lower-triangular system L x = b by forward substitution.
- * <p>
- * L is assumed square, lower-triangular, and (numerically) non-singular.
- * This is O(n^2) and allocation-light (returns a new vector).
- * </p>
- *
- * @param L lower-triangular matrix (n x n)
- * @param b right-hand side vector (n)
- * @return x solution vector (n)
- * @throws IllegalArgumentException if dimensions mismatch
- * @throws IllegalStateException if a (near-)zero diagonal is encountered
- */
-private static RealVector solveLower(final RealMatrix L, final RealVector b) {
-
-    final int n = L.getRowDimension();
-    if (L.getColumnDimension() != n) {
-        throw new IllegalArgumentException("L must be square: " +
-                                           n + "x" + L.getColumnDimension());
-    }
-    if (b.getDimension() != n) {
-        throw new IllegalArgumentException("Dimension mismatch: b=" +
-                                           b.getDimension() + ", L=" + n);
-    }
-
-    final double[] x = new double[n];
-
-//    // A relative safety threshold for diagonal pivots.
-//    // Using sqrt(eps) is a common "numeric non-singularity" guard.
-//    final double tiny = FastMath.sqrt(Precision.EPSILON);
-
-    for (int i = 0; i < n; ++i) {
-        double sum = b.getEntry(i);
-        for (int j = 0; j < i; ++j) {
-            sum -= L.getEntry(i, j) * x[j];
-        }
-
-        final double lii = L.getEntry(i, i);
-//        if (!Double.isFinite(lii) || FastMath.abs(lii) <= tiny) {
-//            throw new IllegalStateException("Singular/ill-conditioned lower-triangular pivot at i=" +
-//                                            i + ", Lii=" + lii);
-//        }
-
-        x[i] = sum / lii;
-    }
-
-    return new ArrayRealVector(x, false);
-}
-
 }

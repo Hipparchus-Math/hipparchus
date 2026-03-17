@@ -144,12 +144,9 @@ public class HS359Test {
     @Test
     public void testHS359() {
         // Initialize the SQP optimizer
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         
         // Enable debug output if the system property is set.
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-             opt.setDebugPrinter(System.out::println);
-        }
         
         // Define Box Constraints.
         SimpleBounds bounds = new SimpleBounds(

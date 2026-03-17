@@ -74,8 +74,7 @@ public class HS203Test {
     }
 
     private static LagrangeSolution solve() {
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // No bounds, no constraints for HS203.
         final double[] start = {2.0, 0.2}; // Fortran start

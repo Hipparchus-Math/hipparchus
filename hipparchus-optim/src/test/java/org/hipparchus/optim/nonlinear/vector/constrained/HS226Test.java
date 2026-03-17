@@ -161,10 +161,7 @@ public class HS226Test {
         double[] upper = new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(x0),
@@ -177,9 +174,7 @@ public class HS226Test {
         double f = sol.getValue();
 
         // Reference optimum
-        final double fExpected = -0.5;
-        final double tol = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
-
-        assertEquals(fExpected, f, tol);
+        final double val = -0.5;
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

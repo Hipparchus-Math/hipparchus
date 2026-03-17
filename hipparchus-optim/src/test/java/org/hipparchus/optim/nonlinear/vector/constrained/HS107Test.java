@@ -162,8 +162,7 @@ public class HS107Test {
 
     // -------- solve utility ----------
     private static LagrangeSolution solve() {
-        final SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         // Start from the Fortran initial point (angles = 0)
         final double[] x0 = {

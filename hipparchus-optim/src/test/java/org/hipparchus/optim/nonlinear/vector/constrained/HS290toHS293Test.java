@@ -67,8 +67,7 @@ public class HS290toHS293Test {
     private static LagrangeSolution solve(int n) {
         double[] x0 = new double[n];
         for (int i = 0; i < n; i++) x0[i] = 10.0;      // Fortran init: X(i)=.1D+1
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);  
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer()  ;
          SQPOption sqpOption=new SQPOption();
         sqpOption.setGradientMode(GradientMode.EXTERNAL);// richiesto
         return opt.optimize(

@@ -40,9 +40,9 @@ public class HS047Test {
     private static class HS047Eq extends EqualityConstraint {
         HS047Eq() { super(new ArrayRealVector(new double[]{ 0,0,0})); }
         @Override public RealVector value(RealVector x) {
-            return new ArrayRealVector(new double[]{ (((x.getEntry(0) + FastMath.pow(x.getEntry(1), 2)) + FastMath.pow(x.getEntry(2), 3))) - (3), 
-                                                      (((x.getEntry(1) - FastMath.pow(x.getEntry(2), 2)) + x.getEntry(3))) - (1), 
-                                                       ((x.getEntry(0) * x.getEntry(4))) - (1) });
+            return new ArrayRealVector(new double[]{ (((x.getEntry(0) + FastMath.pow(x.getEntry(1), 2)) + FastMath.pow(x.getEntry(2), 3))) - (3.0), 
+                                                      (((x.getEntry(1) - FastMath.pow(x.getEntry(2), 2)) + x.getEntry(3))) - (1.0), 
+                                                       ((x.getEntry(0) * x.getEntry(4))) - (1.0) });
         }
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 5; }
@@ -50,18 +50,15 @@ public class HS047Test {
 
     @Test
     public void testHS047() {
-        InitialGuess guess = new InitialGuess(new double[]{2,FastMath.sqrt(2), -1,2.0-FastMath.sqrt(2.0),0.5});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        InitialGuess guess = new InitialGuess(new double[]{2.0,FastMath.sqrt(2), -1.0,2.0-FastMath.sqrt(2.0),0.5});
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
          final SQPOption sqpOption = new SQPOption();
-        sqpOption.setMaxLineSearchIteration(50);
-        sqpOption.setB(0.5);
-        sqpOption.setMu(1.0e-4);
-        sqpOption.setEps(10e-11);
+       sqpOption.setGradientMode(GradientMode.FORWARD);
         double val = 0.0;
-        LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS047Obj()), new HS047Eq());
-        assertEquals(val, sol.getValue(), 1e-5);
+        LagrangeSolution sol = optimizer.optimize(sqpOption,
+                guess, 
+                new ObjectiveFunction(new HS047Obj()),
+                new HS047Eq());
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

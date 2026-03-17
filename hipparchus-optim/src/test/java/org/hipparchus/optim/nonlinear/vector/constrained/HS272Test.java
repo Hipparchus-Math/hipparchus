@@ -148,10 +148,7 @@ public class HS272Test {
         // Initial guess: X(1..6) = 1, then X(2) = 2
         double[] x0 = new double[]{1.0, 2.0, 1.0, 1.0, 1.0, 1.0};
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Bounds: x_i >= 0
         SimpleBounds bounds = new SimpleBounds(

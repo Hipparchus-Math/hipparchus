@@ -82,11 +82,7 @@ public class HS319Test {
 
     @Test
     public void testHS319() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
@@ -95,9 +91,9 @@ public class HS319Test {
         );
 
         double f = sol.getValue();
-        final double fExpected = 452.4044;
+        final double val = 452.4044;
         
-        assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
         
     }
 }

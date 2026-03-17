@@ -115,8 +115,7 @@ final double[][] A = {
 
     private static LagrangeSolution solve(double[] x0) {
         Data d = new Data();
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); // keep debug output
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer(); // keep debug output;
         SQPOption sqpOption=new SQPOption();
         sqpOption.setGradientMode(GradientMode.FORWARD);
         return opt.optimize(

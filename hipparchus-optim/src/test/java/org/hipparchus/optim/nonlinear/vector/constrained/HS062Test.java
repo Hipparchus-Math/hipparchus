@@ -57,14 +57,11 @@ public class HS062Test {
     @Test
     public void testHS062() {
         InitialGuess guess = new InitialGuess(new double[]{0.7, 0.2, 0.1});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = -26272.51448;
         SQPOption sqpOption=new SQPOption();
-        sqpOption.setMaxLineSearchIteration(20);
-        sqpOption.setB(0.5);
-        sqpOption.setMu(1.0e-4);
-        sqpOption.setEps(1e-11);
+       
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS062Obj()), new HS062Eq(), new HS062Ineq());
-        assertEquals(val, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

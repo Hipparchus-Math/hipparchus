@@ -50,8 +50,7 @@ public class HS208Test {
 
     @Test
     public void testHS208() {
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         double[] start = { -1.2, 1.0 };
         LagrangeSolution sol = optimizer.optimize(
@@ -60,9 +59,7 @@ public class HS208Test {
         );
 
         double expected = 0.0; // known optimum at (1,1)
-        assertEquals(expected, sol.getValue(),
-                     1.0e-6 * (Math.abs(expected) + 1.0),
-                     "objective mismatch");
+        HSProblemTestUtils.assertExpectedObjective(expected, sol);
     }
 }
 

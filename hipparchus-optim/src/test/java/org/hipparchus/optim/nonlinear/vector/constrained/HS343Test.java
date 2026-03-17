@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 public class HS343Test {
 
     private static final int DIM = 3;
-    private static final double C_FACTOR = 0.0201e-6; // .201D-1 * .1D-6
+    private static final double C_FACTOR = 0.0201e-7; // .201D-1 * .1D-6 (Fortran .1D-6 = 1e-7)
 
     static final class HS343Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
@@ -87,7 +87,7 @@ public class HS343Test {
             double g1 = 675.0 - (x1 * x1 * x2);
             
             // G(2) = 0.419 - 1e-6 * X1^2 * X3^2 >= 0
-            double g2 = 0.419 - 1.0e-6 * (x1 * x1 * x3 * x3);
+            double g2 = 0.419 - 1.0e-7 * (x1 * x1 * x3 * x3);
             
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
@@ -108,9 +108,9 @@ public class HS343Test {
             J[0][2] = 0.0;
             
             // G2: dG2/dX1 = -2e-6*X1*X3^2, dG2/dX2 = 0, dG2/dX3 = -2e-6*X1^2*X3
-            J[1][0] = -2.0e-6 * x1 * x3_2;
+            J[1][0] = -2.0e-7 * x1 * x3_2;
             J[1][1] = 0.0;
-            J[1][2] = -2.0e-6 * x1_2 * x3;
+            J[1][2] = -2.0e-7 * x1_2 * x3;
 
             return MatrixUtils.createRealMatrix(J);
         }
@@ -122,11 +122,7 @@ public class HS343Test {
 
     @Test
     public void testHS343() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         
         // Box constraints: 0 <= X1 <= 36, 0 <= X2 <= 5, 0 <= X3 <= 125
         SimpleBounds bounds = new SimpleBounds(
@@ -142,9 +138,9 @@ public class HS343Test {
         );
 
         double f = sol.getValue();
-        final double fExpected = -5.6847825;
+        final double val = -5.6847825;
         
-        assertEquals(fExpected, f, 1.0e-5 * (Math.abs(fExpected) + 1.0), "objective mismatch");
+         HSProblemTestUtils.assertExpectedObjective(val, sol);
         
         
     }

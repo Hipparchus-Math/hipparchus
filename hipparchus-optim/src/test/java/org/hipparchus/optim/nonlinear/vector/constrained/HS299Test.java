@@ -60,6 +60,7 @@ public class HS299Test {
     @Test
     public void testHS299() {
         SQPOption sqpOption = new SQPOption();
+        sqpOption.setGradientMode(GradientMode.CENTRAL);
         double[] start = new double[100];
         for (int i = 0; i < 100; i++) {
             start[i] = -1.2;
@@ -69,12 +70,12 @@ public class HS299Test {
         }
 
         InitialGuess guess = new InitialGuess(start);
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(s -> {});
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
+        
 
         double val = 0.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption, guess, new ObjectiveFunction(new HS299Obj()));
 
-        assertEquals(val, sol.getValue(), 1e-2);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

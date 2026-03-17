@@ -34,9 +34,10 @@ public class HS395Test {
         @Override
         public double value(RealVector x) {
             double sum = 0.0;
+            //FX=FX+DBLE(I)*(X(I)**2+X(I)**4)
             for (int i = 0; i < x.getDimension(); i++) {
                 double xi = x.getEntry(i);
-                double idx = i + 1; // 1-based index
+                double idx = 1.0*i + 1.0; // 1-based index
                 sum += idx * (xi * xi + FastMath.pow(xi, 4));
             }
             return sum;
@@ -72,18 +73,18 @@ public class HS395Test {
         }
         
         InitialGuess guess = new InitialGuess(start);
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-          optimizer.setDebugPrinter(System.out::println);
-          }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         double val = 1.9166668;
 
         LagrangeSolution sol = optimizer.optimize(
-//            guess,
+                option,
+           guess,
             new ObjectiveFunction(new HS395Obj()),
             new HS395Eq()
         );
 
-        assertEquals(val, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

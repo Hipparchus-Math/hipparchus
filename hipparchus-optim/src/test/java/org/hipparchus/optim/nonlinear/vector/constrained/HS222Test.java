@@ -124,10 +124,7 @@ public class HS222Test {
         double[] upper = new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(x0),
@@ -139,9 +136,9 @@ public class HS222Test {
 
         double f = sol.getValue();
 
-        final double fExpected = -1.5;
-        final double tol = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
+        final double val = -1.5;
+        
 
-        assertEquals(fExpected, f, tol);
+         HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

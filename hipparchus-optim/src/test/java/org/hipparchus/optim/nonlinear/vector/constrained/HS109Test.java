@@ -322,8 +322,7 @@ public class HS109Test {
         // Initial guess (as in the Fortran initialization)
         double[] x0 = {0, 0, 0, 0, 250, 250, 200, 0, 0};
 
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        optimizer.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         return optimizer.optimize(
                 new InitialGuess(x0),

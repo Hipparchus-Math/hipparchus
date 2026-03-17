@@ -48,9 +48,9 @@ public class HS066Test {
     @Test
     public void testHS066() {
         InitialGuess guess = new InitialGuess(new double[]{0, 1.05, 2.9});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 0.5181632741;
         LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS066Obj()), new HS066Ineq());
-        assertEquals(val, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

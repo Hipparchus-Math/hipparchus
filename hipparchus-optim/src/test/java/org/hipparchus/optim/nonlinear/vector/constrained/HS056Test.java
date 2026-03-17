@@ -275,25 +275,23 @@ public class HS056Test {
         x0[6] = FastMath.asin(FastMath.sqrt(5.0 / 7.2));
 
         // Optimizer
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
-
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
         LagrangeSolution sol = opt.optimize(
+                option,
             new InitialGuess(x0),
             new ObjectiveFunction(new HS56Obj()),
-            new HS56Eq(),   // 4 equality constraints G(x) = 0
-            null,           // no inequality constraints
-            null            // no bounds
+            new HS56Eq() // 4 equality constraints G(x) = 0
+            
         );
 
         final double f = sol.getValue();
 
         // Fortran: LEX = .TRUE., FEX = -3.456D0
         final double fExpected = -3.456;
-        final double tol = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
+        
 
-        assertEquals(fExpected, f, tol);
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
     }
 }

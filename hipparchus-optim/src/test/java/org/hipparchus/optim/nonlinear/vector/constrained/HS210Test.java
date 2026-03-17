@@ -105,10 +105,7 @@ public class HS210Test {
         double[] upper = { Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY };
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS210Obj()),

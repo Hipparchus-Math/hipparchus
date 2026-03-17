@@ -134,8 +134,7 @@ public class HS119Test {
         double[] ub = new double[16];
         for (int i = 0; i < 16; i++) { lb[i] = 0.0; ub[i] = 5.0; }
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS119Obj()),
@@ -144,6 +143,6 @@ public class HS119Test {
         );
 
         // controllo puntuale
-        assertEquals(244.8996975, sol.getValue(), 1e-6);
+        HSProblemTestUtils.assertExpectedObjective(244.8996975, sol);
     }
 }

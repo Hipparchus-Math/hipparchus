@@ -188,10 +188,7 @@ public class HS378Test {
     }
 
     private LagrangeSolution solve() {
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-          opt.setDebugPrinter(System.out::println);
-          }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         // Start: X(i) = -0.23D+1 = -2.3
         double[] x0 = new double[10];

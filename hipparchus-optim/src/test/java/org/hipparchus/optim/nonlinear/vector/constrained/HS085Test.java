@@ -181,8 +181,7 @@ public class HS085Test {
         sqpOption.setMaxLineSearchIteration(20);
        
         sqpOption.setGradientMode(GradientMode.FORWARD);
-        final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println);
+        final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = opt.optimize(
                 guess,
@@ -193,6 +192,6 @@ public class HS085Test {
         );
 
         // FEX dal TP85: -0.19051553D+01
-        assertEquals(-1.9051553, sol.getValue(), 1e-3);
+        HSProblemTestUtils.assertExpectedObjective(-1.9051553, sol);
     }
 }

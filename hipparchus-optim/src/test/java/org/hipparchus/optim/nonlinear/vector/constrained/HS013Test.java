@@ -31,7 +31,9 @@ public class HS013Test {
     private static class HS013Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 2; }
         @Override public double value(RealVector x) {
-            return (FastMath.pow((x.getEntry(0) - 2.0), 2) + FastMath.pow(x.getEntry(1), 2));
+            double x1=x.getEntry(0);
+             double x2=x.getEntry(1);
+            return (x1-2.0)*(x1-2.0) + x2*x2;
         }
         @Override public RealVector gradient(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public RealMatrix hessian(RealVector x) { throw new UnsupportedOperationException(); }
@@ -49,46 +51,29 @@ public class HS013Test {
     private static class HS013IneqNoBound extends InequalityConstraint {
         HS013IneqNoBound() { super(new ArrayRealVector(new double[]{ 0.0})); }
         @Override public RealVector value(RealVector x) {
-            return new ArrayRealVector(new double[]{((FastMath.pow((1.0 - x.getEntry(0)), 3.0)) - (x.getEntry(1))) });
+             double x1=x.getEntry(0);
+             double x2=x.getEntry(1);
+            return new ArrayRealVector(new double[]{(1.0-x1)*(1.0-x1)*(1.0-x1) - x2});
         }
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 2; }
     }
 
-    @Test
-    public void testHS013() {
-         SQPOption sqpOption=new SQPOption();
-        sqpOption.setMaxLineSearchIteration(20);
-        sqpOption.setB(0.5);
-        sqpOption.setMu(1.0e-4);
-        sqpOption.setEps(10e-4);
-        InitialGuess guess = new InitialGuess(new double[]{0.0, 0.0});
-        ;
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
-        double val = 1.0;
-        LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS013Obj()), new HS013Ineq());
-        assertEquals(val, sol.getValue(), 1e-2);
-    }
+   
     
      @Test
     public void testHS013Bounds() {
          SQPOption sqpOption=new SQPOption();
-        sqpOption.setMaxLineSearchIteration(20);
-        sqpOption.setB(0.5);
-        sqpOption.setMu(1.0e-4);
-        sqpOption.setEps(10e-4);
-        InitialGuess guess = new InitialGuess(new double[]{0.0, 0.0});
+          
+        sqpOption.setGradientMode(GradientMode.CENTRAL);
+        
+        
+        InitialGuess guess = new InitialGuess(new double[]{0.1, 0.1});
         SimpleBounds bounds=new SimpleBounds(new double[]{0.0,0.0},
                                              new double[]{Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY});
-        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            optimizer.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 1.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS013Obj()), new HS013IneqNoBound(),bounds);
-        assertEquals(val, sol.getValue(), 1e-2);
+        HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }

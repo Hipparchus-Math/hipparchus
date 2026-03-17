@@ -27,6 +27,7 @@ import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 
 /**
  * HS370 / HS371 – Least-squares polynomial recursion problems.
@@ -135,10 +136,7 @@ public class HS370toHS371Test {
         // Initial guess X(I) = 0
         double[] x0 = new double[n];
 
-        SQPOptimizerS2 opt = new SQPOptimizerS2();
-        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-            opt.setDebugPrinter(System.out::println);
-        }
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 
         LagrangeSolution sol = opt.optimize(
             new InitialGuess(x0),
@@ -146,41 +144,38 @@ public class HS370toHS371Test {
         );
 
         final double f = sol.getValue();
-        final double fExpected = 0.228767005355e-2; // FEX from TP370
-        final double tolF = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
-
-        // LEX = .FALSE.  → only FEX >= f (up to tolerance)
-        assertTrue(fExpected + tolF >= f,
-                   "HS370: expected F <= " + fExpected + " (with tol " + tolF + "), got F = " + f);
+        final double val = 0.228767005355e-2; // FEX from TP370
+       
+       HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
-
     /**
      * TP371 – N=9, FEX ≈ 1.3997601e-6, LEX = .FALSE ⇒ FEX >= f.
      */
-//    @Test
-//    public void testHS371() {
-//
-//        final int n = 9;
-//
-//        // Initial guess X(I) = 0
-//        double[] x0 = new double[n];
-//
-//        SQPOptimizerS2 opt = new SQPOptimizerS2();
-//        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-//            opt.setDebugPrinter(System.out::println);
-//        }
-//
-//        LagrangeSolution sol = opt.optimize(
-//            new InitialGuess(x0),
-//            new ObjectiveFunction(new HS370371Obj(n))
-//        );
-//
-//        final double f = sol.getValue();
-//        final double fExpected = 0.13997601e-5; // corrected FEX for TP371
-//        final double tolF = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
-//
-//        // LEX = .FALSE.  → only FEX >= f (up to tolerance)
-//        assertTrue(fExpected + tolF >= f,
-//                   "HS371: expected F <= " + fExpected + " (with tol " + tolF + "), got F = " + f);
-//    }
+    //@Disabled
+    @Test
+    public void testHS371() {
+
+        final int n = 9;
+
+        // Initial guess X(I) = 0
+        double[] x0 = new double[n];
+
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
+        SQPOption option=new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
+        LagrangeSolution sol = opt.optimize(
+            option,    
+            new InitialGuess(x0),
+            new ObjectiveFunction(new HS370371Obj(n))
+        );
+
+        final double f = sol.getValue();
+        final double val = 0.13997601e-5; // corrected FEX for TP371
+        
+
+         HSProblemTestUtils.assertExpectedObjective(val, sol);
+    }
 }
