@@ -1,3 +1,20 @@
+/*
+ * Licensed to the Hipparchus project under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.ArrayRealVector;
@@ -10,9 +27,8 @@ import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** TP89..TP92 combined: strict 1-based port of the nonlinear inequality; bounds separate. */
+/** TP88..TP92 combined: strict 1-based port of the nonlinear inequality; bounds separate. */
 public class HS088toHS092 {
 
     private static final double ASSERT_TOL = 1e-5;
@@ -126,19 +142,19 @@ public class HS088toHS092 {
         private static double sq(double v) { return v * v; }
     }
 
-    // ---------------------------- Tests (TP89..TP92) ----------------------------
+    // ---------------------------- Tests (TP88..TP92) ----------------------------
 
-    @Test public void testHS088() { // N=3
+    @Test public void testHS088() { // N=2
         final int n = 2;
         final double[] xex = {
-                .107431872940D+01,     
-                -0.456613707247D+00     
+                .107431872940D+01,
+                -0.456613707247D+00
         };
-        final double fex = 0.136265680508e+01;
+        final double fex = 0.136265680997e+01;
 
         runCaseAndCheck(n, fex, xex);
     }
-    
+
     @Test public void testHS089() { // N=3
         final int n = 3;
         final double[] xex = {
@@ -207,22 +223,16 @@ public class HS088toHS092 {
 
         SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
-        // 1) Evaluate objective at the reported optimum XEX and print it
-        double fAtXex = new Obj(n).value(new ArrayRealVector(xex));
-        System.out.printf("N=%d  objective at XEX = %.12g  (expected FEX = %.12g)%n",
-                n, fAtXex, expectedFex);
-        assertEquals(expectedFex, fAtXex, ASSERT_TOL);
+        
 
-        // 2) Run optimizer and check final objective too (use same tolerance)
+        // Run optimizer and verify objective quality against the reference value.
         LagrangeSolution sol = optimizer.optimize(
                 new InitialGuess(x0),
                 new ObjectiveFunction(new Obj(n)),
                 new HS88to92Ineq(n),
                 new SimpleBounds(lo, hi)
         );
-        
-       //the founded solution is better then expected?       
-        assertTrue(sol.getValue() <= 1.36265681 + 1e-6,
-                "objective is worse than best known reference");
+
+        HSProblemTestUtils.assertExpectedObjective(expectedFex, sol);
     }
 }

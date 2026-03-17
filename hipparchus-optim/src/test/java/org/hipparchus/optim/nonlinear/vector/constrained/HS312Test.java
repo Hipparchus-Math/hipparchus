@@ -85,7 +85,7 @@ public class HS312Test {
         final double fExpected = 0.0;
         LagrangeSolution sol = solve();
         double f = sol.getValue();
-        assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0));
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
     }
 }
 

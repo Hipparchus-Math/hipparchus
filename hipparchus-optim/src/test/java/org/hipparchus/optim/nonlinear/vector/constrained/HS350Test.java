@@ -168,14 +168,9 @@ public class HS350Test {
 
         double f = sol.getValue();
         // EXPECTED VALUE (FEX): 0.30750560D-3
-        final double fExpected = 0.00030750560; 
-        final double tolerance = 1.0e-4 * (Math.abs(fExpected) + 1.0);
-        
-        // Check if the solution is close to or better than the expected minimum.
-        // Since the solver is for minimization, the found solution should be <= FEX + tolerance.
-        assertTrue(f <= fExpected + tolerance, 
-                   String.format("Objective value mismatch/worse than expected. Expected: %.10f, Actual: %.10f", fExpected, f));
-        
+        final double fExpected = 0.30750561E-03; 
+       
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
         // Check if the variables are close to the expected optimal values (XEX)
         // XEX(1)=0.19280644D+0, XEX(2)=0.19126279D+0, XEX(3)=0.12305098D+0, XEX(4)=0.13605235D+0
        

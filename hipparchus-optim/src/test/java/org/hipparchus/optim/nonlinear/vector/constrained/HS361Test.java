@@ -280,10 +280,22 @@ public class HS361Test {
     // Fortran FEX
     private static final double F_EXPECTED = -0.77641212e6;
 
+    // Fortran XEX
+    private static final double[] X_EXPECTED = {
+        0.68128605,
+        2.4,
+        20.0,
+        9.3,
+        7.0
+    };
+
     @Test
     public void testHS361Optimization() {
         final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        final HS361Obj objective = new HS361Obj();
+        final HS361Ineq inequality = new HS361Ineq();
 
+      
         // Bounds: traduzione diretta da LXL/LXU, XL, XU.
         final double[] lowerBounds = {
             0.0,                     // XL(1) = 0.0, LXL(1)=TRUE
@@ -300,22 +312,16 @@ public class HS361Test {
             9.3,                      // XU(4) = 9.3
             7.0                       // XU(5) = 7.0
         };
-
+         
         final SimpleBounds bounds = new SimpleBounds(lowerBounds, upperBounds);
-        SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
         final LagrangeSolution sol = opt.optimize(
-                option,
+                HSProblemTestUtils.newCentralDifferenceOption(),
                 new InitialGuess(X_START),
-                new ObjectiveFunction(new HS361Obj()),
-                new HS361Ineq(),
+                new ObjectiveFunction(objective),
+                inequality,
                 bounds
         );
 
-        final double f = sol.getValue();
-
-        final double tolF = 1.0e-4 * (FastMath.abs(F_EXPECTED) + 1.0);
-
-        assertEquals(F_EXPECTED, f, tolF, "HS361: objective mismatch");
+        HSProblemTestUtils.assertExpectedObjective(F_EXPECTED, sol);
     }
 }

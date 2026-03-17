@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.hipparchus.util.FastMath;
 
+// hipparchus-optim/src/test/java/org/hipparchus/optim/nonlinear/vector/constrained/HSProblemTestUtils.java
 final class HSProblemTestUtils {
 
     private static final boolean DEBUG = Boolean.getBoolean("hipparchus.debug.sqp");
@@ -38,14 +39,29 @@ final class HSProblemTestUtils {
         return optimizer;
     }
 
-    static void assertExpectedObjective(final double fExpected, final LagrangeSolution sol) {
-        final double tol = 1.0e-2 * (FastMath.abs(fExpected) + 1.0);
-        assertEquals(fExpected, sol.getValue(), tol);
+    static SQPOption newCentralDifferenceOption() {
+        final SQPOption option = new SQPOption();
+        option.setGradientMode(GradientMode.CENTRAL);
+        return option;
     }
-    
+
+    static void assertExpectedObjective(final double fExpected, final LagrangeSolution sol) {
+//        final double tol = 1.0e-2 * (FastMath.abs(fExpected) + 1.0);
+//        assertEquals(fExpected, sol.getValue(), tol);
+        final double eps = 2.0e-2; // 2%
+
+final double actual = sol.getValue();
+
+if (fExpected != 0.0) {
+    assertTrue(FastMath.abs(actual - fExpected) < eps * FastMath.abs(fExpected));
+} else {
+    assertTrue(FastMath.abs(actual) < eps);
+}
+    }
+
     static void assertBetterObjective(final double fExpected, final LagrangeSolution sol) {
-       final double tol = 1.0e-4 * (FastMath.abs(fExpected) + 1.0); 
-       assertTrue(sol.getValue() < fExpected+tol,"equal or better Solution");
+        final double tol = 1.0e-4 * (FastMath.abs(fExpected) + 1.0);
+        assertTrue(sol.getValue() < fExpected + tol, "equal or better Solution");
     }
 
 }

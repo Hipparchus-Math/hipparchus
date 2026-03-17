@@ -167,7 +167,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         MeritFunctionL2 penalty = new MeritFunctionL2(this.getObj(), this.getEqConstraint(), this.getIqConstraint(), this.bounds, x);
 
         LineSearch lineSearch = new LineSearch(getSettings().getEps(), 10, getSettings().getMu(), getSettings().getB(),
-                getSettings().getMaxLineSearchIteration(), 1);
+                getSettings().getMaxLineSearchIteration(), 0);
         
 
         //INITIAL VALUES
@@ -361,7 +361,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 if(alpha>0)
                   XNORM = alpha * dx.getNorm();
                 else
-                  XNORM =  dx.getNorm();
+                  XNORM =  0.0;
                 FUNDIFF=FastMath.abs(functionEval - functionEvalOld);              
                 //crit0 = KKT <= sqrtEPS;
 //                maxU=(mi+mb!=0)?u.getSubVector(me, u.getDimension()).getLInfNorm():0;
@@ -393,12 +393,14 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                     bfgs.resetHessian();
                     H = bfgs.getHessian();
                     L=bfgs.getL();
-//                    QPMODE = QPMode.QP_AUGMENTED;
+                    QPMODE = QPMode.QP_AUGMENTED;
                     penalty.resetRj();
-//                    if (m > 0) {
-//                        y = u.copy();
-//
-//                    }
+                    rho = getSettings().getRhoCons();
+                    
+                    if (m > 0) {
+                        y = new ArrayRealVector(m,0);
+
+                    }
 //                    penalty.update(J, JE, JI, x, y, dx, u);
                     lineSearch.resetBadStepCount();
                     BFGSUPDATE=-2;
@@ -421,6 +423,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                         
                         QPMODE = QPMode.QP_AUGMENTED;
                         penalty.resetRj();
+                         rho = getSettings().getRhoCons();
                         if (m > 0) {
                             y = u.copy();
 
