@@ -20,7 +20,7 @@ import org.hipparchus.util.FastMath;
  */
 public final class IQPRRefiner {
 
-    private final QPDualActiveSolver oracle;
+    private final QPDualActiveSolverR oracle;
     private final double targetEpsilon;
     private final int maxIterations;
 
@@ -29,7 +29,7 @@ public final class IQPRRefiner {
     private final int maxBacksteps;        // backstepping attempts
     private final double backstepFactor;   // scale reduction per backstep
 
-    public IQPRRefiner(final QPDualActiveSolver oracle,
+    public IQPRRefiner(final QPDualActiveSolverR oracle,
                        final double targetEpsilon,
                        final int maxIterations) {
         this(oracle, targetEpsilon, maxIterations,
@@ -38,7 +38,7 @@ public final class IQPRRefiner {
              1e-2);
     }
 
-    public IQPRRefiner(final QPDualActiveSolver oracle,
+    public IQPRRefiner(final QPDualActiveSolverR oracle,
                        final double targetEpsilon,
                        final int maxIterations,
                        final double alphaGrow,

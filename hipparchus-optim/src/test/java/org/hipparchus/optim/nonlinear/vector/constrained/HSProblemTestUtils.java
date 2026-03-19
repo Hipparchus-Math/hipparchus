@@ -53,9 +53,9 @@ final class HSProblemTestUtils {
 final double actual = sol.getValue();
 
 if (fExpected != 0.0) {
-    assertTrue(FastMath.abs(actual - fExpected) < eps * FastMath.abs(fExpected));
+    assertTrue(FastMath.abs(actual - fExpected) < eps * FastMath.abs(fExpected),"expected:"+fExpected+"--value:"+actual);
 } else {
-    assertTrue(FastMath.abs(actual) < eps);
+    assertTrue(FastMath.abs(actual) < eps,"expected:"+fExpected+"--value:"+actual);
 }
     }
 

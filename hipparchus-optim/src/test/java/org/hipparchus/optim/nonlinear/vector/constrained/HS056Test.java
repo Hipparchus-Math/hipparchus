@@ -22,6 +22,7 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
@@ -273,11 +274,11 @@ public class HS056Test {
 
         // X(7) = asin(sqrt(5 / 7.2))
         x0[6] = FastMath.asin(FastMath.sqrt(5.0 / 7.2));
-
+        
         // Optimizer
         SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
         LagrangeSolution sol = opt.optimize(
                 option,
             new InitialGuess(x0),

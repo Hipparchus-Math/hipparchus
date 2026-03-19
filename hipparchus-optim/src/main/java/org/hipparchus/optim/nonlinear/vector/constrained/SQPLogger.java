@@ -66,8 +66,8 @@ public class SQPLogger {
         String col = String.format(f, width);
         String lsCol = String.format(f, LS_WIDTH);
         this.headerFormat = String.format(
-            "[SQP] ITER %%4s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
-            col, lsCol, col, col, col, col, col, col, col, col, lsCol
+            "[SQP] ITER %%4s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
+            col, lsCol, col, col, col, col, col, col, col, col, col, lsCol
         );
 
         final String percent = "%%";
@@ -75,8 +75,8 @@ public class SQPLogger {
         String fld  = String.format(percent + width + "." + precision + "e");
         String intf = String.format(percent + LS_WIDTH + "d");
         this.rowFormat = String.format(
-            "[SQP] ITER %%4d | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
-            fld, intf, fld, fld, fld, fld, fld, fld, fld, fld, intf
+            "[SQP] ITER %%4d | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
+            fld, intf, fld, fld, fld, fld, fld, fld, fld, fld, fld, intf
         );
     }
 
@@ -92,30 +92,32 @@ public class SQPLogger {
      */
     public String header() {
         return String.format(headerFormat,
-            "", "alpha", "LS", "dxNorm", "dx'Hdx", "KKT", "viol", "sigma", "penalty", "f(x)", "funDiff", "Hupd");
+            "", "alpha", "LS", "dxNorm", "dx'Hdx", "complSlack", "KKT", "viol", "sigma", "penalty", "f(x)", "funDiff", "Hupd");
     }
 
     /** Format one row.
-     * @param iter     iteration number
-     * @param alpha    step length
-     * @param lsCount  line search iteration
-     * @param dxNorm   || dX ||
-     * @param dxHdx    dX H dX
-     * @param kkt      Lagrangian norm
-     * @param viol     constraints violations
-     * @param sigma    solution of the additional variable in QP subproblem
-     * @param penalty  penalty
-     * @param fx       objective function evaluation
-     * @param funDiff  difference f(x_old) - f(x_new) (or other convention)
-     * @param hUpdate  Hessian update code (implementation-defined)
+     * @param iter        iteration number
+     * @param alpha       step length
+     * @param lsCount     line search iteration
+     * @param dxNorm      || dX ||
+     * @param dxHdx       dX H dX
+     * @param complSlack  complementary slackness measure, i.e. Sum |yi * gi|
+     * @param kkt         Lagrangian norm
+     * @param viol        constraints violations
+     * @param sigma       solution of the additional variable in QP subproblem
+     * @param penalty     penalty
+     * @param fx          objective function evaluation
+     * @param funDiff     difference f(x_old) - f(x_new) (or other convention)
+     * @param hUpdate     Hessian update code (implementation-defined)
      * @return formatted row
      */
     public String formatRow(final int iter, final double alpha, final int lsCount,
-                            final double dxNorm, final double dxHdx, final double kkt,
-                            final double viol, final double sigma, final double penalty,
-                            final double fx, final double funDiff, final int hUpdate) {
+                            final double dxNorm, final double dxHdx, final double complSlack,
+                            final double kkt, final double viol, final double sigma,
+                            final double penalty, final double fx, final double funDiff,
+                            final int hUpdate) {
         return String.format(rowFormat,
-                             iter, alpha, lsCount, dxNorm, dxHdx, kkt, viol, sigma, penalty, fx, funDiff, hUpdate);
+                             iter, alpha, lsCount, dxNorm, dxHdx, complSlack, kkt, viol, sigma, penalty, fx, funDiff, hUpdate);
     }
 
     /** Log header.
@@ -133,7 +135,7 @@ public class SQPLogger {
      * @param crit0 Lagrangian norm criterion
      * @param crit3 constraints violations criterion
      */
-    public void logRow(final boolean crit2, final boolean crit1, final boolean crit0, final boolean crit3,final boolean crit4) {
+    public void logRow(final boolean crit2, final boolean crit1,final boolean crit5, final boolean crit0, final boolean crit3, final boolean crit4) {
         if (printer == null) {
             return;
         }
@@ -143,6 +145,7 @@ public class SQPLogger {
            append(String.format(FIELD_START + LS_WIDTH  + FIELD_CONTINUATION, "")).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit2)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit1)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit5)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit0)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit3)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, "")).
@@ -154,25 +157,26 @@ public class SQPLogger {
     }
 
     /** Log one row.
-     * @param iter     iteration number
-     * @param alpha    step length
-     * @param lsCount  line search iteration
-     * @param dxNorm   || dX ||
-     * @param dxHdx    dX H dX
-     * @param kkt      Lagrangian norm
-     * @param viol     constraints violations
-     * @param sigma    solution of the additional variable in QP subproblem
-     * @param penalty  penalty
-     * @param fx       objective function evaluation
-     * @param funDiff  difference f(x_old) - f(x_new) (or other convention)
-     * @param hUpdate  Hessian update code (implementation-defined)
+     * @param iter        iteration number
+     * @param alpha       step length
+     * @param lsCount     line search iteration
+     * @param dxNorm      || dX ||
+     * @param dxHdx       dX H dX
+     * @param complSlack  complementary slackness measure, i.e. Sum |yi * gi|
+     * @param kkt         Lagrangian norm
+     * @param viol        constraints violations
+     * @param sigma       solution of the additional variable in QP subproblem
+     * @param penalty     penalty
+     * @param fx          objective function evaluation
+     * @param funDiff     difference f(x_old) - f(x_new) (or other convention)
+     * @param hUpdate     Hessian update code (implementation-defined)
      */
     public void logRow(int iter, double alpha, int lsCount,
-                       double dxNorm, double dxHdx, double kkt,
+                       double dxNorm, double dxHdx, double complSlack, double kkt,
                        double viol, double sigma, double penalty, double fx,
                        double funDiff, int hUpdate) {
         if (printer != null) {
-            printer.print(formatRow(iter, alpha, lsCount, dxNorm, dxHdx, kkt, viol, sigma, penalty, fx, funDiff, hUpdate));
+            printer.print(formatRow(iter, alpha, lsCount, dxNorm, dxHdx, complSlack, kkt, viol, sigma, penalty, fx, funDiff, hUpdate));
         }
     }
 

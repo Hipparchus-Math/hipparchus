@@ -155,41 +155,39 @@ public class HS265Test {
 //    // -------------------------------------------------------------------------
 //    // Test
 //    // -------------------------------------------------------------------------
-//    @Test
-//    public void testHS265() {
-//
-//        // Initial guess: x = (0, 0, 0, 0)
-//        double[] x0 = new double[]{0.0, 0.0, 0.0, 0.0};
-//
-//        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer()
-//        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
-//            opt.setDebugPrinter(System.out::println);
-//        }
-//
-//        // Bounds: x_i >= 0 (no upper bounds active in Fortran)
-//        SimpleBounds bounds = new SimpleBounds(
-//                new double[]{0.0, 0.0, 0.0, 0.0},
-//                new double[]{
-//                        Double.POSITIVE_INFINITY,
-//                        Double.POSITIVE_INFINITY,
-//                        Double.POSITIVE_INFINITY,
-//                        Double.POSITIVE_INFINITY
-//                }
-//        );
-//
-//        LagrangeSolution sol = opt.optimize(
-//                new InitialGuess(x0),
-//                new ObjectiveFunction(new HS265Obj()),
-//                new HS265Eq(),   // 2 equalities
-//                null,            // no inequalities
-//                bounds
-//        );
-//
-//        double f = sol.getValue();
-//
-//        double fExpected = 0.97474658;
-//        double tol = 1e-6 * (FastMath.abs(fExpected) + 1.0);
-//
-//        assertEquals(fExpected, f, tol);
-//    }
+    @Test
+    public void testHS265() {
+
+        // Initial guess: x = (0, 0, 0, 0)
+        double[] x0 = new double[]{0.0, 0.0, 0.0, 0.0};
+
+        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
+
+        // Bounds: x_i >= 0 (no upper bounds active in Fortran)
+        SimpleBounds bounds = new SimpleBounds(
+                new double[]{0.0, 0.0, 0.0, 0.0},
+                new double[]{
+                        Double.POSITIVE_INFINITY,
+                        Double.POSITIVE_INFINITY,
+                        Double.POSITIVE_INFINITY,
+                        Double.POSITIVE_INFINITY
+                }
+        );
+
+        LagrangeSolution sol = opt.optimize(
+                new InitialGuess(x0),
+                new ObjectiveFunction(new HS265Obj()),
+                new HS265Eq(),   // 2 equalities
+                null,            // no inequalities
+                bounds
+        );
+
+        
+
+        double fExpected = 0.97474658;
+         HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
+    }
 }

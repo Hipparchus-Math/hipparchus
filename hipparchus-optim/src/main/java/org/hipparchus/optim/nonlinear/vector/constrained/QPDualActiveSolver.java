@@ -521,7 +521,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         if (!activeSet.isEmpty()) {
             for (int i = 0; i < activeSet.size(); i++) {
                 lambda.setEntry(activeSet.get(i), u.getEntry(i));
-                if(i>=p && u.getEntry(i)<0) lambda.setEntry(activeSet.get(i), 0.0);
+                if(activeSet.get(i)>=p && u.getEntry(i)<0) lambda.setEntry(activeSet.get(i), 0.0);
             }
         }
         final double value = 0.5 * x.dotProduct(G.operate(x)) +

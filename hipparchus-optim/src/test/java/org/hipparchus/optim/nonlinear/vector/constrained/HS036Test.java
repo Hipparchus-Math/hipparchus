@@ -17,39 +17,80 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 public class HS036Test {
 
     private static class HS036Obj extends TwiceDifferentiableFunction {
-        @Override public int dim() { return 3; }
-        @Override public double value(RealVector x) {
-            return (((-x.getEntry(0)) * x.getEntry(1)) * x.getEntry(2));
+        @Override
+        public int dim() {
+            return 3;
         }
-        @Override public RealVector gradient(RealVector x) { throw new UnsupportedOperationException(); }
-        @Override public RealMatrix hessian(RealVector x) { throw new UnsupportedOperationException(); }
+
+        @Override
+        public double value(final RealVector x) {
+            // TP36 MODE=2: FX = -X(1)*X(2)*X(3)
+            return -x.getEntry(0) * x.getEntry(1) * x.getEntry(2);
+        }
+
+        @Override
+        public RealVector gradient(final RealVector x) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public RealMatrix hessian(final RealVector x) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private static class HS036Ineq extends InequalityConstraint {
-        HS036Ineq() { super(new ArrayRealVector(new double[]{ 0.0, 0.0, 0.0, 0.0 })); }
-        @Override public RealVector value(RealVector x) {
-            return new ArrayRealVector(new double[]{ (72) - (((x.getEntry(0) + (2 * x.getEntry(1))) + (2 * x.getEntry(2)))), (20) - (x.getEntry(0)), (11) - (x.getEntry(1)), (42) - (x.getEntry(2)) });
+        HS036Ineq() {
+            // TP36 has only 1 nonlinear inequality: 72 - x1 - 2*x2 - 2*x3 >= 0
+            super(new ArrayRealVector(new double[] {0.0}));
         }
-        @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
-        @Override public int dim() { return 3; }
+
+        @Override
+        public RealVector value(final RealVector x) {
+            final double g1 = 72.0 - x.getEntry(0) - 2.0 * x.getEntry(1) - 2.0 * x.getEntry(2);
+            return new ArrayRealVector(new double[] {g1});
+        }
+
+        @Override
+        public RealMatrix jacobian(final RealVector x) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int dim() {
+            return 3;
+        }
     }
 
     @Test
     public void testHS036() {
-        InitialGuess guess = new InitialGuess(new double[]{10, 10, 10});
-        SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
-        double val = -3300.0;
-        LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS036Obj()), new HS036Ineq());
-        HSProblemTestUtils.assertExpectedObjective(val, sol);
+        final InitialGuess guess = new InitialGuess(new double[] {10.0, 10.0, 10.0});
+
+        // TP36 MODE=1 bounds: 0 <= xi, x1<=20, x2<=11, x3<=42
+        final SimpleBounds bounds = new SimpleBounds(
+                new double[] {0.0, 0.0, 0.0},
+                new double[] {20.0, 11.0, 42.0}
+        );
+
+        final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
+
+        final LagrangeSolution sol = optimizer.optimize(
+                guess,
+                new ObjectiveFunction(new HS036Obj()),
+                new HS036Ineq(),
+                bounds
+        );
+
+        HSProblemTestUtils.assertExpectedObjective(-3300.0, sol);
     }
 }

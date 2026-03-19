@@ -29,9 +29,11 @@ public class HS306Test {
     
     static final class HS306Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 2; }
-
+        //FX=-DEXP(-X(1)-X(2))*(.2D+1*X(1)**2+.3D+1*X(2)**2)
         @Override public double value(RealVector x) {
-            double x1 = x.getEntry(0), x2 = x.getEntry(1);
+            double x1=x.getEntry(0);
+            double x2=x.getEntry(1);
+            
             double A  = Math.exp(-(x1 + x2));
             double B  = 2.0 * x1 * x1 + 3.0 * x2 * x2;
             return -A * B;
@@ -55,18 +57,18 @@ public class HS306Test {
 
 //    @Test
 //    public void testHS306() {
-//        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer()
+//        SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
 //        opt.setDebugPrinter(System.out::println);
 //        SQPOption sqpOption=new SQPOption();
-//        sqpOption.setGradientMode(GradientMode.FORWARD);
+//        sqpOption.setGradientMode(GradientMode.EXTERNAL);
 //        LagrangeSolution sol = opt.optimize(
 //                sqpOption,
 //               new InitialGuess(start()),
 //                new ObjectiveFunction(new HS306Obj())
 //        );
 //
-//        double f = sol.getValue();
+//      
 //        double fExpected = -1.1036; 
-//        assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
+//        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
 //    }
 }

@@ -1,22 +1,41 @@
 /*
- * Licensed to the Hipparchus project under one or more contributor license agreements...
+ * Licensed to the Hipparchus project under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The Hipparchus project licenses this file to You under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-/** HS TP84 (hs84). 5 variabili, 3 vincoli a intervallo scritti come 6 inequality. */
+/**
+ * HS84 (TP84): 5 variables with 3 interval constraints represented as 6 inequalities.
+ */
 public class HS084Test {
 
-    // a[1..21] (uso indicizzazione 1-based: a[0] dummy)
-    private static final double[] a = {
+    private static final int DIM      = 5;
+    private static final int NUM_INEQ = 6;
+
+    // a(1..21), aligned with original TP84 Fortran data (index 0 unused)
+    private static final double[] A = {
         0.0,
         -24345.0,
         -8720288.849,
@@ -41,75 +60,159 @@ public class HS084Test {
          30988.146
     };
 
-    // Bounds (l/u nel tuo modello)
     private static final double[] LB = { 0.0, 1.2, 20.0, 9.0, 6.5 };
     private static final double[] UB = { 1000.0, 2.4, 60.0, 9.3, 7.0 };
 
-    // Guess xi
+    // MODE=1 initial guess in Fortran TP84
     private static final double[] X0 = { 2.52, 2.0, 37.5, 9.25, 6.8 };
 
-    /** f(x) = -a1 - a2*x1 - a3*x1*x2 - a4*x1*x3 - a5*x1*x4 - a6*x1*x5. */
+    /**
+     * f(x) = -(a1 + x1*(a2 + a3*x2 + a4*x3 + a5*x4 + a6*x5)).
+     */
     private static class TP84Obj extends TwiceDifferentiableFunction {
-        @Override public int dim() { return 5; }
-        @Override public double value(RealVector X) {
-            final double x1=X.getEntry(0), x2=X.getEntry(1),
-                         x3=X.getEntry(2), x4=X.getEntry(3), x5=X.getEntry(4);
-            return -a[1]
-                   - a[2]*x1
-                   - a[3]*x1*x2
-                   - a[4]*x1*x3
-                   - a[5]*x1*x4
-                   - a[6]*x1*x5;
+
+        @Override
+        public int dim() {
+            return DIM;
         }
-        @Override public RealVector gradient(RealVector x) { throw new UnsupportedOperationException(); }
-        @Override public RealMatrix hessian(RealVector x)  { throw new UnsupportedOperationException(); }
+
+        @Override
+        public double value(final RealVector x) {
+            final double x1 = x.getEntry(0);
+            final double x2 = x.getEntry(1);
+            final double x3 = x.getEntry(2);
+            final double x4 = x.getEntry(3);
+            final double x5 = x.getEntry(4);
+
+            return -(A[1] + x1 * (A[2] + A[3] * x2 + A[4] * x3 + A[5] * x4 + A[6] * x5));
+        }
+
+        @Override
+        public RealVector gradient(final RealVector x) {
+            final double x1 = x.getEntry(0);
+            final double x2 = x.getEntry(1);
+            final double x3 = x.getEntry(2);
+            final double x4 = x.getEntry(3);
+            final double x5 = x.getEntry(4);
+
+            final double[] g = new double[DIM];
+            g[0] = -(A[2] + A[3] * x2 + A[4] * x3 + A[5] * x4 + A[6] * x5);
+            g[1] = -A[3] * x1;
+            g[2] = -A[4] * x1;
+            g[3] = -A[5] * x1;
+            g[4] = -A[6] * x1;
+            return new ArrayRealVector(g, false);
+        }
+
+        @Override
+        public RealMatrix hessian(final RealVector x) {
+            final RealMatrix h = new Array2DRowRealMatrix(DIM, DIM);
+            h.setEntry(0, 1, -A[3]);
+            h.setEntry(1, 0, -A[3]);
+            h.setEntry(0, 2, -A[4]);
+            h.setEntry(2, 0, -A[4]);
+            h.setEntry(0, 3, -A[5]);
+            h.setEntry(3, 0, -A[5]);
+            h.setEntry(0, 4, -A[6]);
+            h.setEntry(4, 0, -A[6]);
+            return h;
+        }
     }
 
     /**
-     * Vincoli a intervallo scritti come g(x) >= 0 (la tua convenzione):
-     * 0 <= V1 <= 294000,  0 <= V2 <= 294000,  0 <= V3 <= 277200
-     * con:
-     *  V1 = a7*x1 + a8*x1*x2 + a9*x1*x3 + a10*x1*x4 + a11*x1*x5
-     *  V2 = a12*x1 + a13*x1*x2 + a14*x1*x3 + a15*x1*x4 + a16*x1*x5
-     *  V3 = a17*x1 + a18*x1*x2 + a19*x1*x3 + a20*x1*x4 + a21*x1*x5
+     * Interval constraints from TP84 in inequality form:
+     *
+     *   0 <= V1 <= 294000
+     *   0 <= V2 <= 294000
+     *   0 <= V3 <= 277200
      */
     private static class TP84Ineq extends InequalityConstraint {
-        TP84Ineq() { super(new ArrayRealVector(new double[]{0,0,0,0,0,0})); }
-        @Override public int dim() { return 5; }
-        @Override public RealVector value(RealVector X) {
-            final double x1=X.getEntry(0), x2=X.getEntry(1),
-                         x3=X.getEntry(2), x4=X.getEntry(3), x5=X.getEntry(4);
 
-            final double V1 = x1*(a[7]  + a[8]*x2  + a[9]*x3  + a[10]*x4 + a[11]*x5);
-            final double V2 = x1*(a[12] + a[13]*x2 + a[14]*x3 + a[15]*x4 + a[16]*x5);
-            final double V3 = x1*(a[17] + a[18]*x2 + a[19]*x3 + a[20]*x4 + a[21]*x5);
-
-            return new ArrayRealVector(new double[]{
-                V1, V2, V3,
-                294000.0 - V1,
-                294000.0 - V2,
-                277200.0 - V3
-            });
+        TP84Ineq() {
+            super(new ArrayRealVector(new double[NUM_INEQ]));
         }
-        @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
+
+        @Override
+        public int dim() {
+            return DIM;
+        }
+
+        @Override
+        public RealVector value(final RealVector x) {
+            final double x1 = x.getEntry(0);
+            final double x2 = x.getEntry(1);
+            final double x3 = x.getEntry(2);
+            final double x4 = x.getEntry(3);
+            final double x5 = x.getEntry(4);
+
+            final double v1 = x1 * (A[7] + A[8] * x2 + A[9] * x3 + A[10] * x4 + A[11] * x5);
+            final double v2 = x1 * (A[12] + A[13] * x2 + A[14] * x3 + A[15] * x4 + A[16] * x5);
+            final double v3 = x1 * (A[17] + A[18] * x2 + A[19] * x3 + A[20] * x4 + A[21] * x5);
+
+            return new ArrayRealVector(new double[] {
+                v1,
+                v2,
+                v3,
+                294000.0 - v1,
+                294000.0 - v2,
+                277200.0 - v3
+            }, false);
+        }
+
+        @Override
+        public RealMatrix jacobian(final RealVector x) {
+            final double x1 = x.getEntry(0);
+            final double x2 = x.getEntry(1);
+            final double x3 = x.getEntry(2);
+            final double x4 = x.getEntry(3);
+            final double x5 = x.getEntry(4);
+
+            final RealMatrix j = new Array2DRowRealMatrix(NUM_INEQ, DIM);
+
+            // V1 derivatives
+            j.setEntry(0, 0, A[7] + A[8] * x2 + A[9] * x3 + A[10] * x4 + A[11] * x5);
+            j.setEntry(0, 1, A[8] * x1);
+            j.setEntry(0, 2, A[9] * x1);
+            j.setEntry(0, 3, A[10] * x1);
+            j.setEntry(0, 4, A[11] * x1);
+
+            // V2 derivatives
+            j.setEntry(1, 0, A[12] + A[13] * x2 + A[14] * x3 + A[15] * x4 + A[16] * x5);
+            j.setEntry(1, 1, A[13] * x1);
+            j.setEntry(1, 2, A[14] * x1);
+            j.setEntry(1, 3, A[15] * x1);
+            j.setEntry(1, 4, A[16] * x1);
+
+            // V3 derivatives
+            j.setEntry(2, 0, A[17] + A[18] * x2 + A[19] * x3 + A[20] * x4 + A[21] * x5);
+            j.setEntry(2, 1, A[18] * x1);
+            j.setEntry(2, 2, A[19] * x1);
+            j.setEntry(2, 3, A[20] * x1);
+            j.setEntry(2, 4, A[21] * x1);
+
+            // Upper interval bounds: -(Vi derivatives)
+            for (int c = 0; c < DIM; c++) {
+                j.setEntry(3, c, -j.getEntry(0, c));
+                j.setEntry(4, c, -j.getEntry(1, c));
+                j.setEntry(5, c, -j.getEntry(2, c));
+            }
+
+            return j;
+        }
     }
 
     @Test
-    public void testHS084() {
-        final InitialGuess guess = new InitialGuess(X0);
-        final SimpleBounds bounds = new SimpleBounds(LB, UB);
-
+    public void testHS084Optimization() {
         final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
-        optimizer.setDebugPrinter(System.out::println);
 
         final LagrangeSolution sol = optimizer.optimize(
-            guess,
+            new InitialGuess(X0),
             new ObjectiveFunction(new TP84Obj()),
             new TP84Ineq(),
-            bounds
+            new SimpleBounds(LB, UB)
         );
 
-        // best known objective = -5280335.133
-        HSProblemTestUtils.assertExpectedObjective(-5280335.133, sol);
+        // FEX in TP84: -0.528033513306D+07
+        HSProblemTestUtils.assertExpectedObjective(-5280335.13306, sol);
     }
 }

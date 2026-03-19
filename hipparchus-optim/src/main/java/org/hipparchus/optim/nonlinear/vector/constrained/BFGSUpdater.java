@@ -80,6 +80,7 @@ public class BFGSUpdater {
      */
     private RealMatrix L;
     private boolean DAMPED;
+    private final int dim;
     
     /**
      * Creates a new updater.
@@ -94,6 +95,7 @@ public class BFGSUpdater {
         this.initialH = new Array2DRowRealMatrix(initialHess.getData());
         this.EPS = eps;
         this.SCALE = autoScale;
+        this.dim=initialHess.getColumnDimension();
         this.decompositionEpsilon = decompositionEpsilon;
         resetHessian();
     }
@@ -178,8 +180,8 @@ public class BFGSUpdater {
      * Resets the Hessian approximation to its initial value.
      */
     public void resetHessian() {
-        final CholeskyDecomposition ch = new CholeskyDecomposition(initialH, decompositionEpsilon, decompositionEpsilon);
-        L = ch.getL();
+        
+        L = MatrixUtils.createRealIdentityMatrix(dim);
        
     }
 
@@ -190,7 +192,8 @@ public class BFGSUpdater {
      */
     public void resetHessian(double gamma) {
         double sqrtGAMMA=FastMath.sqrt(gamma);
-        L=MatrixUtils.createRealIdentityMatrix(L.getRowDimension()).scalarMultiply(sqrtGAMMA);
+       
+        L=MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
        
     }
     

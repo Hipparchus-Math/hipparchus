@@ -132,7 +132,7 @@ public class HS383Test {
             double fx = 0.0;
             for (int i = 0; i < DIM; i++) {
                 double xi = x.getEntry(i);
-                // replica IF (X(I).LT.XL(I)) X(I)=XL(I)
+//                // replica IF (X(I).LT.XL(I)) X(I)=XL(I)
                 if (xi < XL) {
                     xi = XL;
                 }
@@ -219,7 +219,7 @@ public class HS383Test {
             opt.setDebugPrinter(System.out::println);
         }
         SQPOption option =new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.EXTERNAL);
         LagrangeSolution sol = opt.optimize(
                 option,
                 new InitialGuess(x0),

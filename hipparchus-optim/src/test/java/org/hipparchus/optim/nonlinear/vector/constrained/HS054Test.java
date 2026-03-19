@@ -33,8 +33,13 @@ public class HS054Test {
             final double v4 = x.getEntry(3) - 10.0;
             final double v5 = x.getEntry(4) - 1.0e-3;
             final double v6 = x.getEntry(5) - 1.0e8;
-            final double q = (1.5625e-8 * v1 * v1 + 5.0e-5 * v1 * v2 + v2 * v2) / 0.96 +
-                             v3 * v3 / 4.9e13 + 4.0e-4 * v4 * v4 + 4.0e2 * v5 * v5 + 4.0e-18 * v6 * v6;
+            final double v7=1.0/0.960;    
+            final double v8=1.0/4.9e+13;   
+            final double v9=1.0/2.45e+13;  
+            // Q = (1.5625D-8*V1**2 + 5.D-5*V1*V2 + V2**2)*V7 + V3**2*V8
+            //  + 4.D-4*V4**2 + 4.D+2*V5**2 + 4.D-18*V6**2       
+            final double q = (1.5625e-8 * v1 * v1 + 5.0e-5 * v1 * v2 + v2 * v2) *v7 +
+                             v3 * v3 *v8 + 4.0e-4 * v4 * v4 + 4.0e2 * v5 * v5 + 4.0e-18 * v6 * v6;
             return -FastMath.exp(-0.5 * q);
         }
 

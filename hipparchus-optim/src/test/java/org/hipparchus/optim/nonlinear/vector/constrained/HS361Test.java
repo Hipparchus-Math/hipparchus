@@ -315,7 +315,7 @@ public class HS361Test {
          
         final SimpleBounds bounds = new SimpleBounds(lowerBounds, upperBounds);
         final LagrangeSolution sol = opt.optimize(
-                HSProblemTestUtils.newCentralDifferenceOption(),
+                //HSProblemTestUtils.newCentralDifferenceOption(),
                 new InitialGuess(X_START),
                 new ObjectiveFunction(objective),
                 inequality,

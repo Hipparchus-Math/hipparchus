@@ -55,7 +55,7 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
     private SimpleBounds simpleBounds;
     
     /** Default QPSolver. */
-    private QPOptimizer QPSolver = new QPDualActiveSolver();
+    private QPOptimizer QPSolver = new QPDualActiveSolverR();
 
     /** Simple constructor.
      */

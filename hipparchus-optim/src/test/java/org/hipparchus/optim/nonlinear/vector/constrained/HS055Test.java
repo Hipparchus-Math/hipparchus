@@ -27,8 +27,19 @@ public class HS055Test {
 
         @Override
         public double value(final RealVector x) {
-            final double x14 = FastMath.min(10.0, x.getEntry(0) * x.getEntry(3));
-            return x.getEntry(0) + 2.0 * x.getEntry(1) + 4.0 * x.getEntry(4) + FastMath.exp(x14);
+          
+      final double x1=x.getEntry(0);
+      final double x2=x.getEntry(1);
+      final double x3=x.getEntry(2);
+      final double x4=x.getEntry(3);
+      final double x5=x.getEntry(4);
+      final double x6=x.getEntry(5);
+        // X14 = X(1)*X(4)
+      //IF (X14.GT.1.0D1) X14 = 1.0D1   
+      //FX=X(1)+2.D0*X(2)+4.D0*X(5)+DEXP(X14)   
+     
+       final double x14 = FastMath.min(10.0, x1*x4);
+            return x1 + 2.0 * x2 + 4.0 * x5 + FastMath.exp(x14);
         }
 
         @Override public RealVector gradient(final RealVector x) { throw new UnsupportedOperationException(); }
