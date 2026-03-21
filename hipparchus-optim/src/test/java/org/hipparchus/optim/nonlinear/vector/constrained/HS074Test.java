@@ -74,6 +74,7 @@ public class HS074Test {
         final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
 
         final LagrangeSolution sol = optimizer.optimize(
+                
                 guess,
                 new ObjectiveFunction(new TP74Obj()),
                 new TP74Eq(),      // 3 equalities

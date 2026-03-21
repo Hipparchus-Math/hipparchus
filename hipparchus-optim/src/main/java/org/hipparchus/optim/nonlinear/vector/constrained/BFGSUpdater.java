@@ -16,10 +16,7 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.CholeskyDecomposition;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -61,7 +58,7 @@ public class BFGSUpdater {
     /**
      * trigger skip update for diagonal of Hessian.
      */
-    private final double sqrtEPSmachine = FastMath.sqrt(Precision.EPSILON);
+    private final double sqrtEPS = FastMath.sqrt(Precision.EPSILON);
 
     /**
      * Tolerance for symmetric matrices decomposition.
@@ -81,7 +78,8 @@ public class BFGSUpdater {
     private RealMatrix L;
     private boolean DAMPED;
     private final int dim;
-    
+    private double FACTOR=1.0;
+
     /**
      * Creates a new updater.
      *
@@ -95,7 +93,7 @@ public class BFGSUpdater {
         this.initialH = new Array2DRowRealMatrix(initialHess.getData());
         this.EPS = eps;
         this.SCALE = autoScale;
-        this.dim=initialHess.getColumnDimension();
+        this.dim = initialHess.getColumnDimension();
         this.decompositionEpsilon = decompositionEpsilon;
         resetHessian();
     }
@@ -124,65 +122,50 @@ public class BFGSUpdater {
      * 3:sty<sqrt(eps)auto scale gamma*Hini
      * 4:singulatity detected during downdate reset to gamma*Hinit
      */
-    public int update(RealVector s, RealVector y1) {
-        RealVector Hs = L.operate(L.preMultiply(s)); // al posto di getHessian().operate(s)
-        double sHs = s.dotProduct(Hs);
-        double sty=s.dotProduct(y1);
-        if (sHs <=0.0) {
-           
-           
-           this.resetHessian();
+    public int update(final RealVector s, final RealVector y1) {
+        final RealVector Hs = L.operate(L.preMultiply(s));
+        final double sHs = s.dotProduct(Hs);
+        double sty = s.dotProduct(y1);
+        if (sHs <= 0.0) {
+            resetHessian();
             return 1;
         }
-       
-         DAMPED=false;
-         RealVector y=y1.copy();
+
+        DAMPED = false;
+        RealVector y = y1;
         if (sty < GAMMA * sHs) {
-           DAMPED=true;
-            double den=(sHs - sty);
-            double phi = (sHs-GAMMA*sHs) / (den);            
-            y = (y1.mapMultiply(phi)).add(Hs.mapMultiply(1.0 - phi));
-            sty =s.dotProduct(y);
-            
-         
-           
-         
+            DAMPED = true;
+            final double denominator = sHs - sty;
+            final double phi = (sHs - GAMMA * sHs) / denominator;
+            y = y1.mapMultiply(phi).add(Hs.mapMultiply(1.0 - phi));
+            sty = s.dotProduct(y);
         }
-     
-        if(!(sty>0)) return 2;   
-          
+
+        if (!(sty > 0.0)) {
+            return 2;
+        }
         
-//        if (SCALE ) {
-//           
-//            double yy = y.dotProduct(y);
-//            double gamma =yy /sty;
-//            if (gamma < FastMath.sqrt(EPS)) {
-//                gamma = FastMath.max(sqrtEPSmachine, FastMath.min(1/sqrtEPSmachine, gamma));
-//                this.resetHessian(gamma);
-//                return 3;
-//            }
-//        }
-        
-        
-      
-        if (!rankOneUpdate(s, y, Hs, sHs,sty))  
-        { 
-            
+         
+         final double yy = y.dotProduct(y);
+         
+         if (!DAMPED && sty > Precision.SAFE_MIN) {
+                FACTOR= yy / sty;
+            }
+         final double th = 1.0e-6;
+         FACTOR = FastMath.max(th, FastMath.min(1.0 / th, FACTOR));
+
+        if (!rankOneUpdate(s, y, Hs, sHs, sty)) {
             return 4;
         }
-     
-        
+
         return 0;
     }
-    
-    
+
     /**
      * Resets the Hessian approximation to its initial value.
      */
     public void resetHessian() {
-        
         L = MatrixUtils.createRealIdentityMatrix(dim);
-       
     }
 
     /**
@@ -191,12 +174,18 @@ public class BFGSUpdater {
      * @param gamma scale factor
      */
     public void resetHessian(double gamma) {
-        double sqrtGAMMA=FastMath.sqrt(gamma);
-       
-        L=MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
-       
+        final double sqrtGAMMA = FastMath.sqrt(gamma);
+        L = MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
     }
     
+    /**
+     * Resets the Hessian approximation with information on the curvature for esternal usage
+     * 
+     */
+    public void resetHessianFactor() {
+        final double sqrtGAMMA = FastMath.sqrt(FACTOR);
+        L = MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
+    }
 
     /**
      * Performs a BFGS rank‐one update on L.
@@ -207,109 +196,105 @@ public class BFGSUpdater {
      * @param sHs value
      * @return true if update succeeded, false otherwise
      */
-    private boolean rankOneUpdate(RealVector s, RealVector y, RealVector Hs, double sHs,double sty) {
-        
-        double rho = 1.0 / (FastMath.sqrt(sty));
-        double theta = 1.0 / (FastMath.sqrt(sHs));
-       
-        RealVector v = y.mapMultiply(rho);
-        RealVector w = Hs.mapMultiply(theta);
-        
-        
-        
-        cholupdateLower(v,+1);//upgrade
-        
-      
-       if (!cholupdateLower(w,-1)) { //downdate    
-            double gamma = 1.0;            
-            double yy = y.dotProduct(y);
-            if (!DAMPED && sty> Precision.SAFE_MIN ) gamma =yy /sty;                           
-            double th=1.0e-3;
-            gamma = FastMath.max(th, FastMath.min(1.0/th, gamma));
-            this.resetHessian(gamma);
-          
-            return false;        
+    private boolean rankOneUpdate(final RealVector s, final RealVector y, final RealVector Hs,
+                                  final double sHs, final double sty) {
+
+        final double rho = 1.0 / FastMath.sqrt(sty);
+        final double theta = 1.0 / FastMath.sqrt(sHs);
+
+        cholupdateLower(y, rho, +1);
+
+        if (!cholupdateLower(Hs, theta, -1)) {
+            
+            resetHessian(FACTOR);
+
+            return false;
         }
-        
+
         return true;
     }
- /**
-     * Performs a rank‐one Cholesky update/downdate on L.
+
+    /**
+     * Performs a rank-one Cholesky update/downdate on L.
      * <p>
-     * Updates L such that A' = A+σu uᵀ or A' = A−u uᵀ, without refactorization.
+     * Updates L such that A' = A + sigma * alpha² * u * uᵀ, without refactorization.
+     * Uses a numerically robust variant based on Givens/hyperbolic rotations.
      * </p>
      *
-     * @param u update vector
+     * @param u direction vector
+     * @param alpha scaling factor applied to {@code u}
      * @param sigma +1 for update, -1 for downdate
-     * @return true if resulting matrix remains PD, false otherwise
+     * @return true if resulting matrix remains SPD, false otherwise
      */
-    private boolean cholupdateLower(RealVector u, int sigma) {
-        int n = u.getDimension();
-        RealVector temp = new ArrayRealVector(u);
-        for (int i = 0; i < n; i++) {
-            double lii = L.getEntry(i, i);
-            double ui = temp.getEntry(i);
-            double r2=0.0;
-             r2 = lii * lii + sigma * ui * ui;
-           
-            
-            if (sigma < 0 && r2 < 1.0e-12) return false;
-            //skip or update 
-           
-           
-             
+    private boolean cholupdateLower(final RealVector u, final double alpha, final int sigma) {
+        final int n = u.getDimension();
+        final double[] work = u.toArray();
+        for (int i = 0; i < n; ++i) {
+            work[i] *= alpha;
+        }
 
-            double r = Math.sqrt(r2);
-            double c = r / lii;
-            double s = ui / lii;
-            L.setEntry(i, i, r);
-            for (int j = i + 1; j < n; j++) {
-                double lji = L.getEntry(j, i);
-                double uj = temp.getEntry(j);
-                double newLji = (lji + sigma * s * uj) / c;
-                double newUj = c * uj - s * newLji;
-                L.setEntry(j, i, newLji);
-                temp.setEntry(j, newUj);
+        for (int k = 0; k < n; ++k) {
+            final double lkk = L.getEntry(k, k);
+            final double xk = work[k];
+
+            final double r;
+            if (sigma > 0) {
+                r = FastMath.hypot(lkk, xk);
+            } else {
+                // Stable downdate: compute sqrt((a-b)(a+b)) instead of sqrt(a^2-b^2).
+                final double amx = lkk - FastMath.abs(xk);
+                if (amx <= sqrtEPS) {
+                    return false;
+                }
+                r = FastMath.sqrt((lkk - xk) * (lkk + xk));
+                if(r<sqrtEPS) return false;
+            }
+
+            final double c = r / lkk;
+            final double s = xk / lkk;
+            final double invC = 1.0 / c;
+
+            L.setEntry(k, k, r);
+
+            for (int i = k + 1; i < n; ++i) {
+                final double lik = L.getEntry(i, k);
+                final double xi = work[i];
+                final double newLik = (lik + sigma * s * xi) * invC;
+                final double newXi = c * xi - s * newLik;
+                L.setEntry(i, k, newLik);
+                work[i] = newXi;
             }
         }
         return true;
     }
- 
 
- 
-  
-  /**
- * Scales the Hessian H = L*L^T by a positive factor gamma,
- * by scaling the Cholesky factor L in-place.
- *
- * H_new = gamma * H
- * L_new = sqrt(gamma) * L
- *
- * @param gamma scaling factor (must be > 0)
- */
-private void scaleHessian(final double gamma) {
+    /**
+     * Scales the Hessian H = L*L^T by a positive factor gamma,
+     * by scaling the Cholesky factor L in-place.
+     *
+     * H_new = gamma * H
+     * L_new = sqrt(gamma) * L
+     *
+     * @param gamma scaling factor (must be > 0)
+     */
+    private void scaleHessian(final double gamma) {
 
-    
-    final double s = Math.sqrt(gamma);
+        final double s = FastMath.sqrt(gamma);
 
-    final int n = L.getRowDimension();
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j <= i; ++j) {
-            L.setEntry(i, j, s * L.getEntry(i, j));
+        final int n = L.getRowDimension();
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j <= i; ++j) {
+                L.setEntry(i, j, s * L.getEntry(i, j));
+            }
         }
     }
-}
-      /**
- * Returns the inverse of the current lower-triangular Cholesky factor L,
- * computed via forward solves: for each column j, solve L x = e_j.
- *
- * L is assumed lower-triangular and non-singular.
- *
- * @return Linv = L^{-1} (lower-triangular)
- */
-public RealMatrix getL() {
 
-    
-    return L;
-}
+    /**
+     * Returns the current lower-triangular Cholesky factor L.
+     *
+     * @return current lower-triangular Cholesky factor
+     */
+    public RealMatrix getL() {
+        return L;
+    }
 }

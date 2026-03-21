@@ -144,7 +144,7 @@ public class HS368Test {
 
         SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
         LagrangeSolution sol = opt.optimize(
             option,    
             new InitialGuess(x0),

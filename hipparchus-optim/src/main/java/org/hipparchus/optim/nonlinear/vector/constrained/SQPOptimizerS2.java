@@ -191,7 +191,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         
        
 
-        BFGSUpdater1 bfgs = new BFGSUpdater1(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
+        BFGSUpdater bfgs = new BFGSUpdater(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
         
         L=bfgs.getL();
         RealVector dx = new ArrayRealVector(x.getDimension());
@@ -372,7 +372,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                
                 crit0 = KKT <= EPS;
                
-                crit1 = DHD <= EPS;
+                crit1 = DHD <= EPS2;
                 
                 crit2 = XNORM <= EPS * (1.0 + x.getNorm());
                 crit3 = VIOLATION <=sqrtEPS;
@@ -913,32 +913,48 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         return gradL;
     }
 
-    private Pair<Double, Integer> chooseStep(final int i,double x,
+    private Pair<Double, Integer> chooseStep(final int i,
+                                         final double xi,
                                          final double hBase,
                                          final boolean central) {
 
-    final double xi = x;
     final double lb = LB.getEntry(i);
     final double ub = UB.getEntry(i);
 
-    final double roomMinus = FastMath.max(0.0,Double.isFinite(lb) ? (xi - lb) : Double.POSITIVE_INFINITY);
-    final double roomPlus  = FastMath.max(0.0,Double.isFinite(ub) ? (ub - xi) : Double.POSITIVE_INFINITY);
-    
-    // -------- FORWARD --------
+    final double roomMinus = FastMath.max(0.0,
+            Double.isFinite(lb) ? (xi - lb) : Double.POSITIVE_INFINITY);
+    final double roomPlus = FastMath.max(0.0,
+            Double.isFinite(ub) ? (ub - xi) : Double.POSITIVE_INFINITY);
+
+    // -------------------------------------------------
+    // FORWARD / BACKWARD FIRST-ORDER DIFFERENCE
     // h carries the sign; dir is irrelevant here
+    // -------------------------------------------------
     if (!central) {
-        if (roomPlus <= 0.0 && roomMinus <= 0.0) {
-            return new Pair<>(0.0, 0);
+
+        // Prefer full forward step if possible
+        if (roomPlus >= hBase) {
+            return new Pair<>(hBase, +1);
         }
 
-        if (roomPlus >= roomMinus) {
-            final double h = FastMath.min(hBase, roomPlus);
-            return new Pair<>(h > 0.0 ? +h : 0.0, +1);
-        } else {
-            final double h = FastMath.min(hBase, roomMinus);
-            return new Pair<>(h > 0.0 ? -h : 0.0, -1);
+        // Otherwise try full backward step
+        if (roomMinus >= hBase) {
+            return new Pair<>(-hBase, -1);
         }
+
+        // Otherwise reduce the step, still with deterministic preference
+        if (roomPlus > 0.0) {
+            return new Pair<>(roomPlus, +1);
+        }
+
+        if (roomMinus > 0.0) {
+            return new Pair<>(-roomMinus, -1);
+        }
+
+        return new Pair<>(0.0, 0);
     }
+
+   
 
     // -------- CENTRAL --------
     // dir = 0  -> true central
