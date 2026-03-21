@@ -94,10 +94,10 @@ public class HS216Test {
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
         SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
-        SQPOption option = HSProblemTestUtils.newCentralDifferenceOption();
+        
 
         LagrangeSolution sol = opt.optimize(
-                
+               
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS216Obj()),
                 new HS216Eq(),
