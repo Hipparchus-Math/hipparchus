@@ -249,8 +249,11 @@ public class BFGSUpdater {
         for (int i = 0; i < n; i++) {
             double lii = L.getEntry(i, i);
             double ui = temp.getEntry(i);
-            double r2 = lii * lii + sigma * ui * ui;
-             if (sigma < 0 && r2 <  1.0e-12) return false;
+            double r2=0.0;
+             r2 = lii * lii + sigma * ui * ui;
+           
+            
+            if (sigma < 0 && r2 < 1.0e-12) return false;
             //skip or update 
            
            

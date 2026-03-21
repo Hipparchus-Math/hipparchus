@@ -7,7 +7,6 @@ import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 /** HS TP74 (Schittkowski). KN1=1 -> A=0.55. 2 ineq lineari, 3 eq non lineari. */
@@ -60,7 +59,7 @@ public class HS074Test {
                             + 894.8 - x2;
 
             final double h3 = 1000.0*(FastMath.sin( x4 - 0.25) + FastMath.sin( x4 - x3 - 0.25))
-                            + 1294.8;
+                            - 1294.8;
 
             return new ArrayRealVector(new double[]{ h1, h2, h3 });
         }

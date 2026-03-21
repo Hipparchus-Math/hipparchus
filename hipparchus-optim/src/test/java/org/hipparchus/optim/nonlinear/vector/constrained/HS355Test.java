@@ -77,12 +77,12 @@ public class HS355Test {
     public void testHS355() {
         
         // TP355 MODE=1: X(1)=0.1, X(2)=0.1, X(3)=0.0, X(4)=0.0
-        final InitialGuess guess = new InitialGuess(new double[]{ 0.15, 0.15, 0.0, 0.0 });
+        final InitialGuess guess = new InitialGuess(new double[]{ 0.1, 0.1, 0.0, 0.0 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
         final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
         final LagrangeSolution sol = opt.optimize(
                 option,
             guess,

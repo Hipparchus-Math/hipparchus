@@ -393,7 +393,7 @@ public class HS390Test {
 
         final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
          SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.FORWARD);
+        option.setGradientMode(GradientMode.CENTRAL);
         final LagrangeSolution sol = opt.optimize(
                 option,
                 new InitialGuess(x0),

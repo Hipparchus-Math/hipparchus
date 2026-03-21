@@ -25,6 +25,7 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Pair;
 import org.hipparchus.util.Precision;
 
 /**
@@ -166,7 +167,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         //all the function and constraint evaluation will be performed inside the penalty function
         MeritFunctionL2 penalty = new MeritFunctionL2(this.getObj(), this.getEqConstraint(), this.getIqConstraint(), this.bounds, x);
 
-        LineSearch lineSearch = new LineSearch(getSettings().getEps(), 10, getSettings().getMu(), getSettings().getB(),
+        LineSearch lineSearch = new LineSearch(getSettings().getEps(), 1, getSettings().getMu(), getSettings().getB(),
                 getSettings().getMaxLineSearchIteration(), 0);
         
 
@@ -190,7 +191,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         
        
 
-        BFGSUpdater bfgs = new BFGSUpdater(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
+        BFGSUpdater1 bfgs = new BFGSUpdater1(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
         
         L=bfgs.getL();
         RealVector dx = new ArrayRealVector(x.getDimension());
@@ -229,8 +230,10 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 qpSolution = (QPMODE == QPMode.QP_AUGMENTED) ? solveAugmentedQP(y, rho) : solveQP();
                 sigma = (qpSolution == null || qpSolution.getX().getDimension() == 0 || Double.isInfinite(qpSolution.getX().getMaxValue()) ||  Double.isInfinite(qpSolution.getX().getMinValue())) ? getSettings().getSigmaMax() * 10.0 : qpSolution.getValue();
                 if ((sigma > getSettings().getSigmaMax() || sigma < 0.0)) {
-                    if (QPMODE == QPMode.QP_AUGMENTED) rho = rhoUp(rho);
-                    QPMODE = QPMode.QP_AUGMENTED;
+                   
+                   
+                     if (QPMODE == QPMode.QP_AUGMENTED) rho = rhoUp(rho);
+                     QPMODE = QPMode.QP_AUGMENTED;
                 }
 
             }
@@ -352,13 +355,13 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                
                 computeGradients();
                 RealVector lagnew = lagrangianGradX(J, JE, JI, x, u);
-
+                
 //              CONVERGENCE CHECK
                 KKT = lagnew.getNorm()*lagnew.getNorm();
                 VIOLATION = constraintViolation();
                 COMPLEMENTARY=complementarySlackness(u,me);
                 //STEP LENGHT
-                DHD = dx.mapMultiply(alpha).dotProduct(H.operate(dx.mapMultiply(alpha)));
+                DHD = DHD*alpha*alpha;
                 if(alpha>0)
                   XNORM = alpha * dx.getNorm();
                 else
@@ -369,7 +372,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                
                 crit0 = KKT <= EPS;
                
-                crit1 = DHD <= EPS2;
+                crit1 = DHD <= EPS;
                 
                 crit2 = XNORM <= EPS * (1.0 + x.getNorm());
                 crit3 = VIOLATION <=sqrtEPS;
@@ -377,6 +380,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 crit4 = FUNDIFF < EPS*(1.0+FastMath.abs(functionEval));
                 crit5 = COMPLEMENTARY <= EPS;
                   if (!lineSearch.isBadStepDetected()&&(crit0||crit1) && crit5  && crit3) {
+                      
                     
                     break;
                 }
@@ -909,6 +913,57 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         return gradL;
     }
 
+    private Pair<Double, Integer> chooseStep(final int i,double x,
+                                         final double hBase,
+                                         final boolean central) {
+
+    final double xi = x;
+    final double lb = LB.getEntry(i);
+    final double ub = UB.getEntry(i);
+
+    final double roomMinus = FastMath.max(0.0,Double.isFinite(lb) ? (xi - lb) : Double.POSITIVE_INFINITY);
+    final double roomPlus  = FastMath.max(0.0,Double.isFinite(ub) ? (ub - xi) : Double.POSITIVE_INFINITY);
+    
+    // -------- FORWARD --------
+    // h carries the sign; dir is irrelevant here
+    if (!central) {
+        if (roomPlus <= 0.0 && roomMinus <= 0.0) {
+            return new Pair<>(0.0, 0);
+        }
+
+        if (roomPlus >= roomMinus) {
+            final double h = FastMath.min(hBase, roomPlus);
+            return new Pair<>(h > 0.0 ? +h : 0.0, +1);
+        } else {
+            final double h = FastMath.min(hBase, roomMinus);
+            return new Pair<>(h > 0.0 ? -h : 0.0, -1);
+        }
+    }
+
+    // -------- CENTRAL --------
+    // dir = 0  -> true central
+    // dir = +1 -> one-sided with positive h
+    // dir = -1 -> one-sided with negative h
+
+    if (roomPlus >= hBase && roomMinus >= hBase) {
+        return new Pair<>(hBase, 0);
+    }
+
+    if (roomPlus <= 0.0 && roomMinus <= 0.0) {
+        return new Pair<>(0.0, 0);
+    }
+
+    if (roomPlus >= roomMinus) {
+        final double h = FastMath.min(hBase, 0.5 * roomPlus);
+        return new Pair<>(h > 0.0 ? +h : 0.0, +1);
+    } else {
+        final double h = FastMath.min(hBase, 0.5 * roomMinus);
+        return new Pair<>(h > 0.0 ? -h : 0.0, -1);
+    }
+
+}
+    
+    
     /**
      * Compute gradient directly.
      */
@@ -947,11 +1002,13 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
 
         for (int i = 0; i < n; i++) {
             double xi = x.getEntry(i);
-            double h = sqrtEps * FastMath.max(1.0, FastMath.abs(xi));
-
+            double h1 = sqrtEps * FastMath.max(1.0, FastMath.abs(xi));
+            Pair<Double, Integer> step = chooseStep(i,xi,h1,false);
+            double h = step.getFirst();
+            
             RealVector xPerturbed = new ArrayRealVector(x);
             xPerturbed.setEntry(i, xi + h);
-
+            
             double fPerturbed = getObj().value(xPerturbed);
             gradF.setEntry(i, (fPerturbed - fRef) / h);
 
@@ -974,31 +1031,50 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
     }
 
     /**
-     * Computes the gradient of the objective function and the Jacobians of the
-     * constraints using centered finite differences (second-order accurate).
-     */
-    private void centralGradient() {
+ * Computes the gradient of the objective function and the Jacobians of the
+ * constraints using centered finite differences (second-order accurate).
+ */
+private void centralGradient() {
 
-        int n = x.getDimension();
-        double hBase = FastMath.cbrt(Precision.EPSILON);
+    int n = x.getDimension();
+    double hBase = FastMath.cbrt(Precision.EPSILON);
 
-        double fPlus;
-        double fMinus;
-        RealVector gradF = new ArrayRealVector(n);
-        RealMatrix gradEq = (getEqConstraint() != null) ? new Array2DRowRealMatrix(eqEval.getDimension(), n) : null;
-        RealMatrix gradIq = (getIqConstraint() != null) ? new Array2DRowRealMatrix(ineqEval.getDimension(), n) : null;
+    RealVector gradF = new ArrayRealVector(n);
+    RealMatrix gradEq = (getEqConstraint() != null) ? new Array2DRowRealMatrix(eqEval.getDimension(), n) : null;
+    RealMatrix gradIq = (getIqConstraint() != null) ? new Array2DRowRealMatrix(ineqEval.getDimension(), n) : null;
 
-        for (int i = 0; i < n; i++) {
-            double xi = x.getEntry(i);
-            double h = hBase * FastMath.max(1.0, FastMath.abs(xi));
+    for (int i = 0; i < n; i++) {
+        double xi = x.getEntry(i);
+        double h1 = hBase * FastMath.max(1.0, FastMath.abs(xi));
 
+        // true = central mode
+        Pair<Double, Integer> step = chooseStep(i, xi, h1, true);
+        double h = step.getFirst();
+        int dir = step.getSecond();
+
+        if (h == 0.0) {
+            gradF.setEntry(i, 0.0);
+
+            if (gradEq != null) {
+                gradEq.setColumnVector(i, new ArrayRealVector(eqEval.getDimension(), 0.0));
+            }
+
+            if (gradIq != null) {
+                gradIq.setColumnVector(i, new ArrayRealVector(ineqEval.getDimension(), 0.0));
+            }
+
+            continue;
+        }
+
+        if (dir == 0) {
+            // Classical central difference
             RealVector xPlus = new ArrayRealVector(x);
             RealVector xMinus = new ArrayRealVector(x);
             xPlus.addToEntry(i, h);
             xMinus.addToEntry(i, -h);
 
-            fPlus = getObj().value(xPlus);
-            fMinus = getObj().value(xMinus);
+            double fPlus = getObj().value(xPlus);
+            double fMinus = getObj().value(xMinus);
             gradF.setEntry(i, (fPlus - fMinus) / (2.0 * h));
 
             if (gradEq != null) {
@@ -1014,13 +1090,47 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 RealVector dIq = iqPlus.subtract(iqMinus).mapDivide(2.0 * h);
                 gradIq.setColumnVector(i, dIq);
             }
-        }
 
-        this.J = gradF;
-        this.JE = gradEq;
-        this.JI = gradIq;
+        } else {
+            // One-sided 3-point formula.
+            // h already carries the correct sign.
+            RealVector x1 = new ArrayRealVector(x);
+            RealVector x2 = new ArrayRealVector(x);
+            x1.addToEntry(i, h);
+            x2.addToEntry(i, 2.0 * h);
+
+            double f0 = functionEval;
+            double f1 = getObj().value(x1);
+            double f2 = getObj().value(x2);
+
+            gradF.setEntry(i, (-3.0 * f0 + 4.0 * f1 - f2) / (2.0 * h));
+
+            if (gradEq != null) {
+                RealVector eq1 = getEqConstraint().value(x1);
+                RealVector eq2 = getEqConstraint().value(x2);
+                RealVector dEq = eqEval.mapMultiply(-3.0)
+                        .add(eq1.mapMultiply(4.0))
+                        .subtract(eq2)
+                        .mapDivide(2.0 * h);
+                gradEq.setColumnVector(i, dEq);
+            }
+
+            if (gradIq != null) {
+                RealVector iq1 = getIqConstraint().value(x1);
+                RealVector iq2 = getIqConstraint().value(x2);
+                RealVector dIq = ineqEval.mapMultiply(-3.0)
+                        .add(iq1.mapMultiply(4.0))
+                        .subtract(iq2)
+                        .mapDivide(2.0 * h);
+                gradIq.setColumnVector(i, dIq);
+            }
+        }
     }
 
+    this.J = gradF;
+    this.JE = gradEq;
+    this.JI = gradIq;
+}
     /**
      * Set debug printer.
      *
