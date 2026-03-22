@@ -120,7 +120,7 @@ public class HS376BISTest {
 }
 
 
- /**
+ /*
   * Inequality constraints G(x) >= 0 (NINL = 14 in Fortran).
   *
   * Fortran MODE=4:

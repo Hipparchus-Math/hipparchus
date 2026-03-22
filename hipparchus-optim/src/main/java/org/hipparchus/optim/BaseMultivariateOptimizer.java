@@ -88,13 +88,10 @@ public abstract class BaseMultivariateOptimizer<P>
         for (OptimizationData data : optData) {
             if (data instanceof InitialGuess) {
                 start = ((InitialGuess) data).getInitialGuess();
-                continue;
-            }
-            if (data instanceof SimpleBounds) {
+            } else if (data instanceof SimpleBounds) {
                 final SimpleBounds bounds = (SimpleBounds) data;
                 lowerBound = bounds.getLower();
                 upperBound = bounds.getUpper();
-                continue;
             }
         }
 

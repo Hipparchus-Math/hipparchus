@@ -54,7 +54,6 @@ public class HS239Test {
 
     private static final int DIM      = 2;
     private static final int NUM_INEQ = 1;
-    private static final int NUM_EQ   = 0;
 
     // -------------------------------------------------------------------------
     // Objective = TP236239 (stessa implementazione usata in HS238)

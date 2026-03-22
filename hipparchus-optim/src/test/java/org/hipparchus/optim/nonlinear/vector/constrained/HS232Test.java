@@ -59,7 +59,6 @@ public class HS232Test {
 
     private static final int DIM      = 2;
     private static final int NUM_INEQ = 3;
-    private static final int NUM_EQ   = 0;
 
     private static final double HV = FastMath.sqrt(3.0);
 

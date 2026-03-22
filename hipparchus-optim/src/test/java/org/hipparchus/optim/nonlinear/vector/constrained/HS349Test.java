@@ -289,9 +289,8 @@ public class HS349Test {
             ctx.computeIntermediateValues(x); 
             
             double[] g = new double[NUM_CONSTRAINTS];
-            for (int i = 0; i < NUM_CONSTRAINTS; i++) {
-                g[i] = ctx.PHI[i + 1]; // PHI[1] to PHI[9]
-            }
+            // PHI[1] to PHI[9]
+            System.arraycopy(ctx.PHI, 1, g, 0, NUM_CONSTRAINTS);
             return new ArrayRealVector(g, false);
         }
 

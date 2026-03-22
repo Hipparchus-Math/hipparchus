@@ -57,7 +57,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HS253Test {
 
     private static final int DIM      = 3;
-    private static final int NUM_INEQ = 1;
 
    // Data matrix A(3,8) – CORRETTA
 private static final double[][] A = new double[][]{

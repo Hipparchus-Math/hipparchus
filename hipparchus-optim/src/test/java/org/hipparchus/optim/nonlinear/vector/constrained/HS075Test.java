@@ -85,7 +85,6 @@ public class HS075Test {
 
     @Test
     public void testHS075() {
-        final InitialGuess guess = new InitialGuess(new double[]{ 0.0, 0.0, 0.0, 0.0 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
         final SQPOptimizerS2 optimizer = new SQPOptimizerS2();

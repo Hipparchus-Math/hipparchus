@@ -51,7 +51,6 @@ public class HS230Test {
 
     private static final int DIM      = 2;
     private static final int NUM_INEQ = 2;
-    private static final int NUM_EQ   = 0;
 
     // -------------------------------------------------------------------------
     // Objective

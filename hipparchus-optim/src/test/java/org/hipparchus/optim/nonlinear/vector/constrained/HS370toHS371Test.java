@@ -153,7 +153,7 @@ public class HS370toHS371Test {
                    "HS370: expected F <= " + fExpected + " (with tol " + tolF + "), got F = " + f);
     }
 
-    /**
+    /*
      * TP371 – N=9, FEX ≈ 1.3997601e-6, LEX = .FALSE ⇒ FEX >= f.
      */
 //    @Test

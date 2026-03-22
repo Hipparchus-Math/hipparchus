@@ -50,7 +50,6 @@ public class HS235Test {
 
     private static final int DIM      = 3;
     private static final int NUM_INEQ = 1; // model the Fortran constraint as G >= 0
-    private static final int NUM_EQ   = 0;
 
     // -------------------------------------------------------------------------
     // Objective

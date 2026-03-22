@@ -58,8 +58,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HS240Test {
 
     private static final int DIM      = 3;
-    private static final int NUM_INEQ = 0;
-    private static final int NUM_EQ   = 0;
 
     // -------------------------------------------------------------------------
     // Objective

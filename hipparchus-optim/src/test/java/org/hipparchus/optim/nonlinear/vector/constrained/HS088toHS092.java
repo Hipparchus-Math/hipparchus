@@ -147,8 +147,8 @@ public class HS088toHS092 {
     @Test public void testHS088() { // N=3
         final int n = 2;
         final double[] xex = {
-                .107431872940D+01,     
-                -0.456613707247D+00     
+                .107431872940e+01,
+                -0.456613707247e+00
         };
         final double fex = 0.136265680508e+01;
 

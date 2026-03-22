@@ -231,11 +231,6 @@ public class HS386Test {
 
         // Initial guess: X(i) = 0.0 (as in MODE=1)
         double[] x0 = new double[DIM];
-        for (int i = 0; i < DIM; i++) {
-            x0[i] = 0.0;
-        }
-
-        
 
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {

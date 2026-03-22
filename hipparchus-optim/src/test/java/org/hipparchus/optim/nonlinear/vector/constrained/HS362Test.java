@@ -235,7 +235,7 @@ public class HS362Test {
         }
     }
 
-    /**
+    /*
      * Test di ottimizzazione completo per HS362/TP362.
      * LEX = .FALSE. → si verifica solo che il valore trovato sia ≤ FEX.
      */

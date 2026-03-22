@@ -63,7 +63,6 @@ public class HS252Test {
 
     private static final int DIM      = 3;
     private static final int NUM_INEQ = 1;
-    private static final int NUM_EQ   = 0;
 
     // -------------------------------------------------------------------------
     // Objective

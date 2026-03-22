@@ -124,9 +124,6 @@ public class HS263Test {
         public RealMatrix jacobian(RealVector x) {
 
             double x1 = x.getEntry(0);
-            double x2 = x.getEntry(1);
-            double x3 = x.getEntry(2);
-            double x4 = x.getEntry(3);
 
             RealMatrix J = new Array2DRowRealMatrix(NUM_INEQ, DIM);
 

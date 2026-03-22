@@ -32,8 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class HS093Test {
 
-    private static final double TOL = 1e-6;
-
     /** f(x) from TP93. */
     private static final class TP93Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 6; }

@@ -57,7 +57,6 @@ public class HS237Test {
 
     private static final int DIM      = 2;
     private static final int NUM_INEQ = 3;
-    private static final int NUM_EQ   = 0;
 
     // -------------------------------------------------------------------------
     // Objective (stesso TP236239)

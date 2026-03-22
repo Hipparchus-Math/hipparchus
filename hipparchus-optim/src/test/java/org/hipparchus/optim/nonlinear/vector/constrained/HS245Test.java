@@ -82,8 +82,7 @@ public class HS245Test {
             double fx = 0.0;
 
             for (int i = 1; i <= 10; i++) {
-                double Di = (double) i;
-                double Zi = Di / 10.0;
+                double Di = i;
 
                 double term1 = FastMath.exp(-Di * x1 / 10.0);
                 double term2 = FastMath.exp(-Di * x2 / 10.0);
@@ -108,7 +107,7 @@ public class HS245Test {
             double g3 = 0.0;
 
             for (int i = 1; i <= 10; i++) {
-                double Di = (double) i;
+                double Di = i;
 
                 double exp1 = FastMath.exp(-Di * x1 / 10.0);
                 double exp2 = FastMath.exp(-Di * x2 / 10.0);

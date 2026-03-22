@@ -54,7 +54,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         /**
          * Solving the augmented QP subproblem (with slack variable).
          */
-        QP_AUGMENTED;
+        QP_AUGMENTED
     }
 
     /**
