@@ -35,12 +35,12 @@ public class HS347Test {
     // --- Helper Class to compute H values (similar to COMMON /D347/H) ---
     static class HValues {
         final double[] H = new double[9]; // H[1] to H[8] in Fortran
-        
+
         public HValues(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             H[1] = x1 + x2 + x3 + 0.03;       // H(1)
             H[2] = 0.09 * x1 + x2 + x3 + 0.03; // H(2)
             H[3] = H[1] * H[2];               // H(3)
@@ -55,31 +55,31 @@ public class HS347Test {
     // --- Objective Function (MODE 2 and 3) ---
     static final class HS347Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = SUM [ Ai * log(max(H_num / H_den, 1e-4)) ]
         @Override public double value(RealVector x) {
             HValues h = new HValues(x);
-            
+
             double f = A[0] * Math.log(Math.max(h.H[1] / h.H[2], EPS))
                      + A[1] * Math.log(Math.max(h.H[4] / h.H[5], EPS))
                      + A[2] * Math.log(Math.max(h.H[7] / h.H[8], EPS));
             return f;
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             HValues h = new HValues(x);
-            
+
             // The Fortran code does not check for DMAX1, it assumes H_num/H_den > 1e-4.
             // d/dX [ log(H_num/H_den) ] = d/dX [ log(H_num) - log(H_den) ]
             // d/dX [ A*log(H_num/H_den) ] = A * ( dH_num/dX * H_den - H_num * dH_den/dX ) / (H_den * H_num)
             // Note: H3 = H1*H2, H6 = H4*H5. Gradient calculation needs correction.
-            
+
             // The Fortran gradient uses a simplified form:
             // d/dX [ log(a/b) ] = (b * da/dX - a * db/dX) / (a * b)
-            
+
             // Term 1 (X1, X2, X3): A[0] * (H2 * dH1/dXi - H1 * dH2/dXi) / (H1*H2) = A[0] * (H2*d/dXi(H1) - H1*d/dXi(H2)) / H3
             double term1_numer = h.H[2] * (1.0 - 0.09) * 1.0; // Simplified: (H2 * 1 - H1 * 0.09) for d/dX1
-            
+
             // GF(1) = A1 * (H2 - 0.09 * H1) / H3
             double g1 = A[0] * (h.H[2] - 0.09 * h.H[1]) / h.H[3];
 
@@ -90,7 +90,7 @@ public class HS347Test {
             double g2_part1 = A[0] * (h.H[2] - h.H[1]) / h.H[3]; // dH1/dX2 = 1, dH2/dX2 = 1. -> Numerator is H2-H1. Corrected from Fortran.
             double g2_part2 = A[1] * (h.H[5] - 0.07 * h.H[4]) / h.H[6]; // dH4/dX2 = 1, dH5/dX2 = 0.07.
             double g2 = g2_part1 + g2_part2;
-            
+
             // GF(3) = A1 * (H2 - H1) / H3 + A2 * (H5 - H4) / H6 + A3 * (H8 - 0.13 * H7) / (H7*H8)
             double g3_part1 = A[0] * (h.H[2] - h.H[1]) / h.H[3]; // dH1/dX3 = 1, dH2/dX3 = 1
             double g3_part2 = A[1] * (h.H[5] - h.H[4]) / h.H[6]; // dH4/dX3 = 1, dH5/dX3 = 1
@@ -99,7 +99,7 @@ public class HS347Test {
 
             return new ArrayRealVector(new double[]{g1, g2, g3}, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Hessian not defined in Fortran source (MODE 5 is RETURN)
             throw new UnsupportedOperationException("Hessian matrix is not implemented for this test case.");
@@ -108,7 +108,7 @@ public class HS347Test {
 
     // --- Equality Constraint (MODE 4) ---
     static final class HS347Eq extends EqualityConstraint {
-        
+
         HS347Eq() { super(new ArrayRealVector(new double[]{1.0})); } // Target is 1.0 (X1+X2+X3=1)
 
         @Override public int dim() { return DIM; }
@@ -129,8 +129,8 @@ public class HS347Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{0.7, 0.2, 0.1}; 
+    private static double[] start() {
+        return new double[]{0.7, 0.2, 0.1};
     }
 
 //    @Test

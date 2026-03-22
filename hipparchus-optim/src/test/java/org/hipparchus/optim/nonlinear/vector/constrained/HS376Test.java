@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HS376Test {
 
-   
+
     static final class HS376Obj extends TwiceDifferentiableFunction {
 
         @Override
@@ -85,11 +85,11 @@ public class HS376Test {
         }
     }
 
-    
+
     static final class HS376Ineq extends InequalityConstraint {
 
         HS376Ineq() {
-            super(new ArrayRealVector(new double[14])); 
+            super(new ArrayRealVector(new double[14]));
         }
 
         @Override
@@ -306,7 +306,7 @@ public class HS376Test {
         }
     }
 
-    
+
     static final class HS376Eq extends EqualityConstraint {
 
         HS376Eq() {
@@ -342,7 +342,7 @@ public class HS376Test {
           opt.setDebugPrinter(System.out::println);
           }
         SQPOption sqpOtp=new SQPOption();
-        
+
        
         double[] x0 = {
                 1.0,

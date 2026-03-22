@@ -253,7 +253,7 @@ private static class HS118Ineq extends InequalityConstraint {
         for (int i = 0; i < 15; i++) x0[i] = 20.0;
         x0[1]=44.0;
         x0[2]=4.0;
-        
+
         final double[] lb = {
             8, 43, 3,
             0, 0, 0,
@@ -278,7 +278,7 @@ private static class HS118Ineq extends InequalityConstraint {
             new HS118Ineq(),
             new SimpleBounds(lb, ub)
         );
-//FEX=0.664820449993D+03 
+//FEX=0.664820449993D+03
         assertEquals(664.820449993, sol.getValue(), 1e-4, "Optimal objective mismatch");
     }
 }

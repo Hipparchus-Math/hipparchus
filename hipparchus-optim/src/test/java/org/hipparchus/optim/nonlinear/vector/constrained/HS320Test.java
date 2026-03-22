@@ -50,8 +50,8 @@ public class HS320Test {
     }
 
     static final class HS320Eq extends EqualityConstraint {
-        
-        HS320Eq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS320Eq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
@@ -59,7 +59,7 @@ public class HS320Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             // G(1)=0.01*X(1)^2 + X(2)^2/4 - 1 = 0
-            double g1 = 0.01 * x1 * x1 + x2 * x2 / 4.0 - 1.0; 
+            double g1 = 0.01 * x1 * x1 + x2 * x2 / 4.0 - 1.0;
             return new ArrayRealVector(new double[]{g1}, false);
         }
 
@@ -76,8 +76,8 @@ public class HS320Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{0.0, 0.0}; 
+    private static double[] start() {
+        return new double[]{0.0, 0.0};
     }
 
     @Test
@@ -91,14 +91,14 @@ public class HS320Test {
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS320Obj()),
-                new HS320Eq() 
+                new HS320Eq()
         );
 
         double f = sol.getValue();
         final double fExpected = 485.53146;
-        
+
         assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-        
-        
+
+
     }
 }

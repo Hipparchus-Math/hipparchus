@@ -43,7 +43,7 @@ import org.hipparchus.optim.OptimizationData;
  * </p>
  *
  * @since 1.0
- * 
+ *
  */
 public interface SQPProblem extends OptimizationData {
 

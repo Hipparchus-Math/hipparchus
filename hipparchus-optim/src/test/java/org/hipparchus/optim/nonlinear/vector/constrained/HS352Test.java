@@ -51,32 +51,32 @@ public class HS352Test {
             // 1. Calculation of Residuals F(I) and F(I+20) (Mode 2)
             for (int i = 1; i <= 20; i++) {
                 double ti = i * 0.2;
-                
+
                 // F(I) = X(1) + X(2)*TI - exp(TI)
                 F[i - 1] = x1 + x2 * ti - Math.exp(ti);
-                
+
                 // F(I+20) = X(3) + X(4)*sin(TI) - cos(TI)
                 F[i + 20 - 1] = x3 + x4 * Math.sin(ti) - Math.cos(ti);
             }
-            
+
             // 2. Calculation of Objective Function FX (Mode 2)
             FX = 0.0;
             for (int i = 0; i < NUM_RESIDUALS; i++) {
                 // FX = sum(F(I)^2)
                 FX += F[i] * F[i];
             }
-            
+
             // 3. Calculation of the Objective Gradient: GF(J) (Mode 3)
             // DF is the Jacobian of the residuals (partial derivatives)
-            
+
             // Initialize gradient to zero
             for (int j = 0; j < DIM; j++) {
                 GF[j] = 0.0;
             }
-            
+
             for (int i = 1; i <= 20; i++) {
                 double ti = i * 0.2;
-                
+
                 // Derivatives of F(I) = X(1) + X(2)*TI - exp(TI)
                 double df_i_dx1 = 1.0;
                 double df_i_dx2 = ti;
@@ -88,7 +88,7 @@ public class HS352Test {
                 double df_i_plus_20_dx2 = 0.0;
                 double df_i_plus_20_dx3 = 1.0;
                 double df_i_plus_20_dx4 = Math.sin(ti);
-                
+
                 // F[i-1] is F(I), F[i+20-1] is F(I+20)
                 double f_i = F[i - 1];
                 double f_i_plus_20 = F[i + 20 - 1];
@@ -107,38 +107,38 @@ public class HS352Test {
      */
     static final class HS352Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         @Override public double value(RealVector x) {
             Context ctx = new Context();
-            ctx.compute(x); 
+            ctx.compute(x);
             return ctx.FX;
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             Context ctx = new Context();
-            ctx.compute(x); 
+            ctx.compute(x);
             return new ArrayRealVector(ctx.GF, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Mode 5 (Hessian): Not implemented, relies on numerical estimation
             throw new UnsupportedOperationException("Hessian matrix is not implemented for this test case.");
         }
     }
 
-    private static double[] start() { 
+    private static double[] start() {
         // Initial values (Mode 1): X(1)=25.0, X(2)=5.0, X(3)=-5.0, X(4)=-1.0
-        return new double[]{25.0, 5.0, -5.0, -1.0}; 
+        return new double[]{25.0, 5.0, -5.0, -1.0};
     }
 
     @Test
     public void testHS352() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        
+
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);
         }
-        
+
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS352Obj())
@@ -146,9 +146,9 @@ public class HS352Test {
 
         double f = sol.getValue();
         // EXPECTED VALUE (FEX): 0.90323433D+3 (903.23433)
-        final double fExpected = 903.23433; 
+        final double fExpected = 903.23433;
         final double tolerance = 1.0e-5 * (Math.abs(fExpected) + 1.0);
-        
+
         // Check if the solution is close to or better than the expected minimum.
         assertTrue(f <= fExpected + tolerance, 
                    String.format("Objective value mismatch/worse than expected. Expected: %.8f, Actual: %.8f", fExpected, f));

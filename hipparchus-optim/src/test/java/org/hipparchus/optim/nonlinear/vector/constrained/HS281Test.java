@@ -59,7 +59,7 @@ public class HS281Test {
 
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
         optimizer.setDebugPrinter(s -> {});
-        
+
         double val = 0.0;
         LagrangeSolution sol = optimizer.optimize(
             sqpOption,

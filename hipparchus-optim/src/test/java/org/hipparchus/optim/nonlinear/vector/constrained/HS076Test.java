@@ -40,7 +40,7 @@ public class HS076Test {
         HS076Ineq() { super(new ArrayRealVector(new double[]{ 0.0, 0.0, 0.0 ,0,0,0,0})); }
         @Override public RealVector value(RealVector x) {
             return new ArrayRealVector(new double[]{ (5) - ((((x.getEntry(0) + (2 * x.getEntry(1))) + x.getEntry(2)) + x.getEntry(3))),
-                                                     (4) - (((((3 * x.getEntry(0)) + x.getEntry(1)) + (2 * x.getEntry(2))) - x.getEntry(3))), 
+                                                     (4) - (((((3 * x.getEntry(0)) + x.getEntry(1)) + (2 * x.getEntry(2))) - x.getEntry(3))),
                                                             ((x.getEntry(1) + (4 * x.getEntry(2)))) - (1.5) ,
                                                                x.getEntry(0),x.getEntry(1),x.getEntry(2),x.getEntry(3)  }  );
         }

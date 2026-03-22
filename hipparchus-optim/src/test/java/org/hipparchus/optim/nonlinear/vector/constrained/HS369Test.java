@@ -94,7 +94,7 @@ public class HS369Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 8; }
     }
-    
+
     private static class HS369IneqNoBounds extends InequalityConstraint {
         // 22 inequality constraints total:
         // - 3 linear
@@ -102,7 +102,7 @@ public class HS369Test {
         // - 16 bounds (8 lower + 8 upper)
         HS369IneqNoBounds() { super(new ArrayRealVector(22-16)); }
 
-       
+
 
         @Override
         public RealVector value(RealVector x) {
@@ -166,7 +166,7 @@ public class HS369Test {
 
         assertEquals(val, sol.getValue(), 1e-2); // tolleranza rilassata per robustezza
     }
-    
+
     @Test
     public void testHS369Bound() {
         SQPOption sqpOption = new SQPOption();
@@ -191,6 +191,6 @@ public class HS369Test {
             new HS369IneqNoBounds(),bounds
         );
 
-        assertEquals(val, sol.getValue(), 1e-2);  
+        assertEquals(val, sol.getValue(), 1e-2);
     }
 }

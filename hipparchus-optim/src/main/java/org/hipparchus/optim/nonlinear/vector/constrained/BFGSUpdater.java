@@ -124,7 +124,7 @@ public class BFGSUpdater {
         RealVector Hs = L.operate(L.preMultiply(s)); // al posto di getHessian().operate(s)
         double sHs = s.dotProduct(Hs);
         if (sHs <= 0.0) {
-           
+
 //            double sty = s.dotProduct(y1);
 //            double yy = y1.dotProduct(y1);
 //            double gamma =yy /sty;
@@ -139,13 +139,13 @@ public class BFGSUpdater {
 
         RealVector y = damp(s, y1, Hs, sHs);
         if (y == null ) {
-            
+
             return 2;//damp failed
         }
-        
- 
-        
-        
+
+
+
+
         if (scale) {
             double sty = s.dotProduct(y);
             double yy = y.dotProduct(y);
@@ -159,11 +159,11 @@ public class BFGSUpdater {
 
         // Attempt rank‐one BFGS update; regularize on failure
         if (rankOneUpdate(s, y, Hs, sHs))  return 0;
-       
+
         return 4;
     }
-    
-    
+
+
     /**
      * Resets the Hessian approximation to its initial value.
      */
@@ -199,11 +199,11 @@ public class BFGSUpdater {
             double phi = (1.0 - GAMMA) * sHs / (sHs - sty);
             if (phi >= 1.0) return y1;
              else if (phi <= 0.0) return Hs;
-//            
+//
             y = (y1.mapMultiply(phi)).add(Hs.mapMultiply(1.0 - phi));
             sty = s.dotProduct(y);
-           
-           
+
+
             if (sty < GAMMA * sHs) {
 
                 return null;
@@ -212,8 +212,8 @@ public class BFGSUpdater {
         }
         return y;
     }
-    
-  
+
+
 
     /**
      * Performs a BFGS rank‐one update on L.
@@ -231,7 +231,7 @@ public class BFGSUpdater {
         RealVector v = y.mapMultiply(rho);
         RealVector w = Hs.mapMultiply(theta);
         cholupdateLower(v,+1);//upgrade
-        if (!cholupdateLower(w,-1)) { //downdate    
+        if (!cholupdateLower(w,-1)) { //downdate
             double gamma = 1.0;
             double sty = s.dotProduct(y);
             double yy = y.dotProduct(y);
@@ -241,8 +241,8 @@ public class BFGSUpdater {
                 this.resetHessian(gamma);
             }
             else this.resetHessian();
-                
-            
+
+
             return false;
         }
 
@@ -267,7 +267,7 @@ public class BFGSUpdater {
             double ui = temp.getEntry(i);
             double r2 = lii * lii + sigma * ui * ui;
 
-            //skip or update 
+            //skip or update
             if (sigma < 0 && r2 < this.sqrtEPSmachine * lii * lii) {
 //                if (sigma < 0 && r2 < Precision.EPSILON) {
                 return false;
@@ -288,8 +288,8 @@ public class BFGSUpdater {
         }
         return true;
     }
-    
- 
+
+
 
 
 

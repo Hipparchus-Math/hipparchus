@@ -45,20 +45,20 @@ public class HS067Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 10; }
     }
-    
+
      // Bounds from MODE=1
     private static final double[] LB = { 1e-5, 1e-5, 1e-5, 0,0,85,90,3,0.01,145 };
     private static final double[] UB = { 2000,16000,120, 5000,2000,93,95,12,4,162 };
     private static class HS067Ineq extends InequalityConstraint {
         HS067Ineq() { super(new ArrayRealVector(new double[]{ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ,0,0,0,0,0,0,0,0,0,0,0,0,0,0})); }
         @Override public RealVector value(RealVector x) {
-            return new ArrayRealVector(new double[]{ (x.getEntry(0)) - (1e-5), (2000) - (x.getEntry(0)), 
-                                                     (x.getEntry(1)) - (1e-5), (16000) - (x.getEntry(1)), 
+            return new ArrayRealVector(new double[]{ (x.getEntry(0)) - (1e-5), (2000) - (x.getEntry(0)),
+                                                     (x.getEntry(1)) - (1e-5), (16000) - (x.getEntry(1)),
                                                      (x.getEntry(2)) - (1e-5), (120) - (x.getEntry(2)),
-                                                     (x.getEntry(3)) - (0), (5000) - (x.getEntry(3)), 
-                                                     (x.getEntry(4)) - (0), (2000) - (x.getEntry(4)), 
-                                                     (x.getEntry(5)) - (85), (93) - (x.getEntry(5)), 
-                                                     (x.getEntry(6)) - (90), (95) - (x.getEntry(6)), 
+                                                     (x.getEntry(3)) - (0), (5000) - (x.getEntry(3)),
+                                                     (x.getEntry(4)) - (0), (2000) - (x.getEntry(4)),
+                                                     (x.getEntry(5)) - (85), (93) - (x.getEntry(5)),
+                                                     (x.getEntry(6)) - (90), (95) - (x.getEntry(6)),
                                                      (x.getEntry(7)) - (3), (12) - (x.getEntry(7)),
                                                       (x.getEntry(8)) - (0.01), (4) - (x.getEntry(8)),
                                                        (x.getEntry(9)) - (145), (162) - (x.getEntry(9))});
@@ -72,19 +72,19 @@ public class HS067Test {
         InitialGuess guess = new InitialGuess(new double[]{1745, 12000, 110,0,0,0,0,0,0,0});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
         optimizer.setDebugPrinter(System.out::println);
-       
+
         double val = -1162.02698006;
         LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS067Obj()), new HS067Eq(), new HS067Ineq());
         assertEquals(val, sol.getValue(), 1e-4);
     }
-    
+
     @Test
     public void testHS067Bounds() {
-        
+
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
         optimizer.setDebugPrinter(System.out::println);
-       
+
         double val = -1162.02698006;
         LagrangeSolution sol = optimizer.optimize( new ObjectiveFunction(new HS067Obj()), new HS067Eq(), bounds);
         assertEquals(val, sol.getValue(), 1e-4);

@@ -30,7 +30,7 @@ public class HS100Test {
     private static class HS100Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 7; }
         @Override public double value(RealVector x) {
-            return  (((((((((FastMath.pow((x.getEntry(0) - 10), 2) + (5 * FastMath.pow((x.getEntry(1) - 12), 2))) + FastMath.pow(x.getEntry(2), 
+            return  (((((((((FastMath.pow((x.getEntry(0) - 10), 2) + (5 * FastMath.pow((x.getEntry(1) - 12), 2))) + FastMath.pow(x.getEntry(2),
 4)) + (3 * FastMath.pow((x.getEntry(3) - 11), 2))) + (10 * FastMath.pow(x.getEntry(4), 6))) + (7 * FastMath.pow(x.getEntry(5), 2))) + FastMath.pow(x.getEntry(6), 4)) - ((4 * x.getEntry(5)) * x.getEntry(6))) - (10 * x.getEntry(5))) - (8 * x.getEntry(6)));
         }
         @Override public RealVector gradient(RealVector x) { throw new UnsupportedOperationException(); }

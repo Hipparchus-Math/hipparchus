@@ -40,8 +40,8 @@ public class HS047Test {
     private static class HS047Eq extends EqualityConstraint {
         HS047Eq() { super(new ArrayRealVector(new double[]{ 0,0,0})); }
         @Override public RealVector value(RealVector x) {
-            return new ArrayRealVector(new double[]{ (((x.getEntry(0) + FastMath.pow(x.getEntry(1), 2)) + FastMath.pow(x.getEntry(2), 3))) - (3), 
-                                                      (((x.getEntry(1) - FastMath.pow(x.getEntry(2), 2)) + x.getEntry(3))) - (1), 
+            return new ArrayRealVector(new double[]{ (((x.getEntry(0) + FastMath.pow(x.getEntry(1), 2)) + FastMath.pow(x.getEntry(2), 3))) - (3),
+                                                      (((x.getEntry(1) - FastMath.pow(x.getEntry(2), 2)) + x.getEntry(3))) - (1),
                                                        ((x.getEntry(0) * x.getEntry(4))) - (1) });
         }
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }

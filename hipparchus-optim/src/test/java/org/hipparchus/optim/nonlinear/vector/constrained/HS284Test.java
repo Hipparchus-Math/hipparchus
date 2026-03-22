@@ -113,7 +113,7 @@ public class HS284Test {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         opt.setDebugPrinter(System.out::println); // keep debug on
         SQPOption sqpOption=new SQPOption();
-       
+
         return opt.optimize(
                 sqpOption,
             new InitialGuess(x0),

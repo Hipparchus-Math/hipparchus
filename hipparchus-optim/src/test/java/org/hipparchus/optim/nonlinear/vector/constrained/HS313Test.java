@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 public class HS313Test {
 
-    
+
     static final class HS313Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 2; }
 
@@ -38,11 +38,11 @@ public class HS313Test {
 
         @Override public RealVector gradient(RealVector x) {
             double x1 = x.getEntry(0);
-            double x2 = x.getEntry(1);         
+            double x2 = x.getEntry(1);
             double xh = 20.0 * Math.exp(20.0 * (x2 - x1));
             double g1 = 1.0 + 0.0002 * (x1 - 3.0) - xh;
             double g2 = xh - 1.0;
-            
+
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
 
@@ -51,15 +51,15 @@ public class HS313Test {
         }
     }
 
-    private static double[] start() { 
-       
-        return new double[]{0.0, -1.0}; 
+    private static double[] start() {
+
+        return new double[]{0.0, -1.0};
     }
 
     @Test
     public void testHS313() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); 
+        opt.setDebugPrinter(System.out::println);
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
@@ -67,13 +67,13 @@ public class HS313Test {
         );
 
         double f = sol.getValue();
-       
+
         final double fExpected = 0.199786;
-        
-      
+
+
         assertEquals(fExpected, f, 1.0e-5, "objective mismatch");
-        
-        
-       
+
+
+
     }
 }

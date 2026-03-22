@@ -52,8 +52,8 @@ public class QRUpdaterBackUp {
 
     /** Dimension of the optimization problem. */
     private final int n;
-    
-    
+
+
 
     /**
      * Constructs a new QRUpdater given the lower triangular matrix L.
@@ -67,10 +67,10 @@ public class QRUpdaterBackUp {
         this.J = L.transpose();
         this.R = MatrixUtils.createRealMatrix(n, n);
         this.iq = 0;
-        
+
     }
-    
- 
+
+
 
     /**
      * Adds a constraint vector and updates the QR factorization via Givens rotations.
@@ -116,8 +116,8 @@ public class QRUpdaterBackUp {
                 J.setEntry(k, j, xny * (t1 + J.getEntry(k, j - 1)) - t2);
             }
         }
-        
-        
+
+
 
         if (FastMath.abs(tempD.getEntry(iq)) <Precision.EPSILON* (RNorm)) {
             J =Jtemp;
@@ -132,8 +132,8 @@ public class QRUpdaterBackUp {
         iq++;
         return true;
     }
-    
-   
+
+
 
     /**
      * Deletes the active constraint at the specified index and updates the QR factorization via Givens rotations.
@@ -142,7 +142,7 @@ public class QRUpdaterBackUp {
      */
     public void deleteConstraint(int constraintIndex) {
         if (constraintIndex < 0 || constraintIndex >= iq) {
-            
+
             return; //index not found
         }
         for (int i = constraintIndex; i < iq - 1; i++) {
@@ -168,9 +168,9 @@ public class QRUpdaterBackUp {
             R.setEntry(j + 1, j, 0.0);
             cc /= h;
             ss /= h;
-           
-    
-               //////////////// 
+
+
+               ////////////////
             double xny = ss / (1.0 + cc);
             for (int k = j + 1; k < iq; k++) {
                 double t1 = R.getEntry(j, k);
@@ -188,15 +188,15 @@ public class QRUpdaterBackUp {
        double rNorm=0.0;
        for (int i = 0; i < iq; i++)
        {
-       double norm=FastMath.abs(R.getEntry(i, i));    
-       
+       double norm=FastMath.abs(R.getEntry(i, i));
+
        if(norm>rNorm)
            rNorm=norm;
-    
+
        }
-       RNorm=rNorm; 
+       RNorm=rNorm;
     }
-    
+
 
 
     /**

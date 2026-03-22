@@ -43,7 +43,7 @@ public class HS027Test {
     private static class HS027Eq extends EqualityConstraint {
         HS027Eq() { super(new ArrayRealVector(new double[]{ 0.0 })); }
         @Override public RealVector value(RealVector x) {
-            //G(1)=X(1)+X(3)**2+1.D0     
+            //G(1)=X(1)+X(3)**2+1.D0
             return new ArrayRealVector(new double[]{x.getEntry(0) + FastMath.pow(x.getEntry(2), 2)+1.0});
         }
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }

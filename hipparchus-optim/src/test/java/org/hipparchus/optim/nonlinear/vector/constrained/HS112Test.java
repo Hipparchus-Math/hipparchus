@@ -118,7 +118,7 @@ public class HS112Test {
         }
     }
 
-  
+
 static final class HS112Eq extends EqualityConstraint {
     private final RealMatrix A;
     private final RealVector b;

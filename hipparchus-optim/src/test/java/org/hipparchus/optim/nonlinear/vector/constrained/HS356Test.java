@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 public class HS356Test {
 
     private static final int DIM = 4;
-    private static final int NUM_INEQUALITIES = 5; 
+    private static final int NUM_INEQUALITIES = 5;
 
     // Constants derived from the problem definition (MODE=4 section)
     private static final double L = 14.0;
@@ -49,7 +49,7 @@ public class HS356Test {
     private static final double FH = LOAD;
     private static final double E = 3.0E7; // Modulus of Elasticity (0.3D+8)
     private static final double GH = 1.2E7; // Shear Modulus (0.12D+8)
-    
+
     // Helper function to calculate intermediate variables used in constraints
     private static class ConstraintVariables {
         final double T;
@@ -65,34 +65,34 @@ public class HS356Test {
 
             // T1 = FH / (1.414*X1*X2)
             double t1 = FH / (1.414 * x1 * x2);
-            
+
             // M = FH*(L + (X2/2.0))
             double m = FH * (L + (x2 / 2.0));
-            
+
             // R = sqrt((X2/2.0)^2 + ((X3+X1)/2.0)^2)
             double termR1 = x2 / 2.0;
             double termR2 = (x3 + x1) / 2.0;
             double r = FastMath.sqrt(termR1 * termR1 + termR2 * termR2);
-            
+
             // J = 2.0 * (0.707*X1*X2*((X2^2/12.0) + ((X3+X1)/2.0)^2))
             double termJ = x2 * x2 / 12.0 + termR2 * termR2;
             double j = 2.0 * (0.707 * x1 * x2 * termJ);
-            
+
             // T2 = M*R/J. Check for division by zero.
             double t2 = (FastMath.abs(j) > 1.0e-12) ? m * r / j : 0.0;
-            
+
             // COSA = X2/(2.0*R)
             double cosa = (FastMath.abs(r) > 1.0e-12) ? x2 / (2.0 * r) : 0.0;
-            
+
             // WP = ABS(T1^2 + 2*T1*T2*COSA + T2^2)
             double wp = FastMath.abs(t1 * t1 + 2.0 * t1 * t2 * cosa + t2 * t2);
-            
+
             // T = SQRT(WP) (stress T)
             this.T = FastMath.sqrt(wp);
-            
+
             // SIG = 6.0*FH*L / (X4*X3^2) (stress Sigma)
             double denominatorSig = x4 * x3 * x3;
-            this.SIG = (FastMath.abs(denominatorSig) > 1.0e-12) ? 
+            this.SIG = (FastMath.abs(denominatorSig) > 1.0e-12) ?
                        6.0 * FH * L / denominatorSig : Double.MAX_VALUE;
 
             // Intermediate terms for PC and DEL
@@ -100,20 +100,20 @@ public class HS356Test {
             double ei = E * x3 * x4 * x4 * x4 / 12.0;
             // GJ = GH*X3*X4^3/3.0
             double gj = GH * x3 * x4 * x4 * x4 / 3.0;
-            
+
             double eitc = ei * gj;
             double eidc = ei / gj;
-            
+
             double reitc = (eitc > 0.0) ? FastMath.sqrt(eitc) : 0.0;
             double reidc = (eidc > 0.0) ? FastMath.sqrt(eidc) : 0.0;
-            
+
             // PC = 4.013*REITC*(1.0 - (X3/(2.0*L))*REIDC)/(L^2) (Critical load PC)
             double pc_numerator = 4.013 * reitc * (1.0 - (x3 / (2.0 * L)) * reidc);
             this.PC = pc_numerator / (L * L);
-            
+
             // DEL = 4.0*FH*L^3 / (E*X4*X3^3) (Deflection Delta)
             double denominatorDel = E * x4 * x3 * x3 * x3;
-            this.DEL = (FastMath.abs(denominatorDel) > 1.0e-12) ? 
+            this.DEL = (FastMath.abs(denominatorDel) > 1.0e-12) ?
                        4.0 * FH * L * L * L / denominatorDel : Double.MAX_VALUE;
         }
     }
@@ -125,7 +125,7 @@ public class HS356Test {
      */
     static final class HS356Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         @Override public double value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);

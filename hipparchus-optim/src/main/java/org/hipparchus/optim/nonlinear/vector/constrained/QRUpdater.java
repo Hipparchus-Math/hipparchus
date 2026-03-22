@@ -17,9 +17,6 @@ import org.hipparchus.util.Precision;
  * scaling-based safeHypot to avoid overflow/underflow.
  */
 public class QRUpdater {
-    
-    /** sqrtEpsilon*/
-    private double sqrtEpsilon=FastMath.sqrt(Precision.EPSILON);
 
     /** Inverse of the lower triangular matrix L (stored as J = L^T). */
     private RealMatrix J;
@@ -162,10 +159,10 @@ public class QRUpdater {
         iq++;
         return true;
     }
-   
 
-    
-    
+
+
+
     /**
      * Deletes the active constraint at the specified index and updates
      * the QR factorization via Givens rotations.
@@ -213,7 +210,7 @@ public class QRUpdater {
 //                cc=-cc;
 //                ss=-ss;
 //                R.setEntry(j, j, -h);
-//                
+//
 //            }
 
             double xny = ss / (1.0 + cc);
@@ -231,10 +228,14 @@ public class QRUpdater {
             }
         }
     }
-    
-    
 
-    /** Returns the current active upper triangular factor R. */
+
+
+    /**
+     * Returns the current active upper triangular factor R.
+     *
+     * @return submatrix of R containing active columns or {@code null} if none
+     */
     public RealMatrix getR() {
         if (iq == this.n) {
             return R;
@@ -245,7 +246,11 @@ public class QRUpdater {
         return null;
     }
 
-    /** Returns the inverse of the active R factor. */
+    /**
+     * Returns the inverse of the active R factor.
+     *
+     * @return inverse of the current R or {@code null} if no active constraints
+     */
     public RealMatrix getRInv() {
         if (iq > 0) {
             return inverseUpperTriangular(getR());
@@ -253,7 +258,12 @@ public class QRUpdater {
         return null;
     }
 
-    /** Inverse of an upper triangular matrix via backward substitution. */
+    /**
+     * Computes the inverse of an upper triangular matrix via backward substitution.
+     *
+     * @param U upper triangular matrix to invert
+     * @return inverse of U
+     */
     private RealMatrix inverseUpperTriangular(RealMatrix U) {
         int p = U.getRowDimension();
         RealMatrix Uinv = MatrixUtils.createRealMatrix(p, p);
@@ -270,12 +280,20 @@ public class QRUpdater {
         return Uinv;
     }
 
-    /** Returns the current J matrix. */
+    /**
+     * Returns the inverse of L used internally.
+     *
+     * @return current J matrix
+     */
     public RealMatrix getJ() {
         return J;
     }
 
-    /** Returns the inactive columns of J, starting at the first non-active index. */
+    /**
+     * Returns the inactive columns of J, starting at the first non-active index.
+     *
+     * @return submatrix of J for inactive columns or {@code null} if fully occupied
+     */
     public RealMatrix getJ2() {
         if (iq == n) {
             return null;
@@ -283,7 +301,11 @@ public class QRUpdater {
         return J.getSubMatrix(0, n - 1, iq, n - 1);
     }
 
-    /** Returns the number of active constraints. */
+    /**
+     * Returns the number of active constraints.
+     *
+     * @return count of active constraints
+     */
     public int getIq() {
         return iq;
     }

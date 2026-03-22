@@ -277,10 +277,10 @@ public class LineSearch {
         alphaMax = 1.0;
 //       alphaMin = FastMath.min(1.0, 1e-6 / FastMath.max(1.0, 1.0e-6/(1+FastMath.abs(directionalDeriv))));
         alphaMin = 1.0e-6 * (1.0) / FastMath.max(1.0, f.getDx().getNorm());
-        
+
         alphaMin = FastMath.max(1.0e-12, alphaMin);
-        
-        
+
+
 
         // Monotone Search
         nonMonotoneEnabled = false;

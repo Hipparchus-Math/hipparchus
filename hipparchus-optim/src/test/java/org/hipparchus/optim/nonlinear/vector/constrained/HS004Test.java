@@ -46,7 +46,7 @@ public class HS004Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 2; }
     }
-     
+
 
     @Test
     public void testHS004() {
@@ -60,7 +60,7 @@ public class HS004Test {
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS004Obj()), new HS004Ineq());
         assertEquals(val, sol.getValue(), sqpOption.getEps()*10.0*(1.0+val));
     }
-    
+
     @Test
     public void testHS004Bounds() {
         InitialGuess guess = new InitialGuess(new double[]{1.125, 0.125});
@@ -69,7 +69,7 @@ public class HS004Test {
         sqpOption.setB(0.5);
         sqpOption.setMu(1.0e-4);
         sqpOption.setEps(1e-7);
-        
+
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             optimizer.setDebugPrinter(System.out::println);

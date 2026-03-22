@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HS375Test {
 
-    
+
     static final class HS375Obj extends TwiceDifferentiableFunction {
 
         @Override
@@ -62,11 +62,11 @@ public class HS375Test {
         }
     }
 
-    
+
     static final class HS375Eq extends EqualityConstraint {
 
         HS375Eq() {
-           
+
             super(new ArrayRealVector(new double[9]));
         }
 
@@ -133,7 +133,7 @@ public class HS375Test {
           opt.setDebugPrinter(System.out::println);
           }
 
-        
+
         double[] x0 = new double[10];
         java.util.Arrays.fill(x0, 1.0);
 
@@ -141,12 +141,12 @@ public class HS375Test {
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS375Obj()),
                  new HS375Eq() );
-        
+
     }
 
     @Test
     public void testHS375() {
-        
+
         final double fExpected = -15.161;
         double f = solve().getValue();
         assertTrue(fExpected >= f, "objective should be <= reference");

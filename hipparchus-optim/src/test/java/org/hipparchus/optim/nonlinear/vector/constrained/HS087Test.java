@@ -59,7 +59,7 @@ public class HS087Test {
     }
 
     /**
-     * 
+     *
      *  g1 = -x1 + 300 - (x3*x4/A)*cos(B - x6) + (C*x3^2/A)*D
      *  g2 = -x2 - (x3*x4/A)*cos(B + x6) + (C*x4^2/A)*D
      *  g3 = -x5 - (x3*x4/A)*sin(B + x6) + (C*x4^2/A)*E

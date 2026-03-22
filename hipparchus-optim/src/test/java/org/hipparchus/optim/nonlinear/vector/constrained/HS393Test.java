@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class HS393Test {
 
-  
+
     private static class TP393Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 48; }
 
@@ -35,17 +35,17 @@ public class HS393Test {
             final double[] x = Xv.toArray();
             double E = 0.0;
 
-            
+
             for (int i = 0; i < 12; i++) {
                 final double c = 1.0 - x[i];
                 E += 10.0 * c * c;
             }
-            
+
             for (int i = 24; i <= 35; i++) {
                 final double c = x[i] - 1.0;
                 E += 1000.0 * (0.1 + 2.0 * c * (c + Math.sqrt(0.1 + c * c))) / 4.0;
             }
-           
+
             for (int i = 36; i <= 41; i++) {
                 final double c = x[i] - 1.0;
                 E += 2000.0 * (0.1 + 2.0 * c * (c + Math.sqrt(0.1 + c * c))) / 4.0;

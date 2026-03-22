@@ -59,10 +59,10 @@ public class HS348Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             // Check box constraints (Fortran source includes boundary checks here)
             // Note: In a proper optimizer, these checks are usually handled externally (SimpleBounds).
-            // However, the source code modifies X(i) if it's below XL(i). We skip this in the model 
+            // However, the source code modifies X(i) if it's below XL(i). We skip this in the model
             // but acknowledge its presence.
 
             // 1. Calculate Area variables (AF, AT, AC)
@@ -70,17 +70,17 @@ public class HS348Test {
             AT = 30.0 * PI * D * x2 / 144.0;
             AC = (H * x2 - 10.0 * D * x2 - x2 / x1 * 0.006 * H) / 144.0;
             if (AC == 0.0) AC = 1.0e-20;
-            
+
             // 2. Calculate Reynolds Number (RE) and Heat Transfer Coef (HO)
             GI = (RHO * x3 * (H * x2) / (AC * 144.0)) * 60.0;
             RE = GI * 1.083 / (12.0 * XMU);
             if (RE < 1.0e-9) RE = 1.0e-9;
             HO = (0.195 * GI * CP) / (Math.pow(PR, 0.67) * Math.pow(RE, 0.35));
-            
+
             // 3. Calculate Mass Flow (XMDOT) and Pressure Drop (DELP)
             XMDOT = RHO * x3 * H * x2 / 144.0 * 60.0;
             DELP = 1.833e-6 / RHO * GI * GI * 3.0 * (AF / AC * Math.pow(RE, -0.5) + 0.1 * AT / AC);
-            
+
             // 4. Calculate Efficiency (ETAF, ETAS) and Heat Exchanged (Q)
             if (HO < 1.0e-9) HO = 1.0e-9;
             XVAL = 0.0732 * Math.sqrt(HO);
@@ -89,7 +89,7 @@ public class HS348Test {
             double XX = XMDOT * CP;
             HEF = 1.0 - Math.exp(Math.max(-ETAS * HO * (AF + AT) / XX, -100.0));
             Q = HEF * (TIN - TSURF) * XMDOT * CP; // The constraint is 6000 - Q >= 0
-            
+
             // 5. Calculate Cost Components (COSTM, COSTT, COSTF)
             H1 = DELP / RHO * XMDOT / 1.98e6;
             if (H1 < 1.0e-9) H1 = 1.0e-9;
@@ -103,21 +103,21 @@ public class HS348Test {
     // --- Objective Function (MODE 2) ---
     static final class HS348Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = COSTM + COSTT + COSTF
         @Override public double value(RealVector x) {
             Context ctx = new Context();
             ctx.compute(x); // Compute all intermediate variables and costs
             return ctx.COSTM + ctx.COSTT + ctx.COSTF;
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             // Gradient is highly complex due to chain rule through all intermediate variables.
             // Fortran source only provides the function value and constraint calculation.
             // In a real application, this gradient would be calculated analytically or numerically.
             throw new UnsupportedOperationException("Analytical gradient is too complex/not provided in Fortran source.");
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Hessian not defined in Fortran source (MODE 5 is RETURN)
             throw new UnsupportedOperationException("Hessian matrix is not implemented for this test case.");
@@ -126,15 +126,15 @@ public class HS348Test {
 
     // --- Inequality Constraint (MODE 4) ---
     static final class HS348Ineq extends InequalityConstraint {
-        
-        HS348Ineq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS348Ineq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
         @Override public RealVector value(RealVector x) {
             Context ctx = new Context();
             // Need to compute Q first
-            ctx.compute(x); 
+            ctx.compute(x);
             
             // G(1) = 6000 - Q >= 0
             return new ArrayRealVector(new double[]{6000.0 - ctx.Q}, false);

@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HS312Test {
 
-    
+
     static final class HS312Obj extends TwiceDifferentiableFunction {
 
         @Override
@@ -40,7 +40,7 @@ public class HS312Test {
             final double x1 = x.getEntry(0);
             final double x2 = x.getEntry(1);
 
-            
+
             double A = x1 * x1 + 12.0 * x2 - 10.0;
             double B = 49.0 * (x1 * x1 + x2 * x2) + 84.0 * x1 + 2324.0 * x2 - 681.0;
 
@@ -68,13 +68,13 @@ public class HS312Test {
 
     private LagrangeSolution solve() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-       
+
         opt.setDebugPrinter(System.out::println);
 
-       
+
         double[] x0 = {10.0, 10.0};
 
-      
+
         return opt.optimize(
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS312Obj())
@@ -83,7 +83,7 @@ public class HS312Test {
 
     @Test
     public void testHS312() {
-       
+
         final double fExpected = 0.0;
         LagrangeSolution sol = solve();
         double f = sol.getValue();

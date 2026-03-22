@@ -51,12 +51,12 @@ public class HS317Test {
     }
 
     static final class HS317Eq extends EqualityConstraint {
-        HS317Eq() { super(new ArrayRealVector(new double[1])); } 
+        HS317Eq() { super(new ArrayRealVector(new double[1])); }
         @Override public int dim() { return DIM; }
         @Override public RealVector value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
-            double g1 = 0.01 * x1 * x1 + x2 * x2 / 64.0 - 1.0; 
+            double g1 = 0.01 * x1 * x1 + x2 * x2 / 64.0 - 1.0;
             return new ArrayRealVector(new double[]{g1}, false);
         }
         @Override public RealMatrix jacobian(RealVector x) {
@@ -69,25 +69,25 @@ public class HS317Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{0.0, 0.0}; 
+    private static double[] start() {
+        return new double[]{0.0, 0.0};
     }
 
     @Test
     public void testHS317() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); 
+        opt.setDebugPrinter(System.out::println);
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS317Obj()),
-                new HS317Eq() 
+                new HS317Eq()
         );
 
         double f = sol.getValue();
         final double fExpected = 372.46661;
-        
-       
+
+
         assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-      
+
     }
 }

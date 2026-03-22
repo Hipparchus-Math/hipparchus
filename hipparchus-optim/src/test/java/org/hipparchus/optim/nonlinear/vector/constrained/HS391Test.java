@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class HS391Test {
 
-    
+
     static final class HS391Obj extends TwiceDifferentiableFunction {
 
         @Override
@@ -63,7 +63,7 @@ public class HS391Test {
             return fx;
         }
 
-        
+
         @Override
         public RealVector gradient(RealVector x) {
             throw new UnsupportedOperationException("Gradient not provided for TP391");
@@ -76,7 +76,7 @@ public class HS391Test {
     }
 
 
-   
+
     private double[] initialPoint() {
         double[] x = new double[30];
 
@@ -113,7 +113,7 @@ public class HS391Test {
 
     @Test
     public void testHS391() {
-        
+
 
         LagrangeSolution sol = solve();
         double f = sol.getValue();

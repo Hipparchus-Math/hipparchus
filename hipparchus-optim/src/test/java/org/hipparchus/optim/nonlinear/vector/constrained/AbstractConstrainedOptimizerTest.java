@@ -87,7 +87,7 @@ public abstract class AbstractConstrainedOptimizerTest {
                 // so it must have worst objective function than the expected optimum
                 assertTrue(objectiveFunction.getObjectiveFunction().value(plusShift.toArray()) > expectedValue);
             }
-            
+
             final RealVector minusShift = MatrixUtils.createRealVector(expectedSolution);
             minusShift.addToEntry(i, -2 * solutionTolerance);
             boolean minusIsFeasible = true;
@@ -99,7 +99,7 @@ public abstract class AbstractConstrainedOptimizerTest {
                 // so it must have worst objective function than the expected optimum
                 assertTrue(objectiveFunction.getObjectiveFunction().value(minusShift.toArray()) > expectedValue);
             }
-            
+
         }
 
     }

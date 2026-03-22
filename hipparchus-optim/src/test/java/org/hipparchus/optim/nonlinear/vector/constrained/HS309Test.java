@@ -65,10 +65,10 @@ public RealVector gradient(RealVector x) {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         opt.setDebugPrinter(System.out::println); // richiesto
 
-        // Start: X(1)=0, X(2)=0 
+        // Start: X(1)=0, X(2)=0
         double[] x0 = {0.0, 0.0};
 
-       
+
         return opt.optimize(
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS309Obj())

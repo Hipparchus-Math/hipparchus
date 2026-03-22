@@ -49,11 +49,11 @@ public class HS311Test {
             final double x1 = x.getEntry(0);
             final double x2 = x.getEntry(1);
 
-            
+
             double t1 = x1 * x1 + x2 - 11.0;
             double t2 = x1 + x2 * x2 - 7.0;
 
-            
+
             double g1 = 4.0 * x1 * t1 + 2.0 * t2;
             double g2 = 2.0 * t1 + 4.0 * x2 * t2;
 
@@ -68,11 +68,11 @@ public class HS311Test {
 
     private LagrangeSolution solve() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        
+
         opt.setDebugPrinter(System.out::println);
         double[] x0 = { 1.0, 1.0 };
 
-      
+
         return opt.optimize(
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS311Obj())
@@ -81,7 +81,7 @@ public class HS311Test {
 
     @Test
     public void testHS311() {
-      
+
         final double fExpected = 0.0;
         LagrangeSolution sol = solve();
         double f = sol.getValue();

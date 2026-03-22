@@ -241,7 +241,7 @@ public class HS386Test {
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS386Obj()),
                 new HS386Ineq()   // 11 nonlinear inequality constraints
-                
+
         );
 
         double f = sol.getValue();

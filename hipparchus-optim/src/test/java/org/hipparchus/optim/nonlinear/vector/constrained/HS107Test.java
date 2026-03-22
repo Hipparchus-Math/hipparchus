@@ -171,7 +171,7 @@ public class HS107Test {
         };
 
         // Use large finite bounds instead of +/- infinity
-        final double SUP = Double.POSITIVE_INFINITY; 
+        final double SUP = Double.POSITIVE_INFINITY;
         final double INF = Double.NEGATIVE_INFINITY;
         final double[] lo = { 0.0, 0.0, INF, INF, 0.90909, 0.90909, 0.90909, INF, INF };
         final double[] up = { SUP,  SUP, SUP,  SUP, 1.0909,  1.0909,  1.0909,  SUP,  SUP };

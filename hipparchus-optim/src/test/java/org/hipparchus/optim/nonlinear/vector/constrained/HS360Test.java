@@ -62,9 +62,9 @@ public class HS360Test {
         @Override public int dim() { return DIM; }
 
         @Override public double value(RealVector X) {
-            double term2_5 = C[1] * X.getEntry(1) + C[2] * X.getEntry(2) + 
+            double term2_5 = C[1] * X.getEntry(1) + C[2] * X.getEntry(2) +
                              C[3] * X.getEntry(3) + C[4] * X.getEntry(4);
-            
+
             // F(X) = (-C(1) - term2_5) * X(1) + 24345.0
             return (-C[0] - term2_5) * X.getEntry(0) + 24345.0;
         }
@@ -74,7 +74,7 @@ public class HS360Test {
             final double[] g = new double[DIM];
 
             // GF(1) = -C(1) - C(2)*X(2) - C(3)*X(3) - C(4)*X(4) - C(5)*X(5)
-            g[0] = -C[0] - C[1] * X.getEntry(1) - C[2] * X.getEntry(2) - 
+            g[0] = -C[0] - C[1] * X.getEntry(1) - C[2] * X.getEntry(2) -
                    C[3] * X.getEntry(3) - C[4] * X.getEntry(4);
 
             // GF(I) = -C(I)*X(1) for I=2 to 5 (indices 1 to 4 in Java)
@@ -100,7 +100,7 @@ public class HS360Test {
             for (int i = 1; i < DIM; i++) {
                 H.setEntry(i, 0, -C[i]);
             }
-            
+
             // Other terms are zero (GF(i) for i > 1 depends only on X(1))
             return H;
         }
@@ -112,25 +112,25 @@ public class HS360Test {
      */
     private static class HS360Ineq extends InequalityConstraint {
         // RHS = 0 for both constraints
-        HS360Ineq() { super(new ArrayRealVector(new double[NUM_INEQUALITIES])); } 
+        HS360Ineq() { super(new ArrayRealVector(new double[NUM_INEQUALITIES])); }
 
         // Helper function to calculate H(X)
         private double calculateH(RealVector X) {
             final double x1 = X.getEntry(0);
             // D_i = C(i+5)
-            double innerSum = C[5] + C[6] * X.getEntry(1) + C[7] * X.getEntry(2) + 
+            double innerSum = C[5] + C[6] * X.getEntry(1) + C[7] * X.getEntry(2) +
                               C[8] * X.getEntry(3) + C[9] * X.getEntry(4);
             // H = X(1) * (C(6) + C(7)*X(2) + C(8)*X(3) + C(9)*X(4) + C(10)*X(5))
             return x1 * innerSum;
         }
-        
+
         // Helper function to calculate the gradient of H(X)
         private RealVector calculateGradH(RealVector X) {
             final double x1 = X.getEntry(0);
             final double[] gH = new double[DIM];
 
             // HH(1) = C(6)+C(7)*X(2)+C(8)*X(3)+C(9)*X(4)+C(10)*X(5) (Derivative w.r.t X1)
-            gH[0] = C[5] + C[6] * X.getEntry(1) + C[7] * X.getEntry(2) + 
+            gH[0] = C[5] + C[6] * X.getEntry(1) + C[7] * X.getEntry(2) +
                     C[8] * X.getEntry(3) + C[9] * X.getEntry(4);
 
             // HH(I) = C(I+5)*X(1) for I=2 to 5 (indices 1 to 4 in Java)
@@ -145,11 +145,11 @@ public class HS360Test {
         @Override public RealVector value(RealVector X) {
             final double H = calculateH(X);
             double[] g = new double[NUM_INEQUALITIES];
-            
+
             // G(1): H >= 0
-            g[0] = H;                     
+            g[0] = H;
             // G(2): 277200.0 - H >= 0 (i.e., H <= 277200.0)
-            g[1] = 277200.0 - H;          
+            g[1] = 277200.0 - H;
 
             return new ArrayRealVector(g);
         }

@@ -35,19 +35,19 @@ public class HS335Test {
 
     static final class HS335Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = -(0.001*X1 + X2)
         @Override public double value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             return -(0.001 * x1 + x2);
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             // Gradient GF: [-0.001, -1.0, 0.0]
             return new ArrayRealVector(new double[]{-0.001, -1.0, 0.0}, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Hessian is all zeros (linear function)
             return MatrixUtils.createRealMatrix(DIM, DIM);
@@ -55,8 +55,8 @@ public class HS335Test {
     }
 
     static final class HS335Ineq extends InequalityConstraint {
-        
-        HS335Ineq() { super(new ArrayRealVector(new double[2])); } 
+
+        HS335Ineq() { super(new ArrayRealVector(new double[2])); }
 
         @Override public int dim() { return DIM; }
 
@@ -64,30 +64,30 @@ public class HS335Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             double x1_sq = x1 * x1;
             double x2_sq = x2 * x2;
-            
+
             // G(1) = 1000*X1^2 + 100*X2^2 - X3 >= 0
             double g1 = 1000.0 * x1_sq + 100.0 * x2_sq - x3;
-            
+
             // G(2) = 100*X1^2 + 400*X2^2 + X3 - 0.01 >= 0
             double g2 = 100.0 * x1_sq + 400.0 * x2_sq + x3 - 0.01;
-            
+
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
 
         @Override public RealMatrix jacobian(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
-            
+
             double[][] J = new double[2][DIM];
 
             // G1: 2000*X1, 200*X2, -1
             J[0][0] = 2000.0 * x1;
             J[0][1] = 200.0 * x2;
             J[0][2] = -1.0;
-            
+
             // G2: 200*X1, 800*X2, 1
             J[1][0] = 200.0 * x1;
             J[1][1] = 800.0 * x2;
@@ -97,8 +97,8 @@ public class HS335Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{1.0, 1.0, 1.0}; 
+    private static double[] start() {
+        return new double[]{1.0, 1.0, 1.0};
     }
 
 //    @Test
@@ -109,21 +109,21 @@ public class HS335Test {
 //        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
 //            opt.setDebugPrinter(System.out::println);
 //        }
-//        
-//        
-//       
+//
+//
+//
 //
 //        LagrangeSolution sol = opt.optimize(
 //                new InitialGuess(start()),
 //                new ObjectiveFunction(new HS335Obj()),
 //                new HS335Ineq()
-//                
+//
 //        );
 //
 //        double f = sol.getValue();
 //        final double fExpected = -0.0044721370;
-//        
+//
 //        assertEquals(fExpected, f, 1.0e-5 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-//       
+//
 //    }
 }

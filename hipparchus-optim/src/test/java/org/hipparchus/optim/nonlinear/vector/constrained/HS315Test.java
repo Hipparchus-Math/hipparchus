@@ -28,35 +28,35 @@ import org.junit.jupiter.api.Test;
 
 
 public class HS315Test {
-    
-    
+
+
     private static final int DIM = 2;
-    
-    
+
+
     static final class HS315Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
 
         @Override public double value(RealVector x) {
-           
-            return -x.getEntry(1); 
+
+            return -x.getEntry(1);
         }
 
         @Override public RealVector gradient(RealVector x) {
-            
+
             return new ArrayRealVector(new double[]{0.0, -1.0}, false);
         }
 
         @Override public RealMatrix hessian(RealVector x) {
-           
+
             throw new UnsupportedOperationException("Hessian non fornita");
         }
     }
 
-    
+
     static final class HS315Ineq extends InequalityConstraint {
-        
-        
-        public HS315Ineq() { super(new ArrayRealVector(new double[3])); } 
+
+
+        public HS315Ineq() { super(new ArrayRealVector(new double[3])); }
 
         @Override public int dim() { return DIM; }
 
@@ -66,13 +66,13 @@ public class HS315Test {
             double[] g = new double[3];
 
             // G1: 1 - 2*X2 + X1 >= 0
-            g[0] = 1.0 - 2.0 * x2 + x1; 
+            g[0] = 1.0 - 2.0 * x2 + x1;
 
             // G2: X1^2 + X2^2 >= 0 (Vincolo irrilevante/sempre soddisfatto)
             g[1] = x1 * x1 + x2 * x2;
 
             // G3: 1 - X1^2 - X2^2 >= 0 (Unità cerchio)
-            g[2] = 1.0 - x1 * x1 - x2 * x2; 
+            g[2] = 1.0 - x1 * x1 - x2 * x2;
 
             return new ArrayRealVector(g, false);
         }
@@ -87,40 +87,40 @@ public class HS315Test {
             J[0][1] = -2.0;
 
             // G2 Jacobiana
-            J[1][0] = 2.0 * x1; 
-            J[1][1] = 2.0 * x2; 
+            J[1][0] = 2.0 * x1;
+            J[1][1] = 2.0 * x2;
 
             // G3 Jacobiana
             J[2][0] = -2.0 * x1;
-            J[2][1] = -2.0 * x2; 
+            J[2][1] = -2.0 * x2;
 
             return org.hipparchus.linear.MatrixUtils.createRealMatrix(J);
         }
     }
 
-    
 
-    private static double[] start() { 
-        
-        return new double[]{-0.1, -0.9}; 
+
+    private static double[] start() {
+
+        return new double[]{-0.1, -0.9};
     }
 
     @Test
     public void testHS315() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); 
-        
+        opt.setDebugPrinter(System.out::println);
+
         final double fExpected = -0.8;
-        
+
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS315Obj()),
-                new HS315Ineq() 
+                new HS315Ineq()
         );
 
         double f = sol.getValue();
         assertEquals(fExpected, f, 1.0e-3, "Objective mismatch");
-        
-       
+
+
     }
 }

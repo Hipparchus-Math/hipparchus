@@ -71,40 +71,40 @@ public class HS351Test {
                 double b_i = B_DATA[i];
 
                 double a_i_sq = a_i * a_i;
-                
+
                 // Numerator: (XH1 + A(I)*XH2 + A(I)*A(I)*XH3)
                 double numerator = xh1 + a_i * xh2 + a_i_sq * xh3;
-                
+
                 // Denominator: (1.0 + A(I)*XH4)
                 double denominator = 1.0 + a_i * xh4;
-                
+
                 // F(I) = ( (Numerator/Denominator) - B(I) ) / B(I) * 100.0
                 double ratio_term = numerator / denominator;
-                
+
                 F[i] = (ratio_term - b_i) / b_i * 100.0;
             }
-            
+
             // 2. Calculation of Objective Function FX (Mode 2)
             FX = 0.0;
             for (int i = 0; i < NUM_RESIDUALS; i++) {
                 // FX = sum(F(I)^2)
                 FX += F[i] * F[i];
             }
-            
+
             // 3. Calculation of the Gradient GF(J) (Mode 3)
             // DF(I, J) is the Jacobian of the residuals
             for (int i = 0; i < NUM_RESIDUALS; i++) {
                 double a_i = A_DATA[i];
                 double b_i = B_DATA[i];
                 double a_i_sq = a_i * a_i;
-                
+
                 double denominator = 1.0 + a_i * xh4;
                 double denominator_sq = denominator * denominator;
-                
+
                 // XH5 in original code: (1.0 + XH4*A(I))*B(I)
                 double xh5 = denominator * b_i;
                 double xh5_sq = xh5 * xh5;
-                
+
                 // N_I = (XH1 + XH2*A(I) + XH3*A(I)**2)
                 double numerator_ni = xh1 + xh2 * a_i + xh3 * a_i_sq;
 
@@ -125,7 +125,7 @@ public class HS351Test {
                 // Simplified: dF/dx4 = (100/B) * d/dx4(N/D)
                 DF[i][3] = -200.0 * x4 * a_i * b_i * numerator_ni / xh5_sq;
             }
-            
+
             // Calculation of the Objective Gradient: GF(J) = sum(2 * F(I) * DF(I, J))
             for (int j = 0; j < DIM; j++) {
                 GF[j] = 0.0;
@@ -141,42 +141,42 @@ public class HS351Test {
      */
     static final class HS351Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         @Override public double value(RealVector x) {
             Context ctx = new Context();
             // Mode 2 calculation
-            ctx.compute(x); 
+            ctx.compute(x);
             return ctx.FX;
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             Context ctx = new Context();
             // Mode 3 calculation
-            ctx.compute(x); 
+            ctx.compute(x);
             return new ArrayRealVector(ctx.GF, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Mode 5 (Hessian): Not implemented, relies on numerical estimation
             throw new UnsupportedOperationException("Hessian matrix is not implemented for this test case.");
         }
     }
 
-    private static double[] start() { 
+    private static double[] start() {
         // Initial values (Mode 1): X(1)=2.7, X(2)=90.0, X(3)=1500.0, X(4)=10.0
-        return new double[]{2.7, 90.0, 1500.0, 10.0}; 
+        return new double[]{2.7, 90.0, 1500.0, 10.0};
     }
 
     @Test
     public void testHS351() {
         // SQPOptimizerS2 is a placeholder for an unconstrained/SQP optimizer.
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        
+
         // RECOVERY: Added conditional debug printing
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);
         }
-        
+
         // The HS351 problem is unconstrained.
         
         LagrangeSolution sol = opt.optimize(

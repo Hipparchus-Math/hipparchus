@@ -155,7 +155,7 @@ public class HS250Test {
 
     // ---------------------------------------------------------
     // Bounds
-   
+
 // Box Constraints (Variable Bounds)
 SimpleBounds bounds = new SimpleBounds(
         new double[] {

@@ -62,7 +62,7 @@ public class HS359Test {
         @Override public double value(RealVector X) {
             double s = 0.0;
             for (int i = 0; i < DIM; i++) s += A[i] * X.getEntry(i);
-            
+
             // Simplified logic from Fortran MODE 2: FX = 24345.0 - SUM(A*X)
             return 24345.0 - s;
         }
@@ -83,7 +83,7 @@ public class HS359Test {
      */
     private static class HS359Ineq extends InequalityConstraint {
         // RHS = 0 for all 14 inequalities, as we move constants to the left side
-        HS359Ineq() { super(new ArrayRealVector(new double[NUM_INEQUALITIES])); } 
+        HS359Ineq() { super(new ArrayRealVector(new double[NUM_INEQUALITIES])); }
 
         @Override public int dim() { return DIM; }
 
@@ -126,11 +126,11 @@ public class HS359Test {
         }
 
         // Jacobian is constant for linear constraints.
-        // We throw UnsupportedOperationException to rely on the optimizer's finite differences 
+        // We throw UnsupportedOperationException to rely on the optimizer's finite differences
         // as per the clean example provided.
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
     }
-    
+
     // Initial guess (Fortran MODE 1)
     private static final double[] X_START = {
         2.52, 5.04, 94.5, 23.31, 17.136
@@ -138,24 +138,24 @@ public class HS359Test {
 
     // Expected solution (FEX and XEX from Fortran MODE 1)
     private static final double F_EXPECTED = -5280416.8;
-   
+
 
     @Test
     public void testHS359() {
         // Initialize the SQP optimizer
         final SQPOptimizerS2 opt = new SQPOptimizerS2();
-        
+
         // Enable debug output if the system property is set.
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
              opt.setDebugPrinter(System.out::println);
         }
-        
+
         // Define Box Constraints.
         SimpleBounds bounds = new SimpleBounds(
             new double[] { 0.0, 0.0, 0.0, 0.0, 0.0 },
-            new double[] { 
-                Double.POSITIVE_INFINITY, 
-                Double.POSITIVE_INFINITY, 
+            new double[] {
+                Double.POSITIVE_INFINITY,
+                Double.POSITIVE_INFINITY,
                 Double.POSITIVE_INFINITY, 
                 Double.POSITIVE_INFINITY, 
                 Double.POSITIVE_INFINITY 

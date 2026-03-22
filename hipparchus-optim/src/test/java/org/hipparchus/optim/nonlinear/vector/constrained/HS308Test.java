@@ -74,10 +74,10 @@ public class HS308Test {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         opt.setDebugPrinter(System.out::println); // richiesto
 
-        // Start: X(1)=3.0, X(2)=1.0 
+        // Start: X(1)=3.0, X(2)=1.0
         double[] x0 = {3.0, 1.0};
 
-        
+
         return opt.optimize(
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS308Obj())
@@ -86,7 +86,7 @@ public class HS308Test {
 
     @Test
     public void testHS308() {
-        
+
         final double fExpected = 0.77319906;
         LagrangeSolution sol = solve();
         double f = sol.getValue();

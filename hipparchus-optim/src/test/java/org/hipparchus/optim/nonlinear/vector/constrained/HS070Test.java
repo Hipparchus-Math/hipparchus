@@ -137,7 +137,7 @@ public class HS070Test {
     /** g(x) = x3 + (1 - x3)*x4 - 1 <= 0 (coerente con il gradiente TP70). */
      private static class HS070Ineq extends InequalityConstraint {
         HS070Ineq() { super(new ArrayRealVector(new double[] { 0.0 })); }
-        
+
         @Override public int dim() { return 4; }
 
         @Override public RealVector value(RealVector X) {

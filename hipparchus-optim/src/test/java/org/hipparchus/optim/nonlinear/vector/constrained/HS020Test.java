@@ -45,7 +45,7 @@ public class HS020Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 2; }
     }
-    
+
     private static class HS020Ineq1 extends InequalityConstraint {
         HS020Ineq1() { super(new ArrayRealVector(new double[]{ 0.0, 0.0, 0.0})); }
         @Override public RealVector value(RealVector x) {
@@ -70,10 +70,10 @@ public class HS020Test {
     }
     double[]lb=new double[]{-1.0/2.0,Double.NEGATIVE_INFINITY};
     double[]ub=new double[]{1.0/2.0,Double.POSITIVE_INFINITY};
-    
+
     @Test
     public void testHS020Bound() {
-        
+
         InitialGuess guess = new InitialGuess(new double[]{0.1, 1.0});
         SQPOption sqpOption=new SQPOption();
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();

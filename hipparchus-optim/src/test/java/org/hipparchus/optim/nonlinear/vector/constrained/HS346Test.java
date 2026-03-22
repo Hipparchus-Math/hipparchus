@@ -40,7 +40,7 @@ public class HS346Test {
     // --- Objective Function (MODE 2 and 3) ---
     static final class HS346Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = -C_FACTOR * X1^4 * X2 * X3^2
         @Override public double value(RealVector x) {
             double x1 = x.getEntry(0);
@@ -48,28 +48,28 @@ public class HS346Test {
             double x3 = x.getEntry(2);
             return -C_FACTOR * Math.pow(x1, 4) * x2 * (x3 * x3);
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             double x1_4 = Math.pow(x1, 4);
             double x1_3 = x1_4 / x1;
             double x3_2 = x3 * x3;
 
             // GF(1) = -(4 * C_FACTOR) * X1^3 * X2 * X3^2
             double g1 = -4.0 * C_FACTOR * x1_3 * x2 * x3_2;
-            
+
             // GF(2) = -C_FACTOR * X1^4 * X3^2
             double g2 = -C_FACTOR * x1_4 * x3_2;
-            
+
             // GF(3) = -(2 * C_FACTOR) * X1^4 * X2 * X3
             double g3 = -2.0 * C_FACTOR * x1_4 * x2 * x3;
 
             return new ArrayRealVector(new double[]{g1, g2, g3}, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Hessian not fully implemented in Fortran source, often computed numerically.
             throw new UnsupportedOperationException("Hessian matrix is not implemented for this test case.");
@@ -78,8 +78,8 @@ public class HS346Test {
 
     // --- Inequality Constraint (MODE 4 and 5) ---
     static final class HS346Ineq extends InequalityConstraint {
-        
-        HS346Ineq() { super(new ArrayRealVector(new double[2])); } 
+
+        HS346Ineq() { super(new ArrayRealVector(new double[2])); }
 
         @Override public int dim() { return DIM; }
 
@@ -87,13 +87,13 @@ public class HS346Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             // G(1) = 675 - X1^2 * X2 >= 0
             double g1 = 675.0 - (x1 * x1 * x2);
-            
+
             // G(2) = 0.419 - 1e-6 * X1^2 * X3^2 >= 0
             double g2 = 0.419 - 1.0e-6 * (x1 * x1 * x3 * x3);
-            
+
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
 
@@ -101,7 +101,7 @@ public class HS346Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             double x1_2 = x1 * x1;
             double x3_2 = x3 * x3;
 
@@ -111,7 +111,7 @@ public class HS346Test {
             J[0][0] = -2.0 * x1 * x2;
             J[0][1] = -x1_2;
             J[0][2] = 0.0;
-            
+
             // G2: dG2/dX1 = -2e-6*X1*X3^2, dG2/dX2 = 0, dG2/dX3 = -2e-6*X1^2*X3
             // The Fortran source implicitly assumes G2 is independent of X2 (GG(2,2)=0.0D+0)
             J[1][0] = -2.0e-6 * x1 * x3_2;
@@ -122,8 +122,8 @@ public class HS346Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{22.3, 0.5, 125.0}; 
+    private static double[] start() {
+        return new double[]{22.3, 0.5, 125.0};
     }
 
     @Test
@@ -134,7 +134,7 @@ public class HS346Test {
         }
         // Box constraints: 0 <= X1 <= 36, 0 <= X2 <= 5, 0 <= X3 <= 125
         SimpleBounds bounds = new SimpleBounds(
-            new double[]{0.0, 0.0, 0.0}, 
+            new double[]{0.0, 0.0, 0.0},
             new double[]{36.0, 5.0, 125.0}
         );
 
@@ -148,10 +148,10 @@ public class HS346Test {
         double f = sol.getValue();
         final double fExpected = -5.6847825; // FEX value
         final double tolerance = 1.0e-5 * (Math.abs(fExpected) + 1.0);
-        
+
         // Using assert for closeness OR better result (f <= fExpected + tolerance)
         assertTrue(f <= fExpected + tolerance, "Objective value mismatch/worse than expected.");
-        
-       
+
+
     }
 }

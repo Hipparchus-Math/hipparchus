@@ -181,7 +181,7 @@ public class HS395TestWithSQPProblemInterface {
 
         LagrangeSolution sol = optimizer.optimize(
                 problem
-                
+
         );
 
         assertEquals(expected, sol.getValue(), 1e-6);

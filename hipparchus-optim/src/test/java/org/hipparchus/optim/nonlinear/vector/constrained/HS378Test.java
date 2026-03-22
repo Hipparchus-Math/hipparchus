@@ -30,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HS378Test {
 
-    
+
     static final class HS378Obj extends TwiceDifferentiableFunction {
 
-        
+
         private static final double[] A = {
             -6.089,   // -0.6089D+1
             -17.164,  // -0.17164D+2
@@ -92,7 +92,7 @@ public class HS378Test {
         }
     }
 
-    
+
     static final class HS378Eq extends EqualityConstraint {
 
         HS378Eq() {
@@ -215,7 +215,7 @@ public class HS378Test {
 
     @Test
     public void testHS378() {
-    
+
         final double fExpected = -47.761091;
         LagrangeSolution sol = solve();
         double f = sol.getValue();

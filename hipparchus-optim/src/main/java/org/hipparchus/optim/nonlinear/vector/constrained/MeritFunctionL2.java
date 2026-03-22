@@ -51,7 +51,7 @@ public class MeritFunctionL2 {
 
     /** Inequality constraints (may be null). */
     private final Constraint iqConstraint;
-    
+
     /** bounds constraints (may be null). */
     private final LinearInequalityConstraint bounds;
 
@@ -69,7 +69,7 @@ public class MeritFunctionL2 {
 
     /** R vector. */
     private final RealVector r;
-    
+
     /** R vector old. */
     private final RealVector rOld;
 
@@ -87,7 +87,7 @@ public class MeritFunctionL2 {
 
     /** Inequality evaluation. */
     private RealVector iqEval;
-    
+
     /** bounds evaluation. */
     private RealVector bEval;
 
@@ -99,13 +99,13 @@ public class MeritFunctionL2 {
 
     /** Gradient of inequality. */
     private RealMatrix JI;
-    
+
     /** Gradient of bounds. */
     private RealMatrix JB;
-    
+
     /** initial Sigma . */
     private double sigmaInit=1.0e-2;
-    
+
     /** rMax . */
     private double rMax=1.0e9;
 
@@ -157,7 +157,7 @@ public class MeritFunctionL2 {
         if (this.iqConstraint != null) {
             mi = this.iqConstraint.dimY();
         }
-        
+
         if (this.bounds != null) {
             mb = this.bounds.dimY();
             JB=this.bounds.jacobian(null);
@@ -213,7 +213,7 @@ public class MeritFunctionL2 {
     RealVector getX() {
         return this.x;
     }
-    
+
     /**
      * Get Last Objective Evaluation;
      * @return penalty gradient
@@ -237,7 +237,7 @@ public class MeritFunctionL2 {
     RealVector getEqEval() {
         return this.eqEval;
     }
-    
+
     /**
      * Get Last Bounds Evaluation;
      * @return penalty gradient
@@ -306,7 +306,7 @@ public class MeritFunctionL2 {
             RealVector g2 = g.ebeMultiply(g.ebeMultiply(mask));
             penalty -= yi.dotProduct(g.ebeMultiply(mask)) - 0.5 * ri.dotProduct(g2);
         }
-        
+
         int mb = 0;
         if (bounds != null) {
             mb = bounds.dimY();
@@ -341,7 +341,7 @@ public class MeritFunctionL2 {
      * @return penalty gradient
      */
     private double gradient() {
-        if (y.getDimension() > 0) {       
+        if (y.getDimension() > 0) {
             return gradX().dotProduct(dx) + gradY().dotProduct(u.subtract(y));
         } else {
             return gradX().dotProduct(dx);
@@ -354,7 +354,7 @@ public class MeritFunctionL2 {
         int me = 0;
         int mi = 0;
         int mb = 0;
-      
+
         if (eqConstraint != null) {
             me = eqConstraint.dimY();
             RealVector re = r.getSubVector(0, me);
@@ -365,7 +365,7 @@ public class MeritFunctionL2 {
             RealVector term = jacob.preMultiply(ye.subtract(ge.ebeMultiply(re)));
             partial = partial.subtract(term);
         }
-        
+
         if (iqConstraint != null) {
             mi = iqConstraint.dimY();
 
@@ -384,16 +384,16 @@ public class MeritFunctionL2 {
             RealVector term=jacob.preMultiply((yi.subtract(gi.ebeMultiply(ri))).ebeMultiply(mask));
             partial=partial.subtract(term);
         }
-       
+
         if (bounds != null) {
             mb = bounds.dimY();
 
             RealVector rb = r.getSubVector(me+mi, mb);
-           
+
             RealVector yb = y.getSubVector(me+mi, mb);
-            
+
             RealVector gb = this.bEval.subtract(bounds.getLowerBound());
-           
+
             RealMatrix jacob = JB;
             RealVector maskb = new ArrayRealVector(mb, 1.0);
 
@@ -406,7 +406,7 @@ public class MeritFunctionL2 {
             RealVector termb=jacob.preMultiply((yb.subtract(gb.ebeMultiply(rb))).ebeMultiply(maskb));
             partial=partial.subtract(termb);
         }
-       
+
         return partial;
     }
 
@@ -457,7 +457,7 @@ public class MeritFunctionL2 {
 
             partial.setSubVector(me+mi, viri);
         }
-       
+
         return partial;
     }
 
@@ -471,10 +471,10 @@ public class MeritFunctionL2 {
      * @param sigmaValue value of the additional variable of QP solution
      * @param iterations current iteration
      */
-     
-     
+
+
      public void updateRj(RealMatrix H,
-                     RealVector newY,   
+                     RealVector newY,
                      RealVector newDx,  
                      RealVector newU,  
                      double sigmaValue, 

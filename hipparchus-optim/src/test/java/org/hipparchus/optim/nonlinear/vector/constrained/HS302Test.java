@@ -76,13 +76,13 @@ public class HS302Test {
         SQPOption sqpOption=new SQPOption();
          sqpOption.setEps(10e-11);
         InitialGuess guess = new InitialGuess(new double[100]);
-        
+
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
         optimizer.setDebugPrinter(s -> {});
-        
+
         double val = -100.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS302Obj()));
-        
+
         assertEquals(val, sol.getValue(), 1e-6);
     }
 

@@ -39,8 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class SequentialGaussNewtonOptimizerWithLUTest
     extends AbstractSequentialLeastSquaresOptimizerAbstractTest {
-    
-    
+
+
 
     @Override
     public int getMaxIterations() {

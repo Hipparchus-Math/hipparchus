@@ -60,20 +60,20 @@ public class HS324Test {
     }
 
     static final class HS324Ineq extends InequalityConstraint {
-        
-        HS324Ineq() { super(new ArrayRealVector(new double[2])); } 
+
+        HS324Ineq() { super(new ArrayRealVector(new double[2])); }
 
         @Override public int dim() { return DIM; }
 
         @Override public RealVector value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
-            
+
             // G(1) = X1*X2 - 25 >= 0
             double g1 = x1 * x2 - 25.0;
             // G(2) = X1^2 + X2^2 - 25 >= 0
-            double g2 = x1 * x1 + x2 * x2 - 25.0; 
-            
+            double g2 = x1 * x1 + x2 * x2 - 25.0;
+
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
 
@@ -85,7 +85,7 @@ public class HS324Test {
             // G1: X2, X1
             J[0][0] = x2;
             J[0][1] = x1;
-            
+
             // G2: 2*X1, 2*X2
             J[1][0] = 2.0 * x1;
             J[1][1] = 2.0 * x2;
@@ -94,8 +94,8 @@ public class HS324Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{2.0, 2.0}; 
+    private static double[] start() {
+        return new double[]{2.0, 2.0};
     }
 
     @Test
@@ -105,8 +105,8 @@ public class HS324Test {
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);
         }
-        
-       
+
+
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
@@ -117,8 +117,8 @@ public class HS324Test {
 
         double f = sol.getValue();
         final double fExpected = 5.0;
-        
+
         assertEquals(fExpected, f, 1.0e-4 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-        
+
     }
 }

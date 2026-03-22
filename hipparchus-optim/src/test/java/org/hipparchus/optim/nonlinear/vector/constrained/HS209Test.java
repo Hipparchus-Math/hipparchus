@@ -64,6 +64,6 @@ public class HS209Test {
 
         // Expect optimum at (1,1) and f* = 0
         assertEquals(0.0, sol.getValue(), 1e-7);
-        
+
     }
 }

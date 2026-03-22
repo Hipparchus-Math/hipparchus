@@ -35,7 +35,7 @@ public class HS365Test {
     private static final int DIM = 7;
     private static final int NUM_INEQ = 5;
 
-   
+
     private static class HS365Obj extends TwiceDifferentiableFunction {
 
         @Override
@@ -60,21 +60,21 @@ public class HS365Test {
             g[0] = x3;
             // df/dx3 = x1
             g[2] = x1;
-            
+
             return new ArrayRealVector(g, false);
         }
 
         @Override
         public RealMatrix hessian(RealVector x) {
             RealMatrix h = new Array2DRowRealMatrix(DIM, DIM);
-            // d²f/(dx1 dx3) = 1, 
+            // d²f/(dx1 dx3) = 1,
             h.setEntry(0, 2, 1.0);
             h.setEntry(2, 0, 1.0);
             return h;
         }
     }
 
-   
+
     private static class HS365Ineq extends InequalityConstraint {
 
         HS365Ineq() {
@@ -86,7 +86,7 @@ public class HS365Test {
             return DIM;
         }
 
-        
+
         @Override
         public RealVector value(RealVector x) {
 
@@ -101,7 +101,7 @@ public class HS365Test {
             double P = Math.sqrt(x2 * x2 + x3 * x3);
             double Q = Math.sqrt(x3 * x3 + (x2 - x1) * (x2 - x1));
 
-          
+
             if (P == 0.0) {
                 P = 1e-16;
             }
@@ -129,7 +129,7 @@ public class HS365Test {
             return new ArrayRealVector(g, false);
         }
 
-       
+
         @Override
         public RealMatrix jacobian(RealVector x) {
             final double eps = 1.0e-6;
@@ -165,7 +165,7 @@ public class HS365Test {
     @Test
     public void testHS365_optimization() {
 
-        
+
         double[] x0 = {
             3.0,    // X(1)
             0.0,    // X(2)
@@ -176,7 +176,7 @@ public class HS365Test {
             1.0     // X(7)
         };
 
-        
+
         double[] lower = new double[] {
             0.0,                     // X(1) >= 0
             Double.NEGATIVE_INFINITY, // X(2) no LB

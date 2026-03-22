@@ -28,10 +28,10 @@ import org.junit.jupiter.api.Test;
 
 public class HS293Test {
 
-    
+
     private static final int N = 50;
 
-   
+
     private static class TP293Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return N; }
 
@@ -57,20 +57,20 @@ public class HS293Test {
 
     @Test
     public void testHS293() {
-        
+
         double[] x0 = new double[N];
         for (int i = 0; i < N; i++) x0[i] = 1.0;
 
-    
+
         final InitialGuess guess = new InitialGuess(x0);
-      
+
 
         final SQPOptimizerS2 opt = new SQPOptimizerS2();
         opt.setDebugPrinter(System.out::println);
 
         final LagrangeSolution sol = opt.optimize(
             guess,
-            new ObjectiveFunction(new TP293Obj())     
+            new ObjectiveFunction(new TP293Obj())
         );
 
         assertEquals(0.0, sol.getValue(), 1e-3);

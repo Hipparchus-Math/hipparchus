@@ -103,7 +103,7 @@ public class HS267Test {
 
         assertEquals(val, sol.getValue(), 1e-6);
     }
-    
+
     @Test
     public void testHS267Bound() {
         SQPOption sqpOption = new SQPOption();

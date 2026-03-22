@@ -56,20 +56,20 @@ public class HS325Test {
     }
 
     static final class HS325Ineq extends InequalityConstraint {
-        
-        HS325Ineq() { super(new ArrayRealVector(new double[2])); } 
+
+        HS325Ineq() { super(new ArrayRealVector(new double[2])); }
 
         @Override public int dim() { return DIM; }
 
         @Override public RealVector value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
-            
+
             // G(1) = -(X1 + X2) + 1 >= 0
             double g1 = -(x1 + x2) + 1.0;
             // G(2) = -(X1 + X2^2) + 1 >= 0
-            double g2 = -(x1 + x2 * x2) + 1.0; 
-            
+            double g2 = -(x1 + x2 * x2) + 1.0;
+
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
 
@@ -80,7 +80,7 @@ public class HS325Test {
             // G1: -1, -1
             J[0][0] = -1.0;
             J[0][1] = -1.0;
-            
+
             // G2: -1, -2*X2
             J[1][0] = -1.0;
             J[1][1] = -2.0 * x2;
@@ -90,8 +90,8 @@ public class HS325Test {
     }
 
     static final class HS325Eq extends EqualityConstraint {
-        
-        HS325Eq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS325Eq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
@@ -115,9 +115,9 @@ public class HS325Test {
             return MatrixUtils.createRealMatrix(J);
         }
     }
-    
-    private static double[] start() { 
-        return new double[]{-3.0, 0.0}; 
+
+    private static double[] start() {
+        return new double[]{-3.0, 0.0};
     }
 
     @Test
@@ -137,8 +137,8 @@ public class HS325Test {
 
         double f = sol.getValue();
         final double fExpected = 3.7913414;
-        
+
         assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-       
+
     }
 }

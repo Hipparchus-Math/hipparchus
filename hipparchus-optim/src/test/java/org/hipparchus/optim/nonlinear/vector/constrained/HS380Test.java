@@ -29,14 +29,14 @@ import org.junit.jupiter.api.Test;
 
 public class HS380Test {
 
-   
+
     private static final double[] A = {
         -0.00133172, -0.002270927, -0.00248546,
         -4.67, -4.671973, -0.00814, -0.008092,
         -0.005, -0.000909, -0.00088, -0.00119
     };
 
-  
+
     private static final double[] C = {
         5.367373e-2,  2.1863746e-2, 9.7733533e-2, 6.6940803e-3,
         1.0e-6,       1.0e-5,       1.0e-6,       1.0e-10,     1.0e-8,   1.0e-2,
@@ -46,7 +46,7 @@ public class HS380Test {
         1.1184059e-4, 1.0e-4
     };
 
-   
+
 
     private static final int N = 12;
     private static final double[] LB, UB;
@@ -60,7 +60,7 @@ public class HS380Test {
         }
     }
 
-    
+
     private static class TP380Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return N; }
 
@@ -78,7 +78,7 @@ public class HS380Test {
         @Override public RealMatrix hessian(RealVector x)  { throw new UnsupportedOperationException(); }
     }
 
-    
+
     private static class TP380Ineq extends InequalityConstraint {
         TP380Ineq() { super(new ArrayRealVector(new double[]{0,0,0})); }
 
@@ -123,7 +123,7 @@ public class HS380Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
     }
 
-    
+
 
     @Test
     public void testHS380() {
@@ -132,7 +132,7 @@ public class HS380Test {
 
         final InitialGuess guess = new InitialGuess(x0);
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
-         
+
         final SQPOptimizerS2 opt = new SQPOptimizerS2();
          if (Boolean.getBoolean("hipparchus.debug.sqp")) {
           opt.setDebugPrinter(System.out::println);

@@ -28,12 +28,12 @@ import org.junit.jupiter.api.Test;
 
 public class HS355Test {
 
-    
+
     private static final double[] LB = { 0.1, 0.1, 0.0, 0.0 };
     private static final double BIG = Double.POSITIVE_INFINITY;
     private static final double[] UB = { BIG, BIG, BIG, BIG };
 
-    
+
     private static final class Rs {
         final double r1, r2, r3, r4;
         Rs(double x1, double x2, double x3, double x4) {
@@ -59,7 +59,7 @@ public class HS355Test {
         @Override public RealMatrix hessian(RealVector x)  { throw new UnsupportedOperationException(); }
     }
 
-    
+
     private static class TP355Eq extends EqualityConstraint {
         TP355Eq() { super(new ArrayRealVector(new double[]{ 0.0 })); }
         @Override public int dim() { return 4; }
@@ -75,7 +75,7 @@ public class HS355Test {
 
     @Test
     public void testHS355() {
-        
+
         final InitialGuess guess = new InitialGuess(new double[]{ 0.1, 0.1, 0.1, 0.1 });
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
 
@@ -91,12 +91,12 @@ public class HS355Test {
             bounds
         );
 
-        
+
         final double expected = 69.675463;
         assertEquals(expected, sol.getValue(), 1e-5);
 
-        
-       
+
+
     }
 }
 

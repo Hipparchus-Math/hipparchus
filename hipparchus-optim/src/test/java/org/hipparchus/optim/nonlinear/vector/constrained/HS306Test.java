@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 public class HS306Test {
 
-    
+
     static final class HS306Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 2; }
 
@@ -66,7 +66,7 @@ public class HS306Test {
 //        );
 //
 //        double f = sol.getValue();
-//        double fExpected = -1.1036; 
+//        double fExpected = -1.1036;
 //        assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
 //    }
 }

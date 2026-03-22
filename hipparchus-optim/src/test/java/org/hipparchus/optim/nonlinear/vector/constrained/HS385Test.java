@@ -205,7 +205,7 @@ public class HS385Test {
             x0[i] = 0.0;
         }
 
-        
+
 
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
@@ -216,7 +216,7 @@ public class HS385Test {
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS385Obj()),
                 new HS385Ineq()
-               
+
         );
 
         double f = sol.getValue();

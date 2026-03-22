@@ -45,7 +45,7 @@ public class HS034Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 3; }
     }
-    
+
     private static class HS034IneqNoBound extends InequalityConstraint {
         HS034IneqNoBound() { super(new ArrayRealVector(new double[]{ 0.0, 0.0 })); }
         @Override public RealVector value(RealVector x) {
@@ -63,7 +63,7 @@ public class HS034Test {
 //        LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS034Obj()), new HS034Ineq());
 //        assertEquals(val, sol.getValue(), 1e-6);
 //    }
-//    
+//
      @Test
     public void testHS034Bound() {
         InitialGuess guess = new InitialGuess(new double[]{0, 1.05, 2.9});

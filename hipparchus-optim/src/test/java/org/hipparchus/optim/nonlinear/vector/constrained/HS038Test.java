@@ -52,13 +52,13 @@ public class HS038Test {
         sqpOption.setB(0.5);
         sqpOption.setMu(1.0e-4);
         sqpOption.setEps(10e-7);
-        
+
         InitialGuess guess = new InitialGuess(new double[]{-10.0, 10.0, 10.0, -10.0});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             optimizer.setDebugPrinter(System.out::println);
         }
-        
+
         double val = 0.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS038Obj()), new HS038Ineq());
         assertEquals(val, sol.getValue(), 1e-3);

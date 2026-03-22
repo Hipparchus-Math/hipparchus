@@ -35,39 +35,39 @@ public class HS344Test {
 
     static final class HS344Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = (X1-1)^2 + (X1-X2)^2 + (X2-X3)^4
         @Override public double value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             double d1 = x1 - 1.0;
             double d2 = x1 - x2;
             double d3 = x2 - x3;
 
             return d1 * d1 + d2 * d2 + Math.pow(d3, 4);
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             double d3_3 = Math.pow(x2 - x3, 3);
 
             // GF(1) = 2*(X1-1) + 2*(X1-X2)
             double g1 = 2.0 * (x1 - 1.0) + 2.0 * (x1 - x2);
-            
+
             // GF(2) = -2*(X1-X2) + 4*(X2-X3)^3
             double g2 = -2.0 * (x1 - x2) + 4.0 * d3_3;
-            
+
             // GF(3) = -4*(X2-X3)^3
             double g3 = -4.0 * d3_3;
 
             return new ArrayRealVector(new double[]{g1, g2, g3}, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // H11 = 2 + 2 = 4
             // H12 = -2
@@ -92,8 +92,8 @@ public class HS344Test {
     }
 
     static final class HS344Eq extends EqualityConstraint {
-        
-        HS344Eq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS344Eq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
@@ -101,10 +101,10 @@ public class HS344Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             // G(1) = X1*(1 + X2^2) + X3^4 - (4 + 3*sqrt(2)) = 0
             double h1 = x1 * (1.0 + x2 * x2) + Math.pow(x3, 4) - CONST_TERM;
-            
+
             return new ArrayRealVector(new double[]{h1}, false);
         }
 
@@ -112,7 +112,7 @@ public class HS344Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             double x2_2 = x2 * x2;
             double x3_3 = Math.pow(x3, 3);
 
@@ -120,10 +120,10 @@ public class HS344Test {
 
             // dH1/dX1 = 1 + X2^2
             J[0][0] = 1.0 + x2_2;
-            
+
             // dH1/dX2 = 2*X1*X2
             J[0][1] = 2.0 * x1 * x2;
-            
+
             // dH1/dX3 = 4*X3^3
             J[0][2] = 4.0 * x3_3;
 
@@ -131,8 +131,8 @@ public class HS344Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{2.0, 2.0, 2.0}; 
+    private static double[] start() {
+        return new double[]{2.0, 2.0, 2.0};
     }
 
     @Test
@@ -142,14 +142,14 @@ public class HS344Test {
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);
         }
-        
-       
+
+
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS344Obj()),
                 new HS344Eq()
-                
+
         );
 
         double f = sol.getValue();

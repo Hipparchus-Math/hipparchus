@@ -53,7 +53,7 @@ public class HS332Test {
         @Override public RealMatrix hessian(RealVector x) { throw new UnsupportedOperationException(); }
     }
 
-    
+
     private static class HS332Ineq extends InequalityConstraint {
         private static final double PI = 3.1415926535d;
         HS332Ineq() { super(new ArrayRealVector(new double[]{ 0.0, 0.0 })); }
@@ -80,7 +80,7 @@ public class HS332Test {
 
     @Test
     public void testHS332Bounds() {
-      
+
         InitialGuess guess = new InitialGuess(new double[]{ 0.75, 0.75 });
 
         // Optimizer instance
@@ -94,8 +94,8 @@ public class HS332Test {
                 new double[]{ 1.5, 1.5 }
         );
 
-        
-       
+
+
         double expectedF = 11.495015;
 
         LagrangeSolution sol = optimizer.optimize(
@@ -104,8 +104,8 @@ public class HS332Test {
                 new HS332Ineq(),
                 bounds
         );
-        
-        
+
+
         assertEquals(expectedF, sol.getValue(), 1e-5);
     }
 }

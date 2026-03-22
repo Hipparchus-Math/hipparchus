@@ -100,7 +100,7 @@ public class HS366Test {
             g[5] = 0.035 * x1;
             // df/dx7: 0
             g[6] = 0.0;
-            
+
             return new ArrayRealVector(g, false);
         }
 
@@ -129,7 +129,7 @@ public class HS366Test {
 
         HS366Ineq() {
             // All constraints G(i) <= 0, so RHS is a zero vector
-            super(new ArrayRealVector(new double[NUM_INEQ])); 
+            super(new ArrayRealVector(new double[NUM_INEQ]));
         }
 
         @Override
@@ -281,15 +281,15 @@ public class HS366Test {
         double f = sol.getValue();
 
         // FEX = 0.70430560D+03 (704.30560)
-        final double fExpected = 704.30560; 
+        final double fExpected = 704.30560;
 
         // Tolerance for objective function value
         final double tolF = 1.0e-4 * (FastMath.abs(fExpected) + 1.0);
-        
+
         // Assert that the found objective value is close to the expected minimum.
         assertEquals(fExpected, f, tolF, "HS366: objective mismatch");
 
-        
-        
+
+
     }
 }

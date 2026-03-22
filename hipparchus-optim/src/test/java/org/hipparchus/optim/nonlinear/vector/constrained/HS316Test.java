@@ -55,8 +55,8 @@ public class HS316Test {
     }
 
     static final class HS316Eq extends EqualityConstraint {
-        
-        HS316Eq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS316Eq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
@@ -64,7 +64,7 @@ public class HS316Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             // G(1)=0.01*X(1)^2+0.01*X(2)^2-1 = 0
-            double g1 = 0.01 * x1 * x1 + 0.01 * x2 * x2 - 1.0; 
+            double g1 = 0.01 * x1 * x1 + 0.01 * x2 * x2 - 1.0;
             return new ArrayRealVector(new double[]{g1}, false);
         }
 
@@ -81,26 +81,26 @@ public class HS316Test {
         }
     }
 
-    private static double[] start() { 
-       
-        return new double[]{0.0, 0.0}; 
+    private static double[] start() {
+
+        return new double[]{0.0, 0.0};
     }
 
     @Test
     public void testHS316() {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        opt.setDebugPrinter(System.out::println); 
+        opt.setDebugPrinter(System.out::println);
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS316Obj()),
-                new HS316Eq() 
+                new HS316Eq()
         );
 
         double f = sol.getValue();
-       
+
         final double fExpected = 334.31458;
         assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0));
-        
-       
+
+
     }
 }

@@ -50,8 +50,8 @@ public class HS322Test {
     }
 
     static final class HS322Eq extends EqualityConstraint {
-        
-        HS322Eq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS322Eq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
@@ -59,7 +59,7 @@ public class HS322Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             // G(1)=0.01*X(1)^2 + 100*X(2)^2 - 1 = 0
-            double g1 = 0.01 * x1 * x1 + 100.0 * x2 * x2 - 1.0; 
+            double g1 = 0.01 * x1 * x1 + 100.0 * x2 * x2 - 1.0;
             return new ArrayRealVector(new double[]{g1}, false);
         }
 
@@ -76,9 +76,9 @@ public class HS322Test {
         }
     }
 
-    private static double[] start() { 
+    private static double[] start() {
         // Initial point: X(I)=0.0001
-        return new double[]{0.0001, 0.0001}; 
+        return new double[]{0.0001, 0.0001};
     }
 
     @Test
@@ -92,14 +92,14 @@ public class HS322Test {
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
                 new ObjectiveFunction(new HS322Obj()),
-                new HS322Eq() 
+                new HS322Eq()
         );
 
         double f = sol.getValue();
         final double fExpected = 499.96001;
-        
+
         assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-        
-       
+
+
     }
 }

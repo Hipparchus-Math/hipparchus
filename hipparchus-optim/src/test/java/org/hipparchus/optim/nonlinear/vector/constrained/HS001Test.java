@@ -51,7 +51,7 @@ public class HS001Test {
             throw new UnsupportedOperationException();
         }
     }
-    
+
     @Test
     public void testHS001ExternalGradient() {
         doTestHS001(GradientMode.EXTERNAL);
@@ -77,7 +77,7 @@ public class HS001Test {
         }
         double val = 0.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption, guess, new ObjectiveFunction(new HS001Obj()));
-        
+
         assertEquals(val, sol.getValue(), sqpOption.getEps()*10.0*(1.0+val));
     }
 }

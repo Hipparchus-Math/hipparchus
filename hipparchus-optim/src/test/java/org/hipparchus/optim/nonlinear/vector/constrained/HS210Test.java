@@ -117,14 +117,14 @@ public class HS210Test {
                 bounds
         );
 
-       
+
         double f = sol.getValue();
 
         // Expected minimum
         double[] expected = { 1.0, 1.0 };
         double fExpected = 0.0;
         final double tol = 1.0e-5 * (FastMath.abs(fExpected) + 1.0);
-       
+
         assertEquals(fExpected, f, tol);
     }
 }

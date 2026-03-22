@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class HS394Test {
 
-   
+
     private static class TP394Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 20; }
 
@@ -54,7 +54,7 @@ public class HS394Test {
         @Override public RealMatrix hessian(RealVector x) { throw new UnsupportedOperationException(); }
     }
 
-    
+
     private static class TP394Eq extends EqualityConstraint {
         TP394Eq() { super(new ArrayRealVector(new double[] { 0.0 })); }
 
@@ -74,7 +74,7 @@ public class HS394Test {
 
     @Test
     public void testTP394() {
-        
+
         final double[] x0 = new double[20];
         for (int i = 0; i < 20; i++) x0[i] = 2.0;
 

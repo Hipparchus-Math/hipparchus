@@ -58,12 +58,12 @@ public class HS349Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             // 1. Fortran guard against division by zero (X(I).LT.0.1D-5)
             x1 = Math.max(x1, MIN_X);
             x2 = Math.max(x2, MIN_X);
             x3 = Math.max(x3, MIN_X);
-            
+
             final double P1 = 100.0;
 
             // 2. Reaction rate constants (XK1, XK2)
@@ -78,7 +78,7 @@ public class HS349Test {
             C1 = (x1 * C1F - P) / (x1 + V * XK1);
             // UT=0.43D+2+0.452D-1*X(2)
             UT = 43.0 + 0.0452 * x2;
-            
+
             // --- Log Mean Temperature Difference (XLMTD) Loop (GOTO 39, 48) ---
             double current_x2 = x2;
             while (true) {
@@ -101,8 +101,8 @@ public class HS349Test {
 
             // 4. Heat Exchanged (HEAT) and Area (AREA)
             // HEAT=X(1)*CPP*(0.1D+3-X(2))+XK1*(X(1)*C1F-P)*V*H1/(X(1)+V*XK1)+P*H2
-            HEAT = x1 * CPP * (100.0 - x2) 
-                   + XK1 * (x1 * C1F - P) * V * H1 / (x1 + V * XK1) 
+            HEAT = x1 * CPP * (100.0 - x2)
+                   + XK1 * (x1 * C1F - P) * V * H1 / (x1 + V * XK1)
                    + P * H2;
             // AREA=HEAT/(UT*XLMTD)
             AREA = HEAT / (UT * XLMTD);
@@ -112,7 +112,7 @@ public class HS349Test {
             // 5. Vessel Diameter (DIA) and Pressure (PRESS)
             // DIA=(V/0.1272D+2)**0.33333333
             DIA = Math.pow(V / 12.72, 1.0/3.0);
-            
+
             // Press is piecewise defined based on X2 (GOTO 40/41)
             if (x2 < 200.0) { // GOTO 40
                 PRESS = 50.0;
@@ -124,11 +124,11 @@ public class HS349Test {
 
             // 6. Water volume (WATE) and Cost Components (C1 to C7)
             // WATE=(0.909D-1*DIA**3+0.482D+0*DIA**2)*PRESS+0.366D+2*DIA**2+0.1605D+3*DIA
-            WATE = (0.0909 * Math.pow(DIA, 3) + 0.482 * Math.pow(DIA, 2)) * PRESS 
+            WATE = (0.0909 * Math.pow(DIA, 3) + 0.482 * Math.pow(DIA, 2)) * PRESS
                    + 36.6 * Math.pow(DIA, 2) + 160.5 * DIA;
-            
+
             // C1=0.48D+1*WATE**0.782D+0
-            C1 = 4.8 * Math.pow(WATE, 0.782); 
+            C1 = 4.8 * Math.pow(WATE, 0.782);
 
             // C2 is piecewise defined based on X2 (GOTO 42/43)
             if (x2 < 200.0) { // GOTO 42
@@ -146,17 +146,17 @@ public class HS349Test {
                 // C3=0.27D+3*ARE**0.546D+0*(0.962D+0+0.168D-6*X(2)**3)
                 C3 = 270.0 * Math.pow(ARE, 0.546) * (0.962 + 1.68e-7 * Math.pow(x2, 3));
             }
-            
+
             // C4=0.14D+4+0.14D+3*DIA
             C4 = 1400.0 + 140.0 * DIA;
             // C5=0.875D+3*(0.5D-1*V)**0.3D+0
             C5 = 875.0 * Math.pow(0.05 * V, 0.3);
-            
+
             // TERM=0.695D-3+0.459D-10*X(2)**3
             double term_x2_cubed = 0.000695 + 4.59e-11 * Math.pow(x2, 3);
             // C6=0.812D+3*(TERM+X(1))**0.467D+0
             C6 = 812.0 * Math.pow(term_x2_cubed + x1, 0.467);
-            
+
             // C7 is piecewise defined based on X2 (GOTO 46/47)
             if (x2 < 250.0) { // GOTO 46
                 // C7=0.812D+3*(0.298D+3*HEA/X(3))**0.467D+0
@@ -169,13 +169,13 @@ public class HS349Test {
             // 7. Final Cost Components and Objective Function (FX)
             COST = C1 + C2 + C3 + C4 + C5 + C6 + C7;
             VEST = 5.0 * COST;
-            
+
             // C0 calculation (multi-line formula)
             // C0=0.22D+5+0.18D+0*VEST+0.31D+1*V+0.611D+2*TERM*X(1)
-            C0 = 22000.0 
-                 + 0.18 * VEST 
-                 + 3.1 * V 
-                 + 61.1 * term_x2_cubed * x1 
+            C0 = 22000.0
+                 + 0.18 * VEST
+                 + 3.1 * V
+                 + 61.1 * term_x2_cubed * x1
                  // C0=C0+0.115D-2*HEAT+0.692D+1*HEAT+0.574D+3*X(1)*(C1F-C1)+0.1148D+6
                  + 0.00115 * HEAT 
                  + 6.92 * HEAT 

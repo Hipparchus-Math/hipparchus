@@ -79,7 +79,7 @@ public class HS006Test {
 
     private void doTestHS006(final GradientMode gradientMode) {
         SQPOption sqpOption = new SQPOption();
-        
+
         sqpOption.setGradientMode(gradientMode);
         InitialGuess guess = new InitialGuess(new double[]{-1.2, 1});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();

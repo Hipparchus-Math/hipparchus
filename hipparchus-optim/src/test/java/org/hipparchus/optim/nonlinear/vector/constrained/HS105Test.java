@@ -459,7 +459,7 @@ public class HS105Test {
         double fExpected = 0.113841623960e4;
         double tol = 1.0e-6 * (FastMath.abs(fExpected) + 1.0);
 
-        
+
         assertTrue(f < fExpected+ tol,
                    "HS390: expected F ≈ " + fExpected + " but got F = " + f);
     }

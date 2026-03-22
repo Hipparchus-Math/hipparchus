@@ -85,9 +85,9 @@ public class HS307Test {
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         opt.setDebugPrinter(System.out::println); // richiesto
 
-        final double[] x0 = {0.3, 0.4};     
-        final double[] lo = {0.0, 0.0};     
-        final double[] up = {1.0e10, 1.0e10}; 
+        final double[] x0 = {0.3, 0.4};
+        final double[] lo = {0.0, 0.0};
+        final double[] up = {1.0e10, 1.0e10};
 
         return opt.optimize(
                 new InitialGuess(x0),

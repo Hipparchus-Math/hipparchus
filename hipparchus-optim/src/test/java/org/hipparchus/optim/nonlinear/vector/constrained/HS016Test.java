@@ -27,8 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 public class HS016Test {
-   
-    //from the book 
+
+    //from the book
     private static class HS016Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 1; }
         @Override public double value(RealVector x) {
@@ -63,7 +63,7 @@ public class HS016Test {
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS016Obj()), new HS016Ineq());
         assertEquals(val, sol.getValue(), 1e-6);
     }
-    
+
     @Test
     public void testHS016Bound() {
         SQPOption sqpOption=new SQPOption();

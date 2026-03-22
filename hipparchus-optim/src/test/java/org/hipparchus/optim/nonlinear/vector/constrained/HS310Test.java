@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class HS310Test {
 
-    
+
     static final class HS310Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return 2; }
 
@@ -58,7 +58,7 @@ public class HS310Test {
             final double B5 = B4 * B;
             final double C  = B - x2 * B5;
 
-            // 
+            //
             final double common = 2.0 * A * B * C;
             final double g1 = common * (x2 - 1.0 - 5.0 * x2 * B4);
             final double g2 = common * (x1 - B5);
@@ -77,10 +77,10 @@ public class HS310Test {
         opt.setDebugPrinter(System.out::println); // richiesto
          SQPOption sqpOption=new SQPOption();
          sqpOption.setGradientMode(GradientMode.EXTERNAL);
-        // 
+        //
         final double[] x0 = { -1.2, 1.0 };
 
-       
+
         return opt.optimize(
                 sqpOption,
                 new InitialGuess(x0),

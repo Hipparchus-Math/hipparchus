@@ -32,12 +32,12 @@ public class HS350Test {
 
     // Y(I) and U(I) data from the original problem specification
     private static final double[] Y_DATA = {
-        0.1957, 0.1947, 0.1735, 0.1600, 0.0844, 0.0627, 
+        0.1957, 0.1947, 0.1735, 0.1600, 0.0844, 0.0627,
         0.0456, 0.0342, 0.0323, 0.0235, 0.0246
     };
 
     private static final double[] U_DATA = {
-        4.0, 2.0, 1.0, 0.5, 0.25, 0.167, 
+        4.0, 2.0, 1.0, 0.5, 0.25, 0.167,
         0.125, 0.1, 0.0833, 0.0714, 0.0625
     };
 
@@ -63,29 +63,29 @@ public class HS350Test {
                 // H(I)=U(I)**2+X(3)*U(I)+X(4)
                 H[i] = u_i * u_i + x3 * u_i + x4;
             }
-            
+
             // 2. Calculation of Residuals F(I) (from the original problem definition, Mode 2)
             for (int i = 0; i < NUM_RESIDUALS; i++) {
                 double u_i = U_DATA[i];
                 double h_i = H[i];
-                
+
                 // F(I)=Y(I)-X(1)/H(I)*(U(I)**2+X(2)*U(I))
                 // Prevention of division by zero, although unlikely with test data
                 if (Math.abs(h_i) < 1.0e-12) {
-                    F[i] = Double.POSITIVE_INFINITY; 
+                    F[i] = Double.POSITIVE_INFINITY;
                 } else {
                     double numerator_term = u_i * u_i + x2 * u_i;
                     F[i] = Y_DATA[i] - x1 / h_i * numerator_term;
                 }
             }
-            
+
             // 3. Calculation of Objective Function FX (Mode 2)
             FX = 0.0;
             for (int i = 0; i < NUM_RESIDUALS; i++) {
                 // FX=FX+F(I)**2
                 FX += F[i] * F[i];
             }
-            
+
             // 4. Calculation of the Gradient GF(J) (Mode 3)
             // Calculation of the Residuals Jacobian DF(I, J)
             for (int i = 0; i < NUM_RESIDUALS; i++) {
@@ -106,7 +106,7 @@ public class HS350Test {
                 // DF(I,4) = dF_i/dx4
                 DF[i][3] = x1 * numerator_term / h_i_sq;
             }
-            
+
             // Calculation of the Objective Gradient: GF(J) = sum(2 * F(I) * DF(I, J))
             for (int j = 0; j < DIM; j++) {
                 GF[j] = 0.0;
@@ -122,37 +122,37 @@ public class HS350Test {
      */
     static final class HS350Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         @Override public double value(RealVector x) {
             Context ctx = new Context();
             // Mode 2 calculation
-            ctx.compute(x); 
+            ctx.compute(x);
             return ctx.FX;
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             Context ctx = new Context();
             // Mode 3 calculation
-            ctx.compute(x); 
+            ctx.compute(x);
             return new ArrayRealVector(ctx.GF, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Mode 5 (Hessian): Not implemented, relies on numerical estimation
             throw new UnsupportedOperationException("Hessian matrix is not implemented for this test case.");
         }
     }
 
-    private static double[] start() { 
+    private static double[] start() {
         // Initial values (Mode 1): X(1)=0.25, X(2)=0.39, X(3)=0.415, X(4)=0.39
-        return new double[]{0.25, 0.39, 0.415, 0.39}; 
+        return new double[]{0.25, 0.39, 0.415, 0.39};
     }
 
     @Test
     public void testHS350() {
         // SQPOptimizerS2 is a placeholder for an unconstrained/SQP optimizer.
         SQPOptimizerS2 opt = new SQPOptimizerS2();
-        
+
         // RECOVERY: Added conditional debug printing
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);

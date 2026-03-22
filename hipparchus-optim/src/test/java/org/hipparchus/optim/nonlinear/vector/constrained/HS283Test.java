@@ -36,7 +36,7 @@ public class HS283Test {
         @Override public double value(RealVector x) {
             double s = 0.0;
             for (int i = 0; i < 10; i++) {
-                double wi = (1.0*i + 1.0)*(1.0*i + 1.0)*(1.0*i + 1.0);         
+                double wi = (1.0*i + 1.0)*(1.0*i + 1.0)*(1.0*i + 1.0);
                 double di = x.getEntry(i) - 1.0;
                 s += wi * di * di;
             }
@@ -73,12 +73,12 @@ public class HS283Test {
 
         final double[] start = new double[10]; // all zeros as in the Fortran setup
 
-      
+
 
         return optimizer.optimize(
                 new InitialGuess(start),
                 new ObjectiveFunction(new HS283Objective())
-                
+
         );
     }
 

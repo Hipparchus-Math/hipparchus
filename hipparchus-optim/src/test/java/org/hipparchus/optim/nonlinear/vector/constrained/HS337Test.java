@@ -35,7 +35,7 @@ public class HS337Test {
 
     static final class HS337Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = 9*X1^2 + X2^2 + 9*X3^2
         @Override public double value(RealVector x) {
             double x1 = x.getEntry(0);
@@ -43,18 +43,18 @@ public class HS337Test {
             double x3 = x.getEntry(2);
             return 9.0 * x1 * x1 + x2 * x2 + 9.0 * x3 * x3;
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             // GF(1) = 18*X1
             // GF(2) = 2*X2
             // GF(3) = 18*X3
             return new ArrayRealVector(new double[]{18.0 * x1, 2.0 * x2, 18.0 * x3}, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             // Hessian is diagonal: [18.0, 0.0, 0.0], [0.0, 2.0, 0.0], [0.0, 0.0, 18.0]
             double[][] H = new double[DIM][DIM];
@@ -66,25 +66,25 @@ public class HS337Test {
     }
 
     static final class HS337Eq extends EqualityConstraint {
-        
-        HS337Eq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS337Eq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
         @Override public RealVector value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
-            
+
             // G(1) = X1*X2 - 1 = 0
             double h1 = x1 * x2 - 1.0;
-            
+
             return new ArrayRealVector(new double[]{h1}, false);
         }
 
         @Override public RealMatrix jacobian(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
-            
+
             double[][] J = new double[1][DIM];
 
             // h1: X2, X1, 0.0
@@ -96,8 +96,8 @@ public class HS337Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{1.0, 1.0, 1.0}; 
+    private static double[] start() {
+        return new double[]{1.0, 1.0, 1.0};
     }
 
     @Test
@@ -107,10 +107,10 @@ public class HS337Test {
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);
         }
-        
+
         // Box constraints: X1 unconstrained, X2 >= 1.0, X3 <= 1.0
         SimpleBounds bounds = new SimpleBounds(
-            new double[]{Double.NEGATIVE_INFINITY, 1.0, Double.NEGATIVE_INFINITY}, 
+            new double[]{Double.NEGATIVE_INFINITY, 1.0, Double.NEGATIVE_INFINITY},
             new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0}
         );
 
@@ -123,9 +123,9 @@ public class HS337Test {
 
         double f = sol.getValue();
         final double fExpected = 6.0;
-        
+
         assertEquals(fExpected, f, 1.0e-5 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-        
-       
+
+
     }
 }

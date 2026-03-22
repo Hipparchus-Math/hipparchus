@@ -30,7 +30,7 @@ public class HS392Test{
 
     private static int ix(int oneBased) { return oneBased - 1; }
 
-    
+
     private static final double[][] R1 = new double[][]{
         {1000.0, 1000.0, 1000.0, 1100.0, 1100.0}, // j=1
         { 520.0,  520.0,  520.0,  600.0,  600.0}, // j=2
@@ -85,14 +85,14 @@ public class HS392Test{
         {520.0, 400.0, 500.0, 630.0, 600.0}
     };
 
-    
+
     private static final double[][] T = new double[][]{
         {0.6, 0.4, 0.1},
         {0.3, 0.1, 0.12},
         {0.36,0.08,0.06}
     };
 
-    
+
     private static double B(int j, int i) { return (j == 3) ? 180.0 : 170.0; }
 
     

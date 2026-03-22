@@ -51,10 +51,10 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
 
     /** Inequality constraint (may be null). */
     private BoundedConstraint boxConstraint;
-    
+
     /** Simple Bounds (may be null). */
     private SimpleBounds simpleBounds;
-    
+
     /** Default QPSolver. */
     private QPOptimizer QPSolver = new QPDualActiveSolver();
 
@@ -107,7 +107,7 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
     public BoundedConstraint getBoxConstraint() {
         return boxConstraint;
     }
-    
+
      /** Getter for simple bounds.
      * @return simple bounds
      */
@@ -135,13 +135,13 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
             if (data instanceof SQPProblem) {
                 SQPProblem problem = (SQPProblem) data;
                 obj = new SQPObj(problem);
-                
-                eqConstraint= (problem.hasEquality())?new SQPEq((SQPProblem) data):null;
-                iqConstraint= (problem.hasInequality())?new SQPIneq((SQPProblem) data):null;
-                
+
+                eqConstraint= problem.hasEquality() ? new SQPEq((SQPProblem) data) : null;
+                iqConstraint= problem.hasInequality() ? new SQPIneq((SQPProblem) data) : null;
+
                 double[] lb = ((SQPProblem) data).getBoxConstraintLB();
                 double[]ub = ((SQPProblem) data).getBoxConstraintUB();
-                simpleBounds = (problem.hasBounds())?new SimpleBounds(lb,ub):null;
+                simpleBounds = problem.hasBounds() ? new SimpleBounds(lb,ub) : null;
 
                 if (problem.hasInitialGuess()) {
                     super.parseOptimizationData(new InitialGuess(problem.getInitialGuess()));
@@ -149,7 +149,7 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
 
                 continue;
             }
-            
+
             if (data instanceof ObjectiveFunction) {
                 obj = (TwiceDifferentiableFunction) ((ObjectiveFunction) data).getObjectiveFunction();
                 continue;
@@ -168,7 +168,7 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
                 boxConstraint = (BoundedConstraint) data;
                 continue;
             }
-            
+
             if (data instanceof SimpleBounds) {
                 simpleBounds = (SimpleBounds) data;
                 continue;

@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The redistribution policy for MINPACK is available <a
  * href="http://www.netlib.org/minpack/disclaimer">here</a>, for
  * convenience, it is reproduced below.</p>
- 
+
  * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
  * <tr><td>
  *    Minpack Copyright Notice (1999) University of Chicago.
@@ -91,7 +91,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *     POSSIBILITY OF SUCH LOSS OR DAMAGES.</strong></li>
  * <ol></td></tr>
  * </table>
- 
+
  * @author Argonne National Laboratory. MINPACK project. March 1980 (original fortran minpack tests)
  * @author Burton S. Garbow (original fortran minpack tests)
  * @author Kenneth E. Hillstrom (original fortran minpack tests)

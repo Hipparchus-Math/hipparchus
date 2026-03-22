@@ -61,7 +61,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
     /** default absolute tolerance of comparisons */
     public static final double TOl = 1e-10;
-    
+
     /**
      * The subject under test.
      */
@@ -168,7 +168,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
     @Test
     public void testQRColumnsPermutation() {
-        
+
         LinearProblem problem
                 = new LinearProblem(new double[][]{{1, -1}, {0, 2}, {1, -2}},
                 new double[]{4, 6, 1});
@@ -243,7 +243,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                 {2, 1, 3},
                 {-3, 0, -9}
             }, new double[]{1, 1, 1});
-            
+
             defineOptimizer(null);
 
             optimizer.optimize(problem.getBuilder().build());
@@ -461,7 +461,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         assertEquals(97.070437, secondRunCenter.getX(),               1.0e-6);
         assertEquals(49.039898, secondRunCenter.getY(),               1.0e-6);
         assertEquals(70.789016, circleAll.getRadius(secondRunCenter), 1.0e-6);
-        
+
     }
 
     protected void doTestStRD(final StatisticalReferenceDataset dataset,
@@ -513,13 +513,13 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
         assertThat(checked[0], is(true));
     }
-    
+
     @Test
     public void testPointDifferentDim() {
         LinearProblem problem
         = new LinearProblem(new double[][]{{2}},
         new double[]{3});
-        
+
         LeastSquaresProblem lsp = problem.getBuilder().build();
         defineOptimizer(new AbstractEvaluation(2){
             public RealMatrix getJacobian() {

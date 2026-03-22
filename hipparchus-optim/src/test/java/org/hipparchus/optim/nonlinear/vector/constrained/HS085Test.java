@@ -195,7 +195,7 @@ public class HS085Test {
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
         SQPOption sqpOption=new SQPOption();
         sqpOption.setMaxLineSearchIteration(20);
-       
+
         sqpOption.setGradientMode(GradientMode.FORWARD);
         final SQPOptimizerS2 opt = new SQPOptimizerS2();
         opt.setDebugPrinter(System.out::println);

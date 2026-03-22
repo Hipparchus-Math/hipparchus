@@ -37,8 +37,8 @@ import org.junit.jupiter.api.Test;
 public class HS353Test {
 
     private static final int DIM = 4;
-    private static final int NUM_INEQUALITIES = 2; 
-    private static final int NUM_EQUALITIES = 1;   
+    private static final int NUM_INEQUALITIES = 2;
+    private static final int NUM_EQUALITIES = 1;
 
     /**
      * Calculates the non-linear term Q, used in the second inequality constraint.
@@ -51,7 +51,7 @@ public class HS353Test {
         double x2 = x.getEntry(1);
         double x3 = x.getEntry(2);
         double x4 = x.getEntry(3);
-        
+
         return Math.pow(0.53 * x1, 2) + Math.pow(0.44 * x2, 2) +
                Math.pow(4.5 * x3, 2) + Math.pow(0.79 * x4, 2);
     }
@@ -61,32 +61,32 @@ public class HS353Test {
      */
     static final class HS353Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = -(24.55*X1 + 26.75*X2 + 39.0*X3 + 40.5*X4)
         @Override public double value(RealVector x) {
             double fx = 24.55 * x.getEntry(0) + 26.75 * x.getEntry(1) + 39.0 * x.getEntry(2) + 40.5 * x.getEntry(3);
             return -fx; // Minimization
         }
-        
+
         // Gradient of F(X) (constant vector)
         @Override public RealVector gradient(RealVector x) {
             return new ArrayRealVector(new double[] {-24.55, -26.75, -39.0, -40.5}, false);
         }
-        
+
         // Hessian is zero (linear function)
         @Override public RealMatrix hessian(RealVector x) {
             return MatrixUtils.createRealMatrix(DIM, DIM);
         }
     }
-    
+
     /**
      * Implementation of the inequality constraints G(1) and G(2).
      * These constraints must satisfy G(i) >= 0.
      */
     static final class HS353Ineq extends InequalityConstraint {
-        
+
         HS353Ineq() {
-            super(new ArrayRealVector(new double[NUM_INEQUALITIES])); 
+            super(new ArrayRealVector(new double[NUM_INEQUALITIES]));
         }
 
         @Override public int dim() { return DIM; }
@@ -96,42 +96,42 @@ public class HS353Test {
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
             double x4 = x.getEntry(3);
-            
+
             double Q = calculateQ(x);
 
             // G(1) >= 0: 2.3*X1 + 5.6*X2 + 11.1*X3 + 1.3*X4 - 5.0 >= 0
             double G1 = 2.3 * x1 + 5.6 * x2 + 11.1 * x3 + 1.3 * x4 - 5.0;
 
             // G(2) >= 0: 12.0*X1 + 11.9*X2 + 41.8*X3 + 52.1*X4 - 1.645*sqrt(Q) - 12.0 >= 0
-            double G2 = 12.0 * x1 + 11.9 * x2 + 41.8 * x3 + 52.1 * x4 - 
+            double G2 = 12.0 * x1 + 11.9 * x2 + 41.8 * x3 + 52.1 * x4 -
                         1.645 * Math.sqrt(Q) - 12.0;
-            
+
             // Return G(i)
             return new ArrayRealVector(new double[] { G1, G2 }, false);
         }
 
         @Override public RealMatrix jacobian(RealVector x) {
             double x1 = x.getEntry(0);
-            
+
             double[][] J = new double[NUM_INEQUALITIES][DIM];
-            
+
             // Row 0: Gradient of G(1) (linear part)
             J[0][0] = 2.3;
             J[0][1] = 5.6;
-            J[0][2] = 11.1; 
+            J[0][2] = 11.1;
             J[0][3] = 1.3;
 
             // Row 1: Gradient of G(2)
             double Q = calculateQ(x);
             double sqrtQ = Math.sqrt(Q);
-            
-            if (sqrtQ > 1.0e-10) { 
+
+            if (sqrtQ > 1.0e-10) {
                 double termFactor = 1.645 / sqrtQ;
 
                 // Calculate dG2/dXj. The derivative of sqrt(Q) w.r.t Xj is (1/2*sqrt(Q)) * dQ/dXj.
                 // dQ/dXj = 2 * (Cj*Xj) * Cj, where Cj is the coefficient of Xj in Q's term.
                 // Final term derivative: -1.645 * (1/sqrt(Q)) * (Cj^2 * Xj)
-                
+
                 // dG2/dX1
                 J[1][0] = 12.0 - termFactor * Math.pow(0.53, 2) * x1;
                 // dG2/dX2

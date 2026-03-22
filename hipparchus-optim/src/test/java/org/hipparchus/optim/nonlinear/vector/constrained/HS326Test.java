@@ -59,21 +59,21 @@ public class HS326Test {
     }
 
     static final class HS326Ineq extends InequalityConstraint {
-        
-        HS326Ineq() { super(new ArrayRealVector(new double[2])); } 
+
+        HS326Ineq() { super(new ArrayRealVector(new double[2])); }
 
         @Override public int dim() { return DIM; }
 
         @Override public RealVector value(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
-            
+
             // G(1) = 11 - X1^2 + 6*X1 - 4*X2 >= 0
             double g1 = 11.0 - x1 * x1 + 6.0 * x1 - 4.0 * x2;
-            
+
             // G(2) = X1*X2 - 3*X2 - exp(X1 - 3) + 1 >= 0
-            double g2 = x1 * x2 - 3.0 * x2 - Math.exp(x1 - 3.0) + 1.0; 
-            
+            double g2 = x1 * x2 - 3.0 * x2 - Math.exp(x1 - 3.0) + 1.0;
+
             return new ArrayRealVector(new double[]{g1, g2}, false);
         }
 
@@ -81,11 +81,11 @@ public class HS326Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double[][] J = new double[2][DIM];
-            
+
             // G1: -2*X1 + 6, -4
             J[0][0] = -2.0 * x1 + 6.0;
             J[0][1] = -4.0;
-            
+
             // G2: X2 - exp(X1 - 3), X1 - 3
             J[1][0] = x2 - Math.exp(x1 - 3.0);
             J[1][1] = x1 - 3.0;
@@ -94,8 +94,8 @@ public class HS326Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{4.0, 3.0}; 
+    private static double[] start() {
+        return new double[]{4.0, 3.0};
     }
 
     @Test
@@ -105,8 +105,8 @@ public class HS326Test {
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);
         }
-        
-       
+
+
 
         LagrangeSolution sol = opt.optimize(
                 new InitialGuess(start()),
@@ -117,9 +117,9 @@ public class HS326Test {
 
         double f = sol.getValue();
         final double fExpected = -79.807821;
-        
+
         assertEquals(fExpected, f, 1.0e-6 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-        
-        
+
+
     }
 }

@@ -137,7 +137,7 @@ public class HS110Test {
         // Objective value
         assertEquals(F_REF, sol.getValue(), 1e-6 * (abs(F_REF) + 1.0), "objective mismatch");
 
-    
-        
+
+
     }
 }

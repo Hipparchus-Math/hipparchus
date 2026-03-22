@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import java.util.Arrays;
@@ -203,7 +204,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         RealVector lagNew = null;
 
         LagrangeSolution qpSolution = null;
-        
+
         boolean GRADFAIL = false;
         boolean FALLBACK = false;
         boolean RECOVERYMODE=false;
@@ -228,19 +229,19 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
             }
             //IF SIGMA>SIGMA THRESHOLD AFTER SEVERAL ATTEMPT ASSIGN DIRECTION FROM PENALTY GRADIENT
             if (rho >= 1.0e9 || FALLBACK) {
-               
-//                   
-                    
-                    
-                
-               
+
+//
+
+
+
+
                 qpSolution = solveQPFallBack(penalty.gradX());
 
-                if (qpSolution == null || qpSolution.getX().getDimension() == 0 ) 
+                if (qpSolution == null || qpSolution.getX().getDimension() == 0 )
                 {
                     break;//infesible
                 }
-            
+
                 dx = qpSolution.getX();
                 projectDirectionInPlace(x, dx, true);
                 //estimation of multiplier from penalty grad y
@@ -255,13 +256,13 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 QPMODE = QPMode.QP_AUGMENTED;
                 sigma = 0.0;
                 rho = getSettings().getRhoCons();;
-                
-//               
+
+//
 
             } else {
                 dx = qpSolution.getX();
                 u = qpSolution.getLambda();
-               
+
                 sigma = qpSolution.getValue();
                 projectDirectionInPlace(x, dx, true);
                 penalty.updateRj(H, y, dx, u, sigma, iterations.getCount());
@@ -271,7 +272,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                     QPMODE = QPMode.QP_STARDARD;
                     rho = getSettings().getRhoCons();
 
-                }               
+                }
 
             }
 
@@ -281,43 +282,43 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 penalty.rUp();
                 rmax = penalty.getR().getMaxValue();
             }
-            
+
              if(penalty.getGradient()>=0 )
             {
                 if (QPMODE == QPMode.QP_AUGMENTED)  rho = rhoUp(rho);
                 QPMODE = QPMode.QP_AUGMENTED;
                 GRADFAIL = true;
-                
-            }    
+
+            }
             //if penalty gradient is > 0 skip line search and try again with augmented QP
              else  {
                 iterations.increment();
                 GRADFAIL = false;
                 FALLBACK = false;
-               
+
                 if(QPMODE == QPMode.QP_AUGMENTED) rho = updateRho(dx, u, sigma);
                 lagOld = lagrangianGradX(J, JE, JI, x, u);
 
                 //LINE SEARCH
                 alpha = lineSearch.search(penalty);
-                
-                
-                    
-                
+
+
+
+
                 if (m > 0) {
                     y = y.add(u.subtract(y).mapMultiply(alpha));
                 }
-                
+
                 x = x.add(dx.mapMultiply(alpha));
-                
-                
+
+
                 //penalty function memorize last calculation done in the line search
                 functionEvalOld = functionEval;
                 functionEval = penalty.getObjEval();
                 eqEval = penalty.getEqEval();
                 ineqEval = penalty.getIqEval();
                 bEval = penalty.getBEval();
-               
+
                 computeGradients();
                 RealVector lagnew = lagrangianGradX(J, JE, JI, x, u);
 

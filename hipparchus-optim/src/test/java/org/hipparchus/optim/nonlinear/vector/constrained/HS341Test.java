@@ -35,7 +35,7 @@ public class HS341Test {
 
     static final class HS341Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
-        
+
         // F(X) = -X1*X2*X3
         @Override public double value(RealVector x) {
             double x1 = x.getEntry(0);
@@ -43,18 +43,18 @@ public class HS341Test {
             double x3 = x.getEntry(2);
             return -x1 * x2 * x3;
         }
-        
+
         @Override public RealVector gradient(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             // GF(1) = -X2*X3
             // GF(2) = -X1*X3
             // GF(3) = -X1*X2
             return new ArrayRealVector(new double[]{-x2 * x3, -x1 * x3, -x1 * x2}, false);
         }
-        
+
         @Override public RealMatrix hessian(RealVector x) {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
@@ -64,11 +64,11 @@ public class HS341Test {
             // H12 = -X3
             H[0][1] = -x3;
             H[1][0] = -x3;
-            
+
             // H13 = -X2
             H[0][2] = -x2;
             H[2][0] = -x2;
-            
+
             // H23 = -X1
             H[1][2] = -x1;
             H[2][1] = -x1;
@@ -78,8 +78,8 @@ public class HS341Test {
     }
 
     static final class HS341Ineq extends InequalityConstraint {
-        
-        HS341Ineq() { super(new ArrayRealVector(new double[1])); } 
+
+        HS341Ineq() { super(new ArrayRealVector(new double[1])); }
 
         @Override public int dim() { return DIM; }
 
@@ -87,10 +87,10 @@ public class HS341Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             // G(1) = -1*X1^2 - 2*X2^2 - 4*X3^2 + 48 >= 0
             double g1 = -x1 * x1 - 2.0 * x2 * x2 - 4.0 * x3 * x3 + 48.0;
-            
+
             return new ArrayRealVector(new double[]{g1}, false);
         }
 
@@ -98,7 +98,7 @@ public class HS341Test {
             double x1 = x.getEntry(0);
             double x2 = x.getEntry(1);
             double x3 = x.getEntry(2);
-            
+
             double[][] J = new double[1][DIM];
 
             // dG1/dX: -2*X1, -4*X2, -8*X3
@@ -110,8 +110,8 @@ public class HS341Test {
         }
     }
 
-    private static double[] start() { 
-        return new double[]{1.0, 1.0, 1.0}; 
+    private static double[] start() {
+        return new double[]{1.0, 1.0, 1.0};
     }
 
     @Test
@@ -121,10 +121,10 @@ public class HS341Test {
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             opt.setDebugPrinter(System.out::println);
         }
-        
+
         // Box constraints: X1, X2, X3 >= 0.0
         SimpleBounds bounds = new SimpleBounds(
-            new double[]{0.0, 0.0, 0.0}, 
+            new double[]{0.0, 0.0, 0.0},
             new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY}
         );
 
@@ -137,9 +137,9 @@ public class HS341Test {
 
         double f = sol.getValue();
         final double fExpected = -22.627417; // -16 * sqrt(2)
-        
+
         assertEquals(fExpected, f, 1.0e-5 * (Math.abs(fExpected) + 1.0), "objective mismatch");
-        
-       
+
+
     }
 }
