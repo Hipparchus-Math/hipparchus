@@ -986,7 +986,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         double[] lb = (sb != null) ? sb.getLower() : null;
         double[] ub = (sb != null) ? sb.getUpper() : null;
 
-        double[] xArr = (start != null) ? Arrays.copyOf(start, n) : new double[n];
+        double[] xArr = hasStartPoint() ? Arrays.copyOf(getStartPoint(), n) : new double[n];
 
         for (int i = 0; i < n; i++) {
             double li = (lb != null && i < lb.length && Double.isFinite(lb[i])) ? lb[i] : Double.NEGATIVE_INFINITY;

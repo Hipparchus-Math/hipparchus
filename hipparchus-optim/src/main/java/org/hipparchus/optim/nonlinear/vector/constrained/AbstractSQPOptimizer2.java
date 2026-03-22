@@ -19,6 +19,7 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.EigenDecompositionSymmetric;
+import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.SimpleBounds;
@@ -141,8 +142,11 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
                 double[] lb = ((SQPProblem) data).getBoxConstraintLB();
                 double[]ub = ((SQPProblem) data).getBoxConstraintUB();
                 simpleBounds = (problem.hasBounds())?new SimpleBounds(lb,ub):null;
-               
-                start=(problem.hasInitialGuess())?problem.getInitialGuess():null;
+
+                if (problem.hasInitialGuess()) {
+                    super.parseOptimizationData(new InitialGuess(problem.getInitialGuess()));
+                }
+
                 continue;
             }
             

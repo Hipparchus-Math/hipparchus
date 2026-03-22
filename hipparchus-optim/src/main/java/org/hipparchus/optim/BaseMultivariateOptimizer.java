@@ -102,6 +102,14 @@ public abstract class BaseMultivariateOptimizer<P>
         checkParameters();
     }
 
+    /** Check if there is a start point.
+     * @return true if there is a start point.
+     * @since 4.1
+     */
+    public boolean hasStartPoint() {
+        return start != null;
+    }
+
     /**
      * Gets the initial guess.
      *
@@ -110,12 +118,14 @@ public abstract class BaseMultivariateOptimizer<P>
     public double[] getStartPoint() {
         return start == null ? null : start.clone();
     }
+
     /** Get lower bounds.
      * @return the lower bounds, or {@code null} if not set.
      */
     public double[] getLowerBound() {
         return lowerBound == null ? null : lowerBound.clone();
     }
+
     /** Get upper bounds.
      * @return the upper bounds, or {@code null} if not set.
      */
