@@ -20,12 +20,6 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.optim.InitialGuess;
-import org.hipparchus.optim.SimpleBounds;
-import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * HS362 / TP362 – time-to-speed car model with 5 gear ratios (N = 5).

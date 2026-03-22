@@ -29,47 +29,47 @@ public class HS302Test {
 
     private static class HS302Obj extends TwiceDifferentiableFunction {
 
-    @Override
-    public int dim() {
-        return 100;
-    }
-
-    @Override
-    public double value(RealVector x) {
-        int n = dim();
-        double fx = FastMath.pow(x.getEntry(0), 2) - 2.0 * x.getEntry(0);
-        for (int i = 1; i < n; i++) {
-            double xi = x.getEntry(i);
-            double xim1 = x.getEntry(i - 1);
-            fx += 2.0 * xi * xi - 2.0 * xim1 * xi;
-        }
-        return fx;
-    }
-
-    @Override
-    public RealVector gradient(RealVector x) {
-        int n = dim();
-        double[] grad = new double[n];
-
-        // i = 0
-        grad[0] = 2.0 * x.getEntry(0) - 2.0 * x.getEntry(1) - 2.0;
-
-        // i = 1 to n - 2
-        for (int i = 1; i < n - 1; i++) {
-            grad[i] = 4.0 * x.getEntry(i) - 2.0 * x.getEntry(i - 1) - 2.0 * x.getEntry(i + 1);
+        @Override
+        public int dim() {
+            return 100;
         }
 
-        // i = n - 1
-        grad[n - 1] = 4.0 * x.getEntry(n - 1) - 2.0 * x.getEntry(n - 2);
+        @Override
+        public double value(RealVector x) {
+            int n = dim();
+            double fx = FastMath.pow(x.getEntry(0), 2) - 2.0 * x.getEntry(0);
+            for (int i = 1; i < n; i++) {
+                double xi = x.getEntry(i);
+                double xim1 = x.getEntry(i - 1);
+                fx += 2.0 * xi * xi - 2.0 * xim1 * xi;
+            }
+            return fx;
+        }
 
-        return new ArrayRealVector(grad, false);
-    }
+        @Override
+        public RealVector gradient(RealVector x) {
+           int n = dim();
+            double[] grad = new double[n];
 
-    @Override
-    public RealMatrix hessian(RealVector x) {
-        return null;
+            // i = 0
+            grad[0] = 2.0 * x.getEntry(0) - 2.0 * x.getEntry(1) - 2.0;
+
+            // i = 1 to n - 2
+            for (int i = 1; i < n - 1; i++) {
+                grad[i] = 4.0 * x.getEntry(i) - 2.0 * x.getEntry(i - 1) - 2.0 * x.getEntry(i + 1);
+            }
+
+            // i = n - 1
+            grad[n - 1] = 4.0 * x.getEntry(n - 1) - 2.0 * x.getEntry(n - 2);
+
+            return new ArrayRealVector(grad, false);
+        }
+
+        @Override
+        public RealMatrix hessian(RealVector x) {
+            return null;
+        }
     }
-}
 
     @Test
     public void testHS302() {
@@ -85,8 +85,5 @@ public class HS302Test {
         
         assertEquals(val, sol.getValue(), 1e-6);
     }
-    
-    
-    
-    
+
 }

@@ -20,7 +20,6 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
@@ -70,7 +69,7 @@ public class HS361Test {
          0.30988146e5
     };
 
-    /**
+    /*
      * Objective function for HS361.
      *
      * Fortran (MODE 2):
@@ -148,7 +147,7 @@ public class HS361Test {
         }
     }
 
-    /**
+    /*
      * Nonlinear inequality constraints:
      *
      * Fortran (MODE 4):

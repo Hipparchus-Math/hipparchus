@@ -28,11 +28,10 @@ import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-/**
+/*
  * HS368 – Unconstrained polynomial problem (8 variables, simple bounds 0 ≤ x ≤ 1).
  *
  * Objective:
