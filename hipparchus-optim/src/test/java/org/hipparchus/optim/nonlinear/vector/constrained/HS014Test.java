@@ -20,6 +20,7 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,13 +54,39 @@ public class HS014Test {
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
         @Override public int dim() { return 2; }
     }
+    
+    private static class HS014IneqNoBounds extends InequalityConstraint {
+        HS014IneqNoBounds() { super(new ArrayRealVector(new double[]{ 0.0 })); }
+        @Override public RealVector value(RealVector x) {
+            return new ArrayRealVector(new double[]{ (1) - (((FastMath.pow(x.getEntry(0), 2) / 4) + FastMath.pow(x.getEntry(1), 2))) });
+        }
+        @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
+        @Override public int dim() { return 2; }
+    }
 
     @Test
     public void testHS014() {
         InitialGuess guess = new InitialGuess(new double[]{2, 2});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
         double val = (9.0 - (2.875 * FastMath.sqrt(7.0)));
         LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS014Obj()), new HS014Eq(), new HS014Ineq());
+        assertEquals(val, sol.getValue(), 1e-3);
+    }
+    
+     @Test
+    public void testHS014Bounds() {
+        InitialGuess guess = new InitialGuess(new double[]{2, 2});
+        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
+         SimpleBounds bounds=new SimpleBounds(new double[]{0.0,0.0},
+                                             new double[]{Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY});
+        double val = (9.0 - (2.875 * FastMath.sqrt(7.0)));
+        LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS014Obj()), new HS014Eq(), new HS014IneqNoBounds(),bounds);
         assertEquals(val, sol.getValue(), 1e-3);
     }
 }

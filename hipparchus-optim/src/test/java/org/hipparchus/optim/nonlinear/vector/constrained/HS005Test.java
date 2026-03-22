@@ -20,6 +20,7 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,8 +51,26 @@ public class HS005Test {
     public void testHS005() {
         InitialGuess guess = new InitialGuess(new double[]{0, 0});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
         double val = -1.91322207;
         LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS005Obj()), new HS005Ineq());
+        assertEquals(val, sol.getValue(), 1e-6);
+    }
+    
+    @Test
+    public void testHS005Bounds() {
+        InitialGuess guess = new InitialGuess(new double[]{0, 0});
+        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
+        double val = -1.91322207;
+         SimpleBounds bounds=new SimpleBounds(new double[]{-1.5,-3},
+                                             new double[]{4.0,3.0});
+        
+        LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS005Obj()), bounds);
         assertEquals(val, sol.getValue(), 1e-6);
     }
 }

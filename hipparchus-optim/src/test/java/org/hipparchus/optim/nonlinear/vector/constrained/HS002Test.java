@@ -21,6 +21,7 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -77,14 +78,51 @@ public class HS002Test {
     public void testHS002CentralGradient() {
         doTestHS002(GradientMode.CENTRAL);
     }
+    
+    @Test
+    public void testHS002ExternalGradientBounds() {
+        doTestHS002Bounds(GradientMode.EXTERNAL);
+    }
+
+    @Test
+    public void testHS002ForwardGradientBounds() {
+        doTestHS002Bounds(GradientMode.FORWARD);
+    }
+
+    @Test
+    public void testHS002CentralGradientBounds() {
+        doTestHS002Bounds(GradientMode.CENTRAL);
+    }
 
     private void doTestHS002(final GradientMode gradientMode) {
         SQPOption sqpOption = new SQPOption();
         sqpOption.setGradientMode(gradientMode);
         InitialGuess guess = new InitialGuess(new double[]{-2.0, 1.0});
+            
+               
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
         double val = 0.0;
-        LagrangeSolution sol = optimizer.optimize(sqpOption, guess, new ObjectiveFunction(new HS002Obj()), new HS002Ineq());
+        LagrangeSolution sol = optimizer.optimize(sqpOption, guess, new ObjectiveFunction(new HS002Obj()), new HS002Ineq() );
+        
+        assertEquals(val, sol.getValue(), sqpOption.getEps()*10.0*(1.0+val));
+    }
+    
+    private void doTestHS002Bounds(final GradientMode gradientMode) {
+        SQPOption sqpOption = new SQPOption();
+        sqpOption.setGradientMode(gradientMode);
+        InitialGuess guess = new InitialGuess(new double[]{-2.0, 1.0});
+        SimpleBounds bounds=new SimpleBounds(new double[]{Double.NEGATIVE_INFINITY,Double.NEGATIVE_INFINITY},
+                                             new double[]{Double.POSITIVE_INFINITY,1.5});       
+               
+        SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
+        double val = 0.0;
+        LagrangeSolution sol = optimizer.optimize(sqpOption, guess, new ObjectiveFunction(new HS002Obj()), bounds);
         assertEquals(val, sol.getValue(), 1e-3);
     }
 }

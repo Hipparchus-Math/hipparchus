@@ -1,39 +1,24 @@
-name: Java CI with Maven
+name: Hipparchus Optim Test (My Fork)
 
-on: [ push ]
+on: [ push, pull_request ]
 
 jobs:
   build:
-    name: Build
+    name: Build and Test Optimization
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up JDK 11
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 11
-    - name: Build with Maven
-      run: mvn -B -U -f pom.xml install checkstyle:checkstyle
-    - name: SonarQube scan
-      run: |
-        export PROJECT_NAME="Hipparchus ($GITHUB_REPOSITORY)"
-        export PROJECT_KEY=${GITHUB_REPOSITORY/\//:}
-        mvn -B -f pom.xml sonar:sonar \
-            -Dsonar.host.url=$SONARQUBE_HOST_URL \
-            -Dsonar.login=$SONARQUBE_TOKEN \
-            -Dsonar.branch.name=${GITHUB_REF##*/} \
-            -Dsonar.projectName="$PROJECT_NAME" \
-            -Dsonar.projectKey="$PROJECT_KEY" \
-            -Dsonar.qualitygate.wait=true
-      env:
-        SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-        SONARQUBE_HOST_URL: ${{ vars.SONARQUBE_HOST_URL }}
-    - name: Deployment
-      if: ( github.repository == 'Hipparchus-Math/hipparchus' ) && ( ( github.ref == 'refs/heads/develop' ) || startsWith( github.ref, 'refs/heads/release-' ) )
-      run: mvn -B -U -f pom.xml -s .CI/maven-settings.xml deploy -DskipTests=true -Prelease,ci-deploy
-      env:
-        NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-        NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-        MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        cache: 'maven'
+
+    - name: Test Optimization Module
+    # Usiamo -U per forzare l'aggiornamento delle dipendenze (come nell'originale)
+      # Usiamo -pl e -am per isolare il modulo optimization
+      run: mvn -B -U -f pom.xml test -pl hipparchus-optim -am
+

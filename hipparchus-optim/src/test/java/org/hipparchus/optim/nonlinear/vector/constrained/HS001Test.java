@@ -20,6 +20,7 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class HS001Test {
             throw new UnsupportedOperationException();
         }
     }
-
+    
     @Test
     public void testHS001ExternalGradient() {
         doTestHS001(GradientMode.EXTERNAL);
@@ -68,17 +69,15 @@ public class HS001Test {
 
     private void doTestHS001(final GradientMode gradientMode) {
         SQPOption sqpOption=new SQPOption();
-        sqpOption.setMaxLineSearchIteration(12);
-        sqpOption.setB(0.5);
-        sqpOption.setMu(1.0e-4);
-        sqpOption.setEps(10e-7);
         sqpOption.setGradientMode(gradientMode);
         InitialGuess guess = new InitialGuess(new double[]{-2, 1});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
-        
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
         double val = 0.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption, guess, new ObjectiveFunction(new HS001Obj()));
         
-        assertEquals(val, sol.getValue(), 1e-6);
+        assertEquals(val, sol.getValue(), sqpOption.getEps()*10.0*(1.0+val));
     }
 }

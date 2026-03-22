@@ -58,6 +58,9 @@ public class HS032Test {
     public void testHS032() {
         InitialGuess guess = new InitialGuess(new double[]{0.1, 0.7, 0.2});
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            optimizer.setDebugPrinter(System.out::println);
+        }
          SQPOption sqpOption=new SQPOption();
         sqpOption.setMaxLineSearchIteration(20);
         sqpOption.setB(0.5);
