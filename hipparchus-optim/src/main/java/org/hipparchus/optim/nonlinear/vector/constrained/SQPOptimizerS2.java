@@ -186,7 +186,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         double gamma = 1.0;
         H = MatrixUtils.createRealIdentityMatrix(x.getDimension()).scalarMultiply(FastMath.sqrt(gamma));
 
-        BFGSUpdater bfgs = new BFGSUpdater(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
+        BFGSUpdater2 bfgs = new BFGSUpdater2(H, EPS, true, getMatrixDecompositionTolerance().getEpsMatrixDecomposition());
 
         RealVector dx = new ArrayRealVector(x.getDimension());
         RealVector u = new ArrayRealVector(y.getDimension());
