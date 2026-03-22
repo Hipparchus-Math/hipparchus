@@ -31,11 +31,11 @@ import org.hipparchus.util.Precision;
  * Manages Hessian updates for SQP solvers by:
  * </p>
  * <ul>
- * <li>Checking curvature condition</li>
- * <li>Applying dynamic damping if necessary</li>
- * <li>Skipping update if curvature still fails after damping</li>
- * <li>Soft regularization of diagonal entries on repeated failures</li>
- * <li>Automatic Hessian reset after configurable failures</li>
+ *   <li>Checking curvature condition</li>
+ *   <li>Applying dynamic damping if necessary</li>
+ *   <li>Skipping update if curvature still fails after damping</li>
+ *   <li>Soft regularization of diagonal entries on repeated failures</li>
+ *   <li>Automatic Hessian reset after configurable failures</li>
  * </ul>
  *
  * @since 4.1
@@ -43,19 +43,19 @@ import org.hipparchus.util.Precision;
 public class BFGSUpdater {
 
     /**
+     * Damping factor.
+     */
+    private static final double GAMMA = 0.2;
+
+    /**
      * AutoScaling Flag.
      */
-    private final boolean SCALE;
+    private final boolean scale;
 
     /**
      * EPS.
      */
-    private final double EPS;
-
-    /**
-     * Damping factor.
-     */
-    private static final double GAMMA = 0.2;
+    private final double eps;
 
     /**
      * trigger skip update for diagonal of Hessian.
@@ -84,14 +84,14 @@ public class BFGSUpdater {
      *
      * @param initialHess initial positive‐definite Hessian matrix
      * @param eps treshold to apply auto scale sty<sqrt(eps)
-     * @param autoSCale true apply auto hessain rescaling
+     * @param autoScale true apply auto hessian rescaling
      * @param decompositionEpsilon tolerance for symmetric matrices
      * decomposition
      */
     public BFGSUpdater(final RealMatrix initialHess, final double eps, final boolean autoScale, final double decompositionEpsilon) {
         this.initialH = new Array2DRowRealMatrix(initialHess.getData());
-        this.EPS = eps;
-        this.SCALE = autoScale;
+        this.eps                  = eps;
+        this.scale                = autoScale;
         this.decompositionEpsilon = decompositionEpsilon;
         resetHessian();
     }
@@ -146,11 +146,11 @@ public class BFGSUpdater {
  
         
         
-        if (SCALE ) {
+        if (scale) {
             double sty = s.dotProduct(y);
             double yy = y.dotProduct(y);
             double gamma =yy /sty;
-            if (gamma < FastMath.sqrt(EPS)) {
+            if (gamma < FastMath.sqrt(eps)) {
                 gamma = FastMath.max(sqrtEPSmachine, FastMath.min(1/sqrtEPSmachine, gamma));
                 this.resetHessian(gamma);
                 return 3;
