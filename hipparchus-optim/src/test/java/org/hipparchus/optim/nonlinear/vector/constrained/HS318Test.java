@@ -22,10 +22,6 @@ import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.optim.nonlinear.vector.constrained.EqualityConstraint;
-import org.hipparchus.optim.nonlinear.vector.constrained.LagrangeSolution;
-import org.hipparchus.optim.nonlinear.vector.constrained.SQPOptimizerS2;
-import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -33,8 +29,6 @@ import org.junit.jupiter.api.Test;
 public class HS318Test {
 
     private static final int DIM = 2;
-    // You can manage this flag globally (e.g., via configuration)
-    private static final boolean IS_DEBUG_ENABLED = true;
 
     static final class HS318Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }

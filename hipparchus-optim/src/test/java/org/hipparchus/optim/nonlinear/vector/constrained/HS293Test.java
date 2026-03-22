@@ -20,10 +20,11 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
-import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 
 public class HS293Test {
@@ -59,8 +60,7 @@ public class HS293Test {
     public void testHS293() {
 
         double[] x0 = new double[N];
-        for (int i = 0; i < N; i++) x0[i] = 1.0;
-
+        Arrays.fill(x0, 1.0);
 
         final InitialGuess guess = new InitialGuess(x0);
 

@@ -255,9 +255,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 }
                 QPMODE = QPMode.QP_AUGMENTED;
                 sigma = 0.0;
-                rho = getSettings().getRhoCons();;
-
-//
+                rho = getSettings().getRhoCons();
 
             } else {
                 dx = qpSolution.getX();

@@ -23,8 +23,6 @@ import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.optim.SimpleBounds;
-import org.hipparchus.optim.nonlinear.vector.constrained.InequalityConstraint;
-import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -32,7 +30,6 @@ import org.junit.jupiter.api.Test;
 public class HS330Test {
 
     private static final int DIM = 2;
-    private static final double MIN_BOUND = 0.0001;
 
     static final class HS330Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }

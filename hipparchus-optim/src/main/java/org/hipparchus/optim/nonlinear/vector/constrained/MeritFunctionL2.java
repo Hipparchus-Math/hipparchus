@@ -104,10 +104,10 @@ public class MeritFunctionL2 {
     private RealMatrix JB;
 
     /** initial Sigma . */
-    private double sigmaInit=1.0e-2;
+    private final double sigmaInit = 1.0e-2;
 
     /** rMax . */
-    private double rMax=1.0e9;
+    private final double rMax = 1.0e9;
 
     /**
      * Constructor.

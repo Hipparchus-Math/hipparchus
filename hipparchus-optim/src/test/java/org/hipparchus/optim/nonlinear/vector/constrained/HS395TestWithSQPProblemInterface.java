@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HS395TestWithSQPProblemInterface {
 
-    /**
+    /*
      * SQPProblem implementation for Hock–Schittkowski problem 395.
      *
      * Objective:

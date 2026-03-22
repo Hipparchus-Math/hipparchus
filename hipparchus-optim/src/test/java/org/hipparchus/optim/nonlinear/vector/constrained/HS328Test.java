@@ -18,14 +18,7 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.optim.InitialGuess;
-import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.optim.SimpleBounds;
-import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
 
 public class HS328Test {
 

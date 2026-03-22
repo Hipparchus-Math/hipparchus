@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
+/*
  * HS210 (TP210) – Scaled Rosenbrock variant.
  *
  * N = 2

@@ -26,6 +26,8 @@ import org.hipparchus.util.FastMath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 
 public class HS380Test {
 
@@ -128,7 +130,7 @@ public class HS380Test {
     @Test
     public void testHS380() {
         final double[] x0 = new double[N];
-        for (int i = 0; i < N; i++) x0[i] = 4.0; // 0.4D+1
+        Arrays.fill(x0, 4.0);
 
         final InitialGuess guess = new InitialGuess(x0);
         final SimpleBounds bounds = new SimpleBounds(LB, UB);

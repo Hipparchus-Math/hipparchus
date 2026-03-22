@@ -11,10 +11,11 @@ import org.hipparchus.util.Precision;
 /**
  * Updates a QR factorization when adding or removing constraints in
  * active-set methods for nonlinear vector optimization.
- *
+ * <p>
  * This version is algebraically identical to your working backup, but
  * replaces {@link FastMath#hypot(double, double)} with a robust
  * scaling-based safeHypot to avoid overflow/underflow.
+ * </p>
  */
 public class QRUpdater {
 

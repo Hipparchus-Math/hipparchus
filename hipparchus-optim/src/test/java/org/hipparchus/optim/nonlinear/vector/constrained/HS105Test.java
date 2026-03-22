@@ -21,16 +21,14 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
+/*
  * HS105 (TP105) – Mixture of three normal distributions, maximum likelihood.
  *
  * N    = 8 variables
@@ -85,7 +83,6 @@ public class HS105Test {
 
     private static final int DIM      = 8;
     private static final int NUM_INEQ = 1;
-    private static final int NUM_EQ   = 0;
 
     /** Y(1..235) from COMMON /D105/. */
     private static final double[] Y = new double[235];

@@ -144,7 +144,6 @@ static final class HS112Eq extends EqualityConstraint {
 
     /** Solve helper (adds requested debug printer). */
     static LagrangeSolution solve() {
-        final double INF = Double.NEGATIVE_INFINITY;
         final double SUP = Double.POSITIVE_INFINITY;
 
         double[] start = new double[10];

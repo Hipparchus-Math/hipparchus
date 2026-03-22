@@ -63,7 +63,6 @@ public class HS013Test {
         sqpOption.setMu(1.0e-4);
         sqpOption.setEps(10e-4);
         InitialGuess guess = new InitialGuess(new double[]{0.0, 0.0});
-        ;
         SQPOptimizerS2 optimizer = new SQPOptimizerS2();
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {
             optimizer.setDebugPrinter(System.out::println);

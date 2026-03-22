@@ -130,7 +130,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                 .target(new double[]{1})
                 .weight(new DiagonalMatrix(new double[]{1}))
                 .start(new double[]{3})
-                .model(point -> new Pair<RealVector, RealMatrix>(
+                .model(point -> new Pair<>(
                         new ArrayRealVector(
                                 new double[]{
                                         FastMath.pow(point.getEntry(0), 4)
@@ -407,7 +407,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
     }
 
     @Test
-    public void testSequential() throws Exception {
+    public void testSequential() {
 
         CircleVectorial circleAll    = new CircleVectorial();
         CircleVectorial circleFirst  = new CircleVectorial();

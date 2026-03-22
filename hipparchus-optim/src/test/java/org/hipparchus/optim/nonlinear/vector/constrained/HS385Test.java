@@ -23,7 +23,6 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 import org.hipparchus.optim.InitialGuess;
-import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 
 import org.hipparchus.util.FastMath;
@@ -31,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
+/*
  * HS385 (TP385) – 15-variable problem with 10 nonlinear inequality constraints.
  *
  * From TP385:
@@ -201,11 +200,6 @@ public class HS385Test {
 
         // Initial guess: X(i) = 0.0 (as in MODE=1)
         double[] x0 = new double[DIM];
-        for (int i = 0; i < DIM; i++) {
-            x0[i] = 0.0;
-        }
-
-
 
         SQPOptimizerS2 opt = new SQPOptimizerS2();
         if (Boolean.getBoolean("hipparchus.debug.sqp")) {

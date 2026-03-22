@@ -21,8 +21,6 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.optim.SimpleBounds;
-import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -48,7 +46,7 @@ public class HS334Test {
             double fx = 0.0;
 
             for (int i = 0; i < DATA_SIZE; i++) {
-                double ui = (double) (i + 1); // I
+                double ui = i + 1;             // I
                 double vi = 16.0 - ui;         // VI
                 double wi = Math.min(ui, vi);  // WI
 
@@ -69,7 +67,7 @@ public class HS334Test {
             double g3 = 0.0;
 
             for (int i = 0; i < DATA_SIZE; i++) {
-                double ui = (double) (i + 1);
+                double ui = i + 1;
                 double vi = 16.0 - ui;
                 double wi = Math.min(ui, vi);
 

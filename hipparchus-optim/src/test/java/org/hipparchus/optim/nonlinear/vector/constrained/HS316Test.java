@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test;
 public class HS316Test {
 
     private static final int DIM = 2;
-    private static final double EPSILON = 1.0e-6;
 
     static final class HS316Obj extends TwiceDifferentiableFunction {
         @Override public int dim() { return DIM; }
