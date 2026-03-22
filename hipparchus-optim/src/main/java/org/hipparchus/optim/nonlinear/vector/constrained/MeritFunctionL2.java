@@ -108,6 +108,7 @@ public class MeritFunctionL2 {
     
     /** rMax . */
     private double rMax=1.0e9;
+
     /**
      * Constructor.
      *
@@ -115,6 +116,27 @@ public class MeritFunctionL2 {
      * @param eqConstraint Equality constraint (may be null)
      * @param iqConstraint Inequality constraint (may be null)
      * @param x current point
+     * @deprecated as of 4.1, replaced by {@link
+     * #MeritFunctionL2(TwiceDifferentiableFunction, Constraint, Constraint,
+     * LinearInequalityConstraint, RealVector)}
+     */
+    @Deprecated
+    public MeritFunctionL2(final TwiceDifferentiableFunction objective,
+                           final Constraint eqConstraint,
+                           final Constraint iqConstraint,
+                           final RealVector x) {
+        this(objective, eqConstraint, iqConstraint, null, x);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param objective Objective function
+     * @param eqConstraint Equality constraint (may be null)
+     * @param iqConstraint Inequality constraint (may be null)
+     * @param bounds Linear inequality constraint (may be null)
+     * @param x current point
+     * @since 4.1
      */
     public MeritFunctionL2(final TwiceDifferentiableFunction objective,
                            final Constraint eqConstraint,
