@@ -209,9 +209,9 @@ public class SmoothStepFactory {
      * @throws MathIllegalArgumentException if input is not between [0:1]
      */
     public static void checkBetweenZeroAndOneIncluded(final double input) throws MathIllegalArgumentException {
-        if (input < 0 || input > 1) {
-            throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED);
+        if (input < 0 - 1E-10 || input > 1 + 1E-10) {
+	    throw new MathIllegalArgumentException(
+                    LocalizedCoreFormats.INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED, input);
         }
     }
 
