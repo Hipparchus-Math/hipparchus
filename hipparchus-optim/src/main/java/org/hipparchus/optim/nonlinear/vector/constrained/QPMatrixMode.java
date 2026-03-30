@@ -9,15 +9,17 @@ import org.hipparchus.optim.OptimizationData;
  * When present and set to true, QPDualActiveSolver will interpret function.getP()
  * as L and will NOT factorize it.
  */
-public final class IsCholesky implements OptimizationData {
 
-    private final boolean cholesky;
+public enum QPMatrixMode implements OptimizationData {
 
-    public IsCholesky(final boolean cholesky) {
-        this.cholesky = cholesky;
-    }
+    /** Compute gradients from the objective and constraints functions themselves. */
+    FULL,
 
-    public boolean isCholesky() {
-        return cholesky;
-    }
+    /** Compute gradients using forward difference. */
+    CHOLESKY,
+
+    /** Compute gradients using central differences. */
+    INVCHOLESKY
+
 }
+

@@ -16,6 +16,7 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
@@ -43,7 +44,18 @@ public class HS395Test {
             return sum;
         }
 
-        @Override public RealVector gradient(RealVector x) { throw new UnsupportedOperationException(); }
+       
+        @Override
+        public RealVector gradient(RealVector x) {
+            final double[] g = new double[50];
+            for (int i = 0; i < x.getDimension(); i++) {
+                final double xi = x.getEntry(i);
+                final double idx = i + 1.0;
+                g[i] = idx * (2.0 * xi + 4.0 * xi * xi * xi);
+            }
+            return new ArrayRealVector(g, false);
+        }
+
         @Override public RealMatrix hessian(RealVector x) { throw new UnsupportedOperationException(); }
     }
 
@@ -61,7 +73,15 @@ public class HS395Test {
             return new ArrayRealVector(new double[]{sum - 1.0});
         }
 
-        @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
+        @Override
+        public RealMatrix jacobian(RealVector x) {
+            final double[][] j = new double[1][50];
+            for (int i = 0; i < x.getDimension(); i++) {
+                j[0][i] = 2.0 * x.getEntry(i);
+            }
+            return new Array2DRowRealMatrix(j, false);
+        }
+
         @Override public int dim() { return 50; }
     }
 
@@ -75,7 +95,7 @@ public class HS395Test {
         InitialGuess guess = new InitialGuess(start);
         SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
         double val = 1.9166668;
 
         LagrangeSolution sol = optimizer.optimize(
@@ -86,5 +106,23 @@ public class HS395Test {
         );
 
         HSProblemTestUtils.assertExpectedObjective(val, sol);
+    }
+    public static void main(String[] args) {
+        // 1. Istanzia la tua classe di test
+        HS395Test tester = new HS395Test();
+        
+        // 2. Chiama direttamente il metodo di test che vuoi profilare
+        // (Sostituisci "nomeDelTuoTest" con il nome reale del metodo, es. testRosenbrock)
+        try {
+            System.out.println("Starting profiler warm-up...");
+            tester.testHS395(); // Warm-up (opzionale ma consigliato)
+            
+            System.out.println("Starting actual profiling run...");
+            tester.testHS395();// La vera run da profilare
+            
+            System.out.println("Done!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

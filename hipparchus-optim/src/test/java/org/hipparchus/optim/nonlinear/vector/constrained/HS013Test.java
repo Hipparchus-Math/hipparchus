@@ -81,7 +81,7 @@ public class HS013Test {
     public void testHS013() {
          SQPOption sqpOption=new SQPOption();
           
-        sqpOption.setGradientMode(GradientMode.EXTERNAL);
+        sqpOption.setGradientMode(GradientMode.FORWARD);
         
         
         InitialGuess guess = new InitialGuess(new double[]{0.01, 0.01});

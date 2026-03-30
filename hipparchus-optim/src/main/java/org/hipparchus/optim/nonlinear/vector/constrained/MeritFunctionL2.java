@@ -90,6 +90,12 @@ public class MeritFunctionL2 {
     
     /** bounds evaluation. */
     private RealVector bEval;
+    
+    /** LB lower Bound. */
+    private RealVector lB;
+    
+    /** UB upper Bound. */
+    private RealVector uB;
 
     /** Penalty evaluation. */
     private double pEval;
@@ -120,7 +126,7 @@ public class MeritFunctionL2 {
     public MeritFunctionL2(final TwiceDifferentiableFunction objective,
                            final Constraint eqConstraint,
                            final Constraint iqConstraint,
-                           final LinearInequalityConstraint bounds,
+                           final LinearInequalityConstraint bounds, 
                            final RealVector x) {
         this.objective = objective;
         this.eqConstraint = eqConstraint;
@@ -141,6 +147,8 @@ public class MeritFunctionL2 {
             mb = this.bounds.dimY();
             JB=this.bounds.jacobian(null);
         }
+        
+        
         final int m = me + mi + mb;
         this.dx = new ArrayRealVector(x.getDimension());
         this.y = new ArrayRealVector(m);
@@ -310,6 +318,7 @@ public class MeritFunctionL2 {
 
    public double value(double alpha) {
         RealVector xAlpha = x.add(dx.mapMultiply(alpha));
+        
         RealVector yAlpha = null;
         if (y.getDimension() > 0) {
             yAlpha = y.add(u.subtract(y).mapMultiply(alpha));

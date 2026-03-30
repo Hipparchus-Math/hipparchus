@@ -147,15 +147,15 @@ public class BFGSUpdater {
         
          
          final double yy = y.dotProduct(y);
-         
+         FACTOR=1.0;
          if (!DAMPED && sty > Precision.SAFE_MIN) {
                 FACTOR= yy / sty;
             }
-         final double th = 1.0e-6;
+         final double th = 1.0e-3;
          FACTOR = FastMath.max(th, FastMath.min(1.0 / th, FACTOR));
-
+       
         if (!rankOneUpdate(s, y, Hs, sHs, sty)) {
-            return 4;
+            return 3;
         }
 
         return 0;
@@ -232,24 +232,47 @@ public class BFGSUpdater {
         for (int i = 0; i < n; ++i) {
             work[i] *= alpha;
         }
+        // --- Single global guard for downdate ---
+    if (sigma < 0) {
+        final double[] z = new double[n];
+
+        // Solve L z = work
+        for (int i = 0; i < n; ++i) {
+            double sum = work[i];
+            for (int j = 0; j < i; ++j) {
+                sum -= L.getEntry(i, j) * z[j];
+            }
+            final double lii = L.getEntry(i, i);
+            z[i] = sum / lii;
+        }
+
+        double znorm2 = 0.0;
+        for (int i = 0; i < n; ++i) {
+            znorm2 += z[i] * z[i];
+        }
+
+        if (znorm2 >= 1.0 - Precision.EPSILON) {
+            return false;
+        }
+    }
 
         for (int k = 0; k < n; ++k) {
             final double lkk = L.getEntry(k, k);
             final double xk = work[k];
 
-            final double r;
+            double r;
             if (sigma > 0) {
                 r = FastMath.hypot(lkk, xk);
             } else {
-                // Stable downdate: compute sqrt((a-b)(a+b)) instead of sqrt(a^2-b^2).
-                final double amx = lkk - FastMath.abs(xk);
-                if (amx <= sqrtEPS) {
-                    return false;
-                }
+                
+                
                 r = FastMath.sqrt((lkk - xk) * (lkk + xk));
-                if(r<sqrtEPS) return false;
+                if(r<sqrtEPS) 
+                    r=sqrtEPS;
+                    //return false;
             }
-
+           
+          
             final double c = r / lkk;
             final double s = xk / lkk;
             final double invC = 1.0 / c;
@@ -267,6 +290,8 @@ public class BFGSUpdater {
         }
         return true;
     }
+    
+  
 
     /**
      * Scales the Hessian H = L*L^T by a positive factor gamma,
@@ -297,4 +322,6 @@ public class BFGSUpdater {
     public RealMatrix getL() {
         return L;
     }
+    
+    
 }

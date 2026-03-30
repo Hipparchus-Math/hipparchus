@@ -111,7 +111,7 @@ public class QPDualActiveSolver extends QPOptimizer {
     * If true, function.getP() is interpreted as Cholesky lower factor L (H = L*L^T),
     * not as the Hessian H itself.
     */
-    private boolean isCholesky=false;
+    private QPMatrixMode matrixMode=QPMatrixMode.FULL;
     
 
     /**
@@ -129,7 +129,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         this.iqConstraints = null;
         this.bConstraints = null;
         this.matrixDecompositionTolerance = new MatrixDecompositionTolerance(EPS);
-        this.isCholesky=false;
+        this.matrixMode=QPMatrixMode.FULL;
         for (OptimizationData data : optData) {
             if (data instanceof ObjectiveFunction) {
                 function = (QuadraticFunction) ((ObjectiveFunction) data).getObjectiveFunction();
@@ -139,8 +139,8 @@ public class QPDualActiveSolver extends QPOptimizer {
                 iqConstraints = (LinearInequalityConstraint) data;
             } else if (data instanceof LinearBoundedConstraint) {
                 bConstraints = (LinearBoundedConstraint) data;
-            } else if (data instanceof IsCholesky) {
-                isCholesky = ((IsCholesky) data).isCholesky();
+            } else if (data instanceof QPMatrixMode) {
+                this.matrixMode = ((QPMatrixMode) data);
             } else if (data instanceof MatrixDecompositionTolerance) {
                 matrixDecompositionTolerance = (MatrixDecompositionTolerance) data;
             }
@@ -287,10 +287,10 @@ public class QPDualActiveSolver extends QPOptimizer {
     public LagrangeSolution doOptimize() {
         RealMatrix G;
         
-        if(!this.isCholesky)
+        if(this.matrixMode==QPMatrixMode.FULL)
         
              G = function.getP();
-        else
+        else 
              G=function.getP().multiplyTransposed(function.getP());
         RealVector g0 = function.getQ();
         double g = function.getD();
@@ -334,10 +334,10 @@ public class QPDualActiveSolver extends QPOptimizer {
         RealMatrix L1;
         QRUpdater qrUpdater;
         double tol;
-        if (!this.isCholesky) {
+        if (this.matrixMode==QPMatrixMode.FULL) {
             try {
                 final double eps = matrixDecompositionTolerance.getEpsMatrixDecomposition();
-                final CholeskyDecomposition cholesky = new CholeskyDecomposition(G, eps, eps);
+                final RegularizedCholeskyDecomposition cholesky = new RegularizedCholeskyDecomposition(G, eps, eps);
                 DecompositionSolver solver = cholesky.getSolver();
                 
                 x = solver.solve(g0).mapMultiply(-1.0);
@@ -500,6 +500,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         if (iteration == maxIter) {
             return buildFailureSolution(ERROR_MAX_ITERATIONS );
         }
+         //u=recomputeFinalMultipliers(x,G,g0,qrUpdater,active);
         return buildSolution(x, u, active, G, g0, g, p, m);
     }
 
@@ -552,5 +553,47 @@ public class QPDualActiveSolver extends QPOptimizer {
                 new ArrayRealVector(1,ERROR_CHOLESKY_DECOMPOSITION),0);
         
     }
+/**
+ * Recompute final active-set multipliers from the final QR factorization.
+ *
+ * This should be called only after the active set has been accepted as final.
+ * It recomputes lambda from the final primal point x and the final working set,
+ * instead of trusting the iteratively updated dual vector u.
+ *
+ * Convention:
+ * - objective: 0.5 * x^T G x + g0^T x
+ * - constraints: C^T x + c0 >= 0
+ *
+ * IMPORTANT:
+ * Depending on the internal sign convention of QRUpdaterR, the correct line may be:
+ *     yActive = qrUpdater.solveR(dGrad);
+ * or
+ *     yActive = qrUpdater.solveR(dGrad).mapMultiply(-1.0);
+ *
+ * Since your current solver/refinement already uses solveR(d) directly, keep the
+ * same convention unless a sign mismatch is observed in KKT reconstruction.
+ */
+private RealVector recomputeFinalMultipliers(final RealVector x,
+                                             final RealMatrix G,
+                                             final RealVector g0,
+                                             final QRUpdater qrUpdater,
+                                             final List<Integer> active
+                                            ) {
 
+    // Full gradient of the quadratic objective at final x:
+    // grad q(x) = G*x + g0
+    final RealVector grad = G.operate(x).add(g0);
+
+    // Project gradient through the current QR representation.
+    // This is the same algebraic path already used inside the solver.
+    final RealVector dGrad = qrUpdater.computeD(grad);
+
+    // Reconstruct active multipliers from the final factorization.
+    // Keep the same sign convention already used in your current code.
+    final RealVector yActive = qrUpdater.solveR(dGrad);
+
+    
+
+    return yActive.getSubVector(0, active.size());
+}
 }

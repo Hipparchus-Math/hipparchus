@@ -144,7 +144,8 @@ public class HS088toHS092 {
 
     // ---------------------------- Tests (TP88..TP92) ----------------------------
 
-    @Test public void testHS088() { // N=2
+    @Test 
+    public void testHS088() { // N=2
         final int n = 2;
         final double[] xex = {
                 .107431872940D+01,
@@ -155,7 +156,8 @@ public class HS088toHS092 {
         runCaseAndCheck(n, fex, xex);
     }
 
-    @Test public void testHS089() { // N=3
+    @Test 
+    public void testHS089() { // N=3
         final int n = 3;
         final double[] xex = {
                 0.107431872754e+01,
@@ -167,7 +169,8 @@ public class HS088toHS092 {
         runCaseAndCheck(n, fex, xex);
     }
 
-    @Test public void testHS090() { // N=4
+    @Test 
+    public void testHS090() { // N=4
         final int n = 4;
         final double[] xex = {
                 0.708479399007e+00,
@@ -180,7 +183,8 @@ public class HS088toHS092 {
         runCaseAndCheck(n, fex, xex);
     }
 
-    @Test public void testHS091() { // N=5
+    @Test 
+    public void testHS091() { // N=5
         final int n = 5;
         final double[] xex = {
                 0.701892928031e+00,
@@ -194,7 +198,8 @@ public class HS088toHS092 {
         runCaseAndCheck(n, fex, xex);
     }
 
-    @Test public void testHS092() { // N=6
+    @Test 
+    public void testHS092() { // N=6
         final int n = 6;
         final double[] xex = {
                 0.494144465323e+00,

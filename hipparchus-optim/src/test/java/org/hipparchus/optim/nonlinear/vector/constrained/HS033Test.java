@@ -55,8 +55,6 @@ public class HS033Test {
 
         final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         SQPOption sqpOption=new SQPOption();
-        sqpOption.setMaxLineSearchIteration(20);
-        sqpOption.setEps(10e-11);
         final LagrangeSolution sol = opt.optimize(
             guess,
             new ObjectiveFunction(new TP33Obj()),

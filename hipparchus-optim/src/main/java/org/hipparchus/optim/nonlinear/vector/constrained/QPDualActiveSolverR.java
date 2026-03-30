@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposition;
 import org.hipparchus.linear.DecompositionSolver;
@@ -41,8 +42,8 @@ import org.hipparchus.util.Precision;
  * <pre>
  * minimize   (1/2) x^T G x + g0^T x
  * subject to CE^T x  =  ce0     (equality constraints)
- *            CI^T x  &gt;= ci0     (inequality constraints)
- *            lb &lt;= Ax &lt;= ub      (bounded constraints)
+ * CI^T x  &gt;= ci0     (inequality constraints)
+ * lb &lt;= Ax &lt;= ub      (bounded constraints)
  * </pre>
  *
  * <p>
@@ -67,17 +68,17 @@ public class QPDualActiveSolverR extends QPOptimizer {
     /** Error code reported in lambda[0] when max iterations are reached. */
     public static final double ERROR_MAX_ITERATIONS = -3.0;
 
-    /** Error code reported when numerical issue. */
+    /** Error code reported when numerical issue occurs. */
     public static final double ERROR_NUMERICAL = -4.0;
 
-    /** Error no Solution Found. */
+    /** Error code reported when no solution is found (infeasible). */
     public static final double ERROR_INFEASIBLE = -5.0;
 
     /** Machine epsilon for tolerance checks. */
-    private static final double EPS = Math.ulp(1.0);
+    private static final double EPS = FastMath.ulp(1.0);
 
     /**
-     * Maximum number of iterations allowed.Will be adjusted in base of problem
+     * Maximum number of iterations allowed. Will be adjusted based on the problem
      * dimension.
      */
     private int maxIter;
@@ -105,7 +106,7 @@ public class QPDualActiveSolverR extends QPOptimizer {
      * If true, function.getP() is interpreted as Cholesky lower factor L
      * (H = L*L^T), not as the Hessian H itself.
      */
-    private boolean isCholesky = false;
+    private QPMatrixMode matrixMode = QPMatrixMode.FULL;
 
     /**
      * Parses optimization data to extract the objective function and various
@@ -116,14 +117,14 @@ public class QPDualActiveSolverR extends QPOptimizer {
     @Override
     protected void parseOptimizationData(final OptimizationData... optData) {
         super.parseOptimizationData(optData);
-        // reset QP problem to reuse the same instance of the QP solver;
+        // Reset QP problem to reuse the same instance of the QP solver
         this.maxIter = 1000;
         this.function = null;
         this.eqConstraints = null;
         this.iqConstraints = null;
         this.bConstraints = null;
         this.matrixDecompositionTolerance = new MatrixDecompositionTolerance(EPS);
-        this.isCholesky = false;
+        this.matrixMode = QPMatrixMode.FULL;
 
         for (OptimizationData data : optData) {
             if (data instanceof ObjectiveFunction) {
@@ -134,8 +135,8 @@ public class QPDualActiveSolverR extends QPOptimizer {
                 iqConstraints = (LinearInequalityConstraint) data;
             } else if (data instanceof LinearBoundedConstraint) {
                 bConstraints = (LinearBoundedConstraint) data;
-            } else if (data instanceof IsCholesky) {
-                isCholesky = ((IsCholesky) data).isCholesky();
+            } else if (data instanceof QPMatrixMode) {
+                matrixMode = ((QPMatrixMode) data);
             } else if (data instanceof MatrixDecompositionTolerance) {
                 matrixDecompositionTolerance = (MatrixDecompositionTolerance) data;
             }
@@ -166,7 +167,7 @@ public class QPDualActiveSolverR extends QPOptimizer {
         }
 
         double alpha = -sv / denom;
-        // step for inequality should be positive
+        // Step for inequality should be positive
         if (!equality && alpha < 0) {
             alpha = Double.POSITIVE_INFINITY;
         }
@@ -198,7 +199,7 @@ public class QPDualActiveSolverR extends QPOptimizer {
         for (int i = 0; i < size; i++) {
             double ui = u.getEntry(i);
             double ri = r.getEntry(i);
-            // consider only inequality constraint in the active set
+            // Consider only inequality constraints in the active set
             if (ri > Precision.SAFE_MIN && activeSet.get(i) >= me) {
                 double cand = ui / ri;
                 if (cand < alpha) {
@@ -214,7 +215,7 @@ public class QPDualActiveSolverR extends QPOptimizer {
     /**
      * Updates multipliers when adding a constraint.
      *
-     * @param u       current u or null
+     * @param u       current multipliers or null
      * @param r       dual direction
      * @param alpha   step length
      * @param partial new partial multiplier
@@ -226,10 +227,15 @@ public class QPDualActiveSolverR extends QPOptimizer {
                                                    final double partial) {
         if (u.getDimension() == 0) {
             RealVector v = new ArrayRealVector(1);
-            v.set(partial);
+            v.setEntry(0, partial); // SetEntry evita instanziazioni ambigue
             return v;
         }
-        return u.add(r.mapMultiply(-alpha)).append(partial);
+        
+        // Original: return u.add(r.mapMultiply(-alpha)).append(partial);
+        // Optimized: copy once, combine in-place, then append
+        
+        u.combineToSelf(1.0, -alpha, r);
+        return u.append(partial);
     }
 
     /**
@@ -249,22 +255,31 @@ public class QPDualActiveSolverR extends QPOptimizer {
             return new ArrayRealVector(0, 0);
         }
 
-        RealVector tmp = u.add(r.mapMultiply(-alpha));
-        int size = tmp.getDimension();
+        // Original: RealVector tmp = u.add(r.mapMultiply(-alpha));
+        // Optimized: copy once, combine in-place
+        
+        u.combineToSelf(1.0, -alpha, r);
+        
+        int size = u.getDimension();
 
         if (dropIndex == 0) {
-            return tmp.getSubVector(1, size - 1);
+            return u.getSubVector(1, size - 1);
         } else if (dropIndex == size - 1) {
-            return tmp.getSubVector(0, size - 1);
+            return u.getSubVector(0, size - 1);
         }
 
-        RealVector head = tmp.getSubVector(0, dropIndex);
-        RealVector tail = tmp.getSubVector(dropIndex + 1, size - dropIndex - 1);
+        RealVector head = u.getSubVector(0, dropIndex);
+        RealVector tail = u.getSubVector(dropIndex + 1, size - dropIndex - 1);
         return head.append(tail);
     }
     
-   
-
+    /**
+     * Removes a multiplier at a specific index.
+     *
+     * @param u         the multiplier vector
+     * @param dropIndex the index to drop
+     * @return the vector without the dropped multiplier
+     */
     private RealVector removeMultiplierAt(final RealVector u, final int dropIndex) {
         if (u.getDimension() == 1) {
             return new ArrayRealVector(0, 0);
@@ -278,29 +293,6 @@ public class QPDualActiveSolverR extends QPOptimizer {
         final RealVector head = u.getSubVector(0, dropIndex);
         final RealVector tail = u.getSubVector(dropIndex + 1, u.getDimension() - dropIndex - 1);
         return head.append(tail);
-    }
-
-    private int findEqualitySwapIndex(final RealVector u,
-                                      final RealVector r,
-                                      final List<Integer> active,
-                                      final int p) {
-        int swapIndex = -1;
-        double minRatio = Double.POSITIVE_INFINITY;
-
-        for (int j = 0; j < active.size(); j++) {
-            if (active.get(j) >= p) {
-                final double rj = r.getEntry(j);
-                if (rj > Precision.SAFE_MIN) {
-                    final double ratio = u.getEntry(j) / rj;
-                    if (ratio < minRatio) {
-                        minRatio = ratio;
-                        swapIndex = j;
-                    }
-                }
-            }
-        }
-
-        return swapIndex;
     }
 
     /**
@@ -321,48 +313,76 @@ public class QPDualActiveSolverR extends QPOptimizer {
     }
 
     /**
-     * Find the most violated constraint using normalized violations.
+     * Finds the most violated constraint using normalized violations and an embedded numerical noise filter.
+     * <p>
+     * Equality constraints use absolute normalized violation.
+     * Inequality/bound constraints use one-sided normalized violation.
+     * The noise filter evaluates the exact numerical floating-point stability of the constraint residual
+     * relative to the magnitude of the terms involved in its calculation.
+     * </p>
      *
-     * Equality constraints use -|c_i(x)| * w_i.
-     * Inequality/bound constraints use c_i(x) * w_i.
-     *
-     * This keeps the original solver convention: a violated constraint must
-     * produce a negative value to be selected.
-     *
-     * @param sv        current constraint evalutation
+     * @param sv        current constraint evaluation (residuals)
      * @param weights   constraint weights
-     * @param blackList dependent constraint
-     * @param activeSet constraint in active set
-     * @param me        equality constraint numbers
-     * @return the violation value and index
+     * @param blackList dependent constraints to ignore
+     * @param activeSet constraints currently in the active set
+     * @param me        number of equality constraints
+     * @param C         the constraint matrix
+     * @param c0        the constraint constant vector
+     * @param x         the current primal point
+     * @return a Pair containing the index of the most violated constraint and the maximum violation value
      */
     private Pair<Integer, Double> mostViolatedConstraintNormalized(final RealVector sv,
-                                                                  final RealVector weights,
-                                                                  final Set<Integer> blackList,
-                                                                  final List<Integer> activeSet,
-                                                                  final int me) {
-        double maxViolation = 0.0;
-        int mostViolated = -1;
+                                                                   final RealVector weights,
+                                                                   final List<Integer> activeSet,
+                                                                   final int me,
+                                                                   final RealMatrix C,
+                                                                   final RealVector c0,
+                                                                   final RealVector x) {
+        double cvMax = 0.0;
+        int kViolated = -1;
 
-        for (int i = 0; i < sv.getDimension(); i++) {
-            if (blackList.contains(i) || activeSet.contains(i)) {
+        for (int k = 0; k < sv.getDimension(); k++) {
+            if (activeSet.contains(k)) {
                 continue;
             }
 
-            final double violation;
-            if (i < me) {
-                violation = -FastMath.abs(sv.getEntry(i)) * weights.getEntry(i);
+            final double residual = sv.getEntry(k);
+            final double absResidual = FastMath.abs(residual);
+
+            // 1. Scaled Violation
+            final double scaledViolation;
+            if (k < me) {
+                scaledViolation = absResidual * weights.getEntry(k);
             } else {
-                violation = sv.getEntry(i) * weights.getEntry(i);
+                scaledViolation = -residual * weights.getEntry(k);
             }
 
-            if (violation < maxViolation) {
-                maxViolation = violation;
-                mostViolated = i;
+            // 2. Convergence Test: skip if not greater than current maximum
+            if (scaledViolation <= cvMax) {
+                continue;
             }
+
+            // 3. --- NOISE FILTER ---
+            double absSum = FastMath.abs(c0.getEntry(k));
+            for (int i = 0; i < x.getDimension(); i++) {
+                absSum += FastMath.abs(C.getEntry(i, k) * x.getEntry(i));
+            }
+
+            double tempA = absSum + absResidual;
+            if (tempA <= absSum) {
+                continue; // Noise detected
+            }
+
+            double tempB = absSum + 1.5 * absResidual;
+            if (tempB <= tempA) {
+                continue; // Noise detected
+            }
+
+            kViolated = k;
+            cvMax = scaledViolation;
         }
 
-        return new Pair<>(mostViolated, maxViolation);
+        return new Pair<>(kViolated, cvMax);
     }
 
     /**
@@ -374,9 +394,9 @@ public class QPDualActiveSolverR extends QPOptimizer {
     public LagrangeSolution doOptimize() {
         RealMatrix G;
 
-        if (!this.isCholesky) {
+        if (matrixMode == QPMatrixMode.FULL) {
             G = function.getP();
-        } else {
+        } else  {
             G = function.getP().multiplyTransposed(function.getP());
         }
 
@@ -403,30 +423,32 @@ public class QPDualActiveSolverR extends QPOptimizer {
         RealVector weights = null;
 
         if (mc > 0) {
-            C = MatrixUtils.createRealMatrix(n, mc);
-            c0 = new ArrayRealVector(mc);
-
-            if (p > 0) {
-                C.setSubMatrix(CE.getData(), 0, 0);
-                c0.setSubVector(0, ce0);
-            }
-
-            if (m1 > 0) {
-                RealMatrix Aineq = iqConstraints.jacobian(null);
-                RealVector bineq = iqConstraints.getLowerBound();
-                C.setSubMatrix(Aineq.transpose().getData(), 0, p);
-                c0.setSubVector(p, bineq.mapMultiply(-1.0));
-            }
-
-            if (b1 > 0) {
-                RealMatrix Abound = bConstraints.jacobian(null);
-                RealVector lower = bConstraints.getLowerBound();
-                RealVector upper = bConstraints.getUpperBound();
-                C.setSubMatrix(Abound.transpose().getData(), 0, p + m1);
-                C.setSubMatrix(Abound.scalarMultiply(-1.0).transpose().getData(), 0, p + m1 + b1);
-                c0.setSubVector(p + m1, lower.mapMultiply(-1.0));
-                c0.setSubVector(p + m1 + b1, upper);
-            }
+//            C = new Array2DRowRealMatrix(n, mc);
+//            c0 = new ArrayRealVector(mc);
+            Pair<RealMatrix, RealVector> CC0 = buildGlobalConstraints(n, eqConstraints, iqConstraints, bConstraints);
+            C=CC0.getFirst();
+            c0=CC0.getSecond();
+//            if (p > 0) {
+//                C.setSubMatrix(CE.getData(), 0, 0);
+//                c0.setSubVector(0, ce0);
+//            }
+//
+//            if (m1 > 0) {
+//                RealMatrix Aineq = iqConstraints.jacobian(null);
+//                RealVector bineq = iqConstraints.getLowerBound();
+//                C.setSubMatrix(Aineq.transpose().getData(), 0, p);
+//                c0.setSubVector(p, bineq.mapMultiply(-1.0));
+//            }
+//
+//            if (b1 > 0) {
+//                RealMatrix Abound = bConstraints.jacobian(null);
+//                RealVector lower = bConstraints.getLowerBound();
+//                RealVector upper = bConstraints.getUpperBound();
+//                C.setSubMatrix(Abound.transpose().getData(), 0, p + m1);
+//                C.setSubMatrix(Abound.scalarMultiply(-1.0).transpose().getData(), 0, p + m1 + b1);
+//                c0.setSubVector(p + m1, lower.mapMultiply(-1.0));
+//                c0.setSubVector(p + m1 + b1, upper);
+//            }
 
             weights = computeConstraintWeights(C);
         }
@@ -435,61 +457,38 @@ public class QPDualActiveSolverR extends QPOptimizer {
         RealMatrix L;
         RealMatrix L1;
         QRUpdaterR qrUpdater;
-        double tol;
-        if (!this.isCholesky) {
+        
+        if (matrixMode == QPMatrixMode.FULL) {
             try {
                 final double eps = matrixDecompositionTolerance.getEpsMatrixDecomposition();
-                final CholeskyDecomposition cholesky = new CholeskyDecomposition(G, eps, eps);
+                final RegularizedCholeskyDecomposition cholesky = new RegularizedCholeskyDecomposition(G, eps, eps);
                 DecompositionSolver solver = cholesky.getSolver();
 
                 x = solver.solve(g0).mapMultiply(-1.0);
                 L = cholesky.getL();
-//                if(cholesky.getDiagonalShift()!=0.0)
-//                    G=L.multiplyTransposed(L);
-//                L=factorizeLQp(G,null);
-
                 L1 = inverseLowerTriangular(L);
-
-//                x = L1.preMultiply(L1.operate(g0)).mapMultiply(-1.0);
-//                G=L.multiplyTransposed(L);
-//                c1 trace of G matrix
-//                double c1 = FastMath.sqrt(G.getTrace());
-                double c1 = G.getTrace();
-//                c2 trace of inverse of cholesky factorization
-//                double c2 = FastMath.sqrt(L1.getTrace());
-                double c2 = L1.getTrace();
-                tol = mc * c1 * c2 * Precision.EPSILON * 100.0;
                 qrUpdater = new QRUpdaterR(L1);
             } catch (MathIllegalArgumentException ex) {
-                // matrix is not positive definite return empty solution
-                return buildFailureSolution(ERROR_DEPENDENT_EQUALITIES);
+                // Matrix is not positive definite, return failure solution
+                return buildFailureSolution(ERROR_CHOLESKY_DECOMPOSITION);
             }
         } else {
             L = function.getP();
             L1 = inverseLowerTriangular(L);
 
             x = L1.preMultiply(L1.operate(g0)).mapMultiply(-1.0);
-            double c1 = G.getTrace();
-            double c2 = L1.getTrace();
-            tol = mc * c1 * c2 * Precision.EPSILON * 100.0;
             qrUpdater = new QRUpdaterR(L1);
         }
-
+        
+       
         if (mc == 0) {
-            return new LagrangeSolution(
-                    x,
-                    new ArrayRealVector(0, 0),
-                    0.5 * x.dotProduct(G.operate(x)) + g0.dotProduct(x) + g
-            );
+            double obj = 0.5 * x.dotProduct(G.operate(x)) + g0.dotProduct(x) + g;
+            return new LagrangeSolution(x, new ArrayRealVector(0, 0), obj);
         }
 
-        // max iteration adjusted in base of problem dimension
+        // Maximum iterations adjusted based on problem dimension
         this.maxIter = 40 * (n + mc);
 
-        // convergence threshold calculated in base at the matrix conditioning
-        // ActiveSet and blackLit(dependent constraints)
-
-        final Set<Integer> blacklist = new HashSet<>();
         List<Integer> active = new ArrayList<>();
 
         RealVector u = new ArrayRealVector(0, 0);
@@ -497,137 +496,62 @@ public class QPDualActiveSolverR extends QPOptimizer {
         RealVector d = null;
         RealVector z = null;
         int iteration = 0;
-
+        RealMatrix absG = precomputeAbsG(G);
+        RealVector xOld = x.copy();        
+        boolean refinementDone = false;
+        
         // Active-set loop for all constraints
         while (mc != 0 && iteration++ < maxIter) {
-
+            
+            // Delete constraints with negative multipliers and recompute X, U with the new base
+            if (!active.isEmpty()) {
+                for (int j = 0; j < active.size(); j++) {
+                    if (active.get(j) >= p && u.getEntry(j) < 0.0) {
+                        qrUpdater.deleteConstraint(j);
+                        active.remove(j);
+                        Pair<RealVector, RealVector> xy = recomputeXY(x, G, g0, C, c0, qrUpdater, active);
+                        x = xy.getFirst();
+                        u = xy.getSecond();
+                     }
+                }
+            }
+            
             RealVector sv;
-            // store solution in case constraint can't be added because dependent
-            RealVector xOld = x.copy();
-            RealVector uOld = u.copy();
-            // evaluate constraints
-            sv = C.transpose().operate(x).add(c0);
+            // Evaluate constraints sv = C.preMultiply(x).add(c0); 
+            sv = C.preMultiply(x);           
+            sv.combineToSelf(1.0, 1.0, c0);
+            // Convergence test: find the most violated NON-active constraint
+            Pair<Integer, Double> violationInfo = mostViolatedConstraintNormalized(sv, weights, active, p, C, c0, x);
+            int kViolated = violationInfo.getKey();
+            double cvMax = violationInfo.getValue();
 
-//            // convergence test:
-//            // consider only NON-active constraints.
-//            // For equalities use absolute normalized violation.
-//            // For inequalities/bounds use one-sided normalized violation.
-//            double cvMax = 0.0;
-//
-//            for (int k = 0; k < sv.getDimension(); k++) {
-//                if (active.contains(k)) {
-//                    continue;
-//                }
-//
-//                final double scaledViolation;
-//                if (k < p) {
-//                    scaledViolation = FastMath.abs(sv.getEntry(k)) * weights.getEntry(k);
-//                } else {
-//                    scaledViolation = -sv.getEntry(k) * weights.getEntry(k);
-//                }
-//
-//                if (scaledViolation > cvMax) {
-//                    cvMax = scaledViolation;
-//                }
-//            }
-//
-//            // Evaluate convergence : no significantly violated NON-active constraint
-//            if (cvMax <= Precision.EPSILON) {
-//                break; // Optimal solution found
-//            }
-
-             // convergence test:
-            // consider only NON-active constraints.
-            // For equalities use absolute normalized violation.
-            // For inequalities/bounds use one-sided normalized violation.
-            double cvMax = 0.0;
-
-            for (int k = 0; k < sv.getDimension(); k++) {
-                if (active.contains(k)) {
-                    continue;
-                }
-
-                double residual = sv.getEntry(k);
-                double absResidual = FastMath.abs(residual);
-
-                // --- INIZIO FILTRO ANTIRUMORE DI POWELL ---
-                // Calcola la somma dei valori assoluti degli operandi (il "TEMP" di Powell)
-                // c0 è l'equivalente di B(K), C.getEntry(i, k) è l'equivalente di A(K,I)
-                double absSum = FastMath.abs(c0.getEntry(k));
-                for (int i = 0; i < x.getDimension(); i++) {
-                    // Ricorda: C ha le normali sulle colonne, quindi usiamo C.getEntry(i, k)
-                    absSum += FastMath.abs(C.getEntry(i, k) * x.getEntry(i));
-                }
-
-                double tempA = absSum + absResidual;
-                
-                // Test 1: Se sommare il residuo ad absSum non cambia il risultato 
-                // in precisione floating-point, il residuo è puro rumore. Ignoralo.
-                if (tempA <= absSum) {
-                    continue; 
-                }
-                
-                // Test 2: Margine di sicurezza di Powell (1.5 * residuo)
-                double tempB = absSum + 1.5 * absResidual;
-                if (tempB <= tempA) {
-                    continue;
-                }
-                // --- FINE FILTRO ANTIRUMORE ---
-
-                final double scaledViolation;
-                if (k < p) {
-                    // Per le uguaglianze, usiamo il valore assoluto già calcolato
-                    scaledViolation = absResidual * weights.getEntry(k);
-                } else {
-                    // Per le disuguaglianze, la violazione è negativa nel tuo framework
-                    scaledViolation = -residual * weights.getEntry(k);
-                }
-
-                if (scaledViolation > cvMax) {
-                    cvMax = scaledViolation;
-                }
+            // Evaluate convergence: no significantly violated NON-active constraint
+            if (cvMax <= Precision.EPSILON && !refinementDone) {
+                Pair<RealVector, RealVector> xy = recomputeXY(x, G, g0, C, c0, qrUpdater, active);
+                x = xy.getFirst();
+                u = xy.getSecond();
+                kViolated = -1;
+                refinementDone = true;
+            }      
+            
+            if (cvMax <= Precision.EPSILON && refinementDone) {
+                break; // Solution found
             }
-
-            // Evaluate convergence : no significantly violated NON-active constraint
-            if (cvMax <= Precision.EPSILON) {
-                break; // Optimal solution found
-            }
-
-////////            sv = C.transpose().operate(x).add(c0);
-////////
-////////            //calculate norm1-like measure of scaled violations with original flow
-////////            double sum = 0;
-////////            for (int k = 0; k < sv.getDimension(); k++) {
-////////                if (k < p) {
-////////                    sum -= FastMath.abs(sv.getEntry(k)) * weights.getEntry(k);
-////////                } else {
-////////                    sum += FastMath.min(0.0, sv.getEntry(k) * weights.getEntry(k));
-////////                }
-////////            }
-////////
-////////            // Evaluate convergence
-////////            if (FastMath.abs(sum) <= tol) {
-////////                break;// Optimal solution found
-////////            }
-
-            // Evaluate most violated constraint, excluding dependent/active loop
+          
+            // Active loop evaluation
             while (iteration++ < maxIter) {
-
-                final Pair<Integer, Double> mostViolated =
-                        mostViolatedConstraintNormalized(sv, weights, blacklist, active, p);
-                if (mostViolated.getValue() >= 0) {
-                    blacklist.clear();
-                    break; // reavaluate constraints and optimal condition;
+                if (kViolated < 0) {
+                    break;
                 }
-
+                    
                 double t1;
                 double t2;
                 double t = 0;
                 double uPartial = 0;
                 int dropIndex;
                 RealVector np;
-                RealMatrix J2;
-                final int constraintIndex = mostViolated.getKey();
+                
+                final int constraintIndex = kViolated;
                 final boolean equality = constraintIndex < p;
 
                 // Dual step loop update multiplier and x (if step is also in primal)
@@ -644,85 +568,45 @@ public class QPDualActiveSolverR extends QPOptimizer {
                     t2 = dualStep.getValue();
                     dropIndex = dualStep.getKey();
                     t = FastMath.min(t1, t2);
+                    
                     if (!Double.isFinite(t)) {
                         return buildFailureSolution(ERROR_INFEASIBLE);
                     }
+                    
                     if (t == t1) {
-                        break; // primal full step (exit from dual step loop)
+                        break; // Primal full step (exit from dual step loop)
                     } else {
                         // Manage dual step
                         if (t1 < Double.POSITIVE_INFINITY) {
-                            // step is also in primal
-                            x = x.add(z.mapMultiply(t));
+                            // Step is also in primal x = x.add(z.mapMultiply(t));
+                            x.combineToSelf(1.0, t, z);
                         }
                         uPartial += t;
                         u = updateMultipliersOnRemoval(u, r, t, dropIndex);
                         
                         qrUpdater.deleteConstraint(dropIndex);
-
                         active.remove(dropIndex);
                     }
                 }
 
                 // Manage full step
-                //equality constraint:
-                //equality constraint need to be added and if it is no possible some inequality constraint on the active set
-                //will be dropped
-                if (constraintIndex < p) {
-                    // equality case
-
-                    boolean added = false;
-                    if (active.size() < n) {
-                        added = qrUpdater.addConstraint(d);
-                    }
-
-                    if (added) {
-                        active.add(constraintIndex);
-                        x = x.add(z.mapMultiply(t));
-                        uPartial += t;
-                        u = updateMultipliersOnAddition(u, r, t, uPartial);
-                        
-                        blacklist.clear();
-                        break; // re-evaluate convergence
-                    } else {
-                        final int swapIndex = findEqualitySwapIndex(u, r, active, p);
-                        
-                        if (swapIndex < 0) {
-                            return buildFailureSolution(ERROR_DEPENDENT_EQUALITIES);
-                        }
-
-                        final int droppedConstraint = active.get(swapIndex);
-                        System.out.println("SWAP CONSTRAINT FOUND");
-                        qrUpdater.deleteConstraint(swapIndex);
-                        active.remove(swapIndex);
-                        u = removeMultiplierAt(u, swapIndex);
-
-                        blacklist.add(droppedConstraint);
-
-                        // let the equality be selected again in the next pass
-                        break;
-                    }
+                if (active.size() < n && qrUpdater.addConstraint(d)) {
+                    active.add(constraintIndex);
+                    // Step rimal x = x.add(z.mapMultiply(t));
+                    x.combineToSelf(1.0, t, z);
+                    uPartial += t;
+                    u = updateMultipliersOnAddition(u, r, t, uPartial);
+                    break; // Re-evaluate convergence
                 } else {
-                    // inequality / bound case
-                    if (active.size() < n && qrUpdater.addConstraint(d)) {
-                        active.add(constraintIndex);
-                        x = x.add(z.mapMultiply(t));
-                        uPartial += t;
-                        u = updateMultipliersOnAddition(u, r, t, uPartial);
-                        blacklist.clear();
-                        break;
-                    } else {
-                        blacklist.add(constraintIndex);
-                    }
+                    return buildFailureSolution(ERROR_DEPENDENT_EQUALITIES);
                 }
-                //////MANAGE FULL STEP END
             }
         }
 
         if (iteration == maxIter) {
             return buildFailureSolution(ERROR_MAX_ITERATIONS);
         }
-
+        
         return buildSolution(x, u, active, G, g0, g, p, m);
     }
 
@@ -751,16 +635,12 @@ public class QPDualActiveSolverR extends QPOptimizer {
         if (!activeSet.isEmpty()) {
             for (int i = 0; i < activeSet.size(); i++) {
                 lambda.setEntry(activeSet.get(i), u.getEntry(i));
-                if (activeSet.get(i) >= p && u.getEntry(i) < 0) {
-                    lambda.setEntry(activeSet.get(i), 0.0);
-                }
             }
         }
-        final double value = 0.5 * x.dotProduct(G.operate(x)) +
-                             g0.dotProduct(x) + g;
+        final double value = 0.5 * x.dotProduct(G.operate(x)) + g0.dotProduct(x) + g;
         return new LagrangeSolution(x, lambda, value);
     }
-
+    
     /**
      * Computes the inverse of a lower-triangular matrix via forward
      * substitution.
@@ -780,12 +660,337 @@ public class QPDualActiveSolverR extends QPOptimizer {
         return Linv;
     }
 
-    private LagrangeSolution buildFailureSolution(final double ERROR_CHOLESKY_DECOMPOSITION) {
+    /**
+     * Helper to build a failure solution structure.
+     *
+     * @param errorCode the failure code
+     * @return a LagrangeSolution representing the failure
+     */
+    private LagrangeSolution buildFailureSolution(final double errorCode) {
         return new LagrangeSolution(
                 new ArrayRealVector(0, 0),
-                new ArrayRealVector(1, ERROR_CHOLESKY_DECOMPOSITION),
+                new ArrayRealVector(1, errorCode),
                 0
         );
     }
+ 
+    /**
+     * Precomputes the entrywise absolute matrix of G.
+     *
+     * @param G the symmetric matrix
+     * @return the absolute matrix
+     */
+    private RealMatrix precomputeAbsG(final RealMatrix G) {
+        final int n = G.getRowDimension();
+        final RealMatrix absG = MatrixUtils.createRealMatrix(n, n);
 
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                absG.setEntry(i, j, FastMath.abs(G.getEntry(i, j)));
+            }
+        }
+
+        return absG;
+    }
+
+    /**
+     * Exact numerical progress check.
+     *
+     * <p>The test evaluates:
+     *
+     * <pre>
+     * FDIFF  = sum_i ( 2*g0_i + sum_j G_ij*(xOld_j + xNew_j) ) * (xNew_i - xOld_i)
+     * FDIFFA = sum_i ( |2*g0_i| + sum_j |G_ij*(xOld_j + xNew_j)| ) * |xNew_i - xOld_i|
+     * </pre>
+     *
+     * and rejects progress if:
+     *
+     * <pre>
+     * FDIFFA + FDIFF     &lt;= FDIFFA
+     * FDIFFA + 1.5*FDIFF  &lt;= FDIFFA + FDIFF
+     * </pre>
+     *
+     * <p>To save work:
+     * <ul>
+     * <li>FDIFF is evaluated exactly using the Cholesky factor {@code L}, with {@code G = L*L^T}</li>
+     * <li>FDIFFA is evaluated using a precomputed entrywise absolute matrix {@code absG = |G|}</li>
+     * </ul>
+     *
+     * @param xOld checkpoint point x_old
+     * @param xNew current point x_new
+     * @param g0 linear term of the quadratic objective
+     * @param L lower Cholesky factor of G
+     * @param absG precomputed entrywise absolute Hessian |G|
+     * @return true if the objective progress is numerically reliable, false otherwise
+     */
+    private boolean isObjectiveProgressReliableExact(final RealVector xOld,
+                                                     final RealVector xNew,
+                                                     final RealVector g0,
+                                                     final RealMatrix L,
+                                                     final RealMatrix absG) {
+
+        // dx = xNew - xOld
+        final RealVector dx = xNew.subtract(xOld);
+
+        // Early rejection for exact no-move (stall detected)
+        if (dx.getNorm() == 0.0) {
+            return false;
+        }
+
+        // ------------------------------------------------------------------
+        // Exact FDIFF
+        //
+        //   FDIFF = ( 2*g0 + G*(xOld + xNew) )^T * (xNew - xOld)
+        //
+        // Using:
+        //   gOld = g0 + G*xOld
+        // so:
+        //   FDIFF = 2*gOld^T*dx + dx^T*G*dx
+        //         = 2*gOld^T*dx + ||L^T dx||^2
+        // ------------------------------------------------------------------
+        final RealVector gOld = L.operate(L.preMultiply(xOld)).add(g0);
+        final RealVector ltDx = L.preMultiply(dx);
+        final double fDiff = 2.0 * gOld.dotProduct(dx) + ltDx.dotProduct(ltDx);
+
+        // ------------------------------------------------------------------
+        // Exact FDIFFA
+        //
+        //   FDIFFA = ( |2*g0| + |G|*|xOld + xNew| )^T * |dx|
+        // ------------------------------------------------------------------
+        final RealVector xSumAbs = xOld.add(xNew).map(FastMath::abs);
+        final RealVector dxAbs   = dx.map(FastMath::abs);
+        final RealVector abs2g0  = g0.mapMultiply(2.0).map(FastMath::abs);
+
+        final RealVector rowAbs = absG.operate(xSumAbs).add(abs2g0);
+        final double fDiffA = rowAbs.dotProduct(dxAbs);
+
+        // ------------------------------------------------------------------
+        // Rejection logic
+        // ------------------------------------------------------------------
+        final double s1 = fDiffA + fDiff;
+        if (s1 <= fDiffA) {
+            return false;
+        }
+
+        final double s2 = fDiffA + 1.5 * fDiff;
+        if (s2 <= s1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Incremental recomputation of primal x and active multipliers y after a change
+     * in the working set (for example after dropping one negative active multiplier).
+     *
+     * Unlike the absolute KKT reconstruction, this version starts from the current
+     * primal point xCurrent and only applies:
+     *
+     * 1) an active-space correction to reduce the residuals of the current active set,
+     * 2) a free-space correction to improve projected stationarity,
+     * 3) a recomputation of the active multipliers consistent with the corrected x.
+     *
+     * Convention:
+     * - objective: 0.5 * x^T G x + g0^T x, with G = L*L^T
+     * - constraints: C^T x + c0 >= 0
+     *
+     * @param x  the current primal point
+     * @param G         the quadratic objective matrix
+     * @param g0        the linear objective vector
+     * @param C         the constraint matrix
+     * @param c0        the constraint constants
+     * @param qrUpdater the factorization updater
+     * @param active    the current active set
+     * @return a Pair containing the corrected primal x and the active multipliers y
+     */
+    private Pair<RealVector, RealVector> recomputeXY(final RealVector x,
+                                                     final RealMatrix G,
+                                                     final RealVector g0,
+                                                     final RealMatrix C,
+                                                     final RealVector c0,
+                                                     final QRUpdaterR qrUpdater,
+                                                     final List<Integer> active) {
+
+        final int nAct = active.size();
+        
+
+        // --------------------------------------------------------------
+        // 1) Active-space correction: reduce active residuals starting from xCurrent
+        //    rp_i = -(a_i^T x + c0_i)
+        // --------------------------------------------------------------
+        if (nAct > 0) {
+            final double[] rpData = new double[nAct];
+            for (int i = 0; i < nAct; i++) {
+                final int idx = active.get(i);
+                final RealVector ai = C.getColumnVector(idx);
+                rpData[i] = -(ai.dotProduct(x) + c0.getEntry(idx));
+            }
+            final RealVector rp = new ArrayRealVector(rpData, false);
+
+            final RealVector tActive = qrUpdater.solveRT(rp);
+            if (tActive == null) {
+                return null; // singular / numerically unsafe
+            }
+
+            // Original: xRec = xRec.add(qrUpdater.applyJActive(tActive));
+            // Optimized: in-place addition to avoid object allocation
+            x.combineToSelf(1.0, 1.0, qrUpdater.applyJActive(tActive));
+        }
+
+        // --------------------------------------------------------------
+        // 2) Free-space correction: improve projected stationarity
+        //    grad = G*x + g0
+        // --------------------------------------------------------------
+        
+        // Original: final RealVector gMid = G.operate(xRec).add(g0);
+        // Optimized: allocate once for G.operate(xRec), then combine in-place
+        final RealVector gMid = G.operate(x);
+        gMid.combineToSelf(1.0, 1.0, g0);
+        
+        final RealVector dMid = qrUpdater.computeD(gMid);
+        
+        // Original: xRec = xRec.subtract(qrUpdater.computeZ(dMid));
+        // Optimized: in-place subtraction (xRec = 1.0 * xRec + (-1.0) * Z)
+        x.combineToSelf(1.0, -1.0, qrUpdater.computeZ(dMid));
+
+        // --------------------------------------------------------------
+        // 3) Recompute active multipliers from corrected xRec
+        // --------------------------------------------------------------
+        if (nAct == 0) {
+            return new Pair<>(x, new ArrayRealVector(0));
+        }
+
+        RealVector yActive = qrUpdater.solveR(dMid);
+
+        if (yActive == null) {
+            return null;
+        }
+
+        if (yActive.getDimension() > nAct) {
+            yActive = yActive.getSubVector(0, nAct);
+        }
+
+        return new Pair<>(x, yActive);
+    }
+
+ /**
+ * Populates the global constraint matrix C and constant vector c0 in-place
+ * by extracting data from specific constraint objects.
+ * * @param C             the target global constraint matrix (n x mc)
+ * @param c0            the target global constant vector (mc)
+ * @param eqConstraints the linear equality constraints (can be null)
+ * @param iqConstraints the linear inequality constraints (can be null)
+ * @param bConstraints  the linear bounded constraints (can be null)
+ */
+/**
+ * Populates the global constraint matrix C and constant vector c0 in-place.
+ * Optimized to avoid memory spikes by bypassing getData() calls.
+ * * @param n             dimension of the problem
+ * @param eqConstraints linear equality constraints
+ * @param iqConstraints linear inequality constraints
+ * @param bConstraints  linear bounded constraints
+ * @return a Pair containing the global C matrix (n x mc) and c0 vector (mc)
+ */
+public Pair<RealMatrix, RealVector> buildGlobalConstraints(final int n,
+                                                           final LinearEqualityConstraint eqConstraints,
+                                                           final LinearInequalityConstraint iqConstraints,
+                                                           final LinearBoundedConstraint bConstraints) {
+
+    final int p = (eqConstraints != null) ? eqConstraints.getA().getRowDimension() : 0;
+    final int m1 = (iqConstraints != null) ? iqConstraints.getLowerBound().getDimension() : 0;
+    final int b1 = (bConstraints != null) ? bConstraints.getLowerBound().getDimension() : 0;
+    
+    final int mc = p + m1 + 2 * b1;
+    final double[][] cData = new double[n][mc];
+    final double[] c0Data = new double[mc];
+
+    // --- 1. EQUALITIES (p) ---
+    if (p > 0) {
+        RealMatrix Ae = eqConstraints.getA();
+        RealVector be = eqConstraints.getLowerBound();
+        
+        // Handle Vector c0 (Equality)
+        if (be instanceof ArrayRealVector) {
+            double[] data = ((ArrayRealVector) be).getDataRef();
+            for (int j = 0; j < p; j++) c0Data[j] = -data[j];
+        } else {
+            for (int j = 0; j < p; j++) c0Data[j] = -be.getEntry(j);
+        }
+
+        // Handle Matrix C (Equality - Transposed)
+        if (Ae instanceof Array2DRowRealMatrix) {
+            double[][] data = ((Array2DRowRealMatrix) Ae).getDataRef();
+            for (int j = 0; j < p; j++) {
+                for (int i = 0; i < n; i++) cData[i][j] = data[j][i];
+            }
+        } else {
+            for (int j = 0; j < p; j++) {
+                for (int i = 0; i < n; i++) cData[i][j] = Ae.getEntry(j, i);
+            }
+        }
+    }
+
+    // --- 2. INEQUALITIES (m1) ---
+    if (m1 > 0) {
+        RealMatrix Ai = iqConstraints.jacobian(null);
+        RealVector bi = iqConstraints.getLowerBound();
+        
+        // Handle Vector c0 (Inequality)
+        if (bi instanceof ArrayRealVector) {
+            double[] data = ((ArrayRealVector) bi).getDataRef();
+            for (int j = 0; j < m1; j++) c0Data[p + j] = -data[j];
+        } else {
+            for (int j = 0; j < m1; j++) c0Data[p + j] = -bi.getEntry(j);
+        }
+
+        // Handle Matrix C (Inequality - Transposed)
+        if (Ai instanceof Array2DRowRealMatrix) {
+            double[][] data = ((Array2DRowRealMatrix) Ai).getDataRef();
+            for (int j = 0; j < m1; j++) {
+                for (int i = 0; i < n; i++) cData[i][p + j] = data[j][i];
+            }
+        } else {
+            for (int j = 0; j < m1; j++) {
+                for (int i = 0; i < n; i++) cData[i][p + j] = Ai.getEntry(j, i);
+            }
+        }
+    }
+
+    // --- 3. BOUNDS (2 * b1) ---
+    if (b1 > 0) {
+        RealMatrix Ab = bConstraints.jacobian(null);
+        RealVector lb = bConstraints.getLowerBound();
+        RealVector ub = bConstraints.getUpperBound();
+
+        // Handle Vectors (Lower & Upper)
+        for (int j = 0; j < b1; j++) {
+            c0Data[p + m1 + j] = (lb instanceof ArrayRealVector) ? -((ArrayRealVector) lb).getDataRef()[j] : -lb.getEntry(j);
+            c0Data[p + m1 + b1 + j] = (ub instanceof ArrayRealVector) ? ((ArrayRealVector) ub).getDataRef()[j] : ub.getEntry(j);
+        }
+
+        // Handle Matrix C (Transposed and Sign Flipped for Upper Bounds)
+        if (Ab instanceof Array2DRowRealMatrix) {
+            double[][] data = ((Array2DRowRealMatrix) Ab).getDataRef();
+            for (int j = 0; j < b1; j++) {
+                for (int i = 0; i < n; i++) {
+                    double val = data[j][i];
+                    cData[i][p + m1 + j] = val;        // Lower Bound: A^T
+                    cData[i][p + m1 + b1 + j] = -val;  // Upper Bound: -A^T
+                }
+            }
+        } else {
+            for (int j = 0; j < b1; j++) {
+                for (int i = 0; i < n; i++) {
+                    double val = Ab.getEntry(j, i);
+                    cData[i][p + m1 + j] = val;
+                    cData[i][p + m1 + b1 + j] = -val;
+                }
+            }
+        }
+    }
+
+    // Wrap the raw arrays into Hipparchus objects (false = no copy)
+    return new Pair<>(new Array2DRowRealMatrix(cData, false), new ArrayRealVector(c0Data, false));
+}
 }

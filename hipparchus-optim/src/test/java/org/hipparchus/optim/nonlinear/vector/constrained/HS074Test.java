@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 public class HS074Test {
 
     private static final double A = 0.55; // A(1)
+    
+
 
     // Bounds: x1,x2 in [0,1200]; x3,x4 in [-A, +A]
     private static final double[] LB = { 0.0, 0.0, -A, -A };
@@ -39,6 +41,7 @@ public class HS074Test {
             final double x3 = X.getEntry(2), x4 = X.getEntry(3);
             final double g1 =  x4 - x3 + A;
             final double g2 =  x3 - x4 + A;
+           
             return new ArrayRealVector(new double[]{ g1, g2 });
         }
         @Override public RealMatrix jacobian(RealVector x) { throw new UnsupportedOperationException(); }
@@ -53,13 +56,12 @@ public class HS074Test {
                          x3=X.getEntry(2), x4=X.getEntry(3);
 
             final double h1 = 1000.0*(FastMath.sin(-x3 - 0.25) + FastMath.sin(-x4 - 0.25))
-                            + 894.8 - x1;
-
+                            + 894.8 -x1;
             final double h2 = 1000.0*(FastMath.sin( x3 - 0.25) + FastMath.sin( x3 - x4 - 0.25))
-                            + 894.8 - x2;
+                            + 894.8-x2;
 
             final double h3 = 1000.0*(FastMath.sin( x4 - 0.25) + FastMath.sin( x4 - x3 - 0.25))
-                            - 1294.8;
+                            + 1294.8;
 
             return new ArrayRealVector(new double[]{ h1, h2, h3 });
         }

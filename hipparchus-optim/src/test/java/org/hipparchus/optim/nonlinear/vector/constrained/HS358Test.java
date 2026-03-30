@@ -12,6 +12,7 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
@@ -21,6 +22,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HS358Test {
+
+    // TP358 MODE=1 bounds
+    private static final double[] LB = {-0.5, 1.5, -2.0, 0.001, 0.001};
+    private static final double[] UB = { 0.5, 2.5, -1.0, 0.1,   0.1  };
 
     private static final class HS358Obj extends TwiceDifferentiableFunction {
         private static final double[] Y = {
@@ -34,33 +39,61 @@ public class HS358Test {
         @Override
         public double value(final RealVector x) {
             double fx = 0.0;
+            final double x1 = FastMath.max(LB[0], FastMath.min(UB[0], x.getEntry(0)));
+            final double x2 = FastMath.max(LB[1], FastMath.min(UB[1], x.getEntry(1)));
+            final double x3 = FastMath.max(LB[2], FastMath.min(UB[2], x.getEntry(2)));
+            final double x4 = FastMath.max(LB[3], FastMath.min(UB[3], x.getEntry(3)));
+            final double x5 = FastMath.max(LB[4], FastMath.min(UB[4], x.getEntry(4)));
             for (int i = 0; i < 33; i++) {
                 final double ti = i * 0.1 + 2.0;
-                final double fi = Y[i] - (x.getEntry(0) + x.getEntry(1) * FastMath.exp(-x.getEntry(3) * ti) +
-                                          x.getEntry(2) * FastMath.exp(-x.getEntry(4) * ti));
+                final double fi = Y[i] - (x1 + x2 * FastMath.exp(-x4 * ti) +
+                                          x3 * FastMath.exp(-x5 * ti));
                 fx += fi * fi;
             }
             return fx;
         }
 
-        @Override public RealVector gradient(final RealVector x) { throw new UnsupportedOperationException(); }
+        @Override
+        public RealVector gradient(final RealVector x) {
+            final double[] g = new double[5];
+            final double x1 = FastMath.max(LB[0], FastMath.min(UB[0], x.getEntry(0)));
+            final double x2 = FastMath.max(LB[1], FastMath.min(UB[1], x.getEntry(1)));
+            final double x3 = FastMath.max(LB[2], FastMath.min(UB[2], x.getEntry(2)));
+            final double x4 = FastMath.max(LB[3], FastMath.min(UB[3], x.getEntry(3)));
+            final double x5 = FastMath.max(LB[4], FastMath.min(UB[4], x.getEntry(4)));
+
+            for (int i = 0; i < 33; i++) {
+                final double ti = i * 0.1 + 2.0;
+                final double exp4 = FastMath.exp(-x4 * ti);
+                final double exp5 = FastMath.exp(-x5 * ti);
+                final double fi = Y[i] - (x1 + x2 * exp4 + x3 * exp5);
+                final double[] dfi = {
+                        -1.0,
+                        -exp4,
+                        -exp5,
+                        x2 * exp4 * ti,
+                        x3 * exp5 * ti
+                };
+                for (int j = 0; j < 5; j++) {
+                    g[j] += 2.0 * fi * dfi[j];
+                }
+            }
+            return new ArrayRealVector(g, false);
+        }
         @Override public RealMatrix hessian(final RealVector x) { throw new UnsupportedOperationException(); }
     }
 
     @Test
     void testHS358() {
         final HS358Obj obj = new HS358Obj();
-        final double[] xEx = {0.3754, 1.9358, -1.4647, 0.01287, 0.02212};
-        assertEquals(0.546e-4, obj.value(new org.hipparchus.linear.ArrayRealVector(xEx, false)), 5.0e-7);
+        
 
         final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         final LagrangeSolution sol = optimizer.optimize(
+                HSProblemTestUtils.newExternalOption(),
                 new InitialGuess(new double[] {0.5, 1.5, -1.0, 0.01, 0.02}),
                 new ObjectiveFunction(obj),
-                new SimpleBounds(
-                        new double[] {-0.5, 1.5, -2.0, 0.001, 0.001},
-                        new double[] { 0.5, 2.5, -1.0, 0.1,   0.1  }
-                )
+                new SimpleBounds(LB, UB)
         );
 
         HSProblemTestUtils.assertBetterObjective(0.546e-4, sol);

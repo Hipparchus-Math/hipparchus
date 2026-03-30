@@ -121,7 +121,7 @@ public class LineSearch {
     /**
      * Simple constructor.
      *
-     * @param eps tolerance for convergence and active constraint evaluation
+     * @param minAlpha minimum step for line search
      * @param maxHistory maximum penalty history size
      * @param mu parameter for evaluation of Armijo condition for descend
      * direction
@@ -129,13 +129,13 @@ public class LineSearch {
      * @param maxMonotoneFailures failures before switching to non-monotone
      * @param maxBadSteps allowed consecutive bad steps before Hessian reset
      */
-    public LineSearch(final double eps, final int maxHistory, final double mu, final double beta,
+    public LineSearch(final double alpha, final int maxHistory, final double mu, final double beta,
             final int maxMonotoneFailures, final int maxBadSteps) {
         this.maxHistory = maxHistory;
         this.sigma = mu;
         this.beta = beta;
         //this.alphaMin = FastMath.min(1.0e-12, eps);
-        this.alphaMin =1.0e-14;
+        this.alphaMin =alpha;
         this.maxMonotoneFailures = maxMonotoneFailures;
         this.maxBadSteps = maxBadSteps;
         this.history = new LinkedList<>();

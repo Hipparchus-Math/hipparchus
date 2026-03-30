@@ -156,7 +156,7 @@ public class HS099Test {
     public void testHS099() {
         final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
         final LagrangeSolution sol = optimizer.optimize(
                 guess(),
                 new ObjectiveFunction(new HS099Objective()),

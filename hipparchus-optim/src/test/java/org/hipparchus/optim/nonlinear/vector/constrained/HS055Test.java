@@ -80,6 +80,7 @@ public class HS055Test {
     void testHS055() {
         final SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         final LagrangeSolution sol = optimizer.optimize(
+                
                 new InitialGuess(new double[] {1.0, 2.0, 0.0, 0.0, 0.0, 2.0}),
                 new ObjectiveFunction(new HS055Obj()),
                 new HS055Eq(),

@@ -16,8 +16,6 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.hipparchus.util.FastMath;
@@ -26,6 +24,7 @@ import org.hipparchus.util.FastMath;
 final class HSProblemTestUtils {
 
     private static final boolean DEBUG = Boolean.getBoolean("hipparchus.debug.sqp");
+    
 
     private HSProblemTestUtils() {
         // utility class
@@ -41,14 +40,19 @@ final class HSProblemTestUtils {
 
     static SQPOption newCentralDifferenceOption() {
         final SQPOption option = new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
+        return option;
+    }
+    static SQPOption newExternalOption() {
+        final SQPOption option = new SQPOption();
+        option.setGradientMode(GradientMode.EXTERNAL);
         return option;
     }
 
     static void assertExpectedObjective(final double fExpected, final LagrangeSolution sol) {
 //        final double tol = 1.0e-2 * (FastMath.abs(fExpected) + 1.0);
 //        assertEquals(fExpected, sol.getValue(), tol);
-        final double eps = 2.0e-2; // 2%
+        final double eps = 1.0e-2; // 2%
 
 final double actual = sol.getValue();
 

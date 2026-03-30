@@ -145,7 +145,7 @@ public class HS214Test {
         LagrangeSolution sol = opt.optimize(
             new InitialGuess(x0),
             new ObjectiveFunction(new HS214Obj()),
-            null,   // no equality constraints
+           HSProblemTestUtils.newCentralDifferenceOption(),
             null,   // no inequality constraints
             null    // no bounds
         );

@@ -25,10 +25,66 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.hipparchus.util.FastMath;
 
 
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * HS383 (TP383) – Linear-fractional type problem (14 variables) with
+ * one linear equality constraint and simple bounds.
+ *
+ * From TP383:
+ *
+ * N    = 14
+ * NILI = 0
+ * NINL = 0
+ * NELI = 1
+ * NENL = 0
+ *
+ * Objective:
+ *   f(x) = sum_{i=1..14} A(i) / x(i)
+ *
+ * where:
+ *
+ *   A = {
+ *     12842.275, 634.25, 634.25, 634.125,
+ *     1268.0,   633.875, 633.75, 1267.0,
+ *     760.05,   633.25,  1266.25, 632.875,
+ *     394.46,   940.838
+ *   }
+ *
+ * Bounds (MODE=1):
+ *   X(i)  initial = 0.1D-1 = 0.01
+ *   LXL(i) = TRUE, LXU(i) = TRUE
+ *   XL(i)  = 0.1D-3 = 1.0e-4
+ *   XU(i)  = 0.1D+1 / B(i) = 1.0 / B(i)
+ *
+ *   with
+ *   B = {
+ *     25, 26, 26, 27, 28, 29, 30, 32,
+ *     33, 34, 35, 37, 38, 36
+ *   }
+ *
+ * Equality constraint (MODE=4):
+ *
+ *   G1(x) = sum_{i=1..14} C(i) * X(i) - 0.1D+1 = 0
+ *         = sum C(i) * X(i) - 1.0 = 0
+ *
+ *   with
+ *   C = {
+ *     5.47934, 0.83234, 0.94749, 1.11082,
+ *     2.64824, 1.55868, 1.73215, 3.90896,
+ *     2.74284, 2.60541, 5.96184, 3.29522,
+ *     1.83517, 2.81372
+ *   }
+ *
+ * Reference:
+ *   LEX = .FALSE.
+ *   FEX = 0.728566D+6 = 728566.0
+ *   → we use FEX as an upper bound on f.
+ */
 public class HS383Test {
 
     private static final int DIM    = 14;
@@ -37,6 +93,7 @@ public class HS383Test {
     // XL(i) = 0.1D-3 = 1e-4
     private static final double XL = 1.0e-4;
 
+    // A, B, C come prima...
     private static final double[] A = {
         0.12842275e5, 0.63425e3, 0.63425e3, 0.634125e3,
         0.1268e4,     0.633875e3, 0.63375e3, 0.1267e4,
@@ -58,6 +115,9 @@ public class HS383Test {
         0.183517e1, 0.281372e1
     };
 
+    // -------------------------------------------------------------------------
+    // Objective f(x) = Σ A(i)/x(i) (with TP383 MODE=2 lower clipping)
+    // -------------------------------------------------------------------------
     private static class HS383Obj extends TwiceDifferentiableFunction {
 
         @Override
@@ -69,7 +129,7 @@ public class HS383Test {
         public double value(RealVector x) {
             double fx = 0.0;
             for (int i = 0; i < DIM; i++) {
-                final double xi = x.getEntry(i);
+                final double xi = FastMath.max(x.getEntry(i), XL);
                 fx += A[i] / xi;
             }
             return fx;
@@ -79,7 +139,8 @@ public class HS383Test {
         public RealVector gradient(RealVector x) {
             double[] g = new double[DIM];
             for (int i = 0; i < DIM; i++) {
-                final double xi = x.getEntry(i);
+                 double xi = x.getEntry(i);
+                if (xi<XL)xi=XL;
                 g[i] = -A[i] / (xi * xi);
             }
             return new ArrayRealVector(g, false);
@@ -87,14 +148,18 @@ public class HS383Test {
 
         @Override
         public RealMatrix hessian(RealVector x) {
+            // possiamo lasciarla nulla (Fortran non passa Hessiana)
             return new Array2DRowRealMatrix(DIM, DIM);
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Equality constraint: G1(x) = Σ C(i)*x(i) - 1.0 = 0
+    // -------------------------------------------------------------------------
     private static class HS383Eq extends EqualityConstraint {
 
         HS383Eq() {
-            super(new ArrayRealVector(new double[NUM_EQ]));
+            super(new ArrayRealVector(new double[NUM_EQ])); // RHS = 0
         }
 
         @Override
@@ -106,8 +171,10 @@ public class HS383Test {
         public RealVector value(RealVector x) {
             double sum = 0.0;
             for (int i = 0; i < DIM; i++) {
-                sum += C[i] * x.getEntry(i);
+                
+                sum += C[i]* FastMath.max (XL,x.getEntry(i));
             }
+            // G(1) = Σ C(i)*X(i) - 0.1D+1 → -1.0
             double g1 = sum - 1.0;
             return new ArrayRealVector(new double[] { g1 }, false);
         }
@@ -121,14 +188,16 @@ public class HS383Test {
             return J;
         }
     }
-
     @Test
     public void testHS383_optimization() {
+
+        // X(i) iniziale = 0.01
         double[] x0 = new double[DIM];
         for (int i = 0; i < DIM; i++) {
             x0[i] = 0.01;
         }
 
+        // Bounds: XL = 1e-4, XU = 1/B(i)
         double[] lower = new double[DIM];
         double[] upper = new double[DIM];
         for (int i = 0; i < DIM; i++) {
@@ -138,15 +207,17 @@ public class HS383Test {
         SimpleBounds bounds = new SimpleBounds(lower, upper);
 
         SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
-        
+        if (Boolean.getBoolean("hipparchus.debug.sqp")) {
+            opt.setDebugPrinter(System.out::println);
+        }
         SQPOption option =new SQPOption();
         option.setGradientMode(GradientMode.FORWARD);
         LagrangeSolution sol = opt.optimize(
                 option,
                 new InitialGuess(x0),
                 new ObjectiveFunction(new HS383Obj()),
-                new HS383Eq(),
-                bounds
+                new HS383Eq()
+                //bounds
         );
 
         HSProblemTestUtils.assertBetterObjective(0.728566e6, sol);

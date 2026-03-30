@@ -43,17 +43,23 @@ public class SQPOption implements OptimizationData {
 
     /** Default parameter for quadratic line search. */
     public static final  double DEFAULT_B = 0.1;//[0;1]
+    
+    /** Default parameter for alpha min during line search. */
+    public static final  double DEFAULT_ALPHA_MIN = 1.0e-14;
+    
+    /** Default parameter for non monotone line search history. */
+    public static final  int DEFAULT_HISTORY = 10;
 
     /** Default flag for using BFGS update formula. */
     public static final  boolean DEFAULT_USE_FUNCTION_HESSIAN = false;
 
     /** Default max iteration before reset hessian. */
-    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 40;
+    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 30;
 
     /** Default Gradient mode. */
     public static final GradientMode DEFAULT_GRADIENT_MODE = GradientMode.FORWARD;
     
-    /** Default Gradient mode. */
+    /** Default Max Iterations. */
     public static final int DEFAULT_MAX_ITERATION = 300;
 
     /** Convergence criteria*/
@@ -79,6 +85,12 @@ public class SQPOption implements OptimizationData {
 
     /** Parameter for quadratic line search. */
     private double b;
+    
+    /** Parameter line search alpha min. */
+    private double alphaMin;
+    
+    /** Parameter for non monotone line search history. */
+    private int history;
 
     /** Max Iteration for the line search. */
     private int maxLineSearchIteration;
@@ -105,6 +117,7 @@ public class SQPOption implements OptimizationData {
         this.qpMaxLoop              = DEFAULT_QP_MAX_LOOP;
         this.mu                     = DEFAULT_MU;
         this.b                      = DEFAULT_B;
+        this.alphaMin               = DEFAULT_ALPHA_MIN;
         this.maxLineSearchIteration = DEFAULT_MAX_LINE_SEARCH_ITERATION;
         this.useFunHessian          = DEFAULT_USE_FUNCTION_HESSIAN;
         this.gradientMode           = DEFAULT_GRADIENT_MODE;
@@ -221,6 +234,34 @@ public class SQPOption implements OptimizationData {
      */
     public double getB() {
         return b;
+    }
+    
+    /** Set parameter for line search alpha min.
+     * @param alphaMin parameter line search
+     */
+    public void setAlphaMin(final double alphaMin) {
+        this.alphaMin = alphaMin;
+    }
+
+    /** Get parameter line search alpha min.
+     * @return parameter for quadratic line search
+     */
+    public double getAlphaMin() {
+        return this.alphaMin;
+    }
+    
+    /** Set parameter for nom monotone line search history.
+     * @param history parameter line search
+     */
+    public void setHistory(final int history) {
+        this.history = history;
+    }
+
+    /** Get parameter fot non monotone line search history.
+     * @return parameter for non monotone line search history
+     */
+    public int getHistory() {
+        return this.history;
     }
 
     /** Set max Iteration for the line search

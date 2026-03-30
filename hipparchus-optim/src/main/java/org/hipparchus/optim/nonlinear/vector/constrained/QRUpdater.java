@@ -259,7 +259,7 @@ public class QRUpdater {
         return iq;
     }
     
-    /**
+ /**
  * Computes the vector z used in the primal step without explicitly
  * forming the J2 submatrix or the tail subvector of d.
  *
@@ -301,7 +301,7 @@ public RealVector computeZ(final RealVector d) {
 
     return z;
 }
-   /**
+ /**
  * Computes d = J^T * a using Hipparchus preMultiply.
  *
  * @param a input vector

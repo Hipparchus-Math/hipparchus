@@ -49,17 +49,14 @@ public class HS064Test {
     public void testHS064() {
         SQPOption sqpOption=new SQPOption();
         sqpOption.setGradientMode(GradientMode.FORWARD);
-//        sqpOption.setMaxLineSearchIteration(20);
-//        sqpOption.setB(0.5);
-//        sqpOption.setMu(1.0e-4);
-//        sqpOption.setEps(10e-11);
+
  final double[] LB = { 1e-5, 1e-5, 1e-5 };
   final double[] UB = { Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
         final SimpleBounds bounds = new SimpleBounds(LB, UB);
         InitialGuess guess = new InitialGuess(new double[]{1.0 ,1.0, 1.0});
         SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 6299.842428;
-        LagrangeSolution sol = optimizer.optimize(bounds,guess, new ObjectiveFunction(new HS064Obj()), new HS064Ineq());
+        LagrangeSolution sol = optimizer.optimize(sqpOption,bounds,guess, new ObjectiveFunction(new HS064Obj()), new HS064Ineq());
         HSProblemTestUtils.assertExpectedObjective(val, sol);
     }
 }
