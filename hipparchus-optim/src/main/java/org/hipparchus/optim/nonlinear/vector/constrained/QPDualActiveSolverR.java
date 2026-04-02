@@ -404,17 +404,10 @@ public class QPDualActiveSolverR extends QPOptimizer {
         double g = function.getD();
         int n = G.getColumnDimension();
 
-        RealMatrix CE = null;
-        RealVector ce0 = null;
-        int p = 0;
-        if (eqConstraints != null && eqConstraints.getA().getRowDimension() > 0) {
-            CE = eqConstraints.getA().transpose();
-            ce0 = eqConstraints.getLowerBound().mapMultiply(-1.0);
-            p = CE.getColumnDimension();
-        }
-
-        int m1 = (iqConstraints != null) ? iqConstraints.getLowerBound().getDimension() : 0;
-        int b1 = (bConstraints != null) ? bConstraints.getLowerBound().getDimension() : 0;
+ 
+        int p =  (eqConstraints != null) ? eqConstraints.dimY():0;
+        int m1 = (iqConstraints != null) ? iqConstraints.dimY() : 0;
+        int b1 = (bConstraints != null)  ? bConstraints.dimY() : 0;
         int m = m1 + 2 * b1;
 
         final int mc = p + m;
@@ -423,34 +416,15 @@ public class QPDualActiveSolverR extends QPOptimizer {
         RealVector weights = null;
 
         if (mc > 0) {
-//            C = new Array2DRowRealMatrix(n, mc);
-//            c0 = new ArrayRealVector(mc);
-            Pair<RealMatrix, RealVector> CC0 = buildGlobalConstraints(n, eqConstraints, iqConstraints, bConstraints);
-            C=CC0.getFirst();
-            c0=CC0.getSecond();
-//            if (p > 0) {
-//                C.setSubMatrix(CE.getData(), 0, 0);
-//                c0.setSubVector(0, ce0);
-//            }
-//
-//            if (m1 > 0) {
-//                RealMatrix Aineq = iqConstraints.jacobian(null);
-//                RealVector bineq = iqConstraints.getLowerBound();
-//                C.setSubMatrix(Aineq.transpose().getData(), 0, p);
-//                c0.setSubVector(p, bineq.mapMultiply(-1.0));
-//            }
-//
-//            if (b1 > 0) {
-//                RealMatrix Abound = bConstraints.jacobian(null);
-//                RealVector lower = bConstraints.getLowerBound();
-//                RealVector upper = bConstraints.getUpperBound();
-//                C.setSubMatrix(Abound.transpose().getData(), 0, p + m1);
-//                C.setSubMatrix(Abound.scalarMultiply(-1.0).transpose().getData(), 0, p + m1 + b1);
-//                c0.setSubVector(p + m1, lower.mapMultiply(-1.0));
-//                c0.setSubVector(p + m1 + b1, upper);
-//            }
 
-            weights = computeConstraintWeights(C);
+//            Pair<RealMatrix, RealVector> CC0 = buildGlobalConstraints(n, eqConstraints, iqConstraints, bConstraints);
+            QPConstraintSystem record = buildGlobalConstraints(n, eqConstraints, iqConstraints, bConstraints);
+//            C=CC0.getFirst();
+//            c0=CC0.getSecond();           
+//            weights = computeConstraintWeights(C);
+             C=record.C;
+             c0=record.c0;           
+             weights = record.weights;
         }
 
         RealVector x;
@@ -874,123 +848,116 @@ public class QPDualActiveSolverR extends QPOptimizer {
         return new Pair<>(x, yActive);
     }
 
- /**
- * Populates the global constraint matrix C and constant vector c0 in-place
- * by extracting data from specific constraint objects.
- * * @param C             the target global constraint matrix (n x mc)
- * @param c0            the target global constant vector (mc)
- * @param eqConstraints the linear equality constraints (can be null)
- * @param iqConstraints the linear inequality constraints (can be null)
- * @param bConstraints  the linear bounded constraints (can be null)
- */
-/**
- * Populates the global constraint matrix C and constant vector c0 in-place.
- * Optimized to avoid memory spikes by bypassing getData() calls.
- * * @param n             dimension of the problem
- * @param eqConstraints linear equality constraints
- * @param iqConstraints linear inequality constraints
- * @param bConstraints  linear bounded constraints
- * @return a Pair containing the global C matrix (n x mc) and c0 vector (mc)
- */
-public Pair<RealMatrix, RealVector> buildGlobalConstraints(final int n,
-                                                           final LinearEqualityConstraint eqConstraints,
-                                                           final LinearInequalityConstraint iqConstraints,
-                                                           final LinearBoundedConstraint bConstraints) {
+    /**
+     * Private container for the integrated QP system.
+     * Designed to be stack-allocated.
+     */
+    private static final class QPConstraintSystem {
+        /** Global constraint matrix C (n x mc) where columns are constraint gradients. */
+        private final RealMatrix C;
+        /** Right-hand side vector c0 for the QP problem. */
+        private final RealVector c0;
+        /** Normalization weights based on the 2-norm of each constraint gradient. */
+        private final RealVector weights;
 
-    final int p = (eqConstraints != null) ? eqConstraints.getA().getRowDimension() : 0;
-    final int m1 = (iqConstraints != null) ? iqConstraints.getLowerBound().getDimension() : 0;
-    final int b1 = (bConstraints != null) ? bConstraints.getLowerBound().getDimension() : 0;
-    
-    final int mc = p + m1 + 2 * b1;
-    final double[][] cData = new double[n][mc];
-    final double[] c0Data = new double[mc];
-
-    // --- 1. EQUALITIES (p) ---
-    if (p > 0) {
-        RealMatrix Ae = eqConstraints.getA();
-        RealVector be = eqConstraints.getLowerBound();
-        
-        // Handle Vector c0 (Equality)
-        if (be instanceof ArrayRealVector) {
-            double[] data = ((ArrayRealVector) be).getDataRef();
-            for (int j = 0; j < p; j++) c0Data[j] = -data[j];
-        } else {
-            for (int j = 0; j < p; j++) c0Data[j] = -be.getEntry(j);
+        private QPConstraintSystem(RealMatrix C, RealVector c0, RealVector weights) {
+            this.C = C;
+            this.c0 = c0;
+            this.weights = weights;
         }
+    }
 
-        // Handle Matrix C (Equality - Transposed)
-        if (Ae instanceof Array2DRowRealMatrix) {
-            double[][] data = ((Array2DRowRealMatrix) Ae).getDataRef();
+    /**
+     * Builds the physical QP system and computes constraint weights in a single pass.
+     * Each column j of C corresponds to the gradient of the j-th constraint.
+     * * @param n           Number of primal variables.
+     * @param eqConstraints Equality constraints (JE, be).
+     * @param iqConstraints Inequality constraints (JI, bi).
+     * @param bConstraints  Box constraints (JB, lb, ub).
+     * @return The integrated QP system container.
+     */
+    private QPConstraintSystem buildGlobalConstraints(final int n,
+                                                       final LinearEqualityConstraint eqConstraints,
+                                                       final LinearInequalityConstraint iqConstraints,
+                                                       final LinearBoundedConstraint bConstraints) {
+        // 1. Setup dimensions
+        final int p  = (eqConstraints != null) ? eqConstraints.dimY() : 0;
+        final int m1 = (iqConstraints != null) ? iqConstraints.dimY() : 0;
+        final int b1 = (bConstraints != null)  ? bConstraints.dimY() : 0;
+        final int mc = p + m1 + 2 * b1;
+
+        // 2. Initialize storage using physical arrays for speed
+        final RealMatrix C = MatrixUtils.createRealMatrix(n, mc);
+        final double[] c0Data = new double[mc];
+        final double[] wData = new double[mc];
+        final double safeMin = Precision.SAFE_MIN;
+        double sumSq = 0;
+        double val=0;
+        double invNorm=0;
+        // --- SECTION 1: EQUALITIES ---
+        if (p > 0) {
+            final RealMatrix Ae = eqConstraints.getA();
+            final RealVector be = eqConstraints.getLowerBound();
             for (int j = 0; j < p; j++) {
-                for (int i = 0; i < n; i++) cData[i][j] = data[j][i];
-            }
-        } else {
-            for (int j = 0; j < p; j++) {
-                for (int i = 0; i < n; i++) cData[i][j] = Ae.getEntry(j, i);
-            }
-        }
-    }
-
-    // --- 2. INEQUALITIES (m1) ---
-    if (m1 > 0) {
-        RealMatrix Ai = iqConstraints.jacobian(null);
-        RealVector bi = iqConstraints.getLowerBound();
-        
-        // Handle Vector c0 (Inequality)
-        if (bi instanceof ArrayRealVector) {
-            double[] data = ((ArrayRealVector) bi).getDataRef();
-            for (int j = 0; j < m1; j++) c0Data[p + j] = -data[j];
-        } else {
-            for (int j = 0; j < m1; j++) c0Data[p + j] = -bi.getEntry(j);
-        }
-
-        // Handle Matrix C (Inequality - Transposed)
-        if (Ai instanceof Array2DRowRealMatrix) {
-            double[][] data = ((Array2DRowRealMatrix) Ai).getDataRef();
-            for (int j = 0; j < m1; j++) {
-                for (int i = 0; i < n; i++) cData[i][p + j] = data[j][i];
-            }
-        } else {
-            for (int j = 0; j < m1; j++) {
-                for (int i = 0; i < n; i++) cData[i][p + j] = Ai.getEntry(j, i);
-            }
-        }
-    }
-
-    // --- 3. BOUNDS (2 * b1) ---
-    if (b1 > 0) {
-        RealMatrix Ab = bConstraints.jacobian(null);
-        RealVector lb = bConstraints.getLowerBound();
-        RealVector ub = bConstraints.getUpperBound();
-
-        // Handle Vectors (Lower & Upper)
-        for (int j = 0; j < b1; j++) {
-            c0Data[p + m1 + j] = (lb instanceof ArrayRealVector) ? -((ArrayRealVector) lb).getDataRef()[j] : -lb.getEntry(j);
-            c0Data[p + m1 + b1 + j] = (ub instanceof ArrayRealVector) ? ((ArrayRealVector) ub).getDataRef()[j] : ub.getEntry(j);
-        }
-
-        // Handle Matrix C (Transposed and Sign Flipped for Upper Bounds)
-        if (Ab instanceof Array2DRowRealMatrix) {
-            double[][] data = ((Array2DRowRealMatrix) Ab).getDataRef();
-            for (int j = 0; j < b1; j++) {
+                c0Data[j] = -be.getEntry(j);
+                sumSq = 0;
                 for (int i = 0; i < n; i++) {
-                    double val = data[j][i];
-                    cData[i][p + m1 + j] = val;        // Lower Bound: A^T
-                    cData[i][p + m1 + b1 + j] = -val;  // Upper Bound: -A^T
+                    val = Ae.getEntry(j, i);
+                    C.setEntry(i, j, val);
+                    sumSq += val * val;
                 }
-            }
-        } else {
-            for (int j = 0; j < b1; j++) {
-                for (int i = 0; i < n; i++) {
-                    double val = Ab.getEntry(j, i);
-                    cData[i][p + m1 + j] = val;
-                    cData[i][p + m1 + b1 + j] = -val;
-                }
+                sumSq = FastMath.sqrt(sumSq);
+                wData[j] = sumSq > safeMin ? 1.0 / sumSq  : 1.0;
             }
         }
+
+        // --- SECTION 2: INEQUALITIES ---
+        if (m1 > 0) {
+            final RealMatrix Ai = iqConstraints.jacobian(null);
+            final RealVector bi = iqConstraints.getLowerBound();
+            for (int j = 0; j < m1; j++) {
+                c0Data[p + j] = -bi.getEntry(j);
+                sumSq = 0;
+                for (int i = 0; i < n; i++) {
+                    val = Ai.getEntry(j, i);
+                    C.setEntry(i, p + j, val);
+                    sumSq += val * val;
+                }
+                sumSq  = FastMath.sqrt(sumSq);
+                wData[p + j] = sumSq  > safeMin ? 1.0 / sumSq  : 1.0;
+            }
+        }
+
+        // --- SECTION 3: BOUNDS ---
+        if (b1 > 0) {
+            final RealMatrix Ab = bConstraints.jacobian(null);
+            final RealVector lb = bConstraints.getLowerBound();
+            final RealVector ub = bConstraints.getUpperBound();
+            for (int j = 0; j < b1; j++) {
+                // Constant terms for lower and upper bounds
+                c0Data[p + m1 + j] = -lb.getEntry(j);
+                c0Data[p + m1 + b1 + j] = ub.getEntry(j);
+
+                sumSq = 0;
+                for (int i = 0; i < n; i++) {
+                    val = Ab.getEntry(j, i);
+                    // Column for Lower Bound
+                    C.setEntry(i, p + m1 + j, val);
+                    // Column for Upper Bound (negative gradient)
+                    C.setEntry(i, p + m1 + b1 + j, -val);
+                    sumSq += val * val;
+                }
+                // Weight calculation (same for both bounds as ||a|| = ||-a||)
+                sumSq = FastMath.sqrt(sumSq);
+                invNorm = sumSq > safeMin ? 1.0 / sumSq  : 1.0;
+                wData[p + m1 + j] = invNorm;
+                wData[p + m1 + b1 + j] = invNorm;
+            }
+        }
+
+        return new QPConstraintSystem(C, 
+                                      new ArrayRealVector(c0Data, false), 
+                                      new ArrayRealVector(wData, false));
     }
 
-    // Wrap the raw arrays into Hipparchus objects (false = no copy)
-    return new Pair<>(new Array2DRowRealMatrix(cData, false), new ArrayRealVector(c0Data, false));
-}
 }

@@ -17,6 +17,7 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.optim.OptimizationData;
+import org.hipparchus.util.Precision;
 
 /** Parameter for SQP Algorithm.
  * @since 3.1
@@ -26,7 +27,7 @@ public class SQPOption implements OptimizationData {
     /** Default convergence criteria. */
     public static final int DEFAULT_CONV_CRITERIA = 1;
 
-    /** Default tolerance for convergence and active constraint. */
+    /** Default tolerance for convergence and active constraint(proportional to sqrt of function accuracy and >=sqrt of Grad EPS. */
     public static final double DEFAULT_EPSILON = 1.0e-7;//>0
 
     /** Default weight for augmented QP subproblem. */
@@ -58,6 +59,9 @@ public class SQPOption implements OptimizationData {
 
     /** Default Gradient mode. */
     public static final GradientMode DEFAULT_GRADIENT_MODE = GradientMode.FORWARD;
+    
+    /** Default Gradient EPS proportional to function accuracy. */
+    public static final double DEFAULT_GRAD_EPS = Precision.EPSILON;
     
     /** Default Max Iterations. */
     public static final int DEFAULT_MAX_ITERATION = 300;
@@ -101,6 +105,9 @@ public class SQPOption implements OptimizationData {
     /** Gradient Mode. */
     private GradientMode gradientMode;
     
+    /** Gradient eps. */
+    private double gradEps;
+    
     /** Max Iteration */
     private int maxIteration;
 
@@ -121,6 +128,7 @@ public class SQPOption implements OptimizationData {
         this.maxLineSearchIteration = DEFAULT_MAX_LINE_SEARCH_ITERATION;
         this.useFunHessian          = DEFAULT_USE_FUNCTION_HESSIAN;
         this.gradientMode           = DEFAULT_GRADIENT_MODE;
+        this.gradEps                = DEFAULT_GRAD_EPS;
         this.maxIteration           = DEFAULT_MAX_ITERATION;
     }
 
@@ -136,6 +144,20 @@ public class SQPOption implements OptimizationData {
      */
     public GradientMode getGradientMode() {
         return gradientMode;
+    }
+    
+     /** Set Gradient Eps
+     * @param gradEps gradient mode
+     */
+    public void setGradientEps(final double gradEps) {
+        this.gradEps = gradEps;
+    }
+
+    /** Get Gradient Eps.
+     * @return Gradient Eps
+     */
+    public double getGradientEps() {
+        return gradEps;
     }
 
     /** Set convergence criteria.

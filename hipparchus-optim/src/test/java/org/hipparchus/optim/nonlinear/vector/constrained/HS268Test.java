@@ -209,11 +209,11 @@ public class HS268Test {
                 null               // no bounds
         );
 
-        double f = sol.getValue();
+        
 
         double fExpected = 0.0;
-        double tol = 1e-6 * (FastMath.abs(fExpected) + 1.0);
-
-        assertEquals(fExpected, f, tol);
+        
+        HSProblemTestUtils.assertExpectedObjective(fExpected, sol);
+       
     }
 }

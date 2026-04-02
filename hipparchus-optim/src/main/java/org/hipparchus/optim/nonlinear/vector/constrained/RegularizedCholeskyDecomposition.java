@@ -64,7 +64,7 @@ public class RegularizedCholeskyDecomposition {
     /**
      * Default threshold below which diagonal pivots are considered too small.
      */
-    public static final double DEFAULT_ABSOLUTE_POSITIVITY_THRESHOLD = 1.0e-10;
+    public static final double DEFAULT_ABSOLUTE_POSITIVITY_THRESHOLD = 1.0e-14;
 
     /**
      * Default growth factor for the diagonal shift.

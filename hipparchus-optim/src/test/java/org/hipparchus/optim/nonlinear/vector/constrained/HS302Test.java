@@ -74,11 +74,10 @@ public class HS302Test {
     @Test
     public void testHS302() {
         SQPOption sqpOption=new SQPOption();
-         sqpOption.setEps(10e-11);
         InitialGuess guess = new InitialGuess(new double[100]);
         
         SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
-        optimizer.setDebugPrinter(s -> {});
+        
         
         double val = -100.0;
         LagrangeSolution sol = optimizer.optimize(sqpOption,guess, new ObjectiveFunction(new HS302Obj()));
