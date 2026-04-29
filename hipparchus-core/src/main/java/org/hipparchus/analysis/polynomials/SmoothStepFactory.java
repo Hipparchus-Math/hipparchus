@@ -30,6 +30,7 @@ import org.hipparchus.util.MathArrays;
  * <a href="https://en.wikipedia.org/wiki/Smoothstep">here</a>.
  */
 public class SmoothStepFactory {
+    private static final double EPSILON = 1E-10;
 
     /**
      * Private constructor.
@@ -209,8 +210,8 @@ public class SmoothStepFactory {
      * @throws MathIllegalArgumentException if input is not between [0:1]
      */
     public static void checkBetweenZeroAndOneIncluded(final double input) throws MathIllegalArgumentException {
-        if (input < 0 - 1E-10 || input > 1 + 1E-10) {
-	    throw new MathIllegalArgumentException(
+        if (input < 0 - EPSILON || input > 1 + EPSILON) {
+            throw new MathIllegalArgumentException(
                     LocalizedCoreFormats.INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED, input);
         }
     }
