@@ -799,6 +799,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="psteitz" type="update">
         Forked from the Apache Commons Math library.
       </action>
+      <action dev="sean-g-rae" type="update">
+        Added some basic edge case unit tests.
+      </action>
     </release>
   </body>
 </document>
