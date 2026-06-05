@@ -407,4 +407,64 @@ class QuaternionTest {
         final Quaternion q = new Quaternion(1, 2, 3, 4);
         assertEquals("[1.0 2.0 3.0 4.0]", q.toString());
     }
+
+    @Test
+    final void testGetPositivePolarForm() {
+        final Quaternion q = new Quaternion(-3, 1, -2, 1);
+        final Quaternion p = q.getPositivePolarForm();
+        assertTrue(p.getQ0() > 0);
+        assertEquals(1.0, p.getNorm(), EPS);
+
+        final Quaternion q2 = new Quaternion(3, 1, -2, 1);
+        final Quaternion p2 = q2.getPositivePolarForm();
+        assertTrue(p2.getQ0() > 0);
+        assertEquals(1.0, p2.getNorm(), EPS);
+
+        final Quaternion q3 = new Quaternion(0, 1, -2, 1);
+        final Quaternion p3 = q3.getPositivePolarForm();
+        assertEquals(0, p3.getQ0(), EPS);
+        assertEquals(1.0, p3.getNorm(), EPS);
+    }
+
+    @Test
+    final void testHashCode() {
+        final Quaternion q1 = new Quaternion(1, 2, 3, 4);
+        final Quaternion q2 = new Quaternion(1, 2, 3, 4);
+        assertEquals(q1.hashCode(), q2.hashCode());
+
+        final Quaternion q3 = new Quaternion(1, 2, 3, 5);
+        assertNotEquals(q1.hashCode(), q3.hashCode());
+    }
+
+    @Test
+    final void testObjectEqualsMore() {
+        final Quaternion q1 = new Quaternion(1, 2, 3, 4);
+        assertEquals(q1, q1);
+        assertNotEquals(null, q1);
+        assertNotEquals(q1, "not a quaternion");
+        final Quaternion q2 = new Quaternion(1, 2, 3, 4);
+        assertEquals(q1, q2);
+    }
+
+    @Test
+    final void testInstanceMethods() {
+        final Quaternion q1 = new Quaternion(1, 2, 3, 4);
+        final Quaternion q2 = new Quaternion(5, 6, 7, 8);
+
+        // multiply(Quaternion)
+        final Quaternion qM = q1.multiply(q2);
+        assertEquals(Quaternion.multiply(q1, q2), qM);
+
+        // add(Quaternion)
+        final Quaternion qA = q1.add(q2);
+        assertEquals(Quaternion.add(q1, q2), qA);
+
+        // subtract(Quaternion)
+        final Quaternion qS = q1.subtract(q2);
+        assertEquals(Quaternion.subtract(q1, q2), qS);
+
+        // dotProduct(Quaternion)
+        final double d = q1.dotProduct(q2);
+        assertEquals(Quaternion.dotProduct(q1, q2), d, EPS);
+    }
 }
