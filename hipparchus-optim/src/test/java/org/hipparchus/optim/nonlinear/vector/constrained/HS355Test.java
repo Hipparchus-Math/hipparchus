@@ -82,7 +82,7 @@ public class HS355Test {
 
         final SQPOptimizerS2 opt = HSProblemTestUtils.newOptimizer();
         SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
         final LagrangeSolution sol = opt.optimize(
                 option,
             guess,

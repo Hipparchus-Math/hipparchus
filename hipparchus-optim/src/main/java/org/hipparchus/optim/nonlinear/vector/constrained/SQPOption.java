@@ -27,9 +27,12 @@ public class SQPOption implements OptimizationData {
     /** Default convergence criteria. */
     public static final int DEFAULT_CONV_CRITERIA = 1;
 
-    /** Default tolerance for convergence and active constraint(proportional to sqrt of function accuracy and >=sqrt of Grad EPS. */
+    /** Default tolerance for convergence and active constraint(proportional to sqrt of function accuracy) */
     public static final double DEFAULT_EPSILON = 1.0e-7;//>0
 
+    /** Default tolerance for QP convergence  */
+    public static final double DEFAULT_EPSILON_QP = 1.0e-14;//>0
+    
     /** Default weight for augmented QP subproblem. */
     public static final double DEFAULT_RHO = 100.0;//rho>1
 
@@ -71,6 +74,9 @@ public class SQPOption implements OptimizationData {
 
     /** Tolerance for convergence and active constraint evaluation. */
     private double eps;
+    
+    /** Tolerance for qp convergence */
+    private double epsQP;
 
     /** Weight for augmented QP subproblem. */
     private double rhoCons;
@@ -119,6 +125,7 @@ public class SQPOption implements OptimizationData {
     public SQPOption() {
         this.convCriteria           = DEFAULT_CONV_CRITERIA;
         this.eps                    = DEFAULT_EPSILON;
+        this.epsQP                  = DEFAULT_EPSILON_QP;
         this.rhoCons                = DEFAULT_RHO;
         this.sigmaMax               = DEFAULT_SIGMA_MAX;
         this.qpMaxLoop              = DEFAULT_QP_MAX_LOOP;
@@ -187,6 +194,22 @@ public class SQPOption implements OptimizationData {
     public double getEps() {
         return eps;
     }
+    
+     /** Set tolerance for QP convergence 
+     * @param eps tolerance for convergence
+     */
+    public void setEpsQP(final double eps) {
+        this.epsQP = eps;
+    }
+
+    /** Get tolerance for QP convergence
+     * @return tolerance for QP convergence
+     */
+    public double getEpsQP() {
+        return epsQP;
+    }
+    
+    
 
     /** Set weight for augmented QP subproblem.
      * @param rhoCons weight for augmented QP subproblem

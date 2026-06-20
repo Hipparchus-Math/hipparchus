@@ -57,7 +57,7 @@ public class HS015Test {
 
     @Test
     public void testHS015() {
-        InitialGuess guess = new InitialGuess(new double[]{-2, 1});
+        InitialGuess guess = new InitialGuess(new double[]{-2.0, 1.0});
         SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 306.5;
         LagrangeSolution sol = optimizer.optimize(guess, new ObjectiveFunction(new HS015Obj()), new HS015Ineq());
@@ -66,7 +66,7 @@ public class HS015Test {
     
     @Test
     public void testHS015Bound() {
-        InitialGuess guess = new InitialGuess(new double[]{-2, 1.0});
+        InitialGuess guess = new InitialGuess(new double[]{-2.0, 1.0});
         SimpleBounds bounds=new SimpleBounds(new double[]{Double.NEGATIVE_INFINITY,Double.NEGATIVE_INFINITY},
                                              new double[]{0.5,Double.POSITIVE_INFINITY});
         SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();

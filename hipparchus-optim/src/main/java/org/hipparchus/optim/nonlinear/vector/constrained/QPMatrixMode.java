@@ -4,21 +4,21 @@ import org.hipparchus.optim.OptimizationData;
 
 /**
  * Marker OptimizationData indicating that the quadratic matrix "G" passed to the QP solver
- * is not the Hessian H, but the lower Cholesky factor L such that H = L*L^T.
+ * is not the Hessian H, but the lower Cholesky factor L such that H = L*L^T or the inverse of Cholesky factor L^-1 
  *
  * When present and set to true, QPDualActiveSolver will interpret function.getP()
- * as L and will NOT factorize it.
+ * as L or L^-1 and will NOT factorize it.
  */
 
 public enum QPMatrixMode implements OptimizationData {
 
-    /** Compute gradients from the objective and constraints functions themselves. */
+    /** QP Problem with full Hessian Matrix. */
     FULL,
 
-    /** Compute gradients using forward difference. */
+    /** QP Problem with Cholesky L factor. */
     CHOLESKY,
 
-    /** Compute gradients using central differences. */
+    /** QP Problem with Inverse o Cholesky factor. */
     INVCHOLESKY
 
 }

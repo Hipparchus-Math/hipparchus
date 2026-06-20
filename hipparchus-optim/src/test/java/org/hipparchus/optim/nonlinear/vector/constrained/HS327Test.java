@@ -146,7 +146,7 @@ public class HS327Test {
         
        
         SQPOption option=new SQPOption();
-        option.setGradientMode(GradientMode.CENTRAL);
+        option.setGradientMode(GradientMode.FORWARD);
         
         LagrangeSolution sol = opt.optimize(
                 option,

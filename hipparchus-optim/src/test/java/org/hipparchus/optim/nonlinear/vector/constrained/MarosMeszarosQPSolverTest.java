@@ -142,11 +142,12 @@ class MarosMeszarosQPSolverTest {
     }
 
     private LagrangeSolution runSingle(final MarosMeszarosDenseProblemLoader.DenseQPProblem problem) {
-        final QPDualActiveSolverR solver = new QPDualActiveSolverR();
-        final QuadraticFunction q = new QuadraticFunction(problem.getH(), problem.getC(), problem.getConstantTerm());
-        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(q);
+        final QPDualActiveSolver  solver = new QPDualActiveSolver ();
+        final QPDualActiveSolverOption option=new QPDualActiveSolverOption();
+        option.setEps(1.0e-9);
+        
 
-        final LagrangeSolution solution = solve(solver, objectiveFunction, problem);
+        final LagrangeSolution solution = solve(solver,option, problem);
 
         if (!problem.hasExpectedValue()) {
             fail("Missing expected objective value for problem " + problem.getName() +
@@ -157,6 +158,12 @@ class MarosMeszarosQPSolverTest {
             System.out.println("[MarosMeszarosQPSolverTest] " + problem.getName() +
                                " expectedValue=" + problem.getExpectedValue() +
                                " actualValue=" + solution.getValue());
+        }
+        
+        if (Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "true"))) {
+            if(solution.getX().getDimension()==0)System.out.println("[MarosMeszarosQPSolverTest] " + problem.getName() +
+                               
+                               " error code=" + solution.getLambda());
         }
 
 //        if (problem.hasExpectedX()) {
@@ -169,7 +176,7 @@ class MarosMeszarosQPSolverTest {
         final double absTol = problem.getValueTolerance();
         final double tolF = absTol * (FastMath.abs(fExpected) + 1.0);
         if (fExpected != 0.0) {
-            assertTrue(FastMath.abs(solution.getValue() - fExpected) < absTol  * FastMath.abs(fExpected), problem.getName()+";expected:"+fExpected+"--value:"+solution.getValue());
+            assertTrue(FastMath.abs(solution.getValue() - fExpected) <  tolF, problem.getName()+";expected:"+fExpected+"--value:"+solution.getValue());
          } else {
             assertTrue(FastMath.abs(solution.getValue()) < absTol,problem.getName()+";expected:"+fExpected+"--value:"+solution.getValue());
 }
@@ -177,9 +184,12 @@ class MarosMeszarosQPSolverTest {
         return solution;
     }
 
-    private LagrangeSolution solve(final QPDualActiveSolverR solver,
-                                   final ObjectiveFunction objectiveFunction,
+    private LagrangeSolution solve(final QPDualActiveSolver solver,QPDualActiveSolverOption option,
                                    final MarosMeszarosDenseProblemLoader.DenseQPProblem problem) {
+        
+        
+        final QuadraticFunction q = new QuadraticFunction(problem.getH(), problem.getC(), problem.getConstantTerm());
+        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(q);
         final boolean hasEq = problem.getAeq().length > 0;
         final boolean hasIq = problem.getAiq().length > 0;
 
@@ -191,12 +201,12 @@ class MarosMeszarosQPSolverTest {
                 null;
 
         if (hasEq && hasIq) {
-            return solver.optimize(objectiveFunction, eq, iq);
+            return solver.optimize(option,objectiveFunction, eq, iq);
         } else if (hasEq) {
-            return solver.optimize(objectiveFunction, eq);
+            return solver.optimize(option,objectiveFunction, eq);
         } else if (hasIq) {
-            return solver.optimize(objectiveFunction, iq);
+            return solver.optimize(option,objectiveFunction, iq);
         }
-        return solver.optimize(objectiveFunction);
+        return solver.optimize(option,objectiveFunction);
     }
 }

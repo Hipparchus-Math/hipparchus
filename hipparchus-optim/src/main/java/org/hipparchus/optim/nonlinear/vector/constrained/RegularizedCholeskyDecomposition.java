@@ -609,5 +609,14 @@ public class RegularizedCholeskyDecomposition {
         public int getColumnDimension() {
             return lTData[0].length;
         }
+        
+        /**
+     * Get the final diagonal shift added to the original matrix.
+     *
+     * @return diagonal shift
+     */
+    public double getDiagonalShift() {
+        return diagonalShift;
+    }
     }
 }

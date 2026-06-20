@@ -129,13 +129,12 @@ public class LineSearch {
      * @param maxMonotoneFailures failures before switching to non-monotone
      * @param maxBadSteps allowed consecutive bad steps before Hessian reset
      */
-    public LineSearch(final double alpha, final int maxHistory, final double mu, final double beta,
+    public LineSearch(final double minAlpha, final int maxHistory, final double mu, final double beta,
             final int maxMonotoneFailures, final int maxBadSteps) {
         this.maxHistory = maxHistory;
         this.sigma = mu;
         this.beta = beta;
-        //this.alphaMin = FastMath.min(1.0e-12, eps);
-        this.alphaMin =alpha;
+        this.alphaMin =minAlpha;
         this.maxMonotoneFailures = maxMonotoneFailures;
         this.maxBadSteps = maxBadSteps;
         this.history = new LinkedList<>();

@@ -276,16 +276,11 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                     u = y.subtract(penalty.gradY());
                
                 
-                //dx=MatrixUtils.inverse(H).operate(penalty.gradX()).mapMultiply(-1.0);
+                
                 dx = qpSolution.getX();
                 projectDirectionInPlace(x, dx, true);
                 
                 
-////                // Estimation of bounds multiplier from QP
-//                if (mb > 0) {
-//                    RealVector db = qpSolution.getLambda();
-//                    u.setSubVector(mi + me, db);
-//                }
                 QPMODE = QPMode.QP_AUGMENTED;
                 sigma = 0.0;
                 rho = getSettings().getRhoCons();
@@ -441,15 +436,6 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         }
     }
 
-    /**
-     * Extracts the underlying data reference if possible.
-     *
-     * @param v the vector
-     * @return the raw double array
-     */
-    private double[] getArrayRef(RealVector v) {
-        return (v instanceof ArrayRealVector) ? ((ArrayRealVector) v).getDataRef() : v.toArray();
-    }
 
     /**
      * Compute constraints violations using residuals directly.
@@ -460,26 +446,26 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         double crit = 0.0;
         
         if (this.getEqConstraint() != null) {
-            double[] evalData = getArrayRef(eqEval);
-            for (int k = 0; k < evalData.length; k++) {
-                crit += FastMath.abs(evalData[k]);
+           
+            for (int k = 0; k < eqEval.getDimension(); k++) {
+                crit += FastMath.abs(eqEval.getEntry(k));
             }
         }
         
         if (this.getIqConstraint() != null) {
-            double[] evalData = getArrayRef(ineqEval);
-            for (int k = 0; k < evalData.length; k++) {
-                if (evalData[k] < 0.0) {
-                    crit -= evalData[k]; 
+            
+            for (int k = 0; k < ineqEval.getDimension(); k++) {
+                if (ineqEval.getEntry(k)< 0.0) {
+                    crit -= ineqEval.getEntry(k); 
                 }
             }
         } 
         
         if (this.BIQ != null) {
-            double[] evalData = getArrayRef(bEval);
-            for (int k = 0; k < evalData.length; k++) {
-                if (evalData[k] < 0.0) {
-                    crit -= evalData[k];
+            
+            for (int k = 0; k < bEval.getDimension(); k++) {
+                if (bEval.getEntry(k) < 0.0) {
+                    crit -= bEval.getEntry(k);
                 }
             }
         } 
@@ -501,20 +487,20 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         
         double crit = 0.0;
         int shift = me;
-        double[] uData = getArrayRef(u);
+        
          
         if (this.getIqConstraint() != null) {
-            double[] evalData = getArrayRef(ineqEval);
-            for (int i = 0; i < evalData.length; i++) {
-                crit += FastMath.abs(evalData[i] * uData[shift + i]);
+           
+            for (int i = 0; i < ineqEval.getDimension(); i++) {
+                crit += FastMath.abs(ineqEval.getEntry(i) * u.getEntry(shift + i));
             }
-            shift += evalData.length;
+            shift += ineqEval.getDimension();
         }
         
         if (this.BIQ != null) {
-            double[] evalData = getArrayRef(bEval);
-            for (int i = 0; i < evalData.length; i++) {
-                crit += FastMath.abs(evalData[i] * uData[shift + i]);
+           
+            for (int i = 0; i < bEval.getDimension(); i++) {
+                crit += FastMath.abs(bEval.getEntry(i) * u.getEntry(shift + i));
             }
         }
         
@@ -683,7 +669,9 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
     }
     
     // Solve
-    final LagrangeSolution sol = getQPSolver().optimize(
+    QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
+    optQP.setEps(this.getSettings().getEpsQP());
+    final LagrangeSolution sol = getQPSolver().optimize(optQP,
             new ObjectiveFunction(new QuadraticFunction(L1, g1, 0)), 
             iqc, eqc, bc, QPMatrixMode.CHOLESKY);
     
@@ -747,12 +735,15 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
             iqc = new LinearInequalityConstraint(combinedAI, combinedBI);
         }
 
+        
+        QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
+        optQP.setEps(this.getSettings().getEpsQP());
         // --- QUADRATIC OBJECTIVE ---
         // Objective: 0.5 * d^T * L * d + J^T * d
         final QuadraticFunction q = new QuadraticFunction(L, J, 0.0);
 
         // --- SOLVE QP ---
-        final LagrangeSolution sol = getQPSolver().optimize(new ObjectiveFunction(q), iqc, eqc, QPMatrixMode.CHOLESKY);
+        final LagrangeSolution sol = getQPSolver().optimize(optQP,new ObjectiveFunction(q), iqc, eqc, QPMatrixMode.CHOLESKY);
 
         if (sol == null || sol.getX().getDimension() == 0) {
             return null;
@@ -786,8 +777,9 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
             RealVector B = bEval.mapMultiply(-1.0);
             iqc = new LinearInequalityConstraint(A, B);
         }
-
-        LagrangeSolution sol = getQPSolver().optimize(new ObjectiveFunction(q), iqc,QPMatrixMode.FULL);
+        QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
+        optQP.setEps(this.getSettings().getEpsQP());
+        LagrangeSolution sol = getQPSolver().optimize(optQP,new ObjectiveFunction(q), iqc,QPMatrixMode.FULL);
         
         if (sol == null || sol.getX().getDimension() == 0) {
             return sol;
