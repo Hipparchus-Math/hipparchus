@@ -12,12 +12,21 @@ public class QPDualActiveSolverOption implements OptimizationData  {
     /** Default tolerance for constraint satisfaction */
     public static final double DEFAULT_EPSILON = 1.0e-15;//>0
     
+     /** Default Matrix Mode */
+    public static final QPMatrixMode DEFAULT_MATRIX_MODE = QPMatrixMode.FULL;
+    
+    
+    /** Tolerance for constraint satisfaction */
     private double eps;
+    
+    /** Matrix Mode */
+    private QPMatrixMode matrixMode;
     
     
     public QPDualActiveSolverOption() 
     {
         this.eps=DEFAULT_EPSILON;
+        this.matrixMode=DEFAULT_MATRIX_MODE;
     }
     
     /** Set tolerance for convergence 
@@ -28,9 +37,25 @@ public class QPDualActiveSolverOption implements OptimizationData  {
         this.eps = eps;
     }
     
-    /** get tolerance for convergence and active constraint evaluation.
-     */
+    /** get tolerance for convergence and active constraint evaluation
+     * @return .*/
     public double getEps() {
         return eps;
+    }
+    
+     /** Set MatrixMode 
+      *
+      *@param matrixMode  
+      */
+    public void setMatrixMode(final QPMatrixMode matrixMode)
+    {
+        this.matrixMode=matrixMode;
+    }
+    
+    /** Get MatrixMode
+     * @return  */
+     public QPMatrixMode getMatrixMode()
+    {
+      return  this.matrixMode;
     }
 }

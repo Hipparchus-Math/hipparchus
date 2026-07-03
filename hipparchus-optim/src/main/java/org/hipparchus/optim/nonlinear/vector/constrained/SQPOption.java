@@ -27,11 +27,11 @@ public class SQPOption implements OptimizationData {
     /** Default convergence criteria. */
     public static final int DEFAULT_CONV_CRITERIA = 1;
 
-    /** Default tolerance for convergence and active constraint(proportional to sqrt of function accuracy) */
+    /** Default tolerance for convergence and active constraint(proportional to sqrt of function an constraints evaluation accuracy) */
     public static final double DEFAULT_EPSILON = 1.0e-7;//>0
 
-    /** Default tolerance for QP convergence  */
-    public static final double DEFAULT_EPSILON_QP = 1.0e-14;//>0
+    /** Default tolerance for QP convergence(proportional to function and constraints evaluation accuracy)  */
+    public static final double DEFAULT_EPSILON_QP = Precision.EPSILON;//>0
     
     /** Default weight for augmented QP subproblem. */
     public static final double DEFAULT_RHO = 100.0;//rho>1
@@ -63,7 +63,7 @@ public class SQPOption implements OptimizationData {
     /** Default Gradient mode. */
     public static final GradientMode DEFAULT_GRADIENT_MODE = GradientMode.FORWARD;
     
-    /** Default Gradient EPS proportional to function accuracy. */
+    /** Default Gradient EPS (proportional to function and constraints evaluation accuracy). */
     public static final double DEFAULT_GRAD_EPS = Precision.EPSILON;
     
     /** Default Max Iterations. */
@@ -154,8 +154,9 @@ public class SQPOption implements OptimizationData {
     }
     
      /** Set Gradient Eps
-     * @param gradEps gradient mode
-     */
+      *  Choose value proportional to function and constraints evaluation accuracy)
+      * @param gradEps gradient mode
+      */
     public void setGradientEps(final double gradEps) {
         this.gradEps = gradEps;
     }
@@ -167,7 +168,7 @@ public class SQPOption implements OptimizationData {
         return gradEps;
     }
 
-    /** Set convergence criteria.
+    /** Set convergence criteria.]
      * @param convCriteria convergence criteria
      */
     public void setConvCriteria(final int convCriteria) {
@@ -181,7 +182,8 @@ public class SQPOption implements OptimizationData {
         return convCriteria;
     }
 
-    /** Set tolerance for convergence and active constraint evaluation.
+    /** Set tolerance for convergence 
+     *  Choose value proportional to  sqrt of function and constraints evaluation accuracy
      * @param eps tolerance for convergence and active constraint evaluation
      */
     public void setEps(final double eps) {
@@ -196,8 +198,9 @@ public class SQPOption implements OptimizationData {
     }
     
      /** Set tolerance for QP convergence 
-     * @param eps tolerance for convergence
-     */
+      *  Choose value proportional to function and constraints evaluation accuracy
+      * @param eps tolerance for convergence
+      */
     public void setEpsQP(final double eps) {
         this.epsQP = eps;
     }

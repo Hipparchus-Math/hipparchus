@@ -105,11 +105,7 @@ public class QPDualActiveSolver extends QPOptimizer {
      */
     private MatrixDecompositionTolerance matrixDecompositionTolerance;
 
-    /**
-     * If true, function.getP() is interpreted as Cholesky lower factor L
-     * (H = L*L^T), not as the Hessian H itself.
-     */
-    private QPMatrixMode matrixMode = QPMatrixMode.FULL;
+    
 
     /**
      * Parses optimization data to extract the objective function and various
@@ -128,7 +124,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         this.bConstraints = null;
         this.settings=new QPDualActiveSolverOption();
         this.matrixDecompositionTolerance = new MatrixDecompositionTolerance(EPS);
-        this.matrixMode = QPMatrixMode.FULL;
+        
 
         for (OptimizationData data : optData) {
             if (data instanceof ObjectiveFunction) {
@@ -139,14 +135,12 @@ public class QPDualActiveSolver extends QPOptimizer {
                 iqConstraints = (LinearInequalityConstraint) data;
             } else if (data instanceof LinearBoundedConstraint) {
                 bConstraints = (LinearBoundedConstraint) data;
-            } else if (data instanceof QPMatrixMode) {
-                matrixMode = ((QPMatrixMode) data);
             } else if (data instanceof MatrixDecompositionTolerance) {
                 matrixDecompositionTolerance = (MatrixDecompositionTolerance) data;
             }
-            else if(data instanceof QPDualActiveSolverOption)
+              else if(data instanceof QPDualActiveSolverOption)
             {
-             settings = (QPDualActiveSolverOption) data;
+               settings = (QPDualActiveSolverOption) data;
             }
         }    
     }
@@ -323,10 +317,11 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         }
         
         double cand;
-       
+        
         if(u.getEntry(i)<=0.0)  cand=0.0;
           
-        else cand = u.getEntry(i) / FastMath.abs(ri);  
+        else 
+            cand = u.getEntry(i) / FastMath.abs(ri);  
            
         
         
@@ -475,9 +470,13 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         int kViolated = -1;
 
         for (int k = 0; k < sv.getDimension(); k++) {
-            if (activeSet.contains(k)) {
+            if (activeSet.contains(k) ) {
                 continue;
             }
+            
+            
+           
+            
 
             final double residual = sv.getEntry(k);
             final double absResidual = FastMath.abs(residual);
@@ -494,6 +493,8 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             if (scaledViolation <= cvMax) {
                 continue;
             }
+            
+           
 
             // 3. --- NOISE FILTER ---
             double absSum = FastMath.abs(c0.getEntry(k));
@@ -563,7 +564,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         RealMatrix L1=null;
         QRUpdater qrUpdater=null;
         
-        if (matrixMode == QPMatrixMode.FULL) {
+        if (settings.getMatrixMode() == QPMatrixMode.FULL) {
             G = function.getP();
             try {
                 final double eps = matrixDecompositionTolerance.getEpsMatrixDecomposition();
@@ -579,7 +580,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 // Matrix is not positive definite, return failure solution
                 return buildFailureSolution(ERROR_CHOLESKY_DECOMPOSITION);
             }
-        } else if(matrixMode ==QPMatrixMode.CHOLESKY) {
+        } else if(settings.getMatrixMode() ==QPMatrixMode.CHOLESKY) {
             
             L = function.getP();
             G = L.multiplyTransposed(L);
@@ -610,7 +611,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         this.maxIter = 40 * (n + mc);
 
         List<Integer> active = new ArrayList<>();
-
+        List<Integer> relaxed = new ArrayList<>();
         RealVector u = new ArrayRealVector(0, 0);
         RealVector r = new ArrayRealVector(0, 0);
         RealVector d = null;
@@ -664,13 +665,14 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             Pair<Integer, Double> violationInfo = mostViolatedConstraintNormalized(sv, weights, active, p, C, c0, x);
             int kViolated = violationInfo.getKey();
             double cvMax = violationInfo.getValue();
-            
+           
+          
              if (cvMax <= settings.getEps() && refinementDone) {
                 break; // Solution found
             }
 
             // Evaluate convergence: no significantly violated NON-active constraint
-            if (cvMax <= settings.getEps() && !refinementDone) {
+            if (cvMax <= settings.getEps()  && !refinementDone) {
                 
                 kViolated = -1;
                 refinementDone = true;
@@ -701,7 +703,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 
                 final int constraintIndex = kViolated;
                 final boolean equality = constraintIndex < p;
-
+               
                 // Dual step loop update multiplier and x (if step is also in primal)
                 // until primal step is not done
                 while (iteration++ < maxIter) {
@@ -721,6 +723,9 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     signedStep = reverseStep ? -t : t;
                     
                     if (!Double.isFinite(t)) {
+                        //second change
+                        
+                        
                         return buildFailureSolution(ERROR_INFEASIBLE);
                     }
                     
@@ -741,7 +746,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                         
                     }
                 }
-
+                
                 // Manage full step
                 if (active.size() < n && qrUpdater.addConstraint(d)) {
                     active.add(constraintIndex);

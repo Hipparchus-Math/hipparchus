@@ -219,7 +219,7 @@ public class QRUpdater {
             double sum = 0.0;
             for (int j = i + 1; j < iq; j++) sum += R.getEntry(i, j) * xResult[j];
             double rii = R.getEntry(i, i);
-            if (FastMath.abs(rii) < Precision.EPSILON) return null;
+            if (FastMath.abs(rii) < Precision.SAFE_MIN) return null;
             
             xResult[i] = (xResult[i] - sum) / rii;
         }

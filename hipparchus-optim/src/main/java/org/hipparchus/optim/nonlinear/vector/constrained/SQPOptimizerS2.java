@@ -137,6 +137,9 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
      * Upper bound.
      */
     private ArrayRealVector UB;
+    
+    // Volatile flag to safely capture the Ctrl+C signal across JVM contexts
+    public static boolean manualBreak= false;
 
     /**
      * {@inheritDoc}
@@ -226,7 +229,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         double XNORM = 0.0;
         double FUNDIFF = 0.0;
         int BFGSUPDATE = 0;
-        
+           
         for (int i = 0; i < getSettings().getMaxIteration(); i++) {
             
             sigma = getSettings().getSigmaMax() * 10.0;
@@ -317,10 +320,12 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
             crit2 = XNORM <= EPS * (1.0 + x.getNorm());
             crit3 = VIOLATION <= sqrtEPS;
             crit5 = COMPLEMENTARY <= EPS;
-                  
+              
             if ((crit0 || crit1) && crit5  && crit3) {
                 break;
             }
+            
+            
             
             if (penalty.getGradient() >= 0) {
                 if (QPMODE == QPMode.QP_AUGMENTED)  rho = rhoUp(rho);
@@ -373,10 +378,18 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 crit4 = FUNDIFF < EPS * (1.0 + FastMath.abs(functionEval));
                 crit5 = (COMPLEMENTARY <= EPS);
                 
-                if (!lineSearch.isBadStepDetected() && (crit0 || (crit5 && m > 0) || crit4) && crit1  && crit3) {
+////                if (!lineSearch.isBadStepDetected() && (crit0 || (crit5 && m > 0) || crit4 || crit2 ) && crit1   && crit3) {
+////                    break;
+////                }
+//                if (manualBreak) {
+//                    System.out.println("\n[Solver] Manual break triggered by the user.");
+//                    break; // Exits the loop exactly at this checkpoint
+//                }
+            
+                 if (!lineSearch.isBadStepDetected() && ((crit0 || crit1) && crit5  && crit3)) {
                     break;
                 }
-                
+              
                 if (lineSearch.isBadStepDetected() && (crit3 && (crit4 || crit2))) {
                     break;
                 }
@@ -671,9 +684,10 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
     // Solve
     QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
     optQP.setEps(this.getSettings().getEpsQP());
+    optQP.setMatrixMode(QPMatrixMode.CHOLESKY);
     final LagrangeSolution sol = getQPSolver().optimize(optQP,
             new ObjectiveFunction(new QuadraticFunction(L1, g1, 0)), 
-            iqc, eqc, bc, QPMatrixMode.CHOLESKY);
+            iqc, eqc, bc);
     
     if (sol == null || sol.getX().getDimension() == 0) {
         return sol;
@@ -738,12 +752,13 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
         
         QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
         optQP.setEps(this.getSettings().getEpsQP());
+        optQP.setMatrixMode(QPMatrixMode.CHOLESKY);
         // --- QUADRATIC OBJECTIVE ---
         // Objective: 0.5 * d^T * L * d + J^T * d
         final QuadraticFunction q = new QuadraticFunction(L, J, 0.0);
 
         // --- SOLVE QP ---
-        final LagrangeSolution sol = getQPSolver().optimize(optQP,new ObjectiveFunction(q), iqc, eqc, QPMatrixMode.CHOLESKY);
+        final LagrangeSolution sol = getQPSolver().optimize(optQP,new ObjectiveFunction(q), iqc, eqc);
 
         if (sol == null || sol.getX().getDimension() == 0) {
             return null;
@@ -779,7 +794,8 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
         }
         QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
         optQP.setEps(this.getSettings().getEpsQP());
-        LagrangeSolution sol = getQPSolver().optimize(optQP,new ObjectiveFunction(q), iqc,QPMatrixMode.FULL);
+        optQP.setMatrixMode(QPMatrixMode.FULL);
+        LagrangeSolution sol = getQPSolver().optimize(optQP,new ObjectiveFunction(q), iqc);
         
         if (sol == null || sol.getX().getDimension() == 0) {
             return sol;
