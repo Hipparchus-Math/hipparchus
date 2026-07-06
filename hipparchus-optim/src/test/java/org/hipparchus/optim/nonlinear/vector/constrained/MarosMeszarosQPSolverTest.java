@@ -153,13 +153,13 @@ class MarosMeszarosQPSolverTest {
             fail("Missing expected objective value for problem " + problem.getName() +
                  ". Check 00readme.qp OPT parsing.");
         }
-
-        if (Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "true"))) {
-            System.out.println("[MarosMeszarosQPSolverTest] " + problem.getName() +
-                               " expectedValue=" + problem.getExpectedValue() +
-                               " actualValue=" + solution.getValue());
-        }
-        
+//
+//        if (Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "true"))) {
+//            System.out.println("[MarosMeszarosQPSolverTest] " + problem.getName() +
+//                               " expectedValue=" + problem.getExpectedValue() +
+//                               " actualValue=" + solution.getValue());
+//        }
+//        
         if (Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "true"))) {
             if(solution.getX().getDimension()==0)System.out.println("[MarosMeszarosQPSolverTest] " + problem.getName() +
                                

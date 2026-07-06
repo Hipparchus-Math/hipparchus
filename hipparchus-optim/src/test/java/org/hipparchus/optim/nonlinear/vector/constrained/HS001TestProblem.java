@@ -20,9 +20,6 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.InitialGuess;
-import org.hipparchus.optim.SimpleBounds;
-import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 public class HS001TestProblem {
@@ -34,10 +31,7 @@ public class HS001TestProblem {
             return 2; 
         }
 
-        @Override
-        public double[] getInitialGuess() {
-            return new double[]{-2, 1};
-        }
+       
 
         @Override
         public double[] getBoxConstraintLB() {
@@ -101,10 +95,7 @@ public class HS001TestProblem {
              return null;
         }
 
-        @Override
-        public boolean hasInitialGuess() {
-           return true;
-        }
+       
 
         @Override
         public boolean hasBounds() {
@@ -145,7 +136,8 @@ public class HS001TestProblem {
         sqpOption.setGradientMode(gradientMode);
         SQPOptimizerS2 optimizer = HSProblemTestUtils.newOptimizer();
         double val = 0.0;
-        LagrangeSolution sol = optimizer.optimize(sqpOption,new HS001Problem());
+         InitialGuess guess = new InitialGuess(new double[]{-2, 1});
+        LagrangeSolution sol = optimizer.optimize(sqpOption,guess,new HS001Problem());
         
         HSProblemTestUtils.assertExpectedObjective(val, sol);
     }

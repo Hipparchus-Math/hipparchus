@@ -39,21 +39,6 @@ public interface SQPProblem extends OptimizationData {
     int getdim();
 
     /**
-     * Indicates whether this problem supplies an initial guess.
-     * The optimizer may fallback to a default guess if false.
-     *
-     * @return true if {@link #getInitialGuess()} is defined
-     */
-    boolean hasInitialGuess();
-
-    /**
-     * Returns the initial guess vector for the optimization variables.
-     *
-     * @return initial guess values as a primitive array
-     */
-    double[] getInitialGuess();
-
-    /**
      * Indicates whether explicit variable bounds are defined.
      *
      * @return true if box constraints are available

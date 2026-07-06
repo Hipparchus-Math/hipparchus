@@ -142,7 +142,6 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
                 double[]ub = ((SQPProblem) data).getBoxConstraintUB();
                 SB = (problem.hasBounds())?new SimpleBounds(lb,ub):null;
                
-                start=(problem.hasInitialGuess())?problem.getInitialGuess():null;
                 continue;
             }
             
