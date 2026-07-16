@@ -23,6 +23,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.RealVector;
 
 import org.hipparchus.util.FastMath;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
@@ -192,21 +195,22 @@ class MarosMeszarosQPSolverTest {
         final ObjectiveFunction objectiveFunction = new ObjectiveFunction(q);
         final boolean hasEq = problem.getAeq().length > 0;
         final boolean hasIq = problem.getAiq().length > 0;
-
+                              
         final LinearEqualityConstraint eq = hasEq ?
                 new LinearEqualityConstraint(problem.getAeq(), problem.getBeq()) :
                 null;
         final LinearInequalityConstraint iq = hasIq ?
                 new LinearInequalityConstraint(problem.getAiq(), problem.getBiq()) :
                 null;
-
-        if (hasEq && hasIq) {
-            return solver.optimize(option,objectiveFunction, eq, iq);
-        } else if (hasEq) {
-            return solver.optimize(option,objectiveFunction, eq);
-        } else if (hasIq) {
-            return solver.optimize(option,objectiveFunction, iq);
-        }
-        return solver.optimize(option,objectiveFunction);
+        final LinearBoundedConstraint bq=new LinearBoundedConstraint(MatrixUtils.createRealIdentityMatrix(problem.getVariableCount()),new ArrayRealVector(problem.getLowerBound()),new ArrayRealVector(problem.getUpperBound()));
+         return solver.optimize(option,objectiveFunction, eq, iq,bq);
+//        if (hasEq && hasIq) {
+//            return solver.optimize(option,objectiveFunction, eq, iq);
+//        } else if (hasEq) {
+//            return solver.optimize(option,objectiveFunction, eq);
+//        } else if (hasIq) {
+//            return solver.optimize(option,objectiveFunction, iq);
+//        }
+//        return solver.optimize(option,objectiveFunction);
     }
 }

@@ -378,9 +378,9 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 crit4 = FUNDIFF < EPS * (1.0 + FastMath.abs(functionEval));
                 crit5 = (COMPLEMENTARY <= EPS);
                 
-////                if (!lineSearch.isBadStepDetected() && (crit0 || (crit5 && m > 0) || crit4 || crit2 ) && crit1   && crit3) {
-////                    break;
-////                }
+//                if (!lineSearch.isBadStepDetected() && (crit0 || (crit5 && m > 0) || crit4 || crit2 ) && crit1   && crit3) {
+//                    break;
+//                }
 //                if (manualBreak) {
 //                    System.out.println("\n[Solver] Manual break triggered by the user.");
 //                    break; // Exits the loop exactly at this checkpoint
@@ -389,7 +389,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                  if (!lineSearch.isBadStepDetected() && ((crit0 || crit1) && crit5  && crit3)) {
                     break;
                 }
-              
+//              
                 if (lineSearch.isBadStepDetected() && (crit3 && (crit4 || crit2))) {
                     break;
                 }

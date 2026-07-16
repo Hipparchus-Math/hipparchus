@@ -174,7 +174,7 @@ public class QPDualActiveSolver extends QPOptimizer {
     final double sumB = ai.ebeMultiply(z).getL1Norm();
 
     /*
-     * SUMC = ||z||
+     * SUMC = ||ai|| * ||z||
      */
     final double sumC = z.getNorm()*ai.getNorm();
 
@@ -318,7 +318,8 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         
         double cand;
         
-        if(u.getEntry(i)<=0.0)  cand=0.0;
+        if(u.getEntry(i)<=0.0)  
+            cand=0.0;
           
         else 
             cand = u.getEntry(i) / FastMath.abs(ri);  
@@ -461,7 +462,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
 //     */
      private Pair<Integer, Double> mostViolatedConstraintNormalized(final RealVector sv,
                                                                    final RealVector weights,
-                                                                   final List<Integer> activeSet,
+                                                                   final boolean[] active ,
                                                                    final int me,
                                                                    final RealMatrix C,
                                                                    final RealVector c0,
@@ -470,7 +471,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         int kViolated = -1;
 
         for (int k = 0; k < sv.getDimension(); k++) {
-            if (activeSet.contains(k) ) {
+            if (active[k] ) {
                 continue;
             }
             
@@ -499,7 +500,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             // 3. --- NOISE FILTER ---
             double absSum = FastMath.abs(c0.getEntry(k));
             for (int i = 0; i < x.getDimension(); i++) {
-                absSum += FastMath.abs(C.getEntry(i, k) * x.getEntry(i));
+                absSum += FastMath.abs(C.getEntry(k, i) * x.getEntry(i));
             }
 
             double tempA = absSum + absResidual;
@@ -611,7 +612,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         this.maxIter = 40 * (n + mc);
 
         List<Integer> active = new ArrayList<>();
-        List<Integer> relaxed = new ArrayList<>();
+        final boolean[] activeMask = new boolean[mc];
         RealVector u = new ArrayRealVector(0, 0);
         RealVector r = new ArrayRealVector(0, 0);
         RealVector d = null;
@@ -647,7 +648,8 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     // 2. Se trovato, effettua il drop e riesegui il KKT da capo
                     if (dropIndex >= 0) {
                         qrUpdater.deleteConstraint(dropIndex);
-                        active.remove(dropIndex);
+                        final int removedConstraint = active.remove(dropIndex);
+                        activeMask[removedConstraint] = false;
                         u=removeMultiplierAt(u, dropIndex);
                         Pair<RealVector, RealVector> xy = recomputeXY(x, G, g0, C, c0, qrUpdater, active);
                         x = xy.getFirst();
@@ -659,10 +661,10 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             
             RealVector sv;
             // Evaluate constraints sv = C.preMultiply(x).add(c0); 
-            sv = C.preMultiply(x);           
+            sv = C.operate(x);           
             sv.combineToSelf(1.0, 1.0, c0);
             // Convergence test: find the most violated NON-active constraint
-            Pair<Integer, Double> violationInfo = mostViolatedConstraintNormalized(sv, weights, active, p, C, c0, x);
+            Pair<Integer, Double> violationInfo = mostViolatedConstraintNormalized(sv, weights, activeMask, p, C, c0, x);
             int kViolated = violationInfo.getKey();
             double cvMax = violationInfo.getValue();
            
@@ -696,18 +698,18 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 double t1;
                 double t2;
                 double t = 0;
-               double signedStep=0;
+                double signedStep=0;
                 double uPartial = 0;
                 int dropIndex;
                 RealVector np;
                 
                 final int constraintIndex = kViolated;
                 final boolean equality = constraintIndex < p;
-               
+                
                 // Dual step loop update multiplier and x (if step is also in primal)
                 // until primal step is not done
                 while (iteration++ < maxIter) {
-                    np = C.getColumnVector(constraintIndex);
+                    np = C.getRowVector(constraintIndex);
                     sv.setEntry(constraintIndex, np.dotProduct(x) + c0.getEntry(constraintIndex));
                     d = qrUpdater.computeD(np);
                     z = qrUpdater.computeZ(d);
@@ -723,7 +725,6 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     signedStep = reverseStep ? -t : t;
                     
                     if (!Double.isFinite(t)) {
-                        //second change
                         
                         
                         return buildFailureSolution(ERROR_INFEASIBLE);
@@ -741,15 +742,18 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                         u = updateMultipliersOnRemoval(u, r, signedStep, dropIndex);
                         
                         qrUpdater.deleteConstraint(dropIndex);
-                        active.remove(dropIndex);
+                        final int removedConstraint = active.remove(dropIndex);
+                        activeMask[removedConstraint] = false;
                         
                         
                     }
                 }
                 
+               
                 // Manage full step
                 if (active.size() < n && qrUpdater.addConstraint(d)) {
                     active.add(constraintIndex);
+                    activeMask[constraintIndex] = true;
                     // Step rimal x = x.add(z.mapMultiply(t));
                     x.combineToSelf(1.0, signedStep, z);
                     uPartial += signedStep;
@@ -757,6 +761,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     
                     break; // Re-evaluate convergence
                 } else {
+                    
                     return buildFailureSolution(ERROR_DEPENDENT_EQUALITIES);
                 }
             }
@@ -982,7 +987,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             final double[] rpData = new double[nAct];
             for (int i = 0; i < nAct; i++) {
                 final int idx = active.get(i);
-                final RealVector ai = C.getColumnVector(idx);
+                final RealVector ai = C.getRowVector(idx);
                 rpData[i] = -(ai.dotProduct(x) + c0.getEntry(idx));
             }
             final RealVector rp = new ArrayRealVector(rpData, false);
@@ -1052,98 +1057,178 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         }
     }
 
-    /**
-     * Builds the physical QP system and computes constraint weights in a single pass.
-     * Each column j of C corresponds to the gradient of the j-th constraint.
-     * * @param n           Number of primal variables.
-     * @param eqConstraints Equality constraints (JE, be).
-     * @param iqConstraints Inequality constraints (JI, bi).
-     * @param bConstraints  Box constraints (JB, lb, ub).
-     * @return The integrated QP system container.
+        /**
+     * Builds the virtual row-oriented QP constraint system.
+     *
+     * <p>The global constraint matrix is represented as:</p>
+     *
+     * <pre>
+     * A = [ Ae  ]
+     *     [ Ai  ]
+     *     [ Ab  ]
+     *     [-Ab  ]
+     * </pre>
+     *
+     * <p>No global physical matrix and no transpose are created.</p>
+     *
+     * @param n number of primal variables
+     * @param eqConstraints equality constraints
+     * @param iqConstraints inequality constraints
+     * @param bConstraints bounded constraints
+     * @return integrated constraint system
      */
-    private QPConstraintSystem buildGlobalConstraints(final int n,
-                                                       final LinearEqualityConstraint eqConstraints,
-                                                       final LinearInequalityConstraint iqConstraints,
-                                                       final LinearBoundedConstraint bConstraints) {
-        // 1. Setup dimensions
-        final int p  = (eqConstraints != null) ? eqConstraints.dimY() : 0;
-        final int m1 = (iqConstraints != null) ? iqConstraints.dimY() : 0;
-        final int b1 = (bConstraints != null)  ? bConstraints.dimY() : 0;
+    private QPConstraintSystem buildGlobalConstraints(
+            final int n,
+            final LinearEqualityConstraint eqConstraints,
+            final LinearInequalityConstraint iqConstraints,
+            final LinearBoundedConstraint bConstraints) {
+
+        final int p = eqConstraints != null ?
+                eqConstraints.dimY() : 0;
+
+        final int m1 = iqConstraints != null ?
+                iqConstraints.dimY() : 0;
+
+        final int b1 = bConstraints != null ?
+                bConstraints.dimY() : 0;
+
         final int mc = p + m1 + 2 * b1;
 
-        // 2. Initialize storage using physical arrays for speed
-        final RealMatrix C = MatrixUtils.createRealMatrix(n, mc);
+        /*
+         * Original row-oriented matrices.
+         *
+         * No transpose and no coefficient copy are performed.
+         */
+        final RealMatrix Ae = eqConstraints != null ?
+                eqConstraints.getA() : null;
+
+        final RealMatrix Ai = iqConstraints != null ?
+                iqConstraints.jacobian(null) : null;
+
+        final RealMatrix Ab = bConstraints != null ?
+                bConstraints.jacobian(null) : null;
+
+        /*
+         * Virtual global matrix:
+         *
+         *     [ Ae  ]
+         * A = [ Ai  ]
+         *     [ Ab  ]
+         *     [-Ab  ]
+         */
+        final RealMatrix A = new QPConstraintMatrix(n,Ae, Ai, Ab);
+
         final double[] c0Data = new double[mc];
         final double[] wData = new double[mc];
+
         final double safeMin = Precision.SAFE_MIN;
-        double sumSq = 0;
-        double val=0;
-        double invNorm=0;
-        // --- SECTION 1: EQUALITIES ---
+
+        /*
+         * Equality constraints:
+         *
+         *     Ae_j x - be_j = 0
+         */
         if (p > 0) {
-            final RealMatrix Ae = eqConstraints.getA();
+
             final RealVector be = eqConstraints.getLowerBound();
+
             for (int j = 0; j < p; j++) {
+
                 c0Data[j] = -be.getEntry(j);
-                sumSq = 0;
+
+                double sumSq = 0.0;
+
                 for (int i = 0; i < n; i++) {
-                    val = Ae.getEntry(j, i);
-                    C.setEntry(i, j, val);
-                    sumSq += val * val;
+                    final double value = Ae.getEntry(j, i);
+                    sumSq += value * value;
                 }
-                sumSq = FastMath.sqrt(sumSq);
-                wData[j] = sumSq > safeMin ? 1.0 / sumSq  : 0.0;
+
+                final double norm = FastMath.sqrt(sumSq);
+
+                wData[j] = norm > safeMin ?
+                        1.0 / norm : 0.0;
             }
         }
 
-        // --- SECTION 2: INEQUALITIES ---
+        /*
+         * Inequality constraints:
+         *
+         *     Ai_j x - bi_j >= 0
+         */
         if (m1 > 0) {
-            final RealMatrix Ai = iqConstraints.jacobian(null);
+
             final RealVector bi = iqConstraints.getLowerBound();
+
             for (int j = 0; j < m1; j++) {
-                c0Data[p + j] = -bi.getEntry(j);
-                sumSq = 0;
+
+                final int globalIndex = p + j;
+
+                c0Data[globalIndex] = -bi.getEntry(j);
+
+                double sumSq = 0.0;
+
                 for (int i = 0; i < n; i++) {
-                    val = Ai.getEntry(j, i);
-                    C.setEntry(i, p + j, val);
-                    sumSq += val * val;
+                    final double value = Ai.getEntry(j, i);
+                    sumSq += value * value;
                 }
-                sumSq  = FastMath.sqrt(sumSq);
-                wData[p + j] = sumSq  > safeMin ? 1.0 / sumSq  : 0.0;
+
+                final double norm = FastMath.sqrt(sumSq);
+
+                wData[globalIndex] = norm > safeMin ?
+                        1.0 / norm : 0.0;
             }
         }
 
-        // --- SECTION 3: BOUNDS ---
+        /*
+         * Bounded constraints:
+         *
+         * Lower:
+         *
+         *     Ab_j x - lb_j >= 0
+         *
+         * Upper:
+         *
+         *     -Ab_j x + ub_j >= 0
+         *
+         * Both rows have the same Euclidean norm.
+         */
         if (b1 > 0) {
-            final RealMatrix Ab = bConstraints.jacobian(null);
+
             final RealVector lb = bConstraints.getLowerBound();
             final RealVector ub = bConstraints.getUpperBound();
-            for (int j = 0; j < b1; j++) {
-                // Constant terms for lower and upper bounds
-                c0Data[p + m1 + j] = -lb.getEntry(j);
-                c0Data[p + m1 + b1 + j] = ub.getEntry(j);
 
-                sumSq = 0;
+            final int lowerOffset = p + m1;
+            final int upperOffset = lowerOffset + b1;
+
+            for (int j = 0; j < b1; j++) {
+
+                final int lowerIndex = lowerOffset + j;
+                final int upperIndex = upperOffset + j;
+
+                c0Data[lowerIndex] = -lb.getEntry(j);
+                c0Data[upperIndex] = ub.getEntry(j);
+
+                double sumSq = 0.0;
+
                 for (int i = 0; i < n; i++) {
-                    val = Ab.getEntry(j, i);
-                    // Column for Lower Bound
-                    C.setEntry(i, p + m1 + j, val);
-                    // Column for Upper Bound (negative gradient)
-                    C.setEntry(i, p + m1 + b1 + j, -val);
-                    sumSq += val * val;
+                    final double value = Ab.getEntry(j, i);
+                    sumSq += value * value;
                 }
-                // Weight calculation (same for both bounds as ||a|| = ||-a||)
-                sumSq = FastMath.sqrt(sumSq);
-                invNorm = sumSq > safeMin ? 1.0 / sumSq  : 0.0;
-                wData[p + m1 + j] = invNorm;
-                wData[p + m1 + b1 + j] = invNorm;
+
+                final double norm = FastMath.sqrt(sumSq);
+
+                final double inverseNorm = norm > safeMin ?
+                        1.0 / norm : 0.0;
+
+                wData[lowerIndex] = inverseNorm;
+                wData[upperIndex] = inverseNorm;
             }
         }
 
-        return new QPConstraintSystem(C, 
-                                      new ArrayRealVector(c0Data, false), 
-                                      new ArrayRealVector(wData, false));
+        return new QPConstraintSystem(
+                A,
+                new ArrayRealVector(c0Data, false),
+                new ArrayRealVector(wData, false));
     }
-    
     
 }

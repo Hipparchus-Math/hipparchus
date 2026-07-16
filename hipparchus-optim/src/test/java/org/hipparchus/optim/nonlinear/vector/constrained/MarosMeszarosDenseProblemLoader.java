@@ -184,7 +184,8 @@ class MarosMeszarosDenseProblemLoader {
             estimatedVariables > maxVariables ||
             estimatedVariables > hardMaxVariables) {
             final double expectedValue = metadata == null ? Double.NaN : metadata.opt;
-            return DenseQPProblem.tooLarge(problemName, estimatedVariables, expectedValue);
+            final int reportedVariables = metadata == null ? estimatedVariables : metadata.n;
+            return DenseQPProblem.tooLarge(problemName, reportedVariables, expectedValue);
         }
 
         if (metadata != null) {
@@ -238,7 +239,7 @@ class MarosMeszarosDenseProblemLoader {
                     continue;
                 }
 
-                final String[] tokens = parseDataTokens(rawLine);
+                final String[] tokens = parseDataTokens(rawLine, "COLUMNS");
                 if (tokens.length == 0) {
                     continue;
                 }
@@ -301,21 +302,6 @@ class MarosMeszarosDenseProblemLoader {
             }
         }
 
-        for (int i = 0; i < n; i++) {
-            if (Double.isFinite(lb[i])) {
-                final double[] row = new double[n];
-                row[i] = 1.0;
-                iqRows.add(row);
-                iqValues.add(lb[i]);
-            }
-            if (Double.isFinite(ub[i])) {
-                final double[] row = new double[n];
-                row[i] = -1.0;
-                iqRows.add(row);
-                iqValues.add(-ub[i]);
-            }
-        }
-
         final double[][] h = buildSymmetricH(lowerQ, file);
 
         validateAgainstMetadata(file, metadata, h, layout);
@@ -330,6 +316,8 @@ class MarosMeszarosDenseProblemLoader {
                                   toMatrix(iqRows, n),
                                   toVector(iqValues),
                                   objectiveConstant[0],
+                                  Arrays.copyOf(lb, lb.length),
+                                  Arrays.copyOf(ub, ub.length),
                                   null,
                                   expectedValue,
                                   1e-6,
@@ -439,13 +427,23 @@ class MarosMeszarosDenseProblemLoader {
                 final String nextSection = parseSectionHeader(rawLine, trimmed);
                 if (nextSection != null) {
                     section = nextSection;
+                    if ("OBJNAME".equals(section)) {
+                        final String[] headerTokens = parseDataTokens(rawLine);
+                        if (headerTokens.length > 1) {
+                            layout.objectiveRow = headerTokens[1];
+                        }
+                    }
                     if ("ENDATA".equals(section)) {
                         break;
                     }
                     continue;
                 }
 
-                final String[] tokens = parseDataTokens(rawLine);
+                if ("ROWS".equals(section) && shouldUseFixedFormat(rawLine, section, parseDataTokens(rawLine))) {
+                    layout.fixedFormat = true;
+                }
+
+                final String[] tokens = parseDataTokens(rawLine, section, layout.fixedFormat);
                 if ("ROWS".equals(section)) {
                     if (tokens.length >= 2) {
                         final char type = Character.toUpperCase(tokens[0].charAt(0));
@@ -455,13 +453,16 @@ class MarosMeszarosDenseProblemLoader {
                             layout.objectiveRow = name;
                         }
                     }
+                } else if ("OBJNAME".equals(section)) {
+                    parseObjectiveName(layout, tokens);
                 } else if ("COLUMNS".equals(section)) {
                     if (tokens.length > 0 && !(tokens.length >= 2 && "'MARKER'".equalsIgnoreCase(tokens[1]))) {
                         layout.addVariable(tokens[0]);
                     }
                 } else if ("BOUNDS".equals(section)) {
-                    if (tokens.length >= 3) {
-                        layout.addVariable(tokens[2]);
+                    final int varToken = boundVariableTokenIndex(tokens);
+                    if (varToken >= 0) {
+                        layout.addVariable(tokens[varToken]);
                     }
                 } else if ("QUADOBJ".equals(section) || "QMATRIX".equals(section) || "DMATRIX".equals(section)) {
                     if (tokens.length >= 1) {
@@ -524,7 +525,7 @@ class MarosMeszarosDenseProblemLoader {
                     continue;
                 }
 
-                final String[] tokens = parseDataTokens(rawLine);
+                final String[] tokens = parseDataTokens(rawLine, section, layout.fixedFormat);
                 if (tokens.length == 0) {
                     continue;
                 }
@@ -628,16 +629,18 @@ class MarosMeszarosDenseProblemLoader {
                                  final String[] tokens,
                                  final double[] lb,
                                  final double[] ub) {
-        if (tokens.length < 3) {
+        final int varToken = boundVariableTokenIndex(tokens);
+        if (varToken < 0) {
             return;
         }
-        final Integer varIndex = layout.varIndex.get(tokens[2]);
+        final Integer varIndex = layout.varIndex.get(tokens[varToken]);
         if (varIndex == null) {
             return;
         }
 
         final String type = tokens[0].toUpperCase(Locale.ROOT);
-        final Double parsed = tokens.length > 3 ? tryParseDouble(tokens[3]) : Double.valueOf(0.0);
+        final int valueToken = boundValueTokenIndex(tokens, type);
+        final Double parsed = valueToken >= 0 ? tryParseDouble(tokens[valueToken]) : Double.valueOf(0.0);
         final double value = parsed == null ? 0.0 : parsed.doubleValue();
         final int j = varIndex.intValue();
         if ("LO".equals(type)) {
@@ -652,8 +655,51 @@ class MarosMeszarosDenseProblemLoader {
             ub[j] = Double.POSITIVE_INFINITY;
         } else if ("MI".equals(type)) {
             lb[j] = Double.NEGATIVE_INFINITY;
+            if (!Double.isFinite(ub[j])) {
+                ub[j] = 0.0;
+            }
         } else if ("PL".equals(type)) {
             ub[j] = Double.POSITIVE_INFINITY;
+        } else if ("BV".equals(type)) {
+            lb[j] = 0.0;
+            ub[j] = 1.0;
+        } else if ("LI".equals(type)) {
+            lb[j] = value;
+        } else if ("UI".equals(type)) {
+            ub[j] = value;
+        }
+    }
+
+
+    private int boundVariableTokenIndex(final String[] tokens) {
+        if (tokens.length < 2) {
+            return -1;
+        }
+        if (tokens.length == 2) {
+            return 1;
+        }
+        final String type = tokens[0].toUpperCase(Locale.ROOT);
+        return tokens.length == 3 && boundTypeRequiresValue(type) ? 1 : 2;
+    }
+
+    private int boundValueTokenIndex(final String[] tokens, final String type) {
+        if (tokens.length > 3) {
+            return 3;
+        }
+        return tokens.length == 3 && boundTypeRequiresValue(type) ? 2 : -1;
+    }
+
+    private boolean boundTypeRequiresValue(final String type) {
+        return "LO".equals(type) ||
+               "UP".equals(type) ||
+               "FX".equals(type) ||
+               "LI".equals(type) ||
+               "UI".equals(type);
+    }
+
+    private void parseObjectiveName(final ProblemLayout layout, final String[] tokens) {
+        if (tokens.length > 0) {
+            layout.objectiveRow = tokens[0];
         }
     }
 
@@ -870,51 +916,6 @@ class MarosMeszarosDenseProblemLoader {
         System.out.println("[MarosMeszarosLoader] " + message);
     }
 
-    private ParsedQps parseQps(final Path file) throws IOException {
-        final ParsedQps out = new ParsedQps();
-        String section = "";
-
-        try (BufferedReader reader = Files.newBufferedReader(file)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                final String rawLine = line;
-                final String trimmed = rawLine.trim();
-                if (trimmed.isEmpty() || trimmed.startsWith("*") || trimmed.startsWith("&")) {
-                    continue;
-                }
-
-                final String nextSection = parseSectionHeader(rawLine, trimmed);
-                if (nextSection != null) {
-                    section = nextSection;
-                    if ("ENDATA".equals(section)) {
-                        break;
-                    }
-                    continue;
-                }
-
-                final String[] tokens = parseDataTokens(rawLine);
-                if (tokens.length == 0) {
-                    continue;
-                }
-
-                if ("ROWS".equals(section)) {
-                    parseRow(out, tokens);
-                } else if ("COLUMNS".equals(section)) {
-                    parseColumn(out, tokens);
-                } else if ("RHS".equals(section)) {
-                    parseRhs(out, tokens);
-                } else if ("BOUNDS".equals(section)) {
-                    parseBounds(out, tokens);
-                } else if ("QUADOBJ".equals(section) || "QMATRIX".equals(section) || "DMATRIX".equals(section)) {
-                    parseQuadratic(out, tokens);
-                }
-            }
-        }
-
-        out.freezeVariables();
-        return out;
-    }
-
     private String parseSectionHeader(final String rawLine,
                                       final String trimmed) {
         if (rawLine.isEmpty() || Character.isWhitespace(rawLine.charAt(0))) {
@@ -946,92 +947,6 @@ class MarosMeszarosDenseProblemLoader {
         return null;
     }
 
-    private void parseRow(final ParsedQps out, final String[] tokens) {
-        if (tokens.length < 2) {
-            return;
-        }
-        final char type = Character.toUpperCase(tokens[0].charAt(0));
-        final String name = tokens[1];
-        out.rows.put(name, Character.valueOf(type));
-        if (type == 'N' && out.objectiveRow == null) {
-            out.objectiveRow = name;
-        }
-    }
-
-    private void parseColumn(final ParsedQps out, final String[] tokens) {
-        if (tokens.length < 3) {
-            return;
-        }
-        if (tokens.length >= 2 && "'MARKER'".equalsIgnoreCase(tokens[1])) {
-            return;
-        }
-
-        final String var = tokens[0];
-        out.addVariable(var);
-        final Map<String, Double> coeffs = out.columnCoefficients.computeIfAbsent(var, k -> new LinkedHashMap<>());
-
-        for (int i = 1; i + 1 < tokens.length; i += 2) {
-            final String row = tokens[i];
-            final double value = parseDouble(tokens[i + 1]);
-            coeffs.put(row, coeffs.getOrDefault(row, 0.0) + value);
-        }
-    }
-
-    private void parseRhs(final ParsedQps out, final String[] tokens) {
-        for (int i = 1; i + 1 < tokens.length; i += 2) {
-            final String row = tokens[i];
-            final double value = parseDouble(tokens[i + 1]);
-            out.rhs.put(row, value);
-        }
-    }
-
-    private void parseBounds(final ParsedQps out, final String[] tokens) {
-        if (tokens.length < 3) {
-            return;
-        }
-
-        final String type = tokens[0].toUpperCase(Locale.ROOT);
-        final String var = tokens[2];
-        final Double parsed = tokens.length > 3 ? tryParseDouble(tokens[3]) : Double.valueOf(0.0);
-        final double value = parsed == null ? 0.0 : parsed.doubleValue();
-
-        out.addVariable(var);
-        final Bound b = out.bounds.computeIfAbsent(var, k -> new Bound());
-
-        if ("LO".equals(type)) {
-            b.lb = value;
-        } else if ("UP".equals(type)) {
-            b.ub = value;
-        } else if ("FX".equals(type)) {
-            b.lb = value;
-            b.ub = value;
-        } else if ("FR".equals(type)) {
-            b.lb = Double.NEGATIVE_INFINITY;
-            b.ub = Double.POSITIVE_INFINITY;
-        } else if ("MI".equals(type)) {
-            b.lb = Double.NEGATIVE_INFINITY;
-        } else if ("PL".equals(type)) {
-            b.ub = Double.POSITIVE_INFINITY;
-        }
-    }
-
-    private void parseQuadratic(final ParsedQps out, final String[] tokens) {
-        if (tokens.length < 3) {
-            return;
-        }
-
-        final String first = tokens[0];
-        out.addVariable(first);
-        final Map<String, Double> row = out.quadratic.computeIfAbsent(first, k -> new LinkedHashMap<>());
-
-        for (int i = 1; i + 1 < tokens.length; i += 2) {
-            final String second = tokens[i];
-            final double value = parseDouble(tokens[i + 1]);
-            out.addVariable(second);
-            row.put(second, row.getOrDefault(second, 0.0) + value);
-        }
-    }
-
     private double parseDouble(final String value) {
         return Double.parseDouble(value.replace('D', 'E').replace('d', 'e'));
     }
@@ -1054,15 +969,118 @@ class MarosMeszarosDenseProblemLoader {
         return trimmed.split("\\s+");
     }
 
-    private void applyBounds(final ParsedQps qps, final double[] lb, final double[] ub) {
-        for (Map.Entry<String, Bound> entry : qps.bounds.entrySet()) {
-            final Integer index = qps.varIndex.get(entry.getKey());
-            if (index == null) {
-                continue;
+    /**
+     * Parse one MPS/QPS data line using either whitespace tokenization or fixed
+     * MPS columns.
+     *
+     * <p>Most Maros-Meszaros files use free whitespace-separated names, including
+     * names longer than eight characters. Some older fixed-format files, however,
+     * use the full eight-character MPS name fields and embed spaces inside names
+     * (for example {@code "DEDO3 1R"}). Whitespace tokenization would split such
+     * names and silently merge rows/columns. This method keeps the free parser by
+     * default, but switches to fixed columns when the free tokens cannot form
+     * valid row/value pairs for the current section.</p>
+     *
+     * @param line raw data line
+     * @param section active MPS/QPS section
+     * @return parsed tokens
+     */
+    private String[] parseDataTokens(final String line, final String section) {
+        final String[] freeTokens = parseDataTokens(line);
+        if (shouldUseFixedFormat(line, section, freeTokens)) {
+            return parseFixedDataTokens(line, section);
+        }
+        return freeTokens;
+    }
+
+    private String[] parseDataTokens(final String line,
+                                     final String section,
+                                     final boolean fixedFormat) {
+        if (fixedFormat && isFixedFormatSection(section)) {
+            return parseFixedDataTokens(line, section);
+        }
+        return parseDataTokens(line, section);
+    }
+
+    private boolean isFixedFormatSection(final String section) {
+        return "ROWS".equals(section) ||
+               "COLUMNS".equals(section) ||
+               "RHS".equals(section) ||
+               "RANGES".equals(section) ||
+               "BOUNDS".equals(section) ||
+               "QUADOBJ".equals(section) ||
+               "QMATRIX".equals(section) ||
+               "DMATRIX".equals(section);
+    }
+
+    private boolean shouldUseFixedFormat(final String line,
+                                         final String section,
+                                         final String[] freeTokens) {
+        if (line.isEmpty() || !Character.isWhitespace(line.charAt(0)) || section == null) {
+            return false;
+        }
+
+        if ("ROWS".equals(section)) {
+            final String[] fixedTokens = parseFixedDataTokens(line, section);
+            return fixedTokens.length == 2 && freeTokens.length != 2;
+        }
+
+        if ("BOUNDS".equals(section)) {
+            final String[] fixedTokens = parseFixedDataTokens(line, section);
+            return fixedTokens.length >= 3 &&
+                   fixedTokens[2].indexOf(' ') >= 0 &&
+                   (freeTokens.length > 4 || (fixedTokens.length > 3 && freeTokens.length > 3 &&
+                    tryParseDouble(freeTokens[3]) == null));
+        }
+
+        if ("COLUMNS".equals(section) || "RHS".equals(section) || "RANGES".equals(section) ||
+            "QUADOBJ".equals(section) || "QMATRIX".equals(section) || "DMATRIX".equals(section)) {
+            final String[] fixedTokens = parseFixedDataTokens(line, section);
+            if (fixedTokens.length < 3 || tryParseDouble(fixedTokens[2]) == null) {
+                return false;
             }
-            final Bound b = entry.getValue();
-            lb[index.intValue()] = b.lb;
-            ub[index.intValue()] = b.ub;
+            if (freeTokens.length < 3 || tryParseDouble(freeTokens[2]) == null) {
+                return true;
+            }
+            return fixedTokens.length > 3 && tryParseDouble(fixedTokens[4]) != null &&
+                   (freeTokens.length < 5 || tryParseDouble(freeTokens[4]) == null);
+        }
+
+        return false;
+    }
+
+    private String[] parseFixedDataTokens(final String line, final String section) {
+        final List<String> tokens = new ArrayList<>();
+
+        if ("ROWS".equals(section)) {
+            addFixedField(tokens, line, 1, 3);
+            addFixedField(tokens, line, 4, 12);
+        } else if ("BOUNDS".equals(section)) {
+            addFixedField(tokens, line, 1, 3);
+            addFixedField(tokens, line, 4, 12);
+            addFixedField(tokens, line, 14, 22);
+            addFixedField(tokens, line, 24, 36);
+        } else {
+            addFixedField(tokens, line, 4, 12);
+            addFixedField(tokens, line, 14, 22);
+            addFixedField(tokens, line, 24, 36);
+            addFixedField(tokens, line, 39, 47);
+            addFixedField(tokens, line, 49, 61);
+        }
+
+        return tokens.toArray(new String[0]);
+    }
+
+    private void addFixedField(final List<String> tokens,
+                               final String line,
+                               final int start,
+                               final int end) {
+        if (line.length() <= start) {
+            return;
+        }
+        final String token = line.substring(start, Math.min(line.length(), end)).trim();
+        if (!token.isEmpty()) {
+            tokens.add(token);
         }
     }
 
@@ -1175,6 +1193,7 @@ class MarosMeszarosDenseProblemLoader {
         private int eqCount;
         private int iqCount;
         private int constraintRowCount;
+        private boolean fixedFormat;
 
         private void addVariable(final String name) {
             if (!varIndex.containsKey(name)) {
@@ -1214,43 +1233,6 @@ class MarosMeszarosDenseProblemLoader {
         }
     }
 
-    private static final class Bound {
-        private double lb = 0.0;
-        private double ub = Double.POSITIVE_INFINITY;
-    }
-
-    private static final class ParsedQps {
-        private final Map<String, Character> rows = new LinkedHashMap<>();
-        private final Map<String, Map<String, Double>> columnCoefficients = new LinkedHashMap<>();
-        private final Map<String, Double> rhs = new LinkedHashMap<>();
-        private final Map<String, Bound> bounds = new LinkedHashMap<>();
-        private final Map<String, Map<String, Double>> quadratic = new LinkedHashMap<>();
-        private final Map<String, Integer> varIndex = new LinkedHashMap<>();
-        private final List<String> varNames = new ArrayList<>();
-        private String objectiveRow;
-
-        private void addVariable(final String name) {
-            if (!varIndex.containsKey(name)) {
-                varIndex.put(name, Integer.valueOf(varNames.size()));
-                varNames.add(name);
-            }
-        }
-
-        private void freezeVariables() {
-            for (String var : bounds.keySet()) {
-                addVariable(var);
-            }
-            for (String var : quadratic.keySet()) {
-                addVariable(var);
-            }
-            for (Map<String, Double> row : quadratic.values()) {
-                for (String var : row.keySet()) {
-                    addVariable(var);
-                }
-            }
-        }
-    }
-
     /** Container for one parsed dense QP problem. */
     static final class DenseQPProblem {
         private final String name;
@@ -1261,6 +1243,8 @@ class MarosMeszarosDenseProblemLoader {
         private final double[][] aiq;
         private final double[] biq;
         private final double constantTerm;
+        private final double[] lowerBound;
+        private final double[] upperBound;
         private final double[] expectedX;
         private final double expectedValue;
         private final double xTolerance;
@@ -1279,6 +1263,8 @@ class MarosMeszarosDenseProblemLoader {
                                       new double[0][0],
                                       new double[0],
                                       0.0,
+                                      new double[0],
+                                      new double[0],
                                       null,
                                       expectedValue,
                                       1e-6,
@@ -1295,11 +1281,13 @@ class MarosMeszarosDenseProblemLoader {
                        final double[][] aiq,
                        final double[] biq,
                        final double constantTerm,
+                       final double[] lowerBound,
+                       final double[] upperBound,
                        final double[] expectedX,
                        final double expectedValue,
                        final double xTolerance,
                        final double valueTolerance) {
-            this(name, h, c, aeq, beq, aiq, biq, constantTerm, expectedX, expectedValue, xTolerance, valueTolerance, c.length, false);
+            this(name, h, c, aeq, beq, aiq, biq, constantTerm, lowerBound, upperBound, expectedX, expectedValue, xTolerance, valueTolerance, c.length, false);
         }
 
         DenseQPProblem(final String name,
@@ -1310,6 +1298,8 @@ class MarosMeszarosDenseProblemLoader {
                        final double[][] aiq,
                        final double[] biq,
                        final double constantTerm,
+                       final double[] lowerBound,
+                       final double[] upperBound,
                        final double[] expectedX,
                        final double expectedValue,
                        final double xTolerance,
@@ -1324,6 +1314,8 @@ class MarosMeszarosDenseProblemLoader {
             this.aiq = aiq;
             this.biq = biq;
             this.constantTerm = constantTerm;
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
             this.expectedX = expectedX;
             this.expectedValue = expectedValue;
             this.xTolerance = xTolerance;
@@ -1362,6 +1354,14 @@ class MarosMeszarosDenseProblemLoader {
 
         double getConstantTerm() {
             return constantTerm;
+        }
+
+        double[] getLowerBound() {
+            return lowerBound;
+        }
+
+        double[] getUpperBound() {
+            return upperBound;
         }
 
         double[] getExpectedX() {

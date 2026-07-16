@@ -10,7 +10,7 @@ import org.hipparchus.util.Precision;
 public class QPDualActiveSolverOption implements OptimizationData  {
     
     /** Default tolerance for constraint satisfaction */
-    public static final double DEFAULT_EPSILON = 1.0e-15;//>0
+    public static final double DEFAULT_EPSILON = Precision.EPSILON;//>0
     
      /** Default Matrix Mode */
     public static final QPMatrixMode DEFAULT_MATRIX_MODE = QPMatrixMode.FULL;
