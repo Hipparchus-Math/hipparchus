@@ -17,14 +17,10 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.CholeskyDecomposition;
 import org.hipparchus.linear.DecompositionSolver;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -157,86 +153,61 @@ public class QPDualActiveSolver extends QPOptimizer {
      * @param equality true if the constraint is an equality constraint
      * @return the primal step size, or Double.POSITIVE_INFINITY if the constraint does not block
      */
-
     private double findPrimalStep(final RealVector z,
                               final RealVector ai,
                               final double sv,
                               final boolean equality) {
 
-    /*
-     * SUMA = ai · z
-     */
-    final double sumA = ai.dotProduct(z);
+    double sumA = 0.0;
+    double sumB = 0.0;
+    double aiNormSq = 0.0;
+    double zNormSq = 0.0;
 
-    /*
-     * SUMB = Σ |ai_i * z_i|
-     */
-    final double sumB = ai.ebeMultiply(z).getL1Norm();
+    final int dimension = ai.getDimension();
 
-    /*
-     * SUMC = ||ai|| * ||z||
-     */
-    final double sumC = z.getNorm()*ai.getNorm();
+    for (int i = 0; i < dimension; i++) {
+        final double aiValue = ai.getEntry(i);
+        final double zValue = z.getEntry(i);
+        final double product = aiValue * zValue;
 
-    final double absSumA = FastMath.abs(sumA);
+        sumA += product;
+        sumB += FastMath.abs(product);
+        aiNormSq += aiValue * aiValue;
+        zNormSq += zValue * zValue;
+    }
 
-    /*
-     * First numerical visibility test:
-     *
-     * TEMP  = SUMB + 0.1 * |SUMA|
-     * TEMPA = SUMB + 0.2 * |SUMA|
-     */
-    double temp  = sumB + 0.1 * absSumA;
-    double tempA = sumB + 0.2 * absSumA;
-    
     if (sumB <= Precision.EPSILON) {
         return Double.POSITIVE_INFINITY;
     }
 
-    if (temp <= sumB) {
+    final double absSumA = FastMath.abs(sumA);
+
+    double temp = sumB + 0.1 * absSumA;
+    double tempA = sumB + 0.2 * absSumA;
+
+    if (temp <= sumB || tempA <= temp) {
         return Double.POSITIVE_INFINITY;
     }
 
-    if (tempA <= temp) {
-        return Double.POSITIVE_INFINITY;
-    }
+    final double sumC =
+            FastMath.sqrt(aiNormSq) * FastMath.sqrt(zNormSq);
 
-    
-
-    /*
-     * Second numerical visibility test:
-     *
-     * TEMP  = SUMC + 0.1 * |SUMA|
-     * TEMPA = SUMC + 0.2 * |SUMA|
-     */
-    temp  = sumC + 0.1 * absSumA;
+    temp = sumC + 0.1 * absSumA;
     tempA = sumC + 0.2 * absSumA;
 
-    if (temp <= sumC) {
+    if (temp <= sumC || tempA <= temp) {
         return Double.POSITIVE_INFINITY;
     }
 
-    if (tempA <= temp) {
-        return Double.POSITIVE_INFINITY;
-    }
-
-    
-
-    /*
-     * Step toward the violated constraint.
-     */
     final double alpha = -sv / sumA;
 
-    /*
-     * For inequalities, only a positive step is admissible.
-     * Equalities may be approached from either side.
-     */
     if (!equality && alpha < 0.0) {
         return Double.POSITIVE_INFINITY;
     }
 
     return alpha;
-}   
+}
+
    
  
     
@@ -618,10 +589,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         RealVector d = null;
         RealVector z = null;
         int iteration = 0;
-        RealMatrix absG = precomputeAbsG(G);
-        RealVector xOld = x.copy();        
-        boolean refinementDone = false;
-        RealVector xStart=x.copy();
+        boolean refinementDone = false;  
         // Active-set loop for all constraints
         while (mc != 0 && iteration++ < maxIter) {
             
