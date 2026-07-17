@@ -148,6 +148,7 @@ class MarosMeszarosQPSolverTest {
         final QPDualActiveSolver  solver = new QPDualActiveSolver ();
         final QPDualActiveSolverOption option=new QPDualActiveSolverOption();
         option.setEps(1.0e-9);
+        option.setEpsRelaxation(1.0e-3);
         
 
         final LagrangeSolution solution = solve(solver,option, problem);

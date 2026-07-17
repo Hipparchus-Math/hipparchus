@@ -694,7 +694,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     
                     if (!Double.isFinite(t)) {
                         
-                        
+                        if(cvMax<this.settings.getEpsRelaxation()) return buildSolution(x, u, active, G, g0, g, p, m);
                         return buildFailureSolution(ERROR_INFEASIBLE);
                     }
                     

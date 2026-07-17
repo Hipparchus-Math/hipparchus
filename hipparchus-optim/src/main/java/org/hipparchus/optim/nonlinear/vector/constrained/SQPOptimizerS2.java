@@ -684,6 +684,7 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
     // Solve
     QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
     optQP.setEps(this.getSettings().getEpsQP());
+    optQP.setEpsRelaxation(10.0*this.getSettings().getEpsQP());
     optQP.setMatrixMode(QPMatrixMode.CHOLESKY);
     final LagrangeSolution sol = getQPSolver().optimize(optQP,
             new ObjectiveFunction(new QuadraticFunction(L1, g1, 0)), 
@@ -752,6 +753,7 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
         
         QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
         optQP.setEps(this.getSettings().getEpsQP());
+        optQP.setEpsRelaxation(10.0*this.getSettings().getEpsQP());
         optQP.setMatrixMode(QPMatrixMode.CHOLESKY);
         // --- QUADRATIC OBJECTIVE ---
         // Objective: 0.5 * d^T * L * d + J^T * d
@@ -794,6 +796,7 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
         }
         QPDualActiveSolverOption optQP=new QPDualActiveSolverOption();
         optQP.setEps(this.getSettings().getEpsQP());
+        optQP.setEpsRelaxation(10.0*this.getSettings().getEpsQP());
         optQP.setMatrixMode(QPMatrixMode.FULL);
         LagrangeSolution sol = getQPSolver().optimize(optQP,new ObjectiveFunction(q), iqc);
         
