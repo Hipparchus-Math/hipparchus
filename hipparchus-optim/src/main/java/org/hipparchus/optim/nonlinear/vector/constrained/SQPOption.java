@@ -24,8 +24,6 @@ import org.hipparchus.util.Precision;
  */
 public class SQPOption implements OptimizationData {
 
-    /** Default convergence criteria. */
-    public static final int DEFAULT_CONV_CRITERIA = 1;
 
     /** Default tolerance for convergence and active constraint(proportional to sqrt of function an constraints evaluation accuracy) */
     public static final double DEFAULT_EPSILON = 1.0e-7;//>0
@@ -116,6 +114,12 @@ public class SQPOption implements OptimizationData {
     
     /** Max Iteration */
     private int maxIteration;
+    
+    
+    /**Convergence criteria function for specific problems
+     * to avoid not significative iterations
+     */
+    private SQPCustomCriterion customCovergence=null;
 
     /** Simple constructor.
      * <p>
@@ -123,7 +127,7 @@ public class SQPOption implements OptimizationData {
      * </p>
      */
     public SQPOption() {
-        this.convCriteria           = DEFAULT_CONV_CRITERIA;
+        
         this.eps                    = DEFAULT_EPSILON;
         this.epsQP                  = DEFAULT_EPSILON_QP;
         this.rhoCons                = DEFAULT_RHO;
@@ -168,20 +172,7 @@ public class SQPOption implements OptimizationData {
         return gradEps;
     }
 
-    /** Set convergence criteria.]
-     * @param convCriteria convergence criteria
-     */
-    public void setConvCriteria(final int convCriteria) {
-        this.convCriteria = convCriteria;
-    }
-
-    /** Get convergence criteria.
-     * @return convergence criteria
-     */
-    public int getConvCriteria() {
-        return convCriteria;
-    }
-
+   
     /** Set tolerance for convergence 
      *  Choose value proportional to  sqrt of function and constraints evaluation accuracy
      * @param eps tolerance for convergence and active constraint evaluation
@@ -352,6 +343,20 @@ public class SQPOption implements OptimizationData {
      */
     public boolean useFunHessian() {
         return useFunHessian;
+    }
+    
+     /** Set custom convergence criteria function
+     * @param fun convergence criteria function
+     */
+    public void setConvergenceFunction(final SQPCustomCriterion fun) {
+        this.customCovergence = fun;
+    }
+
+    /** Get Convergence criteria Function
+     * @return the function of the custom convergenc criteria
+     */
+    public SQPCustomCriterion getConvergenceFunction() {
+        return this.customCovergence;
     }
 
 }

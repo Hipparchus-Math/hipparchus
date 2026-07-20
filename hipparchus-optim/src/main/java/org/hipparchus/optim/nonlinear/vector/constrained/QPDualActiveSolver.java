@@ -257,7 +257,8 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         }
 
         final double ri = r.getEntry(i);
-
+        final double absRi=FastMath.abs(ri);
+        
         if (!reverseStep) {
 
             /*
@@ -287,13 +288,8 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             }
         }
         
-        double cand;
-        
-        if(u.getEntry(i)<=0.0)  
-            cand=0.0;
-          
-        else 
-            cand = u.getEntry(i) / FastMath.abs(ri);  
+       
+          final double cand = u.getEntry(i) / FastMath.abs(ri);  
            
         
         
@@ -673,7 +669,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 
                 final int constraintIndex = kViolated;
                 final boolean equality = constraintIndex < p;
-                
+               
                 // Dual step loop update multiplier and x (if step is also in primal)
                 // until primal step is not done
                 while (iteration++ < maxIter) {
@@ -694,6 +690,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     
                     if (!Double.isFinite(t)) {
                         
+                       
                         if(cvMax<this.settings.getEpsRelaxation()) return buildSolution(x, u, active, G, g0, g, p, m);
                         return buildFailureSolution(ERROR_INFEASIBLE);
                     }
@@ -1089,7 +1086,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         final double[] c0Data = new double[mc];
         final double[] wData = new double[mc];
 
-        final double safeMin = Precision.SAFE_MIN;
+        final double safeMin = Precision.EPSILON;
 
         /*
          * Equality constraints:

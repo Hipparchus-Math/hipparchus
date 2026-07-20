@@ -15,14 +15,24 @@ public class QPDualActiveSolverOption implements OptimizationData  {
      /** Default Matrix Mode */
     public static final QPMatrixMode DEFAULT_MATRIX_MODE = QPMatrixMode.FULL;
     
-    /** Default tolerance for constraint satisfaction in case of degenerancy  */    
-    public static final double DEFAULT_EPSILON_RELAXATION = 1.0e-9;//>0
+    /**
+    *  Default Relaxed feasibility tolerance used only when both the primal and dual
+     * step are not available. In that numerically stalled case, a target
+     * constraint whose violation does not exceed this value is accepted as
+     * numerically feasible.
+     */   
+    public static final double DEFAULT_EPSILON_RELAXATION = 1.0e-12;//>0
      
      
     /** Tolerance for constraint satisfaction */
     private double eps;
     
-    /** Tolerance for constraint satisfaction in case of degenerancy */
+    /**
+     * Relaxed feasibility tolerance used only when both the primal and dual
+     * step are not available for ill conditioning problems. In that numerically stalled case, a target
+     * constraint whose violation does not exceed this value is accepted as
+     * numerically feasible. For the major part of the problems choosing 10.0*eps is enough
+     */
     private double epsRelaxation;
     
     /** Matrix Mode */
@@ -32,7 +42,7 @@ public class QPDualActiveSolverOption implements OptimizationData  {
     public QPDualActiveSolverOption() 
     {
         this.eps=DEFAULT_EPSILON;
-         this.epsRelaxation=DEFAULT_EPSILON_RELAXATION;
+        this.epsRelaxation=DEFAULT_EPSILON_RELAXATION;
         this.matrixMode=DEFAULT_MATRIX_MODE;
     }
     
@@ -51,7 +61,7 @@ public class QPDualActiveSolverOption implements OptimizationData  {
     }
     
      /** Set tolerance convergence for constraint in case of degenerancy
-     *  typical 1.0e-3 to 1.0e-16
+     *  typical 10.0*eps
      * @param eps  tolerance for convergence 
      */
     public void setEpsRelaxation(final double eps) {
