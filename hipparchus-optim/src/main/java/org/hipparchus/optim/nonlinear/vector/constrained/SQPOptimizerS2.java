@@ -385,7 +385,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
 //                    System.out.println("\n[Solver] Manual break triggered by the user.");
 //                    break; // Exits the loop exactly at this checkpoint
 //                }
-                if(customCriteria!=null && customCriteria.converged(alpha, XNORM, DHD, COMPLEMENTARY, KKT, VIOLATION , FUNDIFF)){
+                if(customCriteria!=null && customCriteria.converged(alpha, XNORM, DHD, COMPLEMENTARY, KKT, VIOLATION , FUNDIFF,x.getNorm(),FastMath.abs(functionEval))){
                     break;
                 }
                 

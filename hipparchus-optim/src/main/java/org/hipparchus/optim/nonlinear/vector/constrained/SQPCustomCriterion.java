@@ -20,6 +20,8 @@ public interface SQPCustomCriterion extends OptimizationData {
      * @param kkt KKT residual
      * @param viol constraint violation
      * @param funDiff objective-function difference
+     * @param xNorm variables norm
+     * @param funNorm objective-function norm
      * @return {@code true} if convergence has been reached
      */
     boolean converged(double alpha,
@@ -28,5 +30,7 @@ public interface SQPCustomCriterion extends OptimizationData {
                       double complSlack,
                       double kkt,
                       double viol,
-                      double funDiff);
+                      double funDiff,
+                      double xNorm,
+                      double funNorm);
 }
