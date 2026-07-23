@@ -138,8 +138,8 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
                 EQ= (problem.hasEquality())?new SQPEq((SQPProblem) data):null;
                 IQ= (problem.hasInequality())?new SQPIneq((SQPProblem) data):null;
                 
-                double[] lb = ((SQPProblem) data).getBoxConstraintLB();
-                double[]ub = ((SQPProblem) data).getBoxConstraintUB();
+                double[] lb = ((SQPProblem) data).getBoundsLB();
+                double[]ub = ((SQPProblem) data).getBoundsUB();
                 SB = (problem.hasBounds())?new SimpleBounds(lb,ub):null;
                
                 continue;

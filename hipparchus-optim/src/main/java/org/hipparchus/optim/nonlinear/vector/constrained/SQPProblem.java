@@ -50,14 +50,14 @@ public interface SQPProblem extends OptimizationData {
      *
      * @return array of lower bound values (length equals problem dimension)
      */
-    double[] getBoxConstraintLB();
+    double[] getBoundsLB();
 
     /**
      * Returns upper bounds for each decision variable, if available.
      *
      * @return array of upper bound values (length equals problem dimension)
      */
-    double[] getBoxConstraintUB();
+    double[] getBoundsUB();
 
     /**
      * Evaluates the objective function at the given point.

@@ -39,12 +39,12 @@ public class HS001TestProblem {
        
 
         @Override
-        public double[] getBoxConstraintLB() {
+        public double[] getBoundsLB() {
             return null;
         }
 
         @Override
-        public double[] getBoxConstraintUB() {
+        public double[] getBoundsUB() {
             return null;
         }
 
