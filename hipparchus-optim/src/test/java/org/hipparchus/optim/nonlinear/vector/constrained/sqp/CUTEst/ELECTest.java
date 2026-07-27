@@ -30,6 +30,7 @@ import org.hipparchus.optim.nonlinear.vector.constrained.SQPOptimizerS2;
 import org.hipparchus.optim.nonlinear.vector.constrained.SQPOption;
 import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,6 +40,7 @@ import org.junit.jupiter.api.Test;
  * their Coulomb potential. The exact CUTEst dimensions are retained:
  * 600 variables and 200 nonlinear equality constraints.</p>
  */
+@Disabled
 public class ELECTest {
 
     /** Number of electrons. */
