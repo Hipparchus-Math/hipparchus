@@ -463,11 +463,11 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             }
             
            
-
+            final RealVector rowC=C.getRowVector(k);
             // 3. --- NOISE FILTER ---
             double absSum = FastMath.abs(c0.getEntry(k));
             for (int i = 0; i < x.getDimension(); i++) {
-                absSum += FastMath.abs(C.getEntry(k, i) * x.getEntry(i));
+                absSum += FastMath.abs(rowC.getEntry(i) * x.getEntry(i));
             }
 
             double tempA = absSum + absResidual;

@@ -265,11 +265,14 @@ public class BFGSUpdater {
                 r = FastMath.hypot(lkk, xk);
             } else {
                 
+                double radicand=(lkk - xk) * (lkk + xk);
                 
-                r = FastMath.sqrt((lkk - xk) * (lkk + xk));
-                if(r<sqrtEPS) 
+                if(radicand<=Precision.EPSILON) 
                     r=sqrtEPS;
-                    //return false;
+                //return false;
+                else
+                    r = FastMath.sqrt(radicand);
+                    
             }
            
           

@@ -229,6 +229,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         double XNORM = 0.0;
         double FUNDIFF = 0.0;
         int BFGSUPDATE = 0;
+        int FUNEVALCOUNT=0;
         SQPCustomCriterion customCriteria = getSettings().getConvergenceFunction();  
         for (int i = 0; i < getSettings().getMaxIteration(); i++) {
             
@@ -342,14 +343,21 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 
                 // Line Search
                 alpha = lineSearch.search(penalty);
-                
+                FUNEVALCOUNT+=lineSearch.getIteration();
                 //UPDATE MULTIPLIER
                 if (m > 0) {
-                    y = y.add(u.subtract(y).mapMultiply(alpha));
+                   // y = y.add(u.subtract(y).mapMultiply(alpha));
+                    //y.combineToSelf(1.0 - alpha, alpha, u);//this is worse
+                    double yk=0;
+                    for (int k = 0; k < y.getDimension(); ++k) {
+                        yk = y.getEntry(k);
+                        y.setEntry(k, yk + (u.getEntry(k) - yk) * alpha);
+                    }
+
                 }
                 //UPDATE SOLUTION
-                x = x.add(dx.mapMultiply(alpha));
-
+                //x = x.add(dx.mapMultiply(alpha));
+                x.combineToSelf(1.0, alpha, dx);
                 // UPDATE FUNCTION AND CONSTRAINT EVAL (Residuals v = eval - lower are stored)
                 functionEvalOld = functionEval;
                 functionEval = penalty.getObjEval();
@@ -430,7 +438,8 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                         alpha, lineSearch.getIteration(),
                         XNORM, DHD, COMPLEMENTARY, KKT, VIOLATION, sigma,
                         penalty.getPenaltyEval(), functionEval, FUNDIFF, -99);
-        formatter.logRow(crit2, crit1, crit5, crit0, crit3, crit4);
+        FUNEVALCOUNT+=iterations.getCount();
+        formatter.logRow(FUNEVALCOUNT,crit2, crit1, crit5, crit0, crit3, crit4);
 
         return new LagrangeSolution(x, y, functionEval);
     }

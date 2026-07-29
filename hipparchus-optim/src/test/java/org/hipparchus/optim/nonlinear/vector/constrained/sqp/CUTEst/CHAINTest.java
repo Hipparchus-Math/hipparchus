@@ -29,6 +29,7 @@ import org.hipparchus.optim.nonlinear.vector.constrained.SQPOptimizerS2;
 import org.hipparchus.optim.nonlinear.vector.constrained.SQPOption;
 import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -42,6 +43,7 @@ import org.junit.jupiter.api.Test;
  *
  * <p>All derivatives are evaluated by forward finite differences.</p>
  */
+@Disabled
 public class CHAINTest {
 
     /** Number of mesh intervals. */

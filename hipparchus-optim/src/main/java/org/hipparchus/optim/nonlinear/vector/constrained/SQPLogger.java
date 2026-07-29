@@ -24,7 +24,7 @@ import org.hipparchus.util.Precision;
 public class SQPLogger {
 
     /** LS column fixed to 2 digits + 1 space for safety. */
-    private static final int LS_WIDTH = 3;
+    private static final int LS_WIDTH = 5;
 
     /** Field start. */
     private static final String FIELD_START = " %";
@@ -130,19 +130,20 @@ public class SQPLogger {
 
     /**
      * Log one row of convergence criteria flags (kept aligned with table layout).
+     * @param funEvalCount total functions evaluations;
      * @param crit2 norm criterion
      * @param crit1 gradient criterion?
      * @param crit0 Lagrangian norm criterion
      * @param crit3 constraints violations criterion
      */
-    public void logRow(final boolean crit2, final boolean crit1,final boolean crit5, final boolean crit0, final boolean crit3, final boolean crit4) {
+    public void logRow(final int funEvalCount,final boolean crit2, final boolean crit1,final boolean crit5, final boolean crit0, final boolean crit3, final boolean crit4) {
         if (printer == null) {
             return;
         }
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("[SQP] ITER %4d |", -1)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, "")).
-           append(String.format(FIELD_START + LS_WIDTH  + FIELD_CONTINUATION, "")).
+           append(String.format(FIELD_START + LS_WIDTH  + FIELD_CONTINUATION, funEvalCount)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit2)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit1)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit5)).
