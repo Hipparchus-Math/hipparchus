@@ -202,3 +202,5 @@ RIGHT_EDGE_GREATER_THAN_LEFT_EDGE = le bord gauche {0} doit être plus petit que
 INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED = l''entrée {0} doit être comprise entre [0:1]
 IRREGULAR_GRID = la grille devrait avoir {0} éléments à l''index {1}, elle en a {2}
 MISALIGNED_GRID_POINT = le point de la grille à l''index {0} devrait avoir une coordonnée de {1}, mais il en est éloigné de {2}
+ROMAN_NUMERAL_RANGE = {0} ne peut pas être écrit en numération romaine, limitée entre 1 et 3999
+INVALID_ROMAN_NUMERAL = {0} n''est pas valide en numération romaine

@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issues/469">
+        Added support for roman numerals.
+      </action>
       <action dev="serrof" type="update">
         Add some FunctionalInterface tag.
       </action>

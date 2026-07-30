@@ -595,7 +595,13 @@ public enum LocalizedCoreFormats implements Localizable {
     IRREGULAR_GRID("grid should have {0} elements at index {1}, it has {2} elements"),
 
     /** MISALIGNED_GRID_POINT. */
-    MISALIGNED_GRID_POINT("grid point at index {0} should have coordinate {1}, but is {2} away from it");
+    MISALIGNED_GRID_POINT("grid point at index {0} should have coordinate {1}, but is {2} away from it"),
+
+    /** ROMAN_NUMERAL_RANGE. */
+    ROMAN_NUMERAL_RANGE("{0} cannot be represented as a roman numeral (must be between 1 and 3999)"),
+
+    /** INVALID_ROMAN_NUMERAL. */
+    INVALID_ROMAN_NUMERAL("{0} is not a valid roman numeral");
 
     /** Source English format. */
     private final String sourceFormat;

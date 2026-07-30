@@ -30,7 +30,7 @@ public class LocalizedCoreFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
     protected int getExpectedNumber() {
-        return 186;
+        return 188;
     }
 
 }
