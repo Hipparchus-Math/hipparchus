@@ -31,6 +31,18 @@ import org.mockito.internal.util.io.IOUtil;
 
 class RansacFitterTest {
 
+    /** Simple implementation of {@link Fittable} wrapping a double array. */
+    private static final class SimpleFittable implements Fittable {
+        private final double[] point;
+        SimpleFittable(final double[] point) {
+            this.point = point.clone();
+        }
+        @Override
+        public double[] getPoint() {
+            return point.clone();
+        }
+    }
+
     @Test
     void testExceptionsOnInitialValues() {
         assertThrows(MathIllegalArgumentException.class, () -> new RansacFitter<>(mockModel(), -1, 6, 1e-6, 10, 1), "-1 is smaller than the minimum (0)");
@@ -52,7 +64,7 @@ class RansacFitterTest {
     @Test
     void testCanFitALineWithLargeNumberOfOutliers() throws IOException {
         // This test reproduces the example provided in RANSAC wikipedia page. Results are strongly consistent
-        final List<double[]> points = loadData("line_dataset.csv");
+        final List<Fittable> points = loadData("line_dataset.csv");
         final double standardDeviation = 0.6159842899599051;
         final RansacFitterOutputs<PolynomialModelFitter.Model> fitted = new RansacFitter<>(new PolynomialModelFitter(1), 10, 100, standardDeviation / 3, 10, 1).fit(points);
         Assertions.assertNotNull(fitted);
@@ -65,7 +77,7 @@ class RansacFitterTest {
     @Test
     void testCanFitAPolynomialOfDegree2WithOutliers() throws IOException {
         // Reference: https://forum.orekit.org/t/addition-of-ransac-algorithm/5102
-        final List<double[]> points = loadData("quadratic_dataset.csv");
+        final List<Fittable> points = loadData("quadratic_dataset.csv");
         final double standardDeviation = 72.59099534185657;
         final RansacFitterOutputs<PolynomialModelFitter.Model> fitted = new RansacFitter<>(new PolynomialModelFitter(2), 10, 1000, standardDeviation / 3, 10, 1).fit(points);
         Assertions.assertNotNull(fitted);
@@ -90,24 +102,24 @@ class RansacFitterTest {
         Assertions.assertEquals(numberOfTrueData, fitted.getBestInliers().size());
     }
 
-    private List<double[]> generateLine(final int seed, final double expectedSlope, final double expectedIntercept,
-                                        final int trueDataCount, final int falseDataCount, final double noiseFactor) {
+    private List<Fittable> generateLine(final int seed, final double expectedSlope, final double expectedIntercept,
+                                         final int trueDataCount, final int falseDataCount, final double noiseFactor) {
         final Random random = new Random(seed);
         final PolynomialModelFitter.Model trueModel = new PolynomialModelFitter.Model(new double[]{expectedIntercept, expectedSlope});
-        final List<double[]> points = IntStream.range(0, trueDataCount)
-                                               .mapToObj(x -> new double[]{x, trueModel.predict(x) + random.nextGaussian() * noiseFactor})
-                                               .collect(Collectors.toList());
-        points.addAll(IntStream.range(0, falseDataCount).mapToObj(x -> new double[]{x * 3, random.nextDouble() * 20}).collect(Collectors.toList()));
+        final List<Fittable> points = IntStream.range(0, trueDataCount)
+                                                .mapToObj(x -> new SimpleFittable(new double[]{x, trueModel.predict(x) + random.nextGaussian() * noiseFactor}))
+                                                .collect(Collectors.toList());
+        points.addAll(IntStream.range(0, falseDataCount).mapToObj(x -> new SimpleFittable(new double[]{x * 3, random.nextDouble() * 20})).collect(Collectors.toList()));
         return points;
     }
 
-    private List<double[]> loadData(final String fileName) {
+    private List<Fittable> loadData(final String fileName) {
         final InputStream inputStream = this.getClass().getResourceAsStream("/" + this.getClass().getSimpleName() + "/" + fileName);
         Assertions.assertNotNull(inputStream, "Could not find resource " + fileName);
         return IOUtil.readLines(inputStream)
                      .stream()
                      .map(line -> line.split(","))
-                     .map(values -> new double[]{Double.parseDouble(values[0]), Double.parseDouble(values[1])})
+                     .map(values -> new SimpleFittable(new double[]{Double.parseDouble(values[0]), Double.parseDouble(values[1])}))
                      .collect(Collectors.toList());
     }
 

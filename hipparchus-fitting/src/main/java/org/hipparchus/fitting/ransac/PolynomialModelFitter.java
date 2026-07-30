@@ -66,7 +66,7 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
          * @return the coefficients of the polynomial model
          */
         public double[] getCoefficients() {
-            return coefficients;
+            return coefficients.clone();
         }
     }
 
@@ -86,7 +86,7 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
 
     /** {@inheritDoc} */
     @Override
-    public Model fitModel(final List<double[]> points) {
+    public Model fitModel(final List<Fittable> points) {
         // Reference: Wikipedia page "Polynomial regression"
         final int size = points.size();
         checkSampleSize(size);
@@ -95,8 +95,9 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
         final double[][] x = new double[size][degree + 1];
         final double[] y = new double[size];
         for (int i = 0; i < size; i++) {
-            final double currentX = points.get(i)[0];
-            final double currentY = points.get(i)[1];
+            final double[] point = points.get(i).getPoint();
+            final double currentX = point[0];
+            final double currentY = point[1];
             double value = 1.0;
             for (int j = 0; j <= degree; j++) {
                 x[i][j] = value;
@@ -117,8 +118,8 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
 
     /** {@inheritDoc}. */
     @Override
-    public double computeModelError(final Model model, final double[] point) {
-        return FastMath.abs(point[1] - model.predict(point[0]));
+    public double computeModelError(final Model model, final Fittable point) {
+        return FastMath.abs(point.getPoint()[1] - model.predict(point.getPoint()[0]));
     }
 
     /**

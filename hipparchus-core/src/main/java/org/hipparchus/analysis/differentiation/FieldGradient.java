@@ -629,7 +629,8 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      */
-    public T taylor(@SuppressWarnings("unchecked") final T... delta) {
+    @SuppressWarnings("unchecked")
+    public T taylor(final T... delta) {
         T result = value;
         for (int i = 0; i < grad.length; ++i) {
             result = result.add(grad[i].multiply(delta[i]));

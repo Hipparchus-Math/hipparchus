@@ -16,6 +16,8 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.util.Arrays;
+
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -25,8 +27,6 @@ import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-
-import java.util.Arrays;
 
 /** Class representing both the value and the differentials of a function.
  * <p>This class is similar to {@link DerivativeStructure} except function
@@ -944,7 +944,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * with respect to the lower level parameters used in the \(p_i\)
      * @since 2.2
      */
-    public FieldDerivativeStructure<T> rebase(@SuppressWarnings("unchecked") final FieldDerivativeStructure<T>... p) {
+    @SuppressWarnings("unchecked")
+    public FieldDerivativeStructure<T> rebase(final FieldDerivativeStructure<T>... p) {
 
         MathUtils.checkDimension(getFreeParameters(), p.length);
 

@@ -16,6 +16,9 @@
  */
 /**
  * Random sample consensus (RANSAC) algorithm implementation.
+ * <p>
+ * Data points to be fitted must implement the {@link org.hipparchus.fitting.ransac.Fittable} interface.
+ * </p>
  * @since 4.1
  */
 package org.hipparchus.fitting.ransac;

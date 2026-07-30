@@ -16,30 +16,15 @@
  */
 package org.hipparchus.fitting.ransac;
 
-import java.util.List;
-
 /**
- * Base class for mathematical model fitter used with {@link RansacFitter}.
- * @param <M> mathematical model representing the parameters to estimate
+ * Interface for data points that can be used with {@link RansacFitter}.
  * @since 4.1
  */
-public interface IModelFitter<M> {
+public interface Fittable {
 
     /**
-     * Fits the mathematical model parameters based on the set of observed data.
-     * @param points set of observed data
-     * @return the fitted model parameters
+     * Gets the n-dimensional point.
+     * @return the point array (beware, it may be a reference to an internal array)
      */
-    M fitModel(List<Fittable> points);
-
-    /**
-     * Computes the error between the model and an observed data.
-     * <p>
-     * This method is used to determine if the observed data is an inlier or an outlier.
-     * </p>
-     * @param model fitted model
-     * @param point observed data
-     * @return the error between the model and the observed data
-     */
-    double computeModelError(M model, Fittable point);
+    double[] getPoint();
 }

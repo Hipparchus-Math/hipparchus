@@ -46,7 +46,8 @@ class FieldFunctionsTest {
     @Test
     void testScalarMultivariateFunctionConversion() {
         FieldMultivariateFunction f1 = new FieldMultivariateFunction() {
-            public <T extends CalculusFieldElement<T>> T value(@SuppressWarnings("unchecked") T... x) {
+            @SuppressWarnings("unchecked")
+            public <T extends CalculusFieldElement<T>> T value(T... x) {
                 return x[0].twice().add(x[1]);
             }
         };
@@ -90,7 +91,8 @@ class FieldFunctionsTest {
     @Test
     void testVectorMultivariateFunctionConversion() {
         FieldMultivariateVectorFunction f1 = new FieldMultivariateVectorFunction() {
-            public <T extends CalculusFieldElement<T>> T[] value(@SuppressWarnings("unchecked") T... x) {
+            @SuppressWarnings("unchecked")
+            public <T extends CalculusFieldElement<T>> T[] value(T... x) {
                 T[] y = MathArrays.buildArray(x[0].getField(), 3);
                 y[0] = x[0].add(1);
                 y[1] = x[1].twice();
@@ -146,7 +148,8 @@ class FieldFunctionsTest {
     @Test
     void testMatrixMultivariateFunctionConversion() {
         FieldMultivariateMatrixFunction f1 = new FieldMultivariateMatrixFunction() {
-            public <T extends CalculusFieldElement<T>> T[][] value(@SuppressWarnings("unchecked") T... x) {
+            @SuppressWarnings("unchecked")
+            public <T extends CalculusFieldElement<T>> T[][] value(T... x) {
                 T[][] y = MathArrays.buildArray(x[0].getField(), 2, 2);
                 y[0][0] = x[0].add(1);
                 y[0][1] = x[1].twice();

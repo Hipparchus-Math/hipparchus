@@ -31,6 +31,9 @@ import org.hipparchus.util.MathArrays;
  */
 public class SmoothStepFactory {
 
+    /** Epsilon to check that normalized values are between [0:1]. */
+    private static final double EPSILON = 1E-10;
+
     /**
      * Private constructor.
      * <p>
@@ -209,9 +212,9 @@ public class SmoothStepFactory {
      * @throws MathIllegalArgumentException if input is not between [0:1]
      */
     public static void checkBetweenZeroAndOneIncluded(final double input) throws MathIllegalArgumentException {
-        if (input < 0 || input > 1) {
+        if (input < 0 - EPSILON || input > 1 + EPSILON) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED);
+                    LocalizedCoreFormats.INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED, input);
         }
     }
 

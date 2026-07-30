@@ -79,9 +79,9 @@ public class FieldComplexUnivariateIntegrator<T extends CalculusFieldElement<T>>
      * @param path successive points defining the path vertices
      * @return the value of integral along the polyline path
      */
+    @SuppressWarnings("unchecked")
     public FieldComplex<T> integrate(final int maxEval, final CalculusFieldUnivariateFunction<FieldComplex<T>> f,
-                                     final FieldComplex<T> start,
-                                     @SuppressWarnings("unchecked") final FieldComplex<T>...path) {
+                                     final FieldComplex<T> start, final FieldComplex<T>...path) {
         FieldComplex<T> sum      = start.newInstance(0);
         FieldComplex<T> previous = start;
         for (final FieldComplex<T> current : path) {

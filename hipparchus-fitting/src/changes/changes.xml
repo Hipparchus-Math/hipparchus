@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="bryan" type="update" issue="issues/462">
+        Replaced double[] arrays with Fittable interface in RANSAC fitting classes.
+      </action>
       <action dev="bryan" type="add" issue="issues/424">
         Added RANSAC algorithm for estimating the parameters of a mathematical model.
       </action>

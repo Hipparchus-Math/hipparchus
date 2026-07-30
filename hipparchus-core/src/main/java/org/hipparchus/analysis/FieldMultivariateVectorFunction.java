@@ -44,6 +44,7 @@ public interface FieldMultivariateVectorFunction {
      * @param x Point at which the function value should be computed.
      * @return the value of the function.
      */
-    <T extends CalculusFieldElement<T>> T[] value(@SuppressWarnings("unchecked") T... x);
+    @SuppressWarnings("unchecked")
+    <T extends CalculusFieldElement<T>> T[] value(T... x);
 
 }

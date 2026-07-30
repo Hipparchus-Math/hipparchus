@@ -32,5 +32,6 @@ public interface CalculusFieldMultivariateMatrixFunction<T extends CalculusField
      * @param x Point at which the function value should be computed.
      * @return the value of the function.
      */
-    T[][] value(@SuppressWarnings("unchecked") T... x);
+    @SuppressWarnings("unchecked")
+    T[][] value(T... x);
 }

@@ -91,19 +91,19 @@ public class RansacFitter<M> {
      * @param points set of observed data
      * @return a java class containing the best estimate of the model parameters
      */
-    public RansacFitterOutputs<M> fit(final List<double[]> points) {
+    public RansacFitterOutputs<M> fit(final List<Fittable> points) {
 
         // Initialize the best model data
-        final List<double[]> data = new ArrayList<>(points);
+        final List<Fittable> data = new ArrayList<>(points);
         Optional<M> bestModel = Optional.empty();
-        List<double[]> bestInliers = new ArrayList<>();
+        List<Fittable> bestInliers = new ArrayList<>();
 
         // Iterative loop to determine the best model
         for (int iteration = 0; iteration < maxIterations; iteration++) {
 
             // Random permute the set of observed data and determine the inliers
             Collections.shuffle(data, random);
-            final List<double[]> inliers = determineCurrentInliersFromRandomlyPermutedPoints(data);
+            final List<Fittable> inliers = determineCurrentInliersFromRandomlyPermutedPoints(data);
 
             // Verifies if the current inliers are fit better the model than the previous ones
             if (isCurrentInliersSetBetterThanPreviousOne(inliers, bestInliers)) {
@@ -122,8 +122,8 @@ public class RansacFitter<M> {
      * @param permutedPoints randomly permuted data
      * @return the list of inliers
      */
-    private List<double[]> determineCurrentInliersFromRandomlyPermutedPoints(final List<double[]> permutedPoints) {
-        M model = fitter.fitModel(permutedPoints.subList(0, sampleSize));
+    private List<Fittable> determineCurrentInliersFromRandomlyPermutedPoints(final List<Fittable> permutedPoints) {
+        final M model = fitter.fitModel(permutedPoints.subList(0, sampleSize));
         return permutedPoints.stream().filter(point -> fitter.computeModelError(model, point) < threshold).collect(Collectors.toList());
     }
 
@@ -133,7 +133,7 @@ public class RansacFitter<M> {
      * @param previous previous inliers
      * @return true is the current inlier are better than the previous ones
      */
-    private boolean isCurrentInliersSetBetterThanPreviousOne(final List<double[]> current, final List<double[]> previous) {
+    private boolean isCurrentInliersSetBetterThanPreviousOne(final List<Fittable> current, final List<Fittable> previous) {
         return current.size() > previous.size() && current.size() >= minInliers;
     }
 
