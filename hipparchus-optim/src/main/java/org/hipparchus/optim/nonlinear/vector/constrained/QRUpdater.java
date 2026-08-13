@@ -9,11 +9,9 @@ import org.hipparchus.util.Precision;
 
 /**
  * Updates a QR factorization when adding or removing constraints in active-set methods.
- * <p>
- * This implementation leverages Hipparchus {@link RealMatrix} abstraction. For large
- * dimensions, {@link MatrixUtils#createRealMatrix(int, int)} automatically generates 
- * block-partitioned matrices to ensure high cache locality and JIT optimization.
- * </p>
+ *
+ * @see "J. W. Daniel, W. B. Gragg, L. Kaufman and G. W. Stewart,
+ *      Reorthogonalization and Stable Algorithms for Updating the Gram-Schmidt QR Factorization"
  */
 public class QRUpdater {
 
@@ -65,128 +63,210 @@ public class QRUpdater {
      * @param d constraint vector to add.
      * @return {@code true} if added successfully; {@code false} if degenerate.
      */
-    public boolean addConstraint(final RealVector d) {
-        // Load vector into workspace
-        for (int i = 0; i < n; i++) {
-            tempDBuffer[i] = d.getEntry(i);
+
+   public boolean addConstraint(final RealVector d) {
+
+    // Load the constraint vector into the reusable workspace.
+    for (int i = 0; i < n; i++) {
+        tempDBuffer[i] = d.getEntry(i);
+    }
+
+    /*
+     * Apply a backward cascade of orthogonal reflectors to eliminate
+     * all components beyond the current active-set position.
+     */
+    for (int j = n - 1; j >= iq + 1; j--) {
+
+        double cc = tempDBuffer[j - 1];
+        double ss = tempDBuffer[j];
+
+        /*
+         * The component to eliminate is already exactly zero.
+         * Store (0, 0) as an unambiguous marker indicating that no
+         * transformation was applied.
+         */
+        if (ss == 0.0) {
+            cList[j] = 0.0;
+            sList[j] = 0.0;
+            continue;
         }
 
-        // Backward Givens cascade to eliminate elements in tempDBuffer
-        for (int j = n - 1; j >= iq + 1; j--) {
-            double cc = tempDBuffer[j - 1];
-            double ss = tempDBuffer[j];
-            double h = FastMath.hypot(cc, ss);
+        /*
+         * FastMath.hypot computes the Euclidean norm without the
+         * avoidable intermediate overflow/underflow of cc*cc + ss*ss.
+         *
+         * Give h the sign of cc. Consequently, after normalization,
+         * cc is non-negative and 1 + cc cannot suffer cancellation.
+         *
+         * The cc == 0 case needs no special treatment:
+         * it naturally produces cc = 0 and ss = +/-1.
+         */
+        double h = FastMath.hypot(cc, ss);
 
-            if (h < Precision.EPSILON) {
-                cList[j] = 1.0; 
-                sList[j] = 0.0;
+        if (cc < 0.0) {
+            h = -h;
+        }
+
+        cc /= h;
+        ss /= h;
+
+        tempDBuffer[j - 1] = h;
+        tempDBuffer[j] = 0.0;
+
+        cList[j] = cc;
+        sList[j] = ss;
+
+        final double xny = ss / (1.0 + cc);
+
+        // Apply the same reflector to columns j - 1 and j of J.
+        for (int k = 0; k < n; k++) {
+            final double t1 = J.getEntry(k, j - 1);
+            final double t2 = J.getEntry(k, j);
+
+            final double newT1 = t1 * cc + t2 * ss;
+            final double newT2 = xny * (t1 + newT1) - t2;
+
+            J.setEntry(k, j - 1, newT1);
+            J.setEntry(k, j, newT2);
+        }
+    }
+
+    /*
+     * Preserve the existing degeneracy test.
+     * This test concerns acceptance of the new constraint, not whether
+     * an individual orthogonal transformation must be applied.
+     */
+    if (FastMath.abs(tempDBuffer[iq]) < Precision.EPSILON) {
+
+        /*
+         * Roll back the applied transformations in reverse order.
+         * The reflector is symmetric and orthogonal, hence self-inverse.
+         */
+        for (int j = iq + 1; j < n; j++) {
+
+            final double cc = cList[j];
+            final double ss = sList[j];
+
+            // No transformation was applied at this position.
+            if (cc == 0.0 && ss == 0.0) {
                 continue;
             }
 
-            tempDBuffer[j] = 0.0;
-            ss /= h;
-            cc /= h;
-
-            if (cc < 0.0) {
-                cc = -cc; ss = -ss;
-                tempDBuffer[j - 1] = -h;
-            } else {
-                tempDBuffer[j - 1] = h;
-            }
-
-            cList[j] = cc;
-            sList[j] = ss;
-
-            // Apply rotation to J. Using getEntry/setEntry on BlockRealMatrix is 
-            // handled efficiently by tiles during JIT execution.
             final double xny = ss / (1.0 + cc);
+
             for (int k = 0; k < n; k++) {
                 final double t1 = J.getEntry(k, j - 1);
                 final double t2 = J.getEntry(k, j);
+
                 final double newT1 = t1 * cc + t2 * ss;
+                final double newT2 = xny * (t1 + newT1) - t2;
+
                 J.setEntry(k, j - 1, newT1);
-                J.setEntry(k, j, xny * (t1 + newT1) - t2);
+                J.setEntry(k, j, newT2);
             }
         }
 
-        // Degeneracy check
-        if (FastMath.abs(tempDBuffer[iq]) < Precision.EPSILON) {
-            // Rollback rotations in reverse order to restore J
-            for (int j = iq + 1; j <= n - 1; j++) {
-                double cc = cList[j];
-                double ss = sList[j];
-                if (cc == 1.0 && ss == 0.0) continue;
-
-                final double xny = ss / (1.0 + cc);
-                for (int k = 0; k < n; k++) {
-                    final double t1 = J.getEntry(k, j - 1);
-                    final double t2 = J.getEntry(k, j);
-                    final double newT1 = t1 * cc + t2 * ss;
-                    J.setEntry(k, j - 1, newT1);
-                    J.setEntry(k, j, xny * (t1 + newT1) - t2);
-                }
-            }
-            return false;
-        }
-
-        // Store new column in R factor
-        for (int i = 0; i <= iq; i++) {
-            R.setEntry(i, iq, tempDBuffer[i]);
-        }
-        iq++;
-        return true;
+        return false;
     }
+
+    // Append the new column to the active triangular factor R.
+    for (int i = 0; i <= iq; i++) {
+        R.setEntry(i, iq, tempDBuffer[i]);
+    }
+
+    iq++;
+    return true;
+}
 
     /**
      * Deletes the active constraint at the specified index.
      * @param index index of the constraint to remove.
      */
-    public void deleteConstraint(final int index) {
-        if (index < 0 || index >= iq) return;
+//    
+   public void deleteConstraint(final int index) {
 
-        // Shift columns of R left to close the gap
-        for (int j = index; j < iq - 1; j++) {
-            for (int i = 0; i < n; i++) {
-                R.setEntry(i, j, R.getEntry(i, j + 1));
-            }
-        }
-        // Nullify last column
-        for (int i = 0; i < n; i++) R.setEntry(i, iq - 1, 0.0);
+    if (index < 0 || index >= iq) {
+        return;
+    }
 
-        iq--;
-        if (iq == 0) return;
-
-        // Restore triangular form via forward Givens rotations
-        for (int j = index; j < iq; j++) {
-            double cc = R.getEntry(j, j);
-            double ss = R.getEntry(j + 1, j);
-            double h = FastMath.hypot(cc, ss);
-            if (h < Precision.EPSILON) continue;
-
-            R.setEntry(j, j, h);
-            R.setEntry(j + 1, j, 0.0);
-            cc /= h; ss /= h;
-            if (cc < 0.0) { cc = -cc; ss = -ss; R.setEntry(j, j, -h); }
-
-            final double xny = ss / (1.0 + cc);
-            // Apply rotations to R (active part)
-            for (int k = j + 1; k < iq; k++) {
-                double t1 = R.getEntry(j, k);
-                double t2 = R.getEntry(j + 1, k);
-                double nextT1 = t1 * cc + t2 * ss;
-                R.setEntry(j, k, nextT1);
-                R.setEntry(j + 1, k, xny * (t1 + nextT1) - t2);
-            }
-            // Apply rotations to J (full basis)
-            for (int k = 0; k < n; k++) {
-                double t1 = J.getEntry(k, j);
-                double t2 = J.getEntry(k, j + 1);
-                double nextT1 = t1 * cc + t2 * ss;
-                J.setEntry(k, j, nextT1);
-                J.setEntry(k, j + 1, xny * (t1 + nextT1) - t2);
-            }
+    // Shift the columns following the deleted constraint to the left.
+    for (int j = index; j < iq - 1; j++) {
+        for (int i = 0; i < n; i++) {
+            R.setEntry(i, j, R.getEntry(i, j + 1));
         }
     }
+
+    // Clear the final column, which is no longer active.
+    for (int i = 0; i < n; i++) {
+        R.setEntry(i, iq - 1, 0.0);
+    }
+
+    iq--;
+
+    if (iq == 0) {
+        return;
+    }
+
+    /*
+     * Restore the upper-triangular form of R by eliminating each
+     * subdiagonal component created by the column shift.
+     */
+    for (int j = index; j < iq; j++) {
+
+        double cc = R.getEntry(j, j);
+        double ss = R.getEntry(j + 1, j);
+
+        /*
+         * The subdiagonal component is already exactly zero.
+         * No transformation is necessary.
+         */
+        if (ss == 0.0) {
+            continue;
+        }
+
+        /*
+         * Give h the sign of cc so that the normalized cc is
+         * non-negative. The cc == 0 case is handled naturally.
+         */
+        double h = FastMath.hypot(cc, ss);
+
+        if (cc < 0.0) {
+            h = -h;
+        }
+
+        cc /= h;
+        ss /= h;
+
+        R.setEntry(j, j, h);
+        R.setEntry(j + 1, j, 0.0);
+
+        final double xny = ss / (1.0 + cc);
+
+        // Apply the reflector to the remaining active part of R.
+        for (int k = j + 1; k < iq; k++) {
+            final double t1 = R.getEntry(j, k);
+            final double t2 = R.getEntry(j + 1, k);
+
+            final double newT1 = t1 * cc + t2 * ss;
+            final double newT2 = xny * (t1 + newT1) - t2;
+
+            R.setEntry(j, k, newT1);
+            R.setEntry(j + 1, k, newT2);
+        }
+
+        // Apply the same reflector to columns j and j + 1 of J.
+        for (int k = 0; k < n; k++) {
+            final double t1 = J.getEntry(k, j);
+            final double t2 = J.getEntry(k, j + 1);
+
+            final double newT1 = t1 * cc + t2 * ss;
+            final double newT2 = xny * (t1 + newT1) - t2;
+
+            J.setEntry(k, j, newT1);
+            J.setEntry(k, j + 1, newT2);
+        }
+    }
+}
 
     /**
      * Computes z = J_inactive * d_inactive.
@@ -211,20 +291,29 @@ public class QRUpdater {
      * @return solution vector of dimension iq.
      */
     public RealVector solveR(final RealVector d) {
-        if (iq == 0) return new ArrayRealVector(0);
-        final double[] xResult = new double[iq];
-        for (int i = 0; i < iq; i++) xResult[i] = d.getEntry(i);
-
-        for (int i = iq - 1; i >= 0; i--) {
-            double sum = 0.0;
-            for (int j = i + 1; j < iq; j++) sum += R.getEntry(i, j) * xResult[j];
-            double rii = R.getEntry(i, i);
-            if (FastMath.abs(rii) < Precision.EPSILON) return null;
-            
-            xResult[i] = (xResult[i] - sum) / rii;
-        }
-        return new ArrayRealVector(xResult, false);
+    if (iq == 0) {
+        return new ArrayRealVector(0);
     }
+
+    final double[] xResult = new double[iq];
+
+    for (int i = iq - 1; i >= 0; i--) {
+
+        double sum = 0.0;
+
+        for (int j = i + 1; j < iq; j++) {
+            sum += R.getEntry(i, j) * xResult[j];
+        }
+
+        final double rii = R.getEntry(i, i);
+
+        if (FastMath.abs(rii) < Precision.SAFE_MIN) return null;
+
+        xResult[i] = (d.getEntry(i) - sum) / rii;
+    }
+
+    return new ArrayRealVector(xResult, false);
+}
 
     /**
      * Solves R^T * x = rhs using forward substitution.
@@ -238,7 +327,7 @@ public class QRUpdater {
             double sum = 0.0;
             for (int j = 0; j < i; j++) sum += R.getEntry(j, i) * xResult[j];
             double rii = R.getEntry(i, i);
-            if (FastMath.abs(rii) < Precision.EPSILON) return null;
+            if (FastMath.abs(rii) < Precision.SAFE_MIN) return null;
             xResult[i] = (rhs.getEntry(i) - sum) / rii;
         }
         return new ArrayRealVector(xResult, false);
