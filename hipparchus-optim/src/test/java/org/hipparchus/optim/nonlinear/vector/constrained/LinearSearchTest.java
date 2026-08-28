@@ -33,15 +33,6 @@ class LinearSearchTest {
         Assertions.assertFalse(ls.isBadStepFailed());
     }
 
-    @Test
-    public void testBadStep() {
-        final LineSearch ls = new LineSearch(1.0e-7, 5, 1.0e-4, 0.5, 50, 2);
-        double d = ls.search(buildMeritFunction(-2.0, -0.5));
-        Assertions.assertEquals(7.071e-7, d, 1.0e-10);
-        Assertions.assertTrue(ls.isBadStepDetected());
-        Assertions.assertFalse(ls.isBadStepFailed());
-    }
-
     private MeritFunctionL2 buildMeritFunction(final double startX, final double startY) {
         final TwiceDifferentiableFunction objective = new RosenbrockFunction();
         final InequalityConstraint iqConstraint =

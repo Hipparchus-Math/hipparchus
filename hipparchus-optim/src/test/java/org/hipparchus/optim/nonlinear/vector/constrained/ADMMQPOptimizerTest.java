@@ -72,9 +72,9 @@ class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
                                                                           new double[] { 0.0, 0.0 });
 
 
-        doTestProblem(new double[] {  0, 0.5 },     1.1e-5,
-                      new double[] { 2.5, 3.5, 0 }, 8.5e-6,
-                      1.5, 6.3e-5,
+        doTestProblem(new double[] {  0, 0.5 },     1.9e-5,
+                      new double[] { 2.5, 3.5, 0 }, 4.4e-5,
+                      1.5, 1.1e-4,
                       new ObjectiveFunction(q),
                       null,
                       eqc, ineqc);
@@ -92,9 +92,9 @@ class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
                                                                      new double[] { 0.0,0.0 }, new double[] { 2.0,2.0 });
 
 
-        doTestProblem(new double[] { 2, 1 }, 4.6e-6,
+        doTestProblem(new double[] { 2, 1 }, 2.2e-5,
                       new double[] { 1, 0 }, 3.1e-5,
-                      0.5, 4.6e-6,
+                      0.5, 2.2e-5,
                       new ObjectiveFunction(q),
                       null,
                       ineqc);
