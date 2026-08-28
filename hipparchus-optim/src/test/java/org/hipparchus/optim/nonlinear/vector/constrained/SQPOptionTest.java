@@ -60,11 +60,11 @@ class SQPOptionTest {
         final SQPOption option = new SQPOption();
         // WHEN
         final int expectedValue = 10;
-        option.setConvCriteria(expectedValue);
+       
         option.setMaxLineSearchIteration(expectedValue);
         option.setQpMaxLoop(expectedValue);
         // THEN
-        assertEquals(expectedValue, option.getConvCriteria());
+       
         assertEquals(expectedValue, option.getMaxLineSearchIteration());
         assertEquals(expectedValue, option.getQpMaxLoop());
     }

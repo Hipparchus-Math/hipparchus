@@ -173,6 +173,17 @@ public class ADMMQPModifiedRuizEquilibrium {
     public RealVector getScaledQ() {
         return D.operate(q.mapMultiply(c));
     }
+    
+    /** Get scaled constraint constant vector.
+ * For constraints A x + b >= 0 and scaling A_s = E A D,
+ * the constant term must be scaled as b_s = E b.
+ *
+ * @param c0 unscaled constraint constant vector
+ * @return scaled constraint constant vector
+ */
+public RealVector getScaledC0(final RealVector c0) {
+    return E.operate(c0);
+}
 
     /** Get scaled upper bound
      * @param lb1 unscaled lower bound
@@ -226,16 +237,34 @@ public class ADMMQPModifiedRuizEquilibrium {
      * @param v vector to limit
      * @return rescaled vector, taking scaling limits into account
      */
-    private RealVector limitScaling(RealVector v) {
+//    private RealVector limitScaling(RealVector v) {
+//
+//        RealVector result = new ArrayRealVector(v.getDimension());
+//        for (int i = 0; i < v.getDimension(); i++) {
+//            result.setEntry(i,  v.getEntry(i) < MIN_SCALING ? 1.0 : v.getEntry(i));
+//            result.setEntry(i,  v.getEntry(i) > MAX_SCALING ? MAX_SCALING : v.getEntry(i));
+//        }
+//
+//        return result;
+//
+//    }
+   private RealVector limitScaling(final RealVector v) {
+    final RealVector result = new ArrayRealVector(v.getDimension());
 
-        RealVector result = new ArrayRealVector(v.getDimension());
-        for (int i = 0; i < v.getDimension(); i++) {
-            result.setEntry(i,  v.getEntry(i) < MIN_SCALING ? 1.0 : v.getEntry(i));
-            result.setEntry(i,  v.getEntry(i) > MAX_SCALING ? MAX_SCALING : v.getEntry(i));
+    for (int i = 0; i < v.getDimension(); i++) {
+        final double vi = v.getEntry(i);
+
+        if (!Double.isFinite(vi) || vi <= 0.0) {
+            result.setEntry(i, 1.0);
+        } else if (vi < MIN_SCALING) {
+            result.setEntry(i, 1.0);
+        } else if (vi > MAX_SCALING) {
+            result.setEntry(i, MAX_SCALING);
+        } else {
+            result.setEntry(i, vi);
         }
-
-        return result;
-
     }
 
+    return result;
+}
 }

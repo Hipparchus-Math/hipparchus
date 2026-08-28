@@ -17,8 +17,7 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.CholeskyDecomposition;
+import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
@@ -30,43 +29,71 @@ import org.hipparchus.util.Precision;
  * Manages Hessian updates for SQP solvers by:
  * </p>
  * <ul>
- *   <li>Checking curvature condition</li>
- *   <li>Applying dynamic damping if necessary</li>
- *   <li>Skipping update if curvature still fails after damping</li>
- *   <li>Soft regularization of diagonal entries on repeated failures</li>
- *   <li>Automatic Hessian reset after configurable failures</li>
+ * <li>Checking curvature condition</li>
+ * <li>Applying dynamic damping if necessary</li>
+ * <li>Skipping update if curvature still fails after damping</li>
+ * <li>Soft regularization of diagonal entries on repeated failures</li>
+ * <li>Automatic Hessian reset after configurable failures</li>
  * </ul>
  *
  * @since 4.1
  */
 public class BFGSUpdater {
 
-    /** Damping factor. */
+    /**
+     * AutoScaling Flag.
+     */
+    private final boolean SCALE;
+
+    /**
+     * EPS.
+     */
+    private final double EPS;
+
+    /**
+     * Damping factor.
+     */
     private static final double GAMMA = 0.2;
 
-    /** Regularization factor for diagonal of Hessian. */
-    private final double regFactor;
+    /**
+     * trigger skip update for diagonal of Hessian.
+     */
+    private final double sqrtEPS = FastMath.sqrt(Precision.EPSILON);
 
-    /** Tolerance for symmetric matrices decomposition.
+    /**
+     * Tolerance for symmetric matrices decomposition.
+     *
      * @since 4.1
      */
     private final double decompositionEpsilon;
 
-    /** Stored initial Hessian for resets. */
+    /**
+     * Stored initial Hessian for resets.
+     */
     private final RealMatrix initialH;
 
-    /** Current Cholesky factor L such that H = L·Lᵀ. */
+    /**
+     * Current Cholesky factor L such that H = L·Lᵀ.
+     */
     private RealMatrix L;
+    private boolean DAMPED;
+    private final int dim;
+    private double FACTOR=1.0;
 
     /**
      * Creates a new updater.
-     * @param initialHess          initial positive‐definite Hessian matrix
-     * @param regFactor            regularization factor to add on diagonal
-     * @param decompositionEpsilon tolerance for symmetric matrices decomposition
+     *
+     * @param initialHess initial positive‐definite Hessian matrix
+     * @param eps treshold to apply auto scale sty<sqrt(eps)
+     * @param autoSCale true apply auto hessain rescaling
+     * @param decompositionEpsilon tolerance for symmetric matrices
+     * decomposition
      */
-    public BFGSUpdater(final RealMatrix initialHess, final double regFactor, final double decompositionEpsilon) {
-        this.initialH             = new Array2DRowRealMatrix(initialHess.getData());
-        this.regFactor            = regFactor;
+    public BFGSUpdater(final RealMatrix initialHess, final double eps, final boolean autoScale, final double decompositionEpsilon) {
+        this.initialH = new Array2DRowRealMatrix(initialHess.getData());
+        this.EPS = eps;
+        this.SCALE = autoScale;
+        this.dim = initialHess.getColumnDimension();
         this.decompositionEpsilon = decompositionEpsilon;
         resetHessian();
     }
@@ -84,54 +111,80 @@ public class BFGSUpdater {
      * Updates the Hessian approximation using the BFGS formula.
      * <p>
      * If curvature condition fails, applies damping or regularization.
-     *</p>
+     * </p>
      *
      * @param s displacement vector (x_{k+1} − x_k)
      * @param y1 gradient difference (∇f_{k+1} − ∇f_k)
+     * @return type of update
+     * 0: update is done
+     * 1:sHs too small skip update
+     * 2:sty<gamma*sHs skipped update
+     * 3:sty<sqrt(eps)auto scale gamma*Hini
+     * 4:singulatity detected during downdate reset to gamma*Hinit
      */
-    public void update(RealVector s, RealVector y1) {
-        RealVector y = damp(s, y1);
-        if (y == null) {
-            return;
+    public int update(final RealVector s, final RealVector y1) {
+        final RealVector Hs = L.operate(L.preMultiply(s));
+        final double sHs = s.dotProduct(Hs);
+        double sty = s.dotProduct(y1);
+        if (sHs <= 0.0) {
+            resetHessian();
+            return 1;
         }
-        // Attempt rank‐one BFGS update; regularize on failure
-        rankOneUpdate(s, y);
+
+        DAMPED = false;
+        RealVector y = y1;
+        if (sty < GAMMA * sHs) {
+            DAMPED = true;
+            final double denominator = sHs - sty;
+            final double phi = (sHs - GAMMA * sHs) / denominator;
+            y = y1.mapMultiply(phi).add(Hs.mapMultiply(1.0 - phi));
+            sty = s.dotProduct(y);
+        }
+
+        if (!(sty > 0.0)) {
+            return 2;
+        }
+        
+         
+         final double yy = y.dotProduct(y);
+         FACTOR=1.0;
+         if (!DAMPED && sty > Precision.SAFE_MIN) {
+                FACTOR= yy / sty;
+            }
+         final double th = 1.0e-3;
+         FACTOR = FastMath.max(th, FastMath.min(1.0 / th, FACTOR));
+       
+        if (!rankOneUpdate(s, y, Hs, sHs, sty)) {
+            return 3;
+        }
+
+        return 0;
     }
 
     /**
      * Resets the Hessian approximation to its initial value.
      */
     public void resetHessian() {
-        final CholeskyDecomposition ch = new CholeskyDecomposition(initialH, decompositionEpsilon, decompositionEpsilon);
-        L = ch.getL();
+        L = MatrixUtils.createRealIdentityMatrix(dim);
     }
 
     /**
-     * Applies dynamic damping to y to satisfy curvature condition sᵀy ≥ γ sᵀHs.
+     * Resets the Hessian approximation with information on the curvature.
      *
-     * @param s search direction
-     * @param y1 raw gradient difference
-     * @return damped y, or null if update should be skipped
+     * @param gamma scale factor
      */
-    public RealVector damp(RealVector s, RealVector y1) {
-        RealVector y = new ArrayRealVector(y1);
-        double sty = s.dotProduct(y1);
-        RealVector Hs = getHessian().operate(s);
-        double sHs = s.dotProduct(Hs);
-        if (sty <= Precision.EPSILON) {
-            return null;
-        }
-        if (sty < GAMMA * sHs) {
-            double phi = (1.0 - GAMMA) * sHs / (sHs - sty);
-            // clamp phi to [0,1]
-            phi = FastMath.max(0.0, FastMath.min(1.0, phi));
-            y = y1.mapMultiply(phi).add(Hs.mapMultiply(1.0 - phi));
-            sty = s.dotProduct(y);
-            if (sty < GAMMA * sHs) {
-                return null;
-            }
-        }
-        return y;
+    public void resetHessian(double gamma) {
+        final double sqrtGAMMA = FastMath.sqrt(gamma);
+        L = MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
+    }
+    
+    /**
+     * Resets the Hessian approximation with information on the curvature for esternal usage
+     * 
+     */
+    public void resetHessianFactor() {
+        final double sqrtGAMMA = FastMath.sqrt(FACTOR);
+        L = MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
     }
 
     /**
@@ -139,58 +192,139 @@ public class BFGSUpdater {
      *
      * @param s displacement vector
      * @param y gradient difference vector
+     * @param Hs vector
+     * @param sHs value
      * @return true if update succeeded, false otherwise
      */
-    private boolean rankOneUpdate(RealVector s, RealVector y) {
-        RealMatrix Lcopy = new Array2DRowRealMatrix(L.getData());
-        RealVector Hs = L.operate(L.preMultiply(s));
-        double rho = 1.0 / FastMath.sqrt(s.dotProduct(y));
-        double theta = 1.0 / FastMath.sqrt(s.dotProduct(Hs));
-        RealVector v = y.mapMultiply(rho);
-        RealVector w = Hs.mapMultiply(theta);
-        cholupdateLower(v, +1) ;
+    private boolean rankOneUpdate(final RealVector s, final RealVector y, final RealVector Hs,
+                                  final double sHs, final double sty) {
 
-        if (!cholupdateLower(w, -1)) {
-            //try to regularize
-            L.setSubMatrix(Lcopy.getData(), 0, 0);
+        final double rho = 1.0 / FastMath.sqrt(sty);
+        final double theta = 1.0 / FastMath.sqrt(sHs);
+
+        cholupdateLower(y, rho, +1);
+
+        if (!cholupdateLower(Hs, theta, -1)) {
+            
+            resetHessian(FACTOR);
+
+            return false;
         }
+
         return true;
     }
 
     /**
-     * Performs a rank‐one Cholesky update/downdate on L.
+     * Performs a rank-one Cholesky update/downdate on L.
      * <p>
-     * Updates L such that A' = A+σu uᵀ or A' = A−u uᵀ, without refactorization.
+     * Updates L such that A' = A + sigma * alpha² * u * uᵀ, without refactorization.
+     * Uses a numerically robust variant based on Givens/hyperbolic rotations.
      * </p>
      *
-     * @param u update vector
+     * @param u direction vector
+     * @param alpha scaling factor applied to {@code u}
      * @param sigma +1 for update, -1 for downdate
-     * @return true if resulting matrix remains PD, false otherwise
+     * @return true if resulting matrix remains SPD, false otherwise
      */
-    private boolean cholupdateLower(RealVector u, int sigma) {
-        int n = u.getDimension();
-        RealVector temp = new ArrayRealVector(u);
-        for (int i = 0; i < n; i++) {
-            double lii = L.getEntry(i, i);
-            double ui = temp.getEntry(i);
-            double r2 = lii * lii + sigma * ui * ui;
-            if (r2 < regFactor) {
-                return false;
+    private boolean cholupdateLower(final RealVector u, final double alpha, final int sigma) {
+        final int n = u.getDimension();
+        final double[] work = u.toArray();
+        for (int i = 0; i < n; ++i) {
+            work[i] *= alpha;
+        }
+        // --- Single global guard for downdate ---
+    if (sigma < 0) {
+        final double[] z = new double[n];
+
+        // Solve L z = work
+        for (int i = 0; i < n; ++i) {
+            double sum = work[i];
+            for (int j = 0; j < i; ++j) {
+                sum -= L.getEntry(i, j) * z[j];
             }
-            double r = Math.sqrt(r2);
-            double c = r / lii;
-            double s = ui / lii;
-            L.setEntry(i, i, r);
-            for (int j = i + 1; j < n; j++) {
-                double lji = L.getEntry(j, i);
-                double uj = temp.getEntry(j);
-                double newLji = (lji + sigma * s * uj) / c;
-                double newUj = c * uj - s * newLji;
-                L.setEntry(j, i, newLji);
-                temp.setEntry(j, newUj);
+            final double lii = L.getEntry(i, i);
+            z[i] = sum / lii;
+        }
+
+        double znorm2 = 0.0;
+        for (int i = 0; i < n; ++i) {
+            znorm2 += z[i] * z[i];
+        }
+
+        if (znorm2 >= 1.0 - Precision.EPSILON) {
+            return false;
+        }
+    }
+
+        for (int k = 0; k < n; ++k) {
+            final double lkk = L.getEntry(k, k);
+            final double xk = work[k];
+
+            double r;
+            if (sigma > 0) {
+                r = FastMath.hypot(lkk, xk);
+            } else {
+                
+                double radicand=(lkk - xk) * (lkk + xk);
+                
+                if(radicand<=Precision.EPSILON) 
+                    r=sqrtEPS;
+                //return false;
+                else
+                    r = FastMath.sqrt(radicand);
+                    
+            }
+           
+          
+            final double c = r / lkk;
+            final double s = xk / lkk;
+            final double invC = 1.0 / c;
+
+            L.setEntry(k, k, r);
+
+            for (int i = k + 1; i < n; ++i) {
+                final double lik = L.getEntry(i, k);
+                final double xi = work[i];
+                final double newLik = (lik + sigma * s * xi) * invC;
+                final double newXi = c * xi - s * newLik;
+                L.setEntry(i, k, newLik);
+                work[i] = newXi;
             }
         }
         return true;
     }
+    
+  
 
+    /**
+     * Scales the Hessian H = L*L^T by a positive factor gamma,
+     * by scaling the Cholesky factor L in-place.
+     *
+     * H_new = gamma * H
+     * L_new = sqrt(gamma) * L
+     *
+     * @param gamma scaling factor (must be > 0)
+     */
+    private void scaleHessian(final double gamma) {
+
+        final double s = FastMath.sqrt(gamma);
+
+        final int n = L.getRowDimension();
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j <= i; ++j) {
+                L.setEntry(i, j, s * L.getEntry(i, j));
+            }
+        }
+    }
+
+    /**
+     * Returns the current lower-triangular Cholesky factor L.
+     *
+     * @return current lower-triangular Cholesky factor
+     */
+    public RealMatrix getL() {
+        return L;
+    }
+    
+    
 }

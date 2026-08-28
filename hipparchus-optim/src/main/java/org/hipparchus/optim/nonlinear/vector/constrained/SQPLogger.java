@@ -3,8 +3,8 @@
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * (the "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *      https://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,7 +24,7 @@ import org.hipparchus.util.Precision;
 public class SQPLogger {
 
     /** LS column fixed to 2 digits + 1 space for safety. */
-    private static final int LS_WIDTH = 3;
+    private static final int LS_WIDTH = 5;
 
     /** Field start. */
     private static final String FIELD_START = " %";
@@ -66,16 +66,17 @@ public class SQPLogger {
         String col = String.format(f, width);
         String lsCol = String.format(f, LS_WIDTH);
         this.headerFormat = String.format(
-            "[SQP] ITER %%2s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
-            col, lsCol, col, col, col, col, col, col, col
+            "[SQP] ITER %%4s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
+            col, lsCol, col, col, col, col, col, col, col, col, col, lsCol
         );
 
         final String percent = "%%";
-        String fld = String.format(percent + width + "." + precision + "f");
+        // use scientific notation for all doubles
+        String fld  = String.format(percent + width + "." + precision + "e");
         String intf = String.format(percent + LS_WIDTH + "d");
         this.rowFormat = String.format(
-            "[SQP] ITER %%2d | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
-            fld, intf, fld, fld, fld, fld, fld, fld, fld
+            "[SQP] ITER %%4d | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
+            fld, intf, fld, fld, fld, fld, fld, fld, fld, fld, fld, intf
         );
     }
 
@@ -91,27 +92,32 @@ public class SQPLogger {
      */
     public String header() {
         return String.format(headerFormat,
-            "", "alpha", "LS", "dxNorm", "dx'Hdx", "KKT", "viol", "sigma", "penalty", "f(x)");
+            "", "alpha", "LS", "dxNorm", "dx'Hdx", "complSlack", "KKT", "viol", "sigma", "penalty", "f(x)", "funDiff", "Hupd");
     }
 
     /** Format one row.
-     * @param iter     iteration number
-     * @param alpha    step length
-     * @param lsCount  line search iteration
-     * @param dxNorm   || dX ||
-     * @param dxHdx    dX H dX
-     * @param kkt      Lagrangian norm
-     * @param viol     constraints violations
-     * @param sigma    solution of the additional variable in QP subproblem
-     * @param penalty  penalty
-     * @param fx       objective function evaluation
+     * @param iter        iteration number
+     * @param alpha       step length
+     * @param lsCount     line search iteration
+     * @param dxNorm      || dX ||
+     * @param dxHdx       dX H dX
+     * @param complSlack  complementary slackness measure, i.e. Sum |yi * gi|
+     * @param kkt         Lagrangian norm
+     * @param viol        constraints violations
+     * @param sigma       solution of the additional variable in QP subproblem
+     * @param penalty     penalty
+     * @param fx          objective function evaluation
+     * @param funDiff     difference f(x_old) - f(x_new) (or other convention)
+     * @param hUpdate     Hessian update code (implementation-defined)
      * @return formatted row
      */
     public String formatRow(final int iter, final double alpha, final int lsCount,
-                            final double dxNorm, final double dxHdx, final double kkt,
-                            final double viol, final double sigma, final double penalty, final double fx) {
+                            final double dxNorm, final double dxHdx, final double complSlack,
+                            final double kkt, final double viol, final double sigma,
+                            final double penalty, final double fx, final double funDiff,
+                            final int hUpdate) {
         return String.format(rowFormat,
-                             iter, alpha, lsCount, dxNorm, dxHdx, kkt, viol, sigma, penalty, fx);
+                             iter, alpha, lsCount, dxNorm, dxHdx, complSlack, kkt, viol, sigma, penalty, fx, funDiff, hUpdate);
     }
 
     /** Log header.
@@ -123,47 +129,55 @@ public class SQPLogger {
     }
 
     /**
-     * Log one row.
+     * Log one row of convergence criteria flags (kept aligned with table layout).
+     * @param funEvalCount total functions evaluations;
      * @param crit2 norm criterion
      * @param crit1 gradient criterion?
      * @param crit0 Lagrangian norm criterion
      * @param crit3 constraints violations criterion
      */
-    public void logRow(final boolean crit2, final boolean crit1, final boolean crit0, final boolean crit3) {
+    public void logRow(final int funEvalCount,final boolean crit2, final boolean crit1,final boolean crit5, final boolean crit0, final boolean crit3, final boolean crit4) {
         if (printer == null) {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("[SQP] ITER %2d |", -1)).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, "")).
-           append(String.format(FIELD_START + LS_WIDTH + FIELD_CONTINUATION, "")).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, crit2)).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, crit1)).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, crit0)).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, crit3)).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, "")).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, "")).
-           append(String.format(FIELD_START + width + FIELD_CONTINUATION, ""));
+        sb.append(String.format("[SQP] ITER %4d |", -1)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, "")).
+           append(String.format(FIELD_START + LS_WIDTH  + FIELD_CONTINUATION, funEvalCount)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit2)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit1)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit5)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit0)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit3)).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, "")).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, "")).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, "")).
+           append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit4)).
+           append(String.format(FIELD_START + LS_WIDTH  + FIELD_CONTINUATION, ""));
         printer.print(sb.toString());
     }
 
     /** Log one row.
-     * @param iter     iteration number
-     * @param alpha    step length
-     * @param lsCount  line search iteration
-     * @param dxNorm   || dX ||
-     * @param dxHdx    dX H dX
-     * @param kkt      Lagrangian norm
-     * @param viol     constraints violations
-     * @param sigma    solution of the additional variable in QP subproblem
-     * @param penalty  penalty
-     * @param fx       objective function evaluation
+     * @param iter        iteration number
+     * @param alpha       step length
+     * @param lsCount     line search iteration
+     * @param dxNorm      || dX ||
+     * @param dxHdx       dX H dX
+     * @param complSlack  complementary slackness measure, i.e. Sum |yi * gi|
+     * @param kkt         Lagrangian norm
+     * @param viol        constraints violations
+     * @param sigma       solution of the additional variable in QP subproblem
+     * @param penalty     penalty
+     * @param fx          objective function evaluation
+     * @param funDiff     difference f(x_old) - f(x_new) (or other convention)
+     * @param hUpdate     Hessian update code (implementation-defined)
      */
     public void logRow(int iter, double alpha, int lsCount,
-                       double dxNorm, double dxHdx, double kkt,
-                       double viol, double sigma, double penalty, double fx) {
+                       double dxNorm, double dxHdx, double complSlack, double kkt,
+                       double viol, double sigma, double penalty, double fx,
+                       double funDiff, int hUpdate) {
         if (printer != null) {
-            printer.print(formatRow(iter, alpha, lsCount, dxNorm, dxHdx, kkt, viol, sigma, penalty, fx));
+            printer.print(formatRow(iter, alpha, lsCount, dxNorm, dxHdx, complSlack, kkt, viol, sigma, penalty, fx, funDiff, hUpdate));
         }
     }
 

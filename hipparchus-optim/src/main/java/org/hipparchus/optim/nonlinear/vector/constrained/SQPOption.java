@@ -17,18 +17,20 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.optim.OptimizationData;
+import org.hipparchus.util.Precision;
 
 /** Parameter for SQP Algorithm.
  * @since 3.1
  */
 public class SQPOption implements OptimizationData {
 
-    /** Default convergence criteria. */
-    public static final int DEFAULT_CONV_CRITERIA = 1;
 
-    /** Default tolerance for convergence and active constraint. */
+    /** Default tolerance for convergence and active constraint(proportional to sqrt of function an constraints evaluation accuracy) */
     public static final double DEFAULT_EPSILON = 1.0e-7;//>0
 
+    /** Default tolerance for QP convergence(proportional to function and constraints evaluation accuracy)  */
+    public static final double DEFAULT_EPSILON_QP = Precision.EPSILON;//>0
+    
     /** Default weight for augmented QP subproblem. */
     public static final double DEFAULT_RHO = 100.0;//rho>1
 
@@ -42,22 +44,37 @@ public class SQPOption implements OptimizationData {
     public static final  double DEFAULT_MU = 1.0e-4;//[0,0.5]
 
     /** Default parameter for quadratic line search. */
-    public static final  double DEFAULT_B = 0.5;//[0;1]
+    public static final  double DEFAULT_B = 0.1;//[0;1]
+    
+    /** Default parameter for alpha min during line search. */
+    public static final  double DEFAULT_ALPHA_MIN = 1.0e-14;
+    
+    /** Default parameter for non monotone line search history. */
+    public static final  int DEFAULT_HISTORY = 10;
 
     /** Default flag for using BFGS update formula. */
     public static final  boolean DEFAULT_USE_FUNCTION_HESSIAN = false;
 
     /** Default max iteration before reset hessian. */
-    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 50;
+    public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 30;
 
     /** Default Gradient mode. */
     public static final GradientMode DEFAULT_GRADIENT_MODE = GradientMode.FORWARD;
+    
+    /** Default Gradient EPS (proportional to function and constraints evaluation accuracy). */
+    public static final double DEFAULT_GRAD_EPS = Precision.EPSILON;
+    
+    /** Default Max Iterations. */
+    public static final int DEFAULT_MAX_ITERATION = 300;
 
     /** Convergence criteria*/
     private int convCriteria;
 
     /** Tolerance for convergence and active constraint evaluation. */
     private double eps;
+    
+    /** Tolerance for qp convergence */
+    private double epsQP;
 
     /** Weight for augmented QP subproblem. */
     private double rhoCons;
@@ -76,6 +93,12 @@ public class SQPOption implements OptimizationData {
 
     /** Parameter for quadratic line search. */
     private double b;
+    
+    /** Parameter line search alpha min. */
+    private double alphaMin;
+    
+    /** Parameter for non monotone line search history. */
+    private int history;
 
     /** Max Iteration for the line search. */
     private int maxLineSearchIteration;
@@ -85,6 +108,18 @@ public class SQPOption implements OptimizationData {
 
     /** Gradient Mode. */
     private GradientMode gradientMode;
+    
+    /** Gradient eps. */
+    private double gradEps;
+    
+    /** Max Iteration */
+    private int maxIteration;
+    
+    
+    /**Convergence criteria function for specific problems
+     * to avoid not significative iterations
+     */
+    private SQPCustomCriterion customCovergence=null;
 
     /** Simple constructor.
      * <p>
@@ -92,16 +127,20 @@ public class SQPOption implements OptimizationData {
      * </p>
      */
     public SQPOption() {
-        this.convCriteria           = DEFAULT_CONV_CRITERIA;
+        
         this.eps                    = DEFAULT_EPSILON;
+        this.epsQP                  = DEFAULT_EPSILON_QP;
         this.rhoCons                = DEFAULT_RHO;
         this.sigmaMax               = DEFAULT_SIGMA_MAX;
         this.qpMaxLoop              = DEFAULT_QP_MAX_LOOP;
         this.mu                     = DEFAULT_MU;
         this.b                      = DEFAULT_B;
+        this.alphaMin               = DEFAULT_ALPHA_MIN;
         this.maxLineSearchIteration = DEFAULT_MAX_LINE_SEARCH_ITERATION;
         this.useFunHessian          = DEFAULT_USE_FUNCTION_HESSIAN;
         this.gradientMode           = DEFAULT_GRADIENT_MODE;
+        this.gradEps                = DEFAULT_GRAD_EPS;
+        this.maxIteration           = DEFAULT_MAX_ITERATION;
     }
 
      /** Set Gradient mode
@@ -117,22 +156,25 @@ public class SQPOption implements OptimizationData {
     public GradientMode getGradientMode() {
         return gradientMode;
     }
-
-    /** Set convergence criteria.
-     * @param convCriteria convergence criteria
-     */
-    public void setConvCriteria(final int convCriteria) {
-        this.convCriteria = convCriteria;
+    
+     /** Set Gradient Eps
+      *  Choose value proportional to function and constraints evaluation accuracy)
+      * @param gradEps gradient mode
+      */
+    public void setGradientEps(final double gradEps) {
+        this.gradEps = gradEps;
     }
 
-    /** Get convergence criteria.
-     * @return convergence criteria
+    /** Get Gradient Eps.
+     * @return Gradient Eps
      */
-    public int getConvCriteria() {
-        return convCriteria;
+    public double getGradientEps() {
+        return gradEps;
     }
 
-    /** Set tolerance for convergence and active constraint evaluation.
+   
+    /** Set tolerance for convergence 
+     *  Choose value proportional to  sqrt of function and constraints evaluation accuracy
      * @param eps tolerance for convergence and active constraint evaluation
      */
     public void setEps(final double eps) {
@@ -145,6 +187,23 @@ public class SQPOption implements OptimizationData {
     public double getEps() {
         return eps;
     }
+    
+     /** Set tolerance for QP convergence 
+      *  Choose value proportional to function and constraints evaluation accuracy
+      * @param eps tolerance for convergence
+      */
+    public void setEpsQP(final double eps) {
+        this.epsQP = eps;
+    }
+
+    /** Get tolerance for QP convergence
+     * @return tolerance for QP convergence
+     */
+    public double getEpsQP() {
+        return epsQP;
+    }
+    
+    
 
     /** Set weight for augmented QP subproblem.
      * @param rhoCons weight for augmented QP subproblem
@@ -215,6 +274,34 @@ public class SQPOption implements OptimizationData {
     public double getB() {
         return b;
     }
+    
+    /** Set parameter for line search alpha min.
+     * @param alphaMin parameter line search
+     */
+    public void setAlphaMin(final double alphaMin) {
+        this.alphaMin = alphaMin;
+    }
+
+    /** Get parameter line search alpha min.
+     * @return parameter for quadratic line search
+     */
+    public double getAlphaMin() {
+        return this.alphaMin;
+    }
+    
+    /** Set parameter for nom monotone line search history.
+     * @param history parameter line search
+     */
+    public void setHistory(final int history) {
+        this.history = history;
+    }
+
+    /** Get parameter fot non monotone line search history.
+     * @return parameter for non monotone line search history
+     */
+    public int getHistory() {
+        return this.history;
+    }
 
     /** Set max Iteration for the line search
      * @param maxLineSearchIteration max Iteration for the line search
@@ -229,6 +316,20 @@ public class SQPOption implements OptimizationData {
     public int getMaxLineSearchIteration() {
         return maxLineSearchIteration;
     }
+    
+    /** Set max Iteration
+     * @param maxIteration max Iteration
+     */
+    public void setMaxteration(final int maxIteration) {
+        this.maxIteration = maxIteration;
+    }
+
+    /** Get max Iteration
+     * @return max Iteration
+     */
+    public int getMaxIteration() {
+        return maxIteration;
+    }
 
     /** Enable or Disable using direct the function Hessian.
      * @param useFunHessian enable or Disable using direct the function Hessian
@@ -242,6 +343,20 @@ public class SQPOption implements OptimizationData {
      */
     public boolean useFunHessian() {
         return useFunHessian;
+    }
+    
+     /** Set custom convergence criteria function
+     * @param fun convergence criteria function
+     */
+    public void setConvergenceFunction(final SQPCustomCriterion fun) {
+        this.customCovergence = fun;
+    }
+
+    /** Get Convergence criteria Function
+     * @return the function of the custom convergenc criteria
+     */
+    public SQPCustomCriterion getConvergenceFunction() {
+        return this.customCovergence;
     }
 
 }
