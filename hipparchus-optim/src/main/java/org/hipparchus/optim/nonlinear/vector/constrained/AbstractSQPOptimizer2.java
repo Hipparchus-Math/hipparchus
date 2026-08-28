@@ -21,6 +21,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
+import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.MathUtils;
 
@@ -39,17 +40,20 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
     private MatrixDecompositionTolerance matrixDecompositionTolerance;
 
     /** Objective function. */
-    private TwiceDifferentiableFunction obj;
+    private TwiceDifferentiableFunction OBJ;
 
     /** Equality constraint (may be null). */
-    private EqualityConstraint eqConstraint;
+    private EqualityConstraint EQ;
 
     /** Inequality constraint (may be null). */
-    private InequalityConstraint iqConstraint;
+    private InequalityConstraint IQ;
 
     /** Inequality constraint (may be null). */
-    private BoundedConstraint boxConstraint;
-
+    private BoundedConstraint BOX;
+    
+    /** Simple Bounds (may be null). */
+    private SimpleBounds SB;
+    
     /** Default QPSolver. */
     private QPOptimizer QPSolver = new QPDualActiveSolver();
 
@@ -79,28 +83,35 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
      * @return objective function
      */
     public TwiceDifferentiableFunction getObj() {
-        return obj;
+        return OBJ;
     }
 
     /** Getter for equality constraint.
      * @return equality constraint
      */
     public EqualityConstraint getEqConstraint() {
-        return eqConstraint;
+        return EQ;
     }
 
     /** Getter for inequality constraint.
      * @return inequality constraint
      */
     public InequalityConstraint getIqConstraint() {
-        return iqConstraint;
+        return IQ;
     }
 
      /** Getter for box constraint.
      * @return inequality constraint
      */
     public BoundedConstraint getBoxConstraint() {
-        return boxConstraint;
+        return BOX;
+    }
+    
+     /** Getter for simple bounds.
+     * @return simple bounds
+     */
+    public SimpleBounds getSimpleBounds() {
+        return SB;
     }
 
     /** Getter for QP Solver.
@@ -120,22 +131,41 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
         super.parseOptimizationData(optData);
         for (OptimizationData data : optData) {
 
+            if (data instanceof SQPProblem) {
+                SQPProblem problem = (SQPProblem) data;
+                OBJ = new SQPObj(problem);
+                
+                EQ= (problem.hasEquality())?new SQPEq((SQPProblem) data):null;
+                IQ= (problem.hasInequality())?new SQPIneq((SQPProblem) data):null;
+                
+                double[] lb = ((SQPProblem) data).getBoundsLB();
+                double[]ub = ((SQPProblem) data).getBoundsUB();
+                SB = (problem.hasBounds())?new SimpleBounds(lb,ub):null;
+               
+                continue;
+            }
+            
             if (data instanceof ObjectiveFunction) {
-                obj = (TwiceDifferentiableFunction) ((ObjectiveFunction) data).getObjectiveFunction();
+                OBJ = (TwiceDifferentiableFunction) ((ObjectiveFunction) data).getObjectiveFunction();
                 continue;
             }
 
             if (data instanceof EqualityConstraint) {
-                eqConstraint = (EqualityConstraint) data;
+                EQ = (EqualityConstraint) data;
                 continue;
             }
             if (data instanceof InequalityConstraint) {
-                iqConstraint = (InequalityConstraint) data;
+                IQ = (InequalityConstraint) data;
                 continue;
             }
 
             if (data instanceof BoundedConstraint) {
-                boxConstraint = (BoundedConstraint) data;
+                BOX = (BoundedConstraint) data;
+                continue;
+            }
+            
+            if (data instanceof SimpleBounds) {
+                SB = (SimpleBounds) data;
                 continue;
             }
 
@@ -154,13 +184,13 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
         }
 
         // if we got here, convexObjective exists
-        int n = obj.dim();
-        if (eqConstraint != null) {
-            int nDual = eqConstraint.dimY();
+        int n = OBJ.dim();
+        if (EQ != null) {
+            int nDual = EQ.dimY();
             if (nDual > n) {
                 throw new MathIllegalArgumentException(LocalizedOptimFormats.CONSTRAINTS_RANK, nDual, n);
             }
-            int nTest = eqConstraint.dim();
+            int nTest = EQ.dim();
             if (nDual == 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
             }

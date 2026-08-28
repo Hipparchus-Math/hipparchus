@@ -37,7 +37,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 public abstract class BaseMultivariateOptimizer<P>
     extends BaseOptimizer<P> {
     /** Initial guess. */
-    private double[] start;
+    public double[] start;
     /** Lower bounds. */
     private double[] lowerBound;
     /** Upper bounds. */

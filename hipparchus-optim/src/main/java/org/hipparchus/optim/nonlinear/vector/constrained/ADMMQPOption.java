@@ -36,7 +36,7 @@ public class ADMMQPOption implements OptimizationData {
     public static final double DEFAULT_ALPHA = 1.6;
 
     /** Default Value for Enabling Problem Scaling. */
-    public static final boolean DEFAULT_SCALING = true;
+    public static final boolean DEFAULT_SCALING = false;
 
     /** Default Value for the Max Iteration for the scaling. */
     public static final int DEFAULT_SCALING_MAX_ITERATION = 10;
