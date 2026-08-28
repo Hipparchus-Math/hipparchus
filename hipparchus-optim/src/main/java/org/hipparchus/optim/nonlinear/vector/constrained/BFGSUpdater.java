@@ -84,8 +84,8 @@ public class BFGSUpdater {
      * Creates a new updater.
      *
      * @param initialHess initial positive‐definite Hessian matrix
-     * @param eps treshold to apply auto scale sty<sqrt(eps)
-     * @param autoSCale true apply auto hessain rescaling
+     * @param eps treshold to apply auto scale sty &lt; sqrt(eps)
+     * @param autoScale true apply auto hessian rescaling
      * @param decompositionEpsilon tolerance for symmetric matrices
      * decomposition
      */
@@ -118,8 +118,8 @@ public class BFGSUpdater {
      * @return type of update
      * 0: update is done
      * 1:sHs too small skip update
-     * 2:sty<gamma*sHs skipped update
-     * 3:sty<sqrt(eps)auto scale gamma*Hini
+     * 2:sty &lt; gamma*sHs skipped update
+     * 3:sty &lt; sqrt(eps)auto scale gamma*Hini
      * 4:singulatity detected during downdate reset to gamma*Hinit
      */
     public int update(final RealVector s, final RealVector y1) {

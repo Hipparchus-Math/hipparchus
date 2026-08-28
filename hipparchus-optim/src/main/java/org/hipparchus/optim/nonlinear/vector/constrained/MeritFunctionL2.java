@@ -169,7 +169,7 @@ public class MeritFunctionL2 {
      * This method must be called before performing a line search to ensure gradients 
      * and search directions are consistent with the current iterate.
      * </p>
-     * * @param newJ Gradient of objective at current x
+     * @param newJ Gradient of objective at current x
      * @param newJE Gradient of equality at current x
      * @param newJI Gradient of inequality at current x
      * @param newX Current iterate
@@ -602,9 +602,9 @@ public class MeritFunctionL2 {
      * This is a critical step in Schittkowski's algorithm. The penalty parameters \(r_j\) 
      * are updated after solving the QP subproblem but before the line search. 
      * They are chosen such that the search direction \(dx\) is a descent direction for 
-     * the merit function: \(\nabla \Phi(x, v, r)^T d_{QP} < 0\).
+     * the merit function: \(\nabla \Phi(x, v, r)^T d_{QP} &lt; 0\).
      * </p>
-     * * @param H Hessian Matrix (or its BFGS approximation)
+     * @param H Hessian Matrix (or its BFGS approximation)
      * @param newY last estimate of multipliers
      * @param newDx primal direction solution from QP
      * @param newU dual direction (multipliers) from QP

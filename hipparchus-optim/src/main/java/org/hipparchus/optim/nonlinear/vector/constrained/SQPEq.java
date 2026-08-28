@@ -17,9 +17,11 @@ import org.hipparchus.linear.RealVector;
  *
  * <p>
  * Equality constraints typically model conditions of the form:
+ * </p>
  * <pre>
  *     h(x) = 0
  * </pre>
+ * <p>
  * but some SQP formulations internally interpret equalities through
  * a bounded form (e.g. {@code h(x) >= lb} and {@code h(x) <= ub}).
  * Here, only the lower bound is provided via
@@ -29,7 +31,7 @@ import org.hipparchus.linear.RealVector;
  *
  * <p>
  * Instances of this class are commonly created internally by SQP
- * optimizers when parsing user-supplied {@link OptimizationData}.
+ * optimizers when parsing user-supplied {@link org.hipparchus.optim.OptimizationData}.
  * It acts as an adapter layer between domain models and solver APIs.
  * </p>
  *

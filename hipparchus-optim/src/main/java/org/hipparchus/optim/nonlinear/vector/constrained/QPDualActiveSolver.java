@@ -101,7 +101,11 @@ public class QPDualActiveSolver extends QPOptimizer {
      */
     private MatrixDecompositionTolerance matrixDecompositionTolerance;
 
-    
+    /** Simple constructor.
+     */
+    public QPDualActiveSolver() {
+        // nothing to do
+    }
 
     /**
      * Parses optimization data to extract the objective function and various

@@ -27,6 +27,13 @@ import org.hipparchus.linear.ArrayRealVector;
  * @since 3.1
  */
 public abstract class TwiceDifferentiableFunction implements MultivariateFunction {
+
+    /** Simple constructor.
+     */
+    protected TwiceDifferentiableFunction() {
+        // nothing to do
+    }
+
     /**
      * Returns the dimensionality of the function domain.
      * If dim() returns (n) then this function expects an n-vector as its input.

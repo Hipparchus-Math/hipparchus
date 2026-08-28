@@ -16,15 +16,17 @@ import org.hipparchus.linear.RealVector;
  *
  * <p>
  * Inequality constraints are assumed to follow the canonical form:
+ * </p>
  * <pre>
  *     g(x) >= lb
  * </pre>
+ * <p>
  * where {@code lb} is given by {@link SQPProblem#getIneqCostraintLB()}.
  * </p>
  *
  * <p>
  * An instance of this class is normally constructed automatically by SQP
- * optimizers when processing {@link OptimizationData}. It serves as a
+ * optimizers when processing {@link org.hipparchus.optim.OptimizationData}. It serves as a
  * structural adapter layer between user-supplied models and solver APIs.
  * </p>
  *
