@@ -41,7 +41,7 @@ public class TaylorMap implements DifferentialAlgebra {
 
     /** Simple constructor.
      * <p>
-     * The number of number of parameters and derivation orders of all
+     * The number of parameters and derivation orders of all
      * functions must match.
      * </p>
      * @param point point at which map is evaluated
