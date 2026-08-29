@@ -50,8 +50,8 @@ import org.hipparchus.util.FastMath;
  * be retrieved using {@link #getRegularizedMatrix()}.
  * </p>
  *
- * @see CholeskyDecomposition
- * @see SemiDefinitePositiveCholeskyDecomposition
+ * @see org.hipparchus.linear.CholeskyDecomposition
+ * @see org.hipparchus.linear.SemiDefinitePositiveCholeskyDecomposition
  */
 public class RegularizedCholeskyDecomposition {
 

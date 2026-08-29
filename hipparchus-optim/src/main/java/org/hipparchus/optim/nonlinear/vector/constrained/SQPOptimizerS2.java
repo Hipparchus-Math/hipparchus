@@ -137,9 +137,12 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
      * Upper bound.
      */
     private ArrayRealVector UB;
-    
-    // Volatile flag to safely capture the Ctrl+C signal across JVM contexts
-    public static boolean manualBreak= false;
+
+    /** Simple constructor.
+     */
+    public SQPOptimizerS2() {
+        // nothing to do
+    }
 
     /**
      * {@inheritDoc}
@@ -255,30 +258,30 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                         H=bfgs.getHessian();
                         L=bfgs.getL();
                         qpSolution = solveQPFallBack(penalty.gradX());
-                            if (qpSolution == null || qpSolution.getX().getDimension() == 0 )
-                                {  penalty.resetRj();
-                                   if (m > 0) 
-                                       {u.set(0.0);
-                                        y.set(0.0);
-                                       }
-                               penalty.update(J, JE, JI, x, y, new ArrayRealVector(x.getDimension()), u);
-                               qpSolution = solveQPFallBack(penalty.gradX());
-                               RESET=true;
-                               
-                                if (qpSolution == null || qpSolution.getX().getDimension() == 0 ) break;
+                        if (qpSolution == null || qpSolution.getX().getDimension() == 0 ) {
+                            penalty.resetRj();
+                            if (m > 0) {
+                                u.set(0.0);
+                                y.set(0.0);
+                            }
+                            penalty.update(J, JE, JI, x, y, new ArrayRealVector(x.getDimension()), u);
+                            qpSolution = solveQPFallBack(penalty.gradX());
+                            RESET=true;
+
+                            if (qpSolution == null || qpSolution.getX().getDimension() == 0 ) break;
 //                        if (mb > 0) {
 //                         RealVector db = qpSolution.getLambda();
 //                         u.setSubVector(mi + me, db);
 //                              }
                         
-                                }  // Infeasible
+                        }  // Infeasible
                     // Estimation of multiplier from penalty grad y
                 
                 
-                }
-                if (m > 0 ) 
+                    }
+                if (m > 0 ) {
                     u = y.subtract(penalty.gradY());
-               
+                }
                 
                 
                 dx = qpSolution.getX();
@@ -1159,6 +1162,7 @@ private LagrangeSolution solveAugmentedQP(final RealVector y, final double rho) 
     }
     /**
      * Set debug printer.
+     * @param printer debug printer
      */
     public void setDebugPrinter(final DebugPrinter printer) {
         formatter.setDebugPrinter(printer);

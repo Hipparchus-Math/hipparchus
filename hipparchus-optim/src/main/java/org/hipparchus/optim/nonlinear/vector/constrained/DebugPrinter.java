@@ -21,5 +21,8 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
  */
 @FunctionalInterface
 public interface DebugPrinter {
+    /** Print message.
+     * @param message message to print
+     */
     void print(String message);
 }

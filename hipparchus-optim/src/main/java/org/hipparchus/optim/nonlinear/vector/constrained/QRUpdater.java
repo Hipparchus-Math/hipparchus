@@ -350,17 +350,33 @@ public class QRUpdater {
         return new ArrayRealVector(out, false);
     }
 
-    /** @return the current active R factor (submatrix if iq < n). */
-    public RealMatrix getR() { 
-        return (iq == n) ? R : (iq > 0 ? R.getSubMatrix(0, iq - 1, 0, iq - 1) : null); 
+    /** Get the current active R factor.
+     * @return the current active R factor (submatrix if iq &lt; n)
+     */
+    public RealMatrix getR() {
+        return (iq == n) ? R : (iq > 0 ? R.getSubMatrix(0, iq - 1, 0, iq - 1) : null);
     }
 
-    /** @return the full working matrix J. */
-    public RealMatrix getJ() { return J; }
+    /** Get the full working matrix J.
+     * @return the full working matrix J
+     */
+    public RealMatrix getJ() {
+        return J;
+    }
 
-    /** @return current number of active constraints. */
-    public int getIq() { return iq; }
+    /** Get current number of active constraints.
+     * @return current number of active constraints.
+     */
+    public int getIq() {
+        return iq;
+    }
 
-    /** Computes d = J^T * a. */
-    public RealVector computeD(final RealVector a) { return J.preMultiply(a); }
+    /** Computes d = J^T * a.
+     * @param a a vector
+     * @return d = J^T * a
+     */
+    public RealVector computeD(final RealVector a) {
+        return J.preMultiply(a);
+    }
+
 }

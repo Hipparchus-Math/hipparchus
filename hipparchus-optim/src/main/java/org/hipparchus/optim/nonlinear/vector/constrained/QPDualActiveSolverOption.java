@@ -3,8 +3,7 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.util.Precision;
 
-/**
- *
+/** Options for dual active-set method.
  * @author rocca
  */
 public class QPDualActiveSolverOption implements OptimizationData  {
@@ -54,13 +53,14 @@ public class QPDualActiveSolverOption implements OptimizationData  {
         this.eps = eps;
     }
     
-    /** get tolerance for convergence and active constraint evaluation
-     * @return .*/
+    /** get tolerance for convergence and active constraint evaluation.
+     * @return tolerance for convergence and active constraint evaluation
+     */
     public double getEps() {
         return eps;
     }
     
-     /** Set tolerance convergence for constraint in case of degenerancy
+     /** Set tolerance convergence for constraint in case of degeneracy
      *  typical 10.0*eps
      * @param eps  tolerance for convergence 
      */
@@ -68,15 +68,16 @@ public class QPDualActiveSolverOption implements OptimizationData  {
         this.epsRelaxation = eps;
     }
     
-    /** get tolerance for convergence for constraint in case of degenerancy
-     * @return .*/
+    /** get tolerance for convergence for constraint in case of degeneracy.
+     * @return tolerance for convergence for constraint in case of degeneracy
+     */
     public double getEpsRelaxation() {
         return epsRelaxation;
     }
     
-     /** Set MatrixMode 
+     /** Set MatrixMode.
       *
-      *@param matrixMode  
+      * @param matrixMode  matrix mode
       */
     public void setMatrixMode(final QPMatrixMode matrixMode)
     {
@@ -84,7 +85,8 @@ public class QPDualActiveSolverOption implements OptimizationData  {
     }
     
     /** Get MatrixMode
-     * @return  */
+     * @return matric mode
+     */
      public QPMatrixMode getMatrixMode()
     {
       return  this.matrixMode;

@@ -16,7 +16,7 @@ import org.hipparchus.linear.RealVector;
  *
  * <p>
  * Instances of this class are typically constructed internally by SQP
- * optimizers when processing {@link OptimizationData} supplied by users.
+ * optimizers when processing {@link org.hipparchus.optim.OptimizationData} supplied by users.
  * </p>
  *
  * @since 1.0
