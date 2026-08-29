@@ -42,6 +42,8 @@ public class GaussIntegratorFactory {
     private final RuleFactory hermite;
     /** Generator of Gauss-Laguerre integrators. */
     private final RuleFactory laguerre;
+    /** Generator of Gauss-Chebyshev integrators. */
+    private final RuleFactory chebyshevSecondKind;
 
     /** Simple constructor.
      */
@@ -57,6 +59,7 @@ public class GaussIntegratorFactory {
         legendreHighPrecision = new ConvertingRuleFactory<>(new FieldLegendreRuleFactory<>(new DfpField(decimalDigits)));
         hermite               = new HermiteRuleFactory();
         laguerre              = new LaguerreRuleFactory();
+        chebyshevSecondKind   = new ChebyshevSecondKindRuleFactory();
     }
 
     /**
@@ -144,6 +147,21 @@ public class GaussIntegratorFactory {
         throws MathIllegalArgumentException {
         return new GaussIntegrator(transform(legendreHighPrecision.getRule(numberOfPoints),
                                              lowerBound, upperBound));
+    }
+
+    /**
+     * Creates a Gauss-Chebyshev integrator of the second kind of the given order.
+     * The call to the
+     * {@link GaussIntegrator#integrate(org.hipparchus.analysis.UnivariateFunction)
+     * integrate} method will perform an integration on the natural interval
+     * {@code [-1 , 1]}.
+     *
+     * @param numberOfPoints Order of the integration rule.
+     * @return a GaussChebyshev integrator.
+     */
+    public GaussIntegrator chebyshevSecondKind(int numberOfPoints)
+            throws MathIllegalArgumentException {
+        return new GaussIntegrator(chebyshevSecondKind.getRule(numberOfPoints));
     }
 
     /**
