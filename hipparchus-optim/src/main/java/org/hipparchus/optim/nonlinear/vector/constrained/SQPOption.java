@@ -67,9 +67,6 @@ public class SQPOption implements OptimizationData {
     /** Default Max Iterations. */
     public static final int DEFAULT_MAX_ITERATION = 300;
 
-    /** Convergence criteria*/
-    private int convCriteria;
-
     /** Tolerance for convergence and active constraint evaluation. */
     private double eps;
 

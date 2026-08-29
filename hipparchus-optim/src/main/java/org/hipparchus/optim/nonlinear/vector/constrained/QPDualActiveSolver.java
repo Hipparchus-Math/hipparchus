@@ -536,7 +536,8 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             G = function.getP();
             try {
                 final double eps = matrixDecompositionTolerance.getEpsMatrixDecomposition();
-                final RegularizedCholeskyDecomposition cholesky = new RegularizedCholeskyDecomposition(G, settings.getEps(), settings.getEps());
+                final RegularizedCholeskyDecomposition cholesky =
+                        new RegularizedCholeskyDecomposition(G, settings.getEps(), settings.getEps());
                 DecompositionSolver solver = cholesky.getSolver();
 
                 x = solver.solve(g0).mapMultiply(-1.0);

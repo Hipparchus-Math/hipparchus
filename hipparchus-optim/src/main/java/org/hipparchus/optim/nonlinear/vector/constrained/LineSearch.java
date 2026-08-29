@@ -302,12 +302,11 @@ public class LineSearch {
                 } else {
                     markBadStep();
                 }
-                if(this.badStepFailed)
+                if (this.badStepFailed)
                 {
                    f.value(0.0);
                    return 0.0;
-                }
-                else {
+                } else {
                     return alphaMin;
                 }
 
