@@ -50,10 +50,10 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
 
     /** Inequality constraint (may be null). */
     private BoundedConstraint BOX;
-    
+
     /** Simple Bounds (may be null). */
     private SimpleBounds SB;
-    
+
     /** Default QPSolver. */
     private QPOptimizer QPSolver = new QPDualActiveSolver();
 
@@ -106,7 +106,7 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
     public BoundedConstraint getBoxConstraint() {
         return BOX;
     }
-    
+
      /** Getter for simple bounds.
      * @return simple bounds
      */
@@ -134,17 +134,17 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
             if (data instanceof SQPProblem) {
                 SQPProblem problem = (SQPProblem) data;
                 OBJ = new SQPObj(problem);
-                
+
                 EQ= (problem.hasEquality())?new SQPEq((SQPProblem) data):null;
                 IQ= (problem.hasInequality())?new SQPIneq((SQPProblem) data):null;
-                
+
                 double[] lb = ((SQPProblem) data).getBoundsLB();
                 double[]ub = ((SQPProblem) data).getBoundsUB();
                 SB = (problem.hasBounds())?new SimpleBounds(lb,ub):null;
-               
+
                 continue;
             }
-            
+
             if (data instanceof ObjectiveFunction) {
                 OBJ = (TwiceDifferentiableFunction) ((ObjectiveFunction) data).getObjectiveFunction();
                 continue;
@@ -163,7 +163,7 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
                 BOX = (BoundedConstraint) data;
                 continue;
             }
-            
+
             if (data instanceof SimpleBounds) {
                 SB = (SimpleBounds) data;
                 continue;

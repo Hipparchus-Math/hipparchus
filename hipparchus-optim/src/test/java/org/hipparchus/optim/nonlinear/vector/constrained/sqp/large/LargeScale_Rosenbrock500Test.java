@@ -34,8 +34,6 @@ import org.hipparchus.optim.nonlinear.vector.constrained.SQPOption;
 import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /**
  * Large-scale chained Rosenbrock benchmark with 500 variables.
  *
@@ -278,7 +276,7 @@ public class LargeScale_Rosenbrock500Test {
          */
         final SQPOption option = new SQPOption();
         option.setGradientMode(GradientMode.EXTERNAL);
-        option.setMaxteration(1000);
+        option.setMaxIteration(1000);
         final long startTime = System.nanoTime();
 
         final LagrangeSolution solution = optimizer.optimize(

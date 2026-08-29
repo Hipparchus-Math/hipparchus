@@ -90,7 +90,7 @@ public class QPDualActiveSolver extends QPOptimizer {
 
     /** Bounded constraint data (lower <= Ax <= upper). */
     private LinearBoundedConstraint bConstraints;
-    
+
     /** QP Settings */
     private QPDualActiveSolverOption settings;
 
@@ -124,7 +124,7 @@ public class QPDualActiveSolver extends QPOptimizer {
         this.bConstraints = null;
         this.settings=new QPDualActiveSolverOption();
         this.matrixDecompositionTolerance = new MatrixDecompositionTolerance(EPS);
-        
+
 
         for (OptimizationData data : optData) {
             if (data instanceof ObjectiveFunction) {
@@ -142,11 +142,11 @@ public class QPDualActiveSolver extends QPOptimizer {
             {
                settings = (QPDualActiveSolverOption) data;
             }
-        }    
+        }
     }
-    
 
-    
+
+
     /**
      * Finds the step length for a primal move toward a violated constraint.
      * Modern optimized and numerically stable version.
@@ -212,9 +212,9 @@ public class QPDualActiveSolver extends QPOptimizer {
     return alpha;
 }
 
-   
- 
-    
+
+
+
 /**
  * Finds the blocking active inequality for the dual move.
  *
@@ -262,7 +262,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
 
         final double ri = r.getEntry(i);
         final double absRi=FastMath.abs(ri);
-        
+
         if (!reverseStep) {
 
             /*
@@ -291,14 +291,14 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 continue;
             }
         }
-        
-       
-          final double cand = u.getEntry(i) / FastMath.abs(ri);  
-           
-        
-        
-       
-       
+
+
+          final double cand = u.getEntry(i) / FastMath.abs(ri);
+
+
+
+
+
         if (cand < alpha) {
             alpha = cand;
             block = i;
@@ -322,17 +322,17 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                                                    final double alpha,
                                                    final double partial) {
         if (u.getDimension() == 0) {
-            RealVector v = new ArrayRealVector(1,partial);           
+            RealVector v = new ArrayRealVector(1,partial);
             return v;
         }
-        
+
         // Original: return u.add(r.mapMultiply(-alpha)).append(partial);
         // Optimized: copy once, combine in-place, then append
-        
+
         u.combineToSelf(1.0, -alpha, r);
-        
+
         return u.append(partial);
-    
+
     }
 
     /**
@@ -354,9 +354,9 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
 
         // Original: RealVector tmp = u.add(r.mapMultiply(-alpha));
         // Optimized: copy once, combine in-place
-        
+
         u.combineToSelf(1.0, -alpha, r);
-        
+
         int size = u.getDimension();
 
         if (dropIndex == 0) {
@@ -370,9 +370,9 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         RealVector result= head.append(tail);
         return result;
     }
-    
-    
-    
+
+
+
     /**
      * Removes a multiplier at a specific index.
      *
@@ -411,7 +411,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         }
         return weights;
     }
-    
+
     /**
 //     * Finds the most violated constraint using normalized violations and an embedded numerical noise filter.
 //     * <p>
@@ -445,10 +445,10 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             if (active[k] ) {
                 continue;
             }
-            
-            
-           
-            
+
+
+
+
 
             final double residual = sv.getEntry(k);
             final double absResidual = FastMath.abs(residual);
@@ -465,8 +465,8 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             if (scaledViolation <= cvMax) {
                 continue;
             }
-            
-           
+
+
             final RealVector rowC=C.getRowVector(k);
             // 3. --- NOISE FILTER ---
             double absSum = FastMath.abs(c0.getEntry(k));
@@ -491,9 +491,9 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         return new Pair<>(kViolated, cvMax);
     }
 
- 
 
-    
+
+
     /**
      * Main optimization routine.
      *
@@ -501,14 +501,14 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
      */
     @Override
     public LagrangeSolution doOptimize() {
-        
-        
+
+
 
         RealVector g0 = function.getQ();
         double g = function.getD();
         int n = function.getP().getColumnDimension();
 
- 
+
         int p =  (eqConstraints != null) ? eqConstraints.dimY():0;
         int m1 = (iqConstraints != null) ? iqConstraints.dimY() : 0;
         int b1 = (bConstraints != null)  ? bConstraints.dimY() : 0;
@@ -521,13 +521,9 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
 
         if (mc > 0) {
 
-//            Pair<RealMatrix, RealVector> CC0 = buildGlobalConstraints(n, eqConstraints, iqConstraints, bConstraints);
-            QPConstraintSystem record = buildGlobalConstraints(n, eqConstraints, iqConstraints, bConstraints);
-//            C=CC0.getFirst();
-//            c0=CC0.getSecond();           
-//            weights = computeConstraintWeights(C);
+            QPConstraintSystem record = buildGlobalConstraints(n);
              C=record.C;
-             c0=record.c0;           
+             c0=record.c0;
              weights = record.weights;
         }
         RealMatrix G=null;
@@ -535,17 +531,17 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         RealMatrix L=null;
         RealMatrix L1=null;
         QRUpdater qrUpdater=null;
-        
+
         if (settings.getMatrixMode() == QPMatrixMode.FULL) {
             G = function.getP();
             try {
                 final double eps = matrixDecompositionTolerance.getEpsMatrixDecomposition();
                 final RegularizedCholeskyDecomposition cholesky = new RegularizedCholeskyDecomposition(G, settings.getEps(), settings.getEps());
                 DecompositionSolver solver = cholesky.getSolver();
-                
+
                 x = solver.solve(g0).mapMultiply(-1.0);
                 L = cholesky.getL();
-               
+
                 L1 = inverseLowerTriangular(L);
                 qrUpdater = new QRUpdater(L1);
             } catch (MathIllegalArgumentException ex) {
@@ -553,7 +549,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 return buildFailureSolution(ERROR_CHOLESKY_DECOMPOSITION);
             }
         } else if(settings.getMatrixMode() ==QPMatrixMode.CHOLESKY) {
-            
+
             L = function.getP();
             G = L.multiplyTransposed(L);
             L1 = inverseLowerTriangular(L);
@@ -562,23 +558,23 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
             qrUpdater = new QRUpdater(L1);
         }
         else  {
-            
+
             L1 = function.getP();
             L = inverseLowerTriangular(L1);
             G = L.multiplyTransposed(L);
-            
+
 
             x = L1.preMultiply(L1.operate(g0)).mapMultiply(-1.0);
             qrUpdater = new QRUpdater(L1);
         }
-        
-       
+
+
         if (mc == 0) {
             double obj = 0.5 * x.dotProduct(G.operate(x)) + g0.dotProduct(x) + g;
             return new LagrangeSolution(x, new ArrayRealVector(0, 0), obj);
         }
-        
-        
+
+
         // Maximum iterations adjusted based on problem dimension
         this.maxIter = 40 * (n + mc);
 
@@ -589,19 +585,19 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         RealVector d = null;
         RealVector z = null;
         int iteration = 0;
-        boolean refinementDone = false;  
+        boolean refinementDone = false;
         // Active-set loop for all constraints
         while (mc != 0 && iteration++ < maxIter) {
-            
+
             // Check Dual Feasibility delete constraint with negative multiplier and recalculate solution
                 boolean dualFeasible = false;
 
                 // Continua finché non è dual-fattibile o non svuotiamo il set
                 while (!dualFeasible && !active.isEmpty()) {
-                    dualFeasible = true; 
+                    dualFeasible = true;
                     int dropIndex = -1;
-                    
-                    
+
+
 //                    // 1. Identifica il primo moltiplicatore negativo puro
                     for (int j = 0; j < active.size(); j++) {
                         if (active.get(j) >= p) { // Se è una disuguaglianza
@@ -622,47 +618,47 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                         Pair<RealVector, RealVector> xy = recomputeXY(x, G, g0, C, c0, qrUpdater, active);
                         x = xy.getFirst();
                         u = xy.getSecond();
-                        
+
                     }
                 }
-        
-            
+
+
             RealVector sv;
-            // Evaluate constraints sv = C.preMultiply(x).add(c0); 
-            sv = C.operate(x);           
+            // Evaluate constraints sv = C.preMultiply(x).add(c0);
+            sv = C.operate(x);
             sv.combineToSelf(1.0, 1.0, c0);
             // Convergence test: find the most violated NON-active constraint
             Pair<Integer, Double> violationInfo = mostViolatedConstraintNormalized(sv, weights, activeMask, p, C, c0, x);
             int kViolated = violationInfo.getKey();
             double cvMax = violationInfo.getValue();
-           
-          
+
+
              if (cvMax <= settings.getEps() && refinementDone) {
                 break; // Solution found
             }
 
             // Evaluate convergence: no significantly violated NON-active constraint
             if (cvMax <= settings.getEps()  && !refinementDone) {
-                
+
                 kViolated = -1;
                 refinementDone = true;
-                
+
                Pair<RealVector, RealVector> xy = recomputeXY(x, G, g0, C, c0, qrUpdater, active);
                 x = xy.getFirst();
                 u = xy.getSecond();
 
-                
-                
-            }      
-            
-           
-          
+
+
+            }
+
+
+
             // Active loop evaluation
             while (iteration++ < maxIter) {
                 if (kViolated < 0) {
                     break;
                 }
-                    
+
                 double t1;
                 double t2;
                 double t = 0;
@@ -670,10 +666,10 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 double uPartial = 0;
                 int dropIndex;
                 RealVector np;
-                
+
                 final int constraintIndex = kViolated;
                 final boolean equality = constraintIndex < p;
-               
+
                 // Dual step loop update multiplier and x (if step is also in primal)
                 // until primal step is not done
                 while (iteration++ < maxIter) {
@@ -691,15 +687,14 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     dropIndex = dualStep.getKey();
                     t = FastMath.min(t1, t2);
                     signedStep = reverseStep ? -t : t;
-                    
+
                     if (!Double.isFinite(t)) {
-                        
-                       
-                        if(cvMax<this.settings.getEpsRelaxation()) return buildSolution(x, u, active, G, g0, g, p, m);
-                        return buildFailureSolution(ERROR_INFEASIBLE);
+                        return cvMax < this.settings.getEpsRelaxation() ?
+                               buildSolution(x, u, active, G, g0, g, p, m) :
+                               buildFailureSolution(ERROR_INFEASIBLE);
                     }
-                    
-                    if (t1<=t2) {
+
+                    if (t1 <= t2) {
                         break; // Primal full step (exit from dual step loop)
                     } else {
                         // Manage dual step
@@ -709,16 +704,15 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                         }
                         uPartial += signedStep;
                         u = updateMultipliersOnRemoval(u, r, signedStep, dropIndex);
-                        
+
                         qrUpdater.deleteConstraint(dropIndex);
                         final int removedConstraint = active.remove(dropIndex);
                         activeMask[removedConstraint] = false;
-                        
-                        
+
                     }
                 }
-                
-               
+
+
                 // Manage full step
                 if (active.size() < n && qrUpdater.addConstraint(d)) {
                     active.add(constraintIndex);
@@ -727,10 +721,10 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                     x.combineToSelf(1.0, signedStep, z);
                     uPartial += signedStep;
                     u = updateMultipliersOnAddition(u, r, signedStep, uPartial);
-                    
+
                     break; // Re-evaluate convergence
                 } else {
-                    
+
                     return buildFailureSolution(ERROR_DEPENDENT_EQUALITIES);
                 }
             }
@@ -739,7 +733,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         if (iteration == maxIter) {
             return buildFailureSolution(ERROR_MAX_ITERATIONS);
         }
-        
+
         return buildSolution(x, u, active, G, g0, g, p, m);
     }
 
@@ -773,7 +767,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         final double value = 0.5 * x.dotProduct(G.operate(x)) + g0.dotProduct(x) + g;
         return new LagrangeSolution(x, lambda, value);
     }
-    
+
     /**
      * Computes the inverse of a lower-triangular matrix via forward
      * substitution.
@@ -806,7 +800,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 0
         );
     }
- 
+
     /**
      * Precomputes the entrywise absolute matrix of G.
      *
@@ -946,7 +940,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                                                      final List<Integer> active) {
 
         final int nAct = active.size();
-        
+
 
         // --------------------------------------------------------------
         // 1) Active-space correction: reduce active residuals starting from xCurrent
@@ -975,14 +969,14 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
         // 2) Free-space correction: improve projected stationarity
         //    grad = G*x + g0
         // --------------------------------------------------------------
-        
+
         // Original: final RealVector gMid = G.operate(xRec).add(g0);
         // Optimized: allocate once for G.operate(xRec), then combine in-place
         final RealVector gMid = G.operate(x);
         gMid.combineToSelf(1.0, 1.0, g0);
-        
+
         final RealVector dMid = qrUpdater.computeD(gMid);
-        
+
         // Original: xRec = xRec.subtract(qrUpdater.computeZ(dMid));
         // Optimized: in-place subtraction (xRec = 1.0 * xRec + (-1.0) * Z)
         x.combineToSelf(1.0, -1.0, qrUpdater.computeZ(dMid));
@@ -1041,25 +1035,15 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
      * <p>No global physical matrix and no transpose are created.</p>
      *
      * @param n number of primal variables
-     * @param eqConstraints equality constraints
-     * @param iqConstraints inequality constraints
-     * @param bConstraints bounded constraints
      * @return integrated constraint system
      */
-    private QPConstraintSystem buildGlobalConstraints(
-            final int n,
-            final LinearEqualityConstraint eqConstraints,
-            final LinearInequalityConstraint iqConstraints,
-            final LinearBoundedConstraint bConstraints) {
+    private QPConstraintSystem buildGlobalConstraints(final int n) {
 
-        final int p = eqConstraints != null ?
-                eqConstraints.dimY() : 0;
+        final int p = eqConstraints != null ? eqConstraints.dimY() : 0;
 
-        final int m1 = iqConstraints != null ?
-                iqConstraints.dimY() : 0;
+        final int m1 = iqConstraints != null ? iqConstraints.dimY() : 0;
 
-        final int b1 = bConstraints != null ?
-                bConstraints.dimY() : 0;
+        final int b1 = bConstraints != null ? bConstraints.dimY() : 0;
 
         final int mc = p + m1 + 2 * b1;
 
@@ -1068,14 +1052,11 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
          *
          * No transpose and no coefficient copy are performed.
          */
-        final RealMatrix Ae = eqConstraints != null ?
-                eqConstraints.getA() : null;
+        final RealMatrix Ae = eqConstraints != null ? eqConstraints.getA() : null;
 
-        final RealMatrix Ai = iqConstraints != null ?
-                iqConstraints.jacobian(null) : null;
+        final RealMatrix Ai = iqConstraints != null ? iqConstraints.jacobian(null) : null;
 
-        final RealMatrix Ab = bConstraints != null ?
-                bConstraints.jacobian(null) : null;
+        final RealMatrix Ab = bConstraints != null ? bConstraints.jacobian(null) : null;
 
         /*
          * Virtual global matrix:
@@ -1199,5 +1180,5 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 new ArrayRealVector(c0Data, false),
                 new ArrayRealVector(wData, false));
     }
-    
+
 }

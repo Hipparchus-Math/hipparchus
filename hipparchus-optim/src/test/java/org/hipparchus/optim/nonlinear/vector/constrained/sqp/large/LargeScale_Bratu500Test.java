@@ -183,7 +183,7 @@ public class LargeScale_Bratu500Test {
 
         final SQPOption option = new SQPOption();
         option.setGradientMode(GradientMode.EXTERNAL);
-        option.setMaxteration(1000);
+        option.setMaxIteration(1000);
         final SQPOptimizerS2 optimizer =
                 LargeScaleProblemTestUtils.newOptimizer();
 

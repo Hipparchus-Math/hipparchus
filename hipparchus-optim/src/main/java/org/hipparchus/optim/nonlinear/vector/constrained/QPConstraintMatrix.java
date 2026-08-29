@@ -21,7 +21,6 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.util.FastMath;
 
 /**
  * Read-only, zero-copy row-oriented view of all linear constraints of a QP.
@@ -124,7 +123,11 @@ public final class QPConstraintMatrix extends AbstractRealMatrix {
         this.constraintCount = upperBoundOffset + boundedCount;
     }
 
-    /** Validate the number of columns of a backing block. */
+    /** Validate the number of columns of a backing block.
+     * @param name type of the constraint
+     * @param matrix constraint matrix
+     * @param expected expected number of columns
+     */
     private static void checkColumnDimension(final String name,
                                              final RealMatrix matrix,
                                              final int expected) {
@@ -256,7 +259,12 @@ public final class QPConstraintMatrix extends AbstractRealMatrix {
         return new ArrayRealVector(result, false);
     }
 
-    /** Copy a vector into an array, optionally changing its sign. */
+    /** Copy a vector into an array, optionally changing its sign.
+     * @param source      source vector
+     * @param destination destination array
+     * @param offset      offset in destination array
+     * @param scale       scaling factor applied to all components
+     */
     private static void copy(final RealVector source,
                              final double[] destination,
                              final int offset,

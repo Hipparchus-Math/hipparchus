@@ -173,7 +173,7 @@ public class ADMMQPModifiedRuizEquilibrium {
     public RealVector getScaledQ() {
         return D.operate(q.mapMultiply(c));
     }
-    
+
     /** Get scaled constraint constant vector.
  * For constraints A x + b >= 0 and scaling A_s = E A D,
  * the constant term must be scaled as b_s = E b.

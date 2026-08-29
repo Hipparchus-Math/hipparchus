@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Hipparchus project under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.MatrixUtils;
@@ -49,7 +65,7 @@ public class QRUpdater {
         this.iq = 0;
 
         // Initialize J and R through MatrixUtils to exploit BlockRealMatrix for large n
-        this.J = L.transpose(); 
+        this.J = L.transpose();
         this.R = MatrixUtils.createRealMatrix(n, n);
 
         // Pre-allocated workspace for Givens rotations and rollback
@@ -182,7 +198,7 @@ public class QRUpdater {
      * Deletes the active constraint at the specified index.
      * @param index index of the constraint to remove.
      */
-//    
+//
    public void deleteConstraint(final int index) {
 
     if (index < 0 || index >= iq) {
@@ -276,8 +292,10 @@ public class QRUpdater {
     public RealVector computeZ(final RealVector d) {
         final double[] zRaw = new double[n];
         for (int col = iq; col < n; col++) {
-            final double val = d.getEntry(col); 
-            if (val == 0.0) continue;
+            final double val = d.getEntry(col);
+            if (val == 0.0) {
+                continue;
+            }
             for (int row = 0; row < n; row++) {
                 zRaw[row] += J.getEntry(row, col) * val;
             }
@@ -321,13 +339,17 @@ public class QRUpdater {
      * @return solution vector of dimension iq.
      */
     public RealVector solveRT(final RealVector rhs) {
-        if (iq == 0) return new ArrayRealVector(0);
+        if (iq == 0) {
+            return new ArrayRealVector(0);
+        }
         final double[] xResult = new double[iq];
         for (int i = 0; i < iq; i++) {
             double sum = 0.0;
             for (int j = 0; j < i; j++) sum += R.getEntry(j, i) * xResult[j];
             double rii = R.getEntry(i, i);
-            if (FastMath.abs(rii) < Precision.SAFE_MIN) return null;
+            if (FastMath.abs(rii) < Precision.SAFE_MIN) {
+                return null;
+            }
             xResult[i] = (rhs.getEntry(i) - sum) / rii;
         }
         return new ArrayRealVector(xResult, false);

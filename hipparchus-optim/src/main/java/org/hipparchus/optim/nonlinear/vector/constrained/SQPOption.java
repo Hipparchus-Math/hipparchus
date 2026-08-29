@@ -30,7 +30,7 @@ public class SQPOption implements OptimizationData {
 
     /** Default tolerance for QP convergence(proportional to function and constraints evaluation accuracy)  */
     public static final double DEFAULT_EPSILON_QP = Precision.EPSILON;//>0
-    
+
     /** Default weight for augmented QP subproblem. */
     public static final double DEFAULT_RHO = 100.0;//rho>1
 
@@ -45,10 +45,10 @@ public class SQPOption implements OptimizationData {
 
     /** Default parameter for quadratic line search. */
     public static final  double DEFAULT_B = 0.1;//[0;1]
-    
+
     /** Default parameter for alpha min during line search. */
     public static final  double DEFAULT_ALPHA_MIN = 1.0e-14;
-    
+
     /** Default parameter for non monotone line search history. */
     public static final  int DEFAULT_HISTORY = 10;
 
@@ -60,10 +60,10 @@ public class SQPOption implements OptimizationData {
 
     /** Default Gradient mode. */
     public static final GradientMode DEFAULT_GRADIENT_MODE = GradientMode.FORWARD;
-    
+
     /** Default Gradient EPS (proportional to function and constraints evaluation accuracy). */
     public static final double DEFAULT_GRAD_EPS = Precision.EPSILON;
-    
+
     /** Default Max Iterations. */
     public static final int DEFAULT_MAX_ITERATION = 300;
 
@@ -72,7 +72,7 @@ public class SQPOption implements OptimizationData {
 
     /** Tolerance for convergence and active constraint evaluation. */
     private double eps;
-    
+
     /** Tolerance for qp convergence */
     private double epsQP;
 
@@ -93,10 +93,10 @@ public class SQPOption implements OptimizationData {
 
     /** Parameter for quadratic line search. */
     private double b;
-    
+
     /** Parameter line search alpha min. */
     private double alphaMin;
-    
+
     /** Parameter for non monotone line search history. */
     private int history;
 
@@ -108,14 +108,14 @@ public class SQPOption implements OptimizationData {
 
     /** Gradient Mode. */
     private GradientMode gradientMode;
-    
+
     /** Gradient eps. */
-    private double gradEps;
-    
+    private double gradientEps;
+
     /** Max Iteration */
     private int maxIteration;
-    
-    
+
+
     /**Convergence criteria function for specific problems
      * to avoid not significative iterations
      */
@@ -127,7 +127,7 @@ public class SQPOption implements OptimizationData {
      * </p>
      */
     public SQPOption() {
-        
+
         this.eps                    = DEFAULT_EPSILON;
         this.epsQP                  = DEFAULT_EPSILON_QP;
         this.rhoCons                = DEFAULT_RHO;
@@ -138,9 +138,9 @@ public class SQPOption implements OptimizationData {
         this.alphaMin               = DEFAULT_ALPHA_MIN;
         this.maxLineSearchIteration = DEFAULT_MAX_LINE_SEARCH_ITERATION;
         this.useFunHessian          = DEFAULT_USE_FUNCTION_HESSIAN;
-        this.gradientMode           = DEFAULT_GRADIENT_MODE;
-        this.gradEps                = DEFAULT_GRAD_EPS;
-        this.maxIteration           = DEFAULT_MAX_ITERATION;
+        this.gradientMode = DEFAULT_GRADIENT_MODE;
+        this.gradientEps  = DEFAULT_GRAD_EPS;
+        this.maxIteration = DEFAULT_MAX_ITERATION;
     }
 
      /** Set Gradient mode
@@ -156,24 +156,24 @@ public class SQPOption implements OptimizationData {
     public GradientMode getGradientMode() {
         return gradientMode;
     }
-    
+
      /** Set Gradient Eps
       *  Choose value proportional to function and constraints evaluation accuracy)
-      * @param gradEps gradient mode
+      * @param gradientEps gradient mode
       */
-    public void setGradientEps(final double gradEps) {
-        this.gradEps = gradEps;
+    public void setGradientEps(final double gradientEps) {
+        this.gradientEps = gradientEps;
     }
 
     /** Get Gradient Eps.
      * @return Gradient Eps
      */
     public double getGradientEps() {
-        return gradEps;
+        return gradientEps;
     }
 
-   
-    /** Set tolerance for convergence 
+
+    /** Set tolerance for convergence
      *  Choose value proportional to  sqrt of function and constraints evaluation accuracy
      * @param eps tolerance for convergence and active constraint evaluation
      */
@@ -187,13 +187,13 @@ public class SQPOption implements OptimizationData {
     public double getEps() {
         return eps;
     }
-    
-     /** Set tolerance for QP convergence 
+
+     /** Set tolerance for QP convergence
       *  Choose value proportional to function and constraints evaluation accuracy
-      * @param eps tolerance for convergence
+      * @param epsQP tolerance for convergence
       */
-    public void setEpsQP(final double eps) {
-        this.epsQP = eps;
+    public void setEpsQP(final double epsQP) {
+        this.epsQP = epsQP;
     }
 
     /** Get tolerance for QP convergence
@@ -202,8 +202,8 @@ public class SQPOption implements OptimizationData {
     public double getEpsQP() {
         return epsQP;
     }
-    
-    
+
+
 
     /** Set weight for augmented QP subproblem.
      * @param rhoCons weight for augmented QP subproblem
@@ -274,7 +274,7 @@ public class SQPOption implements OptimizationData {
     public double getB() {
         return b;
     }
-    
+
     /** Set parameter for line search alpha min.
      * @param alphaMin parameter line search
      */
@@ -288,7 +288,7 @@ public class SQPOption implements OptimizationData {
     public double getAlphaMin() {
         return this.alphaMin;
     }
-    
+
     /** Set parameter for nom monotone line search history.
      * @param history parameter line search
      */
@@ -316,11 +316,11 @@ public class SQPOption implements OptimizationData {
     public int getMaxLineSearchIteration() {
         return maxLineSearchIteration;
     }
-    
+
     /** Set max Iteration
      * @param maxIteration max Iteration
      */
-    public void setMaxteration(final int maxIteration) {
+    public void setMaxIteration(final int maxIteration) {
         this.maxIteration = maxIteration;
     }
 
@@ -344,7 +344,7 @@ public class SQPOption implements OptimizationData {
     public boolean useFunHessian() {
         return useFunHessian;
     }
-    
+
      /** Set custom convergence criteria function
      * @param fun convergence criteria function
      */

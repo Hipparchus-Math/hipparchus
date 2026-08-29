@@ -41,16 +41,6 @@ import org.hipparchus.util.Precision;
 public class BFGSUpdater {
 
     /**
-     * AutoScaling Flag.
-     */
-    private final boolean SCALE;
-
-    /**
-     * EPS.
-     */
-    private final double EPS;
-
-    /**
      * Damping factor.
      */
     private static final double GAMMA = 0.2;
@@ -58,7 +48,17 @@ public class BFGSUpdater {
     /**
      * trigger skip update for diagonal of Hessian.
      */
-    private final double sqrtEPS = FastMath.sqrt(Precision.EPSILON);
+    private static final double SQRT_EPS = FastMath.sqrt(Precision.EPSILON);
+
+    /**
+     * AutoScaling Flag.
+     */
+    private final boolean scale;
+
+    /**
+     * EPS.
+     */
+    private final double eps;
 
     /**
      * Tolerance for symmetric matrices decomposition.
@@ -76,9 +76,12 @@ public class BFGSUpdater {
      * Current Cholesky factor L such that H = L·Lᵀ.
      */
     private RealMatrix L;
-    private boolean DAMPED;
+
+    /** Dimension. */
     private final int dim;
-    private double FACTOR=1.0;
+
+    /** Hessian factor. */
+    private double    factor;
 
     /**
      * Creates a new updater.
@@ -91,9 +94,10 @@ public class BFGSUpdater {
      */
     public BFGSUpdater(final RealMatrix initialHess, final double eps, final boolean autoScale, final double decompositionEpsilon) {
         this.initialH = new Array2DRowRealMatrix(initialHess.getData());
-        this.EPS = eps;
-        this.SCALE = autoScale;
-        this.dim = initialHess.getColumnDimension();
+        this.eps      = eps;
+        this.scale    = autoScale;
+        this.dim      = initialHess.getColumnDimension();
+        this.factor   = 1.0;
         this.decompositionEpsilon = decompositionEpsilon;
         resetHessian();
     }
@@ -131,10 +135,10 @@ public class BFGSUpdater {
             return 1;
         }
 
-        DAMPED = false;
+        boolean damped = false;
         RealVector y = y1;
         if (sty < GAMMA * sHs) {
-            DAMPED = true;
+            damped = true;
             final double denominator = sHs - sty;
             final double phi = (sHs - GAMMA * sHs) / denominator;
             y = y1.mapMultiply(phi).add(Hs.mapMultiply(1.0 - phi));
@@ -144,16 +148,16 @@ public class BFGSUpdater {
         if (!(sty > 0.0)) {
             return 2;
         }
-        
-         
-         final double yy = y.dotProduct(y);
-         FACTOR=1.0;
-         if (!DAMPED && sty > Precision.SAFE_MIN) {
-                FACTOR= yy / sty;
-            }
-         final double th = 1.0e-3;
-         FACTOR = FastMath.max(th, FastMath.min(1.0 / th, FACTOR));
-       
+
+
+        final double yy = y.dotProduct(y);
+        factor =1.0;
+        if (!damped && sty > Precision.SAFE_MIN) {
+             factor = yy / sty;
+        }
+        final double th = 1.0e-3;
+        factor = FastMath.max(th, FastMath.min(1.0 / th, factor));
+
         if (!rankOneUpdate(s, y, Hs, sHs, sty)) {
             return 3;
         }
@@ -177,13 +181,13 @@ public class BFGSUpdater {
         final double sqrtGAMMA = FastMath.sqrt(gamma);
         L = MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
     }
-    
+
     /**
-     * Resets the Hessian approximation with information on the curvature for esternal usage
-     * 
+     * Resets the Hessian approximation with information on the curvature for external usage
+     *
      */
     public void resetHessianFactor() {
-        final double sqrtGAMMA = FastMath.sqrt(FACTOR);
+        final double sqrtGAMMA = FastMath.sqrt(factor);
         L = MatrixUtils.createRealIdentityMatrix(dim).scalarMultiply(sqrtGAMMA);
     }
 
@@ -194,6 +198,7 @@ public class BFGSUpdater {
      * @param y gradient difference vector
      * @param Hs vector
      * @param sHs value
+     * @param sty Sᵀ.y
      * @return true if update succeeded, false otherwise
      */
     private boolean rankOneUpdate(final RealVector s, final RealVector y, final RealVector Hs,
@@ -205,8 +210,8 @@ public class BFGSUpdater {
         cholupdateLower(y, rho, +1);
 
         if (!cholupdateLower(Hs, theta, -1)) {
-            
-            resetHessian(FACTOR);
+
+            resetHessian(factor);
 
             return false;
         }
@@ -264,18 +269,11 @@ public class BFGSUpdater {
             if (sigma > 0) {
                 r = FastMath.hypot(lkk, xk);
             } else {
-                
-                double radicand=(lkk - xk) * (lkk + xk);
-                
-                if(radicand<=Precision.EPSILON) 
-                    r=sqrtEPS;
-                //return false;
-                else
-                    r = FastMath.sqrt(radicand);
-                    
+                double radicand = (lkk - xk) * (lkk + xk);
+                r = radicand <= Precision.EPSILON ? SQRT_EPS : FastMath.sqrt(radicand);
             }
-           
-          
+
+
             final double c = r / lkk;
             final double s = xk / lkk;
             final double invC = 1.0 / c;
@@ -293,8 +291,8 @@ public class BFGSUpdater {
         }
         return true;
     }
-    
-  
+
+
 
     /**
      * Scales the Hessian H = L*L^T by a positive factor gamma,
@@ -325,6 +323,6 @@ public class BFGSUpdater {
     public RealMatrix getL() {
         return L;
     }
-    
-    
+
+
 }

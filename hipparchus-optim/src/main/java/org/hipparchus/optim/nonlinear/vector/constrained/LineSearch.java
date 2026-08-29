@@ -66,7 +66,7 @@ public class LineSearch {
     /**
      * Minimum step length.
      */
-    private double alphaMin;
+    private final double alphaMin;
 
     /**
      * Max step length.
@@ -209,7 +209,7 @@ public class LineSearch {
             for (double v : history) {
                 ref = FastMath.max(ref, v);
             }
-            
+
         }
         // alfaPenalty - currentPenalty > getSettings().getMu() * alpha * currentPenaltyGrad
         return fxNew - ref <= sigma * alpha * directionalDeriv;
@@ -250,16 +250,16 @@ public class LineSearch {
      */
     private double updateStepLength(final double alpha, final double fxCurrent, final double fxNew,
             final double directionalDeriv) {
-     
+
         double numerator = alpha * directionalDeriv;
         double denominator = alpha * directionalDeriv - fxNew + fxCurrent;
-       
+
         if (FastMath.abs(denominator) < Precision.SAFE_MIN) {
             return alpha * beta;
         }
 
         double alphaStar = 0.5 * alpha * numerator / denominator;
-        
+
         return FastMath.max( alpha * beta, FastMath.min(alphaStar,0.5*alpha));
 
     }
@@ -276,7 +276,7 @@ public class LineSearch {
         double directionalDeriv = f.getGradient();
 
         alphaMax = 1.0;
-        
+
 
         // Monotone Search
         nonMonotoneEnabled = false;

@@ -340,7 +340,7 @@ public class HEART6LSTest {
 
         final SQPOption option =
                 CUTEstProblemUtils.newForwardDifferenceOption();
-        option.setMaxteration(3000);
+        option.setMaxIteration(3000);
         final LagrangeSolution solution =
                 optimizer.optimize(
                         new MaxIter(5000),

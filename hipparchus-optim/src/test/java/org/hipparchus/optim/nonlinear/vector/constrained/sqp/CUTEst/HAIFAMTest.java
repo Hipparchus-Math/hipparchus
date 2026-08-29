@@ -473,7 +473,7 @@ public class HAIFAMTest {
     public void testHAIFAM() {
         final SQPOptimizerS2 optimizer = CUTEstProblemUtils.newOptimizer();
         final SQPOption option = CUTEstProblemUtils.newForwardDifferenceOption();
-        option.setMaxteration(1000);
+        option.setMaxIteration(1000);
         final LagrangeSolution solution = optimizer.optimize(
                 new MaxIter(5000),
                 new InitialGuess(initialPoint()),

@@ -265,7 +265,7 @@ public class NONMSQRTTest {
 
         final SQPOption option =
                 CUTEstProblemUtils.newExternalOption();
-        option.setMaxteration(1000);
+        option.setMaxIteration(1000);
 
         final LagrangeSolution solution =
                 optimizer.optimize(

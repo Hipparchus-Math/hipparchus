@@ -339,7 +339,7 @@ public class ELECTest {
 
         final SQPOption option =
                 CUTEstProblemUtils.newForwardDifferenceOption();
-        option.setMaxteration(5000);
+        option.setMaxIteration(5000);
         final LagrangeSolution solution =
                 optimizer.optimize(
                         new MaxIter(5000),
