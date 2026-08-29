@@ -119,6 +119,13 @@ class FunctionUtilsTest {
     }
 
     @Test
+    void testAddEmpty() {
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            FunctionUtils.add(new UnivariateFunction[0]).value(1.0);
+        });
+    }
+
+    @Test
     void testAddDifferentiable() {
         UnivariateDifferentiableFunction sin = new Sin();
         UnivariateDifferentiableFunction c = new Constant(4);
@@ -134,6 +141,13 @@ class FunctionUtilsTest {
     }
 
     @Test
+    void testAddDifferentiableEmpty() {
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            FunctionUtils.add(new UnivariateDifferentiableFunction[0]).value(1.0);
+        });
+    }
+
+    @Test
     void testMultiply() {
         UnivariateFunction c = new Constant(4);
         assertEquals(16, FunctionUtils.multiply(c, c).value(12345), EPS);
@@ -141,6 +155,13 @@ class FunctionUtilsTest {
         UnivariateFunction inv = new Inverse();
         UnivariateFunction pow = new Power(2);
         assertEquals(1, FunctionUtils.multiply(FunctionUtils.compose(inv, pow), pow).value(3.5), EPS);
+    }
+
+    @Test
+    void testMultiplyEmpty() {
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            FunctionUtils.multiply(new UnivariateFunction[0]).value(1.0);
+        });
     }
 
     @Test
@@ -194,6 +215,14 @@ class FunctionUtilsTest {
         bi = new Min();
         coll = FunctionUtils.collector(bi, Double.POSITIVE_INFINITY);
         assertEquals(-24, coll.value(new double[] {1, -2, 7.5, 10, -24, 9.99}), 0);
+    }
+
+    @Test
+    void testCollectorEmpty() {
+        MultivariateFunction coll = FunctionUtils.collector(new Add(), 0);
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            coll.value(new double[0]);
+        });
     }
 
     @Test
@@ -278,6 +307,13 @@ class FunctionUtilsTest {
             assertEquals(2, ((Integer) e.getParts()[1]).intValue());
             assertEquals(3, ((Integer) e.getParts()[0]).intValue());
         }
+
+        try {
+            FunctionUtils.compose((UnivariateFunction) null).value(1.0);
+            fail("an exception should have been thrown");
+        } catch (NullPointerException e) {
+            // expected
+        }
     }
 
     @Test
@@ -339,6 +375,14 @@ class FunctionUtilsTest {
         } catch (MathIllegalArgumentException e) {
             assertEquals(3, ((Integer) e.getParts()[0]).intValue());
             assertEquals(2, ((Integer) e.getParts()[1]).intValue());
+        }
+
+        try {
+            MultivariateFunction df = FunctionUtils.derivative(mdf, new int[] { 1 });
+            df.value(new double[] { 1.0, 2.0 });
+            fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // expected dimension mismatch
         }
     }
 
