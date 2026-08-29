@@ -273,13 +273,6 @@ class FieldVector3DTest {
         assertEquals( 3.0 / r, createVector(1, 2, 3, 3).getNorm().getPartialDerivative(0, 0, 1), 0);
     }
 
-    @Deprecated
-    @Test
-    void testNormSq() {
-        final FieldVector3D<?> vector3D = createVector(1, 2, 3, 5);
-        assertEquals(vector3D.getNorm2Sq(), vector3D.getNormSq());
-    }
-
     @Test
     void testNorm2Sq() {
         assertEquals(0.0, createVector(0, 0, 0, 3).getNorm2Sq().getReal(), 0);

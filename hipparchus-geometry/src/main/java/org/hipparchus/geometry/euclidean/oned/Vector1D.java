@@ -161,12 +161,6 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double getNormSq() {
-        return getNorm2Sq();
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public double getNormInf() {
         return FastMath.abs(x);
     }

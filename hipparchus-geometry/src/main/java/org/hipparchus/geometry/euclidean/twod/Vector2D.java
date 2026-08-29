@@ -223,13 +223,6 @@ public class Vector2D implements Vector<Euclidean2D, Vector2D> {
 
     /** {@inheritDoc} */
     @Override
-    @Deprecated
-    public double getNormSq() {
-        return getNorm2Sq();
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public double getNormInf() {
         return FastMath.max(FastMath.abs(x), FastMath.abs(y));
     }

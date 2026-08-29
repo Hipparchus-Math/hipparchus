@@ -262,14 +262,6 @@ public class Vector3D implements Serializable, Vector<Euclidean3D, Vector3D> {
 
     /** {@inheritDoc} */
     @Override
-    @Deprecated
-    public double getNormSq() {
-        // there are no cancellation problems here, so we use the straightforward formula
-        return getNorm2Sq();
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public double getNormInf() {
         return FastMath.max(FastMath.max(FastMath.abs(x), FastMath.abs(y)), FastMath.abs(z));
     }

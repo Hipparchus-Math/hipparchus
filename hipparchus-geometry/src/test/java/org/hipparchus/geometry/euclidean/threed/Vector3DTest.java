@@ -95,17 +95,6 @@ class Vector3DTest {
         assertEquals(vector3D.getNorm2() * vector3D.getNorm2(), norm2Sq);
     }
 
-    @Deprecated
-    @Test
-    void testGetNormSq() {
-        // GIVEN
-        final Vector3D vector3D = new Vector3D(1, 2, 3);
-        // WHEN
-        final double normSq = vector3D.getNormSq();
-        // THEN
-        assertEquals(vector3D.getNorm2Sq(), normSq);
-    }
-
     @Test
     void testZero() {
         assertEquals(0, new Vector3D(1, 2, 2).getZero().getNorm(), 1.0e-15);

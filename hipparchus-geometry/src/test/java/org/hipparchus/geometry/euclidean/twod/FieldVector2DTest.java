@@ -205,13 +205,6 @@ class FieldVector2DTest {
         assertEquals( 4.0, v.getNormInf().getReal(), 1.0e-15);
     }
 
-    @Deprecated
-    @Test
-    void testNormSq() {
-        final FieldVector2D<Complex> vector2D = new FieldVector2D<>(Complex.I, Complex.ONE);
-        assertEquals(vector2D.getNorm2Sq(), vector2D.getNormSq());
-    }
-
     private <T extends CalculusFieldElement<T>> void doTestDistances(final Field<T> field) {
         final FieldVector2D<T> u = new FieldVector2D<>(field, new Vector2D( 2.0, -2.0));
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(-1.0,  2.0));

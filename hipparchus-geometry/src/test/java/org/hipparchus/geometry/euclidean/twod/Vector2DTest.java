@@ -127,13 +127,6 @@ class Vector2DTest {
         assertEquals( 4.0, v.getNormInf(), 1.0e-15);
     }
 
-    @Deprecated
-    @Test
-    void testNormSq() {
-        final Vector2D v = new Vector2D(3.0, -4.0);
-        assertEquals( v.getNorm2Sq(), v.getNormSq());
-    }
-
     @Test
     void testDistances() {
         final Vector2D u = new Vector2D( 2.0, -2.0);

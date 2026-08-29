@@ -400,16 +400,6 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
         return getNorm2();
     }
 
-    /** Get the square of the norm for the vector.
-     * @return square of the norm for the vector
-     * @deprecated since 4.1, use getNorm2Sq
-     */
-    @Deprecated
-    public T getNormSq() {
-        // there are no cancellation problems here, so we use the straightforward formula
-        return getNorm2Sq();
-    }
-
     /** Get the square of the 2-norm for the vector.
      * @return square of the Euclidean norm for the vector
      * @since 4.1
