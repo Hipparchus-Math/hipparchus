@@ -325,7 +325,9 @@ public class QRUpdater {
 
         final double rii = R.getEntry(i, i);
 
-        if (FastMath.abs(rii) < Precision.SAFE_MIN) return null;
+        if (FastMath.abs(rii) < Precision.SAFE_MIN) {
+            return null;
+        }
 
         xResult[i] = (d.getEntry(i) - sum) / rii;
     }
@@ -345,7 +347,9 @@ public class QRUpdater {
         final double[] xResult = new double[iq];
         for (int i = 0; i < iq; i++) {
             double sum = 0.0;
-            for (int j = 0; j < i; j++) sum += R.getEntry(j, i) * xResult[j];
+            for (int j = 0; j < i; j++) {
+                sum += R.getEntry(j, i) * xResult[j];
+            }
             double rii = R.getEntry(i, i);
             if (FastMath.abs(rii) < Precision.SAFE_MIN) {
                 return null;
@@ -364,7 +368,9 @@ public class QRUpdater {
         final double[] out = new double[n];
         for (int col = 0; col < iq; col++) {
             final double c = coeffs.getEntry(col);
-            if (c == 0.0) continue;
+            if (c == 0.0) {
+                continue;
+            }
             for (int row = 0; row < n; row++) {
                 out[row] += J.getEntry(row, col) * c;
             }

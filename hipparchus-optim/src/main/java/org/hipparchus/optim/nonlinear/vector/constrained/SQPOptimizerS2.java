@@ -112,11 +112,6 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
     private double functionEval;
 
     /**
-     * Old objective function evaluation.
-     */
-    private double functionEvalOld;
-
-    /**
      * Current point.
      */
     private RealVector x;
@@ -151,7 +146,6 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         formatter.logHeader();
         int me = 0;
         int mi = 0;
-        int mb = 0;
 
         // Equality constraints configuration
         if (this.getEqConstraint() != null) {
@@ -162,7 +156,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
             mi = getIqConstraint().dimY();
         }
 
-        mb = buildBoundsAsInequalities();
+        final int mb = buildBoundsAsInequalities();
 
         final int m = me + mi + mb;
 
@@ -216,8 +210,8 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         boolean crit5 = false;
         double sigma = 0.0;
         double alpha = 0.0;
-        RealVector lagOld = null;
-        RealVector lagNew = null;
+        RealVector lagOld;
+        RealVector lagNew;
 
         LagrangeSolution qpSolution = null;
 
@@ -229,7 +223,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
         double DHD = 0.0;
         double XNORM = 0.0;
         double FUNDIFF = 0.0;
-        int BFGSUPDATE = 0;
+        int BFGSUPDATE;
         int FUNEVALCOUNT=0;
         SQPCustomCriterion customCriteria = getSettings().getConvergenceFunction();
         for (int i = 0; i < getSettings().getMaxIteration(); i++) {
@@ -249,7 +243,6 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
 
             // If sigma > sigma threshold after several attempts, assign direction from penalty gradient
             if (rho >= 1.0e9 || FALLBACK) {
-                boolean RESET = false;
                 qpSolution = solveQPFallBack(penalty.gradX());
 
                     if (qpSolution == null || qpSolution.getX().getDimension() == 0 ) {
@@ -266,15 +259,10 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                             }
                             penalty.update(J, JE, JI, x, y, new ArrayRealVector(x.getDimension()), u);
                             qpSolution = solveQPFallBack(penalty.gradX());
-                            RESET=true;
 
                             if (qpSolution == null || qpSolution.getX().getDimension() == 0 ) {
                                 break;
                             }
-//                        if (mb > 0) {
-//                         RealVector db = qpSolution.getLambda();
-//                         u.setSubVector(mi + me, db);
-//                              }
 
                         }  // Infeasible
                     // Estimation of multiplier from penalty grad y
@@ -357,7 +345,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 if (m > 0) {
                    // y = y.add(u.subtract(y).mapMultiply(alpha));
                     //y.combineToSelf(1.0 - alpha, alpha, u);//this is worse
-                    double yk=0;
+                    double yk;
                     for (int k = 0; k < y.getDimension(); ++k) {
                         yk = y.getEntry(k);
                         y.setEntry(k, yk + (u.getEntry(k) - yk) * alpha);
@@ -368,7 +356,8 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
                 //x = x.add(dx.mapMultiply(alpha));
                 x.combineToSelf(1.0, alpha, dx);
                 // UPDATE FUNCTION AND CONSTRAINT EVAL (Residuals v = eval - lower are stored)
-                functionEvalOld = functionEval;
+                // Old objective function evaluation.
+                final double functionEvalOld = functionEval;
                 functionEval = penalty.getObjEval();
                 eqEval = penalty.getEqEval();
                 ineqEval = penalty.getIqEval();
@@ -723,7 +712,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
 
    /**
      * Solves the standard Quadratic Programming (QP) subproblem using residuals.
-     * * @return a LagrangeSolution containing primal and dual variables, or null if failed.
+     * @return a LagrangeSolution containing primal and dual variables, or null if failed.
      */
     private LagrangeSolution solveQP() {
         final int n = x.getDimension();
@@ -1174,6 +1163,7 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
 
     /**
      * Build bounds constraint in the form of inequality.
+     * @return number of bounds
      */
     private int buildBoundsAsInequalities() {
         if (getSimpleBounds() == null) {
@@ -1185,8 +1175,12 @@ public class SQPOptimizerS2 extends AbstractSQPOptimizer2 {
             return 0;
         }
         int n = getObj().dim();
-        LB = (getSimpleBounds().getLower() != null) ? new ArrayRealVector(getSimpleBounds().getLower()) : new ArrayRealVector(n, Double.NEGATIVE_INFINITY);
-        UB = (getSimpleBounds().getUpper() != null) ? new ArrayRealVector(getSimpleBounds().getUpper()) : new ArrayRealVector(n, Double.POSITIVE_INFINITY);
+        LB = (getSimpleBounds().getLower() != null) ?
+             new ArrayRealVector(getSimpleBounds().getLower()) :
+             new ArrayRealVector(n, Double.NEGATIVE_INFINITY);
+        UB = (getSimpleBounds().getUpper() != null) ?
+             new ArrayRealVector(getSimpleBounds().getUpper()) :
+             new ArrayRealVector(n, Double.POSITIVE_INFINITY);
 
         java.util.ArrayList<double[]> rows = new java.util.ArrayList<>();
         java.util.ArrayList<Double> rhs = new java.util.ArrayList<>();

@@ -307,7 +307,9 @@ public class LineSearch {
                    f.value(0.0);
                    return 0.0;
                 }
-                else return alphaMin;
+                else {
+                    return alphaMin;
+                }
 
             }
         }

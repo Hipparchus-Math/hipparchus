@@ -133,10 +133,13 @@ public class SQPLogger {
      * @param funEvalCount total functions evaluations;
      * @param crit2 norm criterion
      * @param crit1 gradient criterion?
+     * @param crit5 criterion?
      * @param crit0 Lagrangian norm criterion
      * @param crit3 constraints violations criterion
+     * @param crit4 criterion?
      */
-    public void logRow(final int funEvalCount,final boolean crit2, final boolean crit1,final boolean crit5, final boolean crit0, final boolean crit3, final boolean crit4) {
+    public void logRow(final int funEvalCount,final boolean crit2, final boolean crit1, final boolean crit5,
+                       final boolean crit0, final boolean crit3, final boolean crit4) {
         if (printer == null) {
             return;
         }

@@ -41,6 +41,12 @@ import org.hipparchus.util.Precision;
  */
 public class MeritFunctionL2 {
 
+    /** Initial value for penalty parameters (typically small, e.g., 1e-2). */
+    private static final double SIGMA_INIT = 1.0e-2;
+
+    /** Maximum allowed value for penalty parameters to prevent numerical ill-conditioning. */
+    private static final double R_MAX = 1.0e9;
+
     /** Objective function \(f(x)\). */
     private final TwiceDifferentiableFunction objective;
 
@@ -91,12 +97,6 @@ public class MeritFunctionL2 {
     /** Residuals of box constraints \(b(x) = Ax - L\). */
     private RealVector bEval;
 
-    /** Lower bounds for the variables (if applicable). */
-    private RealVector lB;
-
-    /** Upper bounds for the variables (if applicable). */
-    private RealVector uB;
-
     /** Total value of the Augmented Lagrangian penalty function. */
     private double pEval;
 
@@ -108,12 +108,6 @@ public class MeritFunctionL2 {
 
     /** Jacobian matrix of box constraints. */
     private RealMatrix JB;
-
-    /** Initial value for penalty parameters (typically small, e.g., 1e-2). */
-    private double sigmaInit=1.0e-2;
-
-    /** Maximum allowed value for penalty parameters to prevent numerical ill-conditioning. */
-    private double rMax=1.0e9;
 
     /**
      * Constructor for the Merit Function.
@@ -154,8 +148,8 @@ public class MeritFunctionL2 {
         this.dx = new ArrayRealVector(x.getDimension());
         this.y = new ArrayRealVector(m);
         this.u = new ArrayRealVector(m);
-        this.r = new ArrayRealVector(m,sigmaInit);
-        this.rOld=new ArrayRealVector(m,sigmaInit);
+        this.r = new ArrayRealVector(m, SIGMA_INIT);
+        this.rOld=new ArrayRealVector(m, SIGMA_INIT);
         this.J = new ArrayRealVector(x.getDimension());
         this.eqEval = new ArrayRealVector(me);
         this.iqEval = new ArrayRealVector(mi);
@@ -300,7 +294,7 @@ public class MeritFunctionL2 {
             penalty -= yi.dotProduct(g.ebeMultiply(mask)) - 0.5 * ri.dotProduct(g2);
         }
 
-        int mb = 0;
+        int mb;
         if (bounds != null) {
             mb = bounds.dimY();
             RealVector ri = r.getSubVector(me+mi, mb);
@@ -329,39 +323,6 @@ public class MeritFunctionL2 {
         return penalty;
     }
 
-   /**
-    * Evaluates the Augmented Lagrangian merit function at \(x + \alpha d\).
-    * <p>
-    * Following Schittkowski (1982), the penalty terms for inequalities use a continuous
-    * extension to handle inactive constraints. This prevents the "maratos effect" and
-    * ensures smooth behavior during the line search.
-    * </p>
-    * * @param alpha Step length for the line search
-    * @return Value of the merit function \(\Phi(x + \alpha d, y + \alpha(u-y), r)\)
-    */
-    /**
-     * Evaluate merit function for a given step alpha.
-     * <p>
-     * This implementation is optimized to minimize memory overhead and avoid
-     * intermediate RealVector allocations during the line search procedure.
-     * It computes the Augmented Lagrangian merit function Φ(x + αd, y + α(u-y), r).
-     * </p>
-     * @param alpha line search step length
-     * @return penalty value at x + alpha*dx
-     */
-    /** Evaluate merit function for a given step alpha.
-     * <p>
-     * Optimized implementation of Schittkowski's Augmented Lagrangian merit function.
-     * The penalty terms are grouped to maintain the 0.5 factor outside the summations
-     * for numerical consistency with the SOL 82-4 formulation.
-     * </p>
-     * @param alpha line search step length
-     * @return penalty value at x + alpha*dx
-     */
-    /** Evaluate merit function for a given step alpha.
-     * @param alpha line search step length
-     * @return penalty value at x + alpha*dx
-     */
     /**
      * Evaluate merit function for a given step alpha.
      * <p>
@@ -424,13 +385,13 @@ public class MeritFunctionL2 {
             penalty -= yi.dotProduct(g.ebeMultiply(mask)) - 0.5 * ri.dotProduct(g2);
         }
 
-        int mb = 0;
+        int mb;
         if (bounds != null) {
             mb = bounds.dimY();
-            RealVector ri = r.getSubVector(me+mi, mb);
-            RealVector yi = yAlpha.getSubVector(me+mi, mb);
+            RealVector ri = r.getSubVector(me + mi, mb);
+            RealVector yi = yAlpha.getSubVector(me + mi, mb);
 
-            RealVector yk = yAlpha.getSubVector(me+mi, mb);
+            RealVector yk = yAlpha.getSubVector(me + mi, mb);
 
             // Save evaluation directly as residual (Ax - lower)
             bEval = bounds.value(xAlpha).subtract(bounds.getLowerBound());
@@ -628,15 +589,16 @@ public class MeritFunctionL2 {
     final int iter=iterations+1;
 
 
-    double dbdsigma = rMax ;
-    if (dbd * (1.0 - sigmaValue)  > Precision.SAFE_MIN)
+    double dbdsigma = R_MAX;
+    if (dbd * (1.0 - sigmaValue)  > Precision.SAFE_MIN) {
         // Formula to ensure descent: r_j must be proportional to (u_j - y_j)^2 / d^T H d
         dbdsigma = (2.0 * m) / (dbd * (1.0 - sigmaValue));
+    }
 
     for (int j = 0; j < m; j++) {
         final double rj = r.getEntry(j);
         final double diff = newU.getEntry(j) - newY.getEntry(j);
-        final double rNew =  Math.min(rMax,dbdsigma * diff*diff);
+        final double rNew =  Math.min(R_MAX, dbdsigma * diff * diff);
 
         // Increase r_j if necessary to maintain descent condition
         final double rjSigmaj  = Math.min(rj, iter * Math.sqrt(rj));
@@ -651,8 +613,8 @@ public class MeritFunctionL2 {
      */
     public void resetRj() {
         if (y.getDimension() > 0) {
-            this.r.set(sigmaInit);
-            this.rOld.set(sigmaInit);
+            this.r.set(SIGMA_INIT);
+            this.rOld.set(SIGMA_INIT);
         }
      }
 
@@ -669,10 +631,10 @@ public class MeritFunctionL2 {
      */
     public void rUp()
     {
-        if(r!=null)
-        {
-            for(int i=0;i<r.getDimension();i++)
-                r.setEntry(i, FastMath.min(1.0e9, r.getEntry(i)*10.0));
+        if (r != null) {
+            for(int i = 0; i < r.getDimension(); i++) {
+                r.setEntry(i, FastMath.min(1.0e9, r.getEntry(i) * 10.0));
+            }
         }
     }
 
@@ -691,6 +653,6 @@ public class MeritFunctionL2 {
      */
     public double getRmax()
     {
-            return this.rMax;
+            return this.R_MAX;
     }
 }
