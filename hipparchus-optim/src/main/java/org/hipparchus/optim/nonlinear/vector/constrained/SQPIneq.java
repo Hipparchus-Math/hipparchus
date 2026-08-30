@@ -37,7 +37,7 @@ import org.hipparchus.linear.RealVector;
  *     g(x) >= lb
  * </pre>
  * <p>
- * where {@code lb} is given by {@link SQPProblem#getIneqCostraintLB()}.
+ * where {@code lb} is given by {@link SQPProblem#getIneqConstraintLB()}.
  * </p>
  *
  * <p>
@@ -60,7 +60,7 @@ public class SQPIneq extends InequalityConstraint {
      *                and their Jacobian
      */
     public SQPIneq(final SQPProblem problem) {
-        super(problem.getIneqCostraintLB());
+        super(problem.getIneqConstraintLB());
         this.problem = problem;
     }
 
@@ -86,8 +86,8 @@ public class SQPIneq extends InequalityConstraint {
      */
     @Override
     public int dimY() {
-        return (problem.getIneqCostraintLB() != null) ?
-                problem.getIneqCostraintLB().getDimension() :
+        return (problem.getIneqConstraintLB() != null) ?
+                problem.getIneqConstraintLB().getDimension() :
                 0;
     }
 
@@ -109,12 +109,12 @@ public class SQPIneq extends InequalityConstraint {
      *
      * <p>
      * Delegates to
-     * {@link SQPProblem#getIneqCostraintJacobian(RealVector)}.
+     * {@link SQPProblem#getIneqConstraintJacobian(RealVector)}.
      * </p>
      */
     @Override
     public RealMatrix jacobian(final RealVector rv) {
-        return problem.getIneqCostraintJacobian(rv);
+        return problem.getIneqConstraintJacobian(rv);
     }
 
     /**

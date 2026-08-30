@@ -41,7 +41,7 @@ import org.hipparchus.linear.RealVector;
  * but some SQP formulations internally interpret equalities through
  * a bounded form (e.g. {@code h(x) >= lb} and {@code h(x) <= ub}).
  * Here, only the lower bound is provided via
- * {@link SQPProblem#getEqCostraintLB()}, consistent with the
+ * {@link SQPProblem#getEqConstraintLB()}, consistent with the
  * {@link EqualityConstraint} superclass.
  * </p>
  *
@@ -66,7 +66,7 @@ public class SQPEq extends EqualityConstraint {
      *                functions and gradients
      */
     public SQPEq(final SQPProblem problem) {
-        super(problem.getEqCostraintLB());
+        super(problem.getEqConstraintLB());
         this.problem = problem;
     }
 
@@ -92,8 +92,8 @@ public class SQPEq extends EqualityConstraint {
      */
     @Override
     public int dimY() {
-        return (problem.getEqCostraintLB() != null) ?
-                problem.getEqCostraintLB().getDimension() :
+        return (problem.getEqConstraintLB() != null) ?
+                problem.getEqConstraintLB().getDimension() :
                 0;
     }
 
@@ -102,12 +102,12 @@ public class SQPEq extends EqualityConstraint {
      *
      * <p>
      * Delegates evaluation to
-     * {@link SQPProblem#getEqCostraintEvaluation(RealVector)}.
+     * {@link SQPProblem#getEqConstraintEvaluation(RealVector)}.
      * </p>
      */
     @Override
     public RealVector value(final RealVector rv) {
-        return problem.getEqCostraintEvaluation(rv);
+        return problem.getEqConstraintEvaluation(rv);
     }
 
     /**
@@ -115,12 +115,12 @@ public class SQPEq extends EqualityConstraint {
      *
      * <p>
      * Delegates to
-     * {@link SQPProblem#getEqCostraintJacobian(RealVector)}.
+     * {@link SQPProblem#getEqConstraintJacobian(RealVector)}.
      * </p>
      */
     @Override
     public RealMatrix jacobian(final RealVector rv) {
-        return problem.getEqCostraintJacobian(rv);
+        return problem.getEqConstraintJacobian(rv);
     }
 
     /**
@@ -135,6 +135,6 @@ public class SQPEq extends EqualityConstraint {
      */
     @Override
     public double[] value(final double[] doubles) {
-        return problem.getEqCostraintEvaluation(new ArrayRealVector(doubles)).toArray();
+        return problem.getEqConstraintEvaluation(new ArrayRealVector(doubles)).toArray();
     }
 }

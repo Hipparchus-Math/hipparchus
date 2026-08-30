@@ -104,7 +104,7 @@ public interface SQPProblem extends OptimizationData {
      * @param rv evaluation point
      * @return vector of equality constraint residuals
      */
-    RealVector getEqCostraintEvaluation(RealVector rv);
+    RealVector getEqConstraintEvaluation(RealVector rv);
 
     /**
      * Computes the Jacobian of the equality constraints at the given point.
@@ -112,7 +112,7 @@ public interface SQPProblem extends OptimizationData {
      * @param rv evaluation point
      * @return Jacobian matrix of equality constraints
      */
-    RealMatrix getEqCostraintJacobian(RealVector rv);
+    RealMatrix getEqConstraintJacobian(RealVector rv);
 
     /**
      * Returns the lower bound for equality constraints (typically zero).
@@ -124,7 +124,7 @@ public interface SQPProblem extends OptimizationData {
      *
      * @return vector of equality constraint lower bounds
      */
-    RealVector getEqCostraintLB();
+    RealVector getEqConstraintLB();
 
     /**
      * Indicates whether inequality constraints are present.
@@ -151,12 +151,12 @@ public interface SQPProblem extends OptimizationData {
      * @param rv evaluation point
      * @return Jacobian matrix of inequality constraints
      */
-    RealMatrix getIneqCostraintJacobian(RealVector rv);
+    RealMatrix getIneqConstraintJacobian(RealVector rv);
 
     /**
      * Returns the lower bound for inequality constraints.
      *
      * @return vector of lower bound values for inequality constraints
      */
-    RealVector getIneqCostraintLB();
+    RealVector getIneqConstraintLB();
 }

@@ -71,17 +71,17 @@ public class HS001TestProblem {
         }
 
         @Override
-        public RealVector getEqCostraintEvaluation(RealVector rv) {
+        public RealVector getEqConstraintEvaluation(RealVector rv) {
             return null;
         }
 
         @Override
-        public RealMatrix getEqCostraintJacobian(RealVector rv) {
+        public RealMatrix getEqConstraintJacobian(RealVector rv) {
              return null;
         }
 
         @Override
-        public RealVector getEqCostraintLB() {
+        public RealVector getEqConstraintLB() {
              return null;
         }
 
@@ -91,12 +91,12 @@ public class HS001TestProblem {
         }
 
         @Override
-        public RealMatrix getIneqCostraintJacobian(RealVector rv) {
+        public RealMatrix getIneqConstraintJacobian(RealVector rv) {
              return null;
         }
 
         @Override
-        public RealVector getIneqCostraintLB() {
+        public RealVector getIneqConstraintLB() {
              return null;
         }
 
