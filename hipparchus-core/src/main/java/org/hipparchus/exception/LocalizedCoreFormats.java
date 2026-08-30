@@ -207,6 +207,9 @@ public enum LocalizedCoreFormats implements Localizable {
     /** NOT_FINITE_NUMBER. */
     NOT_FINITE_NUMBER("{0} is not a finite number"), /* keep */
 
+    /** NEGATIVE_VALUE. */
+    NEGATIVE_VALUE("{0} is negative"),
+
     /** INFINITE_BOUND. */
     INFINITE_BOUND("interval bounds must be finite"),
 

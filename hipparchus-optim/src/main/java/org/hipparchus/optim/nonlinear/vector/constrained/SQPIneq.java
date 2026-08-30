@@ -126,10 +126,9 @@ public class SQPIneq extends InequalityConstraint {
      * {@link SQPProblem#getIneqConstraintEvaluation(RealVector)}.
      * </p>
      *
-     * @throws IllegalArgumentException if array sizing mismatches problem dimension
      */
     @Override
-    public double[] value(final double[] doubles) throws IllegalArgumentException {
+    public double[] value(final double[] doubles) {
         return problem.getIneqConstraintEvaluation(new ArrayRealVector(doubles)).toArray();
     }
 }

@@ -132,10 +132,9 @@ public class SQPEq extends EqualityConstraint {
      * before delegation.
      * </p>
      *
-     * @throws IllegalArgumentException if vector size mismatch occurs
      */
     @Override
-    public double[] value(final double[] doubles) throws IllegalArgumentException {
+    public double[] value(final double[] doubles) {
         return problem.getEqCostraintEvaluation(new ArrayRealVector(doubles)).toArray();
     }
 }

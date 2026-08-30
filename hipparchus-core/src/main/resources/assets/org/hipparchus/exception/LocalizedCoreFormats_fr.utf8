@@ -72,6 +72,7 @@ INDEX_LARGER_THAN_MAX = l''index spécifié ({0}) dépasse l''index maximal cour
 INDEX_NOT_POSITIVE = l''indice ({0}) n''est pas positif
 INDEX = indice ({0})
 NOT_FINITE_NUMBER = {0} n''est pas un nombre fini
+NEGATIVE_VALUE = {0} est une valeur négative
 INFINITE_BOUND = intervalle limites doit être finie
 ARRAY_ELEMENT = valeur {0} à l''indice {1}
 INFINITE_ARRAY_ELEMENT = le tableau contient l''élément infini {0} à l''index {1}

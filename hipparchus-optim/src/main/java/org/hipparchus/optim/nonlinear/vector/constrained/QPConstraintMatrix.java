@@ -16,6 +16,8 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.AbstractRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.MatrixUtils;
@@ -101,7 +103,7 @@ public final class QPConstraintMatrix extends AbstractRealMatrix {
                               final RealMatrix boundedMatrix) {
 
         if (variableCount < 0) {
-            throw new IllegalArgumentException("Negative variable count: " + variableCount);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_VALUE, variableCount);
         }
 
         this.variableCount = variableCount;
@@ -109,9 +111,9 @@ public final class QPConstraintMatrix extends AbstractRealMatrix {
         this.inequalityMatrix = inequalityMatrix;
         this.boundedMatrix = boundedMatrix;
 
-        checkColumnDimension("equality", equalityMatrix, variableCount);
-        checkColumnDimension("inequality", inequalityMatrix, variableCount);
-        checkColumnDimension("bounded", boundedMatrix, variableCount);
+        checkColumnDimension(equalityMatrix,   variableCount);
+        checkColumnDimension(inequalityMatrix, variableCount);
+        checkColumnDimension(boundedMatrix,    variableCount);
 
         this.equalityCount = equalityMatrix == null ? 0 : equalityMatrix.getRowDimension();
         this.inequalityCount = inequalityMatrix == null ? 0 : inequalityMatrix.getRowDimension();
@@ -124,17 +126,14 @@ public final class QPConstraintMatrix extends AbstractRealMatrix {
     }
 
     /** Validate the number of columns of a backing block.
-     * @param name type of the constraint
      * @param matrix constraint matrix
      * @param expected expected number of columns
      */
-    private static void checkColumnDimension(final String name,
-                                             final RealMatrix matrix,
+    private static void checkColumnDimension(final RealMatrix matrix,
                                              final int expected) {
         if (matrix != null && matrix.getColumnDimension() != expected) {
-            throw new IllegalArgumentException(name + " constraint matrix has " +
-                                               matrix.getColumnDimension() +
-                                               " columns; expected " + expected);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   matrix.getColumnDimension(), expected);
         }
     }
 

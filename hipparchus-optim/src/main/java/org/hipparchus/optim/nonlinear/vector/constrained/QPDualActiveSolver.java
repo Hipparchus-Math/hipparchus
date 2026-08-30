@@ -396,23 +396,6 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
     }
 
     /**
-     * Computes constraint weights used for the normalized violation criterion.
-     * Weight is 1 / ||a_i|| when possible.
-     *
-     * @param C full constraint matrix
-     * @return weights
-     */
-    private RealVector computeConstraintWeights(final RealMatrix C) {
-        final int m = C.getColumnDimension();
-        final RealVector weights = new ArrayRealVector(m);
-        for (int i = 0; i < m; i++) {
-            final double norm = C.getColumnVector(i).getNorm();
-            weights.setEntry(i, norm > Precision.EPSILON ? 1.0 / norm : 0.0);
-        }
-        return weights;
-    }
-
-    /**
 //     * Finds the most violated constraint using normalized violations and an embedded numerical noise filter.
 //     * <p>
 //     * Equality constraints use absolute normalized violation.
@@ -549,7 +532,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 // Matrix is not positive definite, return failure solution
                 return buildFailureSolution(ERROR_CHOLESKY_DECOMPOSITION);
             }
-        } else if(settings.getMatrixMode() ==QPMatrixMode.CHOLESKY) {
+        } else if (settings.getMatrixMode() == QPMatrixMode.CHOLESKY) {
 
             L = function.getP();
             G = L.multiplyTransposed(L);
@@ -557,8 +540,7 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
 
             x = L1.preMultiply(L1.operate(g0)).mapMultiply(-1.0);
             qrUpdater = new QRUpdater(L1);
-        }
-        else  {
+        } else {
 
             L1 = function.getP();
             L = inverseLowerTriangular(L1);
@@ -800,112 +782,6 @@ private Pair<Integer, Double> findDualBlockingConstraint(final RealVector u,
                 new ArrayRealVector(1, errorCode),
                 0
         );
-    }
-
-    /**
-     * Precomputes the entrywise absolute matrix of G.
-     *
-     * @param G the symmetric matrix
-     * @return the absolute matrix
-     */
-    private RealMatrix precomputeAbsG(final RealMatrix G) {
-        final int n = G.getRowDimension();
-        final RealMatrix absG = MatrixUtils.createRealMatrix(n, n);
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                absG.setEntry(i, j, FastMath.abs(G.getEntry(i, j)));
-            }
-        }
-
-        return absG;
-    }
-
-    /**
-     * Exact numerical progress check.
-     *
-     * <p>The test evaluates:
-     *
-     * <pre>
-     * FDIFF  = sum_i ( 2*g0_i + sum_j G_ij*(xOld_j + xNew_j) ) * (xNew_i - xOld_i)
-     * FDIFFA = sum_i ( |2*g0_i| + sum_j |G_ij*(xOld_j + xNew_j)| ) * |xNew_i - xOld_i|
-     * </pre>
-     *
-     * and rejects progress if:
-     *
-     * <pre>
-     * FDIFFA + FDIFF     &lt;= FDIFFA
-     * FDIFFA + 1.5*FDIFF  &lt;= FDIFFA + FDIFF
-     * </pre>
-     *
-     * <p>To save work:
-     * <ul>
-     * <li>FDIFF is evaluated exactly using the Cholesky factor {@code L}, with {@code G = L*L^T}</li>
-     * <li>FDIFFA is evaluated using a precomputed entrywise absolute matrix {@code absG = |G|}</li>
-     * </ul>
-     *
-     * @param xOld checkpoint point x_old
-     * @param xNew current point x_new
-     * @param g0 linear term of the quadratic objective
-     * @param L lower Cholesky factor of G
-     * @param absG precomputed entrywise absolute Hessian |G|
-     * @return true if the objective progress is numerically reliable, false otherwise
-     */
-    private boolean isObjectiveProgressReliableExact(final RealVector xOld,
-                                                     final RealVector xNew,
-                                                     final RealVector g0,
-                                                     final RealMatrix L,
-                                                     final RealMatrix absG) {
-
-        // dx = xNew - xOld
-        final RealVector dx = xNew.subtract(xOld);
-
-        // Early rejection for exact no-move (stall detected)
-        if (dx.getNorm() == 0.0) {
-            return false;
-        }
-
-        // ------------------------------------------------------------------
-        // Exact FDIFF
-        //
-        //   FDIFF = ( 2*g0 + G*(xOld + xNew) )^T * (xNew - xOld)
-        //
-        // Using:
-        //   gOld = g0 + G*xOld
-        // so:
-        //   FDIFF = 2*gOld^T*dx + dx^T*G*dx
-        //         = 2*gOld^T*dx + ||L^T dx||^2
-        // ------------------------------------------------------------------
-        final RealVector gOld = L.operate(L.preMultiply(xOld)).add(g0);
-        final RealVector ltDx = L.preMultiply(dx);
-        final double fDiff = 2.0 * gOld.dotProduct(dx) + ltDx.dotProduct(ltDx);
-
-        // ------------------------------------------------------------------
-        // Exact FDIFFA
-        //
-        //   FDIFFA = ( |2*g0| + |G|*|xOld + xNew| )^T * |dx|
-        // ------------------------------------------------------------------
-        final RealVector xSumAbs = xOld.add(xNew).map(FastMath::abs);
-        final RealVector dxAbs   = dx.map(FastMath::abs);
-        final RealVector abs2g0  = g0.mapMultiply(2.0).map(FastMath::abs);
-
-        final RealVector rowAbs = absG.operate(xSumAbs).add(abs2g0);
-        final double fDiffA = rowAbs.dotProduct(dxAbs);
-
-        // ------------------------------------------------------------------
-        // Rejection logic
-        // ------------------------------------------------------------------
-        final double s1 = fDiffA + fDiff;
-        if (s1 <= fDiffA) {
-            return false;
-        }
-
-        final double s2 = fDiffA + 1.5 * fDiff;
-        if (s2 <= s1) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
