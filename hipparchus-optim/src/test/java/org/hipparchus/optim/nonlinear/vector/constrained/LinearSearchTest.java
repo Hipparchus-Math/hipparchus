@@ -50,6 +50,11 @@ class LinearSearchTest {
                  new ArrayRealVector(iqConstraint.dimY()),
                  new ArrayRealVector(new double[] { -1.0, 1.0 }),
                  new ArrayRealVector(new double[4]));
+        Assertions.assertSame(x, f.getX());
+        Assertions.assertArrayEquals(new double[] { 0.01, 0.01, 0.01, 0.01 },
+                                     f.getR().toArray(),
+                                     1.0e-15);
+        Assertions.assertEquals(1.0e9, f.getRmax(), 1.0e-6);
         return f;
     }
 

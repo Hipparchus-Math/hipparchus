@@ -113,10 +113,10 @@ public class SQPOption implements OptimizationData {
     private int maxIteration;
 
 
-    /**Convergence criteria function for specific problems
+    /** Convergence criteria function for specific problems
      * to avoid not significative iterations
      */
-    private SQPCustomCriterion customCovergence=null;
+    private SQPCustomCriterion customCovergence;
 
     /** Simple constructor.
      * <p>
@@ -135,9 +135,10 @@ public class SQPOption implements OptimizationData {
         this.alphaMin               = DEFAULT_ALPHA_MIN;
         this.maxLineSearchIteration = DEFAULT_MAX_LINE_SEARCH_ITERATION;
         this.useFunHessian          = DEFAULT_USE_FUNCTION_HESSIAN;
-        this.gradientMode = DEFAULT_GRADIENT_MODE;
-        this.gradientEps  = DEFAULT_GRAD_EPS;
-        this.maxIteration = DEFAULT_MAX_ITERATION;
+        this.gradientMode           = DEFAULT_GRADIENT_MODE;
+        this.gradientEps            = DEFAULT_GRAD_EPS;
+        this.maxIteration           = DEFAULT_MAX_ITERATION;
+        this.customCovergence       = null;
     }
 
      /** Set Gradient mode
@@ -286,15 +287,15 @@ public class SQPOption implements OptimizationData {
         return this.alphaMin;
     }
 
-    /** Set parameter for nom monotone line search history.
+    /** Set parameter for non-monotone line search history.
      * @param history parameter line search
      */
     public void setHistory(final int history) {
         this.history = history;
     }
 
-    /** Get parameter fot non monotone line search history.
-     * @return parameter for non monotone line search history
+    /** Get parameter fot non-monotone line search history.
+     * @return parameter for non-monotone line search history
      */
     public int getHistory() {
         return this.history;

@@ -29,8 +29,6 @@ import org.hipparchus.optim.nonlinear.vector.constrained.SQPOption;
 import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /**
  * SparseQP benchmark with 500 variables and 500 cyclic inequalities.
  *
@@ -245,6 +243,14 @@ public class LargeScale_SparseQP500Test {
 
         final SQPOption option = new SQPOption();
         option.setGradientMode(GradientMode.EXTERNAL);
+
+        // just to improve test coverage…
+        option.setGradientEps(SQPOption.DEFAULT_GRAD_EPS);
+        option.setEpsQP(SQPOption.DEFAULT_EPSILON_QP);
+        option.setAlphaMin(SQPOption.DEFAULT_ALPHA_MIN);
+        option.setHistory(0);
+        option.setMaxIteration(SQPOption.DEFAULT_MAX_ITERATION);
+        option.setConvergenceFunction(null);
 
         final SQPOptimizerS2 optimizer =
                 LargeScaleProblemTestUtils.newOptimizer();
