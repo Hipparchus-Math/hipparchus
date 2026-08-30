@@ -86,9 +86,8 @@ public class SQPIneq extends InequalityConstraint {
      */
     @Override
     public int dimY() {
-        return (problem.getIneqConstraintLB() != null) ?
-                problem.getIneqConstraintLB().getDimension() :
-                0;
+        // getIneqConstraintLB is never null because it was checked at construction
+        return problem.getIneqConstraintLB().getDimension();
     }
 
     /**

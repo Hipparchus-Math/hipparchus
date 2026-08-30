@@ -84,17 +84,11 @@ public class SQPEq extends EqualityConstraint {
 
     /**
      * {@inheritDoc}
-     *
-     * <p>
-     * Returns the number of equality constraints. If no lower bound vector
-     * is provided, the set is assumed empty.
-     * </p>
      */
     @Override
     public int dimY() {
-        return (problem.getEqConstraintLB() != null) ?
-                problem.getEqConstraintLB().getDimension() :
-                0;
+        // getEqConstraintLB is never null because it was checked at construction
+        return problem.getEqConstraintLB().getDimension();
     }
 
     /**
