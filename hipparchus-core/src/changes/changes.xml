@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="Nicolas Kaikati" type="add" issue="issues/472">
+        Add Lebedev Integrator.
+      </action>
       <action dev="luc" type="add" issue="issues/469">
         Added support for roman numerals.
       </action>
