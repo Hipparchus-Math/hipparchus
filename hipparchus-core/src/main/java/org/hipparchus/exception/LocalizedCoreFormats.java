@@ -570,6 +570,9 @@ public enum LocalizedCoreFormats implements Localizable {
     /** NUMBER_OF_POINTS. */
     NUMBER_OF_POINTS("number of points ({0})"), /* keep */
 
+    /** UNSUPPORTED_QUADRATURE_ORDER. */
+    UNSUPPORTED_QUADRATURE_ORDER("unsupported quadrature order {0}, must be one of {1}"),
+
     /** ZERO_DENOMINATOR. */
     ZERO_DENOMINATOR("denominator must be different from 0"), /* keep */
 
@@ -604,7 +607,10 @@ public enum LocalizedCoreFormats implements Localizable {
     ROMAN_NUMERAL_RANGE("{0} cannot be represented as a roman numeral (must be between 1 and 3999)"),
 
     /** INVALID_ROMAN_NUMERAL. */
-    INVALID_ROMAN_NUMERAL("{0} is not a valid roman numeral");
+    INVALID_ROMAN_NUMERAL("{0} is not a valid roman numeral"),
+
+    /** INVALID CODE FOR GEN_OH FUNCTION OF LEBEDEV QUADRATURE. */
+    GEN_OH_ILLEGAL_CODE("GEN_OH - Illegal value of code: {0}");
 
     /** Source English format. */
     private final String sourceFormat;

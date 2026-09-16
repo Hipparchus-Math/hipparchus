@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,11 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
 package org.hipparchus.analysis.integration;
 
 import java.util.Arrays;
@@ -26,6 +21,7 @@ import java.util.Arrays;
 import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -35,15 +31,15 @@ import org.hipparchus.util.MathUtils;
  *
  * <p>Inspired by the {@code sphere_lebedev_rule} C++ code by John Burkardt,
  * itself based on the public domain "Lebedev-Laikov" algorithm and tables by
- * Vyacheslav Lebedev and Dmitri Laikov.
+ * Vyacheslav Lebedev and Dmitri Laikov.</p>
  *
  * <p>For a rule of a given {@code order} N, with unit points {@code (x_i,y_i,z_i)} and weights
  * {@code w_i} (which sum to 1), the integral of a function f over the unit sphere is
- * approximated as {@code 4*PI * sum(w_i * f(x_i,y_i,z_i))}.
+ * approximated as {@code 4*PI * sum(w_i * f(x_i,y_i,z_i))}.</p>
  *
  * <p>Usage: the simplest way to integrate a function over the unit sphere is to call
  * {@link #integrate(TrivariateFunction, int)} with the function to integrate and the desired
- * order (number of points), for example:
+ * order (number of points), for example:</p>
  * <pre>{@code
  * double integral = LebedevQuadrature.integrate((x, y, z) -> x * x + y * y + z * z, 110);
  * }</pre>
@@ -53,11 +49,11 @@ import org.hipparchus.util.MathUtils;
  * smallest available rule with at least a given number of points. For repeated integrations with
  * the same order, it is more efficient to retrieve the {@link Rule} once with {@link #getRule(int)}
  * or {@link #getRuleAtLeast(int)} and reuse it, evaluating the function directly on its points and
- * weights, rather than calling {@link #integrate(TrivariateFunction, int)} repeatedly.
+ * weights, rather than calling {@link #integrate(TrivariateFunction, int)} repeatedly.</p>
  *
  * <p>Reference: Vyacheslav Lebedev, Dmitri Laikov, "A quadrature formula for the sphere of the
  * 131st algebraic order of accuracy", Russian Academy of Sciences Doklady Mathematics, Volume 59,
- * Number 3, 1999, pages 477-481.
+ * Number 3, 1999, pages 477-481.</p>
  *
  * @author Vyacheslav Lebedev and Dmitri Laikov (original algorithm and tables)
  * @author Nicolas Kaikati (Java implementation)
@@ -216,7 +212,7 @@ public class LebedevQuadrature {
         for (int i = 0; i < rule.getOrder(); i++) {
             sum += w[i] * function.value(x[i], y[i], z[i]);
         }
-        return 4 * Math.PI * sum;
+        return 4 * FastMath.PI * sum;
     }
 
     /**
@@ -254,7 +250,7 @@ public class LebedevQuadrature {
                 break;
             }
             case 2: {
-                a = Math.sqrt(0.5);
+                a = FastMath.sqrt(0.5);
                 x[n] = 0;  y[n] = a;  z[n] = a;  w[n] = v; n++;
                 x[n] = 0;  y[n] = -a; z[n] = a;  w[n] = v; n++;
                 x[n] = 0;  y[n] = a;  z[n] = -a; w[n] = v; n++;
@@ -271,7 +267,7 @@ public class LebedevQuadrature {
                 break;
             }
             case 3: {
-                a = Math.sqrt(1.0 / 3.0);
+                a = FastMath.sqrt(1.0 / 3.0);
                 x[n] = a;  y[n] = a;  z[n] = a;  w[n] = v; n++;
                 x[n] = -a; y[n] = a;  z[n] = a;  w[n] = v; n++;
                 x[n] = a;  y[n] = -a; z[n] = a;  w[n] = v; n++;
@@ -284,7 +280,7 @@ public class LebedevQuadrature {
                 break;
             }
             case 4: {
-                b = Math.sqrt(1.0 - 2.0 * a * a);
+                b = FastMath.sqrt(1.0 - 2.0 * a * a);
                 x[n] = a;  y[n] = a;  z[n] = b;  w[n] = v; n++;
                 x[n] = -a; y[n] = a;  z[n] = b;  w[n] = v; n++;
                 x[n] = a;  y[n] = -a; z[n] = b;  w[n] = v; n++;
@@ -313,7 +309,7 @@ public class LebedevQuadrature {
                 break;
             }
             case 5: {
-                b = Math.sqrt(1.0 - a * a);
+                b = FastMath.sqrt(1.0 - a * a);
                 x[n] = a;  y[n] = b;  z[n] = 0;  w[n] = v; n++;
                 x[n] = -a; y[n] = b;  z[n] = 0;  w[n] = v; n++;
                 x[n] = a;  y[n] = -b; z[n] = 0;  w[n] = v; n++;
@@ -342,7 +338,7 @@ public class LebedevQuadrature {
                 break;
             }
             case 6: {
-                c = Math.sqrt(1.0 - a * a - b * b);
+                c = FastMath.sqrt(1.0 - a * a - b * b);
                 x[n] = a;  y[n] = b;  z[n] = c;  w[n] = v; n++;
                 x[n] = -a; y[n] = b;  z[n] = c;  w[n] = v; n++;
                 x[n] = a;  y[n] = -b; z[n] = c;  w[n] = v; n++;
@@ -395,11 +391,17 @@ public class LebedevQuadrature {
                 break;
             }
             default:
-                throw new IllegalArgumentException("GEN_OH - Illegal value of code: " + code);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.GEN_OH_ILLEGAL_CODE, code);
         }
         return num;
     }
-
+    /**
+     * Computes the 6 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0006(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         final double a = 0.0;
@@ -408,6 +410,13 @@ public class LebedevQuadrature {
         n += genOh(1, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 14 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0014(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         final double a = 0.0;
@@ -419,6 +428,13 @@ public class LebedevQuadrature {
         n += genOh(3, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 26 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0026(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         final double a = 0.0;
@@ -432,6 +448,13 @@ public class LebedevQuadrature {
         n += genOh(3, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 38 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0038(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -446,6 +469,13 @@ public class LebedevQuadrature {
         n += genOh(5, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 50 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0050(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -462,6 +492,13 @@ public class LebedevQuadrature {
         n += genOh(4, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 74 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0074(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -481,6 +518,13 @@ public class LebedevQuadrature {
         n += genOh(5, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 86 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0086(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -501,6 +545,13 @@ public class LebedevQuadrature {
         n += genOh(5, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 110 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0110(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -524,6 +575,13 @@ public class LebedevQuadrature {
         n += genOh(5, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 146 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0146(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -550,6 +608,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 170 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0170(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -579,6 +644,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 194 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0194(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -611,6 +683,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 230 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0230(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -647,6 +726,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 266 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0266(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -686,6 +772,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 302 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0302(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -729,6 +822,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 350 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0350(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -776,6 +876,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 434 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0434(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -832,6 +939,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 590 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0590(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -903,6 +1017,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 770 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0770(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -991,6 +1112,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 974 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld0974(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -1098,6 +1226,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 1202 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld1202(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -1226,6 +1361,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 1454 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld1454(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -1377,6 +1519,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 1730 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld1730(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -1553,6 +1702,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 2030 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld2030(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -1756,6 +1912,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 2354 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld2354(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -1988,6 +2151,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 2702 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld2702(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -2251,6 +2421,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 3074 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld3074(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -2547,6 +2724,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 3470 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld3470(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -2878,6 +3062,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 3890 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld3890(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -3246,6 +3437,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 4334 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld4334(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -3653,6 +3851,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 4802 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld4802(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -4101,6 +4306,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 5294 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld5294(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
@@ -4592,6 +4804,13 @@ public class LebedevQuadrature {
         n += genOh(6, a, b, v, x, y, z, w, n);
     }
 
+    /**
+     * Computes the 5810 point Lebedev angular grid.
+     * @param x the x coordinates of the points
+     * @param y the y coordinates of the points
+     * @param z the z coordinates of the points
+     * @param w the weights of the points.
+     */
     private static void ld5810(final double[] x, final double[] y, final double[] z, final double[] w) {
         int n = 0;
         double a = 0.0;
