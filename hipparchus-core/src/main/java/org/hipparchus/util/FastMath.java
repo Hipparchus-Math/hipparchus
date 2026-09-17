@@ -2588,18 +2588,13 @@ public class FastMath {
             quadrant ^= 2;  // Flip bit 1
         }
 
-        switch (quadrant) {
-            case 0:
-                return sinQ(xa, xb);
-            case 1:
-                return cosQ(xa, xb);
-            case 2:
-                return -sinQ(xa, xb);
-            case 3:
-                return -cosQ(xa, xb);
-            default:
-                return Double.NaN;
-        }
+        return switch (quadrant) {
+            case 0 -> sinQ(xa, xb);
+            case 1 -> cosQ(xa, xb);
+            case 2 -> -sinQ(xa, xb);
+            case 3 -> -cosQ(xa, xb);
+            default -> Double.NaN;
+        };
     }
 
     /**
@@ -2642,18 +2637,13 @@ public class FastMath {
         //if (negative)
         //  quadrant = (quadrant + 2) % 4;
 
-        switch (quadrant) {
-            case 0:
-                return cosQ(xa, xb);
-            case 1:
-                return -sinQ(xa, xb);
-            case 2:
-                return -cosQ(xa, xb);
-            case 3:
-                return sinQ(xa, xb);
-            default:
-                return Double.NaN;
-        }
+        return switch (quadrant) {
+            case 0 -> cosQ(xa, xb);
+            case 1 -> -sinQ(xa, xb);
+            case 2 -> -cosQ(xa, xb);
+            case 3 -> sinQ(xa, xb);
+            default -> Double.NaN;
+        };
     }
 
     /**
@@ -2705,18 +2695,13 @@ public class FastMath {
             xb = cw.getRemB();
         }
 
-        switch (quadrant) {
-            case 0:
-                return new SinCos(negative ? -sinQ(xa, xb) :  sinQ(xa, xb),  cosQ(xa, xb));
-            case 1:
-                return new SinCos(negative ? -cosQ(xa, xb) :  cosQ(xa, xb), -sinQ(xa, xb));
-            case 2:
-                return new SinCos(negative ?  sinQ(xa, xb) : -sinQ(xa, xb), -cosQ(xa, xb));
-            case 3:
-                return new SinCos(negative ?  cosQ(xa, xb) : -cosQ(xa, xb),  sinQ(xa, xb));
-            default:
-                return new SinCos(Double.NaN, Double.NaN);
-        }
+        return switch (quadrant) {
+            case 0 -> new SinCos(negative ? -sinQ(xa, xb) :  sinQ(xa, xb),  cosQ(xa, xb));
+            case 1 -> new SinCos(negative ? -cosQ(xa, xb) :  cosQ(xa, xb), -sinQ(xa, xb));
+            case 2 -> new SinCos(negative ?  sinQ(xa, xb) : -sinQ(xa, xb), -cosQ(xa, xb));
+            case 3 -> new SinCos(negative ?  cosQ(xa, xb) : -cosQ(xa, xb),  sinQ(xa, xb));
+            default -> new SinCos(Double.NaN, Double.NaN);
+        };
     }
 
     /**
