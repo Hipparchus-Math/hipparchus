@@ -890,7 +890,7 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>1.8.0</version>
+                  <version>21.0.0</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
