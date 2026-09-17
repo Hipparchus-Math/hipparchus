@@ -55,14 +55,13 @@ import org.hipparchus.util.MathUtils;
  * 131st algebraic order of accuracy", Russian Academy of Sciences Doklady Mathematics, Volume 59,
  * Number 3, 1999, pages 477-481.</p>
  *
- * @author Vyacheslav Lebedev and Dmitri Laikov (original algorithm and tables)
- * @author Nicolas Kaikati (Java implementation)
+ * Original algorithm and tables: Vyacheslav Lebedev and Dmitri Laikov
  * @since 4.1
  */
 public class LebedevQuadrature {
 
     /** Orders (number of points) available in this implementation, in increasing order. */
-    public static final int[] AVAILABLE_ORDERS = {
+    static final int[] AVAILABLE_ORDERS = {
         6, 14, 26, 38, 50, 74, 86, 110, 146, 170, 194, 230, 266, 302, 350, 434, 590, 770, 974,
         1202, 1454, 1730, 2030, 2354, 2702, 3074, 3470, 3890, 4334, 4802, 5294, 5810
     };
@@ -407,7 +406,7 @@ public class LebedevQuadrature {
         final double a = 0.0;
         final double b = 0.0;
         final double v = 0.1666666666666667;
-        n += genOh(1, a, b, v, x, y, z, w, n);
+        genOh(1, a, b, v, x, y, z, w, n);
     }
 
     /**
@@ -425,7 +424,7 @@ public class LebedevQuadrature {
         v = 0.6666666666666667e-1;
         n += genOh(1, a, b, v, x, y, z, w, n);
         v = 0.7500000000000000e-1;
-        n += genOh(3, a, b, v, x, y, z, w, n);
+        genOh(3, a, b, v, x, y, z, w, n);
     }
 
     /**
