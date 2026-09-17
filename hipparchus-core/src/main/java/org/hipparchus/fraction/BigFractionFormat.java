@@ -172,15 +172,12 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
                                final StringBuffer toAppendTo, final FieldPosition pos) {
 
         final StringBuffer ret;
-        if (obj instanceof BigFraction fraction) {
-            ret = format(fraction, toAppendTo, pos);
-        } else if (obj instanceof BigInteger integer) {
-            ret = format(new BigFraction(integer), toAppendTo, pos);
-        } else if (obj instanceof Number number) {
-            ret = format(new BigFraction(number.doubleValue()),
-                         toAppendTo, pos);
-        } else {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
+        switch (obj) {
+            case BigFraction fraction -> ret = format(fraction, toAppendTo, pos);
+            case BigInteger integer -> ret = format(new BigFraction(integer), toAppendTo, pos);
+            case Number number -> ret = format(new BigFraction(number.doubleValue()),
+                    toAppendTo, pos);
+            case null, default -> throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
         }
 
         return ret;
