@@ -215,45 +215,28 @@ public class DfpDec extends Dfp {
 
         mant[lsd] = lsb / lsbthreshold * lsbthreshold;
 
-        final boolean inc;
-        switch (getField().getRoundingMode()) {
-            case ROUND_DOWN:
-                inc = false;
-                break;
+        final boolean inc = switch (getField().getRoundingMode()) {
+            case ROUND_DOWN: yield false;
 
-            case ROUND_UP:
-                inc = (n != 0) || (discarded != 0); // round up if n!=0
-                break;
+            case ROUND_UP: yield (n != 0) || (discarded != 0);
 
-            case ROUND_HALF_UP:
-                inc = n >= 5;  // round half up
-                break;
+            case ROUND_HALF_UP: yield n >= 5;
 
-            case ROUND_HALF_DOWN:
-                inc = n > 5;  // round half down
-                break;
+            case ROUND_HALF_DOWN: yield n > 5;
 
-            case ROUND_HALF_EVEN:
-                inc = (n > 5) ||
+            case ROUND_HALF_EVEN: yield (n > 5) ||
                       (n == 5 && discarded != 0) ||
-                      (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 1);  // round half-even
-                break;
+                      (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 1);
 
-            case ROUND_HALF_ODD:
-                inc = (n > 5) ||
+            case ROUND_HALF_ODD: yield (n > 5) ||
                       (n == 5 && discarded != 0) ||
-                      (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 0);  // round half-odd
-                break;
+                      (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 0);
 
-            case ROUND_CEIL:
-                inc = (sign == 1) && (n != 0 || discarded != 0);  // round ceil
-                break;
+            case ROUND_CEIL: yield (sign == 1) && (n != 0 || discarded != 0);
 
             case ROUND_FLOOR:
-            default:
-                inc = (sign == -1) && (n != 0 || discarded != 0);  // round floor
-                break;
-        }
+            default: yield (sign == -1) && (n != 0 || discarded != 0);
+        };
 
         if (inc) {
             // increment if necessary
