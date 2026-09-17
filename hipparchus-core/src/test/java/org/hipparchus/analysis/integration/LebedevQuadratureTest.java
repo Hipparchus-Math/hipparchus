@@ -16,11 +16,16 @@
  */
 package org.hipparchus.analysis.integration;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Test;
 
 public class LebedevQuadratureTest {
 
@@ -43,4 +48,44 @@ public class LebedevQuadratureTest {
             assertTrue(maxNormErr < 1e-9, "points not on unit sphere for order " + order);
         }
     }
+
+    @Test
+    void testUnsupportedQuadratureOrder() {
+        // GIVEN
+        int unsupportedOrder = 5811;
+
+        // WHEN
+        MathIllegalArgumentException e = assertThrows(
+                MathIllegalArgumentException.class,
+                () -> LebedevQuadrature.getRule(unsupportedOrder));
+
+        // THEN
+        assertEquals(
+                LocalizedCoreFormats.UNSUPPORTED_QUADRATURE_ORDER,
+                e.getSpecifier());
+
+        Object[] parts = e.getParts();
+        assertEquals(unsupportedOrder, parts[0]);
+        assertEquals(Arrays.toString(LebedevQuadrature.AVAILABLE_ORDERS), parts[1]);
+    }
+
+    @Test
+    void testUnsupportedQuadratureSymmetryCode() {
+        // GIVEN
+        final int unsupportedCode = 7;
+
+        // WHEN
+        MathIllegalArgumentException e = assertThrows(
+                MathIllegalArgumentException.class,
+                () -> LebedevQuadrature.genOh(unsupportedCode, 0, 0, 0, null, null, null, null, 0));
+
+        // THEN
+        assertEquals(
+                LocalizedCoreFormats.GEN_OH_ILLEGAL_CODE,
+                e.getSpecifier());
+
+        Object[] parts = e.getParts();
+        assertEquals(unsupportedCode, parts[0]);
+    }
+
 }

@@ -102,7 +102,7 @@ public class LebedevQuadrature {
          * @return x coordinates of the unit-sphere points.
          */
         public double[] getX() {
-            return x;
+            return x.clone();
         }
 
         /**
@@ -110,7 +110,7 @@ public class LebedevQuadrature {
          * @return y coordinates of the unit-sphere points.
          */
         public double[] getY() {
-            return y;
+            return y.clone();
         }
 
         /**
@@ -118,7 +118,7 @@ public class LebedevQuadrature {
          * @return z coordinates of the unit-sphere points.
          */
         public double[] getZ() {
-            return z;
+            return z.clone();
         }
 
         /**
@@ -126,7 +126,7 @@ public class LebedevQuadrature {
          * @return weights of the points (sum to 1).
          */
         public double[] getW() {
-            return w;
+            return w.clone();
         }
     }
 
@@ -229,7 +229,7 @@ public class LebedevQuadrature {
      * @param start index to start writing points at
      * @return the number of points generated
      */
-    private static int genOh(final int code, final double aIn, final double bIn, final double v,
+    public static int genOh(final int code, final double aIn, final double bIn, final double v,
                               final double[] x, final double[] y, final double[] z, final double[] w,
                               final int start) {
         double a = aIn;
