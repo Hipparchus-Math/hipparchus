@@ -522,8 +522,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
+    <hipparchus.compiler.release>21</hipparchus.compiler.release>
 
     <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
     <hipparchusParentDir>${basedir}</hipparchusParentDir>
@@ -606,7 +605,7 @@
           <configuration>
             <compilerArgument>-Xlint:deprecation</compilerArgument>
             <compilerArgument>-Xlint:unchecked</compilerArgument>
-            <release>21</release>
+            <release>${hipparchus.compiler.release}</release>
           </configuration>
         </plugin>
         <plugin>
@@ -617,8 +616,8 @@
             <archive>
               <manifestFile>${project.build.directory}/osgi/MANIFEST.MF</manifestFile>
               <manifestEntries>
-                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
-                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+                <X-Compile-Source-JDK>${hipparchus.compiler.release}</X-Compile-Source-JDK>
+                <X-Compile-Target-JDK>${hipparchus.compiler.release}</X-Compile-Target-JDK>
               </manifestEntries>
             </archive>
           </configuration>
@@ -811,7 +810,7 @@
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${hipparchus.maven-pmd-plugin.version}</version>
           <configuration>
-            <targetJdk>${maven.compiler.target}</targetJdk>
+            <targetJdk>${hipparchus.compiler.release}</targetJdk>
             <skipEmptyReport>false</skipEmptyReport>
             <renderSuppressedViolations>false</renderSuppressedViolations>
             <rulesets>
