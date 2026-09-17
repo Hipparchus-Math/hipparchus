@@ -522,8 +522,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
 
     <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
     <hipparchusParentDir>${basedir}</hipparchusParentDir>
@@ -606,7 +606,7 @@
           <configuration>
             <compilerArgument>-Xlint:deprecation</compilerArgument>
             <compilerArgument>-Xlint:unchecked</compilerArgument>
-            <release>17</release>
+            <release>21</release>
           </configuration>
         </plugin>
         <plugin>
