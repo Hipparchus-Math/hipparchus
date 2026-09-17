@@ -366,7 +366,7 @@ class PolygonsSetTest {
         SubLine s2 = set.intersection(l2.wholeHyperplane());
         List<Interval> i2 = ((IntervalsSet) s2.getRemainingRegion()).asList();
         assertEquals(1, i2.size());
-        Interval v20 = i2.get(0);
+        Interval v20 = i2.getFirst();
         Vector2D p20Lower = l2.toSpace(new Vector1D(v20.getInf()));
         assertEquals(1.0, p20Lower.getX(), 1.0e-10);
         assertEquals(2.0, p20Lower.getY(), 1.0e-10);

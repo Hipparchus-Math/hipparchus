@@ -140,7 +140,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
         final int k = initialMixture.getComponents().size();
 
         final int numMeanColumns
-            = initialMixture.getComponents().get(0).getSecond().getMeans().length;
+            = initialMixture.getComponents().getFirst().getSecond().getMeans().length;
 
         if (numMeanColumns != numCols) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,

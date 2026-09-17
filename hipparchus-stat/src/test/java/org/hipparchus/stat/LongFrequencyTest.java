@@ -266,7 +266,7 @@ final class LongFrequencyTest {
         f.addValue(3L);
         mode = f.getMode();
         assertEquals(1, mode.size());
-        assertEquals(Long.valueOf(3L), mode.get(0));
+        assertEquals(Long.valueOf(3L), mode.getFirst());
 
         f.addValue(2L);
         mode = f.getMode();
@@ -277,7 +277,7 @@ final class LongFrequencyTest {
         f.addValue(2L);
         mode = f.getMode();
         assertEquals(1, mode.size());
-        assertEquals(Long.valueOf(2L), mode.get(0));
+        assertEquals(Long.valueOf(2L), mode.getFirst());
         assertFalse(mode.contains(1L));
         assertTrue(mode.contains(2L));
     }

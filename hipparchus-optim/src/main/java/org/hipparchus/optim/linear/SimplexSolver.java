@@ -310,7 +310,7 @@ public class SimplexSolver extends LinearOptimizer {
             }
             return minRow;
         }
-        return minRatioPositions.get(0);
+        return minRatioPositions.getFirst();
     }
 
     /**

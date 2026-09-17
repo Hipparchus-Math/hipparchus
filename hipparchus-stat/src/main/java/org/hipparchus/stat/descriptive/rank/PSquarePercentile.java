@@ -300,7 +300,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         if (markers != null) {
             val = markers.height(PSQUARE_CONSTANT);
         } else if (!initialFive.isEmpty()) {
-            val = initialFive.get(initialFive.size() - 1);
+            val = initialFive.getLast();
         }
         return val;
     }
@@ -313,7 +313,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         if (markers != null) {
             val = markers.height(1);
         } else if (!initialFive.isEmpty()) {
-            val = initialFive.get(0);
+            val = initialFive.getFirst();
         }
         return val;
     }

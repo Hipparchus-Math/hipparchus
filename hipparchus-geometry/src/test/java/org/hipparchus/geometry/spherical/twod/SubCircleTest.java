@@ -83,26 +83,26 @@ class SubCircleTest {
         ArcsSet plus1  = (ArcsSet) split1.getPlus().getRemainingRegion();
         ArcsSet minus1 = (ArcsSet) split1.getMinus().getRemainingRegion();
         assertEquals(1, plus1.asList().size());
-        assertEquals(5.0, plus1.asList().get(0).getInf(), 1.0e-10);
-        assertEquals(6.0, plus1.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(5.0, plus1.asList().getFirst().getInf(), 1.0e-10);
+        assertEquals(6.0, plus1.asList().getFirst().getSup(), 1.0e-10);
         assertEquals(1, minus1.asList().size());
-        assertEquals(1.0, minus1.asList().get(0).getInf(), 1.0e-10);
-        assertEquals(3.0, minus1.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(1.0, minus1.asList().getFirst().getInf(), 1.0e-10);
+        assertEquals(3.0, minus1.asList().getFirst().getSup(), 1.0e-10);
 
         SubCircle sc2 = create(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J, 1.0e-10, 1.0, 3.0);
         SplitSubHyperplane<Sphere2D, S2Point, Circle, SubCircle> split2 = sc2.split(xzPlane);
         assertNull(split2.getPlus());
         ArcsSet minus2 = (ArcsSet) split2.getMinus().getRemainingRegion();
         assertEquals(1, minus2.asList().size());
-        assertEquals(1.0, minus2.asList().get(0).getInf(), 1.0e-10);
-        assertEquals(3.0, minus2.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(1.0, minus2.asList().getFirst().getInf(), 1.0e-10);
+        assertEquals(3.0, minus2.asList().getFirst().getSup(), 1.0e-10);
 
         SubCircle sc3 = create(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J, 1.0e-10, 5.0, 6.0);
         SplitSubHyperplane<Sphere2D, S2Point, Circle, SubCircle> split3 = sc3.split(xzPlane);
         ArcsSet plus3  = (ArcsSet) split3.getPlus().getRemainingRegion();
         assertEquals(1, plus3.asList().size());
-        assertEquals(5.0, plus3.asList().get(0).getInf(), 1.0e-10);
-        assertEquals(6.0, plus3.asList().get(0).getSup(), 1.0e-10);
+        assertEquals(5.0, plus3.asList().getFirst().getInf(), 1.0e-10);
+        assertEquals(6.0, plus3.asList().getFirst().getSup(), 1.0e-10);
         assertNull(split3.getMinus());
 
         SubCircle sc4 = create(Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_I, 1.0e-10, 5.0, 6.0);

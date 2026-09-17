@@ -164,7 +164,7 @@ class DBSCANClustererTest {
 
         final List<DoublePoint> clusterOne =
                 Arrays.asList(points[0], points[1], points[2], points[3], points[4], points[5], points[6], points[7]);
-        assertTrue(clusters.get(0).getPoints().containsAll(clusterOne));
+        assertTrue(clusters.getFirst().getPoints().containsAll(clusterOne));
     }
 
     @Test
