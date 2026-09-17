@@ -22,6 +22,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Inverse Gamma distribution.
  *
@@ -29,6 +31,7 @@ import org.hipparchus.util.FastMath;
  */
 public class InvGammaDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20250915L;
     /** The shape parameter. */
     private final double shape;

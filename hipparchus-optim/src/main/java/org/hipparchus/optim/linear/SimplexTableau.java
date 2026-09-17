@@ -21,10 +21,7 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -70,6 +67,7 @@ class SimplexTableau implements Serializable {
     private static final String NEGATIVE_VAR_COLUMN_LABEL = "x-";
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -1369660067587938365L;
 
     /** Linear objective function. */
@@ -688,8 +686,7 @@ class SimplexTableau implements Serializable {
         return true;
       }
 
-      if (other instanceof SimplexTableau) {
-          SimplexTableau rhs = (SimplexTableau) other;
+      if (other instanceof SimplexTableau rhs) {
           return (restrictToNonNegative  == rhs.restrictToNonNegative) &&
                  (numDecisionVariables   == rhs.numDecisionVariables) &&
                  (numSlackVariables      == rhs.numSlackVariables) &&

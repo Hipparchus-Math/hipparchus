@@ -25,6 +25,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * Faster, more accurate, portable alternative to {@link Math} and
  * {@link StrictMath} for large scale computation.
@@ -1052,7 +1054,7 @@ public class FastMath {
      * @return a random number between 0.0 and 1.0
      */
     public static double random() {
-        return Math.random();
+        return ThreadLocalRandom.current().nextDouble();
     }
 
     /**

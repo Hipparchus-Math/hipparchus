@@ -522,8 +522,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
 
     <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
     <hipparchusParentDir>${basedir}</hipparchusParentDir>
@@ -538,15 +538,15 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>4.9.2.0</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.12</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>4.9.8.5</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.15</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.7.1</hipparchus.maven-assembly-plugin.version>
     <hipparchus.maven-bundle-plugin.version>5.1.9</hipparchus.maven-bundle-plugin.version>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>3.6.0</hipparchus.maven-checkstyle-plugin.version>
     <hipparchus.checkstyle.version>10.21.4</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>3.4.1</hipparchus.maven-clean-plugin.version>
-    <hipparchus.maven-compiler-plugin.version>3.14.0</hipparchus.maven-compiler-plugin.version>
+    <hipparchus.maven-compiler-plugin.version>3.16.0</hipparchus.maven-compiler-plugin.version>
     <hipparchus.maven-javadoc-plugin.version>3.11.2</hipparchus.maven-javadoc-plugin.version>
     <hipparchus.maven-jar-plugin.version>3.4.2</hipparchus.maven-jar-plugin.version>
     <hipparchus.maven-jxr-plugin.version>3.6.0</hipparchus.maven-jxr-plugin.version>
@@ -604,10 +604,9 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${hipparchus.maven-compiler-plugin.version}</version>
           <configuration>
-            <source>${maven.compiler.source}</source>
-            <target>${maven.compiler.target}</target>
             <compilerArgument>-Xlint:deprecation</compilerArgument>
             <compilerArgument>-Xlint:unchecked</compilerArgument>
+            <release>17</release>
           </configuration>
         </plugin>
         <plugin>

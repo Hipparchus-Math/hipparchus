@@ -276,7 +276,7 @@ public class SymmLQTest {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
-                final String msg = String.format("entry[%d][%d]", i, j);
+                final String msg = "entry[%d][%d]".formatted(i, j);
                 assertEquals(expected, actual, delta, msg);
             }
         }
@@ -302,7 +302,7 @@ public class SymmLQTest {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
-                final String msg = String.format("entry[%d][%d)", i, j);
+                final String msg = "entry[%d][%d)".formatted(i, j);
                 assertEquals(expected, actual, delta, msg);
             }
         }
@@ -328,7 +328,7 @@ public class SymmLQTest {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
-                final String msg = String.format("entry[%d][%d]", i, j);
+                final String msg = "entry[%d][%d]".formatted(i, j);
                 assertEquals(expected, actual, delta, msg);
                 assertEquals(1., x0.getEntry(i), Math.ulp(1.), msg);
             }
@@ -446,7 +446,7 @@ public class SymmLQTest {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
-                final String msg = String.format("coefficient (%d, %d)", i, j);
+                final String msg = "coefficient (%d, %d)".formatted(i, j);
                 assertEquals(expected, actual, delta, msg);
             }
         }
@@ -486,9 +486,9 @@ public class SymmLQTest {
             final RealVector x = unprec.solve(a, b);
             final int np = prec.getIterationManager().getIterations();
             final int nup = unprec.getIterationManager().getIterations();
-            msg = String.format(pattern, np, nup);
+            msg = pattern.formatted(np, nup);
             for (int i = 0; i < n; i++) {
-                msg = String.format("row %d, column %d", i, j);
+                msg = "row %d, column %d".formatted(i, j);
                 final double expected = x.getEntry(i);
                 final double actual = px.getEntry(i);
                 final double delta = 5E-5 * FastMath.abs(expected);
@@ -546,9 +546,9 @@ public class SymmLQTest {
             b.set(0.);
             b.setEntry(j, 1.);
             final RealVector xFromSolver = solver.solve(a, b);
-            String msg = String.format("column %d (initialization)", j);
+            String msg = "column %d (initialization)".formatted(j);
             assertEquals(1, count[0], msg);
-            msg = String.format("column %d (finalization)", j);
+            msg = "column %d (finalization)".formatted(j);
             assertEquals(1, count[3], msg);
             /*
              *  Check that solution is not "over-refined". When the last
@@ -556,7 +556,7 @@ public class SymmLQTest {
              *  performed.
              */
             for (int i = 0; i < n; i++){
-                msg = String.format("row %d, column %d", i, j);
+                msg = "row %d, column %d".formatted(i, j);
                 final double expected = xFromSolver.getEntry(i);
                 final double actual = xFromListener.getEntry(i);
                 assertEquals(expected, actual, 0.0, msg);

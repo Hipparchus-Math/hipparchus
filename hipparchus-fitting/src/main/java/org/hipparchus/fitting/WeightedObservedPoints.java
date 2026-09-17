@@ -23,6 +23,7 @@ package org.hipparchus.fitting;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -33,6 +34,7 @@ import java.io.Serializable;
 public class WeightedObservedPoints implements Serializable {
 
     /** Serializable version id. */
+    @Serial
     private static final long serialVersionUID = 20130813L;
 
     /** Observed points. */

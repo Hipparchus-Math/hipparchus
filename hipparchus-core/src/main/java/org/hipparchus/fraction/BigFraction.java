@@ -21,6 +21,7 @@
  */
 package org.hipparchus.fraction;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -93,6 +94,7 @@ public class BigFraction
     public static final BigFraction TWO_THIRDS = new BigFraction(2, 3);
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -5630213147331578515L;
 
     /** <code>BigInteger</code> representation of 100. */
@@ -752,8 +754,7 @@ public class BigFraction
 
         if (this == other) {
             ret = true;
-        } else if (other instanceof BigFraction) {
-            BigFraction rhs = (BigFraction) other;
+        } else if (other instanceof BigFraction rhs) {
             ret = numerator.equals(rhs.numerator) && denominator.equals(rhs.denominator);
         }
 

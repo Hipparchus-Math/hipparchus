@@ -21,6 +21,7 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Random;
 
@@ -35,6 +36,7 @@ import org.hipparchus.util.MathUtils;
 public class JDKRandomGenerator extends IntRandomGenerator implements Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20151227L;
 
     /** JDK's RNG. */

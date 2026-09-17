@@ -26,6 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * This class implements the Laplace distribution.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.util.MathUtils;
 public class LaplaceDistribution extends AbstractRealDistribution {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20141003L;
 
     /** The location parameter. */

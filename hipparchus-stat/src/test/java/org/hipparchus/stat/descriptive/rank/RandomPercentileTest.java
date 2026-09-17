@@ -521,8 +521,8 @@ public class RandomPercentileTest extends
             double max = FastMath.max(a, b);
             double percentage = FastMath.abs(a - b) / max;
             double deviation = delta;
-            assertTrue(percentage < deviation, String.format("Deviated = %f and is beyond %f as a=%f,  b=%f",
-                                     percentage, deviation, a, b));
+            assertTrue(percentage < deviation, "Deviated = %f and is beyond %f as a=%f,  b=%f".formatted(
+                    percentage, deviation, a, b));
         }
     }
 

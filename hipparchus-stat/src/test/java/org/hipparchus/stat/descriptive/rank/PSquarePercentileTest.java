@@ -539,8 +539,8 @@ public class PSquarePercentileTest extends
             double max = FastMath.max(a, b);
             double percentage = FastMath.abs(a - b) / max;
             double deviation = delta;
-            assertTrue(percentage < deviation, String.format("Deviated = %f and is beyond %f as a=%f,  b=%f",
-                                     percentage, deviation, a, b));
+            assertTrue(percentage < deviation, "Deviated = %f and is beyond %f as a=%f,  b=%f".formatted(
+                    percentage, deviation, a, b));
         }
     }
 
@@ -685,7 +685,7 @@ public class PSquarePercentileTest extends
         // expected = new Percentile(50).evaluate(data,0,20);
         // Well the values deviate in our calculation by 0.25 so its 4.25 vs
         // 4.44
-        assertEquals(expected, p2value, 0.25, String.format("Expected=%f, Actual=%f", expected, p2value));
+        assertEquals(expected, p2value, 0.25, "Expected=%f, Actual=%f".formatted(expected, p2value));
     }
 
     final int TINY = 10, SMALL = 50, NOMINAL = 100, MEDIUM = 500,

@@ -23,6 +23,7 @@ package org.hipparchus.stat.descriptive.rank;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
     private static final double DEFAULT_QUANTILE_DESIRED = 50d;
 
     /** Serial ID */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** A decimal formatter for print convenience */
@@ -175,8 +177,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         boolean result = false;
         if (this == o) {
             result = true;
-        } else if (o instanceof PSquarePercentile) {
-            PSquarePercentile that = (PSquarePercentile) o;
+        } else if (o instanceof PSquarePercentile that) {
             boolean isNotNull = markers != null && that.markers != null;
             boolean isNull = markers == null && that.markers == null;
             result = isNotNull ? markers.equals(that.markers) : isNull;
@@ -227,12 +228,12 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         synchronized (this) {
             synchronized (DECIMAL_FORMAT) {
                 if (markers == null) {
-                    return String.format("obs=%s pValue=%s",
-                                         DECIMAL_FORMAT.format(lastObservation),
-                                         DECIMAL_FORMAT.format(pValue));
+                    return "obs=%s pValue=%s".formatted(
+                            DECIMAL_FORMAT.format(lastObservation),
+                            DECIMAL_FORMAT.format(pValue));
                 } else {
-                    return String.format("obs=%s markers=%s",
-                                         DECIMAL_FORMAT.format(lastObservation), markers.toString());
+                    return "obs=%s markers=%s".formatted(
+                            DECIMAL_FORMAT.format(lastObservation), markers.toString());
                 }
             }
         }
@@ -325,6 +326,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         /**
          * Serial version id
          */
+        @Serial
         private static final long serialVersionUID = 1L;
 
         /** Low marker index */
@@ -416,8 +418,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
             boolean result = false;
             if (this == o) {
                 result = true;
-            } else if (o instanceof Markers) {
-                Markers that = (Markers) o;
+            } else if (o instanceof Markers that) {
                 result = Arrays.deepEquals(markerArray, that.markerArray);
             }
             return result;
@@ -578,7 +579,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          */
         @Override
         public String toString() {
-            return String.format("m1=[%s],m2=[%s],m3=[%s],m4=[%s],m5=[%s]",
+            return "m1=[%s],m2=[%s],m3=[%s],m4=[%s],m5=[%s]".formatted(
                     markerArray[1].toString(), markerArray[2].toString(),
                     markerArray[3].toString(), markerArray[4].toString(),
                     markerArray[5].toString());
@@ -594,6 +595,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         /**
          * Serial Version ID
          */
+        @Serial
         private static final long serialVersionUID = -3575879478288538431L;
 
         /**
@@ -794,8 +796,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
             boolean result = false;
             if (this == o) {
                 result = true;
-            } else if (o instanceof Marker) {
-                Marker that = (Marker) o;
+            } else if (o instanceof Marker that) {
 
                 result = Double.compare(markerHeight, that.markerHeight) == 0;
                 result =
@@ -850,8 +851,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          */
         @Override
         public String toString() {
-            return String.format(
-                    "index=%.0f,n=%.0f,np=%.2f,q=%.2f,dn=%.2f,prev=%d,next=%d",
+            return "index=%.0f,n=%.0f,np=%.2f,q=%.2f,dn=%.2f,prev=%d,next=%d".formatted(
                     (double) index, Precision.round(intMarkerPosition, 0),
                     Precision.round(desiredMarkerPosition, 2),
                     Precision.round(markerHeight, 2),
@@ -872,6 +872,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         /**
          * Serialization Version Id
          */
+        @Serial
         private static final long serialVersionUID = 2283952083075725479L;
         /**
          * Capacity of the list

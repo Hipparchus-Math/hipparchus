@@ -21,6 +21,7 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.util.FastMath;
@@ -91,6 +92,7 @@ import org.hipparchus.util.FastMath;
 public class MersenneTwister extends IntRandomGenerator implements Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160529L;
 
     /** Size of the bytes pool. */

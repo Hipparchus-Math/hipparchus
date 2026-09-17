@@ -342,8 +342,8 @@ class FieldDerivativeTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj instanceof TestFieldDerivative) {
-                return value.equals(((TestFieldDerivative) obj).value);
+            if (obj instanceof TestFieldDerivative derivative) {
+                return value.equals(derivative.value);
             } else {
                 return false;
             }

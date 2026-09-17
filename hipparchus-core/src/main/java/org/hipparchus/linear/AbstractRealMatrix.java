@@ -691,8 +691,8 @@ public abstract class AbstractRealMatrix
     @Override
     public RealVector operate(final RealVector v)
         throws MathIllegalArgumentException {
-        if (v instanceof ArrayRealVector) {
-            return new ArrayRealVector(operate(((ArrayRealVector) v).getDataRef()), false);
+        if (v instanceof ArrayRealVector vector) {
+            return new ArrayRealVector(operate(vector.getDataRef()), false);
         } else {
             final int nRows = getRowDimension();
             final int nCols = getColumnDimension();
@@ -740,8 +740,8 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public RealVector preMultiply(final RealVector v) throws MathIllegalArgumentException {
-        if (v instanceof ArrayRealVector) {
-            return new ArrayRealVector(preMultiply(((ArrayRealVector) v).getDataRef()), false);
+        if (v instanceof ArrayRealVector vector) {
+            return new ArrayRealVector(preMultiply(vector.getDataRef()), false);
         } else {
 
             final int nRows = getRowDimension();

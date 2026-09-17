@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.util.FastMath;
@@ -35,6 +36,7 @@ public class StatisticalSummaryValues
     implements Serializable, StatisticalSummary {
 
     /** Serialization id */
+    @Serial
     private static final long serialVersionUID = 20160406L;
 
     /** The sample mean */

@@ -218,12 +218,12 @@ public abstract class BaseOptimizer<P> {
         // The existing values (as set by the previous call) are reused if
         // not provided in the argument list.
         for (OptimizationData data : optData) {
-            if (data instanceof MaxEval) {
-                evaluations = evaluations.withMaximalCount(((MaxEval) data).getMaxEval());
+            if (data instanceof MaxEval eval) {
+                evaluations = evaluations.withMaximalCount(eval.getMaxEval());
                 continue;
             }
-            if (data instanceof MaxIter) {
-                iterations = iterations.withMaximalCount(((MaxIter) data).getMaxIter());
+            if (data instanceof MaxIter iter) {
+                iterations = iterations.withMaximalCount(iter.getMaxIter());
                 continue;
             }
         }

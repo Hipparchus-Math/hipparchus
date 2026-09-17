@@ -127,20 +127,20 @@ public class QPDualActiveSolver extends QPOptimizer {
 
 
         for (OptimizationData data : optData) {
-            if (data instanceof ObjectiveFunction) {
-                function = (QuadraticFunction) ((ObjectiveFunction) data).getObjectiveFunction();
-            } else if (data instanceof LinearEqualityConstraint) {
-                eqConstraints = (LinearEqualityConstraint) data;
-            } else if (data instanceof LinearInequalityConstraint) {
-                iqConstraints = (LinearInequalityConstraint) data;
-            } else if (data instanceof LinearBoundedConstraint) {
-                bConstraints = (LinearBoundedConstraint) data;
-            } else if (data instanceof MatrixDecompositionTolerance) {
-                matrixDecompositionTolerance = (MatrixDecompositionTolerance) data;
+            if (data instanceof ObjectiveFunction objectiveFunction) {
+                function = (QuadraticFunction) objectiveFunction.getObjectiveFunction();
+            } else if (data instanceof LinearEqualityConstraint constraint2) {
+                eqConstraints = constraint2;
+            } else if (data instanceof LinearInequalityConstraint constraint1) {
+                iqConstraints = constraint1;
+            } else if (data instanceof LinearBoundedConstraint constraint) {
+                bConstraints = constraint;
+            } else if (data instanceof MatrixDecompositionTolerance tolerance) {
+                matrixDecompositionTolerance = tolerance;
             }
-              else if(data instanceof QPDualActiveSolverOption)
+              else if(data instanceof QPDualActiveSolverOption option)
             {
-               settings = (QPDualActiveSolverOption) data;
+               settings = option;
             }
         }
     }

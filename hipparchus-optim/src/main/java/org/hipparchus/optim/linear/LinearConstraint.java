@@ -21,10 +21,7 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
@@ -50,6 +47,7 @@ import org.hipparchus.linear.RealVector;
  */
 public class LinearConstraint implements Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -764632794033034092L;
     /** Coefficients of the constraint (left hand side). */
     private final transient RealVector coefficients;
@@ -183,8 +181,7 @@ public class LinearConstraint implements Serializable {
         if (this == other) {
             return true;
         }
-        if (other instanceof LinearConstraint) {
-            LinearConstraint rhs = (LinearConstraint) other;
+        if (other instanceof LinearConstraint rhs) {
             return relationship == rhs.relationship &&
                 value == rhs.value &&
                 coefficients.equals(rhs.coefficients);

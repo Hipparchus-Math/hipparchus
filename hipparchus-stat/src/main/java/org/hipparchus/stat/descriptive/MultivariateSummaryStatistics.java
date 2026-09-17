@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -62,6 +63,7 @@ public class MultivariateSummaryStatistics
     implements StatisticalMultivariateSummary, Serializable {
 
     /** Serialization UID */
+    @Serial
     private static final long serialVersionUID = 20160424L;
 
     /** Dimension of the data. */

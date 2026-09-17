@@ -1065,8 +1065,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     @Override
     public boolean equals(final Object other) {
 
-        if (other instanceof Dfp) {
-            final Dfp x = (Dfp) other;
+        if (other instanceof Dfp x) {
             if (isNaN() || x.isNaN() || field.getRadixDigits() != x.field.getRadixDigits()) {
                 return false;
             }

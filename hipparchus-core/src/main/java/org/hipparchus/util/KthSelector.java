@@ -21,6 +21,7 @@
  */
 package org.hipparchus.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -35,6 +36,7 @@ import org.hipparchus.exception.NullArgumentException;
 public class KthSelector implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20140713L;
 
     /** Minimum selection size for insertion sort rather than selection. */

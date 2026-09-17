@@ -16,6 +16,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -30,6 +31,7 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
     implements Derivative<T>, Serializable, Comparable<T> {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20200519L;
 
     /** Empty constructor.

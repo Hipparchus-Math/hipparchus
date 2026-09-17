@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.complex.Complex;
@@ -33,6 +34,7 @@ import org.hipparchus.complex.Complex;
 public class ComplexODEState implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20180902;
 
     /** Time. */

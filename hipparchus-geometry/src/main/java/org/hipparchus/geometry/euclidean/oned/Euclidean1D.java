@@ -22,6 +22,7 @@
 
 package org.hipparchus.geometry.euclidean.oned;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathRuntimeException;
@@ -34,6 +35,7 @@ import org.hipparchus.geometry.Space;
 public class Euclidean1D implements Serializable, Space {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -1178039568877797126L;
 
     /** Private constructor for the singleton.
@@ -93,6 +95,7 @@ public class Euclidean1D implements Serializable, Space {
     public static class NoSubSpaceException extends MathRuntimeException {
 
         /** Serializable UID. */
+        @Serial
         private static final long serialVersionUID = 20140225L;
 
         /** Simple constructor.

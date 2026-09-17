@@ -27,6 +27,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /** This abstract class represents an interpolator over the last step
  * during an ODE integration.
  *
@@ -43,6 +45,7 @@ public abstract class AbstractODEStateInterpolator
     implements ODEStateInterpolator {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Global previous state. */
