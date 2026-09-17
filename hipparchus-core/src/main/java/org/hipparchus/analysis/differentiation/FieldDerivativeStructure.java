@@ -1353,8 +1353,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
             return true;
         }
 
-        if (other instanceof FieldDerivativeStructure &&
-            ((FieldDerivativeStructure<?>) other).getField().equals(getField())) {
+        if (other instanceof FieldDerivativeStructure<?> structure &&
+            structure.getField().equals(getField())) {
             final FieldDerivativeStructure<T> rhs = (FieldDerivativeStructure<T>) other;
             return (getFreeParameters() == rhs.getFreeParameters()) &&
                    (getOrder() == rhs.getOrder()) &&

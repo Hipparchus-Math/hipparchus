@@ -16,6 +16,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.CalculusFieldElement;
@@ -33,6 +34,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 public class BilinearInterpolatingFunction implements BivariateFunction, FieldBivariateFunction, Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20180926L;
 
     /** Grid along the x axis. */

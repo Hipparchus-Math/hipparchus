@@ -21,6 +21,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -68,6 +69,7 @@ import org.hipparchus.util.MathUtils;
 public class DerivativeStructure implements Derivative<DerivativeStructure>, Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20161220L;
 
     /** Factory that built the instance. */
@@ -1133,8 +1135,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
             return true;
         }
 
-        if (other instanceof DerivativeStructure) {
-            final DerivativeStructure rhs = (DerivativeStructure)other;
+        if (other instanceof DerivativeStructure rhs) {
             return (getFreeParameters() == rhs.getFreeParameters()) &&
                    (getOrder() == rhs.getOrder()) &&
                    MathArrays.equals(data, rhs.data);

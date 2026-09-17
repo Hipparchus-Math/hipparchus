@@ -131,8 +131,8 @@ public class VariationalEquation {
 
         // safety checks
         final OrdinaryDifferentialEquation ode;
-        if (jode instanceof ParameterJacobianWrapper) {
-            ode = ((ParameterJacobianWrapper) jode).getODE();
+        if (jode instanceof ParameterJacobianWrapper wrapper) {
+            ode = wrapper.getODE();
         } else {
             ode = jode;
         }

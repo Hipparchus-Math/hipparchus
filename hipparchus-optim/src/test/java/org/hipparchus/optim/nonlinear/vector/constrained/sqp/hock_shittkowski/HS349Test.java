@@ -330,8 +330,8 @@ public class HS349Test {
         final double tolerance = 1.0e-5 * (Math.abs(fExpected) + 1.0);
         
         // Verifica se la soluzione è vicina o migliore del minimo atteso.
-        assertTrue(f <= fExpected + tolerance, 
-                   String.format("Objective value mismatch/worse than expected. Expected: %.10f, Actual: %.10f", fExpected, f));
+        assertTrue(f <= fExpected + tolerance,
+                "Objective value mismatch/worse than expected. Expected: %.10f, Actual: %.10f".formatted(fExpected, f));
         
         // Verifica se le variabili sono vicine ai valori ottimali attesi (XEX)
         

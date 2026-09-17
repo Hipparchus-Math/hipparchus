@@ -21,6 +21,7 @@
  */
 package org.hipparchus.transform;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.analysis.FunctionUtils;
@@ -55,6 +56,7 @@ import org.hipparchus.util.MathUtils;
 public class FastFourierTransformer implements Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20120210L;
 
     /**

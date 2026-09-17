@@ -21,6 +21,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.ClassicalRungeKuttaIntegrator;
 
+import java.io.Serial;
+
 /**
  * This class implements a step interpolator for the classical fourth
  * order Runge-Kutta integrator.
@@ -55,6 +57,7 @@ import org.hipparchus.ode.nonstiff.ClassicalRungeKuttaIntegrator;
 public class ClassicalRungeKuttaStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Simple constructor.

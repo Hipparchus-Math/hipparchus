@@ -27,6 +27,8 @@ import org.hipparchus.special.Beta;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implements the Beta distribution.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.util.FastMath;
  */
 public class BetaDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** First shape parameter. */
     private final double alpha;

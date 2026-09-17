@@ -56,7 +56,7 @@ public class DenseOutputModelTest {
     void testBoundaries() throws MathIllegalArgumentException, MathIllegalStateException {
         integ.addStepHandler(new DenseOutputModel());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
-        DenseOutputModel dom = (DenseOutputModel) integ.getStepHandlers().iterator().next();
+        DenseOutputModel dom = (DenseOutputModel) integ.getStepHandlers().getFirst();
         double tBefore = 2.0 * pb.getInitialTime() - pb.getFinalTime();
         assertEquals(tBefore, dom.getInterpolatedState(tBefore).getTime(), 1.0e-10);
         double tAfter = 2.0 * pb.getFinalTime() - pb.getInitialTime();

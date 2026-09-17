@@ -21,10 +21,7 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.linear.ArrayRealVector;
@@ -48,6 +45,7 @@ public class LinearObjectiveFunction
                OptimizationData,
                Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -4531815507568396090L;
     /** Coefficients of the linear equation (c<sub>i</sub>). */
     private final transient RealVector coefficients;
@@ -116,8 +114,7 @@ public class LinearObjectiveFunction
         if (this == other) {
             return true;
         }
-        if (other instanceof LinearObjectiveFunction) {
-            LinearObjectiveFunction rhs = (LinearObjectiveFunction) other;
+        if (other instanceof LinearObjectiveFunction rhs) {
           return (constantTerm == rhs.constantTerm) && coefficients.equals(rhs.coefficients);
         }
 

@@ -155,7 +155,7 @@ class RootsOfUnityTest {
         final double tol = 10 * Math.ulp(1.0);
         for (int k = 0; k < n; k++) {
             final double t = 2.0 * FastMath.PI * k / n;
-            final String msg = String.format("n = %d, k = %d", n, k);
+            final String msg = "n = %d, k = %d".formatted(n, k);
             assertEquals(FastMath.cos(t), roots.getReal(k), tol, msg);
             assertEquals(FastMath.sin(t), roots.getImaginary(k), tol, msg);
         }

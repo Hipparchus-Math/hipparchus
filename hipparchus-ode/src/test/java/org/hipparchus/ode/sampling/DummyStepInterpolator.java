@@ -25,6 +25,8 @@ package org.hipparchus.ode.sampling;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 
+import java.io.Serial;
+
 /** This class is a step interpolator that does nothing.
  *
  * <p>This class is used when the {@link ODEStepHandler "step handler"}
@@ -40,6 +42,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 public class DummyStepInterpolator extends AbstractODEStateInterpolator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160402L;
 
     /** Simple constructor.

@@ -21,6 +21,8 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serial;
+
 /**
  * This class implements the WELL1024a pseudo-random number generator
  * from Fran&ccedil;ois Panneton, Pierre L'Ecuyer and Makoto Matsumoto.
@@ -38,6 +40,7 @@ package org.hipparchus.random;
 public class Well1024a extends AbstractWell {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20150223L;
 
     /** Number of bits in the pool. */

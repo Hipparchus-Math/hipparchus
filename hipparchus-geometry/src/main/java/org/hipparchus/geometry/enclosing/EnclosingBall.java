@@ -21,6 +21,7 @@
  */
 package org.hipparchus.geometry.enclosing;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.geometry.Point;
@@ -36,6 +37,7 @@ import org.hipparchus.geometry.Space;
 public class EnclosingBall<S extends Space, P extends Point<S, P>> implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20140126L;
 
     /** Center of the ball. */

@@ -22,6 +22,7 @@
 
 package org.hipparchus.fraction;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -36,6 +37,7 @@ import org.hipparchus.Field;
 public class FractionField implements Field<Fraction>, Serializable  {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = -1257768487499119313L;
 
     /** Private constructor for the singleton.

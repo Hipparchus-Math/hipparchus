@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.NullArgumentException;
@@ -54,6 +55,7 @@ public class SecondMoment extends FirstMoment
     implements AggregatableStatistic<SecondMoment>, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** Second moment of values that have been added */

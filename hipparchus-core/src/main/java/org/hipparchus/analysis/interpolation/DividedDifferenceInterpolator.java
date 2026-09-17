@@ -21,6 +21,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunctionLagrangeForm;
@@ -41,6 +42,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 public class DividedDifferenceInterpolator
     implements UnivariateInterpolator, Serializable {
     /** serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 107049519551235069L;
 
     /** Empty constructor.

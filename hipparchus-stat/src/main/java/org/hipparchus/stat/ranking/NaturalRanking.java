@@ -333,7 +333,7 @@ public class NaturalRanking implements RankingAlgorithm {
     private void resolveTie(double[] ranks, List<Integer> tiesTrace) {
 
         // constant value of ranks over tiesTrace
-        final double c = ranks[tiesTrace.get(0)];
+        final double c = ranks[tiesTrace.getFirst()];
 
         // length of sequence of tied ranks
         final int length = tiesTrace.size();

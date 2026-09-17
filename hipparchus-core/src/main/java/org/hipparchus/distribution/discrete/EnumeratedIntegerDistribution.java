@@ -21,6 +21,7 @@
  */
 package org.hipparchus.distribution.discrete;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,7 @@ import org.hipparchus.util.Pair;
 public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20130308L;
 
     /**

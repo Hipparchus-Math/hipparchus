@@ -23,6 +23,8 @@ import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the half normal (gaussian) distribution.
  *
@@ -31,6 +33,7 @@ import org.hipparchus.util.MathUtils;
  */
 public class HalfNormalDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20250915L;
     /** &radic;(2) */
     private static final double SQRT2 = FastMath.sqrt(2.0);

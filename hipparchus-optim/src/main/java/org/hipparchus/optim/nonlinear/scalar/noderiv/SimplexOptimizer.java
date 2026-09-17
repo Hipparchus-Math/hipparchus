@@ -202,8 +202,8 @@ public class SimplexOptimizer extends MultivariateOptimizer {
         // The existing values (as set by the previous call) are reused if
         // not provided in the argument list.
         for (OptimizationData data : optData) {
-            if (data instanceof AbstractSimplex) {
-                simplex = (AbstractSimplex) data;
+            if (data instanceof AbstractSimplex abstractSimplex) {
+                simplex = abstractSimplex;
                 // If more data must be parsed, this statement _must_ be
                 // changed to "continue".
                 break;

@@ -663,8 +663,8 @@ class CalculusFieldElementTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj instanceof TestCalculusFieldElement) {
-                return Double.compare(value, ((TestCalculusFieldElement) obj).value) == 0;
+            if (obj instanceof TestCalculusFieldElement element) {
+                return Double.compare(value, element.value) == 0;
             } else {
                 return false;
             }

@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -96,6 +97,7 @@ import org.hipparchus.util.Precision;
 public class Percentile extends AbstractUnivariateStatistic implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** Maximum number of partitioning pivots cached (each level double the number of pivots). */

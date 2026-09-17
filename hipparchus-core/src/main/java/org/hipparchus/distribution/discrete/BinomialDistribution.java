@@ -27,6 +27,8 @@ import org.hipparchus.special.Beta;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the binomial distribution.
  *
@@ -35,6 +37,7 @@ import org.hipparchus.util.MathUtils;
  */
 public class BinomialDistribution extends AbstractIntegerDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** The number of trials. */
     private final int numberOfTrials;

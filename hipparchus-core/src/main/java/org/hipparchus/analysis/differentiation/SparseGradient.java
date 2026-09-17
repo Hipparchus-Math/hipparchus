@@ -21,6 +21,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ import org.hipparchus.util.Precision;
 public class SparseGradient implements Derivative1<SparseGradient>, Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20131025L;
 
     /** Value of the calculation. */
@@ -796,8 +798,7 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
             return true;
         }
 
-        if (other instanceof SparseGradient) {
-            final SparseGradient rhs = (SparseGradient)other;
+        if (other instanceof SparseGradient rhs) {
             if (!Precision.equals(value, rhs.value, 1)) {
                 return false;
             }

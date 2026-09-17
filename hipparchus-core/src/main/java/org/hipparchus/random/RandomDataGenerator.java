@@ -21,6 +21,7 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +61,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     implements RandomGenerator, Serializable { // NOPMD - this class has a high number of methods, it is normal
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160529L;
 
     /**

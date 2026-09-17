@@ -21,6 +21,7 @@
  */
 package org.hipparchus.exception;
 
+import java.io.Serial;
 import java.text.MessageFormat;
 import java.util.Locale;
 
@@ -30,6 +31,7 @@ import java.util.Locale;
 public class MathRuntimeException extends RuntimeException implements LocalizedException {
 
     /** Serializable version Id. */
+    @Serial
     private static final long serialVersionUID = 20160217L;
 
     /** URL for reporting problems for internal errors. */

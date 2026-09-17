@@ -21,6 +21,7 @@
  */
 package org.hipparchus.fraction;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.function.Function;
@@ -88,6 +89,7 @@ public class Fraction
     public static final Fraction MINUS_ONE = new Fraction(-1, 1);
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 3698073679419233275L;
 
     /** The default epsilon used for convergence. */
@@ -389,10 +391,7 @@ public class Fraction
         if (this == other) {
             return true;
         }
-        if (other instanceof Fraction) {
-            // since fractions are always in lowest terms, numerators and
-            // denominators can be compared directly for equality.
-            Fraction rhs = (Fraction)other;
+        if (other instanceof Fraction rhs) {
             return (numerator == rhs.numerator) &&
                 (denominator == rhs.denominator);
         }

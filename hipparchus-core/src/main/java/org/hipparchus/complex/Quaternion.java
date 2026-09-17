@@ -22,6 +22,7 @@
 
 package org.hipparchus.complex;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -49,6 +50,7 @@ public final class Quaternion implements Serializable {
     public static final Quaternion K = new Quaternion(0, 0, 0, 1);
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20092012L;
 
     /** First component (scalar part). */
@@ -268,8 +270,7 @@ public final class Quaternion implements Serializable {
         if (this == other) {
             return true;
         }
-        if (other instanceof Quaternion) {
-            final Quaternion q = (Quaternion) other;
+        if (other instanceof Quaternion q) {
             return q0 == q.getQ0() &&
                 q1 == q.getQ1() &&
                 q2 == q.getQ2() &&
