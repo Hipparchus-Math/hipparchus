@@ -26,6 +26,8 @@ import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * This class implements the <a href="http://en.wikipedia.org/wiki/L%C3%A9vy_distribution">
  * L&eacute;vy distribution</a>.
@@ -33,6 +35,7 @@ import org.hipparchus.util.MathUtils;
 public class LevyDistribution extends AbstractRealDistribution {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20130314L;
 
     /** Location parameter. */

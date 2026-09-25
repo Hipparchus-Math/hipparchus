@@ -367,7 +367,7 @@ public class SphericalPolygonsSet
             points.add(vertices[last]);
         }
         // put first point last
-        final S2Point swap = points.remove(0);
+        final S2Point swap = points.removeFirst();
         points.add(swap);
         return points;
     }

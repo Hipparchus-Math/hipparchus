@@ -156,8 +156,7 @@ public abstract class UnivariateStatisticAbstractTest {
     public void testCopyData() {
         UnivariateStatistic stat = getUnivariateStatistic();
 
-        if (stat instanceof AbstractUnivariateStatistic) {
-            AbstractUnivariateStatistic original = (AbstractUnivariateStatistic) stat;
+        if (stat instanceof AbstractUnivariateStatistic original) {
             original.setData(testArray);
             assertEquals(expectedValue(), original.evaluate(), getTolerance());
 

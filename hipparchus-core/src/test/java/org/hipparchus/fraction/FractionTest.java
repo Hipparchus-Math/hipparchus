@@ -700,7 +700,7 @@ class FractionTest {
         // 1, 0, 1,  7, 106, 113,  33102,  33215,  66317,  99532, 265381,  364913, 1360120, 1725033, 25510582,  52746197, 78256779
         List<Fraction> convergents = Fraction.convergents(FastMath.PI, 20).collect(Collectors.toList());
         assertEquals(13, convergents.size());
-        assertEquals(new Fraction(       3,        1), convergents.get( 0));
+        assertEquals(new Fraction(       3,        1), convergents.get(0));
         assertEquals(new Fraction(      22,        7), convergents.get( 1));
         assertEquals(new Fraction(     333,      106), convergents.get( 2));
         assertEquals(new Fraction(     355,      113), convergents.get( 3));

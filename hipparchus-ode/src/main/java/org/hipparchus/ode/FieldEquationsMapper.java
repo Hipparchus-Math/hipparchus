@@ -22,6 +22,7 @@
 
 package org.hipparchus.ode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.CalculusFieldElement;
@@ -42,6 +43,7 @@ import org.hipparchus.util.MathUtils;
 public class FieldEquationsMapper<T extends CalculusFieldElement<T>> implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20151114L;
 
     /** Start indices of the components. */

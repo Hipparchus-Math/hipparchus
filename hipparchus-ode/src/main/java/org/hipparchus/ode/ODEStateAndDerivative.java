@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode;
 
+import java.io.Serial;
+
 /** Container for time, main and secondary state vectors as well as their derivatives.
 
  * @see OrdinaryDifferentialEquation
@@ -27,6 +29,7 @@ package org.hipparchus.ode;
 public class ODEStateAndDerivative extends ODEState {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20160408L;
 
     /** Derivative of the primary state at time. */

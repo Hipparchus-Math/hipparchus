@@ -140,7 +140,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
         final int k = initialMixture.getComponents().size();
 
         final int numMeanColumns
-            = initialMixture.getComponents().get(0).getSecond().getMeans().length;
+            = initialMixture.getComponents().getFirst().getSecond().getMeans().length;
 
         if (numMeanColumns != numCols) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
@@ -421,8 +421,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
                 return true;
             }
 
-            if (other instanceof DataRow) {
-                return MathArrays.equals(row, ((DataRow) other).row);
+            if (other instanceof DataRow dataRow) {
+                return MathArrays.equals(row, dataRow.row);
             }
 
             return false;

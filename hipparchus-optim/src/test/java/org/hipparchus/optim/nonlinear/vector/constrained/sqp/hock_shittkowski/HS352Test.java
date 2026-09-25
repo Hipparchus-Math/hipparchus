@@ -151,8 +151,8 @@ public class HS352Test {
         final double tolerance = 1.0e-5 * (Math.abs(fExpected) + 1.0);
         
         // Check if the solution is close to or better than the expected minimum.
-        assertTrue(f <= fExpected + tolerance, 
-                   String.format("Objective value mismatch/worse than expected. Expected: %.8f, Actual: %.8f", fExpected, f));
+        assertTrue(f <= fExpected + tolerance,
+                "Objective value mismatch/worse than expected. Expected: %.8f, Actual: %.8f".formatted(fExpected, f));
         
         // Check if the variables are close to the expected optimal values (XEX)
         // XEX(1)=-10.223574, XEX(2)=11.908429, XEX(3)=-0.45804134, XEX(4)=0.58031996

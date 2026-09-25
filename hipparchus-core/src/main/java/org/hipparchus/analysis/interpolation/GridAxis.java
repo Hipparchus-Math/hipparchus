@@ -16,6 +16,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -50,6 +51,7 @@ import org.hipparchus.util.MathArrays;
 public class GridAxis implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20180926L;
 
     /** All the coordinates of the interpolation points, sorted in increasing order. */

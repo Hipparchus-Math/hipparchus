@@ -55,7 +55,7 @@ public class FieldDenseOutputModelTest {
         FieldODEIntegrator<T> integ = new DormandPrince54FieldIntegrator<T>(field, minStep, maxStep, 1.0e-8, 1.0e-8);
         integ.addStepHandler(new FieldDenseOutputModel<T>());
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
-        FieldDenseOutputModel<T> cm = (FieldDenseOutputModel<T>) integ.getStepHandlers().iterator().next();
+        FieldDenseOutputModel<T> cm = (FieldDenseOutputModel<T>) integ.getStepHandlers().getFirst();
         cm.getInterpolatedState(pb.getInitialState().getTime().twice().subtract(pb.getFinalTime()));
         cm.getInterpolatedState(pb.getFinalTime().twice().subtract(pb.getInitialState().getTime()));
         cm.getInterpolatedState(pb.getInitialState().getTime().add(pb.getFinalTime()).multiply(0.5));

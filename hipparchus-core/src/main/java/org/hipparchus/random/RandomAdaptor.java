@@ -21,6 +21,7 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serial;
 import java.util.Random;
 
 import org.hipparchus.util.MathUtils;
@@ -32,6 +33,7 @@ import org.hipparchus.util.MathUtils;
 public class RandomAdaptor extends Random implements RandomGenerator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160529L;
 
     /** Wrapped randomGenerator instance */

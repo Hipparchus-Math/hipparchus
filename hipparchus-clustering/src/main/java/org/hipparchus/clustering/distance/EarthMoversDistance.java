@@ -25,6 +25,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
+import java.io.Serial;
+
 /**
  * Calculates the Earh Mover's distance (also known as Wasserstein metric) between two distributions.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.util.MathArrays;
 public class EarthMoversDistance implements DistanceMeasure {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -5406732779747414922L;
 
     /** Empty constructor.

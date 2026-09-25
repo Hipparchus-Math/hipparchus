@@ -68,21 +68,12 @@ class HarmonicOscillatorTest {
                 final double v = i * d;
                 final DerivativeStructure h = f.value(factory.variable(0, v));
                 for (int k = 0; k <= maxOrder; ++k) {
-                    final double trigo;
-                    switch (k % 4) {
-                        case 0:
-                            trigo = +FastMath.cos(w * v + p);
-                            break;
-                        case 1:
-                            trigo = -FastMath.sin(w * v + p);
-                            break;
-                        case 2:
-                            trigo = -FastMath.cos(w * v + p);
-                            break;
-                        default:
-                            trigo = +FastMath.sin(w * v + p);
-                            break;
-                    }
+                    final double trigo = switch (k % 4) {
+                        case 0 -> +FastMath.cos(w * v + p);
+                        case 1 -> -FastMath.sin(w * v + p);
+                        case 2 -> -FastMath.cos(w * v + p);
+                        default -> +FastMath.sin(w * v + p);
+                    };
                     assertEquals(a * FastMath.pow(w, k) * trigo,
                                         h.getPartialDerivative(k),
                                         Precision.EPSILON);

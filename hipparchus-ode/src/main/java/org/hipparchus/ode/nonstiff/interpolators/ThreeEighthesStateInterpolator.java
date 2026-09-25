@@ -21,6 +21,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.ThreeEighthesIntegrator;
 
+import java.io.Serial;
+
 /**
  * This class implements a step interpolator for the 3/8 fourth
  * order Runge-Kutta integrator.
@@ -57,6 +59,7 @@ import org.hipparchus.ode.nonstiff.ThreeEighthesIntegrator;
 public class ThreeEighthesStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Simple constructor.

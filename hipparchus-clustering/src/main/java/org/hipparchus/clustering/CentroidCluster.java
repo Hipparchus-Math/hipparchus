@@ -21,6 +21,8 @@
  */
 package org.hipparchus.clustering;
 
+import java.io.Serial;
+
 /**
  * A Cluster used by centroid-based clustering algorithms.
  * <p>
@@ -32,6 +34,7 @@ package org.hipparchus.clustering;
 public class CentroidCluster<T extends Clusterable> extends Cluster<T> {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -3075288519071812288L;
 
     /** Center of the cluster. */

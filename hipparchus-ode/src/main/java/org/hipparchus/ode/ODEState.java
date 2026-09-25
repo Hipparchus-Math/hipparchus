@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /** Container for time, main and secondary state vectors.
@@ -30,6 +31,7 @@ import java.io.Serializable;
 public class ODEState implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20160408L;
 
     /** Time. */

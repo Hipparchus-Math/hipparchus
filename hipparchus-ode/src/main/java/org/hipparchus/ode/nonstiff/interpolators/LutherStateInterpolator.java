@@ -22,6 +22,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * This class represents an interpolator over the last step during an
  * ODE integration for the 6th order Luther integrator.
@@ -36,6 +38,7 @@ import org.hipparchus.util.FastMath;
 public class LutherStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160328;
 
     /** Square root. */

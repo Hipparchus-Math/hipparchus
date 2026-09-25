@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -56,6 +57,7 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic
     implements AggregatableStatistic<GeometricMean>, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** Wrapped SumOfLogs instance */

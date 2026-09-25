@@ -295,7 +295,7 @@ class BetaDistributionTest {
     private void checkDensity(double alpha, double beta, double[] x, double[] expected) {
         BetaDistribution d = new BetaDistribution(alpha, beta);
         for (int i = 0; i < x.length; i++) {
-            assertEquals(expected[i], d.density(x[i]), 1e-5, String.format("density at x=%.1f for alpha=%.1f, beta=%.1f", x[i], alpha, beta));
+            assertEquals(expected[i], d.density(x[i]), 1e-5, "density at x=%.1f for alpha=%.1f, beta=%.1f".formatted(x[i], alpha, beta));
         }
     }
 

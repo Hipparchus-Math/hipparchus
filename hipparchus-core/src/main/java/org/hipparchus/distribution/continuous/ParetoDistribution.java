@@ -26,6 +26,8 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Pareto distribution.
  * <p>
@@ -48,6 +50,7 @@ import org.hipparchus.util.FastMath;
 public class ParetoDistribution extends AbstractRealDistribution {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20130424L;
 
     /** The scale parameter of this distribution. */

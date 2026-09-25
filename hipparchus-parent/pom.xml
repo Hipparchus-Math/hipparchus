@@ -525,8 +525,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <hipparchus.compiler.release>21</hipparchus.compiler.release>
 
     <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
     <hipparchusParentDir>${basedir}</hipparchusParentDir>
@@ -541,15 +540,15 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>4.9.2.0</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.12</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>4.9.8.5</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.15</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.7.1</hipparchus.maven-assembly-plugin.version>
     <hipparchus.maven-bundle-plugin.version>5.1.9</hipparchus.maven-bundle-plugin.version>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>3.6.0</hipparchus.maven-checkstyle-plugin.version>
     <hipparchus.checkstyle.version>10.21.4</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>3.4.1</hipparchus.maven-clean-plugin.version>
-    <hipparchus.maven-compiler-plugin.version>3.14.0</hipparchus.maven-compiler-plugin.version>
+    <hipparchus.maven-compiler-plugin.version>3.16.0</hipparchus.maven-compiler-plugin.version>
     <hipparchus.maven-javadoc-plugin.version>3.11.2</hipparchus.maven-javadoc-plugin.version>
     <hipparchus.maven-jar-plugin.version>3.4.2</hipparchus.maven-jar-plugin.version>
     <hipparchus.maven-jxr-plugin.version>3.6.0</hipparchus.maven-jxr-plugin.version>
@@ -607,10 +606,9 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${hipparchus.maven-compiler-plugin.version}</version>
           <configuration>
-            <source>${maven.compiler.source}</source>
-            <target>${maven.compiler.target}</target>
             <compilerArgument>-Xlint:deprecation</compilerArgument>
             <compilerArgument>-Xlint:unchecked</compilerArgument>
+            <release>${hipparchus.compiler.release}</release>
           </configuration>
         </plugin>
         <plugin>
@@ -621,8 +619,8 @@
             <archive>
               <manifestFile>${project.build.directory}/osgi/MANIFEST.MF</manifestFile>
               <manifestEntries>
-                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
-                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+                <X-Compile-Source-JDK>${hipparchus.compiler.release}</X-Compile-Source-JDK>
+                <X-Compile-Target-JDK>${hipparchus.compiler.release}</X-Compile-Target-JDK>
               </manifestEntries>
             </archive>
           </configuration>
@@ -815,7 +813,7 @@
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${hipparchus.maven-pmd-plugin.version}</version>
           <configuration>
-            <targetJdk>${maven.compiler.target}</targetJdk>
+            <targetJdk>${hipparchus.compiler.release}</targetJdk>
             <skipEmptyReport>false</skipEmptyReport>
             <renderSuppressedViolations>false</renderSuppressedViolations>
             <rulesets>
@@ -895,7 +893,7 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>1.8.0</version>
+                  <version>21.0.0</version>
                 </requireJavaVersion>
               </rules>
             </configuration>

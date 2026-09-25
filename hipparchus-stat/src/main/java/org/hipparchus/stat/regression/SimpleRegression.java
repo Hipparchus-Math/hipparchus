@@ -21,6 +21,8 @@
  */
 
 package org.hipparchus.stat.regression;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.distribution.continuous.TDistribution;
@@ -68,6 +70,7 @@ import org.hipparchus.util.Precision;
 public class SimpleRegression implements Serializable, UpdatingMultipleLinearRegression {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = -3004689053607543335L;
 
     /** sum of x values */

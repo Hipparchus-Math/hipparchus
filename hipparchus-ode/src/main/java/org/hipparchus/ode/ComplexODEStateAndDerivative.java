@@ -19,6 +19,8 @@ package org.hipparchus.ode;
 
 import org.hipparchus.complex.Complex;
 
+import java.io.Serial;
+
 /** Container for time, main and secondary state vectors as well as their derivatives.
 
  * @see ComplexOrdinaryDifferentialEquation
@@ -29,6 +31,7 @@ import org.hipparchus.complex.Complex;
 public class ComplexODEStateAndDerivative extends ComplexODEState {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20180902L;
 
     /** Derivative of the primary state at time. */

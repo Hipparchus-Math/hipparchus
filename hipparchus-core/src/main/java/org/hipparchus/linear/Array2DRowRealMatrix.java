@@ -22,6 +22,7 @@
 
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -37,6 +38,7 @@ import org.hipparchus.util.MathUtils;
  */
 public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -1067294169172445528L;
 
     /** Entries of the matrix. */
@@ -290,8 +292,8 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     /** {@inheritDoc} */
     @Override
     public RealMatrix multiplyTransposed(final RealMatrix m) {
-        if (m instanceof Array2DRowRealMatrix) {
-            return multiplyTransposed((Array2DRowRealMatrix) m);
+        if (m instanceof Array2DRowRealMatrix matrix) {
+            return multiplyTransposed(matrix);
         } else {
             MatrixUtils.checkSameColumnDimension(this, m);
 
@@ -356,8 +358,8 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     /** {@inheritDoc} */
     @Override
     public RealMatrix transposeMultiply(final RealMatrix m) {
-        if (m instanceof Array2DRowRealMatrix) {
-            return transposeMultiply((Array2DRowRealMatrix) m);
+        if (m instanceof Array2DRowRealMatrix matrix) {
+            return transposeMultiply(matrix);
         } else {
             MatrixUtils.checkSameRowDimension(this, m);
 

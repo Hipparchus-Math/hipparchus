@@ -21,6 +21,7 @@
  */
 package org.hipparchus.analysis.polynomials;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -46,6 +47,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
     /**
      * Serialization identifier
      */
+    @Serial
     private static final long serialVersionUID = -7726511984200295583L;
     /**
      * The coefficients of the polynomial, ordered by degree -- i.e.,

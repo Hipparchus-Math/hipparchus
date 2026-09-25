@@ -22,6 +22,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
@@ -45,6 +46,7 @@ import org.hipparchus.util.MathArrays;
 public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBlendable<FieldVector3D<T>, T>, Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20130224L;
 
     /** Abscissa. */

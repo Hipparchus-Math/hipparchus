@@ -54,19 +54,19 @@ class SphereGeneratorTest {
         List<Vector3D> support = Arrays.asList(new Vector3D(1, 2, 3));
         EnclosingBall<Euclidean3D, Vector3D> sphere = new SphereGenerator().ballOnSupport(support);
         assertEquals(0.0, sphere.getRadius(), 1.0e-10);
-        assertTrue(sphere.contains(support.get(0)));
-        assertTrue(sphere.contains(support.get(0), 0.5));
-        assertFalse(sphere.contains(new Vector3D(support.get(0).getX() + 0.1,
-                                                        support.get(0).getY() + 0.1,
-                                                        support.get(0).getZ() + 0.1),
+        assertTrue(sphere.contains(support.getFirst()));
+        assertTrue(sphere.contains(support.getFirst(), 0.5));
+        assertFalse(sphere.contains(new Vector3D(support.getFirst().getX() + 0.1,
+                                                        support.getFirst().getY() + 0.1,
+                                                        support.getFirst().getZ() + 0.1),
                                            0.001));
-        assertTrue(sphere.contains(new Vector3D(support.get(0).getX() + 0.1,
-                                                       support.get(0).getY() + 0.1,
-                                                       support.get(0).getZ() + 0.1),
+        assertTrue(sphere.contains(new Vector3D(support.getFirst().getX() + 0.1,
+                                                       support.getFirst().getY() + 0.1,
+                                                       support.getFirst().getZ() + 0.1),
                                           0.5));
-        assertEquals(0, support.get(0).distance(sphere.getCenter()), 1.0e-10);
+        assertEquals(0, support.getFirst().distance(sphere.getCenter()), 1.0e-10);
         assertEquals(1, sphere.getSupportSize());
-        assertSame(support.get(0), sphere.getSupport()[0]);
+        assertSame(support.getFirst(), sphere.getSupport()[0]);
     }
 
     @Test
