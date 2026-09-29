@@ -22,6 +22,8 @@
 
 package org.hipparchus.analysis.solvers;
 
+import org.hipparchus.analysis.differentiation.DSFactory;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -67,11 +69,28 @@ public abstract class AbstractUnivariateDifferentiableSolver
      * @return the objective function value and derivative at specified point.
      * @throws MathIllegalStateException
      * if the maximal number of evaluations is exceeded.
+     * @since 4.1
      */
-    protected UnivariateDerivative1 computeObjectiveValueAndDerivative(double point)
+    protected UnivariateDerivative1 computeObjectiveValueAndDerivative1(double point)
         throws MathIllegalStateException {
         incrementEvaluationCount();
         return function.value(new UnivariateDerivative1(point, 1.));
+    }
+
+    /**
+     * Compute the objective function value.
+     *
+     * @param point Point at which the objective function must be evaluated.
+     * @return the objective function value and derivative at specified point.
+     * @throws MathIllegalStateException
+     * if the maximal number of evaluations is exceeded.
+     * @deprecated since 4.1, use {@link #computeObjectiveValueAndDerivative1(double)}
+     */
+    @Deprecated
+    protected DerivativeStructure computeObjectiveValueAndDerivative(double point)
+            throws MathIllegalStateException {
+        incrementEvaluationCount();
+        return function.value(new DSFactory(1, 1).variable(0, point));
     }
 
     /**
