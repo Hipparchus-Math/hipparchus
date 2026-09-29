@@ -30,7 +30,7 @@ public abstract class TwiceDifferentiableFunction implements MultivariateFunctio
 
     /** Simple constructor.
      */
-    protected TwiceDifferentiableFunction() {
+    public TwiceDifferentiableFunction() {
         // nothing to do
     }
 
