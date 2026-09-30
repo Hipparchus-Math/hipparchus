@@ -1365,6 +1365,9 @@ public abstract class RealVectorAbstractTest {
         assertNotEquals(null, v);
         assertNotEquals(v, v.getSubVector(0, v.getDimension() - 1));
         assertEquals(v, v.getSubVector(0, v.getDimension()));
+        assertNotEquals(v, v.toArray());
+        assertNotEquals(v, create(new double[] { 0, Double.NaN, 2 }));
+        assertNotEquals(v, create(new double[] { 0, 2, 1 }));
     }
 
     @Test

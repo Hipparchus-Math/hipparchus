@@ -44,7 +44,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     private static final RealVectorFormat DEFAULT_FORMAT = RealVectorFormat.getRealVectorFormat();
 
     /** Entries of the vector. */
-    private double[] data;
+    private final double[] data;
 
     /**
      * Build a 0-length vector.
@@ -616,7 +616,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     @Override
     public RealVector append(RealVector v) {
         if (v instanceof ArrayRealVector vector) {
-            return new ArrayRealVector(this, vector);
+            return append(vector);
         } else {
             return new ArrayRealVector(this, v);
         }
@@ -807,11 +807,10 @@ public class ArrayRealVector extends RealVector implements Serializable {
             return true;
         }
 
-        if (!(other instanceof RealVector)) {
+        if (!(other instanceof final RealVector rhs)) {
             return false;
         }
 
-        RealVector rhs = (RealVector) other;
         if (data.length != rhs.getDimension()) {
             return false;
         }
