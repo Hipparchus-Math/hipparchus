@@ -105,7 +105,7 @@ class MarosMeszarosQPSolverTest {
     }
 
     private boolean doRun(final Path path) {
-        final boolean skipLengthy = Boolean.parseBoolean(System.getProperty(SKIP_LENGTHY_PROPERTY, "true"));
+        final boolean skipLengthy = Boolean.parseBoolean(System.getProperty(SKIP_LENGTHY_PROPERTY, "false"));
         final boolean isLengthy   = LENGTHY_PATTERN.matcher(path.getFileName().toString()).matches();
         return !(skipLengthy && isLengthy);
     }
