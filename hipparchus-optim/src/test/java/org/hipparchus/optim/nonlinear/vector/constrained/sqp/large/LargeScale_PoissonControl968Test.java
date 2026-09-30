@@ -28,8 +28,7 @@ import org.hipparchus.optim.nonlinear.vector.constrained.SQPOption;
 import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 /**
  * Poisson optimal-control benchmark on a 22 by 22 grid.
@@ -317,6 +316,7 @@ public class LargeScale_PoissonControl968Test {
     }
 
     @Test
+    @DisabledIfSystemProperty(named = "skip.lengthy.tests", matches = "true")
     public void testPoissonControl968() {
 
         final PoissonObjective objective =
