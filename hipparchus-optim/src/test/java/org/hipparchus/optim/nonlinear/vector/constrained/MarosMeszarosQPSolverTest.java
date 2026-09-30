@@ -22,17 +22,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealVector;
 
 import org.hipparchus.util.FastMath;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -43,7 +42,12 @@ class MarosMeszarosQPSolverTest {
     private static final Path FIXED_BENCHMARK_DIRECTORY =
             Paths.get("org.hipparchus.optim.nonlinear.vector.constrained.maros_meszaros");
 
-    private static final String VERBOSE_PROPERTY = "maros.meszaros.verbose";
+    private static final String  VERBOSE_PROPERTY      = "maros.meszaros.verbose";
+    private static final String  SKIP_LENGTHY_PROPERTY = "skip.lengthy.tests";
+    private static final Pattern LENGTHY_PATTERN       = Pattern.compile("(?:" +
+                                                                         "CVXQP[123]_M|GOULDQP[23]|MOSARQP2|QBANDM|QETAMACR|" +
+                                                                         "QFFFFF80|QGROW15|QGROW22|QSCAGR25|QSCFXM2|QSCSD1" +
+                                                                         ")\\.QPS$");
 
     @TestFactory
     List<DynamicTest> testBenchmarkQpsProblemsWhenConfigured() {
@@ -81,9 +85,11 @@ class MarosMeszarosQPSolverTest {
 
     private List<Path> listProblemFilesUnchecked(final Path directory) {
         try {
+
             final List<Path> files = Files.walk(directory)
                                           .filter(Files::isRegularFile)
                                           .filter(this::isQpsFile)
+                                          .filter(this::doRun)
                                           .sorted()
                                           .collect(Collectors.toList());
             assertFalse(files.isEmpty(), "No QPS problem files found in benchmark directory: " + directory);
@@ -96,6 +102,12 @@ class MarosMeszarosQPSolverTest {
     private boolean isQpsFile(final Path path) {
         final String name = path.getFileName().toString().toLowerCase(Locale.ROOT);
         return name.endsWith(".qps") || name.endsWith(".sif") || name.endsWith(".mps");
+    }
+
+    private boolean doRun(final Path path) {
+        final boolean skipLengthy = Boolean.parseBoolean(System.getProperty(SKIP_LENGTHY_PROPERTY, "false"));
+        final boolean isLengthy   = LENGTHY_PATTERN.matcher(path.getFileName().toString()).matches();
+        return !(skipLengthy && isLengthy);
     }
 
     private String stripExtension(final String name) {
@@ -112,7 +124,7 @@ class MarosMeszarosQPSolverTest {
             throw new IllegalStateException("Failed to load QPS file: " + file, e);
         }
 
-        final boolean verbose = Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "true"));
+        final boolean verbose = Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "false"));
         if (verbose) {
             System.out.println("[MarosMeszarosQPSolverTest] START " + problem.getName() +
                                " file=" + file.getFileName());
@@ -158,25 +170,13 @@ class MarosMeszarosQPSolverTest {
             fail("Missing expected objective value for problem " + problem.getName() +
                  ". Check 00readme.qp OPT parsing.");
         }
-//
-//        if (Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "true"))) {
-//            System.out.println("[MarosMeszarosQPSolverTest] " + problem.getName() +
-//                               " expectedValue=" + problem.getExpectedValue() +
-//                               " actualValue=" + solution.getValue());
-//        }
-//        
+
         if (Boolean.parseBoolean(System.getProperty(VERBOSE_PROPERTY, "true"))) {
             if(solution.getX().getDimension()==0)System.out.println("[MarosMeszarosQPSolverTest] " + problem.getName() +
                                
                                " error code=" + solution.getLambda());
         }
 
-//        if (problem.hasExpectedX()) {
-//            assertArrayEquals(problem.getExpectedX(),
-//                              solution.getX().toArray(),
-//                              problem.getXTolerance(),
-//                              "Unexpected x for problem " + problem.getName());
-//        }
         final double fExpected = problem.getExpectedValue();
         final double absTol = problem.getValueTolerance();
         final double tolF = absTol * (FastMath.abs(fExpected) + 1.0);
@@ -206,13 +206,5 @@ class MarosMeszarosQPSolverTest {
                 null;
         final LinearBoundedConstraint bq=new LinearBoundedConstraint(MatrixUtils.createRealIdentityMatrix(problem.getVariableCount()),new ArrayRealVector(problem.getLowerBound()),new ArrayRealVector(problem.getUpperBound()));
          return solver.optimize(option,objectiveFunction, eq, iq,bq);
-//        if (hasEq && hasIq) {
-//            return solver.optimize(option,objectiveFunction, eq, iq);
-//        } else if (hasEq) {
-//            return solver.optimize(option,objectiveFunction, eq);
-//        } else if (hasIq) {
-//            return solver.optimize(option,objectiveFunction, iq);
-//        }
-//        return solver.optimize(option,objectiveFunction);
     }
 }

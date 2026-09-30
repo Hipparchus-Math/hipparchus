@@ -27,8 +27,7 @@ import org.hipparchus.optim.nonlinear.vector.constrained.SQPOptimizerS2;
 import org.hipparchus.optim.nonlinear.vector.constrained.SQPOption;
 import org.hipparchus.optim.nonlinear.vector.constrained.TwiceDifferentiableFunction;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 /**
  * Linear-quadratic optimal-control benchmark with 999 variables.
@@ -220,6 +219,7 @@ public class LargeScale_OptimalControl999Test {
     }
 
     @Test
+    @DisabledIfSystemProperty(named = "skip.lengthy.tests", matches = "true")
     public void testOptimalControl999() {
 
         final OptimalControlObjective objective =
