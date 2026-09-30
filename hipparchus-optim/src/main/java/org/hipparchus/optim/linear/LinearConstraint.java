@@ -21,10 +21,15 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.io.*;
 
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * A linear constraint for a linear optimization problem.
@@ -202,6 +207,7 @@ public class LinearConstraint implements Serializable {
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
+    @Serial
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
         oos.defaultWriteObject();
@@ -218,6 +224,7 @@ public class LinearConstraint implements Serializable {
      * @throws ClassNotFoundException if a class in the stream cannot be found
      * @throws IOException if object cannot be read from the stream
      */
+    @Serial
     private void readObject(ObjectInputStream ois)
       throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
@@ -236,9 +243,7 @@ public class LinearConstraint implements Serializable {
             f.setAccessible(true); // NOPMD
             f.set(this, vector);
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            IOException ioe = new IOException();
-            ioe.initCause(e);
-            throw ioe;
+            throw new IOException(e);
         }
 
     }

@@ -21,12 +21,16 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.io.*;
-
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.OptimizationData;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * An objective function for a linear optimization problem.
@@ -41,9 +45,7 @@ import org.hipparchus.optim.OptimizationData;
  *
  */
 public class LinearObjectiveFunction
-    implements MultivariateFunction,
-               OptimizationData,
-               Serializable {
+    implements MultivariateFunction, OptimizationData, Serializable {
     /** Serializable version identifier. */
     @Serial
     private static final long serialVersionUID = -4531815507568396090L;
@@ -132,6 +134,7 @@ public class LinearObjectiveFunction
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
+    @Serial
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
         oos.defaultWriteObject();
@@ -148,6 +151,7 @@ public class LinearObjectiveFunction
      * @throws ClassNotFoundException if a class in the stream cannot be found
      * @throws IOException if object cannot be read from the stream
      */
+    @Serial
     private void readObject(ObjectInputStream ois)
       throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
@@ -166,9 +170,7 @@ public class LinearObjectiveFunction
             f.setAccessible(true); // NOPMD
             f.set(this, vector);
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            IOException ioe = new IOException();
-            ioe.initCause(e);
-            throw ioe;
+            throw new IOException(e);
         }
     }
 }

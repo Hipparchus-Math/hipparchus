@@ -85,6 +85,7 @@
       <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LinearInequalityConstraint"/>
       <Class name="org.hipparchus.optim.nonlinear.vector.constrained.InverseCholesky"/>
       <Class name="org.hipparchus.optim.nonlinear.vector.constrained.QPConstraintMatrix"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.RegularizedCholeskyDecomposition"/>
       <Class name="org.hipparchus.optim.univariate.MultiStartUnivariateOptimizer"/>
     </Or>
     <Method name="&lt;init>"/>

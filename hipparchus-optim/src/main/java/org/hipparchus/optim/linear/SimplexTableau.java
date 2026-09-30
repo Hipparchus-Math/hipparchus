@@ -21,7 +21,11 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -719,6 +723,7 @@ class SimplexTableau implements Serializable {
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
+    @Serial
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
         oos.defaultWriteObject();
@@ -739,6 +744,7 @@ class SimplexTableau implements Serializable {
      * @throws ClassNotFoundException if a class in the stream cannot be found
      * @throws IOException if object cannot be read from the stream
      */
+    @Serial
     private void readObject(ObjectInputStream ois)
       throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
