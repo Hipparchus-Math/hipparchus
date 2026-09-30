@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -54,6 +55,7 @@ import org.hipparchus.util.MathUtils;
 public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /**Fourth Moment on which this statistic is based */

@@ -57,13 +57,10 @@ public enum Relationship {
      * @return the opposite relationship.
      */
     public Relationship oppositeRelationship() {
-        switch (this) {
-        case LEQ :
-            return GEQ;
-        case GEQ :
-            return LEQ;
-        default :
-            return EQ;
-        }
+        return switch (this) {
+        case LEQ  -> GEQ;
+        case GEQ  -> LEQ;
+        default  -> EQ;
+        };
     }
 }

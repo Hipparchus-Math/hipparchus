@@ -95,9 +95,9 @@ public abstract class AbstractStorelessUnivariateStatistic
 
     @Override
     public String toString() {
-        return String.format("%s: result=%f, N=%d",
-                             getClass().getSimpleName(),
-                             getResult(),
-                             getN());
+        return "%s: result=%f, N=%d".formatted(
+                getClass().getSimpleName(),
+                getResult(),
+                getN());
     }
 }

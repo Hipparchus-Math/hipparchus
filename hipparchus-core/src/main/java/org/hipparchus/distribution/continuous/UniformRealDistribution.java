@@ -26,6 +26,8 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the uniform real distribution.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.util.MathUtils;
  */
 public class UniformRealDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20120109L;
     /** Lower bound of this distribution (inclusive). */
     private final double lower;

@@ -22,6 +22,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.GillIntegrator;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * This class implements a step interpolator for the Gill fourth
  * order Runge-Kutta integrator.
@@ -61,6 +63,7 @@ public class GillStateInterpolator extends RungeKuttaStateInterpolator {
     private static final double ONE_PLUS_INV_SQRT_2 = 1 + FastMath.sqrt(0.5);
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Simple constructor.

@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.vector;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -38,6 +39,7 @@ public class VectorialStorelessStatistic
     implements StorelessMultivariateStatistic, Serializable {
 
     /** Serializable UID */
+    @Serial
     private static final long serialVersionUID = 20160413L;
 
     /** Statistic for each component */

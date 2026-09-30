@@ -298,8 +298,8 @@ class BetaTest {
             fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
-            if (te instanceof MathIllegalArgumentException) {
-                throw (MathIllegalArgumentException) te;
+            if (te instanceof MathIllegalArgumentException exception) {
+                throw exception;
             }
             fail(e.getMessage());
         }
@@ -478,8 +478,8 @@ class BetaTest {
             fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
-            if (te instanceof MathIllegalArgumentException) {
-                throw (MathIllegalArgumentException) te;
+            if (te instanceof MathIllegalArgumentException exception) {
+                throw exception;
             }
             fail(e.getMessage());
         }
@@ -649,8 +649,8 @@ class BetaTest {
             fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
-            if (te instanceof MathIllegalArgumentException) {
-                throw (MathIllegalArgumentException) te;
+            if (te instanceof MathIllegalArgumentException exception) {
+                throw exception;
             }
             fail(e.getMessage());
         }

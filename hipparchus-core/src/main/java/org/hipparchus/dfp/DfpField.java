@@ -559,8 +559,7 @@ public class DfpField implements Field<Dfp> {
     public boolean equals(final Object other) {
         if (this == other) {
             return true;
-        } else if (other instanceof DfpField) {
-            DfpField rhs = (DfpField) other;
+        } else if (other instanceof DfpField rhs) {
             return getRadixDigits()  == rhs.getRadixDigits()  &&
                    getRoundingMode() == rhs.getRoundingMode();
         } else {

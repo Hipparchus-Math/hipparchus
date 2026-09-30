@@ -82,7 +82,7 @@ class CloseEventsTest {
         // verify
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(9, events1.get(0).getT(), 0.0);
+        assertEquals(9, events1.getFirst().getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
         assertEquals(0, events2.size());
     }
@@ -105,10 +105,10 @@ class CloseEventsTest {
         // verify
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(5, events1.get(0).getT(), 0.0);
+        assertEquals(5, events1.getFirst().getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
         assertEquals(1, events2.size());
-        assertEquals(5.5, events2.get(0).getT(), 0.0);
+        assertEquals(5.5, events2.getFirst().getT(), 0.0);
     }
 
     @Test
@@ -128,10 +128,10 @@ class CloseEventsTest {
         // verify
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(5, events1.get(0).getT(), 0.0);
+        assertEquals(5, events1.getFirst().getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
         assertEquals(1, events2.size());
-        assertEquals(5, events2.get(0).getT(), 0.0);
+        assertEquals(5, events2.getFirst().getT(), 0.0);
     }
 
     /**
@@ -248,8 +248,8 @@ class CloseEventsTest {
         // finds one or three events. Not 2.
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(9.9, events1.get(0).getT(), 0.1);
-        assertTrue(events1.get(0).isIncreasing());
+        assertEquals(9.9, events1.getFirst().getT(), 0.1);
+        assertTrue(events1.getFirst().isIncreasing());
     }
 
     /** "A Tricky Problem" from bug #239. */
@@ -382,9 +382,9 @@ class CloseEventsTest {
         // verify
         // allowed to find t1 or t3.
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), tolerance);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorB, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), tolerance);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorB, events.getFirst().getDetector());
     }
 
     /**
@@ -410,9 +410,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), 0.0);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 0.0);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
         // detector worked correctly
         assertEquals(0.0, detectorB.g(state(t1)));
         assertTrue(detectorB.g(state(t1 - 1e-6)) < 0);
@@ -443,9 +443,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), 0.0);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 0.0);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
         // detector worked correctly
         assertEquals(0.0, detectorB.g(state(t1)), 0.0);
         assertTrue(detectorB.g(state(t1 - 1e-6)) > 0);
@@ -612,9 +612,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), 0.0);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 0.0);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
     }
 
     /** check when root finding tolerance > event finding tolerance. */
@@ -637,9 +637,9 @@ class CloseEventsTest {
         // verify
         assertEquals(1, events.size());
         // use root finder tolerance instead of event finder tolerance.
-        assertEquals(t1, events.get(0).getT(), 1e-3);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 1e-3);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
     }
 
     /**
@@ -747,9 +747,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), tolerance);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), tolerance);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
     }
 
     /**
@@ -887,9 +887,9 @@ class CloseEventsTest {
         // verify
         assertEquals(1, events.size());
         // use root finder tolerance instead of event finder tolerance.
-        assertEquals(t1, events.get(0).getT(), tolerance);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), tolerance);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
         assertEquals(t1, finalState.getTime(), tolerance);
 
         // try to resume propagation
@@ -1002,7 +1002,7 @@ class CloseEventsTest {
         assertEquals(10.0, stepHandler.finalTime, tolerance);
         assertEquals(10.0,
                 stepHandler.finalState.getTime(), tolerance);
-        ODEStateInterpolator interpolator = stepHandler.interpolators.get(0);
+        ODEStateInterpolator interpolator = stepHandler.interpolators.getFirst();
         assertEquals(0.0,
                 interpolator.getPreviousState().getTime(), tolerance);
         assertEquals(5.0,
@@ -1096,7 +1096,7 @@ class CloseEventsTest {
         // verify
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(t1, events1.get(0).getT(), 0.0);
+        assertEquals(t1, events1.getFirst().getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
         assertEquals(0, events2.size());
     }
@@ -1119,10 +1119,10 @@ class CloseEventsTest {
         // verify
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(-5, events1.get(0).getT(), 0.0);
+        assertEquals(-5, events1.getFirst().getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
         assertEquals(1, events2.size());
-        assertEquals(-5.5, events2.get(0).getT(), 0.0);
+        assertEquals(-5.5, events2.getFirst().getT(), 0.0);
     }
 
     @Test
@@ -1142,10 +1142,10 @@ class CloseEventsTest {
         // verify
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(-5, events1.get(0).getT(), 0.0);
+        assertEquals(-5, events1.getFirst().getT(), 0.0);
         List<Event> events2 = detector2.getEvents();
         assertEquals(1, events2.size());
-        assertEquals(-5, events2.get(0).getT(), 0.0);
+        assertEquals(-5, events2.getFirst().getT(), 0.0);
     }
 
     /**
@@ -1262,8 +1262,8 @@ class CloseEventsTest {
         // finds one or three events. Not 2.
         List<Event> events1 = detector1.getEvents();
         assertEquals(1, events1.size());
-        assertEquals(-9.9, events1.get(0).getT(), 0.2);
-        assertTrue(events1.get(0).isIncreasing());
+        assertEquals(-9.9, events1.getFirst().getT(), 0.2);
+        assertTrue(events1.getFirst().isIncreasing());
     }
 
     /** "A Tricky Problem" from bug #239. */
@@ -1398,9 +1398,9 @@ class CloseEventsTest {
         // verify
         // allowed to report t1 or t3.
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), tolerance);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorB, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), tolerance);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorB, events.getFirst().getDetector());
     }
 
     /**
@@ -1427,9 +1427,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), 0.0);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 0.0);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
         // detector worked correctly
         assertEquals(0.0, detectorB.g(state(t1)));
         assertTrue(detectorB.g(state(t1 + 1e-6)) < 0);
@@ -1461,9 +1461,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), 0.0);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 0.0);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
         // detector worked correctly
         assertEquals(0.0, detectorB.g(state(t1)), 0.0);
         assertTrue(detectorB.g(state(t1 + 1e-6)) > 0);
@@ -1630,9 +1630,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), 0.0);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 0.0);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
     }
 
     /** check when root finding tolerance > event finding tolerance. */
@@ -1655,9 +1655,9 @@ class CloseEventsTest {
         // verify
         assertEquals(1, events.size());
         // use root finding tolerance since it is larger
-        assertEquals(t1, events.get(0).getT(), 1e-3);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), 1e-3);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
     }
 
     /**
@@ -1764,9 +1764,9 @@ class CloseEventsTest {
 
         // verify
         assertEquals(1, events.size());
-        assertEquals(t1, events.get(0).getT(), tolerance);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), tolerance);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
     }
 
 
@@ -1905,9 +1905,9 @@ class CloseEventsTest {
         // verify
         assertEquals(1, events.size());
         // use root finder tolerance instead of event finder tolerance.
-        assertEquals(t1, events.get(0).getT(), tolerance);
-        assertTrue(events.get(0).isIncreasing());
-        assertSame(detectorA, events.get(0).getDetector());
+        assertEquals(t1, events.getFirst().getT(), tolerance);
+        assertTrue(events.getFirst().isIncreasing());
+        assertSame(detectorA, events.getFirst().getDetector());
         assertEquals(t1, finalState.getTime(), tolerance);
 
         // try to resume propagation
@@ -2020,7 +2020,7 @@ class CloseEventsTest {
         assertEquals(-10.0, stepHandler.finalTime, tolerance);
         assertEquals(-10.0,
                 stepHandler.finalState.getTime(), tolerance);
-        ODEStateInterpolator interpolator = stepHandler.interpolators.get(0);
+        ODEStateInterpolator interpolator = stepHandler.interpolators.getFirst();
         assertEquals(0.0,
                 interpolator.getPreviousState().getTime(), tolerance);
         assertEquals(-5.0,

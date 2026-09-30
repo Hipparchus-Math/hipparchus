@@ -21,6 +21,8 @@
  */
 package org.hipparchus.distribution.continuous;
 
+import java.io.Serial;
+
 /**
  * Implementation of the chi-squared distribution.
  *
@@ -29,6 +31,7 @@ package org.hipparchus.distribution.continuous;
  */
 public class ChiSquaredDistribution extends AbstractRealDistribution {
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** Internal Gamma distribution. */
     private final GammaDistribution gamma;

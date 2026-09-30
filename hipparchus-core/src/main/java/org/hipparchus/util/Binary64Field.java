@@ -21,6 +21,7 @@
  */
 package org.hipparchus.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -33,6 +34,7 @@ import org.hipparchus.Field;
 public class Binary64Field implements Field<Binary64>, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20161219L;
 
     /** Default constructor. */

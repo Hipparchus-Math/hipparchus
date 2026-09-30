@@ -24,6 +24,8 @@ package org.hipparchus.clustering.distance;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
+import java.io.Serial;
+
 /**
  * Calculates the L<sub>&infin;</sub> (max of abs) distance between two points.
  *
@@ -31,6 +33,7 @@ import org.hipparchus.util.MathArrays;
 public class ChebyshevDistance implements DistanceMeasure {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -4694868171115238296L;
 
     /** Empty constructor.

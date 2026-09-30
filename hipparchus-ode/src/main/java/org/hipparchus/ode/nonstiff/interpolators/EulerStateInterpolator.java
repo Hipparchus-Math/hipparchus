@@ -21,6 +21,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.EulerIntegrator;
 
+import java.io.Serial;
+
 /**
  * This class implements a linear interpolator for step.
  *
@@ -45,6 +47,7 @@ import org.hipparchus.ode.nonstiff.EulerIntegrator;
 public class EulerStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Simple constructor.

@@ -67,8 +67,7 @@ class IndexedEigenvalue {
             return true;
         }
 
-        if (other instanceof IndexedEigenvalue) {
-            final IndexedEigenvalue rhs = (IndexedEigenvalue) other;
+        if (other instanceof IndexedEigenvalue rhs) {
             return eigenValue.equals(rhs.eigenValue);
         }
 

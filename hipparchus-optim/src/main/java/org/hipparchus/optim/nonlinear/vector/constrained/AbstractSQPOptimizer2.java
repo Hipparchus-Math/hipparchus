@@ -131,54 +131,53 @@ public abstract class AbstractSQPOptimizer2 extends ConstraintOptimizer {
         super.parseOptimizationData(optData);
         for (OptimizationData data : optData) {
 
-            if (data instanceof SQPProblem) {
-                SQPProblem problem = (SQPProblem) data;
+            if (data instanceof SQPProblem problem) {
                 OBJ = new SQPObj(problem);
 
-                EQ= (problem.hasEquality())?new SQPEq((SQPProblem) data):null;
-                IQ= (problem.hasInequality())?new SQPIneq((SQPProblem) data):null;
+                EQ= (problem.hasEquality())?new SQPEq(problem):null;
+                IQ= (problem.hasInequality())?new SQPIneq(problem):null;
 
-                double[] lb = ((SQPProblem) data).getBoundsLB();
-                double[]ub = ((SQPProblem) data).getBoundsUB();
+                double[] lb = problem.getBoundsLB();
+                double[]ub = problem.getBoundsUB();
                 SB = (problem.hasBounds())?new SimpleBounds(lb,ub):null;
 
                 continue;
             }
 
-            if (data instanceof ObjectiveFunction) {
-                OBJ = (TwiceDifferentiableFunction) ((ObjectiveFunction) data).getObjectiveFunction();
+            if (data instanceof ObjectiveFunction function) {
+                OBJ = (TwiceDifferentiableFunction) function.getObjectiveFunction();
                 continue;
             }
 
-            if (data instanceof EqualityConstraint) {
-                EQ = (EqualityConstraint) data;
+            if (data instanceof EqualityConstraint constraint) {
+                EQ = constraint;
                 continue;
             }
-            if (data instanceof InequalityConstraint) {
-                IQ = (InequalityConstraint) data;
-                continue;
-            }
-
-            if (data instanceof BoundedConstraint) {
-                BOX = (BoundedConstraint) data;
+            if (data instanceof InequalityConstraint constraint1) {
+                IQ = constraint1;
                 continue;
             }
 
-            if (data instanceof SimpleBounds) {
-                SB = (SimpleBounds) data;
+            if (data instanceof BoundedConstraint constraint2) {
+                BOX = constraint2;
                 continue;
             }
 
-            if (data instanceof SQPOption) {
-                settings = (SQPOption) data;
+            if (data instanceof SimpleBounds bounds) {
+                SB = bounds;
+                continue;
             }
 
-            if (data instanceof QPOptimizer) {
-                QPSolver = (QPOptimizer) data;
+            if (data instanceof SQPOption option) {
+                settings = option;
             }
 
-            if (data instanceof MatrixDecompositionTolerance) {
-                matrixDecompositionTolerance = (MatrixDecompositionTolerance) data;
+            if (data instanceof QPOptimizer optimizer) {
+                QPSolver = optimizer;
+            }
+
+            if (data instanceof MatrixDecompositionTolerance tolerance) {
+                matrixDecompositionTolerance = tolerance;
             }
 
         }

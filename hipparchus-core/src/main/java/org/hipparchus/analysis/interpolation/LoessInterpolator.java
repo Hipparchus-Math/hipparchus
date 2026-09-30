@@ -21,6 +21,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -56,6 +57,7 @@ public class LoessInterpolator
      */
     public static final double DEFAULT_ACCURACY = 1e-12;
     /** serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 5204927143605193821L;
     /**
      * The bandwidth parameter: when computing the loess fit at

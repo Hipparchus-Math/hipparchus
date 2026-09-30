@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -78,6 +79,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
     implements AggregatableStatistic<Variance>, WeightedEvaluation, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** SecondMoment is used in incremental calculation of Variance*/

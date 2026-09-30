@@ -21,6 +21,7 @@
  */
 package org.hipparchus.geometry.euclidean.twod;
 
+import java.io.Serial;
 import java.text.NumberFormat;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -74,6 +75,7 @@ public class Vector2D implements Vector<Euclidean2D, Vector2D> {
         new Vector2D(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 266938651998679754L;
 
     /** Abscissa. */
@@ -473,8 +475,7 @@ public class Vector2D implements Vector<Euclidean2D, Vector2D> {
             return true;
         }
 
-        if (other instanceof Vector2D) {
-            final Vector2D rhs = (Vector2D)other;
+        if (other instanceof Vector2D rhs) {
             return x == rhs.x && y == rhs.y || isNaN() && rhs.isNaN();
         }
 
@@ -507,8 +508,7 @@ public class Vector2D implements Vector<Euclidean2D, Vector2D> {
             return true;
         }
 
-        if (other instanceof Vector2D) {
-            final Vector2D rhs = (Vector2D) other;
+        if (other instanceof Vector2D rhs) {
             return x == rhs.x && y == rhs.y;
         }
         return false;

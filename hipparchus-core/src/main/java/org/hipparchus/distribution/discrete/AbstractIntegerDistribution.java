@@ -21,6 +21,7 @@
  */
 package org.hipparchus.distribution.discrete;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.distribution.IntegerDistribution;
@@ -39,6 +40,7 @@ import org.hipparchus.util.MathUtils;
 public abstract class AbstractIntegerDistribution implements IntegerDistribution, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160320L;
 
     /** Empty constructor.

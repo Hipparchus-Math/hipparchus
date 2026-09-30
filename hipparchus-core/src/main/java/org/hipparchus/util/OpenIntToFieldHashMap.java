@@ -23,6 +23,7 @@ package org.hipparchus.util;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serial;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -45,6 +46,7 @@ import org.hipparchus.FieldElement;
 public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOpenIntHashMap implements Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20240326L;
 
     /** Field to which the elements belong. */

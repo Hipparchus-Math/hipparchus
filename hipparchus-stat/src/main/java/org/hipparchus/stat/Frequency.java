@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Collection;
@@ -48,6 +49,7 @@ import org.hipparchus.util.MathUtils;
 public class Frequency<T extends Comparable<T>> implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160322L;
 
     /** underlying collection */

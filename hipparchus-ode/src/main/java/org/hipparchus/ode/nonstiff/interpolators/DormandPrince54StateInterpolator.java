@@ -21,6 +21,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 
+import java.io.Serial;
+
 /**
  * This class represents an interpolator over the last step during an
  * ODE integration for the 5(4) Dormand-Prince integrator.
@@ -69,6 +71,7 @@ public class DormandPrince54StateInterpolator extends RungeKuttaStateInterpolato
     private static final double D6 =      69997945.0 /     29380423.0;
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Simple constructor.

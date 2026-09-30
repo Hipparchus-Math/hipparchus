@@ -106,8 +106,8 @@ class CertifiedDataTest {
 
         DescriptiveStatistics d = null;
         StreamingStatistics s = null;
-        if (u instanceof DescriptiveStatistics) {
-            d = (DescriptiveStatistics) u;
+        if (u instanceof DescriptiveStatistics statistics) {
+            d = statistics;
             d.clear();
         } else {
             s = (StreamingStatistics) u;

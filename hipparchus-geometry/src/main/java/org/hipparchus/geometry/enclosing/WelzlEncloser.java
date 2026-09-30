@@ -141,7 +141,7 @@ public class WelzlEncloser<S extends Space, P extends Point<S, P>> implements En
                     // enlarge the ball by adding it to the support
                     support.add(pi);
                     ball = moveToFrontBall(extreme, i, support);
-                    support.remove(support.size() - 1);
+                    support.removeLast();
 
                     // it was an interesting point, move it to the front
                     // according to Welzl's heuristic

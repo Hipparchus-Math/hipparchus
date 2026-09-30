@@ -372,7 +372,7 @@ final class FrequencyTest {
         f.addValue("3");
         mode = f.getMode();
         assertEquals(1, mode.size());
-        assertEquals("3", mode.get(0));
+        assertEquals("3", mode.getFirst());
 
         f.addValue("2");
         mode = f.getMode();
@@ -383,7 +383,7 @@ final class FrequencyTest {
         f.addValue("2");
         mode = f.getMode();
         assertEquals(1, mode.size());
-        assertEquals("2", mode.get(0));
+        assertEquals("2", mode.getFirst());
         assertFalse(mode.contains("1"));
         assertTrue(mode.contains("2"));
     }

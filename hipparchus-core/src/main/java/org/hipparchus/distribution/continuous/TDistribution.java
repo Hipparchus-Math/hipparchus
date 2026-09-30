@@ -27,11 +27,14 @@ import org.hipparchus.special.Beta;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of Student's t-distribution.
  */
 public class TDistribution extends AbstractRealDistribution {
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** The degrees of freedom. */
     private final double degreesOfFreedom;

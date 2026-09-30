@@ -16,6 +16,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -57,6 +58,7 @@ import org.hipparchus.util.SinhCosh;
 public class Gradient implements Derivative1<Gradient>, Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20200520L;
 
     /** Value of the function. */
@@ -761,8 +763,7 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
             return true;
         }
 
-        if (other instanceof Gradient) {
-            final Gradient rhs = (Gradient) other;
+        if (other instanceof Gradient rhs) {
             return value == rhs.value && MathArrays.equals(grad, rhs.grad);
         }
 

@@ -22,6 +22,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.CalculusFieldElement;
@@ -45,6 +46,7 @@ import org.hipparchus.util.MathArrays;
 public class FieldRotation<T extends CalculusFieldElement<T>> implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20130224L;
 
     /** Scalar coordinate of the quaternion. */

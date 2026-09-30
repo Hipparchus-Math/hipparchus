@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -72,6 +73,7 @@ public class Mean extends AbstractStorelessUnivariateStatistic
     implements AggregatableStatistic<Mean>, WeightedEvaluation, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** First moment on which this statistic is based. */

@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.vector;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -35,6 +36,7 @@ import org.hipparchus.util.MathArrays;
 public class VectorialCovariance implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 4118372414238930270L;
 
     /** Sums for each component. */

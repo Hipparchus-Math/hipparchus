@@ -1065,8 +1065,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     @Override
     public boolean equals(final Object other) {
 
-        if (other instanceof Dfp) {
-            final Dfp x = (Dfp) other;
+        if (other instanceof Dfp x) {
             if (isNaN() || x.isNaN() || field.getRadixDigits() != x.field.getRadixDigits()) {
                 return false;
             }
@@ -1295,8 +1294,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             }
 
             field.setIEEEFlagsBits(DfpField.FLAG_INEXACT);  // signal inexact
-            result = dotrap(DfpField.FLAG_INEXACT, TRUNC_TRAP, this, result);
-            return result;
+            return dotrap(DfpField.FLAG_INEXACT, TRUNC_TRAP, this, result);
         }
 
         return result;
@@ -1461,8 +1459,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
                 field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
                 Dfp result = newInstance(getZero());
                 result.nans = QNAN;
-                result = dotrap(DfpField.FLAG_INVALID, ADD_TRAP, x, result);
-                return result;
+                return dotrap(DfpField.FLAG_INVALID, ADD_TRAP, x, result);
             }
         }
 
@@ -1594,41 +1591,24 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      * @return the IEEE flag if an exception occurred
      */
     protected int round(int n) {
-        boolean inc;
-        switch (field.getRoundingMode()) {
-            case ROUND_DOWN:
-                inc = false;
-                break;
+        boolean inc = switch (field.getRoundingMode()) {
+            case ROUND_DOWN: yield false;
 
-            case ROUND_UP:
-                inc = n != 0;       // round up if n!=0
-                break;
+            case ROUND_UP: yield n != 0;
 
-            case ROUND_HALF_UP:
-                inc = n >= 5000;  // round half up
-                break;
+            case ROUND_HALF_UP: yield n >= 5000;
 
-            case ROUND_HALF_DOWN:
-                inc = n > 5000;  // round half down
-                break;
+            case ROUND_HALF_DOWN: yield n > 5000;
 
-            case ROUND_HALF_EVEN:
-                inc = n > 5000 || (n == 5000 && (mant[0] & 1) == 1);  // round half-even
-                break;
+            case ROUND_HALF_EVEN: yield n > 5000 || (n == 5000 && (mant[0] & 1) == 1);
 
-            case ROUND_HALF_ODD:
-                inc = n > 5000 || (n == 5000 && (mant[0] & 1) == 0);  // round half-odd
-                break;
+            case ROUND_HALF_ODD: yield n > 5000 || (n == 5000 && (mant[0] & 1) == 0);
 
-            case ROUND_CEIL:
-                inc = sign == 1 && n != 0;  // round ceil
-                break;
+            case ROUND_CEIL: yield sign == 1 && n != 0;
 
             case ROUND_FLOOR:
-            default:
-                inc = sign == -1 && n != 0;  // round floor
-                break;
-        }
+            default: yield sign == -1 && n != 0;
+        };
 
         if (inc) {
             // increment if necessary
@@ -1718,8 +1698,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
                 field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
                 result = newInstance(getZero());
                 result.nans = QNAN;
-                result = dotrap(DfpField.FLAG_INVALID, MULTIPLY_TRAP, x, result);
-                return result;
+                return dotrap(DfpField.FLAG_INVALID, MULTIPLY_TRAP, x, result);
             }
         }
 
@@ -1803,16 +1782,14 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             }
 
             if (nans == INFINITE && x != 0) {
-                result = newInstance(this);
-                return result;
+                return newInstance(this);
             }
 
             if (nans == INFINITE && x == 0) {
                 field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
                 result = newInstance(getZero());
                 result.nans = QNAN;
-                result = dotrap(DfpField.FLAG_INVALID, MULTIPLY_TRAP, newInstance(getZero()), result);
-                return result;
+                return dotrap(DfpField.FLAG_INVALID, MULTIPLY_TRAP, newInstance(getZero()), result);
             }
         }
 
@@ -1821,8 +1798,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
             result = newInstance(getZero());
             result.nans = QNAN;
-            result = dotrap(DfpField.FLAG_INVALID, MULTIPLY_TRAP, result, result);
-            return result;
+            return dotrap(DfpField.FLAG_INVALID, MULTIPLY_TRAP, result, result);
         }
 
         int rh = 0;
@@ -1910,8 +1886,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
                 field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
                 result = newInstance(getZero());
                 result.nans = QNAN;
-                result = dotrap(DfpField.FLAG_INVALID, DIVIDE_TRAP, divisor, result);
-                return result;
+                return dotrap(DfpField.FLAG_INVALID, DIVIDE_TRAP, divisor, result);
             }
         }
 
@@ -1921,8 +1896,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             result = newInstance(getZero());
             result.sign = (byte) (sign * divisor.sign);
             result.nans = INFINITE;
-            result = dotrap(DfpField.FLAG_DIV_ZERO, DIVIDE_TRAP, divisor, result);
-            return result;
+            return dotrap(DfpField.FLAG_DIV_ZERO, DIVIDE_TRAP, divisor, result);
         }
 
         dividend = new int[mant.length+1];  // one extra digit needed
@@ -2094,8 +2068,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             Dfp result = newInstance(getZero());
             result.sign = sign;
             result.nans = INFINITE;
-            result = dotrap(DfpField.FLAG_DIV_ZERO, DIVIDE_TRAP, getZero(), result);
-            return result;
+            return dotrap(DfpField.FLAG_DIV_ZERO, DIVIDE_TRAP, getZero(), result);
         }
 
         // range check divisor
@@ -2103,8 +2076,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
             Dfp result = newInstance(getZero());
             result.nans = QNAN;
-            result = dotrap(DfpField.FLAG_INVALID, DIVIDE_TRAP, result, result);
-            return result;
+            return dotrap(DfpField.FLAG_INVALID, DIVIDE_TRAP, result, result);
         }
 
         Dfp result = newInstance(this);
@@ -2168,8 +2140,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
 
                 field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
                 result = newInstance(this);
-                result = dotrap(DfpField.FLAG_INVALID, SQRT_TRAP, null, result);
-                return result;
+                return dotrap(DfpField.FLAG_INVALID, SQRT_TRAP, null, result);
             }
         }
 
@@ -2180,8 +2151,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
             field.setIEEEFlagsBits(DfpField.FLAG_INVALID);
             result = newInstance(this);
             result.nans = QNAN;
-            result = dotrap(DfpField.FLAG_INVALID, SQRT_TRAP, null, result);
-            return result;
+            return dotrap(DfpField.FLAG_INVALID, SQRT_TRAP, null, result);
         }
 
         Dfp x = newInstance(this);

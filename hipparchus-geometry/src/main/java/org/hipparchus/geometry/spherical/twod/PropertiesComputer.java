@@ -89,8 +89,8 @@ class PropertiesComputer implements BSPTreeVisitor<Sphere2D, S2Point, Circle, Su
             }
 
             // compute the geometrical properties of the convex cell
-            final double area  = convexCellArea(boundary.get(0));
-            final Vector3D barycenter = convexCellBarycenter(boundary.get(0));
+            final double area  = convexCellArea(boundary.getFirst());
+            final Vector3D barycenter = convexCellBarycenter(boundary.getFirst());
             convexCellsInsidePoints.add(barycenter);
 
             // add the cell contribution to the global properties

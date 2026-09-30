@@ -258,10 +258,10 @@ public class ComplexFormat {
                                FieldPosition pos)
         throws MathIllegalArgumentException {
 
-        if (obj instanceof Complex) {
-            return format( (Complex)obj, toAppendTo, pos);
-        } else if (obj instanceof Number) {
-            return format(new Complex(((Number)obj).doubleValue(), 0.0), toAppendTo, pos);
+        if (obj instanceof Complex complex) {
+            return format( complex, toAppendTo, pos);
+        } else if (obj instanceof Number number) {
+            return format(new Complex(number.doubleValue(), 0.0), toAppendTo, pos);
         } else {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_INSTANCE_AS_COMPLEX,
                                                    obj.getClass().getName());

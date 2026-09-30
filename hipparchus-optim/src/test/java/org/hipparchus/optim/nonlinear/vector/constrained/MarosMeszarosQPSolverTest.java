@@ -19,7 +19,6 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ class MarosMeszarosQPSolverTest {
 
     /** Fixed benchmark directory provided by user. */
     private static final Path FIXED_BENCHMARK_DIRECTORY =
-            Paths.get("org.hipparchus.optim.nonlinear.vector.constrained.maros_meszaros");
+            Path.of("org.hipparchus.optim.nonlinear.vector.constrained.maros_meszaros");
 
     private static final String VERBOSE_PROPERTY = "maros.meszaros.verbose";
 
@@ -58,13 +57,13 @@ class MarosMeszarosQPSolverTest {
     private Path resolveBenchmarkDirectory() {
         final List<Path> candidates = java.util.Arrays.asList(
                 FIXED_BENCHMARK_DIRECTORY,
-                Paths.get("src", "test", "resources")
+                Path.of("src", "test", "resources")
                      .resolve(FIXED_BENCHMARK_DIRECTORY),
-                Paths.get("hipparchus-optim", "src", "test", "resources")
+                Path.of("hipparchus-optim", "src", "test", "resources")
                      .resolve(FIXED_BENCHMARK_DIRECTORY),
-                Paths.get("org", "hipparchus", "optim", "nonlinear", "vector", "constrained", "maros_meszaros"),
-                Paths.get("src", "test", "resources", "org", "hipparchus", "optim", "nonlinear", "vector", "constrained", "maros_meszaros"),
-                Paths.get("hipparchus-optim", "src", "test", "resources", "org", "hipparchus", "optim", "nonlinear", "vector", "constrained", "maros_meszaros")
+                Path.of("org", "hipparchus", "optim", "nonlinear", "vector", "constrained", "maros_meszaros"),
+                Path.of("src", "test", "resources", "org", "hipparchus", "optim", "nonlinear", "vector", "constrained", "maros_meszaros"),
+                Path.of("hipparchus-optim", "src", "test", "resources", "org", "hipparchus", "optim", "nonlinear", "vector", "constrained", "maros_meszaros")
         );
 
         for (Path candidate : candidates) {

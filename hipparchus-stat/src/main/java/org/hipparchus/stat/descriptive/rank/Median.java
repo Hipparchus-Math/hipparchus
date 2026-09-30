@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -43,6 +44,7 @@ import org.hipparchus.util.KthSelector;
 public class Median extends AbstractUnivariateStatistic implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** Fixed quantile. */

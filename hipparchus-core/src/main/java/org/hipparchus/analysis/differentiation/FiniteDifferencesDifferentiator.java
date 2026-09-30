@@ -21,6 +21,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.analysis.UnivariateFunction;
@@ -76,6 +77,7 @@ public class FiniteDifferencesDifferentiator
                UnivariateMatrixFunctionDifferentiator, Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20120917L;
 
     /** Number of points to use. */

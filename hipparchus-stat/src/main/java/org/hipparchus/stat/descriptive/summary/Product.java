@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.summary;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -48,6 +49,7 @@ public class Product extends AbstractStorelessUnivariateStatistic
     implements AggregatableStatistic<Product>, WeightedEvaluation, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** The number of values that have been added */

@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -33,6 +34,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 public class EquationsMapper implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20160327L;
 
     /** Start indices of the components. */

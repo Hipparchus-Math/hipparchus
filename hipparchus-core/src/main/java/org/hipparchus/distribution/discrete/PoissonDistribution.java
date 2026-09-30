@@ -28,6 +28,8 @@ import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Poisson distribution.
  *
@@ -40,6 +42,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
     /** Default convergence criterion. */
     public static final double DEFAULT_EPSILON = 1e-12;
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** Distribution used to compute normal approximation. */
     private final NormalDistribution normal;

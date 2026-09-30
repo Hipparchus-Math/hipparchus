@@ -339,7 +339,7 @@ public abstract class RealTransformerAbstractTest <T> {
         final double[] expected = transform(x, type);
         final double[] actual = transformer.transform(x, type);
         for (int i = 0; i < n; i++) {
-            final String msg = String.format("%d, %d", n, i);
+            final String msg = "%d, %d".formatted(n, i);
             final double delta = tol * FastMath.abs(expected[i]);
             assertEquals(expected[i], actual[i], delta, msg);
         }
@@ -359,7 +359,7 @@ public abstract class RealTransformerAbstractTest <T> {
         final double[] expected = transform(x, type);
         final double[] actual = transformer.transform(f, a, b, n, type);
         for (int i = 0; i < n; i++) {
-            final String msg = String.format("%d, %d", n, i);
+            final String msg = "%d, %d".formatted(n, i);
             final double delta = tol * FastMath.abs(expected[i]);
             assertEquals(expected[i], actual[i], delta, msg);
         }

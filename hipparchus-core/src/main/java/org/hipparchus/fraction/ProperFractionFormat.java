@@ -21,6 +21,7 @@
  */
 package org.hipparchus.fraction;
 
+import java.io.Serial;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -40,6 +41,7 @@ import org.hipparchus.util.MathUtils;
 public class ProperFractionFormat extends FractionFormat {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160323L;
 
     /** The format used for the whole number. */

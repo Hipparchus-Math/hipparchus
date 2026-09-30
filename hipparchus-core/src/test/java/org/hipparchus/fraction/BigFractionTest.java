@@ -712,7 +712,7 @@ class BigFractionTest {
         // OEIS A002486, Apart from two leading terms (which are present by convention), denominators of convergents to Pi (https://oeis.org/A002486)
         // 1, 0, 1,  7, 106, 113,  33102,  33215,  66317,  99532, 265381,  364913, 1360120, 1725033, 25510582,  52746197, 78256779
         List<BigFraction> convergents = BigFraction.convergents(FastMath.PI, 20).collect(Collectors.toList());
-        assertEquals(new BigFraction(       3,        1), convergents.get( 0));
+        assertEquals(new BigFraction(       3,        1), convergents.get(0));
         assertEquals(new BigFraction(      22,        7), convergents.get( 1));
         assertEquals(new BigFraction(     333,      106), convergents.get( 2));
         assertEquals(new BigFraction(     355,      113), convergents.get( 3));

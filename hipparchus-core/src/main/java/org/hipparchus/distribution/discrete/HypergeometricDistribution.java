@@ -26,6 +26,8 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of the hypergeometric distribution.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.util.FastMath;
  */
 public class HypergeometricDistribution extends AbstractIntegerDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** The number of successes in the population. */
     private final int numberOfSuccesses;

@@ -182,12 +182,12 @@ public class SimplexSolver extends LinearOptimizer {
         solutionCallback = null;
 
         for (OptimizationData data : optData) {
-            if (data instanceof SolutionCallback) {
-                solutionCallback = (SolutionCallback) data;
+            if (data instanceof SolutionCallback callback) {
+                solutionCallback = callback;
                 continue;
             }
-            if (data instanceof PivotSelectionRule) {
-                pivotSelection = (PivotSelectionRule) data;
+            if (data instanceof PivotSelectionRule rule) {
+                pivotSelection = rule;
                 continue;
             }
         }
@@ -310,7 +310,7 @@ public class SimplexSolver extends LinearOptimizer {
             }
             return minRow;
         }
-        return minRatioPositions.get(0);
+        return minRatioPositions.getFirst();
     }
 
     /**

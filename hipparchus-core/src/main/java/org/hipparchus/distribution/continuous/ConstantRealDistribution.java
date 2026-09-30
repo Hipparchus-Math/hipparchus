@@ -25,12 +25,15 @@ package org.hipparchus.distribution.continuous;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the constant real distribution.
  */
 public class ConstantRealDistribution extends AbstractRealDistribution {
 
     /** Serialization ID */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** Constant value of the distribution */
     private final double value;

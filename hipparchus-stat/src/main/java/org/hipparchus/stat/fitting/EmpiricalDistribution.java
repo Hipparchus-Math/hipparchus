@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serial;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -120,6 +121,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     private static final String FILE_CHARSET = "US-ASCII";
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 5729073523949762654L;
 
     /** RandomDataGenerator instance to use in repeated calls to getNext() */

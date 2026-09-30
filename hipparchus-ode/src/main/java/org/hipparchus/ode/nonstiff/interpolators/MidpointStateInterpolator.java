@@ -21,6 +21,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.MidpointIntegrator;
 
+import java.io.Serial;
+
 /**
  * This class implements a step interpolator for second order
  * Runge-Kutta integrator.
@@ -47,6 +49,7 @@ import org.hipparchus.ode.nonstiff.MidpointIntegrator;
 public class MidpointStateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Simple constructor.

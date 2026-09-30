@@ -25,6 +25,8 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.IterationEvent;
 
+import java.io.Serial;
+
 /**
  * This is the base class for all events occurring during the iterations of a
  * {@link IterativeLinearSolver}.
@@ -33,6 +35,7 @@ import org.hipparchus.util.IterationEvent;
 public abstract class IterativeLinearSolverEvent
     extends IterationEvent {
     /** Serialization identifier. */
+    @Serial
     private static final long serialVersionUID = 20120129L;
 
     /**

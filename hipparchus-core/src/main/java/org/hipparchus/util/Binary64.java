@@ -25,6 +25,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
+import java.io.Serial;
+
 /**
  * This class wraps a {@code double} value in an object. It is similar to the
  * standard class {@link Double}, while also implementing the
@@ -57,6 +59,7 @@ public class Binary64 extends Number implements CalculusFieldElement<Binary64>, 
     public static final Binary64 NAN;
 
     /** */
+    @Serial
     private static final long serialVersionUID = 20120227L;
 
     static {
@@ -269,8 +272,7 @@ public class Binary64 extends Number implements CalculusFieldElement<Binary64>, 
     /** {@inheritDoc} */
     @Override
     public boolean equals(final Object obj) {
-        if (obj instanceof Binary64) {
-            final Binary64 that = (Binary64) obj;
+        if (obj instanceof Binary64 that) {
             return Double.doubleToLongBits(this.value) == Double
                     .doubleToLongBits(that.value);
         }

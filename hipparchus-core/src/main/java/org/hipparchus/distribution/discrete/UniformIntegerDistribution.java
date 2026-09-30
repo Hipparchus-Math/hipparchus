@@ -25,6 +25,8 @@ package org.hipparchus.distribution.discrete;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
+import java.io.Serial;
+
 /**
  * Implementation of the uniform integer distribution.
  *
@@ -33,6 +35,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  */
 public class UniformIntegerDistribution extends AbstractIntegerDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20120109L;
     /** Lower bound (inclusive) of this distribution. */
     private final int lower;

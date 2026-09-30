@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat;
 
+import java.io.Serial;
 import java.util.Comparator;
 
 /**
@@ -43,6 +44,7 @@ import java.util.Comparator;
 public class LongFrequency extends Frequency<Long> {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160322L;
 
     /**

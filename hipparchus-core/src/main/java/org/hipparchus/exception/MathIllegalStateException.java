@@ -21,6 +21,8 @@
  */
 package org.hipparchus.exception;
 
+import java.io.Serial;
+
 /**
  * Base class for all exceptions that signal that the process
  * throwing the exception is in a state that does not comply with
@@ -29,6 +31,7 @@ package org.hipparchus.exception;
  */
 public class MathIllegalStateException extends MathRuntimeException {
     /** Serializable version Id. */
+    @Serial
     private static final long serialVersionUID = -6024911025449780478L;
 
     /**

@@ -665,9 +665,9 @@ public class PolygonsSet
                 for (ConnectableSegment s = getUnprocessed(segments); s != null; s = getUnprocessed(segments)) {
                     final List<Segment> loop = followLoop(s);
                     if (loop != null && !loop.isEmpty()) {
-                        if (loop.get(0).getStart() == null) {
+                        if (loop.getFirst().getStart() == null) {
                             // this is an open loop, we put it on the front
-                            loops.add(0, loop);
+                            loops.addFirst(loop);
                             --pending;
                         } else {
                             // this is a closed loop, we put it on the back
@@ -688,13 +688,13 @@ public class PolygonsSet
                 for (final List<Segment> loop : loops) {
                     if (loop.size() < 2) {
                         // single infinite line
-                        final Line line = loop.get(0).getLine();
+                        final Line line = loop.getFirst().getLine();
                         vertices[i++] = new Vector2D[] {
                             null,
                             line.toSpace(new Vector1D(-Float.MAX_VALUE)),
                             line.toSpace(new Vector1D(+Float.MAX_VALUE))
                         };
-                    } else if (loop.get(0).getStart() == null) {
+                    } else if (loop.getFirst().getStart() == null) {
                         // open loop with at least one real point
                         final Vector2D[] array = new Vector2D[loop.size() + 3];
                         int j = 0;
@@ -868,7 +868,7 @@ public class PolygonsSet
             // we need to find its start too
             ConnectableSegment previous = defining.getPrevious();
             while (previous != null) {
-                loop.add(0, previous);
+                loop.addFirst(previous);
                 previous.setProcessed(true);
                 previous = previous.getPrevious();
             }
@@ -877,7 +877,7 @@ public class PolygonsSet
         // filter out spurious vertices
         filterSpuriousVertices(loop);
 
-        if (loop.size() == 2 && loop.get(0).getStart() != null) {
+        if (loop.size() == 2 && loop.getFirst().getStart() != null) {
             // this is a degenerated infinitely thin closed loop, we simply ignore it
             return null; // NOPMD
         } else {

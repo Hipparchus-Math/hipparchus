@@ -22,6 +22,7 @@
 
 package org.hipparchus.geometry.spherical.twod;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -50,6 +51,7 @@ public class Sphere2D implements Serializable, Space {
     public static final double SMALLEST_TOLERANCE = FastMath.ulp(2 * FastMath.PI);
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20131218L;
 
     /** Private constructor for the singleton.

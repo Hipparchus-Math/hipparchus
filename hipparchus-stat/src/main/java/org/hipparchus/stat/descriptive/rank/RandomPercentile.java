@@ -16,6 +16,7 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,6 +93,7 @@ public class RandomPercentile
     /** Default quantile estimation error setting */
     public static final double DEFAULT_EPSILON = 1e-4;
     /** Serialization version id */
+    @Serial
     private static final long serialVersionUID = 1L;
     /** Storage size of each buffer */
     private final int s;
@@ -416,6 +418,7 @@ public class RandomPercentile
      */
     private static class Buffer implements Serializable {
         /** Serialization version id */
+        @Serial
         private static final long serialVersionUID = 1L;
         /** Number of values actually stored in the buffer */
         private final int size;
@@ -705,6 +708,7 @@ public class RandomPercentile
      */
     private static class BufferMap implements Iterable<Buffer>, Serializable {
         /** Serialization version ID */
+        @Serial
         private static final long serialVersionUID = 1L;
         /** Total number of buffers that can be created - cap for count */
         private final int capacity;

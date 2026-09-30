@@ -22,6 +22,7 @@
 
 package org.hipparchus.clustering;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ import java.util.List;
 public class Cluster<T extends Clusterable> implements Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -3442297081515880464L;
 
     /** The points contained in this cluster. */

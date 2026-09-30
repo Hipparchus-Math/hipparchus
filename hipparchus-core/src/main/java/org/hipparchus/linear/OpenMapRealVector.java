@@ -21,6 +21,7 @@
  */
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -47,6 +48,7 @@ public class OpenMapRealVector extends SparseRealVector
     /** Default Tolerance for having a value considered zero. */
     public static final double DEFAULT_ZERO_TOLERANCE = 1.0e-12;
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 8772222695580707260L;
     /** Entries of the vector. */
     private final OpenIntToDoubleHashMap entries;
@@ -235,8 +237,8 @@ public class OpenMapRealVector extends SparseRealVector
     public RealVector add(RealVector v)
         throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
-        if (v instanceof OpenMapRealVector) {
-            return add((OpenMapRealVector) v);
+        if (v instanceof OpenMapRealVector vector) {
+            return add(vector);
         } else {
             return super.add(v);
         }
@@ -287,8 +289,8 @@ public class OpenMapRealVector extends SparseRealVector
     /** {@inheritDoc} */
     @Override
     public OpenMapRealVector append(RealVector v) {
-        if (v instanceof OpenMapRealVector) {
-            return append((OpenMapRealVector) v);
+        if (v instanceof OpenMapRealVector vector) {
+            return append(vector);
         } else {
             final OpenMapRealVector res = new OpenMapRealVector(this, v.getDimension());
             for (int i = 0; i < v.getDimension(); i++) {
@@ -409,8 +411,8 @@ public class OpenMapRealVector extends SparseRealVector
     @Override
     public double getDistance(RealVector v) throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
-        if (v instanceof OpenMapRealVector) {
-            return getDistance((OpenMapRealVector) v);
+        if (v instanceof OpenMapRealVector vector) {
+            return getDistance(vector);
         } else {
             return super.getDistance(v);
         }
@@ -460,8 +462,8 @@ public class OpenMapRealVector extends SparseRealVector
     public double getL1Distance(RealVector v)
         throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
-        if (v instanceof OpenMapRealVector) {
-            return getL1Distance((OpenMapRealVector) v);
+        if (v instanceof OpenMapRealVector vector) {
+            return getL1Distance(vector);
         } else {
             return super.getL1Distance(v);
         }
@@ -502,8 +504,8 @@ public class OpenMapRealVector extends SparseRealVector
     public double getLInfDistance(RealVector v)
         throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
-        if (v instanceof OpenMapRealVector) {
-            return getLInfDistance((OpenMapRealVector) v);
+        if (v instanceof OpenMapRealVector vector) {
+            return getLInfDistance(vector);
         } else {
             return super.getLInfDistance(v);
         }
@@ -615,8 +617,8 @@ public class OpenMapRealVector extends SparseRealVector
     public RealVector subtract(RealVector v)
         throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
-        if (v instanceof OpenMapRealVector) {
-            return subtract((OpenMapRealVector) v);
+        if (v instanceof OpenMapRealVector vector) {
+            return subtract(vector);
         } else {
             return super.subtract(v);
         }

@@ -253,7 +253,7 @@ final class FastFourierTransformerTest {
         final Complex[] actual = fft.transform(x, type);
         for (int i = 0; i < n; i++) {
             final String msg;
-            msg = String.format("%s, %s, %d, %d", normalization, type, n, i);
+            msg = "%s, %s, %d, %d".formatted(normalization, type, n, i);
             final double re = s * expected[i].getReal();
             assertEquals(re, actual[i].getReal(),
                 tol * FastMath.abs(re),
@@ -294,7 +294,7 @@ final class FastFourierTransformerTest {
         final Complex[] actual = fft.transform(x, type);
         for (int i = 0; i < n; i++) {
             final String msg;
-            msg = String.format("%s, %s, %d, %d", normalization, type, n, i);
+            msg = "%s, %s, %d, %d".formatted(normalization, type, n, i);
             final double re = s * expected[i].getReal();
             assertEquals(re, actual[i].getReal(),
                 tol * FastMath.abs(re),
@@ -335,7 +335,7 @@ final class FastFourierTransformerTest {
         }
         final Complex[] actual = fft.transform(f, min, max, n, type);
         for (int i = 0; i < n; i++) {
-            final String msg = String.format("%d, %d", n, i);
+            final String msg = "%d, %d".formatted(n, i);
             final double re = s * expected[i].getReal();
             assertEquals(re, actual[i].getReal(),
                 tol * FastMath.abs(re),

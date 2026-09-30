@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.regression;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -45,6 +46,7 @@ public class RegressionResults implements Serializable {
     /** INDEX of Adjusted R Squared */
     private static final int ADJRSQ_IDX = 4;
     /** UID */
+    @Serial
     private static final long serialVersionUID = 1l;
     /** regression slope parameters */
     private final double[] parameters;

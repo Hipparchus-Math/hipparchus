@@ -23,6 +23,8 @@ import org.hipparchus.ode.nonstiff.EmbeddedRungeKuttaIntegrator;
 import org.hipparchus.ode.nonstiff.FixedStepRungeKuttaIntegrator;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 
+import java.io.Serial;
+
 /** This class represents an interpolator over the last step during an
  * ODE integration for Runge-Kutta and embedded Runge-Kutta integrators.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 public abstract class RungeKuttaStateInterpolator extends AbstractODEStateInterpolator {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Slopes at the intermediate points */

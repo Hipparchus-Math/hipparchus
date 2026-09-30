@@ -28,6 +28,8 @@ import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Pascal distribution.
  * <p>
@@ -61,6 +63,7 @@ import org.hipparchus.util.MathUtils;
  */
 public class PascalDistribution extends AbstractIntegerDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** The number of successes. */
     private final int numberOfSuccesses;

@@ -166,8 +166,7 @@ public class Tuple implements CalculusFieldElement<Tuple> {
     /** {@inheritDoc} */
     @Override
     public boolean equals(final Object obj) {
-        if (obj instanceof Tuple) {
-            final Tuple that = (Tuple) obj;
+        if (obj instanceof Tuple that) {
             if (getDimension() == that.getDimension()) {
                 boolean equals = true;
                 for (int i = 0; i < values.length; ++i) {
@@ -844,8 +843,8 @@ public class Tuple implements CalculusFieldElement<Tuple> {
         /** {@inheritDoc} */
         @Override
         public boolean equals(final Object other) {
-            if (other instanceof TupleField) {
-                return zero.getDimension() == ((TupleField) other).zero.getDimension();
+            if (other instanceof TupleField tupleField) {
+                return zero.getDimension() == tupleField.zero.getDimension();
             } else {
                 return false;
             }

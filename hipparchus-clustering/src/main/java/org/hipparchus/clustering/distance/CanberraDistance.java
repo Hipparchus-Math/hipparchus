@@ -25,6 +25,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
+import java.io.Serial;
+
 /**
  * Calculates the Canberra distance between two points.
  *
@@ -32,6 +34,7 @@ import org.hipparchus.util.MathArrays;
 public class CanberraDistance implements DistanceMeasure {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -6972277381587032228L;
 
     /** Empty constructor.

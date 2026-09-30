@@ -21,6 +21,7 @@
  */
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -37,6 +38,7 @@ import org.hipparchus.util.Precision;
 public class DiagonalMatrix extends AbstractRealMatrix
     implements Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20121229L;
     /** Entries of the diagonal. */
     private final double[] data;
@@ -176,8 +178,8 @@ public class DiagonalMatrix extends AbstractRealMatrix
     @Override
     public RealMatrix multiply(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof DiagonalMatrix) {
-            return multiply((DiagonalMatrix) m);
+        if (m instanceof DiagonalMatrix matrix) {
+            return multiply(matrix);
         } else {
             MatrixUtils.checkMultiplicationCompatible(this, m);
             final RealMatrix product = m.createMatrix(m.getRowDimension(), m.getColumnDimension());
@@ -210,8 +212,8 @@ public class DiagonalMatrix extends AbstractRealMatrix
     @Override
     public RealMatrix multiplyTransposed(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof DiagonalMatrix) {
-            return multiplyTransposed((DiagonalMatrix) m);
+        if (m instanceof DiagonalMatrix matrix) {
+            return multiplyTransposed(matrix);
         } else {
             MatrixUtils.checkSameColumnDimension(this, m);
             final RealMatrix product = m.createMatrix(m.getColumnDimension(), m.getRowDimension());
@@ -243,8 +245,8 @@ public class DiagonalMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public RealMatrix transposeMultiply(final RealMatrix m) {
-        if (m instanceof DiagonalMatrix) {
-            return transposeMultiply((DiagonalMatrix) m);
+        if (m instanceof DiagonalMatrix matrix) {
+            return transposeMultiply(matrix);
         } else {
             // transposition is no-op for diagonal matrices
             return multiply(m);
@@ -354,8 +356,8 @@ public class DiagonalMatrix extends AbstractRealMatrix
     @Override
     public RealVector preMultiply(final RealVector v) throws MathIllegalArgumentException {
         final double[] vectorData;
-        if (v instanceof ArrayRealVector) {
-            vectorData = ((ArrayRealVector) v).getDataRef();
+        if (v instanceof ArrayRealVector vector) {
+            vectorData = vector.getDataRef();
         } else {
             vectorData = v.toArray();
         }

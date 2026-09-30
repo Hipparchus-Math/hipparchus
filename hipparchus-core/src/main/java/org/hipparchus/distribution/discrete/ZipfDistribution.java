@@ -26,6 +26,8 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Zipf distribution.
  * <p>
@@ -50,6 +52,7 @@ import org.hipparchus.util.FastMath;
  */
 public class ZipfDistribution extends AbstractIntegerDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20150501L;
     /** Number of elements. */
     private final int numberOfElements;

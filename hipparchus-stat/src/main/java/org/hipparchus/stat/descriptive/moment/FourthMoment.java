@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.NullArgumentException;
@@ -60,6 +61,7 @@ import org.hipparchus.exception.NullArgumentException;
 class FourthMoment extends ThirdMoment implements Serializable{
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** fourth moment of values that have been added */

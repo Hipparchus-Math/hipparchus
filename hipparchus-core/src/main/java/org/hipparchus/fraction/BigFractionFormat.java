@@ -22,6 +22,7 @@
 
 package org.hipparchus.fraction;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.text.FieldPosition;
@@ -42,6 +43,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 public class BigFractionFormat extends AbstractFormat implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160323L;
 
     /**
@@ -170,15 +172,12 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
                                final StringBuffer toAppendTo, final FieldPosition pos) {
 
         final StringBuffer ret;
-        if (obj instanceof BigFraction) {
-            ret = format((BigFraction) obj, toAppendTo, pos);
-        } else if (obj instanceof BigInteger) {
-            ret = format(new BigFraction((BigInteger) obj), toAppendTo, pos);
-        } else if (obj instanceof Number) {
-            ret = format(new BigFraction(((Number) obj).doubleValue()),
-                         toAppendTo, pos);
-        } else {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
+        switch (obj) {
+            case BigFraction fraction -> ret = format(fraction, toAppendTo, pos);
+            case BigInteger integer -> ret = format(new BigFraction(integer), toAppendTo, pos);
+            case Number number -> ret = format(new BigFraction(number.doubleValue()),
+                    toAppendTo, pos);
+            case null, default -> throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
         }
 
         return ret;

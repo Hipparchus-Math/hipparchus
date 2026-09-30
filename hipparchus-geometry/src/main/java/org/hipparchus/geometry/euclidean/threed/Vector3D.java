@@ -32,6 +32,7 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
@@ -76,6 +77,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D, Vector3D> {
         new Vector3D(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 1313493323784566947L;
 
     /** Abscissa. */
@@ -425,8 +427,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D, Vector3D> {
             return true;
         }
 
-        if (other instanceof Vector3D) {
-            final Vector3D rhs = (Vector3D)other;
+        if (other instanceof Vector3D rhs) {
             return x == rhs.x && y == rhs.y && z == rhs.z || isNaN() && rhs.isNaN();
         }
 
@@ -459,8 +460,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D, Vector3D> {
             return true;
         }
 
-        if (other instanceof Vector3D) {
-            final Vector3D rhs = (Vector3D) other;
+        if (other instanceof Vector3D rhs) {
             return x == rhs.x && y == rhs.y && z == rhs.z;
         }
 

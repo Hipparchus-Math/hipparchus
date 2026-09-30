@@ -24,6 +24,8 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
+import java.io.Serial;
+
 /**
  * A default concrete implementation of the abstract class
  * {@link IterativeLinearSolverEvent}.
@@ -32,6 +34,7 @@ import org.hipparchus.exception.MathRuntimeException;
 public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEvent {
 
     /** */
+    @Serial
     private static final long serialVersionUID = 20120129L;
 
     /** The right-hand side vector. */

@@ -354,8 +354,8 @@ public class ClusterAlgorithmComparison {
                     g2.fill(new Ellipse2D.Double(arr[0] - 1, arr[1] - 1, 3, 3));
                 }
 
-                if (cluster instanceof CentroidCluster) {
-                    Clusterable p = transform(((CentroidCluster<?>) cluster).getCenter(), w, h);
+                if (cluster instanceof CentroidCluster<?> centroidCluster) {
+                    Clusterable p = transform(centroidCluster.getCenter(), w, h);
                     double[] arr = p.getPoint();
                     Shape s = new Ellipse2D.Double(arr[0] - 4, arr[1] - 4, 8, 8);
                     g2.fill(s);
@@ -365,7 +365,7 @@ public class ClusterAlgorithmComparison {
             }
 
             g2.setPaint(Color.black);
-            g2.drawString(String.format("%.2f s", duration / 1e3), w - 40, h - 5);
+            g2.drawString("%.2f s".formatted(duration / 1e3), w - 40, h - 5);
         }
 
         @Override

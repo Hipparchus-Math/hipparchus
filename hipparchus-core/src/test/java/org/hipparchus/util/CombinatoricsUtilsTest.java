@@ -402,8 +402,8 @@ class CombinatoricsUtilsTest {
         final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(emptyList).
                                                  collect(Collectors.toList());
         assertEquals(1, partitions.size());
-        assertEquals(1, partitions.get(0).length);
-        assertEquals(0, partitions.get(0)[0].size());
+        assertEquals(1, partitions.getFirst().length);
+        assertEquals(0, partitions.getFirst()[0].size());
     }
 
     @Test
@@ -411,8 +411,8 @@ class CombinatoricsUtilsTest {
         final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(Arrays.asList(1)).
                                                  collect(Collectors.toList());
         assertEquals(1, partitions.size());
-        assertEquals(1, partitions.get(0).length);
-        assertEquals(1, partitions.get(0)[0].size());
+        assertEquals(1, partitions.getFirst().length);
+        assertEquals(1, partitions.getFirst()[0].size());
     }
 
     @Test
@@ -567,7 +567,7 @@ class CombinatoricsUtilsTest {
         final List<List<Integer>> permutations = CombinatoricsUtils.permutations(emptyList).
                                                  collect(Collectors.toList());
         assertEquals(1, permutations.size());
-        assertEquals(0, permutations.get(0).size());
+        assertEquals(0, permutations.getFirst().size());
     }
 
     @Test
@@ -575,7 +575,7 @@ class CombinatoricsUtilsTest {
         final List<List<Integer>> permutations = CombinatoricsUtils.permutations(Arrays.asList(1)).
                                                  collect(Collectors.toList());
         assertEquals(1, permutations.size());
-        assertEquals(1, permutations.get(0).size());
+        assertEquals(1, permutations.getFirst().size());
     }
 
     @Test

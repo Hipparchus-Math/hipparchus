@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.summary;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -46,6 +47,7 @@ public class SumOfSquares extends AbstractStorelessUnivariateStatistic
     implements AggregatableStatistic<SumOfSquares>, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** Number of values that have been added */

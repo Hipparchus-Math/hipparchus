@@ -22,6 +22,7 @@
 
 package org.hipparchus.fraction;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
@@ -37,6 +38,7 @@ import org.hipparchus.util.MathUtils;
 abstract class AbstractFormat extends NumberFormat implements Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160323L;
 
     /** The format used for the denominator. */

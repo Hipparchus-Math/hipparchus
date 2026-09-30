@@ -305,8 +305,8 @@ class DerivativeTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj instanceof DerivativeTest.TestDerivative) {
-                return Double.compare(value, ((DerivativeTest.TestDerivative) obj).value) == 0;
+            if (obj instanceof DerivativeTest.TestDerivative derivative) {
+                return Double.compare(value, derivative.value) == 0;
             } else {
                 return false;
             }

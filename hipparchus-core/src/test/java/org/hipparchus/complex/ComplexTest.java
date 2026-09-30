@@ -1753,26 +1753,26 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         // NaN + finite -> NaN
         List<Complex> roots = oneNaN.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.NaN, roots.get(0));
+        assertEquals(Complex.NaN, roots.getFirst());
 
         roots = nanZero.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.NaN, roots.get(0));
+        assertEquals(Complex.NaN, roots.getFirst());
 
         // NaN + infinite -> NaN
         roots = nanInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.NaN, roots.get(0));
+        assertEquals(Complex.NaN, roots.getFirst());
 
         // finite + infinite -> Inf
         roots = oneInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.INF, roots.get(0));
+        assertEquals(Complex.INF, roots.getFirst());
 
         // infinite + infinite -> Inf
         roots = negInfInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.INF, roots.get(0));
+        assertEquals(Complex.INF, roots.getFirst());
     }
 
     @Test

@@ -117,7 +117,7 @@ class WeightedObservedPointsTest {
     private boolean lastElementIsSame(WeightedObservedPoints store,
                                       WeightedObservedPoint point) {
         final List<WeightedObservedPoint> list = store.toList();
-        final WeightedObservedPoint lastPoint = list.get(list.size() - 1);
+        final WeightedObservedPoint lastPoint = list.getLast();
 
         if (!Precision.equals(lastPoint.getX(), point.getX())) {
             return false;
