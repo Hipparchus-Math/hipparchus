@@ -91,7 +91,7 @@ public class VariationalEquation {
     private final int index;
 
     /** State and parameters Jacobian matrices in a row. */
-    private double[] matricesData;
+    private final double[] matricesData;
 
     /** Build variational equation using finite differences for local
      * partial derivatives.

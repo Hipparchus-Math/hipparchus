@@ -45,10 +45,10 @@ public class DummyFieldStepInterpolator<T extends CalculusFieldElement<T>>
                                                       final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                       final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                       final FieldEquationsMapper<T> newMapper) {
-        return new DummyFieldStepInterpolator<T>(newForward,
-                                                 newGlobalPreviousState, newGlobalCurrentState,
-                                                 newSoftPreviousState, newSoftCurrentState,
-                                                 newMapper);
+        return new DummyFieldStepInterpolator<>(newForward,
+                newGlobalPreviousState, newGlobalCurrentState,
+                newSoftPreviousState, newSoftCurrentState,
+                newMapper);
     }
 
     @Override

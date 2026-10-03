@@ -1426,7 +1426,7 @@ public class LegendreEllipticIntegral { // NOPMD - this class has a high number 
         private final double csc2;
 
         /** Indicator for negated Jacobi amplitude. */
-        private boolean negate;
+        private final boolean negate;
 
         /** Simple constructor.
          * @param phi amplitude (i.e. upper bound of the integral)
@@ -1455,7 +1455,7 @@ public class LegendreEllipticIntegral { // NOPMD - this class has a high number 
         private final T csc2;
 
         /** Indicator for negated Jacobi amplitude. */
-        private boolean negate;
+        private final boolean negate;
 
         /** Simple constructor.
          * @param phi amplitude (i.e. upper bound of the integral)

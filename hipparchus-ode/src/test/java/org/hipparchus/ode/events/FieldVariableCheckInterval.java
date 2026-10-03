@@ -87,7 +87,7 @@ public class FieldVariableCheckInterval implements FieldOrdinaryDifferentialEqua
     }
 
     /** State events for this unit test. */
-    private class Event implements FieldODEEventDetector<Binary64> {
+    private static class Event implements FieldODEEventDetector<Binary64> {
 
         private final FieldAdaptableInterval<Binary64>             maxCheck;
         private final int                                          maxIter;

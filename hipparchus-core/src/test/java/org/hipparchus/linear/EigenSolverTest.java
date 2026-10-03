@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class EigenSolverTest {
 
-    private double[][] bigSingular = {
+    private final double[][] bigSingular = {
         { 1.0, 2.0,   3.0,    4.0 },
         { 2.0, 5.0,   3.0,    4.0 },
         { 7.0, 3.0, 256.0, 1930.0 },

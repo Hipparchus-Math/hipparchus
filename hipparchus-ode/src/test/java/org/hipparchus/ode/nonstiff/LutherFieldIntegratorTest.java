@@ -29,7 +29,7 @@ class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> FixedStepRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {
-        return new LutherFieldIntegrator<T>(field, step);
+        return new LutherFieldIntegrator<>(field, step);
     }
 
     @Override

@@ -754,9 +754,9 @@ public class MathArrays {
     public static void checkNonNegative(final long[][] in)
         throws MathIllegalArgumentException {
         for (long[] longs : in) {
-            for (int j = 0; j < longs.length; j++) {
-                if (longs[j] < 0) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, longs[j], 0);
+            for (long aLong : longs) {
+                if (aLong < 0) {
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, aLong, 0);
                 }
             }
         }
@@ -975,22 +975,26 @@ public class MathArrays {
         // Create comparators for increasing and decreasing orders.
         final Comparator<PairDoubleInteger> comp =
             dir == MathArrays.OrderDirection.INCREASING ?
-            new Comparator<PairDoubleInteger>() {
-                /** {@inheritDoc} */
-                @Override
-                public int compare(PairDoubleInteger o1,
-                                   PairDoubleInteger o2) {
-                    return Double.compare(o1.getKey(), o2.getKey());
-                }
-            } :
-            new Comparator<PairDoubleInteger>() {
-                /** {@inheritDoc} */
-                @Override
-                public int compare(PairDoubleInteger o1,
-                                   PairDoubleInteger o2) {
-                    return Double.compare(o2.getKey(), o1.getKey());
-                }
-            };
+                    new Comparator<>() {
+                        /**
+                         * {@inheritDoc}
+                         */
+                        @Override
+                        public int compare(PairDoubleInteger o1,
+                                           PairDoubleInteger o2) {
+                            return Double.compare(o1.getKey(), o2.getKey());
+                        }
+                    } :
+                    new Comparator<>() {
+                        /**
+                         * {@inheritDoc}
+                         */
+                        @Override
+                        public int compare(PairDoubleInteger o1,
+                                           PairDoubleInteger o2) {
+                            return Double.compare(o2.getKey(), o1.getKey());
+                        }
+                    };
 
         // Sort.
         list.sort(comp);

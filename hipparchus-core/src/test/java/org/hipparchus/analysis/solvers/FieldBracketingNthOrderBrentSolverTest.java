@@ -46,25 +46,25 @@ final class FieldBracketingNthOrderBrentSolverTest {
 
     @Test
     void testInsufficientOrder3() {
-        assertThrows(MathIllegalArgumentException.class, () -> new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy,
-                                                    absoluteAccuracy,
-                                                    functionValueAccuracy,
-                                                    1));
+        assertThrows(MathIllegalArgumentException.class, () -> new FieldBracketingNthOrderBrentSolver<>(relativeAccuracy,
+                absoluteAccuracy,
+                functionValueAccuracy,
+                1));
     }
 
     @Test
     void testConstructorOK() {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
-                new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
-                                                            functionValueAccuracy, 2);
+                new FieldBracketingNthOrderBrentSolver<>(relativeAccuracy, absoluteAccuracy,
+                        functionValueAccuracy, 2);
         assertEquals(2, solver.getMaximalOrder());
     }
 
     @Test
     void testConvergenceOnFunctionAccuracy() {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
-                new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
-                                                            field.newDfp(1.0e-20), 20);
+                new FieldBracketingNthOrderBrentSolver<>(relativeAccuracy, absoluteAccuracy,
+                        field.newDfp(1.0e-20), 20);
         FieldUnivariateFunction f = new FieldUnivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(T x) {
                 T one     = x.getField().getOne();
@@ -131,8 +131,8 @@ final class FieldBracketingNthOrderBrentSolverTest {
     private void check(CalculusFieldUnivariateFunction<Dfp> f, int maxEval, double min, double max,
                        AllowedSolution allowedSolution) {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
-                new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
-                                                     functionValueAccuracy, 20);
+                new FieldBracketingNthOrderBrentSolver<>(relativeAccuracy, absoluteAccuracy,
+                        functionValueAccuracy, 20);
         Dfp xResult = solver.solve(maxEval, f, field.newDfp(min), field.newDfp(max),
                                    allowedSolution);
         Dfp yResult = f.value(xResult);

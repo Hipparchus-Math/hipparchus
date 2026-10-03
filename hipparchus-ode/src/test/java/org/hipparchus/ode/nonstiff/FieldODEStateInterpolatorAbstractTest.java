@@ -48,7 +48,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     protected <T extends CalculusFieldElement<T>> void doInterpolationAtBounds(final Field<T> field, double epsilon) {
 
         FieldODEStateInterpolator<T> interpolator = setUpInterpolator(field,
-                                                                      new SinCos<T>(field),
+                new SinCos<>(field),
                                                                       0.0, new double[] { 0.0, 1.0 }, 0.125);
 
         assertEquals(0.0, interpolator.getPreviousState().getTime().getReal(), 1.0e-15);
@@ -74,7 +74,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     protected <T extends CalculusFieldElement<T>> void doInterpolationInside(final Field<T> field,
                                                                          double epsilonSin, double epsilonCos) {
 
-        ReferenceFieldODE<T> sinCos =  new SinCos<T>(field);
+        ReferenceFieldODE<T> sinCos = new SinCos<>(field);
         FieldODEStateInterpolator<T> interpolator = setUpInterpolator(field, sinCos,
                                                                       0.0, new double[] { 0.0, 1.0 }, 0.0125);
 
@@ -250,7 +250,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                                                                                      double epsilonSin, double epsilonCos,
                                                                                      double epsilonSinDot, double epsilonCosDot) {
 
-        ReferenceFieldODE<T> eqn = new SinCos<T>(field);
+        ReferenceFieldODE<T> eqn = new SinCos<>(field);
         FieldODEStateInterpolator<T> fieldInterpolator =
                         setUpInterpolator(field, eqn, 0.0, new double[] { 0.0, 1.0 }, 0.125);
         ODEStateInterpolator regularInterpolator = convertInterpolator(fieldInterpolator, eqn);

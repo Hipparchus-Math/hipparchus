@@ -57,7 +57,7 @@ public class GnuplotComplexPlotter {
     private FieldJacobiElliptic<Complex> jacobi;
 
     /** Functions to plot. */
-    private List<Predefined> functions;
+    private final List<Predefined> functions;
 
     /** Output directory (display to terminal if null). */
     private File output;

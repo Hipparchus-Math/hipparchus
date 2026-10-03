@@ -293,16 +293,16 @@ class MersenneTwisterTest extends RandomGeneratorAbstractTest {
             0.70694291, 0.85212760, 0.86074305, 0.33163422, 0.85739792, 0.59908488, 0.74566046, 0.72157152
         };
 
-        for (int i = 0; i < refInt.length; ++i) {
+        for (long l : refInt) {
             int r = mt.nextInt();
-            assertEquals(refInt[i], (r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l));
+            assertEquals(l, (r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l));
         }
 
-        for (int i = 0; i < refDouble.length; ++i) {
+        for (double v : refDouble) {
             int r = mt.nextInt();
-            assertEquals(refDouble[i],
-                         ((r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l)) / 4294967296.0,
-                         1.0e-8);
+            assertEquals(v,
+                    ((r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l)) / 4294967296.0,
+                    1.0e-8);
         }
 
     }

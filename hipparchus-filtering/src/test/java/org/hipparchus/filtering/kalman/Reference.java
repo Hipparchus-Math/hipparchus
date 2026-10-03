@@ -110,7 +110,7 @@ public class Reference {
              BufferedReader br = new BufferedReader(isr)) {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
                 line = line.trim();
-                if (line.length() > 0 && !line.startsWith("#")) {
+                if (!line.isEmpty() && !line.startsWith("#")) {
                     loaded.add(new Reference(stateDimension, measurementDimension, line));
                 }
             }

@@ -342,9 +342,11 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         // copy entries
         final FieldMatrix<T> subMatrix =
             createMatrix(selectedRows.length, selectedColumns.length);
-        subMatrix.walkInOptimizedOrder(new DefaultFieldMatrixChangingVisitor<T>(field.getZero()) {
+        subMatrix.walkInOptimizedOrder(new DefaultFieldMatrixChangingVisitor<>(field.getZero()) {
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public T visit(final int row, final int column, final T value) {
                 return getEntry(selectedRows[row], selectedColumns[column]);
@@ -373,24 +375,32 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         }
 
         // copy entries
-        walkInOptimizedOrder(new DefaultFieldMatrixPreservingVisitor<T>(field.getZero()) {
+        walkInOptimizedOrder(new DefaultFieldMatrixPreservingVisitor<>(field.getZero()) {
 
-            /** Initial row index. */
+            /**
+             * Initial row index.
+             */
             private int startRow;
 
-            /** Initial column index. */
+            /**
+             * Initial column index.
+             */
             private int startColumn;
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void start(final int rows, final int columns,
                               final int startRow, final int endRow,
                               final int startColumn, final int endColumn) {
-                this.startRow    = startRow;
+                this.startRow = startRow;
                 this.startColumn = startColumn;
             }
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void visit(final int row, final int column, final T value) {
                 destination[row - startRow][column - startColumn] = value;
@@ -656,8 +666,10 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         final FieldMatrix<T> out = createMatrix(nCols, nRows);
-        walkInOptimizedOrder(new DefaultFieldMatrixPreservingVisitor<T>(field.getZero()) {
-            /** {@inheritDoc} */
+        walkInOptimizedOrder(new DefaultFieldMatrixPreservingVisitor<>(field.getZero()) {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void visit(final int row, final int column, final T value) {
                 out.setEntry(column, row, value);

@@ -32,22 +32,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class RRQRDecompositionTest {
-    private double[][] testData3x3NonSingular = {
+    private final double[][] testData3x3NonSingular = {
             { 12, -51, 4 },
             { 6, 167, -68 },
             { -4, 24, -41 }, };
 
-    private double[][] testData3x3Singular = {
+    private final double[][] testData3x3Singular = {
             { 1, 4, 7, },
             { 2, 5, 8, },
             { 3, 6, 9, }, };
 
-    private double[][] testData3x4 = {
+    private final double[][] testData3x4 = {
             { 12, -51, 4, 1 },
             { 6, 167, -68, 2 },
             { -4, 24, -41, 3 }, };
 
-    private double[][] testData4x3 = {
+    private final double[][] testData4x3 = {
             { 12, -51, 4, },
             { 6, 167, -68, },
             { -4, 24, -41, },

@@ -58,7 +58,7 @@ public abstract class TestFieldProblemAbstract<T extends CalculusFieldElement<T>
      */
     protected TestFieldProblemAbstract(T t0, T[] y0, T t1, T[] errorScale) {
         calls      = 0;
-        s0         = new FieldODEState<T>(t0, y0);
+        s0         = new FieldODEState<>(t0, y0);
         this.t1    = t1;
         this.errorScale = errorScale.clone();
     }

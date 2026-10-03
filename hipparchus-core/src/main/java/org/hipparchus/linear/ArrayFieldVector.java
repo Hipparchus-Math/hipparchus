@@ -44,7 +44,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     private static final long serialVersionUID = 7648186910365927050L;
 
     /** Entries of the vector. */
-    private T[] data;
+    private final T[] data;
 
     /** Field to which the elements belong. */
     private final Field<T> field;

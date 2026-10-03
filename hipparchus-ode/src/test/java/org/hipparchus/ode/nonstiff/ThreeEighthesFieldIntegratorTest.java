@@ -27,7 +27,7 @@ class ThreeEighthesFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstract
 
     protected <T extends CalculusFieldElement<T>> FixedStepRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {
-        return new ThreeEighthesFieldIntegrator<T>(field, step);
+        return new ThreeEighthesFieldIntegrator<>(field, step);
     }
 
     @Override

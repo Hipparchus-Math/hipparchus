@@ -52,7 +52,7 @@ public class LegendreParametricTest extends GaussianQuadratureAbstractTest {
      * @return the collection of parameters for this parameterized test.
      */
     public static Collection<Object[]> getParameters() {
-        final ArrayList<Object[]> parameters = new ArrayList<Object[]>();
+        final ArrayList<Object[]> parameters = new ArrayList<>();
         for (int k = 1; k <= MAX_NUM_POINTS; k++) {
             parameters.add(new Object[] { k, 2 * k - 1, Math.ulp(1d), 91d });
         }

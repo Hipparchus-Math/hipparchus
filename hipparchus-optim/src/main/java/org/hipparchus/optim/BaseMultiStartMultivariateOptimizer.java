@@ -45,9 +45,9 @@ public abstract class BaseMultiStartMultivariateOptimizer<P>
     /** Number of evaluations already performed for all starts. */
     private int totalEvaluations;
     /** Number of starts to go. */
-    private int starts;
+    private final int starts;
     /** Random generator for multi-start. */
-    private RandomVectorGenerator generator;
+    private final RandomVectorGenerator generator;
     /** Optimization data. */
     private OptimizationData[] optimData;
     /**

@@ -203,8 +203,8 @@ class GraggBulirschStoerIntegratorTest {
         // since state is approx. linear at g=0 need convergence <= (state tolerance) / 2.
         double convergence = 1.0e-11;
         ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
-        for (int l = 0; l < functions.length; ++l) {
-            integ.addEventDetector(functions[l]);
+        for (ODEEventDetector function : functions) {
+            integ.addEventDetector(function);
         }
         assertEquals(functions.length, integ.getEventDetectors().size());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
@@ -355,7 +355,7 @@ class GraggBulirschStoerIntegratorTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
             assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            assertTrue((Double) mise.getParts()[0] <= 0.0);
         }
     }
 
@@ -392,7 +392,7 @@ class GraggBulirschStoerIntegratorTest {
         }
         private int nbSteps;
         private double maxError;
-        private TestProblem3 pb;
+        private final TestProblem3 pb;
     }
 
     public static class VariableStepHandler implements ODEStepHandler {

@@ -117,8 +117,8 @@ class GridAxisTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
-            assertEquals(2.0, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
-            assertEquals(2.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
+            assertEquals(2.0, (Double) miae.getParts()[0], 1.0e-15);
+            assertEquals(2.0, (Double) miae.getParts()[1], 1.0e-15);
             assertEquals(3,   ((Integer) miae.getParts()[2]).intValue());
             assertEquals(2,   ((Integer) miae.getParts()[3]).intValue());
         }
@@ -131,8 +131,8 @@ class GridAxisTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
-            assertEquals(0.5, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
-            assertEquals(1.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
+            assertEquals(0.5, (Double) miae.getParts()[0], 1.0e-15);
+            assertEquals(1.0, (Double) miae.getParts()[1], 1.0e-15);
             assertEquals(2,   ((Integer) miae.getParts()[2]).intValue());
             assertEquals(1,   ((Integer) miae.getParts()[3]).intValue());
         }

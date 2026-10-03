@@ -95,15 +95,15 @@ final class FrequencyTest {
         Frequency<Integer> f = new Frequency<>();
 
         f.addValue(1);
-        f.addValue(Integer.valueOf(1));
+        f.addValue(1);
         f.addValue(Long.valueOf(1).intValue());
         f.addValue(2);
-        f.addValue(Integer.valueOf(-1));
+        f.addValue(-1);
 
         assertEquals(3, f.getCount(1), "1 count");
-        assertEquals(3, f.getCount(Integer.valueOf(1)), "1 count");
+        assertEquals(3, f.getCount(1), "1 count");
         assertEquals(0.2, f.getCumPct(0), TOLERANCE, "0 cum pct");
-        assertEquals(0.6, f.getPct(Integer.valueOf(1)), TOLERANCE, "1 pct");
+        assertEquals(0.6, f.getPct(1), TOLERANCE, "1 pct");
         assertEquals(0, f.getCumPct(-2), TOLERANCE, "-2 cum pct");
         assertEquals(1, f.getCumPct(10), TOLERANCE, "10 cum pct");
     }
@@ -154,11 +154,11 @@ final class FrequencyTest {
         f.addValue(3L);
         f.addValue((long) THREE);
         assertEquals(0.25, f.getPct(1L), TOLERANCE, "one pct");
-        assertEquals(0.25, f.getPct(Long.valueOf(2)), TOLERANCE, "two pct");
+        assertEquals(0.25, f.getPct(2L), TOLERANCE, "two pct");
         assertEquals(0.5, f.getPct(THREE_LONG), TOLERANCE, "three pct");
         assertEquals(0, f.getPct(5L), TOLERANCE, "five pct");
         assertEquals(0.25, f.getCumPct(1L), TOLERANCE, "one cum pct");
-        assertEquals(0.50, f.getCumPct(Long.valueOf(2)), TOLERANCE, "two cum pct");
+        assertEquals(0.50, f.getCumPct(2L), TOLERANCE, "two cum pct");
         assertEquals(1.0, f.getCumPct(THREE_LONG), TOLERANCE, "three cum pct");
         assertEquals(1.0, f.getCumPct(5L), TOLERANCE, "five cum pct");
         assertEquals(0.0, f.getCumPct(0L), TOLERANCE, "zero cum pct");
@@ -171,14 +171,14 @@ final class FrequencyTest {
 
         assertEquals(0, freq.getSumFreq(), "freq sum, empty table");
         assertEquals(0, freq.getCount(0), "count, empty table");
-        assertEquals(0, freq.getCount(Integer.valueOf(0)), "count, empty table");
+        assertEquals(0, freq.getCount(0), "count, empty table");
         assertEquals(0, freq.getCumFreq(0), "cum freq, empty table");
         assertEquals(0, freq.getCumFreq(2), "cum freq, empty table");
 
         assertTrue(Double.isNaN(freq.getPct(0)), "pct, empty table");
-        assertTrue(Double.isNaN(freq.getPct(Integer.valueOf(0))), "pct, empty table");
+        assertTrue(Double.isNaN(freq.getPct(0)), "pct, empty table");
         assertTrue(Double.isNaN(freq.getCumPct(0)), "cum pct, empty table");
-        assertTrue(Double.isNaN(freq.getCumPct(Integer.valueOf(0))), "cum pct, empty table");
+        assertTrue(Double.isNaN(freq.getCumPct(0)), "cum pct, empty table");
     }
 
     @Test
@@ -230,18 +230,18 @@ final class FrequencyTest {
         Frequency<Integer> f = new Frequency<>();
 
         Integer obj1 = null;
-        obj1 = Integer.valueOf(1);
-        Integer int1 = Integer.valueOf(1);
+        obj1 = 1;
+        Integer int1 = 1;
         f.addValue(obj1);
         f.addValue(int1);
         f.addValue(2);
         f.addValue(Long.valueOf(2).intValue());
         assertEquals(2, f.getCount(1), "Integer 1 count");
-        assertEquals(2, f.getCount(Integer.valueOf(1)), "Integer 1 count");
+        assertEquals(2, f.getCount(1), "Integer 1 count");
         assertEquals(2, f.getCount(Long.valueOf(1).intValue()), "Integer 1 count");
         assertEquals(0.5, f.getCumPct(1), TOLERANCE, "Integer 1 cumPct");
         assertEquals(0.5, f.getCumPct(Long.valueOf(1).intValue()), TOLERANCE, "Integer 1 cumPct");
-        assertEquals(0.5, f.getCumPct(Integer.valueOf(1)), TOLERANCE, "Integer 1 cumPct");
+        assertEquals(0.5, f.getCumPct(1), TOLERANCE, "Integer 1 cumPct");
 
         f.incrementValue(ONE, -2);
         f.incrementValue(THREE, 5);
@@ -393,15 +393,15 @@ final class FrequencyTest {
         Frequency<Double> f = new Frequency<>();
 
         List<Double> mode;
-        f.addValue(Double.valueOf(Double.NaN));
-        f.addValue(Double.valueOf(Double.NaN));
-        f.addValue(Double.valueOf(Double.NaN));
-        f.addValue(Double.valueOf(Double.NEGATIVE_INFINITY));
-        f.addValue(Double.valueOf(Double.POSITIVE_INFINITY));
-        f.addValue(Double.valueOf(Double.NEGATIVE_INFINITY));
-        f.addValue(Double.valueOf(Double.POSITIVE_INFINITY));
-        f.addValue(Double.valueOf(Double.NEGATIVE_INFINITY));
-        f.addValue(Double.valueOf(Double.POSITIVE_INFINITY));
+        f.addValue(Double.NaN);
+        f.addValue(Double.NaN);
+        f.addValue(Double.NaN);
+        f.addValue(Double.NEGATIVE_INFINITY);
+        f.addValue(Double.POSITIVE_INFINITY);
+        f.addValue(Double.NEGATIVE_INFINITY);
+        f.addValue(Double.POSITIVE_INFINITY);
+        f.addValue(Double.NEGATIVE_INFINITY);
+        f.addValue(Double.POSITIVE_INFINITY);
         mode = f.getMode();
         assertEquals(3, mode.size());
         assertEquals(Double.valueOf(Double.NEGATIVE_INFINITY), mode.get(0));
@@ -414,15 +414,15 @@ final class FrequencyTest {
         Frequency<Float> f = new Frequency<>();
 
         List<Float> mode;
-        f.addValue(Float.valueOf(Float.NaN));
-        f.addValue(Float.valueOf(Float.NaN));
-        f.addValue(Float.valueOf(Float.NaN));
-        f.addValue(Float.valueOf(Float.NEGATIVE_INFINITY));
-        f.addValue(Float.valueOf(Float.POSITIVE_INFINITY));
-        f.addValue(Float.valueOf(Float.NEGATIVE_INFINITY));
-        f.addValue(Float.valueOf(Float.POSITIVE_INFINITY));
-        f.addValue(Float.valueOf(Float.NEGATIVE_INFINITY));
-        f.addValue(Float.valueOf(Float.POSITIVE_INFINITY));
+        f.addValue(Float.NaN);
+        f.addValue(Float.NaN);
+        f.addValue(Float.NaN);
+        f.addValue(Float.NEGATIVE_INFINITY);
+        f.addValue(Float.POSITIVE_INFINITY);
+        f.addValue(Float.NEGATIVE_INFINITY);
+        f.addValue(Float.POSITIVE_INFINITY);
+        f.addValue(Float.NEGATIVE_INFINITY);
+        f.addValue(Float.POSITIVE_INFINITY);
         mode = f.getMode();
         assertEquals(3, mode.size());
         assertEquals(Float.valueOf(Float.NEGATIVE_INFINITY), mode.get(0));

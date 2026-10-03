@@ -42,7 +42,7 @@ public class AdamsStateInterpolator extends AbstractODEStateInterpolator {
     private static final long serialVersionUID = 20160402L;
 
     /** Step size used in the first scaled derivative and Nordsieck vector. */
-    private double scalingH;
+    private final double scalingH;
 
     /** Reference state.
      * <p>Sometimes, the reference state is the same as globalPreviousState,
@@ -53,10 +53,10 @@ public class AdamsStateInterpolator extends AbstractODEStateInterpolator {
     private final ODEStateAndDerivative reference;
 
     /** First scaled derivative. */
-    private double[] scaled;
+    private final double[] scaled;
 
     /** Nordsieck vector. */
-    private Array2DRowRealMatrix nordsieck;
+    private final Array2DRowRealMatrix nordsieck;
 
     /** Simple constructor.
      * @param stepSize step size used in the scaled and Nordsieck arrays

@@ -241,7 +241,7 @@ class FiniteDifferencesDifferentiatorTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException nse) {
             assertEquals(LocalizedCoreFormats.NUMBER_TOO_SMALL, nse.getSpecifier());
-            assertEquals(-0.05, ((Double) nse.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(-0.05, (Double) nse.getParts()[0], 1.0e-10);
         } catch (Exception e) {
             fail("wrong exception caught: " + e.getClass().getName());
         }
@@ -253,7 +253,7 @@ class FiniteDifferencesDifferentiatorTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException nle) {
             assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, nle.getSpecifier());
-            assertEquals(1.05, ((Double) nle.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(1.05, (Double) nle.getParts()[0], 1.0e-10);
         } catch (Exception e) {
             fail("wrong exception caught: " + e.getClass().getName());
         }

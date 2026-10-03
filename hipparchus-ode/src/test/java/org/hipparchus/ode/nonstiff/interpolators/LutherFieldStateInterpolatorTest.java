@@ -35,15 +35,15 @@ class LutherFieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorA
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState,
                        FieldEquationsMapper<T> mapper) {
-        return new LutherFieldStateInterpolator<T>(field, forward, yDotK,
-                                                  globalPreviousState, globalCurrentState,
-                                                  softPreviousState, softCurrentState,
-                                                  mapper);
+        return new LutherFieldStateInterpolator<>(field, forward, yDotK,
+                globalPreviousState, globalCurrentState,
+                softPreviousState, softCurrentState,
+                mapper);
     }
 
     protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
-        return new LutherFieldIntegrator<T>(field, field.getOne());
+        return new LutherFieldIntegrator<>(field, field.getOne());
     }
 
     @Test

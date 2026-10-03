@@ -189,8 +189,8 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 integ.addStepHandler(handler);
                 double eventTol = 1.0e-6 * step;
                 ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, eventTol, 1000);
-                for (int l = 0; l < functions.length; ++l) {
-                    integ.addEventDetector(functions[l]);
+                for (ODEEventDetector function : functions) {
+                    integ.addEventDetector(function);
                 }
                 assertEquals(functions.length, integ.getEventDetectors().size());
                 ODEStateAndDerivative stop = integ.integrate(new ExpandableODE(pb),
@@ -540,7 +540,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
             assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            assertTrue((Double) mise.getParts()[0] <= 0.0);
         }
     }
 

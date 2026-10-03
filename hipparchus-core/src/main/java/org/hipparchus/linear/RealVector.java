@@ -761,21 +761,29 @@ public abstract class RealVector {
      */
     public Iterator<Entry> iterator() {
         final int dim = getDimension();
-        return new Iterator<Entry>() {
+        return new Iterator<>() {
 
-            /** Current index. */
+            /**
+             * Current index.
+             */
             private int i;
 
-            /** Current entry. */
-            private Entry e = new Entry();
+            /**
+             * Current entry.
+             */
+            private final Entry e = new Entry();
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public boolean hasNext() {
                 return i < dim;
             }
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public Entry next() {
                 if (i < dim) {
@@ -1133,9 +1141,9 @@ public abstract class RealVector {
         /** Dimension of the vector. */
         private final int dim;
         /** Last entry returned by {@link #next()}. */
-        private Entry current;
+        private final Entry current;
         /** Next entry for {@link #next()} to return. */
-        private Entry next;
+        private final Entry next;
 
         /** Simple constructor. */
         protected SparseEntryIterator() {
@@ -1243,17 +1251,23 @@ public abstract class RealVector {
             @Override
             public Iterator<Entry> iterator() {
                 final Iterator<Entry> i = v.iterator();
-                return new Iterator<Entry>() {
-                    /** The current entry. */
+                return new Iterator<>() {
+                    /**
+                     * The current entry.
+                     */
                     private final UnmodifiableEntry e = new UnmodifiableEntry();
 
-                    /** {@inheritDoc} */
+                    /**
+                     * {@inheritDoc}
+                     */
                     @Override
                     public boolean hasNext() {
                         return i.hasNext();
                     }
 
-                    /** {@inheritDoc} */
+                    /**
+                     * {@inheritDoc}
+                     */
                     @Override
                     public Entry next() {
                         e.setIndex(i.next().getIndex());
@@ -1264,7 +1278,7 @@ public abstract class RealVector {
                      * {@inheritDoc}
                      *
                      * @throws MathRuntimeException in all
-                     * circumstances.
+                     *                              circumstances.
                      */
                     @Override
                     public void remove() throws MathRuntimeException {
@@ -1278,17 +1292,23 @@ public abstract class RealVector {
             public Iterator<Entry> sparseIterator() {
                 final Iterator<Entry> i = v.sparseIterator();
 
-                return new Iterator<Entry>() {
-                    /** The current entry. */
+                return new Iterator<>() {
+                    /**
+                     * The current entry.
+                     */
                     private final UnmodifiableEntry e = new UnmodifiableEntry();
 
-                    /** {@inheritDoc} */
+                    /**
+                     * {@inheritDoc}
+                     */
                     @Override
                     public boolean hasNext() {
                         return i.hasNext();
                     }
 
-                    /** {@inheritDoc} */
+                    /**
+                     * {@inheritDoc}
+                     */
                     @Override
                     public Entry next() {
                         e.setIndex(i.next().getIndex());
@@ -1299,11 +1319,11 @@ public abstract class RealVector {
                      * {@inheritDoc}
                      *
                      * @throws MathRuntimeException in all
-                     * circumstances.
+                     *                              circumstances.
                      */
                     @Override
                     public void remove()
-                        throws MathRuntimeException {
+                            throws MathRuntimeException {
                         throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
                     }
                 };

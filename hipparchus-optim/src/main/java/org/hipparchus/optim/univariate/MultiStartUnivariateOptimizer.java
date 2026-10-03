@@ -215,21 +215,23 @@ public class MultiStartUnivariateOptimizer
      * @param goal Goal type.
      */
     private void sortPairs(final GoalType goal) {
-        Arrays.sort(optima, new Comparator<UnivariatePointValuePair>() {
-                /** {@inheritDoc} */
-                @Override
-                public int compare(final UnivariatePointValuePair o1,
-                                   final UnivariatePointValuePair o2) {
-                    if (o1 == null) {
-                        return (o2 == null) ? 0 : 1;
-                    } else if (o2 == null) {
-                        return -1;
-                    }
-                    final double v1 = o1.getValue();
-                    final double v2 = o2.getValue();
-                    return (goal == GoalType.MINIMIZE) ?
-                        Double.compare(v1, v2) : Double.compare(v2, v1);
+        Arrays.sort(optima, new Comparator<>() {
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public int compare(final UnivariatePointValuePair o1,
+                               final UnivariatePointValuePair o2) {
+                if (o1 == null) {
+                    return (o2 == null) ? 0 : 1;
+                } else if (o2 == null) {
+                    return -1;
                 }
-            });
+                final double v1 = o1.getValue();
+                final double v2 = o2.getValue();
+                return (goal == GoalType.MINIMIZE) ?
+                        Double.compare(v1, v2) : Double.compare(v2, v1);
+            }
+        });
     }
 }

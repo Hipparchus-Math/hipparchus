@@ -273,7 +273,7 @@ public abstract class AdamsIntegratorAbstractTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
             assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            assertTrue((Double) mise.getParts()[0] <= 0.0);
         }
     }
 

@@ -105,7 +105,7 @@ public class MersenneTwister extends IntRandomGenerator implements Serializable 
     private static final int[] MAG01 = { 0x0, 0x9908b0df };
 
     /** Bytes pool. */
-    private int[] mt;
+    private final int[] mt;
 
     /** Current index in the bytes pool. */
     private int   mti;

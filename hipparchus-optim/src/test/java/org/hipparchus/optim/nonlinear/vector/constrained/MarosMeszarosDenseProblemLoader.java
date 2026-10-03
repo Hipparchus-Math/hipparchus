@@ -111,7 +111,7 @@ class MarosMeszarosDenseProblemLoader {
                 }
             }
 
-            if (hardMaxVariables != null && metadata != null && metadata.n > hardMaxVariables.doubleValue()) {
+            if (hardMaxVariables != null && metadata != null && metadata.n > hardMaxVariables) {
                 skippedByHardLimit++;
                 if (verbose) {
                     log("SKIP (hard max vars): " + file + " n=" + metadata.n + " > " + hardMaxVariables.intValue());
@@ -168,10 +168,10 @@ class MarosMeszarosDenseProblemLoader {
         final ProblemMetadata metadata = metadataByName.get(canonicalProblemKey(problemName));
 
         final Double configuredMaxVariables = parseOptionalBound(System.getProperty(MAX_VARIABLES_PROPERTY));
-        final double maxVariables = configuredMaxVariables == null ? DEFAULT_MAX_VARIABLES : configuredMaxVariables.doubleValue();
+        final double maxVariables = configuredMaxVariables == null ? DEFAULT_MAX_VARIABLES : configuredMaxVariables;
 
         final Double configuredHardMaxVariables = parseOptionalBound(System.getProperty(HARD_MAX_VARIABLES_PROPERTY));
-        final double hardMaxVariables = configuredHardMaxVariables == null ? maxVariables : configuredHardMaxVariables.doubleValue();
+        final double hardMaxVariables = configuredHardMaxVariables == null ? maxVariables : configuredHardMaxVariables;
 
         final Double configuredMaxDenseVariables = parseOptionalBound(System.getProperty(MAX_DENSE_VARIABLES_PROPERTY));
         final int maxDenseVariables = configuredMaxDenseVariables == null ?
@@ -290,8 +290,8 @@ class MarosMeszarosDenseProblemLoader {
 
         for (Map.Entry<String, Integer> entry : layout.constraintRowIndex.entrySet()) {
             final String rowName = entry.getKey();
-            final int rowIndex = entry.getValue().intValue();
-            final char rowType = layout.rows.get(rowName).charValue();
+            final int rowIndex = entry.getValue();
+            final char rowType = layout.rows.get(rowName);
             final double[] a = rowA[rowIndex];
             final double rhsValue = rhsSeen[rowIndex] ? rhs[rowIndex] : 0.0;
 
@@ -448,7 +448,7 @@ class MarosMeszarosDenseProblemLoader {
                     if (tokens.length >= 2) {
                         final char type = Character.toUpperCase(tokens[0].charAt(0));
                         final String name = tokens[1];
-                        layout.rows.put(name, Character.valueOf(type));
+                        layout.rows.put(name, type);
                         if (type == 'N' && layout.objectiveRow == null) {
                             layout.objectiveRow = name;
                         }
@@ -477,16 +477,16 @@ class MarosMeszarosDenseProblemLoader {
 
         for (Map.Entry<String, Character> row : layout.rows.entrySet()) {
             final String rowName = row.getKey();
-            final char rowType = row.getValue().charValue();
+            final char rowType = row.getValue();
             if (rowName.equals(layout.objectiveRow) || rowType == 'N') {
                 continue;
             }
             if (rowType == 'E') {
                 layout.eqCount++;
-                layout.constraintRowIndex.put(rowName, Integer.valueOf(layout.constraintRowCount++));
+                layout.constraintRowIndex.put(rowName, layout.constraintRowCount++);
             } else if (rowType == 'G' || rowType == 'L') {
                 layout.iqCount++;
-                layout.constraintRowIndex.put(rowName, Integer.valueOf(layout.constraintRowCount++));
+                layout.constraintRowIndex.put(rowName, layout.constraintRowCount++);
             }
         }
 
@@ -564,22 +564,22 @@ class MarosMeszarosDenseProblemLoader {
             if (valueObj == null) {
                 continue;
             }
-            final double value = valueObj.doubleValue();
+            final double value = valueObj;
             if (row.equals(layout.objectiveRow)) {
-                c[varIndex.intValue()] += value;
+                c[varIndex] += value;
                 continue;
             }
             final Integer rowIndex = layout.constraintRowIndex.get(row);
             if (rowIndex == null) {
                 if (verbose) {
                     final Character rowType = layout.rows.get(row);
-                    if (rowType != null && rowType.charValue() == 'N') {
+                    if (rowType != null && rowType == 'N') {
                         log("Ignoring rim objective coefficient row='" + row + "' var='" + tokens[0] + "' value=" + value);
                     }
                 }
                 continue;
             }
-            rowA[rowIndex.intValue()][varIndex.intValue()] += value;
+            rowA[rowIndex][varIndex] += value;
         }
     }
 
@@ -594,15 +594,15 @@ class MarosMeszarosDenseProblemLoader {
             if (valueObj == null) {
                 continue;
             }
-            final double value = valueObj.doubleValue();
+            final double value = valueObj;
             if (row.equals(layout.objectiveRow)) {
                 objectiveConstant[0] = -value;
                 continue;
             }
             final Integer rowIndex = layout.constraintRowIndex.get(row);
             if (rowIndex != null) {
-                rhs[rowIndex.intValue()] = value;
-                rhsSeen[rowIndex.intValue()] = true;
+                rhs[rowIndex] = value;
+                rhsSeen[rowIndex] = true;
             }
         }
     }
@@ -619,8 +619,8 @@ class MarosMeszarosDenseProblemLoader {
             }
             final Integer rowIndex = layout.constraintRowIndex.get(row);
             if (rowIndex != null) {
-                ranges[rowIndex.intValue()] = valueObj.doubleValue();
-                rangesSeen[rowIndex.intValue()] = true;
+                ranges[rowIndex] = valueObj;
+                rangesSeen[rowIndex] = true;
             }
         }
     }
@@ -641,8 +641,8 @@ class MarosMeszarosDenseProblemLoader {
         final String type = tokens[0].toUpperCase(Locale.ROOT);
         final int valueToken = boundValueTokenIndex(tokens, type);
         final Double parsed = valueToken >= 0 ? tryParseDouble(tokens[valueToken]) : Double.valueOf(0.0);
-        final double value = parsed == null ? 0.0 : parsed.doubleValue();
-        final int j = varIndex.intValue();
+        final double value = parsed == null ? 0.0 : parsed;
+        final int j = varIndex;
         if ("LO".equals(type)) {
             lb[j] = value;
         } else if ("UP".equals(type)) {
@@ -721,7 +721,7 @@ class MarosMeszarosDenseProblemLoader {
             }
             final Double valueObj = tryParseDouble(tokens[k + 1]);
             if (valueObj != null) {
-                lowerQ[i.intValue()][j.intValue()] += valueObj.doubleValue();
+                lowerQ[i][j] += valueObj;
             }
         }
     }
@@ -834,8 +834,8 @@ class MarosMeszarosDenseProblemLoader {
                 return null;
             }
 
-            return new ParsedMetadataRow(name, m.intValue(), n.intValue(), nz.intValue(),
-                    qn.intValue(), qnz.intValue(), opt.doubleValue());
+            return new ParsedMetadataRow(name, m, n, nz,
+                    qn, qnz, opt);
         }
 
         return null;
@@ -851,7 +851,7 @@ class MarosMeszarosDenseProblemLoader {
 
     private Double tryParseDouble(final String value) {
         try {
-            return Double.valueOf(parseDouble(value));
+            return parseDouble(value);
         } catch (NumberFormatException ex) {
             return null;
         }
@@ -890,13 +890,13 @@ class MarosMeszarosDenseProblemLoader {
             return true;
         }
 
-        if (maxVariables != null && metadata.n > maxVariables.doubleValue()) {
+        if (maxVariables != null && metadata.n > maxVariables) {
             return false;
         }
 
         if (minDensity != null) {
             final double estimatedDensity = metadata.estimatedDensity();
-            if (estimatedDensity < minDensity.doubleValue()) {
+            if (estimatedDensity < minDensity) {
                 return false;
             }
         }
@@ -1095,7 +1095,7 @@ class MarosMeszarosDenseProblemLoader {
     private double[] toVector(final List<Double> values) {
         final double[] out = new double[values.size()];
         for (int i = 0; i < values.size(); i++) {
-            out[i] = values.get(i).doubleValue();
+            out[i] = values.get(i);
         }
         return out;
     }
@@ -1197,7 +1197,7 @@ class MarosMeszarosDenseProblemLoader {
 
         private void addVariable(final String name) {
             if (!varIndex.containsKey(name)) {
-                varIndex.put(name, Integer.valueOf(varIndex.size()));
+                varIndex.put(name, varIndex.size());
             }
         }
     }

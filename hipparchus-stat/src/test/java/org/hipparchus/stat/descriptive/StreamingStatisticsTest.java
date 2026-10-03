@@ -211,7 +211,7 @@ class StreamingStatisticsTest {
         int emptyHash = u.hashCode();
         assertEquals(u, u, "reflexive");
         assertNotEquals(u, t, "non-null compared to null");
-        assertNotEquals(u, Double.valueOf(0), "wrong type");
+        assertNotEquals(u, (double) 0, "wrong type");
         t = createStreamingStatistics();
         assertEquals(t, u, "empty instances should be equal");
         assertEquals(u, t, "empty instances should be equal");
@@ -285,8 +285,7 @@ class StreamingStatisticsTest {
 
         final int len = values.length;
         double expected = 0;
-        for (int i = 0; i < len; i++) {
-            final double v = values[i];
+        for (final double v : values) {
             expected += v * v / len;
 
             stats.addValue(v);
@@ -360,8 +359,8 @@ class StreamingStatisticsTest {
         aggregate.aggregate(componentStats);
 
         // Compute totalStats directly
-        for (int i = 0; i < totalSample.length; i++) {
-            totalStats.addValue(totalSample[i]);
+        for (double v : totalSample) {
+            totalStats.addValue(v);
         }
 
         /*
@@ -389,8 +388,8 @@ class StreamingStatisticsTest {
 
         // Compute combined stats directly
         StreamingStatistics totalStats = new StreamingStatistics();
-        for (int i = 0; i < totalSample.length; i++) {
-            totalStats.addValue(totalSample[i]);
+        for (double v : totalSample) {
+            totalStats.addValue(v);
         }
 
         // Now compute subsample stats individually and aggregate
@@ -418,8 +417,8 @@ class StreamingStatisticsTest {
 
         // Compute combined stats directly
         StreamingStatistics totalStats = new StreamingStatistics();
-        for (int i = 0; i < totalSample.length; i++) {
-            totalStats.addValue(totalSample[i]);
+        for (double v : totalSample) {
+            totalStats.addValue(v);
         }
 
         // Now compute subsample stats individually and aggregate

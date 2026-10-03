@@ -83,7 +83,7 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
     private static class Legendre {
 
         /** Degree. */
-        private int degree;
+        private final int degree;
 
         /** Simple constructor.
          * @param degree polynomial degree

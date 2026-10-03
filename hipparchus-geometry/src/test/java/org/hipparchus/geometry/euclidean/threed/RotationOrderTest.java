@@ -43,9 +43,9 @@ class RotationOrderTest {
       RotationOrder.YZY, RotationOrder.ZXZ, RotationOrder.ZYZ
     };
 
-    for (int i = 0; i < orders.length; ++i) {
-      assertEquals(getFieldName(orders[i]), orders[i].toString());
-    }
+        for (RotationOrder order : orders) {
+            assertEquals(getFieldName(order), order.toString());
+        }
 
   }
 
@@ -74,11 +74,11 @@ class RotationOrderTest {
   private String getFieldName(RotationOrder order) {
     try {
       Field[] fields = RotationOrder.class.getFields();
-      for (int i = 0; i < fields.length; ++i) {
-        if (fields[i].get(null) == order) {
-          return fields[i].getName();
+        for (Field field : fields) {
+            if (field.get(null) == order) {
+                return field.getName();
+            }
         }
-      }
     } catch (IllegalAccessException iae) {
       // ignored
     }

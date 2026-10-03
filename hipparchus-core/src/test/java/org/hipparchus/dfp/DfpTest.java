@@ -92,7 +92,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         b = (b && x.getField().getIEEEFlags() == flags);
 
         if (!b)
-            assertTrue(b, "assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags());
+            assertTrue(b, "assersion failed "+desc+" x = "+ x +" flags = "+x.getField().getIEEEFlags());
 
         x.getField().clearIEEEFlags();
     }

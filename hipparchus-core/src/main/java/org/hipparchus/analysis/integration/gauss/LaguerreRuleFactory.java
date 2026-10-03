@@ -66,7 +66,7 @@ public class LaguerreRuleFactory extends AbstractRuleFactory {
     private static class Laguerre {
 
         /** Degree. */
-        private int degree;
+        private final int degree;
 
         /** Simple constructor.
          * @param degree polynomial degree

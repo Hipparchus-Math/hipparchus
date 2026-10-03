@@ -53,7 +53,7 @@ class StorelessBivariateCovariance {
     private double covarianceNumerator;
 
     /** flag for bias correction */
-    private boolean biasCorrected;
+    private final boolean biasCorrected;
 
     /**
      * Create an empty {@link StorelessBivariateCovariance} instance with

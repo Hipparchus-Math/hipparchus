@@ -75,15 +75,17 @@ public class RegionParser {
     public static ArcsSet parseArcsSet(final String s)
         throws IOException, ParseException {
         final TreeBuilder<Sphere1D, S1Point, LimitAngle, SubLimitAngle> builder =
-                new TreeBuilder<Sphere1D, S1Point, LimitAngle, SubLimitAngle>("ArcsSet", s) {
+                new TreeBuilder<>("ArcsSet", s) {
 
-            /** {@inheritDoc} */
-            @Override
-            protected LimitAngle parseHyperplane() throws ParseException {
-                return new LimitAngle(new S1Point(getNumber()), getBoolean(), getNumber());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    protected LimitAngle parseHyperplane() throws ParseException {
+                        return new LimitAngle(new S1Point(getNumber()), getBoolean(), getNumber());
+                    }
 
-        };
+                };
         return new ArcsSet(builder.getTree(), builder.getTolerance());
     }
 
@@ -96,15 +98,17 @@ public class RegionParser {
     public static SphericalPolygonsSet parseSphericalPolygonsSet(final String s)
         throws IOException, ParseException {
         final TreeBuilder<Sphere2D, S2Point, Circle, SubCircle> builder =
-                new TreeBuilder<Sphere2D, S2Point, Circle, SubCircle>("SphericalPolygonsSet", s) {
+                new TreeBuilder<>("SphericalPolygonsSet", s) {
 
-            /** {@inheritDoc} */
-            @Override
-            public Circle parseHyperplane() {
-                return new Circle(new Vector3D(getNumber(), getNumber(), getNumber()), getNumber());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public Circle parseHyperplane() {
+                        return new Circle(new Vector3D(getNumber(), getNumber(), getNumber()), getNumber());
+                    }
 
-        };
+                };
         return new SphericalPolygonsSet(builder.getTree(), builder.getTolerance());
     }
 
@@ -117,15 +121,17 @@ public class RegionParser {
     public static IntervalsSet parseIntervalsSet(final String s)
         throws IOException, ParseException {
         final TreeBuilder<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> builder =
-                new TreeBuilder<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>("IntervalsSet", s) {
+                new TreeBuilder<>("IntervalsSet", s) {
 
-            /** {@inheritDoc} */
-            @Override
-            public OrientedPoint parseHyperplane() throws ParseException {
-                return new OrientedPoint(new Vector1D(getNumber()), getBoolean(), getNumber());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public OrientedPoint parseHyperplane() throws ParseException {
+                        return new OrientedPoint(new Vector1D(getNumber()), getBoolean(), getNumber());
+                    }
 
-        };
+                };
         return new IntervalsSet(builder.getTree(), builder.getTolerance());
     }
 
@@ -138,15 +144,17 @@ public class RegionParser {
     public static PolygonsSet parsePolygonsSet(final String s)
         throws IOException, ParseException {
         final TreeBuilder<Euclidean2D, Vector2D, Line, SubLine> builder =
-                new TreeBuilder<Euclidean2D, Vector2D, Line, SubLine>("PolygonsSet", s) {
+                new TreeBuilder<>("PolygonsSet", s) {
 
-            /** {@inheritDoc} */
-            @Override
-            public Line parseHyperplane() {
-                return new Line(new Vector2D(getNumber(), getNumber()), getNumber(), getNumber());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public Line parseHyperplane() {
+                        return new Line(new Vector2D(getNumber(), getNumber()), getNumber(), getNumber());
+                    }
 
-        };
+                };
         return new PolygonsSet(builder.getTree(), builder.getTolerance());
     }
 
@@ -159,17 +167,19 @@ public class RegionParser {
     public static PolyhedronsSet parsePolyhedronsSet(final String s)
         throws IOException, ParseException {
         final TreeBuilder<Euclidean3D, Vector3D, Plane, SubPlane> builder =
-                new TreeBuilder<Euclidean3D, Vector3D, Plane, SubPlane>("PolyhedronsSet", s) {
+                new TreeBuilder<>("PolyhedronsSet", s) {
 
-            /** {@inheritDoc} */
-            @Override
-            public Plane parseHyperplane() {
-                return new Plane(new Vector3D(getNumber(), getNumber(), getNumber()),
-                                 new Vector3D(getNumber(), getNumber(), getNumber()),
-                                 getNumber());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public Plane parseHyperplane() {
+                        return new Plane(new Vector3D(getNumber(), getNumber(), getNumber()),
+                                new Vector3D(getNumber(), getNumber(), getNumber()),
+                                getNumber());
+                    }
 
-        };
+                };
         return new PolyhedronsSet(builder.getTree(), builder.getTolerance());
     }
 

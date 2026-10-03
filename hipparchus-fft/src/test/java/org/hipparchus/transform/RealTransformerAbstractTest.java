@@ -162,10 +162,10 @@ public abstract class RealTransformerAbstractTest <T> {
         final RealTransformer transformer = createRealTransformer();
         for (int i = 0; i < getNumberOfInvalidDataSizes(); i++) {
             final int n = getInvalidDataSize(i);
-            for (int j = 0; j < type.length; j++) {
+            for (TransformType transformType : type) {
                 try {
-                    transformer.transform(createRealData(n), type[j]);
-                    fail(type[j] + ", " + n);
+                    transformer.transform(createRealData(n), transformType);
+                    fail(transformType + ", " + n);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -189,10 +189,10 @@ public abstract class RealTransformerAbstractTest <T> {
         final double b = getValidUpperBound();
         for (int i = 0; i < getNumberOfInvalidDataSizes(); i++) {
             final int n = getInvalidDataSize(i);
-            for (int j = 0; j < type.length; j++) {
+            for (TransformType transformType : type) {
                 try {
-                    transformer.transform(f, a, b, n, type[j]);
-                    fail(type[j] + ", " + n);
+                    transformer.transform(f, a, b, n, transformType);
+                    fail(transformType + ", " + n);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -216,10 +216,10 @@ public abstract class RealTransformerAbstractTest <T> {
         final double b = getValidUpperBound();
         for (int i = 0; i < getNumberOfValidDataSizes(); i++) {
             final int n = getValidDataSize(i);
-            for (int j = 0; j < type.length; j++) {
+            for (TransformType transformType : type) {
                 try {
-                    transformer.transform(f, a, b, -n, type[j]);
-                    fail(type[j] + ", " + (-n));
+                    transformer.transform(f, a, b, -n, transformType);
+                    fail(transformType + ", " + (-n));
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -243,10 +243,10 @@ public abstract class RealTransformerAbstractTest <T> {
         final double b = getValidUpperBound();
         for (int i = 0; i < getNumberOfValidDataSizes(); i++) {
             final int n = getValidDataSize(i);
-            for (int j = 0; j < type.length; j++) {
+            for (TransformType transformType : type) {
                 try {
-                    transformer.transform(f, b, a, n, type[j]);
-                    fail(type[j] + ", " + b + ", " + a);
+                    transformer.transform(f, b, a, n, transformType);
+                    fail(transformType + ", " + b + ", " + a);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -277,8 +277,8 @@ public abstract class RealTransformerAbstractTest <T> {
         for (int i = 0; i < getNumberOfValidDataSizes(); i++) {
             final int n = getValidDataSize(i);
             final double tol = getRelativeTolerance(i);
-            for (int j = 0; j < type.length; j++) {
-                doTestTransformReal(n, tol, type[j]);
+            for (TransformType transformType : type) {
+                doTestTransformReal(n, tol, transformType);
             }
         }
     }
@@ -302,8 +302,8 @@ public abstract class RealTransformerAbstractTest <T> {
         for (int i = 0; i < getNumberOfValidDataSizes(); i++) {
             final int n = getValidDataSize(i);
             final double tol = getRelativeTolerance(i);
-            for (int j = 0; j < type.length; j++) {
-                doTestTransformFunction(n, tol, type[j]);
+            for (TransformType transformType : type) {
+                doTestTransformFunction(n, tol, transformType);
             }
         }
     }

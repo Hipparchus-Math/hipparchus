@@ -40,7 +40,7 @@ class RealLinearOperatorTest {
 
     // local class that does NOT override isTransposable nor operateTranspose
     // so the default methods are called
-    private class DefaultOperator implements RealLinearOperator {
+    private static class DefaultOperator implements RealLinearOperator {
 
         RealMatrix m;
         public DefaultOperator(RealMatrix m) {

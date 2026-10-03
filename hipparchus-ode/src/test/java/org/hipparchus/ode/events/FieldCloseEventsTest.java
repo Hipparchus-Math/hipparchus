@@ -1039,16 +1039,17 @@ class FieldCloseEventsTest {
         TimeDetector detectorA = new TimeDetector(10, 1e-6, 100, Action.RESET_STATE, 15.0) {
             @Override
             public FieldODEEventHandler<Binary64> getHandler() {
-                return new FieldODEEventHandler<Binary64>() {
+                return new FieldODEEventHandler<>() {
                     @Override
                     public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
                                                 FieldODEEventDetector<Binary64> detector,
                                                 boolean increasing) {
                         return Action.RESET_STATE;
                     }
+
                     @Override
                     public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
-                                                               FieldODEStateAndDerivative<Binary64> state) {
+                                                              FieldODEStateAndDerivative<Binary64> state) {
                         return null;
                     }
                 };
@@ -1069,9 +1070,14 @@ class FieldCloseEventsTest {
 
     @Test
     void testResetChangesSign() {
-        FieldOrdinaryDifferentialEquation<Binary64> equation = new FieldOrdinaryDifferentialEquation<Binary64>() {
-            public int getDimension() { return 1; }
-            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) { return new Binary64[] { new Binary64(1.0) }; }
+        FieldOrdinaryDifferentialEquation<Binary64> equation = new FieldOrdinaryDifferentialEquation<>() {
+            public int getDimension() {
+                return 1;
+            }
+
+            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
+                return new Binary64[]{new Binary64(1.0)};
+            }
         };
 
         LutherFieldIntegrator<Binary64> integrator = new LutherFieldIntegrator<>(Binary64Field.getInstance(), new Binary64(20.0));
@@ -2067,16 +2073,17 @@ class FieldCloseEventsTest {
         TimeDetector detectorA = new TimeDetector(10, 1e-6, 100, Action.RESET_STATE, -15.0) {
             @Override
             public FieldODEEventHandler<Binary64> getHandler() {
-                return new FieldODEEventHandler<Binary64>() {
+                return new FieldODEEventHandler<>() {
                     @Override
                     public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
                                                 FieldODEEventDetector<Binary64> detector,
                                                 boolean increasing) {
                         return Action.RESET_STATE;
                     }
+
                     @Override
                     public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
-                                                               FieldODEStateAndDerivative<Binary64> state) {
+                                                              FieldODEStateAndDerivative<Binary64> state) {
                         return null;
                     }
                 };
@@ -2097,9 +2104,14 @@ class FieldCloseEventsTest {
 
     @Test
     void testResetChangesSignReverse() {
-        FieldOrdinaryDifferentialEquation<Binary64> equation = new FieldOrdinaryDifferentialEquation<Binary64>() {
-            public int getDimension() { return 1; }
-            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) { return new Binary64[] { new Binary64(1.0) }; }
+        FieldOrdinaryDifferentialEquation<Binary64> equation = new FieldOrdinaryDifferentialEquation<>() {
+            public int getDimension() {
+                return 1;
+            }
+
+            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
+                return new Binary64[]{new Binary64(1.0)};
+            }
         };
 
         LutherFieldIntegrator<Binary64> integrator = new LutherFieldIntegrator<>(Binary64Field.getInstance(), new Binary64(20.0));
@@ -2229,7 +2241,7 @@ class FieldCloseEventsTest {
 
         public TimeDetector(final double maxCheck, final double threshold, final int maxIter,
                             final Action action, final double... eventTs) {
-            this(maxCheck, threshold, maxIter, action, new ArrayList<Event>(), eventTs);
+            this(maxCheck, threshold, maxIter, action, new ArrayList<>(), eventTs);
         }
 
         public TimeDetector(final double maxCheck, final double threshold, final int maxIter,
@@ -2363,15 +2375,16 @@ class FieldCloseEventsTest {
 
         @Override
         public FieldODEEventHandler<Binary64> getHandler() {
-            return new FieldODEEventHandler<Binary64>() {
+            return new FieldODEEventHandler<>() {
                 @Override
                 public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
                                             FieldODEEventDetector<Binary64> detector, boolean increasing) {
                     return ResetDetector.super.getHandler().eventOccurred(state, detector, increasing);
                 }
+
                 @Override
                 public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
-                                                           FieldODEStateAndDerivative<Binary64> state) {
+                                                          FieldODEStateAndDerivative<Binary64> state) {
                     assertEquals(eventTs[0], state.getTime().getReal(), 0);
                     return resetState;
                 }
@@ -2422,7 +2435,7 @@ class FieldCloseEventsTest {
 
         private FieldODEStateAndDerivative<Binary64> initialState;
         private Binary64 finalTime;
-        private List<FieldODEStateInterpolator<Binary64>> interpolators = new ArrayList<>();
+        private final List<FieldODEStateInterpolator<Binary64>> interpolators = new ArrayList<>();
         private FieldODEStateAndDerivative<Binary64> finalState;
 
         @Override
@@ -2443,7 +2456,7 @@ class FieldCloseEventsTest {
         }
     }
 
-    private class ResetChangesSignGenerator implements FieldODEEventDetector<Binary64> {
+    private static class ResetChangesSignGenerator implements FieldODEEventDetector<Binary64> {
 
         private final FieldAdaptableInterval<Binary64>             maxCheck;
         private final int                                          maxIter;
@@ -2480,7 +2493,7 @@ class FieldCloseEventsTest {
         }
 
         public FieldODEEventHandler<Binary64> getHandler() {
-            return new FieldODEEventHandler<Binary64>() {
+            return new FieldODEEventHandler<>() {
                 public Action eventOccurred(FieldODEStateAndDerivative<Binary64> s,
                                             FieldODEEventDetector<Binary64> detector,
                                             boolean increasing) {
@@ -2488,8 +2501,8 @@ class FieldCloseEventsTest {
                 }
 
                 public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
-                                                           FieldODEStateAndDerivative<Binary64> s) {
-                    return new FieldODEState<>(s.getTime(), new Binary64[] { s.getCompleteState()[0].add(change) });
+                                                          FieldODEStateAndDerivative<Binary64> s) {
+                    return new FieldODEState<>(s.getTime(), new Binary64[]{s.getCompleteState()[0].add(change)});
                 }
             };
         }

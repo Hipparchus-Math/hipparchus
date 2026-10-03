@@ -31,16 +31,16 @@ import org.hipparchus.stat.LocalizedStatFormats;
 public class ConfidenceInterval {
 
     /** Lower endpoint of the interval */
-    private double lowerBound;
+    private final double lowerBound;
 
     /** Upper endpoint of the interval */
-    private double upperBound;
+    private final double upperBound;
 
     /**
      * The asserted probability that the interval contains the population
      * parameter
      */
-    private double confidenceLevel;
+    private final double confidenceLevel;
 
     /**
      * Create a confidence interval with the given bounds and confidence level.

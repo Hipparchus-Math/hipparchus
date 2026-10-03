@@ -27,14 +27,14 @@ class PairTest {
 
     @Test
     void testAccessor() {
-        final Pair<Integer, Double> p = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
+        final Pair<Integer, Double> p = new Pair<>(1, 2.0);
         assertEquals(Integer.valueOf(1), p.getKey());
-        assertEquals(2, p.getValue().doubleValue(), Math.ulp(1d));
+        assertEquals(2, p.getValue(), Math.ulp(1d));
     }
 
     @Test
     void testAccessor2() {
-        final Pair<Integer, Double> p = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
+        final Pair<Integer, Double> p = new Pair<>(1, 2.0);
 
         // Check that both APIs refer to the same data.
 
@@ -50,13 +50,13 @@ class PairTest {
         Pair<Integer, Double> p2 = new Pair<>(null, null);
         assertEquals(p1, p2);
 
-        p1 = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
+        p1 = new Pair<>(1, 2.0);
         assertNotEquals(p1, p2);
 
-        p2 = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
+        p2 = new Pair<>(1, 2.0);
         assertEquals(p1, p2);
 
-        Pair<Integer, Float> p3 = new Pair<>(Integer.valueOf(1), Float.valueOf(2));
+        Pair<Integer, Float> p3 = new Pair<>(1, 2F);
         assertNotEquals(p1, p3);
     }
 

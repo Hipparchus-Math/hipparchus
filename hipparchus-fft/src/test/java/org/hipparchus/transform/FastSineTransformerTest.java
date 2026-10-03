@@ -199,10 +199,10 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest<D
             1.0, 1.0, 1.0, 1.0
         };
         final RealTransformer transformer = createRealTransformer();
-        for (int j = 0; j < type.length; j++) {
+        for (TransformType transformType : type) {
             try {
-                transformer.transform(data, type[j]);
-                fail(type[j].toString());
+                transformer.transform(data, transformType);
+                fail(transformType.toString());
             } catch (MathIllegalArgumentException e) {
                 // Expected: do nothing
             }

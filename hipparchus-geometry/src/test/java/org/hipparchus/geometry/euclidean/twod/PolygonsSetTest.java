@@ -1453,13 +1453,15 @@ class PolygonsSetTest {
         public void count(PolygonsSet polygonsSet) {
             leafNodes     = 0;
             internalNodes = 0;
-            polygonsSet.getTree(false).visit(new BSPTreeVisitor<Euclidean2D, Vector2D, Line, SubLine>() {
+            polygonsSet.getTree(false).visit(new BSPTreeVisitor<>() {
                 public Order visitOrder(BSPTree<Euclidean2D, Vector2D, Line, SubLine> node) {
                     return Order.SUB_PLUS_MINUS;
                 }
+
                 public void visitInternalNode(BSPTree<Euclidean2D, Vector2D, Line, SubLine> node) {
                     ++internalNodes;
                 }
+
                 public void visitLeafNode(BSPTree<Euclidean2D, Vector2D, Line, SubLine> node) {
                     ++leafNodes;
                 }

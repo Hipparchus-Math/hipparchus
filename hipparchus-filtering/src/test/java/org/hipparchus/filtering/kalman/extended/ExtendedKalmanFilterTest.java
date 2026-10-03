@@ -80,7 +80,7 @@ class ExtendedKalmanFilterTest {
 
     private static class ConstantProcess implements NonLinearProcess<SimpleMeasurement> {
 
-        private RealMatrix q = MatrixUtils.createRealDiagonalMatrix(new double[] {
+        private final RealMatrix q = MatrixUtils.createRealDiagonalMatrix(new double[] {
             1.0e-5
         });
 
@@ -385,9 +385,9 @@ class ExtendedKalmanFilterTest {
 
     }
 
-    private final class WelshBishopProcess implements NonLinearProcess<SimpleMeasurement> {
+    private static final class WelshBishopProcess implements NonLinearProcess<SimpleMeasurement> {
 
-        private RealMatrix q;
+        private final RealMatrix q;
 
         WelshBishopProcess(double qValue) {
             q = MatrixUtils.createRealDiagonalMatrix(new double[] {

@@ -109,7 +109,7 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
     private int index;
 
     /** Steps table. */
-    private List<ODEStateInterpolator> steps;
+    private final List<ODEStateInterpolator> steps;
 
     /** Simple constructor.
      * Build an empty continuous output model.

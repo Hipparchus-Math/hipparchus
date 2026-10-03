@@ -194,13 +194,13 @@ public class EigenDecompositionNonSymmetricTest {
 
             double diffNorm = x.subtract(y).getNorm1();
             assertTrue(x.subtract(y).getNorm1() < 1000 * Precision.EPSILON * FastMath.max(x.getNorm1(), y.getNorm1()),
-                    "The norm of (X-Y) is too large: " + diffNorm + ", matrix=" + m.toString());
+                    "The norm of (X-Y) is too large: " + diffNorm + ", matrix=" + m);
 
             RealMatrix invV = new LUDecomposition(v).getSolver().getInverse();
             double norm = v.multiply(d).multiply(invV).subtract(m).getNorm1();
             assertEquals(0.0, norm, 1.0e-10);
         } catch (Exception e) {
-            fail("Failed to create EigenDecomposition for matrix " + m.toString() + ", ex=" + e.toString());
+            fail("Failed to create EigenDecomposition for matrix " + m.toString() + ", ex=" + e);
         }
     }
 

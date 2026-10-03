@@ -73,19 +73,16 @@ public class ImageClusteringExample {
     public static class Display extends ExampleFrame {
 
         /** Reference image. */
-        private BufferedImage referenceImage;
+        private final BufferedImage referenceImage;
 
         /** Cluster image. */
-        private BufferedImage clusterImage;
+        private final BufferedImage clusterImage;
 
         /** Reference raster. */
-        private Raster referenceRaster;
-
-        /** Painter for the clusters. */
-        private ImagePainter painter;
+        private final Raster referenceRaster;
 
         /** Spinner. */
-        private JSpinner clusterSizeSpinner;
+        private final JSpinner clusterSizeSpinner;
 
         /** Simple constructor.
          * @throws IOException if image cannot be created
@@ -114,7 +111,8 @@ public class ImageClusteringExample {
             JLabel picLabel = new JLabel(new ImageIcon(referenceImage));
             bar.add(picLabel);
 
-            painter = new ImagePainter(clusterImage.getWidth(), clusterImage.getHeight());
+            /** Painter for the clusters. */
+            ImagePainter painter = new ImagePainter(clusterImage.getWidth(), clusterImage.getHeight());
             bar.add(painter);
 
             JPanel controlBox = new JPanel();
@@ -206,10 +204,10 @@ public class ImageClusteringExample {
         private class ImagePainter extends Component {
 
             /** Width. */
-            private int width;
+            private final int width;
 
             /** Height. */
-            private int height;
+            private final int height;
 
             /** Simple constructor.
              * @param width width

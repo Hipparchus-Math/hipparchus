@@ -2201,8 +2201,8 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         FieldDerivativeStructure<T> zero = factory.constant(17).getField().getZero();
         T[] a = zero.getAllDerivatives();
         assertEquals(10, a.length);
-        for (int i = 0; i < a.length; ++i) {
-            assertEquals(buildScalar(0.0), a[i]);
+        for (T t : a) {
+            assertEquals(buildScalar(0.0), t);
         }
     }
 
@@ -2244,7 +2244,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
         // even at same parameters and differentiation orders, different values generate different fields
         FieldDerivativeStructure<T> zero64 = buildFactory(3, 2).build();
-        FieldDerivativeStructure<Dfp> zeroDFP = new FDSFactory<Dfp>(new DfpField(15), 3, 2).build();
+        FieldDerivativeStructure<Dfp> zeroDFP = new FDSFactory<>(new DfpField(15), 3, 2).build();
         assertEquals(zero64.getFreeParameters(), zeroDFP.getFreeParameters());
         assertEquals(zero64.getOrder(), zeroDFP.getOrder());
         assertNotEquals(zero64.getField(), zeroDFP.getField());

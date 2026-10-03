@@ -48,7 +48,7 @@ final class SimpleRegressionTest {
      * http://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Norris.dat
      * Strangely, order is {y,x}
      */
-    private double[][] data = { { 0.1, 0.2 }, {338.8, 337.4 }, {118.1, 118.2 },
+    private final double[][] data = { { 0.1, 0.2 }, {338.8, 337.4 }, {118.1, 118.2 },
             {888.0, 884.6 }, {9.2, 10.1 }, {228.1, 226.5 }, {668.5, 666.3 }, {998.5, 996.3 },
             {449.1, 448.6 }, {778.9, 777.0 }, {559.2, 558.2 }, {0.3, 0.4 }, {0.1, 0.6 }, {778.1, 775.5 },
             {668.8, 666.9 }, {339.3, 338.0 }, {448.9, 447.5 }, {10.8, 11.6 }, {557.7, 556.0 },
@@ -62,7 +62,7 @@ final class SimpleRegressionTest {
      * Correlation example from
      * http://www.xycoon.com/correlation.htm
      */
-    private double[][] corrData = { { 101.0, 99.2 }, {100.1, 99.0 }, {100.0, 100.0 },
+    private final double[][] corrData = { { 101.0, 99.2 }, {100.1, 99.0 }, {100.0, 100.0 },
             {90.6, 111.6 }, {86.5, 122.2 }, {89.7, 117.6 }, {90.6, 121.1 }, {82.8, 136.0 },
             {70.1, 154.2 }, {65.4, 153.6 }, {61.3, 158.5 }, {62.5, 140.6 }, {63.6, 136.2 },
             {52.6, 168.0 }, {59.7, 154.3 }, {59.5, 149.0 }, {61.3, 165.5 }
@@ -72,23 +72,23 @@ final class SimpleRegressionTest {
      * From Moore and Mcabe, "Introduction to the Practice of Statistics"
      * Example 10.3
      */
-    private double[][] infData = { { 15.6, 5.2 }, {26.8, 6.1 }, {37.8, 8.7 }, {36.4, 8.5 },
+    private final double[][] infData = { { 15.6, 5.2 }, {26.8, 6.1 }, {37.8, 8.7 }, {36.4, 8.5 },
             {35.5, 8.8 }, {18.6, 4.9 }, {15.3, 4.5 }, {7.9, 2.5 }, {0.0, 1.1 }
     };
 
     /*
      * Points to remove in the remove tests
      */
-    private double[][] removeSingle = {infData[1]};
-    private double[][] removeMultiple = { infData[1], infData[2] };
-    private double removeX = infData[0][0];
-    private double removeY = infData[0][1];
+    private final double[][] removeSingle = {infData[1]};
+    private final double[][] removeMultiple = { infData[1], infData[2] };
+    private final double removeX = infData[0][0];
+    private final double removeY = infData[0][1];
 
 
     /*
      * Data with bad linear fit
      */
-    private double[][] infData2 = { { 1, 1 }, {2, 0 }, {3, 5 }, {4, 2 },
+    private final double[][] infData2 = { { 1, 1 }, {2, 0 }, {3, 5 }, {4, 2 },
             {5, -1 }, {6, 12 }
     };
 
@@ -96,7 +96,7 @@ final class SimpleRegressionTest {
     /*
      * Data from NIST NOINT1
      */
-    private double[][] noint1 = {
+    private final double[][] noint1 = {
         {130.0,60.0},
         {131.0,61.0},
         {132.0,62.0},
@@ -114,7 +114,7 @@ final class SimpleRegressionTest {
      * Data from NIST NOINT2
      *
      */
-    private double[][] noint2 = {
+    private final double[][] noint2 = {
         {3.0,4},
         {4,5},
         {4,6}
@@ -223,10 +223,10 @@ final class SimpleRegressionTest {
         final UpdatingMultipleLinearRegression iface = regression;
         final SimpleRegression regressionNoint = new SimpleRegression( false );
         final SimpleRegression regressionIntOnly= new SimpleRegression( false );
-        for (int i = 0; i < data.length; i++) {
-            iface.addObservation( new double[]{data[i][1]}, data[i][0]);
-            regressionNoint.addData(data[i][1], data[i][0]);
-            regressionIntOnly.addData(1.0, data[i][0]);
+        for (double[] datum : data) {
+            iface.addObservation(new double[]{datum[1]}, datum[0]);
+            regressionNoint.addData(datum[1], datum[0]);
+            regressionIntOnly.addData(1.0, datum[0]);
         }
 
         //should not be null
@@ -374,8 +374,8 @@ final class SimpleRegressionTest {
     @Test
     void testNoIntercept_noint1(){
         SimpleRegression regression = new SimpleRegression(false);
-        for (int i = 0; i < noint1.length; i++) {
-            regression.addData(noint1[i][1], noint1[i][0]);
+        for (double[] doubles : noint1) {
+            regression.addData(doubles[1], doubles[0]);
         }
         assertEquals(0, regression.getIntercept(), 0, "intercept");
         assertEquals(2.07438016528926, regression.getSlope(), 10E-12, "slope");
@@ -396,8 +396,8 @@ final class SimpleRegressionTest {
     @Test
     void testNorris() {
         SimpleRegression regression = new SimpleRegression();
-        for (int i = 0; i < data.length; i++) {
-            regression.addData(data[i][1], data[i][0]);
+        for (double[] datum : data) {
+            regression.addData(datum[1], datum[0]);
         }
         // Tests against certified values from
         // http://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Norris.dat

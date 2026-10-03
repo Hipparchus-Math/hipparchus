@@ -136,7 +136,7 @@ import org.hipparchus.util.SinhCosh;
 public class DSCompiler {
 
     /** Array of all compilers created so far. */
-    private static AtomicReference<DSCompiler[][]> compilers = new AtomicReference<>(null);
+    private static final AtomicReference<DSCompiler[][]> compilers = new AtomicReference<>(null);
 
     /** Number of free parameters. */
     private final int parameters;

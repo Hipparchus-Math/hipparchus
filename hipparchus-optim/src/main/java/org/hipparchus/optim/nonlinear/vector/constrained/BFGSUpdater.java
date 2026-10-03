@@ -51,28 +51,6 @@ public class BFGSUpdater {
     private static final double SQRT_EPS = FastMath.sqrt(Precision.EPSILON);
 
     /**
-     * AutoScaling Flag.
-     */
-    private final boolean scale;
-
-    /**
-     * EPS.
-     */
-    private final double eps;
-
-    /**
-     * Tolerance for symmetric matrices decomposition.
-     *
-     * @since 4.1
-     */
-    private final double decompositionEpsilon;
-
-    /**
-     * Stored initial Hessian for resets.
-     */
-    private final RealMatrix initialH;
-
-    /**
      * Current Cholesky factor L such that H = L·Lᵀ.
      */
     private RealMatrix L;
@@ -93,12 +71,23 @@ public class BFGSUpdater {
      * decomposition
      */
     public BFGSUpdater(final RealMatrix initialHess, final double eps, final boolean autoScale, final double decompositionEpsilon) {
-        this.initialH = new Array2DRowRealMatrix(initialHess.getData());
-        this.eps      = eps;
-        this.scale    = autoScale;
+        /**
+         * Stored initial Hessian for resets.
+         */
+        RealMatrix initialH = new Array2DRowRealMatrix(initialHess.getData());
+        /**
+         * EPS.
+         */
+        /**
+         * AutoScaling Flag.
+         */
         this.dim      = initialHess.getColumnDimension();
         this.factor   = 1.0;
-        this.decompositionEpsilon = decompositionEpsilon;
+        /**
+         * Tolerance for symmetric matrices decomposition.
+         *
+         * @since 4.1
+         */
         resetHessian();
     }
 

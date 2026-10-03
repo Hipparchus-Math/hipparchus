@@ -56,14 +56,16 @@ public abstract class Vector1DFormatAbstractTest {
 
     @Test
     public void testDefaults() {
-        VectorFormat<Euclidean1D, Vector1D> vFormat = new VectorFormat<Euclidean1D, Vector1D>() {
+        VectorFormat<Euclidean1D, Vector1D> vFormat = new VectorFormat<>() {
             public StringBuffer format(Vector<Euclidean1D, Vector1D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
+
             public Vector<Euclidean1D, Vector1D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
+
             public Vector<Euclidean1D, Vector1D> parse(String source) {
                 return null;
             }
@@ -77,14 +79,16 @@ public abstract class Vector1DFormatAbstractTest {
     @Test
     public void testNumberFormat() {
         NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
-        VectorFormat<Euclidean1D, Vector1D> vFormat = new VectorFormat<Euclidean1D, Vector1D>(nf) {
+        VectorFormat<Euclidean1D, Vector1D> vFormat = new VectorFormat<>(nf) {
             public StringBuffer format(Vector<Euclidean1D, Vector1D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
+
             public Vector<Euclidean1D, Vector1D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
+
             public Vector<Euclidean1D, Vector1D> parse(String source) {
                 return null;
             }
@@ -97,14 +101,16 @@ public abstract class Vector1DFormatAbstractTest {
 
     @Test
     public void testPrefixSuffixSeparator() {
-        VectorFormat<Euclidean1D, Vector1D> vFormat = new VectorFormat<Euclidean1D, Vector1D>("<", ">", "|") {
+        VectorFormat<Euclidean1D, Vector1D> vFormat = new VectorFormat<>("<", ">", "|") {
             public StringBuffer format(Vector<Euclidean1D, Vector1D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
+
             public Vector<Euclidean1D, Vector1D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
+
             public Vector<Euclidean1D, Vector1D> parse(String source) {
                 return null;
             }

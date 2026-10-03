@@ -59,8 +59,8 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         StorelessUnivariateStatistic statistic = getUnivariateStatistic();
 
         // Add testArray one value at a time and check result
-        for (int i = 0; i < testArray.length; i++) {
-            statistic.increment(testArray[i]);
+        for (double v : testArray) {
+            statistic.increment(v);
         }
 
         assertEquals(expectedValue(), statistic.getResult(), getTolerance());
@@ -166,12 +166,12 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         StorelessUnivariateStatistic stat = getUnivariateStatistic();
         stat.incrementAll(testArray);
         assertEquals(stat.getResult(), stat.evaluate(testArray), getTolerance());
-        for (int i = 0; i < smallSamples.length; i++) {
+        for (double[] smallSample : smallSamples) {
             stat.clear();
-            for (int j =0; j < smallSamples[i].length; j++) {
-                stat.increment(smallSamples[i][j]);
+            for (int j = 0; j < smallSample.length; j++) {
+                stat.increment(smallSample[j]);
             }
-            UnitTestUtils.customAssertEquals(stat.getResult(), stat.evaluate(smallSamples[i]), getTolerance());
+            UnitTestUtils.customAssertEquals(stat.getResult(), stat.evaluate(smallSample), getTolerance());
         }
     }
 

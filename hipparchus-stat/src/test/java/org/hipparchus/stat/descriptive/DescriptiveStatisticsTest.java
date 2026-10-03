@@ -169,8 +169,7 @@ public class DescriptiveStatisticsTest {
 
         final int len = values.length;
         double expected = 0;
-        for (int i = 0; i < len; i++) {
-            final double v = values[i];
+        for (final double v : values) {
             expected += v * v / len;
         }
         expected = Math.sqrt(expected);
@@ -242,8 +241,8 @@ public class DescriptiveStatisticsTest {
             dstats.addValue(i);
             sstats.clear();
             double[] values = dstats.getValues();
-            for (int j = 0; j < values.length; j++) {
-                sstats.addValue(values[j]);
+            for (double value : values) {
+                sstats.addValue(value);
             }
             UnitTestUtils.customAssertEquals(dstats.getMean(), sstats.getMean(), tol);
             UnitTestUtils.customAssertEquals(new Mean().evaluate(values), dstats.getMean(), tol);

@@ -35,15 +35,15 @@ class MidpointFieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolato
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState,
                        FieldEquationsMapper<T> mapper) {
-        return new MidpointFieldStateInterpolator<T>(field, forward, yDotK,
-                                                    globalPreviousState, globalCurrentState,
-                                                    softPreviousState, softCurrentState,
-                                                    mapper);
+        return new MidpointFieldStateInterpolator<>(field, forward, yDotK,
+                globalPreviousState, globalCurrentState,
+                softPreviousState, softCurrentState,
+                mapper);
     }
 
     protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
-        return new MidpointFieldIntegrator<T>(field, field.getOne());
+        return new MidpointFieldIntegrator<>(field, field.getOne());
     }
 
     @Test

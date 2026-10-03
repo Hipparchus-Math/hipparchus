@@ -372,7 +372,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
 
         for (int i = 1; i < coefficients.length; ++i) {
             if (coefficients[i] != 0) {
-                if (s.length() > 0) {
+                if (!s.isEmpty()) {
                     if (coefficients[i] < 0) {
                         s.append(" - ");
                     } else {

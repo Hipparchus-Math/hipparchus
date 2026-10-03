@@ -32,10 +32,10 @@ import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunctionGradient;
  * Class used in the tests.
  */
 public class CircleScalar {
-    private ArrayList<Vector2D> points;
+    private final ArrayList<Vector2D> points;
 
     public CircleScalar() {
-        points  = new ArrayList<Vector2D>();
+        points  = new ArrayList<>();
     }
 
     public void addPoint(double px, double py) {

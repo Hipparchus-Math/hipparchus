@@ -304,7 +304,7 @@ public abstract class ComplexFormatAbstractTest {
     @Test
     public void testFormatNumber() {
         ComplexFormat cf = ComplexFormat.getComplexFormat(getLocale());
-        Double pi = Double.valueOf(FastMath.PI);
+        Double pi = FastMath.PI;
         String text = cf.format(pi);
         assertEquals("3" + getDecimalCharacter() + "1415926536", text);
     }
