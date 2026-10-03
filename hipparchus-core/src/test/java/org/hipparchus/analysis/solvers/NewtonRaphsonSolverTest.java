@@ -22,9 +22,12 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.QuinticFunction;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +37,33 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  */
 final class NewtonRaphsonSolverTest {
+
+    @Test
+    void testConstructor() {
+        // GIVEN
+        final double expectedRelativeAccuracy = 1.;
+        final double expectedAbsoluteAccuracy = 2.;
+        // WHEN
+        final NewtonRaphsonSolver solver = new NewtonRaphsonSolver(expectedRelativeAccuracy, expectedAbsoluteAccuracy, 3.);
+        // THEN
+        Assertions.assertEquals(expectedAbsoluteAccuracy, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(expectedRelativeAccuracy, solver.getRelativeAccuracy());
+    }
+
+    @Test
+    @Deprecated
+    void testDeprecated() {
+        // GIVEN
+        final NewtonRaphsonSolver solver = new NewtonRaphsonSolver();
+        final Sin sin = new Sin();
+        solver.setup(10, sin, -1., 1., 0.);
+        // WHEN
+        final DerivativeStructure derivativeStructure = solver.computeObjectiveValueAndDerivative(0.);
+        // THEN
+        final UnivariateDerivative1 derivative1 = solver.computeObjectiveValueAndDerivative1(0.);
+        Assertions.assertEquals(derivative1.getDerivative(1), derivativeStructure.getPartialDerivative(1));
+    }
+
     /**
      *
      */
