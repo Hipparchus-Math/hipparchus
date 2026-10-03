@@ -21,7 +21,7 @@ import org.hipparchus.complex.Complex;
 /** Container for index and eigenvalue pair.
  * @since 3.0
  */
-class IndexedEigenvalue {
+class IndexedEigenValue {
 
     /** Index in the diagonal matrix. */
     private int index;
@@ -33,7 +33,7 @@ class IndexedEigenvalue {
      * @param index index in the diagonal matrix
      * @param eigenvalue eigenvalue
      */
-    IndexedEigenvalue(final int index, final Complex eigenvalue) {
+    IndexedEigenValue(final int index, final Complex eigenvalue) {
         this.index      = index;
         this.eigenValue = eigenvalue;
     }
@@ -67,7 +67,7 @@ class IndexedEigenvalue {
             return true;
         }
 
-        if (other instanceof IndexedEigenvalue rhs) {
+        if (other instanceof IndexedEigenValue rhs) {
             return eigenValue.equals(rhs.eigenValue);
         }
 
