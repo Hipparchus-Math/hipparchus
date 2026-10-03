@@ -97,36 +97,36 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
         final FieldMatrix<Complex> V = this.getV();
 
         // getting eigen values
-        IndexedEigenvalue[] eigenValues = new IndexedEigenvalue[D.getRowDimension()];
+        IndexedEigenValue[] eigenValues = new IndexedEigenValue[D.getRowDimension()];
         for (int ij = 0; ij < matrix.getRowDimension(); ij++) {
-            eigenValues[ij] = new IndexedEigenvalue(ij, D.getEntry(ij, ij));
+            eigenValues[ij] = new IndexedEigenValue(ij, D.getEntry(ij, ij));
         }
 
         // ordering
-        Arrays.sort(eigenValues, (v1, v2) -> eigenValuesComparator.compare(v1.eigenValue, v2.eigenValue));
+        Arrays.sort(eigenValues, (v1, v2) -> eigenValuesComparator.compare(v1.getEigenvalue(), v2.getEigenvalue()));
         for (int ij = 0; ij < matrix.getRowDimension() - 1; ij++) {
-            final IndexedEigenvalue eij = eigenValues[ij];
+            final IndexedEigenValue eij = eigenValues[ij];
 
-            if (ij == eij.index) {
+            if (ij == eij.getIndex()) {
                 continue;
             }
 
             // exchanging D
             final Complex previousValue = D.getEntry(ij, ij);
-            D.setEntry(ij, ij, eij.eigenValue);
-            D.setEntry(eij.index, eij.index, previousValue);
+            D.setEntry(ij, ij, eij.getEigenvalue());
+            D.setEntry(eij.getIndex(), eij.getIndex(), previousValue);
 
             // exchanging V
             for (int k = 0; k  < matrix.getRowDimension(); ++k) {
                 final Complex previous = V.getEntry(k, ij);
-                V.setEntry(k, ij, V.getEntry(k, eij.index));
-                V.setEntry(k, eij.index, previous);
+                V.setEntry(k, ij, V.getEntry(k, eij.getIndex()));
+                V.setEntry(k, eij.getIndex(), previous);
             }
 
             // exchanging eigenvalue
             for (int k = ij + 1; k < matrix.getRowDimension(); ++k) {
-                if (eigenValues[k].index == ij) {
-                    eigenValues[k].index = eij.index;
+                if (eigenValues[k].getIndex() == ij) {
+                    eigenValues[k].setIndex(eij.getIndex());
                     break;
                 }
             }
@@ -144,50 +144,4 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
     public FieldMatrix<Complex> getVT() {
         return getV().transpose();
     }
-
-    /** Container for index and eigenvalue pair. */
-    private static class IndexedEigenvalue {
-
-        /** Index in the diagonal matrix. */
-        private int index;
-
-        /** Eigenvalue. */
-        private final Complex eigenValue;
-
-        /** Build the container from its fields.
-         * @param index index in the diagonal matrix
-         * @param eigenvalue eigenvalue
-         */
-        IndexedEigenvalue(final int index, final Complex eigenvalue) {
-            this.index      = index;
-            this.eigenValue = eigenvalue;
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public boolean equals(final Object other) {
-
-            if (this == other) {
-                return true;
-            }
-
-            if (other instanceof IndexedEigenvalue rhs) {
-                return eigenValue.equals(rhs.eigenValue);
-            }
-
-            return false;
-
-        }
-
-        /**
-         * Get a hashCode for the pair.
-         * @return a hash code value for this object
-         */
-        @Override
-        public int hashCode() {
-            return 4563 + index + eigenValue.hashCode();
-        }
-
-    }
-
 }
