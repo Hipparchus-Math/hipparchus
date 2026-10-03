@@ -515,8 +515,8 @@ public class UnitTestUtils {
      */
     public static double sumSquareDev(double[] values, double target) {
         double sumsq = 0d;
-        for (int i = 0; i < values.length; i++) {
-            final double dev = values[i] - target;
+        for (double value : values) {
+            final double dev = value - target;
             sumsq += (dev * dev);
         }
         return sumsq;
@@ -688,8 +688,8 @@ public class UnitTestUtils {
      */
     public static int eliminateZeroMassPoints(int[] densityPoints, double[] densityValues) {
         int positiveMassCount = 0;
-        for (int i = 0; i < densityValues.length; i++) {
-            if (densityValues[i] > 0) {
+        for (double densityValue : densityValues) {
+            if (densityValue > 0) {
                 positiveMassCount++;
             }
         }
@@ -840,8 +840,8 @@ public class UnitTestUtils {
             double accum = 0.0;
             double dev = 0.0;
             double accum2 = 0.0;
-            for (int i = 0; i < length; i++) {
-                dev = values[i] - mean;
+            for (double value : values) {
+                dev = value - mean;
                 accum += dev * dev;
                 accum2 += dev;
             }
@@ -969,7 +969,7 @@ public class UnitTestUtils {
      * @param <T> type of objects being tracked
      */
     public static class Frequency<T> {
-        private Map<T, Integer> counts = new HashMap<>();
+        private final Map<T, Integer> counts = new HashMap<>();
         public void addValue(T value) {
            Integer old = counts.put(value, 0);
            if (old != null) {

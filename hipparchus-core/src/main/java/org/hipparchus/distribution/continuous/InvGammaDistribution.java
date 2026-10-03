@@ -38,11 +38,6 @@ public class InvGammaDistribution extends AbstractRealDistribution {
     /** The scale parameter. */
     private final double scale;
     /**
-     * The constant value of {@code shape + g + 0.5}, where {@code g} is the
-     * Lanczos constant {@link Gamma#LANCZOS_G}.
-     */
-    private final double shiftedShape;
-    /**
      * The constant value of
      * {@code shape / scale * sqrt(e / (2 * pi * (shape + g + 0.5))) / L(shape)},
      * where {@code L(shape)} is the Lanczos approximation returned by
@@ -101,7 +96,11 @@ public class InvGammaDistribution extends AbstractRealDistribution {
 
         this.shape = shape;
         this.scale = scale;
-        this.shiftedShape = shape + Gamma.LANCZOS_G + 0.5;
+        /**
+         * The constant value of {@code shape + g + 0.5}, where {@code g} is the
+         * Lanczos constant {@link Gamma#LANCZOS_G}.
+         */
+        double shiftedShape = shape + Gamma.LANCZOS_G + 0.5;
         // gammaShape is the Lanczos approximation of Gamma function evaluated at shape
         // See https://www.hipparchus.org/apidocs/org/hipparchus/special/Gamma.html#lanczos(double)
         final double gammaShape;

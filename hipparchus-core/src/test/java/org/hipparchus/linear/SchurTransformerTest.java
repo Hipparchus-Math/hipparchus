@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class SchurTransformerTest {
 
-    private double[][] testSquare5 = {
+    private final double[][] testSquare5 = {
             { 5, 4, 3, 2, 1 },
             { 1, 4, 0, 3, 3 },
             { 2, 0, 3, 0, 0 },
@@ -43,14 +43,14 @@ class SchurTransformerTest {
             { 4, 2, 1, 4, 1 }
     };
 
-    private double[][] testSquare3 = {
+    private final double[][] testSquare3 = {
             {  2, -1, 1 },
             { -1,  2, 1 },
             {  1, -1, 2 }
     };
 
     // from http://eigen.tuxfamily.org/dox/classEigen_1_1RealSchur.html
-    private double[][] testRandom = {
+    private final double[][] testRandom = {
             {  0.680, -0.3300, -0.2700, -0.717, -0.687,  0.0259 },
             { -0.211,  0.5360,  0.0268,  0.214, -0.198,  0.6780 },
             {  0.566, -0.4440,  0.9040, -0.967, -0.740,  0.2250 },

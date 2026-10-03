@@ -669,8 +669,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
                 { Percentile.EstimationType.R_7, 0d,MAX }, { Percentile.EstimationType.R_8, 0d,MAX }, { Percentile.EstimationType.R_9, 0d,MAX }  };
         for (final Object[] o : map) {
             final Percentile.EstimationType e = (Percentile.EstimationType) o[0];
-                assertEquals(((Double)o[1]).doubleValue(), e.index(0d, (int)MAX),0d);
-                assertEquals(((Double)o[2]).doubleValue(), e.index(1.0, (int)MAX),0d,"Enum:"+e);
+                assertEquals((Double) o[1], e.index(0d, (int)MAX),0d);
+                assertEquals((Double) o[2], e.index(1.0, (int)MAX),0d,"Enum:"+e);
             }
     }
 

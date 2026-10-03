@@ -98,9 +98,9 @@ public class ComplexEigenDecomposition {
     /** Eigenvectors. */
     private FieldVector<Complex>[] eigenvectors;
     /** Cached value of V. */
-    private FieldMatrix<Complex> V;
+    private final FieldMatrix<Complex> V;
     /** Cached value of D. */
-    private FieldMatrix<Complex> D;
+    private final FieldMatrix<Complex> D;
     /** Internally used threshold below which eigenvectors are considered equal. */
     private final double eigenVectorsEquality;
     /** Internally used epsilon criteria. */

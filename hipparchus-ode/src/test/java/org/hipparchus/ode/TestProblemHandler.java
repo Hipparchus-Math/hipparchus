@@ -33,7 +33,7 @@ import org.hipparchus.util.FastMath;
 public class TestProblemHandler implements ODEStepHandler {
 
     /** Associated problem. */
-    private TestProblemAbstract problem;
+    private final TestProblemAbstract problem;
 
     /** Maximal errors encountered during the integration. */
     private double maxValueError;
@@ -46,7 +46,7 @@ public class TestProblemHandler implements ODEStepHandler {
     private double lastTime;
 
     /** ODE solver used. */
-    private ODEIntegrator integrator;
+    private final ODEIntegrator integrator;
 
     /** Expected start for step. */
     private double expectedStepStart;

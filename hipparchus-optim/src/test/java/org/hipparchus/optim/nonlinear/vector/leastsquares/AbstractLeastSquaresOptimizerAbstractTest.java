@@ -133,7 +133,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
                 .target(new double[]{1})
                 .weight(new DiagonalMatrix(new double[]{1}))
                 .start(new double[]{3})
-                .model(point -> new Pair<RealVector, RealMatrix>(
+                .model(point -> new Pair<>(
                         new ArrayRealVector(
                                 new double[]{
                                         FastMath.pow(point.getEntry(0), 4)
@@ -447,8 +447,8 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
         double[] weights = new double[points.length];
         final double[] start = {-12, -12};
         Arrays.fill(weights, 2);
-        for (int i = 0; i < points.length; ++i) {
-            circle.addPoint(points[i][0], points[i][1]);
+        for (double[] point : points) {
+            circle.addPoint(point[0], point[1]);
         }
 
         Optimum optimum = optimizer.optimize(builder(circle).weight(new DiagonalMatrix(weights)).start(start).build());
@@ -467,8 +467,8 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
         double[][] points = circlePoints;
         double[] weights = new double[points.length];
         Arrays.fill(weights, 2);
-        for (int i = 0; i < points.length; ++i) {
-            circle.addPoint(points[i][0], points[i][1]);
+        for (double[] point : points) {
+            circle.addPoint(point[0], point[1]);
         }
         final double[] start = {0, 0};
 

@@ -602,7 +602,7 @@ class BigFractionTest {
         BigFraction nullFraction = null;
         assertEquals(zero, zero);
         assertNotEquals(zero, nullFraction);
-        assertNotEquals(zero, Double.valueOf(0));
+        assertNotEquals(zero, (double) 0);
         BigFraction zero2 = new BigFraction(0, 2);
         assertEquals(zero, zero2);
         assertEquals(zero.hashCode(), zero2.hashCode());

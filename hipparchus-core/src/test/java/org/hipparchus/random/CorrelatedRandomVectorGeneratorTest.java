@@ -30,9 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CorrelatedRandomVectorGeneratorTest {
-    private double[] mean;
-    private RealMatrix covariance;
-    private CorrelatedRandomVectorGenerator generator;
+    private final double[] mean;
+    private final RealMatrix covariance;
+    private final CorrelatedRandomVectorGenerator generator;
 
     public CorrelatedRandomVectorGeneratorTest() {
         mean = new double[] { 0.0, 1.0, -3.0, 2.3 };

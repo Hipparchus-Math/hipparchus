@@ -30,11 +30,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class SingularValueSolverTest {
 
-    private double[][] testSquare = {
+    private final double[][] testSquare = {
             { 24.0 / 25.0, 43.0 / 25.0 },
             { 57.0 / 25.0, 24.0 / 25.0 }
     };
-    private double[][] bigSingular = {
+    private final double[][] bigSingular = {
         { 1.0, 2.0,   3.0,    4.0 },
         { 2.0, 5.0,   3.0,    4.0 },
         { 7.0, 3.0, 256.0, 1930.0 },

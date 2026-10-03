@@ -398,8 +398,8 @@ class GaussianCurveFitterTest {
      */
     private static WeightedObservedPoints createDataset(double[][] points) {
         final WeightedObservedPoints obs = new WeightedObservedPoints();
-        for (int i = 0; i < points.length; i++) {
-            obs.add(points[i][0], points[i][1]);
+        for (double[] point : points) {
+            obs.add(point[0], point[1]);
         }
         return obs;
     }

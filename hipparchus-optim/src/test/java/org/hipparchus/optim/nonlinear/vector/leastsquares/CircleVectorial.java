@@ -31,10 +31,10 @@ import org.hipparchus.geometry.euclidean.twod.Vector2D;
  * Class used in the tests.
  */
 class CircleVectorial {
-    private ArrayList<Vector2D> points;
+    private final ArrayList<Vector2D> points;
 
     public CircleVectorial() {
-        points  = new ArrayList<Vector2D>();
+        points  = new ArrayList<>();
     }
 
     public void addPoint(double px, double py) {

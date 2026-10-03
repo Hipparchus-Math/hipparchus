@@ -233,7 +233,7 @@ public abstract class StepNormalizerOutputTestBase
         double[] y   = {0.0};
         double start = reverse ? getEnd()   : getStart();
         double end   = reverse ? getStart() : getEnd();
-        output       = new ArrayList<Double>();
+        output       = new ArrayList<>();
         integ.integrate(this, new ODEState(start, y), end);
         double[] actual = new double[output.size()];
         for(int i = 0; i < actual.length; i++) {

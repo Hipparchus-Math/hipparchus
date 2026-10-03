@@ -78,13 +78,11 @@ public class FastMathStrictComparisonTest {
 
     private Method mathMethod;
     private Method fastMethod;
-    private Type[] types;
     private Object[][] valueArrays;
 
     public void initFastMathStrictComparisonTest(Method m, Method f, Type[] types, Object[][] data) throws Exception {
         this.mathMethod=m;
         this.fastMethod=f;
-        this.types=types;
         this.valueArrays=data;
     }
 
@@ -216,7 +214,7 @@ public class FastMathStrictComparisonTest {
 
     public static List<Object[]> data() throws Exception {
         String singleMethod = System.getProperty("testMethod");
-        List<Object[]> list = new ArrayList<Object[]>();
+        List<Object[]> list = new ArrayList<>();
         for(Method mathMethod : StrictMath.class.getDeclaredMethods()) {
             method:
             if (Modifier.isPublic(mathMethod.getModifiers())){// Only test public methods

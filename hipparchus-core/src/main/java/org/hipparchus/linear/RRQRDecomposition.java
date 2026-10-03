@@ -209,7 +209,7 @@ public class RRQRDecomposition extends QRDecomposition {
         private final DecompositionSolver upper;
 
         /** A permutation matrix for the pivots used in the QR decomposition */
-        private RealMatrix p;
+        private final RealMatrix p;
 
         /**
          * Build a solver from decomposed matrix.

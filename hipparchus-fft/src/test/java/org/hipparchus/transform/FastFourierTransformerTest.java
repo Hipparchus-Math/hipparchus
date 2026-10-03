@@ -57,14 +57,14 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
                 final FastFourierTransformer fft;
-                fft = new FastFourierTransformer(norm[i]);
+                fft = new FastFourierTransformer(dftNormalization);
                 try {
-                    fft.transform(x, type[j]);
-                    fail(norm[i] + ", " + type[j] +
-                        ": MathIllegalArgumentException was expected");
+                    fft.transform(x, transformType);
+                    fail(dftNormalization + ", " + transformType +
+                            ": MathIllegalArgumentException was expected");
                 } catch (MathIllegalArgumentException e) {
                     // Expected behaviour
                 }
@@ -80,14 +80,14 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
                 final FastFourierTransformer fft;
-                fft = new FastFourierTransformer(norm[i]);
+                fft = new FastFourierTransformer(dftNormalization);
                 try {
-                    fft.transform(x, type[j]);
-                    fail(norm[i] + ", " + type[j] +
-                        ": MathIllegalArgumentException was expected");
+                    fft.transform(x, transformType);
+                    fail(dftNormalization + ", " + transformType +
+                            ": MathIllegalArgumentException was expected");
                 } catch (MathIllegalArgumentException e) {
                     // Expected behaviour
                 }
@@ -103,14 +103,14 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
                 final FastFourierTransformer fft;
-                fft = new FastFourierTransformer(norm[i]);
+                fft = new FastFourierTransformer(dftNormalization);
                 try {
-                    fft.transform(f, 0.0, Math.PI, n, type[j]);
-                    fail(norm[i] + ", " + type[j] +
-                        ": MathIllegalArgumentException was expected");
+                    fft.transform(f, 0.0, Math.PI, n, transformType);
+                    fail(dftNormalization + ", " + transformType +
+                            ": MathIllegalArgumentException was expected");
                 } catch (MathIllegalArgumentException e) {
                     // Expected behaviour
                 }
@@ -126,15 +126,15 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
                 final FastFourierTransformer fft;
-                fft = new FastFourierTransformer(norm[i]);
+                fft = new FastFourierTransformer(dftNormalization);
                 try {
-                    fft.transform(f, 0.0, Math.PI, n, type[j]);
-                    fft.transform(f, 0.0, Math.PI, n, type[j]);
-                    fail(norm[i] + ", " + type[j] +
-                        ": MathIllegalArgumentException was expected");
+                    fft.transform(f, 0.0, Math.PI, n, transformType);
+                    fft.transform(f, 0.0, Math.PI, n, transformType);
+                    fail(dftNormalization + ", " + transformType +
+                            ": MathIllegalArgumentException was expected");
                 } catch (MathIllegalArgumentException e) {
                     // Expected behaviour
                 }
@@ -150,14 +150,14 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
                 final FastFourierTransformer fft;
-                fft = new FastFourierTransformer(norm[i]);
+                fft = new FastFourierTransformer(dftNormalization);
                 try {
-                    fft.transform(f, Math.PI, 0.0, n, type[j]);
-                    fail(norm[i] + ", " + type[j] +
-                        ": MathIllegalArgumentException was expected");
+                    fft.transform(f, Math.PI, 0.0, n, transformType);
+                    fail(dftNormalization + ", " + transformType +
+                            ": MathIllegalArgumentException was expected");
                 } catch (MathIllegalArgumentException e) {
                     // Expected behaviour
                 }
@@ -356,15 +356,15 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
-                doTestTransformComplex(2, 1.0E-15, norm[i], type[j]);
-                doTestTransformComplex(4, 1.0E-14, norm[i], type[j]);
-                doTestTransformComplex(8, 1.0E-14, norm[i], type[j]);
-                doTestTransformComplex(16, 1.0E-13, norm[i], type[j]);
-                doTestTransformComplex(32, 1.0E-13, norm[i], type[j]);
-                doTestTransformComplex(64, 1.0E-12, norm[i], type[j]);
-                doTestTransformComplex(128, 1.0E-12, norm[i], type[j]);
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
+                doTestTransformComplex(2, 1.0E-15, dftNormalization, transformType);
+                doTestTransformComplex(4, 1.0E-14, dftNormalization, transformType);
+                doTestTransformComplex(8, 1.0E-14, dftNormalization, transformType);
+                doTestTransformComplex(16, 1.0E-13, dftNormalization, transformType);
+                doTestTransformComplex(32, 1.0E-13, dftNormalization, transformType);
+                doTestTransformComplex(64, 1.0E-12, dftNormalization, transformType);
+                doTestTransformComplex(128, 1.0E-12, dftNormalization, transformType);
             }
         }
     }
@@ -375,15 +375,15 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
-                doTestTransformReal(2, 1.0E-15, norm[i], type[j]);
-                doTestTransformReal(4, 1.0E-14, norm[i], type[j]);
-                doTestTransformReal(8, 1.0E-14, norm[i], type[j]);
-                doTestTransformReal(16, 1.0E-13, norm[i], type[j]);
-                doTestTransformReal(32, 1.0E-13, norm[i], type[j]);
-                doTestTransformReal(64, 1.0E-13, norm[i], type[j]);
-                doTestTransformReal(128, 1.0E-11, norm[i], type[j]);
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
+                doTestTransformReal(2, 1.0E-15, dftNormalization, transformType);
+                doTestTransformReal(4, 1.0E-14, dftNormalization, transformType);
+                doTestTransformReal(8, 1.0E-14, dftNormalization, transformType);
+                doTestTransformReal(16, 1.0E-13, dftNormalization, transformType);
+                doTestTransformReal(32, 1.0E-13, dftNormalization, transformType);
+                doTestTransformReal(64, 1.0E-13, dftNormalization, transformType);
+                doTestTransformReal(128, 1.0E-11, dftNormalization, transformType);
             }
         }
     }
@@ -397,15 +397,15 @@ final class FastFourierTransformerTest {
         norm = DftNormalization.values();
         final TransformType[] type;
         type = TransformType.values();
-        for (int i = 0; i < norm.length; i++) {
-            for (int j = 0; j < type.length; j++) {
-                doTestTransformFunction(f, min, max, 2, 1.0E-15, norm[i], type[j]);
-                doTestTransformFunction(f, min, max, 4, 1.0E-14, norm[i], type[j]);
-                doTestTransformFunction(f, min, max, 8, 1.0E-14, norm[i], type[j]);
-                doTestTransformFunction(f, min, max, 16, 1.0E-13, norm[i], type[j]);
-                doTestTransformFunction(f, min, max, 32, 1.0E-13, norm[i], type[j]);
-                doTestTransformFunction(f, min, max, 64, 1.0E-12, norm[i], type[j]);
-                doTestTransformFunction(f, min, max, 128, 1.0E-11, norm[i], type[j]);
+        for (DftNormalization dftNormalization : norm) {
+            for (TransformType transformType : type) {
+                doTestTransformFunction(f, min, max, 2, 1.0E-15, dftNormalization, transformType);
+                doTestTransformFunction(f, min, max, 4, 1.0E-14, dftNormalization, transformType);
+                doTestTransformFunction(f, min, max, 8, 1.0E-14, dftNormalization, transformType);
+                doTestTransformFunction(f, min, max, 16, 1.0E-13, dftNormalization, transformType);
+                doTestTransformFunction(f, min, max, 32, 1.0E-13, dftNormalization, transformType);
+                doTestTransformFunction(f, min, max, 64, 1.0E-12, dftNormalization, transformType);
+                doTestTransformFunction(f, min, max, 128, 1.0E-11, dftNormalization, transformType);
             }
         }
     }

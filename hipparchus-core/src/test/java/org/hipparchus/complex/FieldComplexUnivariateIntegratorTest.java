@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 class FieldComplexUnivariateIntegratorTest {
 
     private FieldComplexUnivariateIntegrator<Binary64> integrator;
-    private FieldComplex<Binary64> zero = FieldComplex.getZero(Binary64Field.getInstance());
+    private final FieldComplex<Binary64> zero = FieldComplex.getZero(Binary64Field.getInstance());
 
     private FieldComplex<Binary64> buildComplex(final double r, final double i) {
         return new FieldComplex<>(new Binary64(r), new Binary64(i));

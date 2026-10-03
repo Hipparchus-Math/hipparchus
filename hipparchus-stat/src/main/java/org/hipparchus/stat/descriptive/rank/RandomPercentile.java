@@ -939,15 +939,21 @@ public class RandomPercentile
          */
         @Override
         public Iterator<Buffer> iterator() {
-            return new Iterator<Buffer>() {
+            return new Iterator<>() {
 
-                /** Outer loop iterator, from level to level. */
+                /**
+                 * Outer loop iterator, from level to level.
+                 */
                 private final Iterator<Integer> levelIterator = registry.keySet().iterator();
 
-                /** List of buffers at current level. */
-                private List<Buffer> currentList = registry.get(levelIterator.next()); // NOPMD - cannot use local variable in anonymous class
+                /**
+                 * List of buffers at current level.
+                 */
+                private final List<Buffer> currentList = registry.get(levelIterator.next()); // NOPMD - cannot use local variable in anonymous class
 
-                /** Inner loop iterator, from buffer to buffer. */
+                /**
+                 * Inner loop iterator, from buffer to buffer.
+                 */
                 private Iterator<Buffer> bufferIterator =
                         currentList == null ? null : currentList.iterator();
 
@@ -973,10 +979,10 @@ public class RandomPercentile
 
                 @Override
                 public Buffer next() {
-                     if (hasNext()) {
-                         return bufferIterator.next();
-                     }
-                     throw new NoSuchElementException();
+                    if (hasNext()) {
+                        return bufferIterator.next();
+                    }
+                    throw new NoSuchElementException();
                 }
 
                 @Override

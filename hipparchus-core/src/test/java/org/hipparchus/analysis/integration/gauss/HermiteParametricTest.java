@@ -54,7 +54,7 @@ public class HermiteParametricTest extends GaussianQuadratureAbstractTest {
      * @return the collection of parameters for this parameterized test.
      */
     public static Collection<Object[]> getParameters() {
-        final ArrayList<Object[]> parameters = new ArrayList<Object[]>();
+        final ArrayList<Object[]> parameters = new ArrayList<>();
         final int [] numUlps = {
              10,  10,  10,  10,  20,
              20,  20,  20,  30,  40,

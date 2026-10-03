@@ -56,9 +56,9 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
      * matrix R, and the rows ABOVE the diagonal are the Householder reflector vectors
      * from which an explicit form of Q can be recomputed if desired.</p>
      */
-    private T[][] qrt;
+    private final T[][] qrt;
     /** The diagonal elements of R. */
-    private T[] rDiag;
+    private final T[] rDiag;
     /** Cached value of Q. */
     private FieldMatrix<T> cachedQ;
     /** Cached value of QT. */

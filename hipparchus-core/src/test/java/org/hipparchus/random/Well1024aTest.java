@@ -75,8 +75,8 @@ class Well1024aTest extends RandomGeneratorAbstractTest {
             2117436668,    281073392,    741537353,   -483063506,   1850906286,   -244876135,   -270818140,   1817568823
         };
 
-        for (int i = 0; i < refInt.length; ++i) {
-            assertEquals(refInt[i], mt.nextInt());
+        for (int j : refInt) {
+            assertEquals(j, mt.nextInt());
         }
 
     }

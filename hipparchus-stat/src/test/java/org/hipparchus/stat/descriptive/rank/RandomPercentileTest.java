@@ -446,7 +446,7 @@ public class RandomPercentileTest extends
         final long n = 1000;
         double[] combined = new double[10000];
         int i = 0;
-        final List<RandomPercentile> aggregates = new ArrayList<RandomPercentile>();
+        final List<RandomPercentile> aggregates = new ArrayList<>();
         for (int j = 0; j < 10; j++) {
             final RandomPercentile randomPercentile = new RandomPercentile();
             for (int k = 0; k < n; k++) {
@@ -473,7 +473,7 @@ public class RandomPercentileTest extends
         final RandomGenerator randomGenerator = new RandomDataGenerator(1000);
         final RandomPercentile randomMaster = new RandomPercentile(randomGenerator);
         final PSquarePercentile pSquare = new PSquarePercentile(1);
-        final List<RandomPercentile> aggregates = new ArrayList<RandomPercentile>();
+        final List<RandomPercentile> aggregates = new ArrayList<>();
         for (int j = 0; j < 5; j++) {
             final RandomPercentile randomPercentile = new RandomPercentile(randomGenerator);
             for (int k = 0; k < n; k++) {

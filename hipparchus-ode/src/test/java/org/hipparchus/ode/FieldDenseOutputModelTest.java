@@ -49,12 +49,12 @@ public class FieldDenseOutputModelTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestBoundaries(final Field<T> field) {
-        TestFieldProblem3<T> pb = new TestFieldProblem3<T>(field.getZero().add(0.9));
+        TestFieldProblem3<T> pb = new TestFieldProblem3<>(field.getZero().add(0.9));
         double minStep = 0;
         double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
-        FieldODEIntegrator<T> integ = new DormandPrince54FieldIntegrator<T>(field, minStep, maxStep, 1.0e-8, 1.0e-8);
-        integ.addStepHandler(new FieldDenseOutputModel<T>());
-        integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
+        FieldODEIntegrator<T> integ = new DormandPrince54FieldIntegrator<>(field, minStep, maxStep, 1.0e-8, 1.0e-8);
+        integ.addStepHandler(new FieldDenseOutputModel<>());
+        integ.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), pb.getFinalTime());
         FieldDenseOutputModel<T> cm = (FieldDenseOutputModel<T>) integ.getStepHandlers().getFirst();
         cm.getInterpolatedState(pb.getInitialState().getTime().twice().subtract(pb.getFinalTime()));
         cm.getInterpolatedState(pb.getFinalTime().twice().subtract(pb.getInitialState().getTime()));
@@ -68,13 +68,13 @@ public class FieldDenseOutputModelTest {
 
     private <T extends CalculusFieldElement<T>> void doTestRandomAccess(final Field<T> field)  {
 
-        TestFieldProblem3<T> pb = new TestFieldProblem3<T>(field.getZero().add(0.9));
+        TestFieldProblem3<T> pb = new TestFieldProblem3<>(field.getZero().add(0.9));
         double minStep = 0;
         double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
-        FieldODEIntegrator<T> integ = new DormandPrince54FieldIntegrator<T>(field, minStep, maxStep, 1.0e-8, 1.0e-8);
-        FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<T>();
+        FieldODEIntegrator<T> integ = new DormandPrince54FieldIntegrator<>(field, minStep, maxStep, 1.0e-8, 1.0e-8);
+        FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<>();
         integ.addStepHandler(cm);
-        integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
+        integ.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), pb.getFinalTime());
 
         Random random = new Random(347588535632l);
         T maxError    = field.getZero();
@@ -109,47 +109,48 @@ public class FieldDenseOutputModelTest {
 
         // theoretical solution: y[0] = cos(t), y[1] = sin(t)
         FieldOrdinaryDifferentialEquation<T> problem =
-                        new FieldOrdinaryDifferentialEquation<T>() {
-            public T[] computeDerivatives(T t, T[] y) {
-                T[] yDot = MathArrays.buildArray(field, 2);
-                yDot[0] = y[1].negate();
-                yDot[1] = y[0];
-                return yDot;
-            }
-            public int getDimension() {
-                return 2;
-            }
-                        };
+                new FieldOrdinaryDifferentialEquation<>() {
+                    public T[] computeDerivatives(T t, T[] y) {
+                        T[] yDot = MathArrays.buildArray(field, 2);
+                        yDot[0] = y[1].negate();
+                        yDot[1] = y[0];
+                        return yDot;
+                    }
+
+                    public int getDimension() {
+                        return 2;
+                    }
+                };
 
         // integrate backward from &pi; to 0;
-        FieldDenseOutputModel<T> cm1 = new FieldDenseOutputModel<T>();
+        FieldDenseOutputModel<T> cm1 = new FieldDenseOutputModel<>();
         FieldODEIntegrator<T> integ1 =
-                        new DormandPrince853FieldIntegrator<T>(field, 0, 1.0, 1.0e-8, 1.0e-8);
+                new DormandPrince853FieldIntegrator<>(field, 0, 1.0, 1.0e-8, 1.0e-8);
         integ1.addStepHandler(cm1);
         T t0 = field.getZero().add(FastMath.PI);
         T[] y0 = MathArrays.buildArray(field, 2);
         y0[0] = field.getOne().negate();
         y0[1] = field.getZero();
-        integ1.integrate(new FieldExpandableODE<T>(problem),
-                         new FieldODEState<T>(t0, y0),
+        integ1.integrate(new FieldExpandableODE<>(problem),
+                new FieldODEState<>(t0, y0),
                          field.getZero());
 
         // integrate backward from 2&pi; to &pi;
-        FieldDenseOutputModel<T> cm2 = new FieldDenseOutputModel<T>();
+        FieldDenseOutputModel<T> cm2 = new FieldDenseOutputModel<>();
         FieldODEIntegrator<T> integ2 =
-                        new DormandPrince853FieldIntegrator<T>(field, 0, 0.1, 1.0e-12, 1.0e-12);
+                new DormandPrince853FieldIntegrator<>(field, 0, 0.1, 1.0e-12, 1.0e-12);
         integ2.addStepHandler(cm2);
         t0 = field.getZero().add(2.0 * FastMath.PI);
         y0[0] = field.getOne();
         y0[1] = field.getZero();
-        integ2.integrate(new FieldExpandableODE<T>(problem),
-                         new FieldODEState<T>(t0, y0),
+        integ2.integrate(new FieldExpandableODE<>(problem),
+                new FieldODEState<>(t0, y0),
                          field.getZero().add(FastMath.PI));
 
         // merge the two half circles
-        FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<T>();
+        FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<>();
         cm.append(cm2);
-        cm.append(new FieldDenseOutputModel<T>());
+        cm.append(new FieldDenseOutputModel<>());
         cm.append(cm1);
 
         // check circle
@@ -169,7 +170,7 @@ public class FieldDenseOutputModelTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestErrorConditions(final Field<T> field) {
-        FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<T>();
+        FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<>();
         cm.handleStep(buildInterpolator(field, 0, 1, new double[] { 0.0, 1.0, -2.0 }));
 
         // dimension mismatch
@@ -189,7 +190,7 @@ public class FieldDenseOutputModelTest {
     private <T extends CalculusFieldElement<T>> boolean checkAppendError(Field<T> field, FieldDenseOutputModel<T> cm,
                                                                      double t0, double t1, double[] y) {
         try {
-            FieldDenseOutputModel<T> otherCm = new FieldDenseOutputModel<T>();
+            FieldDenseOutputModel<T> otherCm = new FieldDenseOutputModel<>();
             otherCm.handleStep(buildInterpolator(field, t0, t1, y));
             cm.append(otherCm);
         } catch(MathIllegalArgumentException dme) {
@@ -204,9 +205,9 @@ public class FieldDenseOutputModelTest {
         for (int i = 0; i < y.length; ++i) {
             fieldY[i] = field.getZero().add(y[i]);
         }
-        final FieldODEStateAndDerivative<T> s0 = new FieldODEStateAndDerivative<T>(field.getZero().add(t0), fieldY, fieldY);
-        final FieldODEStateAndDerivative<T> s1 = new FieldODEStateAndDerivative<T>(field.getZero().add(t1), fieldY, fieldY);
-        final FieldEquationsMapper<T> mapper   = new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<T>() {
+        final FieldODEStateAndDerivative<T> s0 = new FieldODEStateAndDerivative<>(field.getZero().add(t0), fieldY, fieldY);
+        final FieldODEStateAndDerivative<T> s1 = new FieldODEStateAndDerivative<>(field.getZero().add(t1), fieldY, fieldY);
+        final FieldEquationsMapper<T> mapper   = new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<>() {
             public int getDimension() {
                 return s0.getPrimaryStateDimension();
             }
@@ -215,7 +216,7 @@ public class FieldDenseOutputModelTest {
                 return y;
             }
         }).getMapper();
-        return new DummyFieldStepInterpolator<T>(t1 >= t0, s0, s1, s0, s1, mapper);
+        return new DummyFieldStepInterpolator<>(t1 >= t0, s0, s1, s0, s1, mapper);
     }
 
     public void checkValue(double value, double reference) {

@@ -476,10 +476,10 @@ public abstract class RealVectorAbstractTest {
         final double[] data1 = new double[values.length * values.length];
         final double[] data2 = new double[values.length * values.length];
         int k = 0;
-        for (int i = 0; i < values.length; i++) {
-            for (int j = 0; j < values.length; j++) {
-                data1[k] = values[i];
-                data2[k] = values[j];
+        for (double v : values) {
+            for (double value : values) {
+                data1[k] = v;
+                data2[k] = value;
                 ++k;
             }
         }
@@ -653,8 +653,8 @@ public abstract class RealVectorAbstractTest {
         final RealVector v = create(data);
         final double actual = v.getNorm();
         double expected = 0d;
-        for (int i = 0; i < data.length; i++) {
-            expected += data[i] * data[i];
+        for (double datum : data) {
+            expected += datum * datum;
         }
         expected = FastMath.sqrt(expected);
         assertEquals(expected, actual, 0d, "");
@@ -702,8 +702,8 @@ public abstract class RealVectorAbstractTest {
         final RealVector v = create(data);
         final double actual = v.getL1Norm();
         double expected = 0d;
-        for (int i = 0; i < data.length; i++) {
-            expected += FastMath.abs(data[i]);
+        for (double datum : data) {
+            expected += FastMath.abs(datum);
         }
         assertEquals(expected, actual, 0d, "");
 
@@ -751,8 +751,8 @@ public abstract class RealVectorAbstractTest {
         final RealVector v = create(data);
         final double actual = v.getLInfNorm();
         double expected = 0d;
-        for (int i = 0; i < data.length; i++) {
-            expected = FastMath.max(expected, FastMath.abs(data[i]));
+        for (double datum : data) {
+            expected = FastMath.max(expected, FastMath.abs(datum));
         }
         assertEquals(expected, actual, 0d, "");
 
@@ -760,8 +760,7 @@ public abstract class RealVectorAbstractTest {
 
     private void doTestMapBinaryOperation(final BinaryOperation op, final boolean inPlace) {
         final double[] expected = new double[values.length];
-        for (int i = 0; i < values.length; i++) {
-            final double d = values[i];
+        for (final double d : values) {
             for (int j = 0; j < expected.length; j++) {
                 switch (op) {
                     case ADD:
@@ -1007,8 +1006,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testSet() {
-        for (int i = 0; i < values.length; i++) {
-            final double expected = values[i];
+        for (final double expected : values) {
             final RealVector v = create(values);
             v.set(expected);
             for (int j = 0; j < values.length; j++) {
@@ -1032,8 +1030,8 @@ public abstract class RealVectorAbstractTest {
             x, 1d, x, x, 2d, x, x, x, 3d, x, x, x, x
         };
         double norm = 0d;
-        for (int i = 0; i < data.length; i++) {
-            norm += data[i] * data[i];
+        for (double datum : data) {
+            norm += datum * datum;
         }
         norm = FastMath.sqrt(norm);
         final double[] expected = new double[data.length];
@@ -1122,10 +1120,8 @@ public abstract class RealVectorAbstractTest {
         final RealVector v1 = create(data1);
         final RealVector v2 = mixed ? createAlien(data2) : create(data2);
         final double[] expected = new double[n];
-        for (int i = 0; i < values.length; i++) {
-            final double a1 = values[i];
-            for (int j = 0; j < values.length; j++) {
-                final double a2 = values[j];
+        for (final double a1 : values) {
+            for (final double a2 : values) {
                 for (int k = 0; k < n; k++) {
                     expected[k] = a1 * data1[k] + a2 * data2[k];
                 }
@@ -1138,7 +1134,7 @@ public abstract class RealVectorAbstractTest {
                     actual = v1.combine(a1, a2, v2);
                 }
                 UnitTestUtils.customAssertEquals("a1 = " + a1 + ", a2 = " + a2, expected,
-                    actual, 0.);
+                        actual, 0.);
             }
         }
     }
@@ -1230,14 +1226,14 @@ public abstract class RealVectorAbstractTest {
     }
 
     private void doTestDotProductSpecialValues(final boolean mixed) {
-        for (int i = 0; i < values.length; i++) {
+        for (double v : values) {
             final double[] data1 = {
-                values[i]
+                    v
             };
             final RealVector v1 = create(data1);
-            for (int j = 0; j < values.length; j++) {
+            for (double value : values) {
                 final double[] data2 = {
-                    values[j]
+                        value
                 };
                 final RealVector v2;
                 if (mixed) {
@@ -1248,7 +1244,7 @@ public abstract class RealVectorAbstractTest {
                 final double expected = data1[0] * data2[0];
                 final double actual = v1.dotProduct(v2);
                 assertEquals(expected,
-                    actual, 0d, data1[0] + " * " + data2[0]);
+                        actual, 0d, data1[0] + " * " + data2[0]);
             }
         }
     }

@@ -28,7 +28,7 @@ import org.hipparchus.util.FastMath;
 class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplication<T> {
 
     /** Delta product. */
-    private T delta;
+    private final T delta;
 
     /** sₘ iteration parameter. */
     private T sM;

@@ -61,18 +61,18 @@ class FieldMatrixTest {
     void testDefaultMap() {
         FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
         FieldMatrix<Binary64> result = a.add(a.map(Binary64::negate));
-        result.walkInOptimizedOrder(new FieldMatrixPreservingVisitor<Binary64>() {
-            
+        result.walkInOptimizedOrder(new FieldMatrixPreservingVisitor<>() {
+
             @Override
             public void visit(int row, int column, Binary64 value) {
                 assertEquals(0.0, value.getReal(), 1.0e-10);
             }
-            
+
             @Override
             public void start(int rows, int columns, int startRow, int endRow,
                               int startColumn, int endColumn) {
             }
-            
+
             @Override
             public Binary64 end() {
                 return Binary64Field.getInstance().getZero();
@@ -111,7 +111,7 @@ class FieldMatrixTest {
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf
     // so the default methods are called
-    private class DefaultMatrix extends AbstractFieldMatrix<Binary64> {
+    private static class DefaultMatrix extends AbstractFieldMatrix<Binary64> {
 
         FieldMatrix<Binary64> m;
         public DefaultMatrix(FieldMatrix<Binary64> m) {

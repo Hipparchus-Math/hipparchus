@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class CombinatoricsUtilsTest {
 
     /** cached binomial coefficients */
-    private static final List<Map<Integer, Long>> binomialCache = new ArrayList<Map<Integer, Long>>();
+    private static final List<Map<Integer, Long>> binomialCache = new ArrayList<>();
 
     /** Verify that b(0,0) = 1 */
     @Test
@@ -632,9 +632,9 @@ class CombinatoricsUtilsTest {
      */
     private long binomialCoefficient(int n, int k) throws MathRuntimeException {
         if (binomialCache.size() > n) {
-            Long cachedResult = binomialCache.get(n).get(Integer.valueOf(k));
+            Long cachedResult = binomialCache.get(n).get(k);
             if (cachedResult != null) {
-                return cachedResult.longValue();
+                return cachedResult;
             }
         }
         long result = -1;
@@ -657,9 +657,9 @@ class CombinatoricsUtilsTest {
             throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
         }
         for (int i = binomialCache.size(); i < n + 1; i++) {
-            binomialCache.add(new HashMap<Integer, Long>());
+            binomialCache.add(new HashMap<>());
         }
-        binomialCache.get(n).put(Integer.valueOf(k), Long.valueOf(result));
+        binomialCache.get(n).put(k, result);
         return result;
     }
 

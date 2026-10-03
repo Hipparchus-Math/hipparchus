@@ -528,7 +528,7 @@ class ResizableDoubleArrayTest {
 
         // Wrong type
         ResizableDoubleArray first = new ResizableDoubleArray();
-        Double other = Double.valueOf(2);
+        Double other = 2.0;
         assertNotEquals(first, other);
 
         // Null

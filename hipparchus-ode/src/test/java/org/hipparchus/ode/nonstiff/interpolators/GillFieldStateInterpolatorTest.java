@@ -35,15 +35,15 @@ class GillFieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAbs
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState,
                        FieldEquationsMapper<T> mapper) {
-        return new GillFieldStateInterpolator<T>(field, forward, yDotK,
-                                                globalPreviousState, globalCurrentState,
-                                                softPreviousState, softCurrentState,
-                                                mapper);
+        return new GillFieldStateInterpolator<>(field, forward, yDotK,
+                globalPreviousState, globalCurrentState,
+                softPreviousState, softCurrentState,
+                mapper);
     }
 
     protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
-        return new GillFieldIntegrator<T>(field, field.getOne());
+        return new GillFieldIntegrator<>(field, field.getOne());
     }
 
     @Test

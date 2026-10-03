@@ -315,10 +315,10 @@ public class ClusterAlgorithmComparison {
         private static final double PAD = 10;
 
         /** Clusters. */
-        private List<? extends Cluster<DoublePoint>> clusters;
+        private final List<? extends Cluster<DoublePoint>> clusters;
 
         /** Duration of the computation. */
-        private long duration;
+        private final long duration;
 
         /** Simple constructor.
          * @param clusters clusters to plot

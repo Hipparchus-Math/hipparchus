@@ -533,8 +533,7 @@ class GammaTest {
     @Test
     void testLogGamma() {
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA_REF.length; i++) {
-            final double[] data = LOG_GAMMA_REF[i];
+        for (final double[] data : LOG_GAMMA_REF) {
             final double x = data[0];
             final double expected = data[1];
             final double actual = Gamma.logGamma(x);
@@ -551,8 +550,7 @@ class GammaTest {
     @Test
     void testLogGammaField() {
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA_REF.length; i++) {
-            final double[] data = LOG_GAMMA_REF[i];
+        for (final double[] data : LOG_GAMMA_REF) {
             final Binary64 x = new Binary64(data[0]);
             final double expected = data[1];
             final double actual = Gamma.logGamma(x).getReal();
@@ -631,8 +629,7 @@ class GammaTest {
     void testInvGamma1pm1() {
 
         final int ulps = 3;
-        for (int i = 0; i < INV_GAMMA1P_M1_REF.length; i++) {
-            final double[] ref = INV_GAMMA1P_M1_REF[i];
+        for (final double[] ref : INV_GAMMA1P_M1_REF) {
             final double x = ref[0];
             final double expected = ref[1];
             final double actual = Gamma.invGamma1pm1(x);
@@ -645,8 +642,7 @@ class GammaTest {
     void testInvGamma1pm1Field() {
 
         final int ulps = 3;
-        for (int i = 0; i < INV_GAMMA1P_M1_REF.length; i++) {
-            final double[] ref = INV_GAMMA1P_M1_REF[i];
+        for (final double[] ref : INV_GAMMA1P_M1_REF) {
             final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.invGamma1pm1(x).getReal();
@@ -699,8 +695,7 @@ class GammaTest {
     void testLogGamma1p() {
 
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA1P_REF.length; i++) {
-            final double[] ref = LOG_GAMMA1P_REF[i];
+        for (final double[] ref : LOG_GAMMA1P_REF) {
             final double x = ref[0];
             final double expected = ref[1];
             final double actual = Gamma.logGamma1p(x);
@@ -713,8 +708,7 @@ class GammaTest {
     void testLogGamma1pField() {
 
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA1P_REF.length; i++) {
-            final double[] ref = LOG_GAMMA1P_REF[i];
+        for (final double[] ref : LOG_GAMMA1P_REF) {
             final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.logGamma1p(x).getReal();
@@ -1229,8 +1223,7 @@ class GammaTest {
     @Test
     void testGamma() {
 
-        for (int i = 0; i < GAMMA_REF.length; i++) {
-            final double[] ref = GAMMA_REF[i];
+        for (final double[] ref : GAMMA_REF) {
             final double x = ref[0];
             final double expected = ref[1];
             final double actual = Gamma.gamma(x);
@@ -1255,8 +1248,7 @@ class GammaTest {
     @Test
     void testGammaField() {
 
-        for (int i = 0; i < GAMMA_REF.length; i++) {
-            final double[] ref = GAMMA_REF[i];
+        for (final double[] ref : GAMMA_REF) {
             final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.gamma(x).getReal();

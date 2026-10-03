@@ -318,7 +318,7 @@ class VariationalEquationTest {
 
         public static final String B = "b";
 
-        private double b;
+        private final double b;
 
         public Brusselator(double b) {
             this.b = b;
@@ -439,9 +439,9 @@ class VariationalEquationTest {
         public static final String OMEGA = "omega";
 
         private final double[] y0;
-        private double cx;
-        private double cy;
-        private double omega;
+        private final double cx;
+        private final double cy;
+        private final double omega;
 
         public Circle(double[] y0, double cx, double cy, double omega) {
             this.y0    = y0.clone();

@@ -173,11 +173,11 @@ class BilinearInterpolatorTest {
                                            final CalculusFieldBivariateFunction<Binary64> fT,
                                            final double tol) {
 
-        for (int i = 0; i < xVal.length; ++i) {
-            for (int j = 0; j < yVal.length; ++j) {
+        for (double value : xVal) {
+            for (double v : yVal) {
 
-                final double x = xVal[i];
-                final double y = yVal[j];
+                final double x = value;
+                final double y = v;
                 assertEquals(f.value(x, y), bif.value(x, y), tol);
 
                 final Binary64 x64 = new Binary64(x);

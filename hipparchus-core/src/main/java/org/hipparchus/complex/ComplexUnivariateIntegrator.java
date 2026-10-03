@@ -28,7 +28,7 @@ import org.hipparchus.analysis.integration.UnivariateIntegrator;
 public class ComplexUnivariateIntegrator  {
 
     /** Underlying real integrator. */
-    private UnivariateIntegrator integrator;
+    private final UnivariateIntegrator integrator;
 
     /** Crate a complex integrator from a real integrator.
      * @param integrator underlying real integrator to use

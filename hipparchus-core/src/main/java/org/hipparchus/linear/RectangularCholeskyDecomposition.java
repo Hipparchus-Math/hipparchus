@@ -53,7 +53,7 @@ public class RectangularCholeskyDecomposition {
     private final RealMatrix root;
 
     /** Rank of the symmetric positive semidefinite matrix. */
-    private int rank;
+    private final int rank;
 
     /**
      * Decompose a symmetric positive semidefinite matrix.

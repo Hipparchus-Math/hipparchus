@@ -54,7 +54,7 @@ public abstract class CertifiedDataAbstractTest {
     public void setUp() throws IOException {
         descriptives = new DescriptiveStatistics();
         summaries = new StreamingStatistics();
-        certifiedValues = new HashMap<String, Double>();
+        certifiedValues = new HashMap<>();
 
         loadData();
     }
@@ -125,14 +125,14 @@ public abstract class CertifiedDataAbstractTest {
             Double summariesValue = getProperty(summaries, name);
             if (summariesValue != null) {
                 UnitTestUtils.customAssertEquals("summary value for " + name + " is incorrect.",
-                                                 summariesValue.doubleValue(), expectedValue.doubleValue(),
+                        summariesValue, expectedValue,
                                                  getMaximumAbsoluteError());
             }
 
             Double descriptivesValue = getProperty(descriptives, name);
             if (descriptivesValue != null) {
                 UnitTestUtils.customAssertEquals("descriptive value for " + name + " is incorrect.",
-                                                 descriptivesValue.doubleValue(), expectedValue.doubleValue(),
+                        descriptivesValue, expectedValue,
                                                  getMaximumAbsoluteError());
             }
         }
@@ -149,7 +149,7 @@ public abstract class CertifiedDataAbstractTest {
             if (meth.getReturnType().equals(Double.TYPE)) {
                 return (Double) property;
             } else if (meth.getReturnType().equals(Long.TYPE)) {
-                return Double.valueOf(((Long) property).doubleValue());
+                return ((Long) property).doubleValue();
             } else {
                 fail("wrong type: " + meth.getReturnType().getName());
             }

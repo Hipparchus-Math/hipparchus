@@ -27,7 +27,7 @@ import org.hipparchus.util.FastMath;
 public class GradientField implements Field<Gradient> {
 
     /** Array of all fields created so far. */
-    private static AtomicReference<GradientField[]> fields = new AtomicReference<>(null);
+    private static final AtomicReference<GradientField[]> fields = new AtomicReference<>(null);
 
     /** Zero constant. */
     private final Gradient zero;

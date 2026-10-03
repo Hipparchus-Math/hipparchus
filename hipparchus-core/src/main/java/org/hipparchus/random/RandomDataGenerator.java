@@ -741,7 +741,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
 
         // Convert each byte to 2 hex digits
         for (byte randomByte : randomBytes) {
-            Integer c = Integer.valueOf(randomByte);
+            Integer c = (int) randomByte;
 
             /*
              * Add 128 to byte value to make interval 0-255 before doing hex

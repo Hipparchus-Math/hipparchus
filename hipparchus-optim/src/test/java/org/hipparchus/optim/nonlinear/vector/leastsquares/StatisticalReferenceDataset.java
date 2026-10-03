@@ -58,7 +58,7 @@ public abstract class StatisticalReferenceDataset {
     /** The certified values of the standard deviation of the parameters. */
     private final double[] sigA;
     /** The certified value of the residual sum of squares. */
-    private double residualSumOfSquares;
+    private final double residualSumOfSquares;
     /** The least-squares problem. */
     private final LeastSquaresProblem problem;
 
@@ -72,7 +72,7 @@ public abstract class StatisticalReferenceDataset {
     public StatisticalReferenceDataset(final BufferedReader in)
         throws IOException {
 
-        final ArrayList<String> lines = new ArrayList<String>();
+        final ArrayList<String> lines = new ArrayList<>();
         for (String line = in.readLine(); line != null; line = in.readLine()) {
             lines.add(line);
         }

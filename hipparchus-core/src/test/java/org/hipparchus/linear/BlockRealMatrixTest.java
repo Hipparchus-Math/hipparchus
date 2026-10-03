@@ -301,9 +301,9 @@ final class BlockRealMatrixTest {
 
     //Additional Test for BlockRealMatrixTest.testMultiply
 
-    private double[][] d3 = new double[][] {{1,2,3,4},{5,6,7,8}};
-    private double[][] d4 = new double[][] {{1},{2},{3},{4}};
-    private double[][] d5 = new double[][] {{30},{70}};
+    private final double[][] d3 = new double[][] {{1,2,3,4},{5,6,7,8}};
+    private final double[][] d4 = new double[][] {{1},{2},{3},{4}};
+    private final double[][] d5 = new double[][] {{30},{70}};
 
     @Test
     void testMultiply2() {

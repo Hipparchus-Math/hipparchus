@@ -70,7 +70,7 @@ public class FieldLaguerreRuleFactory<T extends CalculusFieldElement<T>> extends
     private static class Laguerre<T extends CalculusFieldElement<T>> {
 
         /** Degree. */
-        private int degree;
+        private final int degree;
 
         /** Simple constructor.
          * @param degree polynomial degree

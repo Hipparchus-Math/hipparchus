@@ -50,7 +50,7 @@ final class StatisticalSummaryValuesTest {
         StatisticalSummaryValues t = null;
         assertEquals(u, u, "reflexive");
         assertNotEquals(u, t, "non-null compared to null");
-        assertNotEquals(u, Double.valueOf(0), "wrong type");
+        assertNotEquals(u, (double) 0, "wrong type");
         t = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
         assertEquals(t, u, "instances with same data should be equal");
         assertEquals(u.hashCode(), t.hashCode(), "hash code");

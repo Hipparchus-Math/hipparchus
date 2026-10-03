@@ -35,15 +35,15 @@ class DormandPrince853FieldStateInterpolatorTest extends RungeKuttaFieldStateInt
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState,
                        FieldEquationsMapper<T> mapper) {
-        return new DormandPrince853FieldStateInterpolator<T>(field, forward, yDotK,
-                                                             globalPreviousState, globalCurrentState,
-                                                             softPreviousState, softCurrentState,
-                                                             mapper);
+        return new DormandPrince853FieldStateInterpolator<>(field, forward, yDotK,
+                globalPreviousState, globalCurrentState,
+                softPreviousState, softCurrentState,
+                mapper);
     }
 
     protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
-        return new DormandPrince853FieldIntegrator<T>(field, 0, 1, 1, 1);
+        return new DormandPrince853FieldIntegrator<>(field, 0, 1, 1, 1);
     }
 
     @Test

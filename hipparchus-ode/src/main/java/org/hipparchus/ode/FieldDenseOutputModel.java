@@ -97,7 +97,7 @@ public class FieldDenseOutputModel<T extends CalculusFieldElement<T>>
     private int index;
 
     /** Steps table. */
-    private List<FieldODEStateInterpolator<T>> steps;
+    private final List<FieldODEStateInterpolator<T>> steps;
 
     /** Simple constructor.
      * Build an empty continuous output model.

@@ -35,15 +35,15 @@ class ThreeEighthesFieldStateInterpolatorTest extends RungeKuttaFieldStateInterp
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState,
                        FieldEquationsMapper<T> mapper) {
-        return new ThreeEighthesFieldStateInterpolator<T>(field, forward, yDotK,
-                                                         globalPreviousState, globalCurrentState,
-                                                         softPreviousState, softCurrentState,
-                                                         mapper);
+        return new ThreeEighthesFieldStateInterpolator<>(field, forward, yDotK,
+                globalPreviousState, globalCurrentState,
+                softPreviousState, softCurrentState,
+                mapper);
     }
 
     protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
-        return new ThreeEighthesFieldIntegrator<T>(field, field.getOne());
+        return new ThreeEighthesFieldIntegrator<>(field, field.getOne());
     }
 
     @Test

@@ -144,8 +144,10 @@ public class SimplexOptimizer extends MultivariateOptimizer {
 
         final boolean isMinim = getGoalType() == GoalType.MINIMIZE;
         final Comparator<PointValuePair> comparator
-            = new Comparator<PointValuePair>() {
-            /** {@inheritDoc} */
+            = new Comparator<>() {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public int compare(final PointValuePair o1,
                                final PointValuePair o2) {

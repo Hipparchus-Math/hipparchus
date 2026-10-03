@@ -759,8 +759,7 @@ class BesselJTest {
     void testBesselJ() {
         final double tol = 1e-15;
 
-        for (int i = 0; i < BESSEL_J_REF.length; i++) {
-            final double[] data = BESSEL_J_REF[i];
+        for (final double[] data : BESSEL_J_REF) {
             final double order = data[0];
             final double x = data[1];
             final double expected = data[2];

@@ -299,16 +299,20 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
         final FieldDenseOutputModel<T> model = new FieldDenseOutputModel<>();
         integ.addStepHandler(model);
 
-        integ.integrate(new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<T>() {
+        integ.integrate(new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<>() {
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public int getDimension() {
                 return 1;
             }
 
-            /** {@inheritDoc} */
-           @Override
+            /**
+             * {@inheritDoc}
+             */
+            @Override
             public T[] computeDerivatives(final T t, final T[] y) {
                 final T sn = jacobi.valuesN(t.subtract(tRef).multiply(tScale)).sn();
                 return toArray(b.divide(c.add(d.multiply(sn).multiply(sn))));

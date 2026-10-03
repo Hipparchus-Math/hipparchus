@@ -38,9 +38,9 @@ class BinomialTestTest {
 
     protected BinomialTest testStatistic = new BinomialTest();
 
-    private static int successes = 51;
-    private static int trials = 235;
-    private static double probability = 1.0 / 6.0;
+    private static final int successes = 51;
+    private static final int trials = 235;
+    private static final double probability = 1.0 / 6.0;
 
     @Test
     void testBinomialTestPValues() {

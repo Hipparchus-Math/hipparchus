@@ -214,7 +214,7 @@ public class RealDistributionComparison {
     public static class Display extends ExampleFrame {
 
         /** Container. */
-        private JComponent container;
+        private final JComponent container;
 
         /** Simple constructor.
          */

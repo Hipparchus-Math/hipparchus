@@ -260,7 +260,7 @@ class PolyhedronsSetTest {
                                                                 1.0, c,
                                                                 1.0, r.applyTo(vertex4.subtract(c)))
         };
-        tree.getTree(true).visit(new BSPTreeVisitor<Euclidean3D, Vector3D, Plane, SubPlane>() {
+        tree.getTree(true).visit(new BSPTreeVisitor<>() {
 
             public Order visitOrder(BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
                 return Order.MINUS_SUB_PLUS;
@@ -269,7 +269,7 @@ class PolyhedronsSetTest {
             public void visitInternalNode(BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
                 @SuppressWarnings("unchecked")
                 BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane> attribute =
-                    (BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane>) node.getAttribute();
+                        (BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane>) node.getAttribute();
                 if (attribute.getPlusOutside() != null) {
                     checkFacet(attribute.getPlusOutside());
                 }
@@ -284,7 +284,7 @@ class PolyhedronsSetTest {
             private void checkFacet(SubPlane facet) {
                 Plane plane = facet.getHyperplane();
                 Vector2D[][] vertices =
-                    ((PolygonsSet) facet.getRemainingRegion()).getVertices();
+                        ((PolygonsSet) facet.getRemainingRegion()).getVertices();
                 assertEquals(1, vertices.length);
                 for (int i = 0; i < vertices[0].length; ++i) {
                     Vector3D v = plane.toSpace(vertices[0][i]);

@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UncorrelatedRandomVectorGeneratorTest {
-    private double[] mean;
-    private double[] standardDeviation;
-    private UncorrelatedRandomVectorGenerator generator;
+    private final double[] mean;
+    private final double[] standardDeviation;
+    private final UncorrelatedRandomVectorGenerator generator;
 
     public UncorrelatedRandomVectorGeneratorTest() {
         mean              = new double[] {0.0, 1.0, -3.0, 2.3};

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class VectorialCovarianceTest {
-    private double[][] points;
+    private final double[][] points;
 
     public VectorialCovarianceTest() {
         points = new double[][] {
@@ -64,8 +64,8 @@ public class VectorialCovarianceTest {
     void testBasicStats() {
 
         VectorialCovariance stat = new VectorialCovariance(points[0].length, true);
-        for (int i = 0; i < points.length; ++i) {
-            stat.increment(points[i]);
+        for (double[] point : points) {
+            stat.increment(point);
         }
 
         assertEquals(points.length, stat.getN());

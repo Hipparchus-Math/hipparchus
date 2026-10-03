@@ -112,8 +112,8 @@ public class Well19937cTest extends RandomGeneratorAbstractTest {
             -339687826,   1219340319,    718895887,  -2007521340,  -1859185806,   2042164737,    -58146784,    742449142,   1930754708,    780832111,    715056441,  -1393886151,     -8150527,   -599607443,   -537300865,  -1212516084
         };
 
-        for (int i = 0; i < refInt.length; ++i) {
-            assertEquals(refInt[i], mt.nextInt());
+        for (int j : refInt) {
+            assertEquals(j, mt.nextInt());
         }
 
     }

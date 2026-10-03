@@ -68,7 +68,7 @@ public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends Field
             fieldY[i] = field.getZero().add(y0[i]);
         }
         fieldYDotK[0] = eqn.computeDerivatives(t, fieldY);
-        FieldODEStateAndDerivative<T> s0 = new FieldODEStateAndDerivative<T>(t, fieldY, fieldYDotK[0]);
+        FieldODEStateAndDerivative<T> s0 = new FieldODEStateAndDerivative<>(t, fieldY, fieldYDotK[0]);
 
         // perform one integration step, in order to get consistent derivatives
         T h = field.getZero().add(t1 - t0);
@@ -90,11 +90,11 @@ public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends Field
                 fieldY[i] = fieldY[i].add(h.multiply(b[s].multiply(fieldYDotK[s][i])));
             }
         }
-        FieldODEStateAndDerivative<T> s1 = new FieldODEStateAndDerivative<T>(t, fieldY,
-                                                                             eqn.computeDerivatives(t, fieldY));
+        FieldODEStateAndDerivative<T> s1 = new FieldODEStateAndDerivative<>(t, fieldY,
+                eqn.computeDerivatives(t, fieldY));
 
         return createInterpolator(field, t1 > t0, fieldYDotK, s0, s1, s0, s1,
-                                  new FieldExpandableODE<T>(eqn).getMapper());
+                new FieldExpandableODE<>(eqn).getMapper());
 
     }
 

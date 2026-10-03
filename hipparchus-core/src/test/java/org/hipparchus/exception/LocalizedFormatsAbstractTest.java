@@ -86,7 +86,7 @@ public abstract class LocalizedFormatsAbstractTest {
                     keyPresent |= messageKey.equals(keys.nextElement());
                 }
                 assertTrue(keyPresent,
-                                  "missing key \"" + message.toString() + "\" for language " + language);
+                                  "missing key \"" + message + "\" for language " + language);
             }
             assertEquals(language, bundle.getLocale().getLanguage());
         }
@@ -138,7 +138,7 @@ public abstract class LocalizedFormatsAbstractTest {
                 MessageFormat translated = new MessageFormat(message.getLocalizedString(locale));
                 assertEquals(source.getFormatsByArgumentIndex().length,
                                     translated.getFormatsByArgumentIndex().length,
-                                    message.toString() + " (" + language + ")");
+                                    message + " (" + language + ")");
             }
         }
     }

@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class HessenbergTransformerTest {
 
-    private double[][] testSquare5 = {
+    private final double[][] testSquare5 = {
             { 5, 4, 3, 2, 1 },
             { 1, 4, 0, 3, 3 },
             { 2, 0, 3, 0, 0 },
@@ -43,7 +43,7 @@ class HessenbergTransformerTest {
             { 4, 2, 1, 4, 1 }
     };
 
-    private double[][] testSquare3 = {
+    private final double[][] testSquare3 = {
             {  2, -1, 1 },
             { -1,  2, 1 },
             {  1, -1, 2 }
@@ -51,7 +51,7 @@ class HessenbergTransformerTest {
 
     // from http://eigen.tuxfamily.org/dox/classEigen_1_1HessenbergDecomposition.html
 
-    private double[][] testRandom = {
+    private final double[][] testRandom = {
             {  0.680,  0.823, -0.4440, -0.2700 },
             { -0.211, -0.605,  0.1080,  0.0268 },
             {  0.566, -0.330, -0.0452,  0.9040 },

@@ -83,8 +83,10 @@ public class MonotoneChain extends AbstractConvexHullGenerator2D {
         final List<Vector2D> pointsSortedByXAxis = new ArrayList<>(points);
 
         // sort the points in increasing order on the x-axis
-        pointsSortedByXAxis.sort(new Comparator<Vector2D>() {
-            /** {@inheritDoc} */
+        pointsSortedByXAxis.sort(new Comparator<>() {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public int compare(final Vector2D o1, final Vector2D o2) {
                 final double tolerance = getTolerance();

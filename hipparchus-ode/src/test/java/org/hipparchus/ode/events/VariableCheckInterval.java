@@ -84,7 +84,7 @@ public class VariableCheckInterval implements OrdinaryDifferentialEquation {
     }
 
     /** State events for this unit test. */
-    private class Event implements ODEEventDetector {
+    private static class Event implements ODEEventDetector {
 
         private final AdaptableInterval             maxCheck;
         private final int                           maxIter;

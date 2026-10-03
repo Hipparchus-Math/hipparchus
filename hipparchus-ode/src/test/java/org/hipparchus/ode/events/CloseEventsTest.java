@@ -2192,7 +2192,7 @@ class CloseEventsTest {
 
         public TimeDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, double... eventTs) {
-            this(maxCheck, threshold, maxIter, action, new ArrayList<Event>(), eventTs);
+            this(maxCheck, threshold, maxIter, action, new ArrayList<>(), eventTs);
         }
 
         public TimeDetector(final double maxCheck, final double threshold, final int maxIter,
@@ -2379,7 +2379,7 @@ class CloseEventsTest {
 
         private ODEStateAndDerivative initialState;
         private double finalTime;
-        private List<ODEStateInterpolator> interpolators = new ArrayList<>();
+        private final List<ODEStateInterpolator> interpolators = new ArrayList<>();
         private ODEStateAndDerivative finalState;
 
         @Override
@@ -2399,7 +2399,7 @@ class CloseEventsTest {
         }
     }
 
-    private class ResetChangesSignGenerator implements ODEEventDetector {
+    private static class ResetChangesSignGenerator implements ODEEventDetector {
 
         private final AdaptableInterval             maxCheck;
         private final int                           maxIter;

@@ -53,7 +53,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
      * The list of methods which are excluded from the general test
      * {@link #testAllButExcluded()}.
      */
-    protected static final Set<String> EXCLUDE = new HashSet<String>();
+    protected static final Set<String> EXCLUDE = new HashSet<>();
     /** The random number generator (always initialized with the same seed. */
     protected static final Random RANDOM;
 
@@ -264,9 +264,9 @@ public abstract class UnmodifiableRealVectorAbstractTest {
      */
     public Object createParameter(final Class<?> c) {
         if (c == Integer.TYPE) {
-            return Integer.valueOf(RANDOM.nextInt());
+            return RANDOM.nextInt();
         } else if (c == Double.TYPE) {
-            return Double.valueOf(RANDOM.nextDouble());
+            return RANDOM.nextDouble();
         } else if (c == double[].class) {
             final double[] v = new double[DIM];
             for (int i = 0; i < DIM; i++) {
@@ -343,8 +343,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
                IllegalArgumentException,
                InvocationTargetException {
         Method[] method = RealVector.class.getMethods();
-        for (int i = 0; i < method.length; i++) {
-            Method m = method[i];
+        for (Method m : method) {
             if (!EXCLUDE.contains(m.getName())) {
                 RealVector u = (RealVector) createParameter(RealVector.class);
                 Class<?>[] paramType = m.getParameterTypes();

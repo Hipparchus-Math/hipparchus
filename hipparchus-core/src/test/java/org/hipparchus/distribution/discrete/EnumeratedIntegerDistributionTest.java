@@ -172,7 +172,7 @@ public class EnumeratedIntegerDistributionTest {
         final EnumeratedIntegerDistribution distribution = new EnumeratedIntegerDistribution(values, masses);
         final List<Pair<Integer, Double>> pmf = distribution.getPmf();
         assertEquals(5, pmf.size());
-        final Map<Integer, Double> pmfMap = new HashMap<Integer, Double>();
+        final Map<Integer, Double> pmfMap = new HashMap<>();
         for (int i = 0; i < 5; i++) {
             pmfMap.put(i, masses[i]);
         }

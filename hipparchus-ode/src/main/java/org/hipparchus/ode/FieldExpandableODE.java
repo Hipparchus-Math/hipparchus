@@ -54,7 +54,7 @@ public class FieldExpandableODE<T extends CalculusFieldElement<T>> {
     private final FieldOrdinaryDifferentialEquation<T> primary;
 
     /** Components of the expandable ODE. */
-    private List<FieldSecondaryODE<T>> components;
+    private final List<FieldSecondaryODE<T>> components;
 
     /** Mapper for all equations. */
     private FieldEquationsMapper<T> mapper;

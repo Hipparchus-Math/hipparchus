@@ -53,7 +53,7 @@ public abstract class AbstractSimplex implements OptimizationData {
     /** Simplex. */
     private PointValuePair[] simplex;
     /** Start simplex configuration. */
-    private double[][] startConfiguration;
+    private final double[][] startConfiguration;
     /** Simplex dimension (must be equal to {@code simplex.length - 1}). */
     private final int dimension;
 

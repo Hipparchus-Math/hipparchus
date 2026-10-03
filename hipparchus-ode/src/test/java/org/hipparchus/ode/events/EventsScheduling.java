@@ -105,7 +105,7 @@ class EventsScheduling {
     private static void doTestField(final double start, final double stop, final int expectedCalls) {
 
         final FieldODEIntegrator<Binary64> integrator =
-                new DormandPrince853FieldIntegrator<Binary64>(Binary64Field.getInstance(), 10, 100.0, 1e-7, 1e-7);
+                new DormandPrince853FieldIntegrator<>(Binary64Field.getInstance(), 10, 100.0, 1e-7, 1e-7);
 
         // checker that will be used in both step handler and events handlers
         // to check they are called in consistent order
@@ -120,14 +120,15 @@ class EventsScheduling {
         }
 
         final FieldOrdinaryDifferentialEquation<Binary64> ode =
-                        new FieldOrdinaryDifferentialEquation<Binary64>() {
-            public int getDimension() {
-                return 1;
-            }
-            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
-                return new Binary64[] { Binary64.ONE };
-            }
-        };
+                new FieldOrdinaryDifferentialEquation<>() {
+                    public int getDimension() {
+                        return 1;
+                    }
+
+                    public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
+                        return new Binary64[]{Binary64.ONE};
+                    }
+                };
 
         final FieldODEState<Binary64> initialState =
                         new FieldODEState<>(new Binary64(start), new Binary64[] { Binary64.ZERO });

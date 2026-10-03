@@ -88,7 +88,7 @@ public class FieldLegendreRuleFactory<T extends CalculusFieldElement<T>> extends
     private static class Legendre<T extends CalculusFieldElement<T>> {
 
         /** Degree. */
-        private int degree;
+        private final int degree;
 
         /** Simple constructor.
          * @param degree polynomial degree

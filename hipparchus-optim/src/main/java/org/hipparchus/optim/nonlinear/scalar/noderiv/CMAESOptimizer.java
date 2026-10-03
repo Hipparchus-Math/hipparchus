@@ -140,8 +140,6 @@ public class CMAESOptimizer
     // selection strategy parameters
     /** Number of parents/points for recombination. */
     private int mu; //
-    /** log(mu + 0.5), stored for efficiency. */
-    private double logMu2;   // NOPMD - using a field here is for performance reasons
     /** Array for weighted recombination. */
     private RealMatrix weights;
     /** Variance-effectiveness of sum w_i x_i. */
@@ -603,7 +601,9 @@ public class CMAESOptimizer
 
         // initialize selection strategy parameters
         mu = lambda / 2; // number of parents/points for recombination
-        logMu2 = FastMath.log(mu + 0.5);
+        /** log(mu + 0.5), stored for efficiency. */
+        // NOPMD - using a field here is for performance reasons
+        double logMu2 = FastMath.log(mu + 0.5);
         weights = log(sequence(1, mu, 1)).scalarMultiply(-1).scalarAdd(logMu2);
         double sumw = 0;
         double sumwq = 0;
@@ -910,9 +910,9 @@ public class CMAESOptimizer
      */
     private static class ValuePenaltyPair {
         /** Objective function value. */
-        private double value;
+        private final double value;
         /** Penalty value for repair of out out of bounds points. */
-        private double penalty;
+        private final double penalty;
 
         /**
          * @param value Function value.
