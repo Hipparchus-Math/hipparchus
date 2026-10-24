@@ -74,9 +74,9 @@ public class BFGSUpdaterTest {
     }
 
     @Test
-    public void testTinyCurvatureKeepsUnitScaleFactor() {
-        // sᵀy = 1e-310 is positive but below Precision.SAFE_MIN,
-        // so the scale factor yᵀy / sᵀy is not used
+    public void testTinyStepKeepsUnitScaleFactor() {
+        // the curvature y/s = 1e10 is large, but the step is so small that sᵀy = 1e-310
+        // is below Precision.SAFE_MIN, so the scale factor yᵀy / sᵀy is not used
         final BFGSUpdater bfgs = createUpdater();
         Assertions.assertEquals(0,
                                 bfgs.update(new ArrayRealVector(new double[] { 1.0e-160, 0.0 }),
