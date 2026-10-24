@@ -109,7 +109,7 @@ public class LebedevQuadratureTest {
         assertEquals(4 * FastMath.PI / 3,
                      LebedevQuadrature.integrate((x, y, z) -> x * x, 14), 1.0e-14);
         assertEquals(4 * FastMath.PI / 105,
-                     LebedevQuadrature.integrate((x, y, z) -> x * x * y * y * z * z, 50), 1.0e-14);
+                     LebedevQuadrature.integrate((x, y, z) -> x * x * y * y * z * z, 26), 1.0e-14);
         // odd function integrates to zero
         assertEquals(0.0,
                      LebedevQuadrature.integrate((x, y, z) -> x * y * y, 110), 1.0e-14);
