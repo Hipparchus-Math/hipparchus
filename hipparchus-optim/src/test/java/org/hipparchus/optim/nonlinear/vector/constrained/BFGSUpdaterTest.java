@@ -40,9 +40,10 @@ public class BFGSUpdaterTest {
             { 2.0, 0.5 },
             { 0.5, 1.125 }
         });
-        checkMatrix(expected, bfgs.getHessian(), TOL);
+        final RealMatrix hessian = bfgs.getHessian();
+        checkMatrix(expected, hessian, TOL);
         // secant condition H+ s = y
-        Assertions.assertEquals(0.0, bfgs.getHessian().operate(s).subtract(y).getNorm(), TOL);
+        Assertions.assertEquals(0.0, hessian.operate(s).subtract(y).getNorm(), TOL);
     }
 
     @Test
