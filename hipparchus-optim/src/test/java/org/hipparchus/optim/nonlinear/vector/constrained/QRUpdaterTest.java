@@ -29,18 +29,22 @@ public class QRUpdaterTest {
     /** Tolerance for quantities of order 1 after a few Givens rotations. */
     private static final double TOL = 1.0e-14;
 
+    /** Two independent constraint columns, |A1| = 3. */
+    private static final RealVector A1 = new ArrayRealVector(new double[] { 1.0,  2.0,  2.0 });
+    private static final RealVector A2 = new ArrayRealVector(new double[] { 0.0,  1.0, -1.0 });
+
     @Test
     public void testGetRDependsOnActiveCount() {
         final QRUpdater updater = new QRUpdater(MatrixUtils.createRealIdentityMatrix(3));
         Assertions.assertNull(updater.getR());
         Assertions.assertEquals(0, updater.solveRT(new ArrayRealVector(3)).getDimension());
 
-        Assertions.assertTrue(add(updater, 1.0, 2.0, 2.0));
+        Assertions.assertTrue(add(updater, A1));
         Assertions.assertEquals(1, updater.getR().getRowDimension());
         // |a1| = 3, so R = [±3]
         Assertions.assertEquals(3.0, FastMath.abs(updater.getR().getEntry(0, 0)), TOL);
 
-        Assertions.assertTrue(add(updater, 0.0, 1.0, -1.0));
+        Assertions.assertTrue(add(updater, A2));
         Assertions.assertEquals(2, updater.getR().getRowDimension());
 
         Assertions.assertTrue(add(updater, 1.0, 0.0, 0.0));
@@ -50,12 +54,10 @@ public class QRUpdaterTest {
 
     @Test
     public void testFactorizationReproducesActiveColumns() {
-        final RealVector a1 = new ArrayRealVector(new double[] { 1.0,  2.0,  2.0 });
-        final RealVector a2 = new ArrayRealVector(new double[] { 0.0,  1.0, -1.0 });
         final QRUpdater updater = new QRUpdater(MatrixUtils.createRealIdentityMatrix(3));
-        Assertions.assertTrue(updater.addConstraint(updater.computeD(a1)));
-        Assertions.assertTrue(updater.addConstraint(updater.computeD(a2)));
-        checkFactorization(updater, a1, a2);
+        Assertions.assertTrue(add(updater, A1));
+        Assertions.assertTrue(add(updater, A2));
+        checkFactorization(updater, A1, A2);
     }
 
     @Test
@@ -92,7 +94,7 @@ public class QRUpdaterTest {
     @Test
     public void testDeleteOutOfRangeIsIgnored() {
         final QRUpdater updater = new QRUpdater(MatrixUtils.createRealIdentityMatrix(3));
-        Assertions.assertTrue(add(updater, 1.0, 2.0, 2.0));
+        Assertions.assertTrue(add(updater, A1));
         final RealMatrix before = updater.getR().copy();
         updater.deleteConstraint(-1);
         updater.deleteConstraint(1);
@@ -102,31 +104,33 @@ public class QRUpdaterTest {
 
     @Test
     public void testDeleteKeepsFactorization() {
-        final RealVector a1 = new ArrayRealVector(new double[] { 1.0,  2.0,  2.0 });
-        final RealVector a2 = new ArrayRealVector(new double[] { 0.0,  1.0, -1.0 });
         final RealVector a3 = new ArrayRealVector(new double[] { 3.0, -1.0,  0.5 });
         final QRUpdater updater = new QRUpdater(MatrixUtils.createRealIdentityMatrix(3));
-        Assertions.assertTrue(updater.addConstraint(updater.computeD(a1)));
-        Assertions.assertTrue(updater.addConstraint(updater.computeD(a2)));
-        Assertions.assertTrue(updater.addConstraint(updater.computeD(a3)));
+        Assertions.assertTrue(add(updater, A1));
+        Assertions.assertTrue(add(updater, A2));
+        Assertions.assertTrue(add(updater, a3));
         updater.deleteConstraint(0);
-        checkFactorization(updater, a2, a3);
+        checkFactorization(updater, A2, a3);
         updater.deleteConstraint(1);
-        checkFactorization(updater, a2);
+        checkFactorization(updater, A2);
         updater.deleteConstraint(0);
         Assertions.assertEquals(0, updater.getIq());
         Assertions.assertNull(updater.getR());
     }
 
     private static boolean add(final QRUpdater updater, final double... a) {
-        return updater.addConstraint(updater.computeD(new ArrayRealVector(a)));
+        return add(updater, new ArrayRealVector(a));
+    }
+
+    private static boolean add(final QRUpdater updater, final RealVector a) {
+        return updater.addConstraint(updater.computeD(a));
     }
 
     /** Check that J_active * R reproduces the active constraint columns (J orthogonal since L = I). */
     private static void checkFactorization(final QRUpdater updater, final RealVector... active) {
         final int iq = updater.getIq();
         Assertions.assertEquals(active.length, iq);
-        final RealMatrix jActive = updater.getJ().getSubMatrix(0, 2, 0, iq - 1);
+        final RealMatrix jActive = updater.getJ().getSubMatrix(0, updater.getJ().getRowDimension() - 1, 0, iq - 1);
         final RealMatrix product = jActive.multiply(updater.getR());
         for (int k = 0; k < iq; ++k) {
             Assertions.assertEquals(0.0, product.getColumnVector(k).subtract(active[k]).getNorm(), TOL);
