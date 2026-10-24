@@ -18,7 +18,6 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.SimpleBounds;
@@ -76,7 +75,7 @@ public class SQPOptimizerS2Test {
         final SimpleBounds bounds = new SimpleBounds(new double[] { 0.0,  Double.NEGATIVE_INFINITY, -5.0, Double.NEGATIVE_INFINITY },
                                                      new double[] { 10.0, 5.0, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY });
         final LagrangeSolution sol = new SQPOptimizerS2().optimize(option, bounds,
-                                                                   new ObjectiveFunction(new ShiftedQuadratic(1.0, 2.0, 3.0, 4.0)));
+                                                                   new ObjectiveFunction(shiftedQuadratic(1.0, 2.0, 3.0, 4.0)));
 
         Assertions.assertArrayEquals(new double[] { 1.0, 2.0, 3.0, 4.0 }, sol.getX().toArray(), TOL);
         Assertions.assertEquals(0.0, sol.getValue(), TOL);
@@ -107,7 +106,7 @@ public class SQPOptimizerS2Test {
                 new LinearInequalityConstraint(new double[][] { { 0.0, 0.0, 1.0 } }, new double[] { 0.0 });
         final LagrangeSolution sol = new SQPOptimizerS2().optimize(option, bounds, eq, iq,
                                                                    new InitialGuess(new double[] { 2.0, 3.8, 0.5 }),
-                                                                   new ObjectiveFunction(new ShiftedQuadratic(1.0, 3.0, 1.0)));
+                                                                   new ObjectiveFunction(shiftedQuadratic(1.0, 3.0, 1.0)));
 
         Assertions.assertArrayEquals(new double[] { 2.0, 3.8, 1.2 }, sol.getX().toArray(), TOL);
         Assertions.assertEquals(1.68, sol.getValue(), TOL);
@@ -124,42 +123,17 @@ public class SQPOptimizerS2Test {
         });
         new SQPOptimizerS2().optimize(option,
                                       new InitialGuess(new double[] { 5.0, -5.0 }),
-                                      new ObjectiveFunction(new ShiftedQuadratic(1.0, 2.0)));
+                                      new ObjectiveFunction(shiftedQuadratic(1.0, 2.0)));
 
         // the optimizer stopped at the first convergence check
         Assertions.assertEquals(1, calls[0]);
     }
 
-    /** f(x) = Σ (xᵢ - cᵢ)². */
-    private static class ShiftedQuadratic extends TwiceDifferentiableFunction {
-
-        private final RealVector center;
-
-        ShiftedQuadratic(final double... center) {
-            this.center = new ArrayRealVector(center);
-        }
-
-        @Override
-        public int dim() {
-            return center.getDimension();
-        }
-
-        @Override
-        public double value(final RealVector x) {
-            final RealVector d = x.subtract(center);
-            return d.dotProduct(d);
-        }
-
-        @Override
-        public RealVector gradient(final RealVector x) {
-            return x.subtract(center).mapMultiply(2.0);
-        }
-
-        @Override
-        public RealMatrix hessian(final RealVector x) {
-            return MatrixUtils.createRealIdentityMatrix(dim()).scalarMultiply(2.0);
-        }
-
+    /** f(x) = Σ (xᵢ - cᵢ)² = ½ xᵀ (2I) x - 2cᵀx + cᵀc. */
+    private static QuadraticFunction shiftedQuadratic(final double... center) {
+        final RealVector c = new ArrayRealVector(center);
+        return new QuadraticFunction(MatrixUtils.createRealIdentityMatrix(center.length).scalarMultiply(2.0),
+                                     c.mapMultiply(-2.0), c.dotProduct(c));
     }
 
 }
