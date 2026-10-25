@@ -36,8 +36,8 @@ public class MeritFunctionL2Test {
         merit.rUp();
         Assertions.assertEquals(10 * SIGMA_INIT, merit.getR().getEntry(0), 1.0e-15);
 
-        // 0.1 * 10^k reaches the cap after 10 more steps
-        for (int k = 0; k < 15; ++k) {
+        // 0.1 * 10^k reaches the cap after 10 more steps, the 11th checks it stays there
+        for (int k = 0; k < 11; ++k) {
             merit.rUp();
         }
         Assertions.assertEquals(merit.getRmax(), merit.getR().getEntry(0), 0.0);
