@@ -34,7 +34,7 @@ import org.hipparchus.linear.RealVector;
  * Inequality constraints are assumed to follow the canonical form:
  * </p>
  * <pre>
- *     g(x) >= lb
+ *     {@code g(x) >= lb}
  * </pre>
  * <p>
  * where {@code lb} is given by {@link SQPProblem#getIneqConstraintLB()}.
