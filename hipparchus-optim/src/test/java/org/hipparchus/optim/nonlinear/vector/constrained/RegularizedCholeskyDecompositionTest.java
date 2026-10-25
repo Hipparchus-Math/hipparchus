@@ -163,4 +163,66 @@ public class RegularizedCholeskyDecompositionTest {
 
     }
 
+    @Test
+    public void testNoShiftNeeded() {
+        final RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][] {
+                { 4.0, 2.0 },
+                { 2.0, 3.0 }
+        });
+        final RegularizedCholeskyDecomposition decomposition = new RegularizedCholeskyDecomposition(matrix);
+        Assertions.assertEquals(0.0, decomposition.getDiagonalShift(), 0.0);
+        Assertions.assertEquals(0.0, decomposition.getRegularizedMatrix().subtract(matrix).getNorm1(), 0.0);
+        Assertions.assertTrue(decomposition.getSolver().isNonSingular());
+    }
+
+    @Test
+    public void testIndefiniteWithoutRegularizationSteps() {
+        final RealMatrix matrix = MatrixUtils.createRealDiagonalMatrix(new double[] { -1.0, 1.0 });
+        try {
+            new RegularizedCholeskyDecomposition(matrix, 1.0e-15, 1.0e-14, 2.0, 0);
+            Assertions.fail("an exception should have been thrown");
+        }  catch (final MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX, e.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testOffDiagonalPivotFailure() {
+        // with a positivity threshold of 4, the first pivot 9 is accepted but its root 3 is
+        // too small to divide the off-diagonal term: shift 6 still fails, 18 succeeds
+        final RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][] {
+                { 9.0, 1.0 },
+                { 1.0, 9.0 }
+        });
+        final RegularizedCholeskyDecomposition decomposition =
+                new RegularizedCholeskyDecomposition(matrix, 1.0e-15, 4.0, 2.0, 5);
+        Assertions.assertEquals(18.0, decomposition.getDiagonalShift(), 1.0e-14);
+        checkReconstruction(decomposition, matrix);
+    }
+
+    @Test
+    public void testTinyLeadingDiagonal() {
+        // the leading factor √1e-36 = 1e-18 is below ulp(1), so the recurrence norm is
+        // reported as infinite and the plain correction threshold - pivot is used
+        final RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][] {
+                { 1.0e-36, 0.0, 0.0 },
+                { 0.0,     1.0, 1.0 },
+                { 0.0,     1.0, 1.0 }
+        });
+        final RegularizedCholeskyDecomposition decomposition =
+                new RegularizedCholeskyDecomposition(matrix, 1.0e-15, 1.0e-40, 1.0e30, 5);
+        Assertions.assertEquals(1.0e-10, decomposition.getDiagonalShift(), 1.0e-24);
+        checkReconstruction(decomposition, matrix);
+    }
+
+    private static void checkReconstruction(final RegularizedCholeskyDecomposition decomposition,
+                                            final RealMatrix matrix) {
+        final int n = matrix.getRowDimension();
+        final RealMatrix expected =
+                matrix.add(MatrixUtils.createRealIdentityMatrix(n).scalarMultiply(decomposition.getDiagonalShift()));
+        Assertions.assertEquals(0.0, decomposition.getRegularizedMatrix().subtract(expected).getNorm1(), 1.0e-14);
+        final RealMatrix l = decomposition.getL();
+        Assertions.assertEquals(0.0, l.multiplyTransposed(l).subtract(expected).getNorm1(), 1.0e-13);
+    }
+
 }

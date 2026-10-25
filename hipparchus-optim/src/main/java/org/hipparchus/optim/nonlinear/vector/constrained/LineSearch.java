@@ -272,11 +272,10 @@ public class LineSearch {
      */
     public double search(final MeritFunctionL2 f) {
         searchCount = 0;
-        double fxCurrent = f.value0();
-        double directionalDeriv = f.getGradient();
+        final double fxCurrent        = f.value0();
+        final double directionalDeriv = f.getGradient();
 
         alphaMax = 1.0;
-
 
         // Monotone Search
         nonMonotoneEnabled = false;
@@ -284,35 +283,31 @@ public class LineSearch {
         if (!Double.isNaN(alpha)) {
             // monotone search succeeded
             return alpha;
-        } else  {
-            // Non-monotone search
-            nonMonotoneEnabled = true;
-            alpha = searchLoop(f, fxCurrent, directionalDeriv);
-            if (!Double.isNaN(alpha)) {
-//                 non-monotone search succeeded
-                return alpha;
-            } else {
-                // last attempt before we declare bad step
-                final double fxNew = f.value(alphaMin);
-                searchCount++;
-                if (acceptStep(fxNew, fxCurrent, alphaMin, directionalDeriv)) {
-                    markGoodStep();
-
-                    updateHistory(fxNew);
-                } else {
-                    markBadStep();
-                }
-                if (this.badStepFailed)
-                {
-                   f.value(0.0);
-                   return 0.0;
-                } else {
-                    return alphaMin;
-                }
-
-            }
         }
 
+        // Non-monotone search
+        nonMonotoneEnabled = true;
+        alpha = searchLoop(f, fxCurrent, directionalDeriv);
+        if (!Double.isNaN(alpha)) {
+            // non-monotone search succeeded
+            return alpha;
+        }
+
+        // last attempt before we declare bad step
+        final double fxNew = f.value(alphaMin);
+        searchCount++;
+        if (acceptStep(fxNew, fxCurrent, alphaMin, directionalDeriv)) {
+            markGoodStep();
+            updateHistory(fxNew);
+        } else {
+            markBadStep();
+        }
+        if (badStepFailed) {
+            f.value(0.0);
+            return 0.0;
+        }
+
+        return alphaMin;
     }
 
     /**

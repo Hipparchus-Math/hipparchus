@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD.">
+      <action dev="vincent" type="fix" issue="issues/481">
+        Fixed continuous integration failures by improving test coverage of new code.
+      </action>
       <action dev="serror" type="add" issue="issues/446">
         Add convergence checker provider for Fielded scalar.
       </action>
