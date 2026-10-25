@@ -188,8 +188,8 @@ public class RegularizedCholeskyDecompositionTest {
 
     @Test
     public void testOffDiagonalPivotFailure() {
-        // with a positivity threshold of 4, the first diagonal factor √9 = 3 is
-        // accepted but too small to divide the off-diagonal term: shifts 6 and 18 are needed
+        // with a positivity threshold of 4, the first pivot 9 is accepted but its root 3 is
+        // too small to divide the off-diagonal term: shift 6 still fails, 18 succeeds
         final RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][] {
                 { 9.0, 1.0 },
                 { 1.0, 9.0 }
@@ -202,8 +202,8 @@ public class RegularizedCholeskyDecompositionTest {
 
     @Test
     public void testTinyLeadingDiagonal() {
-        // the leading factor √1e-36 is below ulp(1), so the pivot correction recurrence
-        // diverges and the plain threshold correction is used
+        // the leading factor √1e-36 = 1e-18 is below ulp(1), so the recurrence norm is
+        // reported as infinite and the plain correction threshold - pivot is used
         final RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][] {
                 { 1.0e-36, 0.0, 0.0 },
                 { 0.0,     1.0, 1.0 },
