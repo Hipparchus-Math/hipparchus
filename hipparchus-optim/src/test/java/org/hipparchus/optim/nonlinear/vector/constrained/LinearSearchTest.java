@@ -33,7 +33,23 @@ class LinearSearchTest {
         Assertions.assertFalse(ls.isBadStepFailed());
     }
 
+    @Test
+    public void testAscentDirectionFallsBackToMinimalStep() {
+        // along an ascent direction no step is acceptable, the last attempt at alphaMin
+        // is a bad step but the bad steps limit is not yet reached
+        final LineSearch ls = new LineSearch(1.0e-7, 5, 1.0e-4, 0.5, 3, 2);
+        double d = ls.search(buildMeritFunction(0.99, 0.8, 1.0, -0.5));
+        Assertions.assertEquals(1.0e-7, d, 0.0);
+        Assertions.assertTrue(ls.isBadStepDetected());
+        Assertions.assertFalse(ls.isBadStepFailed());
+    }
+
     private MeritFunctionL2 buildMeritFunction(final double startX, final double startY) {
+        return buildMeritFunction(startX, startY, -1.0, 1.0);
+    }
+
+    private MeritFunctionL2 buildMeritFunction(final double startX, final double startY,
+                                               final double dirX, final double dirY) {
         final TwiceDifferentiableFunction objective = new RosenbrockFunction();
         final InequalityConstraint iqConstraint =
                 new LinearInequalityConstraint(new double[][] {
@@ -48,7 +64,7 @@ class LinearSearchTest {
                  iqConstraint.gradient(x.toArray()),
                  x,
                  new ArrayRealVector(iqConstraint.dimY()),
-                 new ArrayRealVector(new double[] { -1.0, 1.0 }),
+                 new ArrayRealVector(new double[] { dirX, dirY }),
                  new ArrayRealVector(new double[4]));
         Assertions.assertSame(x, f.getX());
         Assertions.assertArrayEquals(new double[] { 0.01, 0.01, 0.01, 0.01 },

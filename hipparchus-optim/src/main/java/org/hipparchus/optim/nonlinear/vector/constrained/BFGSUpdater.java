@@ -117,14 +117,15 @@ public class BFGSUpdater {
      * If curvature condition fails, applies damping or regularization.
      * </p>
      *
-     * @param s displacement vector (x_{k+1} − x_k)
-     * @param y1 gradient difference (∇f_{k+1} − ∇f_k)
-     * @return type of update
-     * 0: update is done
-     * 1:sHs too small skip update
-     * 2:sty &lt; gamma*sHs skipped update
-     * 3:sty &lt; sqrt(eps)auto scale gamma*Hini
-     * 4:singulatity detected during downdate reset to gamma*Hinit
+     * @param s displacement vector (x<sub>k+1</sub> − x<sub>k</sub>)
+     * @param y1 gradient difference (∇f<sub>k+1</sub> − ∇f<sub>k</sub>)
+     * @return type of update:
+     * <ul>
+     *  <li>0: update is done</li>
+     *  <li>1: sHs not positive (zero step), Hessian reset to identity</li>
+     *  <li>2: sty not positive even after damping (non-finite input), skipped update</li>
+     *  <li>3: downdate would lose positive definiteness, Hessian reset to factor*I</li>
+     * </ul>
      */
     public int update(final RealVector s, final RealVector y1) {
         final RealVector Hs = L.operate(L.preMultiply(s));

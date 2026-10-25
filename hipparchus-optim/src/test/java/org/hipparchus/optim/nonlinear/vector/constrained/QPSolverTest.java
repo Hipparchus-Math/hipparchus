@@ -77,4 +77,39 @@ public class QPSolverTest {
         assertArrayEquals(new double[]{ 1.0, 2.0 }, x.toArray(), 1e-8);
         assertEquals(12.0, expectedObj, 1e-8);
     }
+
+    @Test
+    public void testGoldfarbIdnaniExampleInverseCholeskyMode() {
+        // same problem as above, but the quadratic term is given directly as the
+        // inverse of the Cholesky factor of [[4, -2], [-2, 4]]
+        final double s3 = FastMath.sqrt(3.0);
+        QuadraticFunction q = new QuadraticFunction(new double[][] { { 0.5, 0.0 }, { 0.5 / s3, 1.0 / s3 } },
+                                                    new double[] { 6.0, 0.0 },
+                                                    0.0);
+        LinearEqualityConstraint eqc = new LinearEqualityConstraint(new double[][] { { 1.0, 1.0 } },
+                                                                    new double[] { 3.0 });
+        LinearInequalityConstraint ineqc = new LinearInequalityConstraint(new double[][] { { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } },
+                                                                          new double[] { 0.0, 0.0, 2.0 });
+        QPDualActiveSolverOption option = new QPDualActiveSolverOption();
+        option.setMatrixMode(QPMatrixMode.INVCHOLESKY);
+
+        LagrangeSolution solution = new QPDualActiveSolver().optimize(option, new ObjectiveFunction(q), eqc, ineqc);
+
+        assertArrayEquals(new double[]{ 1.0, 2.0 }, solution.getX().toArray(), 1e-8);
+        assertEquals(12.0, solution.getValue(), 1e-8);
+    }
+
+    @Test
+    public void testNonSymmetricHessian() {
+        QuadraticFunction q = new QuadraticFunction(new double[][] { { 4.0, -2.0 }, { 3.0, 4.0 } },
+                                                    new double[] { 6.0, 0.0 },
+                                                    0.0);
+        LinearInequalityConstraint ineqc = new LinearInequalityConstraint(new double[][] { { 1.0, 0.0 } },
+                                                                          new double[] { 0.0 });
+
+        LagrangeSolution solution = new QPDualActiveSolver().optimize(new ObjectiveFunction(q), ineqc);
+
+        assertEquals(0, solution.getX().getDimension());
+        assertEquals(QPDualActiveSolver.ERROR_CHOLESKY_DECOMPOSITION, solution.getLambda().getEntry(0), 0.0);
+    }
 }
