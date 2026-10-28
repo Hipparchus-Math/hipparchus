@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/486">
+        Fixed indices problems with the GraalVM native image and Window operating system combo.
+      </action>
       <action dev="vincent" type="fix" issue="issues/481">
         Fixed continuous integration failures by improving test coverage of new code.
       </action>
