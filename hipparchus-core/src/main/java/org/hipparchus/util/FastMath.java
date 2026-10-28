@@ -1414,7 +1414,7 @@ public class FastMath {
         }
 
         /* Extract the exponent */
-        int exp = (int)(bits >> 52)-1023;
+        int exp = (int)(bits >>> 52)-1023;
 
         if ((bits & 0x7ff0000000000000L) == 0) {
             // Subnormal!
@@ -1704,10 +1704,10 @@ public class FastMath {
         } else {
 
             final long yBits        = Double.doubleToRawLongBits(y);
-            final int  yRawExp      = (int) ((yBits & MASK_DOUBLE_EXPONENT) >> 52);
+            final int  yRawExp      = (int) ((yBits & MASK_DOUBLE_EXPONENT) >>> 52);
             final long yRawMantissa = yBits & MASK_DOUBLE_MANTISSA;
             final long xBits        = Double.doubleToRawLongBits(x);
-            final int  xRawExp      = (int) ((xBits & MASK_DOUBLE_EXPONENT) >> 52);
+            final int  xRawExp      = (int) ((xBits & MASK_DOUBLE_EXPONENT) >>> 52);
             final long xRawMantissa = xBits & MASK_DOUBLE_MANTISSA;
 
             if (yRawExp > 1085) {
@@ -2325,7 +2325,7 @@ public class FastMath {
     {
         /* Convert input double to bits */
         long inbits = Double.doubleToRawLongBits(x);
-        int exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+        int exponent = (int) ((inbits >>> 52) & 0x7ff) - 1023;
 
         /* Convert to fixed point representation */
         inbits &= 0x000fffffffffffffL;
@@ -2339,7 +2339,7 @@ public class FastMath {
         long shpi0;
         long shpiA;
         long shpiB;
-        int idx = exponent >> 6;
+        int idx = exponent >>> 6;
         int shift = exponent - (idx << 6);
 
         if (shift != 0) {
@@ -3232,7 +3232,7 @@ public class FastMath {
     public static double cbrt(double x) {
       /* Convert input double to bits */
       long inbits = Double.doubleToRawLongBits(x);
-      int exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+      int exponent = (int) ((inbits >>> 52) & 0x7ff) - 1023;
       boolean subnormal = false;
 
       if (exponent == -1023) {
@@ -3244,7 +3244,7 @@ public class FastMath {
           subnormal = true;
           x *= 1.8014398509481984E16;  // 2^54
           inbits = Double.doubleToRawLongBits(x);
-          exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+          exponent = (int) ((inbits >>> 52) & 0x7ff) - 1023;
       }
 
       if (exponent == 1024) {
