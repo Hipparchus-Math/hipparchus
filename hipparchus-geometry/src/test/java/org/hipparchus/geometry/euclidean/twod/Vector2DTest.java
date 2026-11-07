@@ -328,4 +328,10 @@ class Vector2DTest {
         assertEquals(y, v.getY(), tol);
     }
 
+    @Test
+    @SuppressWarnings("deprecation")
+    void testDeprecatedNormSq() {
+        assertEquals(25.0, new Vector2D(3, -4).getNormSq(), 0.0);
+    }
+
 }
