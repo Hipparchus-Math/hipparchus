@@ -115,4 +115,19 @@ class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstractTest
         double step = 60.0;
         Assertions.assertEquals(step, new ClassicalRungeKuttaIntegrator(step).getCurrentSignedStepsize());
     }
+
+    @Test
+    void testConstructorDoesNotCallOverridableDefaultStep() {
+        // a subclass overriding getDefaultStep() sees its own fields uninitialized during super construction
+        final ClassicalRungeKuttaIntegrator integrator = new ClassicalRungeKuttaIntegrator(0.1) {
+            private final double factor = 2.0;
+            @Override
+            public double getDefaultStep() {
+                return factor * super.getDefaultStep();
+            }
+        };
+        Assertions.assertEquals(0.1, integrator.getCurrentSignedStepsize(), 0.0);
+        Assertions.assertEquals(0.2, integrator.getDefaultStep(), 1.0e-15);
+    }
+
 }
