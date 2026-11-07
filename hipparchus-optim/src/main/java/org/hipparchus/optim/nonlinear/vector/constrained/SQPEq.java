@@ -51,7 +51,7 @@ import org.hipparchus.linear.RealVector;
  * It acts as an adapter layer between domain models and solver APIs.
  * </p>
  *
- * @since 5.0
+ * @since 4.1
  */
 public class SQPEq extends EqualityConstraint {
 

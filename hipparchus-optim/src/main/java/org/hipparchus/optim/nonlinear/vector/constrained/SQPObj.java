@@ -35,7 +35,7 @@ import org.hipparchus.linear.RealVector;
  * optimizers when processing {@link org.hipparchus.optim.OptimizationData} supplied by users.
  * </p>
  *
- * @since 5.0
+ * @since 4.1
  */
 public class SQPObj extends TwiceDifferentiableFunction {
 
