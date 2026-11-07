@@ -24,6 +24,11 @@ import org.hipparchus.util.Precision;
  */
 public class SQPOption implements OptimizationData {
 
+    /** Default convergence criteria.
+     * @deprecated as of 4.1, only used by deprecated {@link SQPOptimizerS} and {@link SQPOptimizerGM}; will be removed in 5.0
+     */
+    @Deprecated
+    public static final int DEFAULT_CONV_CRITERIA = 1;
 
     /** Default tolerance for convergence and active constraint(proportional to sqrt of function an constraints evaluation accuracy) */
     public static final double DEFAULT_EPSILON = 1.0e-7;//>0
@@ -112,6 +117,8 @@ public class SQPOption implements OptimizationData {
     /** Max Iteration */
     private int maxIteration;
 
+    /** Convergence criteria (only used by deprecated optimizers). */
+    private int convCriteria;
 
     /** Convergence criteria function for specific problems
      * to avoid not significative iterations
@@ -138,6 +145,7 @@ public class SQPOption implements OptimizationData {
         this.gradientMode           = DEFAULT_GRADIENT_MODE;
         this.gradientEps            = DEFAULT_GRAD_EPS;
         this.maxIteration           = DEFAULT_MAX_ITERATION;
+        this.convCriteria           = DEFAULT_CONV_CRITERIA;
         this.customCovergence       = null;
     }
 
@@ -170,6 +178,23 @@ public class SQPOption implements OptimizationData {
         return gradientEps;
     }
 
+    /** Set convergence criteria.
+     * @param convCriteria convergence criteria
+     * @deprecated as of 4.1, only used by deprecated {@link SQPOptimizerS} and {@link SQPOptimizerGM}; will be removed in 5.0
+     */
+    @Deprecated
+    public void setConvCriteria(final int convCriteria) {
+        this.convCriteria = convCriteria;
+    }
+
+    /** Get convergence criteria.
+     * @return convergence criteria
+     * @deprecated as of 4.1, only used by deprecated {@link SQPOptimizerS} and {@link SQPOptimizerGM}; will be removed in 5.0
+     */
+    @Deprecated
+    public int getConvCriteria() {
+        return convCriteria;
+    }
 
     /** Set tolerance for convergence
      *  Choose value proportional to  sqrt of function and constraints evaluation accuracy
