@@ -100,7 +100,7 @@ public class LegendreEllipticIntegral { // NOPMD - this class has a high number 
      */
     public static <T extends CalculusFieldElement<T>> T nome(final T m) {
         final T one = m.getField().getOne();
-        if (m.norm() < 100 * one.ulp().getReal()) {
+        if (m.abs().getReal() < 100 * one.ulp().getReal()) {
             // first terms of infinite series in Abramowitz and Stegun 17.3.21
             final T m16 = m.multiply(0.0625);
             return m16.multiply(m16.multiply(8).add(1));
@@ -160,7 +160,7 @@ public class LegendreEllipticIntegral { // NOPMD - this class has a high number 
     public static <T extends CalculusFieldElement<T>> T bigK(final T m) {
         final T zero = m.getField().getZero();
         final T one  = m.getField().getOne();
-        if (m.norm() < 1.0e7 * one.ulp().getReal()) {
+        if (m.abs().getReal() < 1.0e7 * one.ulp().getReal()) {
 
             // first terms of infinite series in Abramowitz and Stegun 17.3.11
             return one.add(m.multiply(0.25)).multiply(zero.getPi().multiply(0.5));
