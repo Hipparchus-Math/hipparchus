@@ -485,6 +485,15 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
         return x.square().add(y.square()).add(z.square());
     }
 
+    /** Get the square of the norm for the vector.
+     * @return square of the Euclidean norm for the vector
+     * @deprecated as of 4.1, replaced by {@link #getNorm2Sq()}; will be removed in 5.0
+     */
+    @Deprecated
+    public T getNormSq() {
+        return getNorm2Sq();
+    }
+
     /** Get the L<sub>&infin;</sub> norm for the vector.
      * @return L<sub>&infin;</sub> norm for the vector
      */
