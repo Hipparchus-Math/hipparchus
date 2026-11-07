@@ -152,7 +152,7 @@ public class FieldDenseOutputModel<T extends CalculusFieldElement<T>>
             final T gap = model.getInitialTime().subtract(current);
             if (gap.abs().subtract(step.abs().multiply(1.0e-3)).getReal() > 0) {
                 throw new MathIllegalArgumentException(LocalizedODEFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
-                                                       gap.norm());
+                                                       gap.abs().getReal());
             }
 
         }

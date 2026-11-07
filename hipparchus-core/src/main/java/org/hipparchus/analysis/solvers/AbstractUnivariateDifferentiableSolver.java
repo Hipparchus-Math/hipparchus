@@ -37,6 +37,9 @@ public abstract class AbstractUnivariateDifferentiableSolver
     extends BaseAbstractUnivariateSolver<UnivariateDifferentiableFunction>
     implements UnivariateDifferentiableSolver {
 
+    /** Factory for the deprecated {@link DerivativeStructure} based evaluation. */
+    private static final DSFactory FACTORY = new DSFactory(1, 1);
+
     /** Function to solve. */
     private UnivariateDifferentiableFunction function;
 
@@ -64,6 +67,10 @@ public abstract class AbstractUnivariateDifferentiableSolver
 
     /**
      * Compute the objective function value.
+     * <p>
+     * Until the deprecated {@link #computeObjectiveValueAndDerivative(double)} is removed,
+     * this method delegates to it, so that subclasses overriding it keep working.
+     * </p>
      *
      * @param point Point at which the objective function must be evaluated.
      * @return the objective function value and derivative at specified point.
@@ -73,8 +80,8 @@ public abstract class AbstractUnivariateDifferentiableSolver
      */
     protected UnivariateDerivative1 computeObjectiveValueAndDerivative1(double point)
         throws MathIllegalStateException {
-        incrementEvaluationCount();
-        return function.value(new UnivariateDerivative1(point, 1.));
+        final DerivativeStructure ds = computeObjectiveValueAndDerivative(point);
+        return new UnivariateDerivative1(ds.getValue(), ds.getPartialDerivative(1));
     }
 
     /**
@@ -90,7 +97,7 @@ public abstract class AbstractUnivariateDifferentiableSolver
     protected DerivativeStructure computeObjectiveValueAndDerivative(double point)
             throws MathIllegalStateException {
         incrementEvaluationCount();
-        return function.value(new DSFactory(1, 1).variable(0, point));
+        return function.value(FACTORY.variable(0, point));
     }
 
     /**

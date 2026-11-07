@@ -20,6 +20,7 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ADMMQPOptionTest {
 
@@ -74,6 +75,12 @@ class ADMMQPOptionTest {
         assertEquals(expectedValue, option.getMaxRhoIteration());
         assertEquals(expectedValue, option.getPolishIteration());
         assertEquals(expectedValue, option.getScaleMaxIteration());
+    }
+
+    @Test
+    void testDefaultScalingAsIn403() {
+        assertTrue(ADMMQPOption.DEFAULT_SCALING);
+        assertTrue(new ADMMQPOption().isScaling());
     }
 
 }

@@ -18,6 +18,7 @@ package org.hipparchus.special.elliptic.legendre;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
@@ -265,6 +266,44 @@ public class FieldLegendreEllipticIntegralTest {
                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, csc2, cMn).multiply(n).divide(3));
         assertEquals(0.0, pinphim.subtract(ref).getReal(), 1.0e-15);
 
+    }
+
+    @Test
+    void testValueIndependentOfDerivatives() {
+        // the value of the integrals must not depend on the derivatives carried by the arguments
+        for (final double m : new double[] { 1.0e-300, 1.0e-12, 0.3, 0.9 }) {
+            final double refK = LegendreEllipticIntegral.bigK(m);
+            final double refE = LegendreEllipticIntegral.bigE(m);
+            final double refF = LegendreEllipticIntegral.bigF(0.7, m);
+            final Gradient k1 = LegendreEllipticIntegral.bigK(new Gradient(m, 1.0, 1.0));
+            final Gradient f1 = LegendreEllipticIntegral.bigF(new Gradient(0.7, 1.0, 0.0), new Gradient(m, 1.0, 1.0));
+            for (final double seed : new double[] { 0.0, 1.0, 1.0e3, 1.0e6 }) {
+                final Gradient gm  = new Gradient(m, seed, seed);
+                final Gradient phi = new Gradient(0.7, seed, 0.0);
+                final Gradient k   = LegendreEllipticIntegral.bigK(gm);
+                final Gradient f   = LegendreEllipticIntegral.bigF(phi, gm);
+                assertEquals(refK, k.getValue(), 1.0e-15 * FastMath.abs(refK));
+                assertEquals(refE, LegendreEllipticIntegral.bigE(gm).getValue(), 1.0e-15 * FastMath.abs(refE));
+                assertEquals(refF, f.getValue(), 1.0e-15 * FastMath.abs(refF));
+                // derivatives are linear in the seed: same iterations whatever the seed size
+                assertEquals(seed * k1.getPartialDerivative(0), k.getPartialDerivative(0),
+                             1.0e-14 * FastMath.abs(seed * k1.getPartialDerivative(0)));
+                assertEquals(seed * f1.getPartialDerivative(0), f.getPartialDerivative(0),
+                             1.0e-14 * FastMath.abs(seed * f1.getPartialDerivative(0)));
+            }
+        }
+    }
+
+    @Test
+    void testNomeIndependentOfDerivatives() {
+        // small m selects the series expansion; the choice must not depend on the derivatives
+        for (final double m : new double[] { 1.0e-20, 1.0e-15 }) {
+            final double ref = LegendreEllipticIntegral.nome(new Gradient(m, 0.0, 0.0)).getValue();
+            for (final double seed : new double[] { 1.0, 1.0e3 }) {
+                assertEquals(ref, LegendreEllipticIntegral.nome(new Gradient(m, seed, seed)).getValue(),
+                             1.0e-15 * FastMath.abs(ref));
+            }
+        }
     }
 
 }

@@ -50,6 +50,23 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD.">
+      <action dev="vincent" type="fix" issue="issues/488">
+        Restored SQPOptimizerS, SQPOptimizerGM, AbstractSQPOptimizer and SQPOption getConvCriteria,
+        setConvCriteria and DEFAULT_CONV_CRITERIA, removed without prior deprecation. They are now
+        deprecated and will be removed in 5.0. The restored optimizers keep their 4.0.3 default settings.
+      </action>
+      <action dev="vincent" type="update">
+        Changed SQPOption defaults: DEFAULT_EPSILON from 1.0e-9 to 1.0e-7, DEFAULT_MU from 0.1 to 1.0e-4
+        and DEFAULT_MAX_LINE_SEARCH_ITERATION from 20 to 30. They apply to SQPOptimizerS2 and to any
+        SQPOption built by user code, including one passed to the deprecated SQP optimizers.
+      </action>
+      <action dev="vincent" type="fix" issue="issues/488">
+        Restored ADMMQPOption.DEFAULT_SCALING to true, its 4.0.3 value.
+      </action>
+      <action dev="rocca" type="fix">
+        Fixed ADMMQPModifiedRuizEquilibrium scaling limits: scaling factors below the minimum,
+        non-positive or not finite were not reset to 1.
+      </action>
       <action dev="vincent" type="fix" issue="issues/481">
         Fixed continuous integration failures by improving test coverage of new code.
       </action>

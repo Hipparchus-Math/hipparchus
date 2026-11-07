@@ -46,7 +46,7 @@ import org.hipparchus.linear.RealVector;
  * structural adapter layer between user-supplied models and solver APIs.
  * </p>
  *
- * @since 5.0
+ * @since 4.1
  */
 public class SQPIneq extends InequalityConstraint {
 

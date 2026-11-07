@@ -803,4 +803,15 @@ class FieldVector3DTest {
         assertEquals(dzdt, v.getZ().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
     }
 
+    @Test
+    @SuppressWarnings("deprecation")
+    void testDeprecatedNormSq() {
+        final DerivativeStructure n2 = createVector(1, 2, 3, 3).getNormSq();
+        assertEquals(14, n2.getReal(), 0.0);
+        assertEquals(2, n2.getPartialDerivative(1, 0, 0), 0.0);
+        assertEquals(4, n2.getPartialDerivative(0, 1, 0), 0.0);
+        assertEquals(6, n2.getPartialDerivative(0, 0, 1), 0.0);
+        assertEquals(0.0, createVector(0, 0, 0, 3).getNormSq().getReal(), 0.0);
+    }
+
 }

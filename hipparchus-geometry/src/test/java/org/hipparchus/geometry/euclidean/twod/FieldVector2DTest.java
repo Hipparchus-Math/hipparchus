@@ -418,4 +418,10 @@ class FieldVector2DTest {
         assertEquals(y, v.getY().getReal(), tol);
     }
 
+    @Test
+    @SuppressWarnings("deprecation")
+    void testDeprecatedNormSq() {
+        assertEquals(25.0, new FieldVector2D<>(Binary64Field.getInstance(), new Vector2D(3, -4)).getNormSq().getReal(), 0.0);
+    }
+
 }

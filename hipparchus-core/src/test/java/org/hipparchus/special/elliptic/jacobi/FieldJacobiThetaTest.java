@@ -18,6 +18,7 @@ package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
@@ -107,6 +108,19 @@ class FieldJacobiThetaTest {
         assertEquals(valuesD.cd().getReal(), t03.multiply(tz2)              .divide(t02.multiply(tz3)).getReal(),               3.0e-15);
         assertEquals(valuesC.sc().getReal(), t03.multiply(tz1)              .divide(t04.multiply(tz2)).getReal(),               3.0e-15);
 
+    }
+
+    @Test
+    void testValueIndependentOfDerivatives() {
+        // the value of theta functions must not depend on the derivatives carried by the arguments
+        final FieldTheta<Gradient> ref = new FieldJacobiTheta<>(new Gradient(0.3, 0.0, 0.0)).values(new Gradient(0.4, 0.0, 0.0));
+        for (final double seed : new double[] { 1.0, 1.0e3, 1.0e6 }) {
+            final FieldTheta<Gradient> t = new FieldJacobiTheta<>(new Gradient(0.3, seed, 0.0)).values(new Gradient(0.4, 0.0, seed));
+            assertEquals(ref.theta1().getValue(), t.theta1().getValue(), 1.0e-15 * FastMath.abs(ref.theta1().getValue()));
+            assertEquals(ref.theta2().getValue(), t.theta2().getValue(), 1.0e-15 * FastMath.abs(ref.theta2().getValue()));
+            assertEquals(ref.theta3().getValue(), t.theta3().getValue(), 1.0e-15 * FastMath.abs(ref.theta3().getValue()));
+            assertEquals(ref.theta4().getValue(), t.theta4().getValue(), 1.0e-15 * FastMath.abs(ref.theta4().getValue()));
+        }
     }
 
 }
