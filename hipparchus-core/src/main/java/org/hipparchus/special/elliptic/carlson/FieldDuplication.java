@@ -123,7 +123,7 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
         double    fourM = 1.0;
         for (int m = 0; m < M_MAX; ++m) {
 
-            if (m > 0 && q < fourM * vaM[n].norm()) {
+            if (m > 0 && q < fourM * vaM[n].abs().getReal()) {
                 // convergence reached
                 break;
             }
