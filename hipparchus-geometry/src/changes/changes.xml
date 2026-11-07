@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="This is a minor release.">
+      <action dev="vincent" type="fix" issue="issues/488">
+        Restored Vector.getNormSq() as a default method, and FieldVector2D.getNormSq() and
+        FieldVector3D.getNormSq(), removed without prior deprecation. They are now deprecated
+        in favor of getNorm2Sq() and will be removed in 5.0.
+      </action>
       <action dev="serrof" type="add" issue="issues/400">
         Add getNorm2Sq in geometry.
       </action>

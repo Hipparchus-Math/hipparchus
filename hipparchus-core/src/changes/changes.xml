@@ -50,6 +50,16 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.1" date="TBD" description="TBD">
+      <action dev="vincent" type="fix" issue="issues/488">
+        AbstractUnivariateDifferentiableSolver.computeObjectiveValueAndDerivative1 now delegates to the
+        deprecated computeObjectiveValueAndDerivative, so subclasses overriding the deprecated method
+        are still used by NewtonRaphsonSolver.
+      </action>
+      <action dev="vincent" type="fix" issue="issues/488">
+        Use the magnitude of the value instead of norm() in the convergence and size checks of Carlson and
+        Legendre elliptic integrals, whose results depended on the derivatives carried by the arguments,
+        and for consistency in Jacobi theta functions.
+      </action>
       <action dev="luc" type="fix" issue="issues/486">
         Fixed indices problems with the GraalVM native image and Window operating system combo.
       </action>
@@ -102,12 +112,8 @@ If the output is not quite correct, check for invisible trailing spaces!
         Added AxisChecker helper class to check grid data consistency.
       </action>
       <action dev="serrof" type="update" issue="issues/398">
-        Implement non-trivial norm for CalculusField inheritors.
-      </action>
-      <action dev="ryan" type="update" issue="issues/391">
-        Replaced custom FastMath implementations of
-          sin, cos, tan, sinCos, log1p, log10, log, exp, hypot, cbrt, pow, floor, ceil, and abs
-        with delegates to Math
+        Implement non-trivial norm for CalculusField inheritors. Note that norm() of derivative types and
+        tuples now includes all components, for example Gradient(0.5; 100, -200).norm() is 300.5 instead of 0.5.
       </action>
       <action dev="luc" type="fix" issue="issues/394">
         Prevent stack overflow in digamma function.
