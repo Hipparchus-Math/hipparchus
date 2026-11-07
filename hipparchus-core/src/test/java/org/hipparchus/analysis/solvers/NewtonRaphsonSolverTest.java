@@ -26,6 +26,7 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Sin;
+import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -124,4 +125,41 @@ final class NewtonRaphsonSolverTest {
         result = solver.solve(100, f, 0.85, 5);
         assertEquals(1.0, result, solver.getAbsoluteAccuracy());
     }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void testDeprecatedOverrideStillCalled() {
+        // a 4.0.3 subclass overriding the deprecated hook must still be used by the solver
+        final int[] calls = new int[1];
+        final NewtonRaphsonSolver solver = new NewtonRaphsonSolver() {
+            @Override
+            protected DerivativeStructure computeObjectiveValueAndDerivative(final double point) {
+                ++calls[0];
+                return super.computeObjectiveValueAndDerivative(point);
+            }
+        };
+        checkSqrt2(solver, calls);
+    }
+
+    @Test
+    void testNewOverrideCalled() {
+        final int[] calls = new int[1];
+        final NewtonRaphsonSolver solver = new NewtonRaphsonSolver() {
+            @Override
+            protected UnivariateDerivative1 computeObjectiveValueAndDerivative1(final double point) {
+                ++calls[0];
+                return super.computeObjectiveValueAndDerivative1(point);
+            }
+        };
+        checkSqrt2(solver, calls);
+    }
+
+    /** Solve x^2 - 2 = 0 and check the hook was called once per evaluation, with the 4.0.3 count. */
+    private static void checkSqrt2(final NewtonRaphsonSolver solver, final int[] calls) {
+        final double root = solver.solve(100, new PolynomialFunction(new double[] { -2, 0, 1 }), 0, 3);
+        Assertions.assertEquals(FastMath.sqrt(2), root, 1.0e-6);
+        Assertions.assertEquals(4, calls[0]);
+        Assertions.assertEquals(4, solver.getEvaluations());
+    }
+
 }
