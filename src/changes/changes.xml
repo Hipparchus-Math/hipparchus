@@ -56,6 +56,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="vincent" type="fix" issue="issues/481">
         Fixed continuous integration failures by improving test coverage of new code.
       </action>
+      <action dev="luc" type="fix" due-to="ser10us" issue="issues/470">
+        Fixed overflow in MultidimensionalCounter.
+      </action>
       <action dev="luc" type="add" issue="issues/469">
         Added support for roman numerals.
       </action>
@@ -68,7 +71,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="Marthym" type="update" issue="issues/460">
         Allow small numerical tolerance in SmoothStepFactory.checkBetweenZeroAndOneIncluded
       </action>
-      <action dev="luc" type="update" due-to="yin-mao" issue="issues/459">
+      <action dev="luc" type="fix" due-to="yin-mao" issue="issues/459">
         Forbid all grouping (including commas) in ComplexFormat.
       </action>
       <action dev="serrof" type="update">
