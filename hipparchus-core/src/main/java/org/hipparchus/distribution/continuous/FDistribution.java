@@ -45,7 +45,13 @@ public class FDistribution extends AbstractRealDistribution {
 
     /**
      * Creates an F distribution using the given degrees of freedom.
-     *
+     * <p>
+     * BEWARE: this method uses {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY} for the
+     * maximum absolute error in inverse cumulative probability estimates. It is
+     * therefore <em>not</em> suited to cases where the CDF changes rapidly near zero.
+     * For such cases, the three arguments constructor {@link FDistribution(double,
+     * double, double)} should be used
+     * </p>
      * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
      * @throws MathIllegalArgumentException if
