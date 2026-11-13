@@ -22,6 +22,12 @@
 
 package org.hipparchus.complex;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.util.CompositeFormat;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.Locale;
 
 
@@ -35,4 +41,30 @@ public class ComplexFormatTest extends ComplexFormatAbstractTest {
     protected Locale getLocale() {
         return Locale.US;
     }
+
+    @Test
+    void testIssue459() {
+
+        checkWrongParsing(",,7+,,,2i");
+        checkWrongParsing(",8+,,3i");
+        checkWrongParsing(",7");
+        checkWrongParsing(";7");
+        checkWrongParsing("#7");
+
+        Assertions.assertTrue(CompositeFormat.getDefaultNumberFormat(Locale.US).isGroupingUsed());
+        Assertions.assertFalse(ComplexFormat.getComplexFormat().getRealFormat().isGroupingUsed());
+        Assertions.assertFalse(ComplexFormat.getComplexFormat().getImaginaryFormat().isGroupingUsed());
+
+    }
+
+    private void checkWrongParsing(final String input) {
+        try {
+            final ComplexFormat format = new ComplexFormat(CompositeFormat.getDefaultNumberFormat(Locale.US));
+            format.parse(input);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalStateException mise) {
+            Assertions.assertEquals(LocalizedCoreFormats.CANNOT_PARSE_AS_TYPE, mise.getSpecifier());
+        }
+    }
+
 }

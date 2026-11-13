@@ -65,6 +65,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="Marthym" type="update" issue="issues/460">
         Allow small numerical tolerance in SmoothStepFactory.checkBetweenZeroAndOneIncluded
       </action>
+      <action dev="luc" type="update" due-to="yin-mao" issue="issues/459">
+        Forbid all grouping (including commas) in ComplexFormat.
+      </action>
       <action dev="serrof" type="update">
         Add some FunctionalInterface tag.
       </action>
