@@ -59,6 +59,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="Nicolas Kaikati" type="add" issue="issues/472">
         Add Lebedev Integrator.
       </action>
+      <action dev="luc" type="fix" due-to="ser10us" issue="issues/471">
+        Fixed overflow in MathArrays.distance1.
+      </action>
       <action dev="luc" type="fix" due-to="ser10us" issue="issues/470">
         Fixed overflow in MultidimensionalCounter.
       </action>
