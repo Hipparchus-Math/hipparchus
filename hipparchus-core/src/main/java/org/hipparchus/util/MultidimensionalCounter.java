@@ -178,23 +178,23 @@ public class MultidimensionalCounter implements Iterable<Integer> {
         uniCounterOffset = new int[dimension];
 
         last = dimension - 1;
-        int tS = size[last];
+        long tS = size[last];
         for (int i = 0; i < last; i++) {
-            int count = 1;
+            long count = 1;
             for (int j = i + 1; j < dimension; j++) {
                 count *= size[j];
             }
-            uniCounterOffset[i] = count;
+            uniCounterOffset[i] = FastMath.toIntExact(count);
             tS *= size[i];
         }
         uniCounterOffset[last] = 0;
 
-        if (tS <= 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
-                                                   tS, 0);
+        if (tS <= 0 || tS > Integer.MAX_VALUE) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
+                                                   tS, 0, Integer.MAX_VALUE);
         }
 
-        totalSize = tS;
+        totalSize = (int) tS;
     }
 
     /**
@@ -260,13 +260,13 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      */
     public int getCount(int ... c) throws MathIllegalArgumentException {
         MathUtils.checkDimension(c.length, dimension);
-        int count = 0;
+        long count = 0;
         for (int i = 0; i < dimension; i++) {
             final int index = c[i];
             MathUtils.checkRangeInclusive(index, 0, size[i] - 1);
-            count += uniCounterOffset[i] * c[i];
+            count += (long) uniCounterOffset[i] * c[i];
         }
-        return count + c[last];
+        return FastMath.toIntExact(count) + c[last];
     }
 
     /**

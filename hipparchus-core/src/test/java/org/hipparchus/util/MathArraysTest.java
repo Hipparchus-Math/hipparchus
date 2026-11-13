@@ -15,11 +15,15 @@ package org.hipparchus.util;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.Well1024a;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -303,57 +307,21 @@ public class MathArraysTest {
 
     @Test
     void testIsMonotonicComparable() {
-        assertFalse(MathArrays.isMonotonic(new Double[] {(double) -15,
-                        -5.5,
-                        (double) -1,
-                        (double) -1,
-                        2.0,
-                        15.0},
+        assertFalse(MathArrays.isMonotonic(new Double[] { -15.0, -5.5, -1.0, -1.0, 2.0, 15.0 },
                 MathArrays.OrderDirection.INCREASING, true));
-        assertTrue(MathArrays.isMonotonic(new Double[] {(double) -15,
-                        -5.5,
-                        (double) -1,
-                        (double) 0,
-                        2.0,
-                        15.0},
+        assertTrue(MathArrays.isMonotonic(new Double[] { -15.0, -5.5, -1.0, 0.0, 2.0, 15.0 },
                 MathArrays.OrderDirection.INCREASING, true));
-        assertFalse(MathArrays.isMonotonic(new Double[] {(double) -15,
-                        -5.5,
-                        (double) -1,
-                        (double) -2,
-                        2.0},
+        assertFalse(MathArrays.isMonotonic(new Double[] { -15.0, -5.5, -1.0, -2.0, 2.0 },
                 MathArrays.OrderDirection.INCREASING, false));
-        assertTrue(MathArrays.isMonotonic(new Double[] {(double) -15,
-                        -5.5,
-                        (double) -1,
-                        (double) -1,
-                        2.0},
+        assertTrue(MathArrays.isMonotonic(new Double[] { -15.0, -5.5, -1.0, -1.0, 2.0 },
                 MathArrays.OrderDirection.INCREASING, false));
-        assertFalse(MathArrays.isMonotonic(new Double[] {3.0,
-                        3.0,
-                        -5.5,
-                        (double) -11,
-                        -27.5},
+        assertFalse(MathArrays.isMonotonic(new Double[] { 3.0, 3.0, -5.5, -11.0, -27.5 },
                 MathArrays.OrderDirection.DECREASING, true));
-        assertTrue(MathArrays.isMonotonic(new Double[] {3.0,
-                        2.0,
-                        -5.5,
-                        (double) -11,
-                        -27.5},
+        assertTrue(MathArrays.isMonotonic(new Double[] { 3.0, 2.0, -5.5, -11.0, -27.5 },
                 MathArrays.OrderDirection.DECREASING, true));
-        assertFalse(MathArrays.isMonotonic(new Double[] {3.0,
-                        (double) -1,
-                        (double) 0,
-                        -5.5,
-                        (double) -11,
-                        -27.5},
+        assertFalse(MathArrays.isMonotonic(new Double[] { 3.0, -1.0, 0.0, -5.5, -11.0, 27.5 },
                 MathArrays.OrderDirection.DECREASING, false));
-        assertTrue(MathArrays.isMonotonic(new Double[] {3.0,
-                        (double) 0,
-                        (double) 0,
-                        -5.5,
-                        (double) -11,
-                        -27.5},
+        assertTrue(MathArrays.isMonotonic(new Double[] { 3.0, 0.0, 0.0, -5.5, -11.0, -27.5 },
                 MathArrays.OrderDirection.DECREASING, false));
     }
 
@@ -652,7 +620,7 @@ public class MathArraysTest {
     void testLinearCombination2() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
-        Well1024a random = new Well1024a(553267312521321234l);
+        Well1024a random = new Well1024a(553267312521321234L);
 
         for (int i = 0; i < 10000; ++i) {
             final double ux = 1e17 * random.nextDouble();
@@ -859,7 +827,7 @@ public class MathArraysTest {
     void testArrayEquals() {
         assertFalse(MathArrays.equals(new double[] { 1d }, null));
         assertFalse(MathArrays.equals(null, new double[] { 1d }));
-        assertTrue(MathArrays.equals((double[]) null, (double[]) null));
+        assertTrue(MathArrays.equals(null, (double[]) null));
 
         assertFalse(MathArrays.equals(new double[] { 1d }, new double[0]));
         assertTrue(MathArrays.equals(new double[] { 1d }, new double[] { 1d }));
@@ -880,7 +848,7 @@ public class MathArraysTest {
     void testArrayEqualsIncludingNaN() {
         assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d }, null));
         assertFalse(MathArrays.equalsIncludingNaN(null, new double[] { 1d }));
-        assertTrue(MathArrays.equalsIncludingNaN((double[]) null, (double[]) null));
+        assertTrue(MathArrays.equalsIncludingNaN(null, (double[]) null));
 
         assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d }, new double[0]));
         assertTrue(MathArrays.equalsIncludingNaN(new double[] { 1d }, new double[] { 1d }));
@@ -898,7 +866,7 @@ public class MathArraysTest {
     void testLongArrayEquals() {
         assertFalse(MathArrays.equals(new long[] { 1L }, null));
         assertFalse(MathArrays.equals(null, new long[] { 1L }));
-        assertTrue(MathArrays.equals((long[]) null, (long[]) null));
+        assertTrue(MathArrays.equals(null, (long[]) null));
 
         assertFalse(MathArrays.equals(new long[] { 1L }, new long[0]));
         assertTrue(MathArrays.equals(new long[] { 1L }, new long[] { 1L }));
@@ -915,7 +883,7 @@ public class MathArraysTest {
     void testIntArrayEquals() {
         assertFalse(MathArrays.equals(new int[] { 1 }, null));
         assertFalse(MathArrays.equals(null, new int[] { 1 }));
-        assertTrue(MathArrays.equals((int[]) null, (int[]) null));
+        assertTrue(MathArrays.equals(null, (int[]) null));
 
         assertFalse(MathArrays.equals(new int[] { 1 }, new int[0]));
         assertTrue(MathArrays.equals(new int[] { 1 }, new int[] { 1 }));
@@ -932,7 +900,7 @@ public class MathArraysTest {
     void testByteArrayEquals() {
         assertFalse(MathArrays.equals(new byte[] { 1 }, null));
         assertFalse(MathArrays.equals(null, new byte[] { 1 }));
-        assertTrue(MathArrays.equals((byte[]) null, (byte[]) null));
+        assertTrue(MathArrays.equals(null, (byte[]) null));
 
         assertFalse(MathArrays.equals(new byte[] { 1 }, new byte[0]));
         assertTrue(MathArrays.equals(new byte[] { 1 }, new byte[] { 1 }));
@@ -949,7 +917,7 @@ public class MathArraysTest {
     void testShortArrayEquals() {
         assertFalse(MathArrays.equals(new short[] { 1 }, null));
         assertFalse(MathArrays.equals(null, new short[] { 1 }));
-        assertTrue(MathArrays.equals((short[]) null, (short[]) null));
+        assertTrue(MathArrays.equals(null, (short[]) null));
 
         assertFalse(MathArrays.equals(new short[] { 1 }, new short[0]));
         assertTrue(MathArrays.equals(new short[] { 1 }, new short[] { 1 }));
@@ -966,7 +934,7 @@ public class MathArraysTest {
     void testFloatArrayEquals() {
         assertFalse(MathArrays.equals(new float[] { 1 }, null));
         assertFalse(MathArrays.equals(null, new float[] { 1 }));
-        assertTrue(MathArrays.equals((float[]) null, (float[]) null));
+        assertTrue(MathArrays.equals(null, (float[]) null));
 
         assertFalse(MathArrays.equals(new float[] { 1 }, new float[0]));
         assertTrue(MathArrays.equals(new float[] { 1 }, new float[] { 1 }));
@@ -983,7 +951,7 @@ public class MathArraysTest {
     void testDoubleArrayEquals() {
         assertFalse(MathArrays.equals(new double[] { 1 }, null));
         assertFalse(MathArrays.equals(null, new double[] { 1 }));
-        assertTrue(MathArrays.equals((double[]) null, (double[]) null));
+        assertTrue(MathArrays.equals(null, (double[]) null));
 
         assertFalse(MathArrays.equals(new double[] { 1 }, new double[0]));
         assertTrue(MathArrays.equals(new double[] { 1 }, new double[] { 1 }));
@@ -1000,7 +968,7 @@ public class MathArraysTest {
     void testFieldArrayEquals() {
         assertFalse(MathArrays.equals(new Complex[] { Complex.I }, null));
         assertFalse(MathArrays.equals(null, new Complex[] { Complex.I }));
-        assertTrue(MathArrays.equals((Complex[]) null, (Complex[]) null));
+        assertTrue(MathArrays.equals(null, (Complex[]) null));
 
         assertFalse(MathArrays.equals(new Complex[] { Complex.I }, new Complex[0]));
         assertTrue(MathArrays.equals(new Complex[] { Complex.I }, new Complex[] { Complex.I }));
@@ -1038,26 +1006,34 @@ public class MathArraysTest {
         try {
             MathArrays.normalizeArray(zeroSum, 1);
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ex) {
+            Assertions.assertEquals(LocalizedCoreFormats.ARRAY_SUMS_TO_ZERO, ex.getSpecifier());
+        }
 
         // Infinite elements -> MathRuntimeException
         double[] hasInf = new double[] {1, 2, 1, Double.NEGATIVE_INFINITY};
         try {
             MathArrays.normalizeArray(hasInf, 1);
             fail("expecting MathIllegalArgumentException");
-        } catch (MathIllegalArgumentException ex) {}
+        } catch (MathIllegalArgumentException ex) {
+            Assertions.assertEquals(LocalizedCoreFormats.INFINITE_ARRAY_ELEMENT, ex.getSpecifier());
+        }
 
         // Infinite target -> MathIllegalArgumentException
         try {
             MathArrays.normalizeArray(testValues1, Double.POSITIVE_INFINITY);
             fail("expecting MathIllegalArgumentException");
-        } catch (MathIllegalArgumentException ex) {}
+        } catch (MathIllegalArgumentException ex) {
+            Assertions.assertEquals(LocalizedCoreFormats.NORMALIZE_INFINITE, ex.getSpecifier());
+        }
 
         // NaN target -> MathIllegalArgumentException
         try {
             MathArrays.normalizeArray(testValues1, Double.NaN);
             fail("expecting MathIllegalArgumentException");
-        } catch (MathIllegalArgumentException ex) {}
+        } catch (MathIllegalArgumentException ex) {
+            Assertions.assertEquals(LocalizedCoreFormats.NORMALIZE_NAN, ex.getSpecifier());
+        }
     }
 
     @Test
@@ -1280,17 +1256,6 @@ public class MathArraysTest {
         assertArrayEquals(x, MathArrays.concatenate(x), 0);
     }
 
-    public void testConcatenateEmptyArguments() {
-        final double[] x = new double[] {0, 1, 2};
-        final double[] y = new double[] {3};
-        final double[] z = new double[] {};
-        final double[] u = new double[] {0, 1, 2, 3};
-        assertArrayEquals(u,  MathArrays.concatenate(x, z, y), 0);
-        assertArrayEquals(u,  MathArrays.concatenate(x, y, z), 0);
-        assertArrayEquals(u,  MathArrays.concatenate(z, x, y), 0);
-        assertEquals(0,  MathArrays.concatenate(z, z, z).length);
-    }
-
     @Test
     void testConcatenateNullArguments() {
         assertThrows(NullPointerException.class, () -> {
@@ -1391,6 +1356,39 @@ public class MathArraysTest {
             for (Binary64[] a2 : a1) {
                 assertNull(a2);
             }
+        }
+    }
+
+    @Test
+    void testIssue471() {
+
+        checkOverflow(new int[] { Integer.MAX_VALUE }, new int[] { -1 });
+        checkOverflow(new int[] { Integer.MIN_VALUE }, new int[] {  1 });
+
+        checkOverflow(filled(3, 1_000_000_000), new int[3]);
+        checkOverflow(filled(4, 1_000_000_000), new int[4]);
+        checkOverflow(filled(10, 1_000_000_000), new int[10]);
+
+        Assertions.assertEquals(100000000, MathArrays.distance1( filled(100_000, 1000), new int[100_000]));
+        checkOverflow(filled(2_200_000, 1000), new int[2_200_000]);
+
+        Assertions.assertEquals(      9, MathArrays.distance1(new int[] { 1, 2, 3}, new int[] { 4, 5, 6 }));
+        Assertions.assertEquals(1000000, MathArrays.distance1(filled(100_000, 10), new int[100_000]));
+
+    }
+
+    private int[] filled(int n, int v) {
+        int[] a = new int[n];
+        Arrays.fill(a, v);
+        return a;
+    }
+
+    private void checkOverflow(final int[] p1, final int[] p2) {
+        try {
+            MathArrays.distance1(p1, p2);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            Assertions.assertEquals(LocalizedCoreFormats.OVERFLOW, mre.getSpecifier());
         }
     }
 

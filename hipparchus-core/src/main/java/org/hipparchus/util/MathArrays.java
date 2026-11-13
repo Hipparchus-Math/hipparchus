@@ -209,11 +209,11 @@ public class MathArrays {
     public static int distance1(int[] p1, int[] p2)
         throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
-        int sum = 0;
+        long sum = 0;
         for (int i = 0; i < p1.length; i++) {
-            sum += FastMath.abs(p1[i] - p2[i]);
+            sum += FastMath.abs((long) p1[i] - (long) p2[i]);
         }
-        return sum;
+        return FastMath.toIntExact(sum);
     }
 
     /**
@@ -754,7 +754,7 @@ public class MathArrays {
     public static void checkNonNegative(final long[][] in)
         throws MathIllegalArgumentException {
         for (long[] longs : in) {
-            for (long aLong : longs) {
+            for (final long aLong : longs) {
                 if (aLong < 0) {
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, aLong, 0);
                 }

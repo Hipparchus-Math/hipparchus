@@ -56,14 +56,26 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="vincent" type="fix" issue="issues/481">
         Fixed continuous integration failures by improving test coverage of new code.
       </action>
+      <action dev="luc" type="fix" due-to="ser10us" issue="issues/471">
+        Fixed overflow in MathArrays.distance1.
+      </action>
+      <action dev="luc" type="fix" due-to="ser10us" issue="issues/470">
+        Fixed overflow in MultidimensionalCounter.
+      </action>
       <action dev="luc" type="add" issue="issues/469">
         Added support for roman numerals.
+      </action>
+      <action dev="luc" type="fix" due-to="AviranAbady" issue="issues/465">
+        Fixed overflow in DfpMath.pow and DfpMath.splitPow.
       </action>
       <action dev="bryan" type="update" issue="issues/462">
         Replaced double[] arrays with Fittable interface in RANSAC fitting classes.
       </action>
       <action dev="Marthym" type="update" issue="issues/460">
         Allow small numerical tolerance in SmoothStepFactory.checkBetweenZeroAndOneIncluded
+      </action>
+      <action dev="luc" type="fix" due-to="yin-mao" issue="issues/459">
+        Forbid all grouping (including commas) in ComplexFormat.
       </action>
       <action dev="serrof" type="update">
         Add some FunctionalInterface tag.
@@ -122,7 +134,12 @@ If the output is not quite correct, check for invisible trailing spaces!
         Prevent stack overflow in digamma function.
       </action>
     </release>
-    <release version="4.0.2" date="TBC" description="This is a patch release.">
+    <release version="4.0.3" date="2026-02-08" description="This is a patch release.">
+      <action dev="lebihanbastien" type="fix" issue="issues/449">
+        Fixed inconsistency between interpolated states when calling ODEStepHandler#handleStep at each event.
+      </action>
+    </release>
+    <release version="4.0.2" date="2025-09-08" description="This is a patch release.">
       <action dev="bryan" type="fix" issue="issues/416">
         Fixed inconsistency between Abstract{Field}ODEStateInterpolator and {Field}DetectorBasedEventState for event time handling.
       </action>

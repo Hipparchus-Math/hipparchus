@@ -22,7 +22,9 @@
 
 package org.hipparchus.util;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
@@ -42,19 +44,19 @@ class MultidimensionalCounterTest {
         MultidimensionalCounter c;
 
         try {
-            c = new MultidimensionalCounter(0, 1);
+            new MultidimensionalCounter(0, 1);
             fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
-            c = new MultidimensionalCounter(2, 0);
+            new MultidimensionalCounter(2, 0);
             fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
-            c = new MultidimensionalCounter(-1, 1);
+            new MultidimensionalCounter(-1, 1);
             fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
@@ -221,4 +223,30 @@ class MultidimensionalCounterTest {
             fail("Too long");
         }
     }
+
+    @Test
+    void testIssue470() {
+
+        checkOverflow(65537, 65536);
+        checkOverflow(46341, 46341);
+        checkOverflow(1000, 1000, 4295);
+        checkOverflow(641, 6700417);
+        checkOverflow(2, 2147483647);
+        checkOverflow(3, 1431655766);
+
+        Assertions.assertEquals(        60, new MultidimensionalCounter(3, 4, 5).getSize());
+        Assertions.assertEquals(2147395600, new MultidimensionalCounter(46340, 46340).getSize());
+        Assertions.assertEquals(2147483647, new MultidimensionalCounter(2147483647).getSize());
+
+    }
+
+    private void checkOverflow(int... dims) {
+        try {
+            new MultidimensionalCounter(dims);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+        }
+    }
+
 }
