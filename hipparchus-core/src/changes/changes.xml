@@ -61,7 +61,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="add" issue="issues/469">
         Added support for roman numerals.
-      </action>
+      </action>w
       <action dev="Marthym" type="update" issue="issues/460">
         Allow small numerical tolerance in SmoothStepFactory.checkBetweenZeroAndOneIncluded
       </action>

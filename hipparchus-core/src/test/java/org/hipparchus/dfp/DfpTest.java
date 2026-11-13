@@ -27,6 +27,7 @@ import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -119,11 +120,11 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
 
     @Test
     void testLongConstructor() {
-        assertEquals("0.", new Dfp(field, 0l).toString());
-        assertEquals("1.", new Dfp(field, 1l).toString());
-        assertEquals("-1.", new Dfp(field, -1l).toString());
-        assertEquals("1234567890.", new Dfp(field, 1234567890l).toString());
-        assertEquals("-1234567890.", new Dfp(field, -1234567890l).toString());
+        assertEquals("0.", new Dfp(field, 0L).toString());
+        assertEquals("1.", new Dfp(field, 1L).toString());
+        assertEquals("-1.", new Dfp(field, -1L).toString());
+        assertEquals("1234567890.", new Dfp(field, 1234567890L).toString());
+        assertEquals("-1234567890.", new Dfp(field, -1234567890L).toString());
         assertEquals("-9223372036854775808.", new Dfp(field, Long.MIN_VALUE).toString());
         assertEquals("9223372036854775807.", new Dfp(field, Long.MAX_VALUE).toString());
     }
@@ -1882,6 +1883,14 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         Dfp ulp = one.ulp();
         assertTrue(one.add(ulp).greaterThan(one));
         assertFalse(one.add(ulp.half()).greaterThan(one));
+    }
+
+    @Test
+    void testLargeIntegerExponentDoesNotHang() {
+        final DfpField field = new DfpField(20);
+        Assertions.assertTrue(field.newDfp("3").pow(1 << 30).isInfinite());   // 3^(2^30)
+        Assertions.assertTrue(field.newDfp("2000000000").exp().isInfinite());   // e^2e9
+        Assertions.assertTrue(field.newDfp("-1500000000").sinh().isInfinite()); // -Inf
     }
 
     @Test

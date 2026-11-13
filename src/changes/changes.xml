@@ -59,6 +59,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="add" issue="issues/469">
         Added support for roman numerals.
       </action>
+      <action dev="luc" type="fix" due-to="AviranAbady" issue="issues/465">
+        Fixed overflow in DfpMath.pow and DfpMath.splitPow.
+      </action>
       <action dev="bryan" type="update" issue="issues/462">
         Replaced double[] arrays with Fittable interface in RANSAC fitting classes.
       </action>
