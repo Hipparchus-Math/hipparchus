@@ -122,7 +122,12 @@ If the output is not quite correct, check for invisible trailing spaces!
         Prevent stack overflow in digamma function.
       </action>
     </release>
-    <release version="4.0.2" date="TBC" description="This is a patch release.">
+    <release version="4.0.3" date="2026-02-08" description="This is a patch release.">
+      <action dev="lebihanbastien" type="fix" issue="issues/449">
+        Fixed inconsistency between interpolated states when calling ODEStepHandler#handleStep at each event.
+      </action>
+    </release>
+    <release version="4.0.2" date="2025-09-08" description="This is a patch release.">
       <action dev="bryan" type="fix" issue="issues/416">
         Fixed inconsistency between Abstract{Field}ODEStateInterpolator and {Field}DetectorBasedEventState for event time handling.
       </action>
