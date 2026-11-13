@@ -22,6 +22,7 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -161,4 +162,14 @@ public class FDistributionTest extends RealDistributionAbstractTest {
             assertTrue(result < 1.0);
         }, "Failing to calculate inverse cumulative probability");
     }
+
+    @Test
+    void testIssue465()
+    {
+        FDistribution dist = new FDistribution(0.10006, 1.51904, 1e-30);
+        double x = dist.inverseCumulativeProbability(0.16038);
+        Assertions.assertEquals(3.1304e-15, x, 1.0e-19);
+        Assertions.assertEquals(0.16038, dist.cumulativeProbability(x), 3.0e-17);
+    }
+
 }
