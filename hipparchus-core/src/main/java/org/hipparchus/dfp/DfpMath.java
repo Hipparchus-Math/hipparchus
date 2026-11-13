@@ -180,9 +180,9 @@ public class DfpMath {
         do {
             r[0] = new Dfp(base[0]);
             r[1] = new Dfp(base[1]);
-            int trial = 1;
+            long trial = 1;
 
-            int prevtrial;
+            long prevtrial;
             while (true) {
                 prevtrial = trial;
                 trial *= 2;
@@ -234,8 +234,8 @@ public class DfpMath {
         do {
             Dfp r = new Dfp(base);
             Dfp prevr;
-            int trial = 1;
-            int prevtrial;
+            long trial = 1;
+            long prevtrial;
 
             do {
                 prevr = new Dfp(r);
