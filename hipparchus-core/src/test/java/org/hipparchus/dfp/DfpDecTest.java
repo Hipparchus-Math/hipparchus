@@ -65,14 +65,37 @@ class DfpDecTest {
         b = (b && x.getField().getIEEEFlags() == flags);
 
         if (!b)
-            assertTrue(b, "assersion failed "+desc+" x = "+ x +" flags = "+x.getField().getIEEEFlags());
+            assertTrue(b, "assertion failed "+desc+" x = "+ x +" flags = "+x.getField().getIEEEFlags());
 
         x.getField().clearIEEEFlags();
     }
 
     @Test
-    void testRound()
-    {
+    public void testConstructors() {
+        test(new DfpDec(field).newInstance(Double.POSITIVE_INFINITY),
+             new DfpDec(field, (byte) 1, Dfp.INFINITE),
+             0, "");
+        test(new DfpDec(field), new DfpDec(field, (byte) 0), 0, "");
+        test(new DfpDec(field), new DfpDec(field, 0), 0, "");
+        test(new DfpDec(field), new DfpDec(field, 0L), 0, "");
+        test(new DfpDec(field), new DfpDec(field, 0.0), 0, "");
+    }
+
+    @Test
+    public void testNewInstance() {
+        final DfpDec zero = new DfpDec(field);
+        test(zero, zero.newInstance((byte) 0), 0, "");
+        test(zero, zero.newInstance(0), 0, "");
+        test(zero, zero.newInstance(0L), 0, "");
+        test(zero, zero.newInstance(0.0), 0, "");
+        test(zero.newInstance(new Dfp(new DfpField(10))),
+             new DfpDec(field, Double.NaN), DfpField.FLAG_INVALID, "");
+        test(zero, zero.newInstance("0.0"), 0, "");
+        test(zero, zero.newInstance((byte) 0, (byte)0), 0, "");
+    }
+
+    @Test
+    void testRound() {
         field.setRoundingMode(DfpField.RoundingMode.ROUND_HALF_EVEN);
 
         test(new DfpDec(field, "12345678901234567890"),
@@ -395,7 +418,7 @@ class DfpDecTest {
 
         // RoundDecimal10 up
         test(new Decimal10(field, 1234567890).add(new Decimal10(field, "0.1")),
-             new Decimal10(field, 1234567891l),
+             new Decimal10(field, 1234567891L),
              DfpField.FLAG_INEXACT, "RoundDecimal10 #25");
 
         test(new Decimal10(field, "1234567890").add(new Decimal10(field, "0.0001")),
@@ -536,7 +559,7 @@ class DfpDecTest {
              0, "NextAfter #6");
 
         test(new DfpDec(field, (byte) 2).nextAfter(new DfpDec(field, 2)),
-             new DfpDec(field, 2l),
+             new DfpDec(field, 2L),
              0, "NextAfter #7");
 
         test(new DfpDec(field, 0).nextAfter(new DfpDec(field, 0)),
