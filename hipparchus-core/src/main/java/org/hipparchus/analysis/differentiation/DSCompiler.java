@@ -136,7 +136,7 @@ import org.hipparchus.util.SinhCosh;
 public class DSCompiler {
 
     /** Array of all compilers created so far. */
-    private static final AtomicReference<DSCompiler[][]> compilers = new AtomicReference<>(null);
+    private static final AtomicReference<DSCompiler[][]> COMPILERS = new AtomicReference<>(null);
 
     /** Number of free parameters. */
     private final int parameters;
@@ -204,7 +204,7 @@ public class DSCompiler {
         throws MathIllegalArgumentException {
 
         // get the cached compilers
-        final DSCompiler[][] cache = compilers.get();
+        final DSCompiler[][] cache = COMPILERS.get();
         if (cache != null && cache.length > parameters &&
             cache[parameters].length > order && cache[parameters][order] != null) {
             // the compiler has already been created
@@ -236,7 +236,7 @@ public class DSCompiler {
         }
 
         // atomically reset the cached compilers array
-        compilers.compareAndSet(cache, newCache);
+        COMPILERS.compareAndSet(cache, newCache);
 
         return newCache[parameters][order];
 
@@ -3781,7 +3781,7 @@ public class DSCompiler {
             }
         }
 
-        return combined.toArray((T[]) Array.newInstance(terms.get(0).getClass(), combined.size()));
+        return combined.toArray((T[]) Array.newInstance(terms.getFirst().getClass(), combined.size()));
 
     }
 

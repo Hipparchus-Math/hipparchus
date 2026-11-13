@@ -27,7 +27,7 @@ import org.hipparchus.util.FastMath;
 public class GradientField implements Field<Gradient> {
 
     /** Array of all fields created so far. */
-    private static final AtomicReference<GradientField[]> fields = new AtomicReference<>(null);
+    private static final AtomicReference<GradientField[]> FIELDS = new AtomicReference<>(null);
 
     /** Zero constant. */
     private final Gradient zero;
@@ -54,7 +54,7 @@ public class GradientField implements Field<Gradient> {
     public static GradientField getField(int parameters) {
 
         // get the cached fields
-        final GradientField[] cache = fields.get();
+        final GradientField[] cache = FIELDS.get();
         if (cache != null && cache.length > parameters && cache[parameters] != null) {
             // the field has already been created
             return cache[parameters];
@@ -73,7 +73,7 @@ public class GradientField implements Field<Gradient> {
         newCache[parameters] = new GradientField(parameters);
 
         // atomically reset the cached fileds array
-        fields.compareAndSet(cache, newCache);
+        FIELDS.compareAndSet(cache, newCache);
 
         return newCache[parameters];
 

@@ -16,7 +16,6 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -71,13 +70,6 @@ public class BFGSUpdater {
      * decomposition
      */
     public BFGSUpdater(final RealMatrix initialHess, final double eps, final boolean autoScale, final double decompositionEpsilon) {
-        /**
-         * Stored initial Hessian for resets.
-         */
-        RealMatrix initialH = new Array2DRowRealMatrix(initialHess.getData());
-        /**
-         * EPS.
-         */
         /**
          * AutoScaling Flag.
          */
