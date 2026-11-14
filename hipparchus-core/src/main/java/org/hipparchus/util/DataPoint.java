@@ -1,5 +1,5 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Apache Software Foundation (ASF)  under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
@@ -14,17 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.fitting.ransac;
+package org.hipparchus.util;
 
 /**
- * Interface for data points that can be used with {@link RansacFitter}.
- * @since 4.1
+ * Interface for n-dimensional data points.
+ *
+ * @since 5.0
  */
-public interface Fittable {
+public interface DataPoint {
 
     /**
      * Gets the n-dimensional point.
+     *
      * @return the point array (beware, it may be a reference to an internal array)
      */
-    double[] getPoint();
+    double[] values();
 }

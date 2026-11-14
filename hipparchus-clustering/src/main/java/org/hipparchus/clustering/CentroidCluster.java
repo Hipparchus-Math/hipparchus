@@ -23,6 +23,8 @@ package org.hipparchus.clustering;
 
 import java.io.Serial;
 
+import org.hipparchus.util.DataPoint;
+
 /**
  * A Cluster used by centroid-based clustering algorithms.
  * <p>
@@ -31,20 +33,20 @@ import java.io.Serial;
  *
  * @param <T> the type of points that can be clustered
  */
-public class CentroidCluster<T extends Clusterable> extends Cluster<T> {
+public class CentroidCluster<T extends DataPoint> extends Cluster<T> {
 
     /** Serializable version identifier. */
     @Serial
     private static final long serialVersionUID = -3075288519071812288L;
 
     /** Center of the cluster. */
-    private final Clusterable center;
+    private final DataPoint center;
 
     /**
      * Build a cluster centered at a specified point.
      * @param center the point which is to be the center of this cluster
      */
-    public CentroidCluster(final Clusterable center) {
+    public CentroidCluster(final DataPoint center) {
         this.center = center;
     }
 
@@ -52,7 +54,7 @@ public class CentroidCluster<T extends Clusterable> extends Cluster<T> {
      * Get the point chosen to be the center of this cluster.
      * @return chosen cluster center
      */
-    public Clusterable getCenter() {
+    public DataPoint getCenter() {
         return center;
     }
 

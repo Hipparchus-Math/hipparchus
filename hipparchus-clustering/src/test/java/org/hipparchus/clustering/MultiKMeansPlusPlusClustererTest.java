@@ -22,6 +22,7 @@
 
 package org.hipparchus.clustering;
 
+import org.hipparchus.util.DoublePoint;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.hipparchus.util.DataPoint;
 
 class MultiKMeansPlusPlusClustererTest {
 
@@ -76,8 +78,8 @@ class MultiKMeansPlusPlusClustererTest {
         boolean cluster3Found = false;
         double epsilon = 1e-6;
         for (CentroidCluster<DoublePoint> cluster : clusters) {
-            Clusterable center = cluster.getCenter();
-            double[] point = center.getPoint();
+            DataPoint center = cluster.getCenter();
+            double[] point = center.values();
             if (point[0] < 0) {
                 cluster1Found = true;
                 assertEquals(8, cluster.getPoints().size());

@@ -25,7 +25,7 @@ package org.hipparchus.clustering.evaluation;
 import java.util.List;
 
 import org.hipparchus.clustering.Cluster;
-import org.hipparchus.clustering.Clusterable;
+import org.hipparchus.util.DataPoint;
 import org.hipparchus.distance.DistanceMeasure;
 import org.hipparchus.stat.descriptive.moment.Variance;
 
@@ -37,7 +37,7 @@ import org.hipparchus.stat.descriptive.moment.Variance;
  *
  * @param <T> the type of the clustered points
  */
-public class SumOfClusterVariances<T extends Clusterable> extends ClusterEvaluator<T> {
+public class SumOfClusterVariances<T extends DataPoint> extends ClusterEvaluator<T> {
 
     /** Simple constructor.
      * @param measure the distance measure to use
@@ -53,7 +53,7 @@ public class SumOfClusterVariances<T extends Clusterable> extends ClusterEvaluat
         for (final Cluster<T> cluster : clusters) {
             if (!cluster.getPoints().isEmpty()) {
 
-                final Clusterable center = centroidOf(cluster);
+                final DataPoint center = centroidOf(cluster);
 
                 // compute the distance variance of the current cluster
                 final Variance stat = new Variance();

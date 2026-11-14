@@ -41,10 +41,10 @@ import javax.swing.JLabel;
 
 import org.hipparchus.clustering.CentroidCluster;
 import org.hipparchus.clustering.Cluster;
-import org.hipparchus.clustering.Clusterable;
+import org.hipparchus.util.DataPoint;
 import org.hipparchus.clustering.Clusterer;
 import org.hipparchus.clustering.DBSCANClusterer;
-import org.hipparchus.clustering.DoublePoint;
+import org.hipparchus.util.DoublePoint;
 import org.hipparchus.clustering.FuzzyKMeansClusterer;
 import org.hipparchus.clustering.KMeansPlusPlusClusterer;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
@@ -349,14 +349,14 @@ public class ClusterAlgorithmComparison {
             for (Cluster<DoublePoint> cluster : clusters) {
                 g2.setPaint(colors[index++]);
                 for (DoublePoint point : cluster.getPoints()) {
-                    Clusterable p = transform(point, w, h);
-                    double[] arr = p.getPoint();
+                    DataPoint p = transform(point, w, h);
+                    double[] arr = p.values();
                     g2.fill(new Ellipse2D.Double(arr[0] - 1, arr[1] - 1, 3, 3));
                 }
 
                 if (cluster instanceof CentroidCluster<?> centroidCluster) {
-                    Clusterable p = transform(centroidCluster.getCenter(), w, h);
-                    double[] arr = p.getPoint();
+                    DataPoint p = transform(centroidCluster.getCenter(), w, h);
+                    double[] arr = p.values();
                     Shape s = new Ellipse2D.Double(arr[0] - 4, arr[1] - 4, 8, 8);
                     g2.fill(s);
                     g2.setPaint(Color.black);
@@ -373,8 +373,8 @@ public class ClusterAlgorithmComparison {
             return new Dimension(150, 150);
         }
 
-        private Clusterable transform(Clusterable point, int width, int height) {
-            double[] arr = point.getPoint();
+        private DataPoint transform(DataPoint point, int width, int height) {
+            double[] arr = point.values();
             return new DoublePoint(new double[] { PAD + (arr[0] + 1) / 2.0 * (width - 2 * PAD),
                                                   height - PAD - (arr[1] + 1) / 2.0 * (height - 2 * PAD) });
         }

@@ -20,16 +20,16 @@
  * It has been modified by the Hipparchus project
  */
 
-package org.hipparchus.clustering;
+package org.hipparchus.util;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * A simple implementation of {@link Clusterable} for points with double coordinates.
+ * A simple implementation of {@link DataPoint} for points with double coordinates.
  */
-public class DoublePoint implements Clusterable, Serializable {
+public class DoublePoint implements DataPoint, Serializable {
 
     /** Serializable version identifier. */
     @Serial
@@ -65,12 +65,12 @@ public class DoublePoint implements Clusterable, Serializable {
 
     /** {@inheritDoc}
      * <p>
-     * In this implementation of the {@link Clusterable} interface,
+     * In this implementation of the {@link DataPoint} interface,
      * the method <em>always</em> returns a reference to an internal array.
      * </p>
      */
     @Override
-    public double[] getPoint() {
+    public double[] values() {
         return point; // NOPMD - returning a reference to an internal array is documented here
     }
 

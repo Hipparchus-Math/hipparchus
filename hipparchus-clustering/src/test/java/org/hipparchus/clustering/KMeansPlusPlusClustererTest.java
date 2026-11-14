@@ -26,6 +26,7 @@ import org.hipparchus.distance.EuclideanDistance;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.util.DoublePoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

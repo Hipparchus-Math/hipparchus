@@ -29,13 +29,14 @@ import org.hipparchus.clustering.evaluation.ClusterEvaluator;
 import org.hipparchus.clustering.evaluation.SumOfClusterVariances;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.util.DataPoint;
 
 /**
  * A wrapper around a k-means++ clustering algorithm which performs multiple trials
  * and returns the best solution.
  * @param <T> type of the points to cluster
  */
-public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T> {
+public class MultiKMeansPlusPlusClusterer<T extends DataPoint> extends Clusterer<T> {
 
     /** The underlying k-means clusterer. */
     private final KMeansPlusPlusClusterer<T> clusterer;
