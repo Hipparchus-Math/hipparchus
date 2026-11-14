@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Clustering Release Notes</title>
   </properties>
   <body>
+    <release version="5.0" date="TBD" description="TBD">
+      <action dev="bryan" type="update" issue="issues/497">
+        Replaced Clusterable interface by DataPoint interface from core module.
+      </action>
+    </release>
     <release version="4.0.3" date="2026-02-08" description="This is a patch release.">
       <action dev="bryan" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,
