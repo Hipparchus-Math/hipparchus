@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.distance.DistanceMeasure;
+import org.hipparchus.distance.EuclideanDistance;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;

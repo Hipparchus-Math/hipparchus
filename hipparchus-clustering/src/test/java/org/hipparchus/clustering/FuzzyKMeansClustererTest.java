@@ -22,8 +22,8 @@
 package org.hipparchus.clustering;
 
 import org.hamcrest.CoreMatchers;
-import org.hipparchus.clustering.distance.CanberraDistance;
-import org.hipparchus.clustering.distance.DistanceMeasure;
+import org.hipparchus.distance.CanberraDistance;
+import org.hipparchus.distance.DistanceMeasure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;

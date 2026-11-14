@@ -24,7 +24,7 @@ package org.hipparchus.clustering.evaluation;
 
 import org.hipparchus.clustering.Cluster;
 import org.hipparchus.clustering.DoublePoint;
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.distance.EuclideanDistance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.hipparchus.clustering.Cluster;
 import org.hipparchus.clustering.Clusterable;
-import org.hipparchus.clustering.distance.DistanceMeasure;
+import org.hipparchus.distance.DistanceMeasure;
 import org.hipparchus.stat.descriptive.moment.Variance;
 
 /**

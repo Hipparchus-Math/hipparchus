@@ -19,17 +19,17 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests for {@link CanberraDistance} class.
+ * Tests for {@link ChebyshevDistance} class.
  */
-class CanberraDistanceTest {
-    final DistanceMeasure distance = new CanberraDistance();
+class ChebyshevDistanceTest {
+    final DistanceMeasure distance = new ChebyshevDistance();
 
     @Test
     void testZero() {
@@ -38,16 +38,10 @@ class CanberraDistanceTest {
     }
 
     @Test
-    void testZero2() {
-        final double[] a = { 0, 0 };
-        assertEquals(0, distance.compute(a, a), 0d);
-    }
-
-    @Test
     void test() {
-        final double[] a = { 1, 2, 3, 4, 9 };
-        final double[] b = { -5, -6, 7, 4, 3 };
-        final double expected = 2.9;
+        final double[] a = { 1, 2, 3, 4 };
+        final double[] b = { -5, -6, 7, 8 };
+        final double expected = 8;
         assertEquals(expected, distance.compute(a, b), 0d);
         assertEquals(expected, distance.compute(b, a), 0d);
     }

@@ -19,30 +19,39 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
-import org.junit.jupiter.api.Test;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathArrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.Serial;
 
 /**
- * Tests for {@link ChebyshevDistance} class.
+ * Calculates the L<sub>1</sub> (sum of abs) distance between two points.
+ *
  */
-class ChebyshevDistanceTest {
-    final DistanceMeasure distance = new ChebyshevDistance();
+public class ManhattanDistance implements DistanceMeasure {
 
-    @Test
-    void testZero() {
-        final double[] a = { 0, 1, -2, 3.4, 5, -6.7, 89 };
-        assertEquals(0, distance.compute(a, a), 0d);
+    /** Serializable version identifier. */
+    @Serial
+    private static final long serialVersionUID = -9108154600539125566L;
+
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public ManhattanDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
     }
 
-    @Test
-    void test() {
-        final double[] a = { 1, 2, 3, 4 };
-        final double[] b = { -5, -6, 7, 8 };
-        final double expected = 8;
-        assertEquals(expected, distance.compute(a, b), 0d);
-        assertEquals(expected, distance.compute(b, a), 0d);
+    /** {@inheritDoc} */
+    @Override
+    public double compute(double[] a, double[] b)
+    throws MathIllegalArgumentException {
+        return MathArrays.distance1(a, b);
     }
+
 }

@@ -19,27 +19,31 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
-import java.io.Serializable;
+import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Test;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Interface for distance measures of n-dimensional vectors.
- *
+ * Tests for {@link EuclideanDistance} class.
  */
-public interface DistanceMeasure extends Serializable {
+class EuclideanDistanceTest {
+    final DistanceMeasure distance = new EuclideanDistance();
 
-    /**
-     * Compute the distance between two n-dimensional vectors.
-     * <p>
-     * The two vectors are required to have the same dimension.
-     *
-     * @param a the first vector
-     * @param b the second vector
-     * @return the distance between the two vectors
-     * @throws MathIllegalArgumentException if the array lengths differ.
-     */
-    double compute(double[] a, double[] b) throws MathIllegalArgumentException;
+    @Test
+    void testZero() {
+        final double[] a = { 0, 1, -2, 3.4, 5, -6.7, 89 };
+        assertEquals(0, distance.compute(a, a), 0d);
+    }
+
+    @Test
+    void test() {
+        final double[] a = { 1, -2, 3, 4 };
+        final double[] b = { -5, -6, 7, 8 };
+        final double expected = FastMath.sqrt(84);
+        assertEquals(expected, distance.compute(a, b), 0d);
+        assertEquals(expected, distance.compute(b, a), 0d);
+    }
 }

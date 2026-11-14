@@ -24,7 +24,7 @@ package org.hipparchus.clustering;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.clustering.distance.DistanceMeasure;
+import org.hipparchus.distance.DistanceMeasure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 

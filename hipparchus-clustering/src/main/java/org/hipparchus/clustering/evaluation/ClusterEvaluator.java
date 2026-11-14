@@ -28,8 +28,8 @@ import org.hipparchus.clustering.CentroidCluster;
 import org.hipparchus.clustering.Cluster;
 import org.hipparchus.clustering.Clusterable;
 import org.hipparchus.clustering.DoublePoint;
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.distance.DistanceMeasure;
+import org.hipparchus.distance.EuclideanDistance;
 
 /**
  * Base class for cluster evaluation methods.

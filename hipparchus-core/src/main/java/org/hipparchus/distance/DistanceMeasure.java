@@ -19,7 +19,27 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
+package org.hipparchus.distance;
+
+import java.io.Serializable;
+
+import org.hipparchus.exception.MathIllegalArgumentException;
+
 /**
- * Common distance measures.
+ * Interface for distance measures of n-dimensional vectors.
+ *
  */
-package org.hipparchus.clustering.distance;
+public interface DistanceMeasure extends Serializable {
+
+    /**
+     * Compute the distance between two n-dimensional vectors.
+     * <p>
+     * The two vectors are required to have the same dimension.
+     *
+     * @param a the first vector
+     * @param b the second vector
+     * @return the distance between the two vectors
+     * @throws MathIllegalArgumentException if the array lengths differ.
+     */
+    double compute(double[] a, double[] b) throws MathIllegalArgumentException;
+}
