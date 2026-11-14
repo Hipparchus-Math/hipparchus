@@ -83,12 +83,12 @@ public abstract class ClusterEvaluator<T extends DataPoint> {
      * Calculates the distance between two {@link DataPoint} instances
      * with the configured {@link DistanceMeasure}.
      *
-     * @param p1 the first DataPoint
-     * @param p2 the second DataPoint
-     * @return the distance between the two clusterables
+     * @param p1 the first data point
+     * @param p2 the second data point
+     * @return the distance between the two data points
      */
     protected double distance(final DataPoint p1, final DataPoint p2) {
-        return measure.compute(p1.values(), p2.values());
+        return measure.compute(p1, p2);
     }
 
     /**
