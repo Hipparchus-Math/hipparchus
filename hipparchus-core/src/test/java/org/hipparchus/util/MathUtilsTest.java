@@ -441,4 +441,11 @@ final class MathUtilsTest {
         }
     }
 
+    @Test
+    void testConstants() {
+        assertEquals(0x401921fb54442d18L, Double.doubleToRawLongBits(MathUtils.TWO_PI));
+        assertEquals(0x4023bd3cc9be45deL, Double.doubleToRawLongBits(MathUtils.PI_SQUARED));
+        assertEquals(FastMath.PI * FastMath.PI, MathUtils.PI_SQUARED, 1.0e-20);
+        assertEquals(0x3ff921fb54442d18L, Double.doubleToRawLongBits(MathUtils.SEMI_PI));
+    }
 }
