@@ -21,6 +21,7 @@
  */
 package org.hipparchus.distance;
 
+import org.hipparchus.util.DataPoint;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,5 +51,14 @@ class EarthMoversDistanceTest {
         double expected = 0.65; //0.2 + 0.1 + 0.1 + 0.2 + 0.05 + 0.0;
         assertEquals(expected, distance.compute(a, b), 1e-10);
         assertEquals(expected, distance.compute(b, a), 1e-10);
+    }
+
+    @Test
+    void testDataPoint() {
+        final DataPoint pa = () -> a;
+        final DataPoint pb = () -> b;
+        final double expected = 0.65;
+        assertEquals(expected, distance.compute(pa, pb), 1e-10);
+        assertEquals(expected, distance.compute(pb, pa), 1e-10);
     }
 }

@@ -21,6 +21,7 @@
  */
 package org.hipparchus.distance;
 
+import org.hipparchus.util.DataPoint;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
@@ -45,5 +46,13 @@ class EuclideanDistanceTest {
         final double expected = FastMath.sqrt(84);
         assertEquals(expected, distance.compute(a, b), 0d);
         assertEquals(expected, distance.compute(b, a), 0d);
+    }
+
+    @Test
+    void testDataPoint() {
+        final DataPoint a = () -> new double[] { 1, -2, 3, 4 };
+        final DataPoint b = () -> new double[] { -5, -6, 7, 8 };
+        assertEquals(FastMath.sqrt(84), distance.compute(a, b), 0d);
+        assertEquals(FastMath.sqrt(84), distance.compute(b, a), 0d);
     }
 }

@@ -21,6 +21,7 @@
  */
 package org.hipparchus.distance;
 
+import org.hipparchus.util.DataPoint;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,5 +45,13 @@ class ChebyshevDistanceTest {
         final double expected = 8;
         assertEquals(expected, distance.compute(a, b), 0d);
         assertEquals(expected, distance.compute(b, a), 0d);
+    }
+
+    @Test
+    void testDataPoint() {
+        final DataPoint a = () -> new double[] { 1, 2, 3, 4 };
+        final DataPoint b = () -> new double[] { -5, -6, 7, 8 };
+        assertEquals(8, distance.compute(a, b), 0d);
+        assertEquals(8, distance.compute(b, a), 0d);
     }
 }

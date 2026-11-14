@@ -24,6 +24,7 @@ package org.hipparchus.distance;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.DataPoint;
 
 /**
  * Interface for distance measures of n-dimensional vectors.
@@ -42,4 +43,20 @@ public interface DistanceMeasure extends Serializable {
      * @throws MathIllegalArgumentException if the array lengths differ.
      */
     double compute(double[] a, double[] b) throws MathIllegalArgumentException;
+
+    /**
+     * Compute the distance between two n-dimensional data points.
+     * <p>
+     * The two points are required to have the same dimension.
+     * </p>
+     *
+     * @param a the first data point
+     * @param b the second data point
+     * @return the distance between the two data points
+     * @throws MathIllegalArgumentException if the array lengths differ.
+     * @since 5.0
+     */
+    default double compute(final DataPoint a, final DataPoint b) throws MathIllegalArgumentException {
+        return compute(a.values(), b.values());
+    }
 }
