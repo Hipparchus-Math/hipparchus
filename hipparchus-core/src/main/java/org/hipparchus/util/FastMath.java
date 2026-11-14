@@ -81,8 +81,14 @@ import java.util.concurrent.ThreadLocalRandom;
  * </ul>
  */
 public class FastMath {
+
     /** Archimede's constant PI, ratio of circle circumference to diameter. */
     public static final double PI = 105414357.0 / 33554432.0 + 1.984187159361080883e-9;
+
+    /** Double Archimede's constant, ratio of circle circumference to radius.
+     * @since 4.1
+     */
+    public static final double TAU = 1686629713.0 / 268435456.0 + 2.43084020260247704e-10;
 
     /** Napier's constant e, base of the natural logarithm. */
     public static final double E = 2850325.0 / 1048576.0 + 8.254840070411028747e-8;
@@ -4855,6 +4861,137 @@ public class FastMath {
     public static int getExponent(final float f) {
         // NaN and Infinite will return the same exponent anyhow so can use raw bits
         return ((Float.floatToRawIntBits(f) >>> 23) & 0xff) - 127;
+    }
+
+    /**
+     * Unsigned product of unsigned arguments.
+     * @param a first multiplicand
+     * @param b second multiplicand
+     * @return product of a and b, considered unsigned, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static int unsignedMultiplyExact(int a, int b) {
+        if (a >= 0 && b >= 0) {
+            int result;
+            try {
+                result = ArithmeticUtils.mulAndCheck(a, b);
+            } catch (MathRuntimeException mre) {
+                result = -1;
+            }
+            if (result >= 0) {
+                return result;
+            }
+        }
+        throw new ArithmeticException();
+    }
+
+    /**
+     * Unsigned product of unsigned arguments.
+     * @param a first multiplicand
+     * @param b second multiplicand
+     * @return product of a and b, considered unsigned, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long unsignedMultiplyExact(long a , int b) {
+        return unsignedMultiplyExact(a, (long) b);
+    }
+
+    /**
+     * Unsigned product of unsigned arguments.
+     * @param a first multiplicand
+     * @param b second multiplicand
+     * @return product of a and b, considered unsigned, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long unsignedMultiplyExact(long a, long b) {
+        if (a >= 0L && b >= 0L) {
+            long result;
+            try {
+                result = ArithmeticUtils.mulAndCheck(a, b);
+            } catch (MathRuntimeException mre) {
+                result = -1L;
+            }
+            if (result >= 0L) {
+                return result;
+            }
+        }
+        throw new ArithmeticException();
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static int powExact(int k, int e) {
+        try {
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long powExact(long k, int e) {
+        try {
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static int unsignedPowExact(int k, int e) {
+        try {
+            if (e == 0) {
+                // process special case early (not event checking for k really be unsigned
+                return 1;
+            }
+            if (k < 0) {
+                // k is not unsigned
+                throw new ArithmeticException();
+            }
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long unsignedPowExact(long k, int e) {
+        try {
+            if (e == 0) {
+                // process special case early (not event checking for k really be unsigned
+                return 1;
+            }
+            if (k < 0) {
+                // k is not unsigned
+                throw new ArithmeticException();
+            }
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
     }
 
     /** Compute Fused-multiply-add operation a * b + c.

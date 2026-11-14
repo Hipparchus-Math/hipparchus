@@ -31,6 +31,7 @@ import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -165,8 +166,9 @@ class FastMathTest {
 
     @Test
     void testConstants() {
-        assertEquals(Math.PI, FastMath.PI, 1.0e-20);
-        assertEquals(Math.E, FastMath.E, 1.0e-20);
+        assertEquals(0x400921fb54442d18L, Double.doubleToRawLongBits(FastMath.PI));
+        assertEquals(0x401921fb54442d18L, Double.doubleToRawLongBits(FastMath.TAU));
+        assertEquals(0x4005bf0a8b145769L, Double.doubleToRawLongBits(FastMath.E));
     }
 
     @Test
@@ -3033,6 +3035,100 @@ class FastMathTest {
             assertEquals(i, FastMath.getExponent(FastMath.scalb(1.5f,   i)));
             assertEquals(i, FastMath.getExponent(FastMath.scalb(1.999f, i)));
         }
+    }
+
+    @Test
+    public void testUnsignedMultiplyExactIntInt() {
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(-1, 0));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(0, -1));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(Integer.MAX_VALUE, 2));
+        Assertions.assertEquals(2147483646, FastMath.unsignedMultiplyExact(41706, 51491));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(41707, 51491));
+        Assertions.assertEquals(0, FastMath.unsignedMultiplyExact(0, Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void testUnsignedMultiplyExactLongInt() {
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(-1L, 0));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(0L, -1));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(Long.MAX_VALUE, 2));
+        Assertions.assertEquals(9223372036854775807L, FastMath.unsignedMultiplyExact(60247241209L, 153092023));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(60247241209L, 153092024));
+        Assertions.assertEquals(0, FastMath.unsignedMultiplyExact(0L, Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void testUnsignedMultiplyExactLongLong() {
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedMultiplyExact(Long.MAX_VALUE, 2L));
+    }
+
+    @Test
+    public void testPowExactIntInt() {
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.powExact(21, 8));
+        Assertions.assertEquals(1, FastMath.powExact(-2, 0));
+        Assertions.assertEquals(1, FastMath.powExact( 2, 0));
+        Assertions.assertEquals(0x1 << 30, FastMath.powExact(2, 30));
+        Assertions.assertEquals( 1419857, FastMath.powExact( 17, 5));
+        Assertions.assertEquals(-1419857, FastMath.powExact(-17, 5));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.powExact(17, 9));
+    }
+
+    @Test
+    public void testPowExactLongInt() {
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.powExact(21L, 15));
+        Assertions.assertEquals(1L, FastMath.powExact(-2L, 0));
+        Assertions.assertEquals(1L, FastMath.powExact( 2L, 0));
+        Assertions.assertEquals(0x1L << 62, FastMath.powExact(2L, 62));
+        Assertions.assertEquals( 118587876497L, FastMath.powExact( 17L, 9));
+        Assertions.assertEquals(-118587876497L, FastMath.powExact(-17L, 9));
+    }
+
+    @Test
+    public void testUnsignedPowExactIntInt() {
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(21, 15));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(-1, 1));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(-1, 2));
+        // when exponent is 0, we don't even check first argument is unsigned
+        // this is for consistency with the Math class
+        Assertions.assertEquals(1, FastMath.unsignedPowExact(-1, 0));
+        Assertions.assertEquals( 1419857, FastMath.unsignedPowExact(17, 5));
+        Assertions.assertEquals(24137569, FastMath.unsignedPowExact(17, 6));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(17, 8));
+        Assertions.assertEquals(1, FastMath.unsignedPowExact(-1, 0));
+    }
+
+    @Test
+    public void testUnsignedPowExactLongInt() {
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(21L, 15));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(-1L, 1));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(-1L, 2));
+        // when exponent is 0, we don't even check first argument is unsigned
+        // this is for consistency with the Math class
+        Assertions.assertEquals(1, FastMath.unsignedPowExact(-1L, 0));
+        Assertions.assertEquals(       118587876497L, FastMath.powExact( 17L,  9));
+        Assertions.assertEquals(      2015993900449L, FastMath.powExact( 17L, 10));
+        Assertions.assertEquals(2862423051509815793L, FastMath.powExact( 17L, 15));
+        Assertions.assertThrows(ArithmeticException.class,
+                                () -> FastMath.unsignedPowExact(17L, 16));
     }
 
     private static long poorManMultiplyHigh(final long p, final long q) {
