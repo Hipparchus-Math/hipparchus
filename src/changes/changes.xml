@@ -49,6 +49,17 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="5.0" date="TBD" description="TBD">
+      <action dev="bryan" type="update" issue="issues/497">
+        Moved DistanceMeasure from clustering module to core module.
+      </action>
+      <action dev="bryan" type="add" issue="issues/497">
+        Added DataPoint interface and replaced Clusterable and Fittable interfaces.
+      </action>
+      <action dev="bryan" type="update" issue="issues/497">
+        Added compute(DataPoint, DataPoint) to DistanceMeasure.
+      </action>
+    </release>
     <release version="4.1" date="TBD" description="TBD">
       <action dev="luc" type="fix" issue="issues/486">
         Fixed indices problems with the GraalVM native image and Window operating system combo.

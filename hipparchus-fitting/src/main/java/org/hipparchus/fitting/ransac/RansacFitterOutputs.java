@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hipparchus.util.DataPoint;
+
 /**
  * Class containing the best estimate of the model parameters.
  * @param <M> mathematical model representing the parameters to estimate
@@ -36,7 +38,7 @@ public class RansacFitterOutputs<M> {
     private final Optional<M> bestModel;
 
     /** List of points used to determine the best model parameters. */
-    private final List<Fittable> bestInliers;
+    private final List<DataPoint> bestInliers;
 
     /**
      * Constructor.
@@ -44,7 +46,7 @@ public class RansacFitterOutputs<M> {
      * @param bestInliers list of points used to determine the best model parameters
      * @param fitter mathematical model fitter used by RANSAC algorithm
      */
-    public RansacFitterOutputs(final Optional<M> bestModel, final List<Fittable> bestInliers, final IModelFitter<M> fitter) {
+    public RansacFitterOutputs(final Optional<M> bestModel, final List<DataPoint> bestInliers, final IModelFitter<M> fitter) {
         this.bestModel = bestModel;
         this.bestInliers = new ArrayList<>(bestInliers);
         this.fitter = fitter;
@@ -62,7 +64,7 @@ public class RansacFitterOutputs<M> {
      * Get the list of points used to determine the best model parameters.
      * @return the list of points used to determine the best model parameters
      */
-    public List<Fittable> getBestInliers() {
+    public List<DataPoint> getBestInliers() {
         return new ArrayList<>(bestInliers);
     }
 
@@ -73,7 +75,7 @@ public class RansacFitterOutputs<M> {
      * @return the list of points below the given threshold based on the computed best model parameters
      *         (can be empty if the all points are above the threshold or if no best model has been found)
      */
-    public List<Fittable> filterPointsBelowThreshold(final List<Fittable> points, final double threshold) {
+    public List<DataPoint> filterPointsBelowThreshold(final List<DataPoint> points, final double threshold) {
         return bestModel.map(model -> points.stream().filter(point -> fitter.computeModelError(model, point) < threshold).collect(Collectors.toList()))
                         .orElse(Collections.emptyList());
     }

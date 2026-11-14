@@ -19,36 +19,39 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
+import org.hipparchus.util.DataPoint;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests for {@link EarthMoversDistance} class.
+ * Tests for {@link ChebyshevDistance} class.
  */
-class EarthMoversDistanceTest {
-
-    final DistanceMeasure distance = new EarthMoversDistance();
-    final double[] a = { 0.1, 0.3, 0.2, 0.0, 0.25, 0.15 };
-    final double[] b = { 0.3, 0.0, 0.4, 0.1, 0.0, 0.2 };
+class ChebyshevDistanceTest {
+    final DistanceMeasure distance = new ChebyshevDistance();
 
     @Test
     void testZero() {
+        final double[] a = { 0, 1, -2, 3.4, 5, -6.7, 89 };
         assertEquals(0, distance.compute(a, a), 0d);
     }
 
     @Test
-    void testZero2() {
-        final double[] zero = new double[] { 0, 0 };
-        assertEquals(0, distance.compute(zero, zero), 0d);
+    void test() {
+        final double[] a = { 1, 2, 3, 4 };
+        final double[] b = { -5, -6, 7, 8 };
+        final double expected = 8;
+        assertEquals(expected, distance.compute(a, b), 0d);
+        assertEquals(expected, distance.compute(b, a), 0d);
     }
 
     @Test
-    void test() {
-        double expected = 0.65; //0.2 + 0.1 + 0.1 + 0.2 + 0.05 + 0.0;
-        assertEquals(expected, distance.compute(a, b), 1e-10);
-        assertEquals(expected, distance.compute(b, a), 1e-10);
+    void testDataPoint() {
+        final DataPoint a = () -> new double[] { 1, 2, 3, 4 };
+        final DataPoint b = () -> new double[] { -5, -6, 7, 8 };
+        assertEquals(8, distance.compute(a, b), 0d);
+        assertEquals(8, distance.compute(b, a), 0d);
     }
 }

@@ -19,25 +19,22 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
 import java.io.Serial;
 
 /**
- * Calculates the Earh Mover's distance (also known as Wasserstein metric) between two distributions.
- *
- * @see <a href="http://en.wikipedia.org/wiki/Earth_mover's_distance">Earth Mover's distance (Wikipedia)</a>
+ * Calculates the L<sub>1</sub> (sum of abs) distance between two points.
  *
  */
-public class EarthMoversDistance implements DistanceMeasure {
+public class ManhattanDistance implements DistanceMeasure {
 
     /** Serializable version identifier. */
     @Serial
-    private static final long serialVersionUID = -5406732779747414922L;
+    private static final long serialVersionUID = -9108154600539125566L;
 
     /** Empty constructor.
      * <p>
@@ -46,7 +43,7 @@ public class EarthMoversDistance implements DistanceMeasure {
      * </p>
      * @since 3.0
      */
-    public EarthMoversDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    public ManhattanDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 
@@ -54,15 +51,7 @@ public class EarthMoversDistance implements DistanceMeasure {
     @Override
     public double compute(double[] a, double[] b)
     throws MathIllegalArgumentException {
-        MathArrays.checkEqualLength(a, b);
-        double lastDistance = 0;
-        double totalDistance = 0;
-        for (int i = 0; i < a.length; i++) {
-            final double currentDistance = (a[i] + lastDistance) - b[i];
-            totalDistance += FastMath.abs(currentDistance);
-            lastDistance = currentDistance;
-        }
-        return totalDistance;
+        return MathArrays.distance1(a, b);
     }
 
 }

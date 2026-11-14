@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Fitting Release Notes</title>
   </properties>
   <body>
+    <release version="5.0" date="TBD" description="TBD">
+      <action dev="bryan" type="add" issue="issues/497">
+        Added DataPoint interface and replaced Clusterable and Fittable interfaces.
+      </action>
+    </release>
     <release version="4.1" date="TBD" description="TBD">
       <action dev="bryan" type="update" issue="issues/462">
         Replaced double[] arrays with Fittable interface in RANSAC fitting classes.

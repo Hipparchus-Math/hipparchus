@@ -19,8 +19,9 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
+import org.hipparchus.util.DataPoint;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,5 +51,13 @@ class CanberraDistanceTest {
         final double expected = 2.9;
         assertEquals(expected, distance.compute(a, b), 0d);
         assertEquals(expected, distance.compute(b, a), 0d);
+    }
+
+    @Test
+    void testDataPoint() {
+        final DataPoint a = () -> new double[] { 1, 2, 3, 4, 9 };
+        final DataPoint b = () -> new double[] { -5, -6, 7, 4, 3 };
+        assertEquals(2.9, distance.compute(a, b), 0d);
+        assertEquals(2.9, distance.compute(b, a), 0d);
     }
 }

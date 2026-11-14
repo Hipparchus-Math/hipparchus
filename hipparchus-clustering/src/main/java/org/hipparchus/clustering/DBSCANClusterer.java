@@ -29,12 +29,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.distance.DistanceMeasure;
+import org.hipparchus.distance.EuclideanDistance;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.DataPoint;
 
 /**
  * DBSCAN (density-based spatial clustering of applications with noise) algorithm.
@@ -60,7 +61,7 @@ import org.hipparchus.util.MathUtils;
  * @see <a href="http://www.dbs.ifi.lmu.de/Publikationen/Papers/KDD-96.final.frame.pdf">
  * A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise</a>
  */
-public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
+public class DBSCANClusterer<T extends DataPoint> extends Clusterer<T> {
 
     /** Maximum radius of the neighborhood to be considered. */
     private final double              eps;
@@ -142,7 +143,7 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
         MathUtils.checkNotNull(points);
 
         final List<Cluster<T>> clusters = new ArrayList<>();
-        final Map<Clusterable, PointStatus> visited = new HashMap<>();
+        final Map<DataPoint, PointStatus> visited = new HashMap<>();
 
         for (final T point : points) {
             if (visited.get(point) != null) {
@@ -175,7 +176,7 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
                                      final T point,
                                      final List<T> neighbors,
                                      final Collection<T> points,
-                                     final Map<Clusterable, PointStatus> visited) {
+                                     final Map<DataPoint, PointStatus> visited) {
         cluster.addPoint(point);
         visited.put(point, PointStatus.PART_OF_CLUSTER);
 

@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.distance.DistanceMeasure;
+import org.hipparchus.distance.EuclideanDistance;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -35,9 +35,11 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.util.DoublePoint;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.DataPoint;
 
 /**
  * Fuzzy K-Means clustering algorithm.
@@ -69,7 +71,7 @@ import org.hipparchus.util.MathUtils;
  *
  * @param <T> type of the points to cluster
  */
-public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
+public class FuzzyKMeansClusterer<T extends DataPoint> extends Clusterer<T> {
 
     /** The default value for the convergence criteria. */
     private static final double DEFAULT_EPSILON = 1e-3;
@@ -298,7 +300,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
         initializeMembershipMatrix();
 
         // there is at least one point
-        final int pointDimension = points.getFirst().getPoint().length;
+        final int pointDimension = points.getFirst().values().length;
         for (int i = 0; i < k; i++) {
             clusters.add(new CentroidCluster<>(new DoublePoint(new double[pointDimension])));
         }
@@ -324,13 +326,13 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
         int j = 0;
         final List<CentroidCluster<T>> newClusters = new ArrayList<>(k);
         for (final CentroidCluster<T> cluster : clusters) {
-            final Clusterable center = cluster.getCenter();
+            final DataPoint center = cluster.getCenter();
             int i = 0;
-            double[] arr = new double[center.getPoint().length];
+            double[] arr = new double[center.values().length];
             double sum = 0.0;
             for (final T point : points) {
                 final double u = FastMath.pow(membershipMatrix[i][j], fuzziness);
-                final double[] pointArr = point.getPoint();
+                final double[] pointArr = point.values();
                 for (int idx = 0; idx < arr.length; idx++) {
                     arr[idx] += u * pointArr[idx];
                 }

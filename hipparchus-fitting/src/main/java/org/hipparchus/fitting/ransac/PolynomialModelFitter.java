@@ -26,6 +26,7 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.SingularValueDecomposition;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.DataPoint;
 
 /**
  * Fitter for polynomial model.
@@ -86,7 +87,7 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
 
     /** {@inheritDoc} */
     @Override
-    public Model fitModel(final List<Fittable> points) {
+    public Model fitModel(final List<DataPoint> points) {
         // Reference: Wikipedia page "Polynomial regression"
         final int size = points.size();
         checkSampleSize(size);
@@ -95,7 +96,7 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
         final double[][] x = new double[size][degree + 1];
         final double[] y = new double[size];
         for (int i = 0; i < size; i++) {
-            final double[] point = points.get(i).getPoint();
+            final double[] point = points.get(i).values();
             final double currentX = point[0];
             final double currentY = point[1];
             double value = 1.0;
@@ -118,8 +119,8 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
 
     /** {@inheritDoc}. */
     @Override
-    public double computeModelError(final Model model, final Fittable point) {
-        return FastMath.abs(point.getPoint()[1] - model.predict(point.getPoint()[0]));
+    public double computeModelError(final Model model, final DataPoint point) {
+        return FastMath.abs(point.values()[1] - model.predict(point.values()[0]));
     }
 
     /**

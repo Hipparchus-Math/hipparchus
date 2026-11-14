@@ -27,22 +27,24 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.distance.DistanceMeasure;
+import org.hipparchus.distance.EuclideanDistance;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.descriptive.moment.Variance;
+import org.hipparchus.util.DoublePoint;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.DataPoint;
 
 /**
  * Clustering algorithm based on David Arthur and Sergei Vassilvitski k-means++ algorithm.
  * @param <T> type of the points to cluster
  * @see <a href="http://en.wikipedia.org/wiki/K-means%2B%2B">K-means++ (wikipedia)</a>
  */
-public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T> {
+public class KMeansPlusPlusClusterer<T extends DataPoint> extends Clusterer<T> {
 
     /** Strategies to use for replacing an empty cluster. */
     public enum EmptyClusterStrategy {
@@ -222,7 +224,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
             boolean emptyCluster = false;
             List<CentroidCluster<T>> newClusters = new ArrayList<>();
             for (final CentroidCluster<T> cluster : clusters) {
-                final Clusterable newCenter;
+                final DataPoint newCenter;
                 if (cluster.getPoints().isEmpty()) {
                     switch (emptyStrategy) {
                         case LARGEST_VARIANCE :
@@ -239,7 +241,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
                     }
                     emptyCluster = true;
                 } else {
-                    newCenter = centroidOf(cluster.getPoints(), cluster.getCenter().getPoint().length);
+                    newCenter = centroidOf(cluster.getPoints(), cluster.getCenter().values().length);
                 }
                 newClusters.add(new CentroidCluster<>(newCenter));
             }
@@ -423,7 +425,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
             if (!cluster.getPoints().isEmpty()) {
 
                 // compute the distance variance of the current cluster
-                final Clusterable center = cluster.getCenter();
+                final DataPoint center = cluster.getCenter();
                 final Variance stat = new Variance();
                 for (final T point : cluster.getPoints()) {
                     stat.increment(distance(point, center));
@@ -501,7 +503,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
         for (final CentroidCluster<T> cluster : clusters) {
 
             // get the farthest point
-            final Clusterable center = cluster.getCenter();
+            final DataPoint center = cluster.getCenter();
             final List<T> points = cluster.getPoints();
             for (int i = 0; i < points.size(); ++i) {
                 final double distance = distance(points.get(i), center);
@@ -552,10 +554,10 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
      * @param dimension the point dimension
      * @return the computed centroid for the set of points
      */
-    private Clusterable centroidOf(final Collection<T> points, final int dimension) {
+    private DataPoint centroidOf(final Collection<T> points, final int dimension) {
         final double[] centroid = new double[dimension];
         for (final T p : points) {
-            final double[] point = p.getPoint();
+            final double[] point = p.values();
             for (int i = 0; i < centroid.length; i++) {
                 centroid[i] += point[i];
             }

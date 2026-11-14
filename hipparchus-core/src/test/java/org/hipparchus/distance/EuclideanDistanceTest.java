@@ -19,17 +19,19 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
+import org.hipparchus.util.DataPoint;
+import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests for {@link ChebyshevDistance} class.
+ * Tests for {@link EuclideanDistance} class.
  */
-class ChebyshevDistanceTest {
-    final DistanceMeasure distance = new ChebyshevDistance();
+class EuclideanDistanceTest {
+    final DistanceMeasure distance = new EuclideanDistance();
 
     @Test
     void testZero() {
@@ -39,10 +41,18 @@ class ChebyshevDistanceTest {
 
     @Test
     void test() {
-        final double[] a = { 1, 2, 3, 4 };
+        final double[] a = { 1, -2, 3, 4 };
         final double[] b = { -5, -6, 7, 8 };
-        final double expected = 8;
+        final double expected = FastMath.sqrt(84);
         assertEquals(expected, distance.compute(a, b), 0d);
         assertEquals(expected, distance.compute(b, a), 0d);
+    }
+
+    @Test
+    void testDataPoint() {
+        final DataPoint a = () -> new double[] { 1, -2, 3, 4 };
+        final DataPoint b = () -> new double[] { -5, -6, 7, 8 };
+        assertEquals(FastMath.sqrt(84), distance.compute(a, b), 0d);
+        assertEquals(FastMath.sqrt(84), distance.compute(b, a), 0d);
     }
 }

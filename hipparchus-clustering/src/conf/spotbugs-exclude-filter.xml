@@ -36,12 +36,12 @@
 
   <!-- The equals method for RealVector intentionally throws an exception -->
   <Match>
-    <Class name="org.hipparchus.clustering.DoublePoint"/>
+    <Class name="org.hipparchus.util.DoublePoint"/>
     <Method name="&lt;init>" params="double[]" returns="void" />
     <Bug pattern="EI_EXPOSE_REP2" />
   </Match>
   <Match>
-    <Class name="org.hipparchus.clustering.DoublePoint"/>      
+    <Class name="org.hipparchus.util.DoublePoint"/>
     <Method name="getPoint" params="" returns="double[]" />
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>

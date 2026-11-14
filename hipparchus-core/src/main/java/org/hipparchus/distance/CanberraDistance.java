@@ -19,22 +19,23 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
 import java.io.Serial;
 
 /**
- * Calculates the L<sub>1</sub> (sum of abs) distance between two points.
+ * Calculates the Canberra distance between two points.
  *
  */
-public class ManhattanDistance implements DistanceMeasure {
+public class CanberraDistance implements DistanceMeasure {
 
     /** Serializable version identifier. */
     @Serial
-    private static final long serialVersionUID = -9108154600539125566L;
+    private static final long serialVersionUID = -6972277381587032228L;
 
     /** Empty constructor.
      * <p>
@@ -43,7 +44,7 @@ public class ManhattanDistance implements DistanceMeasure {
      * </p>
      * @since 3.0
      */
-    public ManhattanDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    public CanberraDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 
@@ -51,7 +52,14 @@ public class ManhattanDistance implements DistanceMeasure {
     @Override
     public double compute(double[] a, double[] b)
     throws MathIllegalArgumentException {
-        return MathArrays.distance1(a, b);
+        MathArrays.checkEqualLength(a, b);
+        double sum = 0;
+        for (int i = 0; i < a.length; i++) {
+            final double num = FastMath.abs(a[i] - b[i]);
+            final double denom = FastMath.abs(a[i]) + FastMath.abs(b[i]);
+            sum += num == 0.0 && denom == 0.0 ? 0.0 : num / denom;
+        }
+        return sum;
     }
 
 }

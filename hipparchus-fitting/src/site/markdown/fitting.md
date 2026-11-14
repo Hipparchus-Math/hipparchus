@@ -102,12 +102,12 @@ RANSAC-based fitting of specific functions are provided through the following cl
 * call the fit method of [RansacFitter](../apidocs/org/hipparchus/fitting/ransac/RansacFitter.html) with a List of observed data points as argument, which will return 
   a java class containing the parameters that best fit the given data points.
 
-Data points must implement the [Fittable](../apidocs/org/hipparchus/fitting/ransac/Fittable.html) interface which provides a `getPoint()` method returning the point coordinates as a `double[]`.
+Data points must implement the [DataPoint](../apidocs/org/hipparchus/util/DataPoint.html) interface which provides a `values()` method returning the point coordinates as a `double[]`.
 
 The following example shows how to fit data with a polynomial model of degree 2.
 
     // Collect data.
-    final List<Fittable> obs = new ArrayList<>();
+    final List<DataPoint> obs = new ArrayList<>();
     obs.add(new SimpleFittable(0.0, -61.422));
     obs.add(new SimpleFittable(2.0, -42.28700013));
     obs.add(new SimpleFittable(4.0, -58.97612903));

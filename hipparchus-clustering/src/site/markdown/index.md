@@ -51,12 +51,12 @@ where each location has a method `double getX()` and `double getY()`
 representing their current coordinates in a 2-dimensional space. We want to cluster the locations into
 10 different clusters based on their euclidean distance.
 
-The cluster algorithms expect a list of [Clusterable](../apidocs/org/hipparchus/cluster/Clusterable.html)
+The cluster algorithms expect a list of [DataPoint](../apidocs/org/hipparchus/util/DataPoint.html)
 as input. Typically, we don't want to pollute our domain objects with interfaces from helper APIs.
 Hence, we first create a wrapper object:
 
     // wrapper class
-    public static class LocationWrapper implements Clusterable {
+    public static class LocationWrapper implements DataPoint {
         private double[] points;
         private Location location;
     
@@ -69,7 +69,7 @@ Hence, we first create a wrapper object:
             return location;
         }
     
-        public double[] getPoint() {
+        public double[] values() {
             return points;
         }
     }

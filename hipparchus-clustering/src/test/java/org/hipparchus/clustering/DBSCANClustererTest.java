@@ -23,6 +23,7 @@ package org.hipparchus.clustering;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.DoublePoint;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
