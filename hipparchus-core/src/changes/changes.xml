@@ -77,6 +77,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" due-to="yin-mao" issue="issues/459">
         Forbid all grouping (including commas) in ComplexFormat.
       </action>
+      <action dev="luc" type="fix" due-to="Hanbing59" issue="issues/457">
+        Implement in FastMath methods introduced in Math as of Java 25.
+      </action>
       <action dev="serrof" type="update">
         Add some FunctionalInterface tag.
       </action>
