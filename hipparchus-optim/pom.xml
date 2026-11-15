@@ -90,6 +90,8 @@
             <inputExclude>src/test/resources/org.hipparchus.optim.nonlinear.vector.constrained.maros_meszaros/*</inputExclude>
             <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Lanczos1.dat</inputExclude>
             <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/MGH17.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Hahn1.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Kirby2.dat</inputExclude>
 
           </inputExcludes>
         </configuration>
@@ -144,6 +146,8 @@
             <inputExclude>src/test/resources/org.hipparchus.optim.nonlinear.vector.constrained.maros_meszaros/*</inputExclude>
             <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Lanczos1.dat</inputExclude>
             <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/MGH17.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Hahn1.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Kirby2.dat</inputExclude>
 
           </inputExcludes>
         </configuration>
