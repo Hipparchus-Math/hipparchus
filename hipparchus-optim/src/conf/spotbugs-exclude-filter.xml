@@ -69,6 +69,20 @@
   </Match>
   <Match>
     <Or>
+      <Class name="org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresFactory$LocalLeastSquaresProblem$LazyUnweightedEvaluation"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresFactory$LocalLeastSquaresProblem$UnweightedEvaluation"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.leastsquares.SequentialGaussNewtonOptimizer$1"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.leastsquares.SequentialGaussNewtonOptimizer$CombinedEvaluation"/>
+    </Or>
+    <Or>
+      <Method name="getPoint"/>
+      <Method name="getJacobian"/>
+      <Method name="getResiduals"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
       <Class name="org.hipparchus.optim.ConvergenceCheckerAndMultiplexer"/>
       <Class name="org.hipparchus.optim.ConvergenceCheckerOrMultiplexer"/>
       <Class name="org.hipparchus.optim.linear.LinearConstraint"/>
@@ -85,6 +99,7 @@
       <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LinearInequalityConstraint"/>
       <Class name="org.hipparchus.optim.nonlinear.vector.constrained.InverseCholesky"/>
       <Class name="org.hipparchus.optim.nonlinear.vector.constrained.QPConstraintMatrix"/>
+      <Class name="org.hipparchus.optim.univariate.MultiStartUnivariateOptimizer"/>
       <Class name="org.hipparchus.optim.univariate.MultiStartUnivariateOptimizer"/>
     </Or>
     <Method name="&lt;init>"/>
@@ -114,9 +129,19 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
   <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.AbstractSQPOptimizer"/>
+    <Method name="getSettings"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
     <Class name="org.hipparchus.optim.nonlinear.vector.constrained.AbstractSQPOptimizer2"/>
     <Method name="getSettings"/>
     <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.AbstractSQPOptimizer2"/>
+    <Method name="buildBoundsAsInequalities"/>
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
   </Match>
   <Match>
     <Class name="org.hipparchus.optim.nonlinear.vector.constrained.BoundedConstraint"/>
@@ -176,7 +201,7 @@
   <!--  which already know about limited precision of the double numbers -->
 
   <Match>
-    <Class name="org.hipparchus.optim.univariate.BrentOptimizer" />
+    <Class name="org.hipparch us.optim.univariate.BrentOptimizer" />
     <Method name="localMin" params="boolean,double,double,double,double,double" returns="double" />
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>

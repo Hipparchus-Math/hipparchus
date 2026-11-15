@@ -179,6 +179,11 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
   <Match>
+    <Class name="org.hipparchus.geometry.partitioning.BoundaryProjector"/>
+    <Method name="visitLeafNode"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
     <Class name="org.hipparchus.geometry.spherical.oned.ArcsSet$Split"/>
     <Or>
       <Method name="getMinus"/>

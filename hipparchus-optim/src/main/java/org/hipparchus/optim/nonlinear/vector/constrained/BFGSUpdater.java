@@ -50,6 +50,9 @@ public class BFGSUpdater {
      */
     private static final double SQRT_EPS = FastMath.sqrt(Precision.EPSILON);
 
+    /** Reducing factor. */
+    private static final double TH = 1.0e-3;
+
     /**
      * AutoScaling Flag.
      */
@@ -156,8 +159,7 @@ public class BFGSUpdater {
         if (!damped && sty > Precision.SAFE_MIN) {
              factor = yy / sty;
         }
-        final double th = 1.0e-3;
-        factor = FastMath.max(th, FastMath.min(1.0 / th, factor));
+        factor = FastMath.max(TH, FastMath.min(1.0 / TH, factor));
 
         if (!rankOneUpdate(s, y, Hs, sHs, sty)) {
             return 3;

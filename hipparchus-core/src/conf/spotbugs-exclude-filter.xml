@@ -326,6 +326,11 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
   <Match>
+    <Class name="org.hipparchus.linear.SingularValueDecomposition$Solver"/>
+    <Method name="getInverse"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
     <Class name="org.hipparchus.linear.RiccatiEquationSolverImpl"/>
     <Or>
       <Method name="getK"/>
@@ -514,6 +519,27 @@
     </Or>
     <Method name="&lt;init>"/>
     <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+
+  <!-- No infinite loop here as there is a protection against maximum number of evaluations -->
+  <Match>
+    <Class name="org.hipparchus.analysis.solvers.BisectionSolver"/>
+    <Method name="doSolve"/>
+    <Bug pattern="IL_INFINITE_LOOP" />
+  </Match>
+
+  <!-- No infinite loop here as p increases -->
+  <Match>
+    <Class name="org.hipparchus.special.BesselJ"/>
+    <Method name="rjBesl"/>
+    <Bug pattern="IL_INFINITE_LOOP" />
+  </Match>
+
+  <!-- Behavio is simple to understand, and loop is guaranteed to finish -->
+  <Match>
+    <Class name="org.hipparchus.special.Gamma"/>
+    <Method name="digamma"/>
+    <Bug pattern="FL_FLOATS_AS_LOOP_COUNTERS" />
   </Match>
 
   <!-- the following expositions of internal representation are intentional and documented -->
