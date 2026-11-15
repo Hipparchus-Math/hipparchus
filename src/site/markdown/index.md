@@ -71,9 +71,19 @@ at fork time.
 
  ---
 
-## 4.0.3 Release is out!
+## 4.1 Release is out!
 
-Hipparchus 4.0.3 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 4.0.3 release are:
+Hipparchus 4.1 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 4.1 release
+are additions of:
 
-   * Fixed inconsistency between interpolated states when calling ODEStepHandler#handleStep at each event.
+   * Lebedev integrator
+   * roman numerals
+   * complex Schur transformer
+   * trilinear interpolation
+   * random generators for exponential, gamma and Nakagami distributions
+   * half Cauchy, half normal and inverse gamma distributions
+   * RANSAC algorithm
+   * revamped constrained optimizers
+
+and numerous small improvements and bug fixes.
