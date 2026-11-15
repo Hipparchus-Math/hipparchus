@@ -29,6 +29,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * sample points must be specified on a regular grid.
  *
  */
+@FunctionalInterface
 public interface BivariateGridInterpolator {
     /**
      * Compute an interpolating function for the dataset.

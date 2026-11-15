@@ -21,7 +21,7 @@ import org.hipparchus.optim.OptimizationData;
 /**
  * Custom convergence criterion for an SQP optimizer.
  */
-
+@FunctionalInterface
 public interface SQPCustomCriterion extends OptimizationData {
 
     /**

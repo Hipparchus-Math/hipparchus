@@ -25,6 +25,7 @@ import org.hipparchus.util.MathUtils;
  *
  * @param <T> the type of statistic
  */
+@FunctionalInterface
 public interface AggregatableStatistic<T> {
 
     /**

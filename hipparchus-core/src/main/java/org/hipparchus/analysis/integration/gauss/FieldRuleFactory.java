@@ -25,6 +25,7 @@ import org.hipparchus.util.Pair;
  * the quadrature rules.
  * @since 2.0
  */
+@FunctionalInterface
 public interface FieldRuleFactory<T extends FieldElement<T>> {
 
     /**

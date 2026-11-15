@@ -26,6 +26,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @param <T> type of the field elements
  * @since 4.1
  */
+@FunctionalInterface
 public interface FieldTrivariateGridInterpolator<T extends CalculusFieldElement<T>> {
     /**
      * Compute an interpolating function for the dataset.

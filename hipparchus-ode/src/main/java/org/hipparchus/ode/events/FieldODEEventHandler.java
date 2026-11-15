@@ -57,6 +57,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @see org.hipparchus.ode.events
  * @param <T> the type of the field elements
  */
+@FunctionalInterface
 public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
 
     /** Initialize event handler at the start of an ODE integration.

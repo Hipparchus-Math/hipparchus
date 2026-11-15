@@ -31,6 +31,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @see UnivariateDifferentiableFunction
  * @see UnivariateFunctionDifferentiator
  */
+@FunctionalInterface
 public interface UnivariateDifferentiableFunction extends UnivariateFunction {
 
     /**

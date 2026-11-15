@@ -398,6 +398,7 @@ public class PolynomialsUtils {
     }
 
     /** Interface for recurrence coefficients generation. */
+    @FunctionalInterface
     private interface RecurrenceCoefficientsGenerator {
         /**
          * Generate recurrence coefficients.

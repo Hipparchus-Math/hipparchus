@@ -35,7 +35,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see ODEStepHandler
  * @see StepNormalizer
  */
-
+@FunctionalInterface
 public interface ODEFixedStepHandler  {
 
     /** Initialize step handler at the start of an ODE integration.

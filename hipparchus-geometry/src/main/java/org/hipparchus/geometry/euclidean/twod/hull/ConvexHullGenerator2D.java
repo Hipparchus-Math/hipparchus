@@ -34,6 +34,7 @@ import org.hipparchus.geometry.hull.ConvexHullGenerator;
  * Interface for convex hull generators in the two-dimensional euclidean space.
  *
  */
+@FunctionalInterface
 public interface ConvexHullGenerator2D extends ConvexHullGenerator<Euclidean2D, Vector2D, Line, SubLine> {
 
     /** {@inheritDoc} */

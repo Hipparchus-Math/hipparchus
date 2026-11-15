@@ -25,6 +25,7 @@ import org.hipparchus.analysis.UnivariateMatrixFunction;
 
 /** Interface defining the function differentiation operation.
  */
+@FunctionalInterface
 public interface UnivariateMatrixFunctionDifferentiator {
 
     /** Create an implementation of a {@link UnivariateDifferentiableMatrixFunction

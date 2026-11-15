@@ -30,6 +30,7 @@ import org.hipparchus.util.Pair;
  * derivatives (Jacobian).
  *
  */
+@FunctionalInterface
 public interface MultivariateJacobianFunction {
 
     /**

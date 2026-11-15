@@ -41,6 +41,7 @@ import org.hipparchus.geometry.partitioning.SubHyperplane;
  * @see <a href="http://mathworld.wolfram.com/ConvexHull.html">Convex Hull (MathWorld)</a>
  *
  */
+@FunctionalInterface
 public interface ConvexHullGenerator<S extends Space,
                                      P extends Point<S, P>,
                                      H extends Hyperplane<S, P, H, I>,

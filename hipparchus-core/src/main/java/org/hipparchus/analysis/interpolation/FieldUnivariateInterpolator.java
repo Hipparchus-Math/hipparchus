@@ -24,6 +24,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * Interface representing a univariate field interpolating function.
  * @since 1.5
  */
+@FunctionalInterface
 public interface FieldUnivariateInterpolator {
     /**
      * Compute an interpolating function for the dataset.

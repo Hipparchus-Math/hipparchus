@@ -767,7 +767,7 @@ public abstract class RealVector {
             private int i;
 
             /** Current entry. */
-            private Entry e = new Entry();
+            private final Entry e = new Entry();
 
             /** {@inheritDoc} */
             @Override
@@ -1133,9 +1133,9 @@ public abstract class RealVector {
         /** Dimension of the vector. */
         private final int dim;
         /** Last entry returned by {@link #next()}. */
-        private Entry current;
+        private final Entry current;
         /** Next entry for {@link #next()} to return. */
-        private Entry next;
+        private final Entry next;
 
         /** Simple constructor. */
         protected SparseEntryIterator() {
@@ -1212,7 +1212,7 @@ public abstract class RealVector {
      * @return an unmodifiable view of {@code v}.
      */
     public static RealVector unmodifiableRealVector(final RealVector v) {
-        /**
+        /*
          * This anonymous class is an implementation of {@link RealVector}
          * with read-only access.
          * It wraps any {@link RealVector}, and exposes all methods which

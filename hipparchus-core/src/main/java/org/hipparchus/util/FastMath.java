@@ -141,7 +141,7 @@ public class FastMath {
         {-0.16624879837036133, -2.6033824355191673E-8}
     };
 
-    /** Sine, Cosine, Tangent tables are for 0, 1/8, 2/8, ... 13/8 = PI/2 approx. */
+    /* Sine, Cosine, Tangent tables are for 0, 1/8, 2/8, ... 13/8 = PI/2 approx. */
 
     /** Sine table (high bits). */
     private static final double[] SINE_TABLE_A =
