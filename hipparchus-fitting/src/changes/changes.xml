@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Fitting Release Notes</title>
   </properties>
   <body>
-    <release version="4.1" date="TBD" description="TBD">
+    <release version="4.1" date="2026" description="This is a minor version, adding RANSAC algorithm.">
       <action dev="bryan" type="update" issue="issues/462">
         Replaced double[] arrays with Fittable interface in RANSAC fitting classes.
       </action>
