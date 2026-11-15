@@ -71,9 +71,9 @@ in a set of properties:
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>4.7.3.4</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.9</hipparchus.jacoco-maven-plugin.version>
-    <hipparchus.maven-assembly-plugin.version>3.5.0</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>4.10.5.0</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.16</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>3.8.0</hipparchus.maven-assembly-plugin.version>
     ...
 
 You can find the latest version of the plugins using the search feature at

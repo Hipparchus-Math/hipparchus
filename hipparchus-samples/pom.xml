@@ -107,6 +107,19 @@
           <skip>true</skip>
         </configuration>
         </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
+        <configuration>
+          <inputExcludes>
+
+            <!-- text file explaining reference to a public domain image -->
+            <inputExclude>src/main/resources/references.txt</inputExclude>
+
+          </inputExcludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -122,12 +135,12 @@
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.apache-rat-plugin.version}</version>
         <configuration>
-          <excludes>
+          <inputExcludes>
 
             <!-- text file explaining reference to a public domain image -->
-            <exclude>src/main/resources/references.txt</exclude>
+            <inputExclude>src/main/resources/references.txt</inputExclude>
 
-          </excludes>
+          </inputExcludes>
         </configuration>
       </plugin>
       <plugin>
