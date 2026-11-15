@@ -1,0 +1,93 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommitsDisabled"
+  ],
+  "baseBranchPatterns": ["develop"],
+  "timezone": "Europe/Paris",
+  "schedule": ["before 6am on monday"],
+  "prConcurrentLimit": 5,
+  "separateMinorPatch": true,
+  "ignorePaths": ["**/target/**"],
+  "major": {
+    "dependencyDashboardApproval": true
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"]
+  },
+  "packageRules": [
+    {
+      "description": "Maven build plugins",
+      "groupName": "maven plugins",
+      "matchPackageNames": [
+        "org.apache.maven.plugins:*",
+        "org.jacoco:jacoco-maven-plugin",
+        "com.github.spotbugs:spotbugs-maven-plugin",
+        "org.sonarsource.scanner.maven:sonar-maven-plugin",
+        "org.apache.felix:maven-bundle-plugin",
+        "com.github.jeluard:plantuml-maven-plugin",
+        "org.apache.rat:apache-rat-plugin",
+        "com.puppycrawl.tools:checkstyle"
+      ]
+    },
+    {
+      "description": "PlantUML: only the 1.x scheme (1.YYYY.N); Maven Central also lists legacy 8059, 2017.11, ...",
+      "matchPackageNames": ["net.sourceforge.plantuml:plantuml", "com.github.jeluard:plantuml-maven-plugin"],
+      "allowedVersions": "/^1\\./"
+    },
+    {
+      "description": "Test dependencies",
+      "groupName": "test dependencies",
+      "matchPackageNames": [
+        "org.junit.jupiter:*",
+        "org.junit-pioneer:*",
+        "org.mockito:*",
+        "org.hamcrest:*"
+      ]
+    },
+    {
+      "description": "GitHub Actions",
+      "groupName": "github actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "Java 8 target: Mockito 5 requires Java 11",
+      "matchPackageNames": ["org.mockito:*"],
+      "allowedVersions": "<5"
+    },
+    {
+      "description": "Java 8 target: JUnit 6 requires Java 17",
+      "matchPackageNames": ["org.junit.jupiter:*", "org.junit.platform:*", "org.junit:*"],
+      "allowedVersions": "<6"
+    },
+    {
+      "description": "Java 8 target: junit-pioneer 2 requires Java 11",
+      "matchPackageNames": ["org.junit-pioneer:*"],
+      "allowedVersions": "<2"
+    },
+    {
+      "description": "JDK 11 CI runtime: Checkstyle 11 requires Java 17",
+      "matchPackageNames": ["com.puppycrawl.tools:checkstyle"],
+      "allowedVersions": "<11"
+    },
+    {
+      "description": "JDK 11 CI runtime: maven-bundle-plugin 6 depends on bndlib 7, which requires Java 17",
+      "matchPackageNames": ["org.apache.felix:maven-bundle-plugin"],
+      "allowedVersions": "<6"
+    },
+    {
+      "description": "Automerge patch updates once CI is green",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Runtime dependencies of the samples are always reviewed by hand",
+      "matchFileNames": ["hipparchus-samples/**"],
+      "automerge": false
+    }
+  ]
+}

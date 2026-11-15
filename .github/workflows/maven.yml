@@ -16,6 +16,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B -U -f pom.xml -Dskip.lengthy.tests=true install checkstyle:checkstyle
     - name: SonarQube scan
+      if: ${{ !startsWith(github.ref, 'refs/heads/renovate/') }}
       run: |
         export PROJECT_NAME="Hipparchus ($GITHUB_REPOSITORY)"
         export PROJECT_KEY=${GITHUB_REPOSITORY/\//:}
