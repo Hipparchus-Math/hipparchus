@@ -147,6 +147,59 @@ class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
         return data;
     }
 
+    // The tests below only add coverage to this deprecated class, they will be removed with it in 5.0.
+
+    @Test
+    void testPenaltyGradientDirectionWithBothConstraints() {
+        // a tiny sigmaMax with a single QP attempt makes some iterations
+        // use the penalty gradient direction instead of the QP solution
+        final SQPOptimizerS optimizer = new SQPOptimizerS();
+        optimizer.getSettings().setSigmaMax(1.0e-4);
+        optimizer.getSettings().setQpMaxLoop(1);
+        final LagrangeSolution solution =
+                optimizer.optimize(new ObjectiveFunction(new HockSchittkowskiFunction71()),
+                                   new HockSchittkowskiConstraintInequality71(),
+                                   new HockSchittkowskiConstraintEquality71(),
+                                   new InitialGuess(new double[] { 1, 5, 5, 1 }));
+        // observed errors: 7.7e-5 on the solution, 2.6e-7 on the value
+        assertEquals(0.0,
+                     MatrixUtils.createRealVector(new double[] { 1, 4.74293167, 3.82123882, 1.37939596 }).
+                     subtract(solution.getX()).getL1Norm(),
+                     1.0e-4);
+        assertEquals(17.01401698, solution.getValue(), 1.0e-6);
+    }
+
+    @Test
+    void testPenaltyGradientDirectionWithEqualityConstraintOnly() {
+        final SQPOptimizerS optimizer = new SQPOptimizerS();
+        optimizer.getSettings().setSigmaMax(1.0e-4);
+        optimizer.getSettings().setQpMaxLoop(1);
+        final LagrangeSolution solution =
+                optimizer.optimize(new ObjectiveFunction(new HockSchittkowskiFunction77()),
+                                   new HockSchittkowskiConstraintEquality77(),
+                                   new InitialGuess(new double[] { 2, 2, 2, 3, 3 }));
+        // observed errors: 1.1e-6 on the solution, 1.3e-8 on the value
+        assertEquals(0.0,
+                     MatrixUtils.createRealVector(new double[] { 1.16617194, 1.18211086, 1.38025671, 1.50603641, 0.61092012 }).
+                     subtract(solution.getX()).getL1Norm(),
+                     2.0e-6);
+        assertEquals(0.24150486, solution.getValue(), 2.0e-8);
+    }
+
+    @Test
+    void testNoInitialGuessAndFunctionHessian() {
+        // without initial guess the search starts at the origin
+        final SQPOptimizerS optimizer = new SQPOptimizerS();
+        optimizer.getSettings().setUseFunHessian(true);
+        final OptimizationData[] data = createOptimizationData();
+        final LagrangeSolution solution = optimizer.optimize(data[0], data[1], data[2]);
+        // observed errors: 6.6e-4 on the solution, 3.3e-3 on the value
+        assertEquals(0.0,
+                     MatrixUtils.createRealVector(new double[] { 1, 1 }).subtract(solution.getX()).getL1Norm(),
+                     1.0e-3);
+        assertEquals(8., solution.getValue(), 5.0e-3);
+    }
+
     @Test
     void testLegacyDefaultSettings() {
         // the deprecated optimizers keep the 4.0.3 defaults, not the ones tuned for SQPOptimizerS2
