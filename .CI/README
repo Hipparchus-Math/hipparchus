@@ -1,1 +1,7 @@
 A directory for Continuous Integration tooling.
+
+Dependency updates are proposed by Renovate (Mend GitHub App), configured in
+.github/renovate.json. Major updates wait for approval on the Dependency
+Dashboard issue. Version caps keep Mockito < 5, JUnit < 6 and junit-pioneer < 2
+(Java 8 target), and Checkstyle < 11 and maven-bundle-plugin < 6 (CI runs on
+JDK 11): lift them only when the Java baseline moves.

@@ -160,6 +160,7 @@
 
             <!-- build files -->
             <exclude>.github/workflows/maven.yml</exclude>
+            <exclude>.github/renovate.json</exclude>
             <exclude>.CI/maven-settings.xml</exclude>
 
           </excludes>
