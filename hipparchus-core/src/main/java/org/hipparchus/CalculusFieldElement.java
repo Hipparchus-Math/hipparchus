@@ -608,7 +608,7 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param base base value to compare against
      * @param relativeThreshold relative threshold
      * @return true if instance is small with respect to reference
-     * @since 5.0
+     * @since 4.1
      */
     default boolean isSmall(final T base, final double relativeThreshold) {
         return FastMath.abs(getReal()) <= FastMath.abs(base.getReal() * relativeThreshold);

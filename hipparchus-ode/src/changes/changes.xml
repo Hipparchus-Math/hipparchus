@@ -49,6 +49,20 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
+    <release version="4.1" date="TBD" description="TBD">
+      <action dev="vincent" type="fix" issue="issues/488">
+        Time checks of field integrators (integration span and last step detection) now compare time values
+        only, ignoring the derivatives carried by the time. Too small intervals were not detected and an
+        extra step could be taken.
+      </action>
+      <action dev="vincent" type="fix" issue="issues/488">
+        Fixed-step Runge-Kutta integrators no longer call the overridable getDefaultStep() from their constructor.
+      </action>
+      <action dev="bryan" type="update">
+        getCurrentSignedStepsize() of fixed-step Runge-Kutta integrators now returns the configured step
+        before integration starts, instead of NaN.
+      </action>
+    </release>
     <release version="4.0.3" date="2026-02-08" description="This is a patch release.">
       <action dev="lebihanbastien" type="fix" issue="issues/449">
         Fixed inconsistency between interpolated states when calling ODEStepHandler#handleStep at each event.

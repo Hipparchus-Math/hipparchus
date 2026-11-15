@@ -128,4 +128,20 @@ class ClassicalRungeKuttaFieldIntegratorTest extends RungeKuttaFieldIntegratorAb
         Binary64 step = field.getZero().add(60.0);
         Assertions.assertEquals(step.getReal(), new ClassicalRungeKuttaFieldIntegrator<>(field, step).getCurrentSignedStepsize().getReal());
     }
+
+    @Test
+    void testConstructorDoesNotCallOverridableDefaultStep() {
+        // a subclass overriding getDefaultStep() sees its own fields uninitialized during super construction
+        final ClassicalRungeKuttaFieldIntegrator<Binary64> integrator =
+                        new ClassicalRungeKuttaFieldIntegrator<Binary64>(Binary64Field.getInstance(), new Binary64(0.1)) {
+            private final Binary64 factor = new Binary64(2.0);
+            @Override
+            public Binary64 getDefaultStep() {
+                return factor.multiply(super.getDefaultStep());
+            }
+        };
+        Assertions.assertEquals(0.1, integrator.getCurrentSignedStepsize().getReal(), 0.0);
+        Assertions.assertEquals(0.2, integrator.getDefaultStep().getReal(), 1.0e-15);
+    }
+
 }
