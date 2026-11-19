@@ -907,25 +907,43 @@
         <groupId>com.github.davidmoten</groupId>
         <artifactId>plantuml-maven-plugin</artifactId>
         <version>${hipparchus.plantuml-maven-plugin.version}</version>
-        <configuration>
-          <sourceFiles>
-            <directory>${project.basedir}/src/site/design</directory>
-            <includes>
-              <include>
-                *.puml
-              </include>
-            </includes>
-          </sourceFiles>
-          <outputDirectory>
-            ${project.build.directory}/site/images/userguide
-          </outputDirectory>
-        </configuration>
         <executions>
           <execution>
+            <id>javadoc-diagrams</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <directory>${basedir}/src/main/plantuml</directory>
+                  <includes>
+                    <include>**/*.puml</include>
+                  </includes>
+              </sources>
+              <outputDirectory>${build.directory}/generated-sources/plantuml</outputDirectory>
+                <formats>
+                  <format>png</format>
+                </formats>
+                <preserveDirectoryStructure>true</preserveDirectoryStructure>
+                <generateMarkdownIndex>false</generateMarkdownIndex>
+            </configuration>
+          </execution>
+          <execution>
+            <id>site-images</id>
             <phase>pre-site</phase>
             <goals>
               <goal>generate</goal>
             </goals>
+            <configuration>
+              <sources>
+                <directory>${basedir}/src/site/design</directory>
+                <includes>
+                  <include>**/*.puml</include>
+                </includes>
+              </sources>
+              <outputDirectory>${build.directory}/site/images/userguide</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>

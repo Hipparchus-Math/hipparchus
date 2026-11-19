@@ -21,6 +21,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /** Interface representing both the value and the differentials of a function.
+ * <img src="doc-files/derivative-class-diagram.png" alt="class diagram">
  * @param <T> the type of the field elements
  * @since 1.7
  */
