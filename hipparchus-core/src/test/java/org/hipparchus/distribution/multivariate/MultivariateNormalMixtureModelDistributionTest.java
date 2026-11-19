@@ -53,8 +53,8 @@ class MultivariateNormalMixtureModelDistributionTest {
 
         final List<Pair<Double, MultivariateNormalDistribution>> comp = d.getComponents();
 
-        assertEquals(1d / 3, comp.get(0).getFirst().doubleValue(), Math.ulp(1d));
-        assertEquals(2d / 3, comp.get(1).getFirst().doubleValue(), Math.ulp(1d));
+        assertEquals(1d / 3, comp.get(0).getFirst(), Math.ulp(1d));
+        assertEquals(2d / 3, comp.get(1).getFirst(), Math.ulp(1d));
     }
 
     @Test
@@ -160,12 +160,12 @@ class MultivariateNormalMixtureModelDistributionTest {
                                                               double[][] means,
                                                               double[][][] covariances) {
         final List<Pair<Double, MultivariateNormalDistribution>> mvns
-            = new ArrayList<Pair<Double, MultivariateNormalDistribution>>();
+            = new ArrayList<>();
 
         for (int i = 0; i < weights.length; i++) {
             final MultivariateNormalDistribution dist
                 = new MultivariateNormalDistribution(means[i], covariances[i]);
-            mvns.add(new Pair<Double, MultivariateNormalDistribution>(weights[i], dist));
+            mvns.add(new Pair<>(weights[i], dist));
         }
 
         return new MultivariateNormalMixtureModelDistribution(mvns);

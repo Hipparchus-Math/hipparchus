@@ -83,7 +83,7 @@ public class PLYParser {
             boolean inFaceElt     = false;
             while (parsing) {
                 fields = parseNextLine();
-                if (fields.size() < 1) {
+                if (fields.isEmpty()) {
                     complain();
                 }
                 switch (fields.get(0).getToken()) {
@@ -218,7 +218,7 @@ public class PLYParser {
      */
     private List<Field> parseNextLine()
         throws IOException, ParseException {
-        final List<Field> fields = new ArrayList<Field>();
+        final List<Field> fields = new ArrayList<>();
         line = br.readLine();
         if (line == null) {
             throw new EOFException();
@@ -249,7 +249,7 @@ public class PLYParser {
         PLY, FORMAT, ASCII, BINARY_BIG_ENDIAN, BINARY_LITTLE_ENDIAN,
         COMMENT, ELEMENT, VERTEX, FACE, PROPERTY, LIST, OBJ_INFO,
         CHAR, UCHAR, SHORT, USHORT, INT, UINT, FLOAT, DOUBLE,
-        X, Y, Z, VERTEX_INDICES, END_HEADER, UNKNOWN;
+        X, Y, Z, VERTEX_INDICES, END_HEADER, UNKNOWN
     }
 
     /** Parsed line fields. */

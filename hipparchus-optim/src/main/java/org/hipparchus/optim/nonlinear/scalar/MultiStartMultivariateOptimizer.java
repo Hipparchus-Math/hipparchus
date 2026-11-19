@@ -95,8 +95,10 @@ public class MultiStartMultivariateOptimizer
      * @return a comparator for sorting the optima.
      */
     private Comparator<PointValuePair> getPairComparator() {
-        return new Comparator<PointValuePair>() {
-            /** {@inheritDoc} */
+        return new Comparator<>() {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public int compare(final PointValuePair o1,
                                final PointValuePair o2) {
@@ -108,7 +110,7 @@ public class MultiStartMultivariateOptimizer
                 final double v1 = o1.getValue();
                 final double v2 = o2.getValue();
                 return (optimizer.getGoalType() == GoalType.MINIMIZE) ?
-                    Double.compare(v1, v2) : Double.compare(v2, v1);
+                        Double.compare(v1, v2) : Double.compare(v2, v1);
             }
         };
     }

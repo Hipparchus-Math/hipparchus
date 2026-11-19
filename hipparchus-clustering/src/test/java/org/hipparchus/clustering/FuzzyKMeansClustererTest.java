@@ -47,7 +47,7 @@ class FuzzyKMeansClustererTest {
 
     @Test
     void testCluster() {
-        final List<DoublePoint> points = new ArrayList<DoublePoint>();
+        final List<DoublePoint> points = new ArrayList<>();
 
         // create 10 data points: [1], ... [10]
         for (int i = 1; i <= 10; i++) {
@@ -56,7 +56,7 @@ class FuzzyKMeansClustererTest {
         }
 
         final FuzzyKMeansClusterer<DoublePoint> transformer =
-                new FuzzyKMeansClusterer<DoublePoint>(3, 2.0);
+                new FuzzyKMeansClusterer<>(3, 2.0);
         final List<CentroidCluster<DoublePoint>> clusters = transformer.cluster(points);
 
         // we expect 3 clusters:
@@ -95,7 +95,7 @@ class FuzzyKMeansClustererTest {
     @Test
     void testNullDataset() {
         assertThrows(NullArgumentException.class, () -> {
-            final FuzzyKMeansClusterer<DoublePoint> clusterer = new FuzzyKMeansClusterer<DoublePoint>(3, 2.0);
+            final FuzzyKMeansClusterer<DoublePoint> clusterer = new FuzzyKMeansClusterer<>(3, 2.0);
             clusterer.cluster(null);
         });
     }
@@ -105,7 +105,7 @@ class FuzzyKMeansClustererTest {
         final DistanceMeasure measure = new CanberraDistance();
         final RandomGenerator random = new JDKRandomGenerator();
         final FuzzyKMeansClusterer<DoublePoint> clusterer =
-                new FuzzyKMeansClusterer<DoublePoint>(3, 2.0, 100, measure, 1e-6, random);
+                new FuzzyKMeansClusterer<>(3, 2.0, 100, measure, 1e-6, random);
 
         assertEquals(3, clusterer.getK());
         assertEquals(2.0, clusterer.getFuzziness(), 1e-6);
@@ -117,11 +117,11 @@ class FuzzyKMeansClustererTest {
 
     @Test
     void testSingleCluster() {
-        final List<DoublePoint> points = new ArrayList<DoublePoint>();
+        final List<DoublePoint> points = new ArrayList<>();
         points.add(new DoublePoint(new double[] { 1, 1 }));
 
         final FuzzyKMeansClusterer<DoublePoint> transformer =
-                new FuzzyKMeansClusterer<DoublePoint>(1, 2.0);
+                new FuzzyKMeansClusterer<>(1, 2.0);
         final List<CentroidCluster<DoublePoint>> clusters = transformer.cluster(points);
 
         assertEquals(1, clusters.size());
@@ -129,14 +129,14 @@ class FuzzyKMeansClustererTest {
 
     @Test
     void testClusterCenterEqualsPoints() {
-        final List<DoublePoint> points = new ArrayList<DoublePoint>();
+        final List<DoublePoint> points = new ArrayList<>();
         points.add(new DoublePoint(new double[] { 1, 1 }));
         points.add(new DoublePoint(new double[] { 1.00001, 1.00001 }));
         points.add(new DoublePoint(new double[] { 2, 2 }));
         points.add(new DoublePoint(new double[] { 3, 3 }));
 
         final FuzzyKMeansClusterer<DoublePoint> transformer =
-                new FuzzyKMeansClusterer<DoublePoint>(3, 2.0);
+                new FuzzyKMeansClusterer<>(3, 2.0);
         final List<CentroidCluster<DoublePoint>> clusters = transformer.cluster(points);
 
         assertEquals(3, clusters.size());

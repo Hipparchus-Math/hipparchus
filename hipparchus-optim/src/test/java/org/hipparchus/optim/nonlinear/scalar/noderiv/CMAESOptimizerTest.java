@@ -541,14 +541,13 @@ public class CMAESOptimizerTest {
 
         public double value(double[] x) {
             double f = 0;
-            for (int i = 0; i < x.length; ++i)
-                f += x[i] * x[i];
+            for (double v : x) f += v * v;
             return f;
         }
     }
 
     private static class Cigar implements MultivariateFunction {
-        private double factor;
+        private final double factor;
 
         Cigar() {
             this(1e3);
@@ -567,7 +566,7 @@ public class CMAESOptimizerTest {
     }
 
     private static class Tablet implements MultivariateFunction {
-        private double factor;
+        private final double factor;
 
         Tablet() {
             this(1e3);
@@ -586,7 +585,7 @@ public class CMAESOptimizerTest {
     }
 
     private static class CigTab implements MultivariateFunction {
-        private double factor;
+        private final double factor;
 
         CigTab() {
             this(1e4);
@@ -607,7 +606,7 @@ public class CMAESOptimizerTest {
 
     private static class TwoAxes implements MultivariateFunction {
 
-        private double factor;
+        private final double factor;
 
         TwoAxes() {
             this(1e6);
@@ -626,8 +625,8 @@ public class CMAESOptimizerTest {
     }
 
     private static class ElliRotated implements MultivariateFunction {
-        private Basis B = new Basis();
-        private double factor;
+        private final Basis B = new Basis();
+        private final double factor;
 
         ElliRotated() {
             this(1e3);
@@ -648,7 +647,7 @@ public class CMAESOptimizerTest {
 
     private static class Elli implements MultivariateFunction {
 
-        private double factor;
+        private final double factor;
 
         Elli() {
             this(1e3);
@@ -704,7 +703,7 @@ public class CMAESOptimizerTest {
     }
 
     private static class Ackley implements MultivariateFunction {
-        private double axisratio;
+        private final double axisratio;
 
         Ackley(double axra) {
             axisratio = axra;
@@ -731,8 +730,8 @@ public class CMAESOptimizerTest {
 
     private static class Rastrigin implements MultivariateFunction {
 
-        private double axisratio;
-        private double amplitude;
+        private final double axisratio;
+        private final double amplitude;
 
         Rastrigin() {
             this(1, 10);

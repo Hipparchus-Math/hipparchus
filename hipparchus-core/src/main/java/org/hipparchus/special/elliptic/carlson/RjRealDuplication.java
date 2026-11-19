@@ -25,7 +25,7 @@ import org.hipparchus.util.MathArrays;
 class RjRealDuplication extends RealDuplication {
 
     /** Delta product. */
-    private double delta;
+    private final double delta;
 
     /** sₘ iteration parameter. */
     private double sM;

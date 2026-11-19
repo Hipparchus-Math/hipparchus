@@ -174,7 +174,7 @@ class MultivariateSummaryStatisticsTest {
         int emptyHash = u.hashCode();
         assertEquals(u, u);
         assertNotEquals(u, t);
-        assertNotEquals(u, Double.valueOf(0));
+        assertNotEquals(u, (double) 0);
         t = createMultivariateSummaryStatistics(2, true);
         assertEquals(t, u);
         assertEquals(u, t);

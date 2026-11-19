@@ -27,6 +27,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Beta;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of the F-distribution.
  *
@@ -35,6 +37,7 @@ import org.hipparchus.util.FastMath;
  */
 public class FDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** The numerator degrees of freedom. */
     private final double numeratorDegreesOfFreedom;

@@ -22,7 +22,11 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NullArgumentException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -179,4 +183,80 @@ public class ArrayRealVectorTest extends RealVectorAbstractTest {
         assertEquals(0, new ArrayRealVector(new double[0], true).getDimension());
         assertEquals(0, new ArrayRealVector(new double[0], false).getDimension());
     }
+
+    @Test
+    void testGetSubVectorError() {
+        try {
+            create(new double[] { 0, 1, 2 }).getSubVector(1, 10);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(10, e.getParts()[0]);
+            Assertions.assertEquals( 0, e.getParts()[1]);
+            Assertions.assertEquals( 2, e.getParts()[2]);
+        }
+    }
+
+    @Test
+    void testSetSubVectorError1() {
+        try {
+            create(new double[] { 0, 1, 2 }).setSubVector(1, new OpenMapRealVector(10));
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(10, e.getParts()[0]);
+            Assertions.assertEquals( 0, e.getParts()[1]);
+            Assertions.assertEquals( 2, e.getParts()[2]);
+        }
+    }
+
+    @Test
+    void testSetSubVectorError2() {
+        try {
+            ((ArrayRealVector) create(new double[] { 0, 1, 2 })).setSubVector(1, new double[] { 4.0, 5.0, 6.0});
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals( 3, e.getParts()[0]);
+            Assertions.assertEquals( 0, e.getParts()[1]);
+            Assertions.assertEquals( 2, e.getParts()[2]);
+        }
+    }
+
+    @Test
+    void testToString() {
+        Assertions.assertEquals("{0; 1; 2}", create(new double[] { 0, 1, 2 }).toString());
+    }
+
+    @Test
+    void testNullArrayCopy() {
+        doTestNull(() -> new ArrayRealVector((double[]) null, true));
+    }
+
+    @Test
+    void testNullArrayPosSize() {
+        doTestNull(() -> new ArrayRealVector((double[]) null, 0, 3));
+    }
+
+    @Test
+    void testNullDoubleArray() {
+        doTestNull(() -> new ArrayRealVector((Double[]) null, 0, 3));
+    }
+
+    @Test
+    void testNullDoubleArrayPosSize() {
+        doTestNull(() -> new ArrayRealVector((Double[]) null, 0, 3));
+    }
+
+    @Test
+    void testNullRealVector() {
+        doTestNull(() -> new ArrayRealVector((RealVector) null));
+    }
+
+    private void doTestNull(final Supplier<ArrayRealVector> supplier) {
+        try {
+            supplier.get();
+            Assertions.fail("an exception should have been thrown");
+        } catch (NullArgumentException nae) {
+            // expected
+        }
+    }
+
 }

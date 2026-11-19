@@ -231,7 +231,7 @@ class EvaluationTestValidation {
         // Index 0 = slope
         // Index 1 = offset
         // Index 2 = normalized chi2
-        final List<double[]> paramsAndChi2 = new ArrayList<double[]>(gridSize * gridSize);
+        final List<double[]> paramsAndChi2 = new ArrayList<>(gridSize * gridSize);
 
         final double slopeRange = 10 * sigma.getEntry(0);
         final double offsetRange = 10 * sigma.getEntry(1);
@@ -281,7 +281,7 @@ class EvaluationTestValidation {
         }
         System.out.println(); // Empty line.
 
-        System.out.println("# sigma=" + sigma.toString());
+        System.out.println("# sigma=" + sigma);
         System.out.println("# " + numLarger + " sets filtered out");
     }
 

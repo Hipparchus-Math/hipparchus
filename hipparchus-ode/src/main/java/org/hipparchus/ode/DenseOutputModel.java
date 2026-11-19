@@ -22,6 +22,7 @@
 
 package org.hipparchus.ode;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ import org.hipparchus.util.FastMath;
 public class DenseOutputModel implements ODEStepHandler, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Initial integration time. */
@@ -107,7 +109,7 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
     private int index;
 
     /** Steps table. */
-    private List<ODEStateInterpolator> steps;
+    private final List<ODEStateInterpolator> steps;
 
     /** Simple constructor.
      * Build an empty continuous output model.

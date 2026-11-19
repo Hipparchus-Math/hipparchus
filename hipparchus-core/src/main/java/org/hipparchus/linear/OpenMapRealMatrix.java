@@ -22,6 +22,7 @@
 
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -42,6 +43,7 @@ import org.hipparchus.util.OpenIntToDoubleHashMap;
 public class OpenMapRealMatrix extends AbstractRealMatrix
     implements SparseRealMatrix, Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -5962461716457143437L;
     /** Number of rows of the matrix. */
     private final int rows;
@@ -138,8 +140,8 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     @Override
     public OpenMapRealMatrix subtract(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof OpenMapRealMatrix) {
-            return subtract((OpenMapRealMatrix) m);
+        if (m instanceof OpenMapRealMatrix matrix) {
+            return subtract(matrix);
         } else {
             return (OpenMapRealMatrix) super.subtract(m);
         }

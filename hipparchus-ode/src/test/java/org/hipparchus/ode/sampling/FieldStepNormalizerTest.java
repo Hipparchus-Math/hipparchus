@@ -37,7 +37,7 @@ class FieldStepNormalizerTest {
 
     @Test
     void testBoundariesDefault() {
-        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<>(new Binary64(0.9));
         final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
         final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, null, stepSize,
@@ -47,7 +47,7 @@ class FieldStepNormalizerTest {
 
     @Test
     void testBoundariesNeither() {
-        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<>(new Binary64(0.9));
         final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
         final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.NEITHER, stepSize,
@@ -57,7 +57,7 @@ class FieldStepNormalizerTest {
 
     @Test
     void testBoundariesFirst() {
-        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<>(new Binary64(0.9));
         final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
         final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.FIRST, stepSize,
@@ -67,7 +67,7 @@ class FieldStepNormalizerTest {
 
     @Test
     void testBoundariesLast() {
-        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<>(new Binary64(0.9));
         final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
         final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.LAST, stepSize,
@@ -77,7 +77,7 @@ class FieldStepNormalizerTest {
 
     @Test
     void testBoundariesBoth() {
-        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<>(new Binary64(0.9));
         final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
         final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.BOTH, stepSize,
@@ -87,7 +87,7 @@ class FieldStepNormalizerTest {
 
     @Test
     void testBeforeEnd() {
-        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<>(new Binary64(0.9));
         final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
         final Binary64 stepSize = range.divide(10.5);
         doTestBoundaries(pb, null, stepSize,
@@ -141,14 +141,14 @@ class FieldStepNormalizerTest {
                                            final double t0, final double t1,
                                            final double expectedFirst,
                                            final double expectedLast) {
-        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<>(new Binary64(0.9));
         double minStep = 0;
         double maxStep = pb.getFinalTime().getReal() - pb.getInitialTime().getReal();
         FieldODEIntegrator<Binary64> integ =
                         new DormandPrince54FieldIntegrator<>(Binary64Field.getInstance(),
                                                              minStep, maxStep, 10.e-8, 1.0e-8);
         final Checker<Binary64> checker = new Checker<>();
-        integ.addStepHandler(new FieldStepNormalizer<Binary64>(stepSize, checker, mode));
+        integ.addStepHandler(new FieldStepNormalizer<>(stepSize, checker, mode));
         integ.integrate(new FieldExpandableODE<>(new FieldOrdinaryDifferentialEquation<Binary64>() {
             public int getDimension() { return 1; }
             public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) { return y; }

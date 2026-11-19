@@ -89,7 +89,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         dataArray = new double[list.size()];
         int i = 0;
         for (Double data : list) {
-            dataArray[i] = data.doubleValue();
+            dataArray[i] = data;
             i++;
         }
     }
@@ -531,8 +531,8 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         for (int i = 0; i < 20; i++) {
             final double v = dist.getNextValue();
             // Make sure v is not in the excluded range between bins - that is (bounds[i], bounds[i] + 1)
-            for (int j = 0; j < bounds.length; j++) {
-                assertFalse(v > bounds[j] + tol && v < bounds[j] + 1 - tol);
+            for (double bound : bounds) {
+                assertFalse(v > bound + tol && v < bound + 1 - tol);
             }
         }
         assertEquals(0.0, dist.cumulativeProbability(1), tol);
@@ -569,7 +569,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     /**
      * Empirical distribution using a constant smoothing kernel.
      */
-    private class ConstantKernelEmpiricalDistribution extends EmpiricalDistribution {
+    private static class ConstantKernelEmpiricalDistribution extends EmpiricalDistribution {
         private static final long serialVersionUID = 1L;
         public ConstantKernelEmpiricalDistribution(int i) {
             super(i);
@@ -584,7 +584,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     /**
      * Empirical distribution using a uniform smoothing kernel.
      */
-    private class UniformKernelEmpiricalDistribution extends EmpiricalDistribution {
+    private static class UniformKernelEmpiricalDistribution extends EmpiricalDistribution {
         private static final long serialVersionUID = 2963149194515159653L;
         public UniformKernelEmpiricalDistribution(int i) {
             super(i);

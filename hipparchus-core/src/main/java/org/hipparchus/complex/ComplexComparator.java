@@ -16,6 +16,7 @@
  */
 package org.hipparchus.complex;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -26,6 +27,7 @@ import java.util.Comparator;
 public class ComplexComparator implements Comparator<Complex>, Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20171113L;
 
     /** Empty constructor.

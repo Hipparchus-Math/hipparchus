@@ -21,7 +21,7 @@
  */
 package org.hipparchus.util;
 
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -48,6 +48,7 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
     public static final BigReal ONE = new BigReal(BigDecimal.ONE);
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 4984534880991310382L;
 
     /** Underlying BigDecimal. */
@@ -319,8 +320,8 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
             return true;
         }
 
-        if (other instanceof BigReal){
-            return d.equals(((BigReal) other).d);
+        if (other instanceof BigReal real){
+            return d.equals(real.d);
         }
         return false;
     }

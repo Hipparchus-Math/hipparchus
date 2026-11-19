@@ -67,8 +67,8 @@ class AbstractFieldIntegratorTest {
         // WHEN
         integrator.integrate(testProblem, initialState, finalTime);
         // THEN
-        assertEquals(1, ((UpdateStepTestHandler) integrator.getStepHandlers().get(0)).getUpdateStepCounter());
-        assertEquals(3, ((UpdateStepTestHandler) integrator.getStepHandlers().get(0)).getHandlerStepCounter());
+        assertEquals(1, ((UpdateStepTestHandler) integrator.getStepHandlers().getFirst()).getUpdateStepCounter());
+        assertEquals(3, ((UpdateStepTestHandler) integrator.getStepHandlers().getFirst()).getHandlerStepCounter());
     }
 
     private static class TestDetector implements FieldODEEventDetector<Binary64> {

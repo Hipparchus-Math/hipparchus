@@ -51,7 +51,7 @@ public class TestProblem4 extends TestProblemAbstract {
     private static final double OFFSET = 1.2;
 
     /** Time offset. */
-    private double a;
+    private final double a;
 
     /** Simple constructor. */
     public TestProblem4() {

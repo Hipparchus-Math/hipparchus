@@ -248,7 +248,7 @@ public class LowDiscrepancyGeneratorComparison {
         private static final double PAD = 10;
 
         /** Points to plot. */
-        private List<Vector2D> points;
+        private final List<Vector2D> points;
 
         /** Simple constructor.
          * @param points points to plot

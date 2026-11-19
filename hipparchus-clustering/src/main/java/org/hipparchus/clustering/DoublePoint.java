@@ -22,6 +22,7 @@
 
 package org.hipparchus.clustering;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -31,6 +32,7 @@ import java.util.Arrays;
 public class DoublePoint implements Clusterable, Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 3946024775784901369L;
 
     /** Point coordinates. */

@@ -128,7 +128,7 @@ public class PolynomialModelFitter implements IModelFitter<PolynomialModelFitter
      */
     private void checkSampleSize(final int size) {
         if (size < degree + 1) {
-            throw new IllegalArgumentException(String.format("Not enough points to fit polynomial model, at least %d points are required", degree + 1));
+            throw new IllegalArgumentException("Not enough points to fit polynomial model, at least %d points are required".formatted(degree + 1));
         }
     }
 }

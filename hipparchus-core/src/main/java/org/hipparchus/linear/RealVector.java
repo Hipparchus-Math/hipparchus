@@ -761,7 +761,7 @@ public abstract class RealVector {
      */
     public Iterator<Entry> iterator() {
         final int dim = getDimension();
-        return new Iterator<Entry>() {
+        return new Iterator<>() {
 
             /** Current index. */
             private int i;
@@ -1243,7 +1243,7 @@ public abstract class RealVector {
             @Override
             public Iterator<Entry> iterator() {
                 final Iterator<Entry> i = v.iterator();
-                return new Iterator<Entry>() {
+                return new Iterator<>() {
                     /** The current entry. */
                     private final UnmodifiableEntry e = new UnmodifiableEntry();
 
@@ -1263,8 +1263,7 @@ public abstract class RealVector {
                     /**
                      * {@inheritDoc}
                      *
-                     * @throws MathRuntimeException in all
-                     * circumstances.
+                     * @throws MathRuntimeException in all circumstances.
                      */
                     @Override
                     public void remove() throws MathRuntimeException {
@@ -1278,7 +1277,7 @@ public abstract class RealVector {
             public Iterator<Entry> sparseIterator() {
                 final Iterator<Entry> i = v.sparseIterator();
 
-                return new Iterator<Entry>() {
+                return new Iterator<>() {
                     /** The current entry. */
                     private final UnmodifiableEntry e = new UnmodifiableEntry();
 
@@ -1298,12 +1297,10 @@ public abstract class RealVector {
                     /**
                      * {@inheritDoc}
                      *
-                     * @throws MathRuntimeException in all
-                     * circumstances.
+                     * @throws MathRuntimeException in all circumstances.
                      */
                     @Override
-                    public void remove()
-                        throws MathRuntimeException {
+                    public void remove() throws MathRuntimeException {
                         throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
                     }
                 };

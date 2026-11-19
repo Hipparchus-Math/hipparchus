@@ -32,12 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BiDiagonalTransformerTest {
 
-    private double[][] testSquare = {
+    private final double[][] testSquare = {
             { 24.0 / 25.0, 43.0 / 25.0 },
             { 57.0 / 25.0, 24.0 / 25.0 }
     };
 
-    private double[][] testNonSquare = {
+    private final double[][] testNonSquare = {
         {  -540.0 / 625.0,  963.0 / 625.0, -216.0 / 625.0 },
         { -1730.0 / 625.0, -744.0 / 625.0, 1008.0 / 625.0 },
         {  -720.0 / 625.0, 1284.0 / 625.0, -288.0 / 625.0 },

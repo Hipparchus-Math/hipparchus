@@ -240,7 +240,7 @@ public class PSquarePercentileTest extends
                                 95.1959, 95.1442, 95.0610, 95.1591, 95.1195,
                                 95.1772, 95.0925, 95.1990, 95.1682 }), 0.0);
         assertEquals(m1, m2);
-        Set<PSquareMarkers> setMarkers = new LinkedHashSet<PSquareMarkers>();
+        Set<PSquareMarkers> setMarkers = new LinkedHashSet<>();
         assertTrue(setMarkers.add(m1));
         assertFalse(setMarkers.add(m2));
         assertEquals(1, setMarkers.size());
@@ -260,8 +260,8 @@ public class PSquarePercentileTest extends
         assertNotEquals(mThis, mThat);
         String s1="";
         assertNotEquals(mThis, s1);
-        for (int i = 0; i < testArray.length; i++) {
-            mThat.processDataPoint(testArray[i]);
+        for (double v : testArray) {
+            mThat.processDataPoint(v);
         }
         setMarkers.add(mThat);
         setMarkers.add(mThis);
@@ -283,8 +283,8 @@ public class PSquarePercentileTest extends
                     Arrays.asList(new Double[]{95.1772, 95.1567, 95.1937,
                         95.1959, 95.1442, 95.0610, 95.1591, 95.1195,
                         95.1772, 95.0925, 95.1990, 95.1682}), 0.50);
-            for (int i = 0; i < testArray.length; i++) {
-                mThat.processDataPoint(testArray[i]);
+            for (double v : testArray) {
+                mThat.processDataPoint(v);
             }
             mThat.estimate(0);
         });
@@ -298,8 +298,8 @@ public class PSquarePercentileTest extends
                     Arrays.asList(new Double[]{95.1772, 95.1567, 95.1937,
                         95.1959, 95.1442, 95.0610, 95.1591, 95.1195,
                         95.1772, 95.0925, 95.1990, 95.1682}), 0.50);
-            for (int i = 0; i < testArray.length; i++) {
-                mThat.processDataPoint(testArray[i]);
+            for (double v : testArray) {
+                mThat.processDataPoint(v);
             }
             mThat.estimate(6);
         });
@@ -392,7 +392,7 @@ public class PSquarePercentileTest extends
 
     @Test
     void testInitial() {
-        assertThrows(MathIllegalArgumentException.class, () -> PSquarePercentile.newMarkers(new ArrayList<Double>(), 0.5));
+        assertThrows(MathIllegalArgumentException.class, () -> PSquarePercentile.newMarkers(new ArrayList<>(), 0.5));
     }
 
     @Test
@@ -539,8 +539,8 @@ public class PSquarePercentileTest extends
             double max = FastMath.max(a, b);
             double percentage = FastMath.abs(a - b) / max;
             double deviation = delta;
-            assertTrue(percentage < deviation, String.format("Deviated = %f and is beyond %f as a=%f,  b=%f",
-                                     percentage, deviation, a, b));
+            assertTrue(percentage < deviation, "Deviated = %f and is beyond %f as a=%f,  b=%f".formatted(
+                    percentage, deviation, a, b));
         }
     }
 
@@ -685,7 +685,7 @@ public class PSquarePercentileTest extends
         // expected = new Percentile(50).evaluate(data,0,20);
         // Well the values deviate in our calculation by 0.25 so its 4.25 vs
         // 4.44
-        assertEquals(expected, p2value, 0.25, String.format("Expected=%f, Actual=%f", expected, p2value));
+        assertEquals(expected, p2value, 0.25, "Expected=%f, Actual=%f".formatted(expected, p2value));
     }
 
     final int TINY = 10, SMALL = 50, NOMINAL = 100, MEDIUM = 500,

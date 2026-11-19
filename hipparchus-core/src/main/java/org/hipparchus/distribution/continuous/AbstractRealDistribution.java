@@ -21,6 +21,7 @@
  */
 package org.hipparchus.distribution.continuous;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.analysis.UnivariateFunction;
@@ -43,6 +44,7 @@ public abstract class AbstractRealDistribution
     /** Default absolute accuracy for inverse cumulative computation. */
     protected static final double DEFAULT_SOLVER_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160320L;
 
     /** Inverse cumulative probability accuracy. */

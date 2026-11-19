@@ -36,7 +36,7 @@ import java.util.Collection;
  *
  */
 public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstractTest {
-    private static GaussIntegratorFactory factory = new GaussIntegratorFactory();
+    private static final GaussIntegratorFactory factory = new GaussIntegratorFactory();
 
     /**
      * The highest order quadrature rule to be tested.

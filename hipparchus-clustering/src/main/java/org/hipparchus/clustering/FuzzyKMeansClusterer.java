@@ -298,7 +298,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
         initializeMembershipMatrix();
 
         // there is at least one point
-        final int pointDimension = points.get(0).getPoint().length;
+        final int pointDimension = points.getFirst().getPoint().length;
         for (int i = 0; i < k; i++) {
             clusters.add(new CentroidCluster<>(new DoublePoint(new double[pointDimension])));
         }

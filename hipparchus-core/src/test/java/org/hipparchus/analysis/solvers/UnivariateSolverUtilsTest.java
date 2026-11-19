@@ -40,8 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class UnivariateSolverUtilsTest {
 
-    private UnivariateFunction sin = new Sin();
-    private CalculusFieldUnivariateFunction<Binary64> fieldSin = Binary64::sin;
+    private final UnivariateFunction sin = new Sin();
+    private final CalculusFieldUnivariateFunction<Binary64> fieldSin = Binary64::sin;
 
     @Test
     void testSolveNull() {

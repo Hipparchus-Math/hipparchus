@@ -42,12 +42,12 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class InferenceTestUtilsTest {
 
-    private double[] classA = { 93.0, 103.0, 95.0, 101.0 };
-    private double[] classB = { 99.0, 92.0, 102.0, 100.0, 102.0 };
-    private double[] classC = { 110.0, 115.0, 111.0, 117.0, 128.0 };
+    private final double[] classA = { 93.0, 103.0, 95.0, 101.0 };
+    private final double[] classB = { 99.0, 92.0, 102.0, 100.0, 102.0 };
+    private final double[] classC = { 110.0, 115.0, 111.0, 117.0, 128.0 };
 
-    private List<double[]> classes = new ArrayList<double[]>();
-    private OneWayAnova oneWayAnova = new OneWayAnova();
+    private final List<double[]> classes = new ArrayList<>();
+    private final OneWayAnova oneWayAnova = new OneWayAnova();
 
 
     @Test
@@ -206,9 +206,9 @@ class InferenceTestUtilsTest {
         assertEquals(0.0462835770603, InferenceTestUtils.chiSquareTest(counts), 1E-9, "chi-square p-value");
     }
 
-    private double[] tooShortObs = { 1.0 };
-    private double[] emptyObs = {};
-    private StreamingStatistics emptyStats = new StreamingStatistics();
+    private final double[] tooShortObs = { 1.0 };
+    private final double[] emptyObs = {};
+    private final StreamingStatistics emptyStats = new StreamingStatistics();
 
     @Test
     void testOneSampleT() {
@@ -218,8 +218,8 @@ class InferenceTestUtilsTest {
         };
         double mu = 100.0;
         StreamingStatistics sampleStats = new StreamingStatistics();
-        for (int i = 0; i < observed.length; i++) {
-            sampleStats.addValue(observed[i]);
+        for (double v : observed) {
+            sampleStats.addValue(v);
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
@@ -290,8 +290,8 @@ class InferenceTestUtilsTest {
             6d, 6d, 3d, 0d, 1d, 1d, 0d, 2d, 3d, 3d
         };
         StreamingStatistics oneSidedPStats = new StreamingStatistics();
-        for (int i = 0; i < oneSidedP.length; i++) {
-            oneSidedPStats.addValue(oneSidedP[i]);
+        for (double v : oneSidedP) {
+            oneSidedPStats.addValue(v);
         }
         // Target comparison values computed using R version 1.8.1 (Linux version)
         assertEquals(3.86485535541, InferenceTestUtils.t(0d, oneSidedP), 10E-10, "one sample t stat");
@@ -324,12 +324,12 @@ class InferenceTestUtilsTest {
         double[] sample1 = { 7d, -4d, 18d, 17d, -3d, -5d, 1d, 10d, 11d, -2d };
         double[] sample2 = { -1d, 12d, -1d, -3d, 3d, -5d, 5d, 2d, -11d, -1d, -3d };
         StreamingStatistics sampleStats1 = new StreamingStatistics();
-        for (int i = 0; i < sample1.length; i++) {
-            sampleStats1.addValue(sample1[i]);
+        for (double value : sample1) {
+            sampleStats1.addValue(value);
         }
         StreamingStatistics sampleStats2 = new StreamingStatistics();
-        for (int i = 0; i < sample2.length; i++) {
-            sampleStats2.addValue(sample2[i]);
+        for (double v : sample2) {
+            sampleStats2.addValue(v);
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
@@ -410,12 +410,12 @@ class InferenceTestUtilsTest {
         double[] sample1 ={2, 4, 6, 8, 10, 97};
         double[] sample2 = {4, 6, 8, 10, 16};
         StreamingStatistics sampleStats1 = new StreamingStatistics();
-        for (int i = 0; i < sample1.length; i++) {
-            sampleStats1.addValue(sample1[i]);
+        for (double value : sample1) {
+            sampleStats1.addValue(value);
         }
         StreamingStatistics sampleStats2 = new StreamingStatistics();
-        for (int i = 0; i < sample2.length; i++) {
-            sampleStats2.addValue(sample2[i]);
+        for (double v : sample2) {
+            sampleStats2.addValue(v);
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)

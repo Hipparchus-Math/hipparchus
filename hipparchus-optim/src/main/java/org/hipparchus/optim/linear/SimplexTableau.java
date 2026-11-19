@@ -24,6 +24,7 @@ package org.hipparchus.optim.linear;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,6 +71,7 @@ class SimplexTableau implements Serializable {
     private static final String NEGATIVE_VAR_COLUMN_LABEL = "x-";
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -1369660067587938365L;
 
     /** Linear objective function. */
@@ -688,8 +690,7 @@ class SimplexTableau implements Serializable {
         return true;
       }
 
-      if (other instanceof SimplexTableau) {
-          SimplexTableau rhs = (SimplexTableau) other;
+      if (other instanceof SimplexTableau rhs) {
           return (restrictToNonNegative  == rhs.restrictToNonNegative) &&
                  (numDecisionVariables   == rhs.numDecisionVariables) &&
                  (numSlackVariables      == rhs.numSlackVariables) &&
@@ -722,6 +723,7 @@ class SimplexTableau implements Serializable {
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
+    @Serial
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
         oos.defaultWriteObject();
@@ -742,6 +744,7 @@ class SimplexTableau implements Serializable {
      * @throws ClassNotFoundException if a class in the stream cannot be found
      * @throws IOException if object cannot be read from the stream
      */
+    @Serial
     private void readObject(ObjectInputStream ois)
       throws ClassNotFoundException, IOException {
         ois.defaultReadObject();

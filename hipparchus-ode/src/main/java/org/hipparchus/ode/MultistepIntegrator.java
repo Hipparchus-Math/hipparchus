@@ -79,7 +79,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
     private final int nSteps;
 
     /** Stepsize control exponent. */
-    private double exp;
+    private final double exp;
 
     /** Safety factor for stepsize control. */
     private double safety;

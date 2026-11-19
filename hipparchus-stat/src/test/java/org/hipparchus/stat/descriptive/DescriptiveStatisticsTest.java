@@ -169,8 +169,7 @@ public class DescriptiveStatisticsTest {
 
         final int len = values.length;
         double expected = 0;
-        for (int i = 0; i < len; i++) {
-            final double v = values[i];
+        for (final double v : values) {
             expected += v * v / len;
         }
         expected = Math.sqrt(expected);
@@ -186,15 +185,17 @@ public class DescriptiveStatisticsTest {
         stats.addValue(3);
         Locale d = Locale.getDefault();
         Locale.setDefault(Locale.US);
-        assertEquals("DescriptiveStatistics:\n" +
-                     "n: 3\n" +
-                     "min: 1.0\n" +
-                     "max: 3.0\n" +
-                     "mean: 2.0\n" +
-                     "std dev: 1.0\n" +
-                     "median: 2.0\n" +
-                     "skewness: 0.0\n" +
-                     "kurtosis: NaN\n",  stats.toString());
+        assertEquals("""
+                     DescriptiveStatistics:
+                     n: 3
+                     min: 1.0
+                     max: 3.0
+                     mean: 2.0
+                     std dev: 1.0
+                     median: 2.0
+                     skewness: 0.0
+                     kurtosis: NaN
+                     """,  stats.toString());
         Locale.setDefault(d);
     }
 
@@ -240,8 +241,8 @@ public class DescriptiveStatisticsTest {
             dstats.addValue(i);
             sstats.clear();
             double[] values = dstats.getValues();
-            for (int j = 0; j < values.length; j++) {
-                sstats.addValue(values[j]);
+            for (double value : values) {
+                sstats.addValue(value);
             }
             UnitTestUtils.customAssertEquals(dstats.getMean(), sstats.getMean(), tol);
             UnitTestUtils.customAssertEquals(new Mean().evaluate(values), dstats.getMean(), tol);

@@ -35,28 +35,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class LUDecompositionTest {
-    private double[][] testData = {
+    private final double[][] testData = {
             { 1.0, 2.0, 3.0},
             { 2.0, 5.0, 3.0},
             { 1.0, 0.0, 8.0}
     };
-    private double[][] testDataMinus = {
+    private final double[][] testDataMinus = {
             { -1.0, -2.0, -3.0},
             { -2.0, -5.0, -3.0},
             { -1.0,  0.0, -8.0}
     };
-    private double[][] luData = {
+    private final double[][] luData = {
             { 2.0, 3.0, 3.0 },
             { 0.0, 5.0, 7.0 },
             { 6.0, 9.0, 8.0 }
     };
 
     // singular matrices
-    private double[][] singular = {
+    private final double[][] singular = {
             { 2.0, 3.0 },
             { 2.0, 3.0 }
     };
-    private double[][] bigSingular = {
+    private final double[][] bigSingular = {
             { 1.0, 2.0,   3.0,    4.0 },
             { 2.0, 5.0,   3.0,    4.0 },
             { 7.0, 3.0, 256.0, 1930.0 },

@@ -71,18 +71,20 @@ public class RegionDumper {
      */
     public static String dump(final ArcsSet arcsSet) {
         final TreeDumper<Sphere1D, S1Point, LimitAngle, SubLimitAngle> visitor =
-                new TreeDumper<Sphere1D, S1Point, LimitAngle, SubLimitAngle>("ArcsSet", arcsSet.getTolerance()) {
+                new TreeDumper<>("ArcsSet", arcsSet.getTolerance()) {
 
-            /** {@inheritDoc} */
-            @Override
-            protected void formatHyperplane(final LimitAngle hyperplane) {
-                getFormatter().format("%22.15e %b %22.15e",
-                                      hyperplane.getLocation().getAlpha(),
-                                      hyperplane.isDirect(),
-                                      hyperplane.getTolerance());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    protected void formatHyperplane(final LimitAngle hyperplane) {
+                        getFormatter().format("%22.15e %b %22.15e",
+                                hyperplane.getLocation().getAlpha(),
+                                hyperplane.isDirect(),
+                                hyperplane.getTolerance());
+                    }
 
-        };
+                };
         arcsSet.getTree(false).visit(visitor);
         return visitor.getDump();
     }
@@ -93,17 +95,19 @@ public class RegionDumper {
      */
     public static String dump(final SphericalPolygonsSet sphericalPolygonsSet) {
         final TreeDumper<Sphere2D, S2Point, Circle, SubCircle> visitor =
-                new TreeDumper<Sphere2D, S2Point, Circle, SubCircle>("SphericalPolygonsSet", sphericalPolygonsSet.getTolerance()) {
+                new TreeDumper<>("SphericalPolygonsSet", sphericalPolygonsSet.getTolerance()) {
 
-            /** {@inheritDoc} */
-            @Override
-            protected void formatHyperplane(final Circle hyperplane) {
-                getFormatter().format("%22.15e %22.15e %22.15e %22.15e",
-                                      hyperplane.getPole().getX(), hyperplane.getPole().getY(), hyperplane.getPole().getZ(),
-                                      hyperplane.getTolerance());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    protected void formatHyperplane(final Circle hyperplane) {
+                        getFormatter().format("%22.15e %22.15e %22.15e %22.15e",
+                                hyperplane.getPole().getX(), hyperplane.getPole().getY(), hyperplane.getPole().getZ(),
+                                hyperplane.getTolerance());
+                    }
 
-        };
+                };
         sphericalPolygonsSet.getTree(false).visit(visitor);
         return visitor.getDump();
     }
@@ -114,18 +118,20 @@ public class RegionDumper {
      */
     public static String dump(final IntervalsSet intervalsSet) {
         final TreeDumper<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint> visitor =
-                new TreeDumper<Euclidean1D, Vector1D, OrientedPoint, SubOrientedPoint>("IntervalsSet", intervalsSet.getTolerance()) {
+                new TreeDumper<>("IntervalsSet", intervalsSet.getTolerance()) {
 
-            /** {@inheritDoc} */
-            @Override
-            protected void formatHyperplane(final OrientedPoint hyperplane) {
-                getFormatter().format("%22.15e %b %22.15e",
-                                      hyperplane.getLocation().getX(),
-                                      hyperplane.isDirect(),
-                                      hyperplane.getTolerance());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    protected void formatHyperplane(final OrientedPoint hyperplane) {
+                        getFormatter().format("%22.15e %b %22.15e",
+                                hyperplane.getLocation().getX(),
+                                hyperplane.isDirect(),
+                                hyperplane.getTolerance());
+                    }
 
-        };
+                };
         intervalsSet.getTree(false).visit(visitor);
         return visitor.getDump();
     }
@@ -136,17 +142,19 @@ public class RegionDumper {
      */
     public static String dump(final PolygonsSet polygonsSet) {
         final TreeDumper<Euclidean2D, Vector2D, Line, SubLine> visitor =
-                new TreeDumper<Euclidean2D, Vector2D, Line, SubLine>("PolygonsSet", polygonsSet.getTolerance()) {
+                new TreeDumper<>("PolygonsSet", polygonsSet.getTolerance()) {
 
-            /** {@inheritDoc} */
-            @Override
-            protected void formatHyperplane(final Line hyperplane) {
-                final Vector2D p = hyperplane.toSpace(Vector1D.ZERO);
-                getFormatter().format("%22.15e %22.15e %22.15e %22.15e",
-                                      p.getX(), p.getY(), hyperplane.getAngle(), hyperplane.getTolerance());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    protected void formatHyperplane(final Line hyperplane) {
+                        final Vector2D p = hyperplane.toSpace(Vector1D.ZERO);
+                        getFormatter().format("%22.15e %22.15e %22.15e %22.15e",
+                                p.getX(), p.getY(), hyperplane.getAngle(), hyperplane.getTolerance());
+                    }
 
-        };
+                };
         polygonsSet.getTree(false).visit(visitor);
         return visitor.getDump();
     }
@@ -157,19 +165,21 @@ public class RegionDumper {
      */
     public static String dump(final PolyhedronsSet polyhedronsSet) {
         final TreeDumper<Euclidean3D, Vector3D, Plane, SubPlane> visitor =
-                new TreeDumper<Euclidean3D, Vector3D, Plane, SubPlane>("PolyhedronsSet", polyhedronsSet.getTolerance()) {
+                new TreeDumper<>("PolyhedronsSet", polyhedronsSet.getTolerance()) {
 
-            /** {@inheritDoc} */
-            @Override
-            protected void formatHyperplane(final Plane hyperplane) {
-                final Vector3D p = hyperplane.toSpace(Vector2D.ZERO);
-                getFormatter().format("%22.15e %22.15e %22.15e %22.15e %22.15e %22.15e %22.15e",
-                                      p.getX(), p.getY(), p.getZ(),
-                                      hyperplane.getNormal().getX(), hyperplane.getNormal().getY(), hyperplane.getNormal().getZ(),
-                                      hyperplane.getTolerance());
-            }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    protected void formatHyperplane(final Plane hyperplane) {
+                        final Vector3D p = hyperplane.toSpace(Vector2D.ZERO);
+                        getFormatter().format("%22.15e %22.15e %22.15e %22.15e %22.15e %22.15e %22.15e",
+                                p.getX(), p.getY(), p.getZ(),
+                                hyperplane.getNormal().getX(), hyperplane.getNormal().getY(), hyperplane.getNormal().getZ(),
+                                hyperplane.getTolerance());
+                    }
 
-        };
+                };
         polyhedronsSet.getTree(false).visit(visitor);
         return visitor.getDump();
     }

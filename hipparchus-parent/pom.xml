@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus</artifactId>
-  <version>4.1</version>
+  <version>5.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Hipparchus</name>
@@ -525,8 +525,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <hipparchus.compiler.release>21</hipparchus.compiler.release>
 
     <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
     <hipparchusParentDir>${basedir}</hipparchusParentDir>
@@ -606,10 +605,9 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${hipparchus.maven-compiler-plugin.version}</version>
           <configuration>
-            <source>${maven.compiler.source}</source>
-            <target>${maven.compiler.target}</target>
             <compilerArgument>-Xlint:deprecation</compilerArgument>
             <compilerArgument>-Xlint:unchecked</compilerArgument>
+            <release>${hipparchus.compiler.release}</release>
           </configuration>
         </plugin>
         <plugin>
@@ -620,8 +618,8 @@
             <archive>
               <manifestFile>${project.build.directory}/osgi/MANIFEST.MF</manifestFile>
               <manifestEntries>
-                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
-                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+                <X-Compile-Source-JDK>${hipparchus.compiler.release}</X-Compile-Source-JDK>
+                <X-Compile-Target-JDK>${hipparchus.compiler.release}</X-Compile-Target-JDK>
               </manifestEntries>
             </archive>
           </configuration>
@@ -814,7 +812,7 @@
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${hipparchus.maven-pmd-plugin.version}</version>
           <configuration>
-            <targetJdk>${maven.compiler.target}</targetJdk>
+            <targetJdk>${hipparchus.compiler.release}</targetJdk>
             <skipEmptyReport>false</skipEmptyReport>
             <renderSuppressedViolations>false</renderSuppressedViolations>
             <rulesets>
@@ -894,7 +892,7 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>1.8.0</version>
+                  <version>21.0.0</version>
                 </requireJavaVersion>
               </rules>
             </configuration>

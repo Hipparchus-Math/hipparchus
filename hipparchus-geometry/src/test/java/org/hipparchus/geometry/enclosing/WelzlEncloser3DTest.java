@@ -45,7 +45,7 @@ class WelzlEncloser3DTest {
     void testNullList() {
         SphereGenerator generator = new SphereGenerator();
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
-                new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, generator);
+                new WelzlEncloser<>(1.0e-10, generator);
         EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(null);
         assertTrue(ball.getRadius() < 0);
     }
@@ -54,8 +54,8 @@ class WelzlEncloser3DTest {
     void testNoPoints() {
         SphereGenerator generator = new SphereGenerator();
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
-                new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, generator);
-        EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(new ArrayList<Vector3D>());
+                new WelzlEncloser<>(1.0e-10, generator);
+        EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(new ArrayList<>());
         assertTrue(ball.getRadius() < 0);
     }
 
@@ -74,7 +74,7 @@ class WelzlEncloser3DTest {
                               new Vector3D(-7.140322188726825, -16.574152894557717,  11.710305611121410),
                               new Vector3D(-7.141116131477088, -16.574061164624560,  11.712938509321699));
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
-                new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, new SphereGenerator());
+                new WelzlEncloser<>(1.0e-10, new SphereGenerator());
         EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(list);
         assertTrue(ball.getRadius() > 0);
     }
@@ -103,7 +103,7 @@ class WelzlEncloser3DTest {
                               new Vector3D( -0.98034899533935820,  -3.34004481162763960,  13.03245014017556800));
 
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
-                new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, new SphereGenerator());
+                new WelzlEncloser<>(1.0e-10, new SphereGenerator());
         EnclosingBall<Euclidean3D, Vector3D> ball = encloser.enclose(list);
         assertTrue(ball.getRadius() > 0);
     }
@@ -120,7 +120,7 @@ class WelzlEncloser3DTest {
             Vector3D refCenter = new Vector3D(d, new Vector3D(sr.nextVector()));
             // set up a large sample inside the reference sphere
             int nbPoints = random.nextInt(1000);
-            List<Vector3D> points = new ArrayList<Vector3D>();
+            List<Vector3D> points = new ArrayList<>();
             for (int i = 0; i < nbPoints; ++i) {
                 double r = refRadius * random.nextDouble();
                 points.add(new Vector3D(1.0, refCenter, r, new Vector3D(sr.nextVector())));
@@ -157,8 +157,8 @@ class WelzlEncloser3DTest {
     @Test
     void testIssue20Encloser() {
         final WelzlEncloser<Euclidean3D, Vector3D> encloser =
-                        new WelzlEncloser<Euclidean3D, Vector3D>(1e-14, new SphereGenerator());
-        List<Vector3D> points = new ArrayList<Vector3D>();
+                new WelzlEncloser<>(1e-14, new SphereGenerator());
+        List<Vector3D> points = new ArrayList<>();
         points.add(new Vector3D(0.9999999731, 0.000200015, 0.0001174338));
         points.add(new Vector3D(0.9987716667, 0.0350821284, 0.0349914572));
         points.add(new Vector3D(0.9987856181, -0.0346743952, 0.0349996489));
@@ -180,7 +180,7 @@ class WelzlEncloser3DTest {
 
         // check removing any point of the support Sphere fails to enclose the point
         for (int i = 0; i < sphere.getSupportSize(); ++i) {
-            List<Vector3D> reducedSupport = new ArrayList<Vector3D>();
+            List<Vector3D> reducedSupport = new ArrayList<>();
             int count = 0;
             for (Vector3D s : sphere.getSupport()) {
                 if (count++ != i) {
@@ -203,7 +203,7 @@ class WelzlEncloser3DTest {
     private EnclosingBall<Euclidean3D, Vector3D> checkSphere(List<Vector3D> points) {
 
         WelzlEncloser<Euclidean3D, Vector3D> encloser =
-                new WelzlEncloser<Euclidean3D, Vector3D>(1.0e-10, new SphereGenerator());
+                new WelzlEncloser<>(1.0e-10, new SphereGenerator());
         EnclosingBall<Euclidean3D, Vector3D> Sphere = encloser.enclose(points);
 
         // all points are enclosed

@@ -21,6 +21,7 @@
  */
 package org.hipparchus.complex;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -36,6 +37,7 @@ import org.hipparchus.util.SinCos;
 public class RootsOfUnity implements Serializable {
 
     /** Serializable version id. */
+    @Serial
     private static final long serialVersionUID = 20120201L;
 
     /** Number of roots of unity. */

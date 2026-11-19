@@ -237,19 +237,19 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
 
     private void testHypergeometricDistributionProbabilities(int populationSize, int sampleSize, int numberOfSucceses, double[][] data) {
         HypergeometricDistribution dist = new HypergeometricDistribution(populationSize, numberOfSucceses, sampleSize);
-        for (int i = 0; i < data.length; ++i) {
-            int x = (int)data[i][0];
-            double pmf = data[i][1];
+        for (double[] datum : data) {
+            int x = (int) datum[0];
+            double pmf = datum[1];
             double actualPmf = dist.probability(x);
-            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <"+x+"> pmf", pmf, actualPmf, 1.0e-9);
+            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <" + x + "> pmf", pmf, actualPmf, 1.0e-9);
 
-            double cdf = data[i][2];
+            double cdf = datum[2];
             double actualCdf = dist.cumulativeProbability(x);
-            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <"+x+"> cdf", cdf, actualCdf, 1.0e-9);
+            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <" + x + "> cdf", cdf, actualCdf, 1.0e-9);
 
-            double cdf1 = data[i][3];
+            double cdf1 = datum[3];
             double actualCdf1 = dist.upperCumulativeProbability(x);
-            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <"+x+"> cdf1", cdf1, actualCdf1, 1.0e-9);
+            UnitTestUtils.customAssertRelativelyEquals("Expected equals for <" + x + "> cdf1", cdf1, actualCdf1, 1.0e-9);
         }
     }
 

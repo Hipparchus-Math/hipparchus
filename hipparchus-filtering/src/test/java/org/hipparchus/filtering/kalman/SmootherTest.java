@@ -181,7 +181,7 @@ public class SmootherTest {
         Assertions.assertThrows(MathIllegalStateException.class, smoother::backwardsSmooth);
 
         // Process a single measurement
-        filter.estimationStep(measurements.get(0));
+        filter.estimationStep(measurements.getFirst());
 
         // Now should not throw
         Assertions.assertDoesNotThrow(smoother::backwardsSmooth);

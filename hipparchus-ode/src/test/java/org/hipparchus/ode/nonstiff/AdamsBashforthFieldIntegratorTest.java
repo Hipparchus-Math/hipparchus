@@ -31,15 +31,15 @@ class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest
     protected <T extends CalculusFieldElement<T>> AdamsFieldIntegrator<T>
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double scalAbsoluteTolerance, final double scalRelativeTolerance) {
-        return new AdamsBashforthFieldIntegrator<T>(field, nSteps, minStep, maxStep,
-                        scalAbsoluteTolerance, scalRelativeTolerance);
+        return new AdamsBashforthFieldIntegrator<>(field, nSteps, minStep, maxStep,
+                scalAbsoluteTolerance, scalRelativeTolerance);
     }
 
     protected <T extends CalculusFieldElement<T>> AdamsFieldIntegrator<T>
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance) {
-        return new AdamsBashforthFieldIntegrator<T>(field, nSteps, minStep, maxStep,
-                        vecAbsoluteTolerance, vecRelativeTolerance);
+        return new AdamsBashforthFieldIntegrator<>(field, nSteps, minStep, maxStep,
+                vecAbsoluteTolerance, vecRelativeTolerance);
     }
 
     @Test

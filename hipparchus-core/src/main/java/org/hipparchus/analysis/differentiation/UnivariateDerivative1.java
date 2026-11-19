@@ -22,6 +22,8 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /** Class representing both the value and the differentials of a function.
  * <p>This class is a stripped-down version of {@link DerivativeStructure}
  * with only one {@link DerivativeStructure#getFreeParameters() free parameter}
@@ -57,6 +59,7 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
     public static final UnivariateDerivative1 PI = new UnivariateDerivative1(FastMath.PI, 0.0);
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20200519L;
 
     /** Value of the function. */
@@ -527,8 +530,7 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
             return true;
         }
 
-        if (other instanceof UnivariateDerivative1) {
-            final UnivariateDerivative1 rhs = (UnivariateDerivative1) other;
+        if (other instanceof UnivariateDerivative1 rhs) {
             return f0 == rhs.f0 && f1 == rhs.f1;
         }
 

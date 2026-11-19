@@ -26,6 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the exponential distribution.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.util.MathUtils;
  */
 public class ExponentialDistribution extends AbstractRealDistribution {
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** The mean of this distribution. */
     private final double mean;

@@ -47,7 +47,7 @@ import org.hipparchus.util.MathArrays;
 public class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> extends AbstractFieldODEStateInterpolator<T> {
 
     /** Step size used in the first scaled derivative and Nordsieck vector. */
-    private T scalingH;
+    private final T scalingH;
 
     /** Reference state.
      * <p>Sometimes, the reference state is the same as globalPreviousState,

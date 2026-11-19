@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  */
 class LegendreHighPrecisionTest {
-    private static GaussIntegratorFactory factory = new GaussIntegratorFactory();
+    private static final GaussIntegratorFactory factory = new GaussIntegratorFactory();
 
     @Test
     void testCos() {

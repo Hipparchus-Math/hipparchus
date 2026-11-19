@@ -90,7 +90,7 @@ public class ConjugateGradient
      * {@code true} if positive-definiteness of matrix and preconditioner should
      * be checked.
      */
-    private boolean check;
+    private final boolean check;
 
     /** The value of &delta;, for the default stopping criterion. */
     private final double delta;

@@ -140,8 +140,6 @@ public class CMAESOptimizer
     // selection strategy parameters
     /** Number of parents/points for recombination. */
     private int mu; //
-    /** log(mu + 0.5), stored for efficiency. */
-    private double logMu2;   // NOPMD - using a field here is for performance reasons
     /** Array for weighted recombination. */
     private RealMatrix weights;
     /** Variance-effectiveness of sum w_i x_i. */
@@ -540,12 +538,12 @@ public class CMAESOptimizer
         // The existing values (as set by the previous call) are reused if
         // not provided in the argument list.
         for (OptimizationData data : optData) {
-            if (data instanceof Sigma) {
-                inputSigma = ((Sigma) data).getSigma();
+            if (data instanceof Sigma sigma1) {
+                inputSigma = sigma1.getSigma();
                 continue;
             }
-            if (data instanceof PopulationSize) {
-                lambda = ((PopulationSize) data).getPopulationSize();
+            if (data instanceof PopulationSize size) {
+                lambda = size.getPopulationSize();
                 continue;
             }
         }
@@ -603,7 +601,9 @@ public class CMAESOptimizer
 
         // initialize selection strategy parameters
         mu = lambda / 2; // number of parents/points for recombination
-        logMu2 = FastMath.log(mu + 0.5);
+        /** log(mu + 0.5), stored for efficiency. */
+        // NOPMD - using a field here is for performance reasons
+        double logMu2 = FastMath.log(mu + 0.5);
         weights = log(sequence(1, mu, 1)).scalarMultiply(-1).scalarAdd(logMu2);
         double sumw = 0;
         double sumwq = 0;
@@ -891,8 +891,8 @@ public class CMAESOptimizer
                 return true;
             }
 
-            if (other instanceof DoubleIndex) {
-                return Double.compare(value, ((DoubleIndex) other).value) == 0;
+            if (other instanceof DoubleIndex doubleIndex) {
+                return Double.compare(value, doubleIndex.value) == 0;
             }
 
             return false;
@@ -910,9 +910,9 @@ public class CMAESOptimizer
      */
     private static class ValuePenaltyPair {
         /** Objective function value. */
-        private double value;
+        private final double value;
         /** Penalty value for repair of out out of bounds points. */
-        private double penalty;
+        private final double penalty;
 
         /**
          * @param value Function value.

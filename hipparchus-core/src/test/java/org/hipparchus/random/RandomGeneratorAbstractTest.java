@@ -93,8 +93,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         }
 
         final int numTests = 1000;
-        for (int i = 0; i < testValues.length; i++) {
-            final int n = testValues[i];
+        for (final int n : testValues) {
             // Set up bins
             int[] binUpperBounds;
             if (n < 32) {
@@ -116,16 +115,16 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
             final long[] observed = new long[binCount];
             final double[] expected = new double[binCount];
             expected[0] = binUpperBounds[0] == 0 ? (double) smallSampleSize / (double) n :
-                (double) ((binUpperBounds[0] + 1) * smallSampleSize) / (double) n;
+                    (double) ((binUpperBounds[0] + 1) * smallSampleSize) / (double) n;
             for (int k = 1; k < binCount; k++) {
                 expected[k] = (double) smallSampleSize *
-                (double) (binUpperBounds[k] - binUpperBounds[k - 1]) / n;
+                        (double) (binUpperBounds[k] - binUpperBounds[k - 1]) / n;
             }
             for (int j = 0; j < numTests; j++) {
                 Arrays.fill(observed, 0);
                 for (int k = 0; k < smallSampleSize; k++) {
                     final int value = generator.nextInt(n);
-                    assertTrue((value >= 0) && (value < n),"nextInt range");
+                    assertTrue((value >= 0) && (value < n), "nextInt range");
                     for (int l = 0; l < binCount; l++) {
                         if (binUpperBounds[l] >= value) {
                             observed[l]++;
@@ -139,7 +138,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
             }
             if ((double) numFailures / (double) numTests > 0.02) {
                 fail("Too many failures for n = " + n +
-                     " " + numFailures + " out of " + numTests + " tests failed.");
+                        " " + numFailures + " out of " + numTests + " tests failed.");
             }
         }
     }

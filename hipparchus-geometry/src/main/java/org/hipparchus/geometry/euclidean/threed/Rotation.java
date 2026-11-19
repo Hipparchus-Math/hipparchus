@@ -22,6 +22,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -103,8 +104,9 @@ public class Rotation implements Serializable {
   /** Identity rotation. */
   public static final Rotation IDENTITY = new Rotation(1.0, 0.0, 0.0, 0.0, false);
 
-  /** Serializable version identifier */
-  private static final long serialVersionUID = -2153622329907944313L;
+    /** Serializable version identifier */
+    @Serial
+    private static final long serialVersionUID = -2153622329907944313L;
 
   /** Scalar coordinate of the quaternion. */
   private final double q0;

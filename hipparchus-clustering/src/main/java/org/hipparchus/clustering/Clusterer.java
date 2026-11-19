@@ -36,7 +36,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 public abstract class Clusterer<T extends Clusterable> {
 
     /** The distance measure to use. */
-    private DistanceMeasure measure;
+    private final DistanceMeasure measure;
 
     /**
      * Build a new clusterer with the given {@link DistanceMeasure}.

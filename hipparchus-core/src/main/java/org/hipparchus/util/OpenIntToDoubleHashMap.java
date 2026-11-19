@@ -24,6 +24,7 @@ package org.hipparchus.util;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
@@ -41,6 +42,7 @@ import java.util.NoSuchElementException;
 public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20240326L;
 
     /** Values table. */
@@ -213,6 +215,7 @@ public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Se
     private static class DataTransferObject implements Serializable {
 
         /** Serializable UID. */
+        @Serial
         private static final long serialVersionUID = 20240326L;
 
         /** Return value for missing entries. */

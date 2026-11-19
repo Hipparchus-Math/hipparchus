@@ -26,6 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Gamma distribution.
  *
@@ -34,6 +36,7 @@ import org.hipparchus.util.FastMath;
  */
 public class GammaDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20120524L;
     /** The shape parameter. */
     private final double shape;

@@ -109,7 +109,7 @@ public abstract class ClusterEvaluator<T extends Clusterable> {
             return ((CentroidCluster<T>) cluster).getCenter();
         }
 
-        final int dimension = points.get(0).getPoint().length;
+        final int dimension = points.getFirst().getPoint().length;
         final double[] centroid = new double[dimension];
         for (final T p : points) {
             final double[] point = p.getPoint();

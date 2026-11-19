@@ -280,10 +280,10 @@ public class GammaDistributionTest extends RealDistributionAbstractTest {
                 sb.append(", scale = 1.0\n");
                 sb.append("Old implementation\n");
                 sb.append("------------------\n");
-                sb.append(statOld.toString());
+                sb.append(statOld);
                 sb.append("New implementation\n");
                 sb.append("------------------\n");
-                sb.append(statNewNoOF.toString());
+                sb.append(statNewNoOF);
                 final String msg = sb.toString();
 
                 final double oldMin = statOld.getMin();

@@ -34,15 +34,15 @@ class EulerFieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAb
                        FieldODEStateAndDerivative<T> globalCurrentState,
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState, FieldEquationsMapper<T> mapper) {
-        return new EulerFieldStateInterpolator<T>(field, forward, yDotK,
-                                                  globalPreviousState, globalCurrentState,
-                                                  softPreviousState, softCurrentState,
-                                                  mapper);
+        return new EulerFieldStateInterpolator<>(field, forward, yDotK,
+                globalPreviousState, globalCurrentState,
+                softPreviousState, softCurrentState,
+                mapper);
     }
 
     protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
-        return new EulerFieldIntegrator<T>(field, field.getOne());
+        return new EulerFieldIntegrator<>(field, field.getOne());
     }
 
     @Test

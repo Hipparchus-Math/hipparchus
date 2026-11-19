@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -48,6 +49,7 @@ public class Min extends AbstractStorelessUnivariateStatistic
     implements AggregatableStatistic<Min>, Serializable {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20150412L;
 
     /** Number of values that have been added */

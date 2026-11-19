@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class StableRandomGeneratorTest {
 
-    private RandomGenerator rg = new Well19937c(100);
+    private final RandomGenerator rg = new Well19937c(100);
     private final static int sampleSize = 10000;
 
     /**
@@ -98,7 +98,7 @@ class StableRandomGeneratorTest {
             fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
-            assertEquals(-1.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(-1.0, (Double) e.getParts()[0], 1.0e-10);
         }
     }
 
@@ -109,7 +109,7 @@ class StableRandomGeneratorTest {
             fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
-            assertEquals(3.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(3.0, (Double) e.getParts()[0], 1.0e-10);
         }
     }
 
@@ -120,7 +120,7 @@ class StableRandomGeneratorTest {
             fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
-            assertEquals(-2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(-2.0, (Double) e.getParts()[0], 1.0e-10);
         }
     }
 
@@ -131,7 +131,7 @@ class StableRandomGeneratorTest {
             fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
-            assertEquals(2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
+            assertEquals(2.0, (Double) e.getParts()[0], 1.0e-10);
         }
     }
 }

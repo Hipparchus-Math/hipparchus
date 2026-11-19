@@ -45,8 +45,8 @@ class SubLineTest {
         SubLine sub = new SubLine(segment);
         List<Segment> segments = sub.getSegments();
         assertEquals(1, segments.size());
-        assertEquals(0.0, new Vector2D(-1, -7).distance(segments.get(0).getStart()), 1.0e-10);
-        assertEquals(0.0, new Vector2D( 7, -1).distance(segments.get(0).getEnd()), 1.0e-10);
+        assertEquals(0.0, new Vector2D(-1, -7).distance(segments.getFirst().getStart()), 1.0e-10);
+        assertEquals(0.0, new Vector2D( 7, -1).distance(segments.getFirst().getEnd()), 1.0e-10);
     }
 
     @Test
@@ -54,14 +54,14 @@ class SubLineTest {
         SubLine wholeLine = new Line(new Vector2D(-1, 7), new Vector2D(7, 1), 1.0e-10).wholeHyperplane();
         List<Segment> segments = wholeLine.getSegments();
         assertEquals(1, segments.size());
-        assertTrue(Double.isInfinite(segments.get(0).getStart().getX()) &&
-                          segments.get(0).getStart().getX() < 0);
-        assertTrue(Double.isInfinite(segments.get(0).getStart().getY()) &&
-                          segments.get(0).getStart().getY() > 0);
-        assertTrue(Double.isInfinite(segments.get(0).getEnd().getX()) &&
-                          segments.get(0).getEnd().getX() > 0);
-        assertTrue(Double.isInfinite(segments.get(0).getEnd().getY()) &&
-                          segments.get(0).getEnd().getY() < 0);
+        assertTrue(Double.isInfinite(segments.getFirst().getStart().getX()) &&
+                          segments.getFirst().getStart().getX() < 0);
+        assertTrue(Double.isInfinite(segments.getFirst().getStart().getY()) &&
+                          segments.getFirst().getStart().getY() > 0);
+        assertTrue(Double.isInfinite(segments.getFirst().getEnd().getX()) &&
+                          segments.getFirst().getEnd().getX() > 0);
+        assertTrue(Double.isInfinite(segments.getFirst().getEnd().getY()) &&
+                          segments.getFirst().getEnd().getY() < 0);
     }
 
     @Test
@@ -88,11 +88,11 @@ class SubLineTest {
                                     new IntervalsSet(Double.NEGATIVE_INFINITY, 0.0, 1.0e-10));
         List<Segment> segments = empty.getSegments();
         assertEquals(1, segments.size());
-        assertTrue(Double.isInfinite(segments.get(0).getStart().getX()) &&
-                          segments.get(0).getStart().getX() < 0);
-        assertTrue(Double.isInfinite(segments.get(0).getStart().getY()) &&
-                          segments.get(0).getStart().getY() < 0);
-        assertEquals(0.0, new Vector2D(3, -4).distance(segments.get(0).getEnd()), 1.0e-10);
+        assertTrue(Double.isInfinite(segments.getFirst().getStart().getX()) &&
+                          segments.getFirst().getStart().getX() < 0);
+        assertTrue(Double.isInfinite(segments.getFirst().getStart().getY()) &&
+                          segments.getFirst().getStart().getY() < 0);
+        assertEquals(0.0, new Vector2D(3, -4).distance(segments.getFirst().getEnd()), 1.0e-10);
     }
 
     @Test
@@ -101,11 +101,11 @@ class SubLineTest {
                                     new IntervalsSet(0.0, Double.POSITIVE_INFINITY, 1.0e-10));
         List<Segment> segments = empty.getSegments();
         assertEquals(1, segments.size());
-        assertEquals(0.0, new Vector2D(3, -4).distance(segments.get(0).getStart()), 1.0e-10);
-        assertTrue(Double.isInfinite(segments.get(0).getEnd().getX()) &&
-                          segments.get(0).getEnd().getX() > 0);
-        assertTrue(Double.isInfinite(segments.get(0).getEnd().getY()) &&
-                          segments.get(0).getEnd().getY() > 0);
+        assertEquals(0.0, new Vector2D(3, -4).distance(segments.getFirst().getStart()), 1.0e-10);
+        assertTrue(Double.isInfinite(segments.getFirst().getEnd().getX()) &&
+                          segments.getFirst().getEnd().getX() > 0);
+        assertTrue(Double.isInfinite(segments.getFirst().getEnd().getY()) &&
+                          segments.getFirst().getEnd().getY() > 0);
     }
 
     @Test

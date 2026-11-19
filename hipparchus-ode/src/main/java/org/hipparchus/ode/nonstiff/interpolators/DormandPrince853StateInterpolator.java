@@ -21,6 +21,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 
+import java.io.Serial;
+
 /**
  * This class represents an interpolator over the last step during an
  * ODE integration for the 8(5,3) Dormand-Prince integrator.
@@ -32,6 +34,7 @@ import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 public class DormandPrince853StateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160328L;
 
     /** Interpolation weights. */

@@ -291,9 +291,9 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
         public boolean equals(final Object other) {
             if (this == other) {
                 return true;
-            } else if (other instanceof DerivativeField) {
+            } else if (other instanceof DerivativeField<?> field) {
                 FDSFactory<T> lhsFactory = zero.getFactory();
-                FDSFactory<?> rhsFactory = ((DerivativeField<?>) other).zero.getFactory();
+                FDSFactory<?> rhsFactory = field.zero.getFactory();
                 return lhsFactory.compiler == rhsFactory.compiler &&
                        lhsFactory.valueField.equals(rhsFactory.valueField);
             } else {

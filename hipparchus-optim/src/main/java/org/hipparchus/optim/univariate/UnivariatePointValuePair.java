@@ -22,6 +22,7 @@
 
 package org.hipparchus.optim.univariate;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -32,6 +33,7 @@ import java.io.Serializable;
  */
 public class UnivariatePointValuePair implements Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 1003888396256744753L;
     /** Point. */
     private final double point;

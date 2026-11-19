@@ -22,6 +22,7 @@
 
 package org.hipparchus.complex;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +91,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
     private static final double LOG10 = 2.302585092994045684;
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160305L;
 
     /** The imaginary part. */
@@ -364,8 +366,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
         if (this == other) {
             return true;
         }
-        if (other instanceof Complex){
-            Complex c = (Complex) other;
+        if (other instanceof Complex c){
             if (c.isNaN) {
                 return isNaN;
             } else {

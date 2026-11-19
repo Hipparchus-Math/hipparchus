@@ -244,7 +244,7 @@ class GammaTest {
                 -1e+17, -1e+18, -1e+19, -1e+20, -1e+21, -1e+22, -1e+23, -1e+24, -1e+25, -1e+26,
                 -1e+27, -1e+28, -1e+29, -1e+30};
         for (double n = 1; n < 30; n++) {
-            checkRelativeError(String.format("Test %.0f: ", n), expected[(int) (n - 1)], Gamma.digamma(FastMath.pow(10.0, -n)), 1e-8);
+            checkRelativeError("Test %.0f: ".formatted(n), expected[(int) (n - 1)], Gamma.digamma(FastMath.pow(10.0, -n)), 1e-8);
         }
     }
 
@@ -259,7 +259,7 @@ class GammaTest {
                              -1e+17, -1e+18, -1e+19, -1e+20, -1e+21, -1e+22, -1e+23, -1e+24, -1e+25, -1e+26,
                              -1e+27, -1e+28, -1e+29, -1e+30};
         for (double n = 1; n < 30; n++) {
-            checkRelativeError(String.format("Test %.0f: ", n), expected[(int) (n - 1)], Gamma.digamma(new Binary64(FastMath.pow(10.0, -n))).getReal(), 1e-8);
+            checkRelativeError("Test %.0f: ".formatted(n), expected[(int) (n - 1)], Gamma.digamma(new Binary64(FastMath.pow(10.0, -n))).getReal(), 1e-8);
         }
     }
 
@@ -318,7 +318,7 @@ class GammaTest {
                 100, 0.010050166663333571395
         };
         for (int i = data.length - 2; i >= 0; i -= 2) {
-            assertEquals(data[i + 1], Gamma.trigamma(data[i]), eps, String.format("trigamma %.0f", data[i]));
+            assertEquals(data[i + 1], Gamma.trigamma(data[i]), eps, "trigamma %.0f".formatted(data[i]));
         }
     }
 
@@ -346,7 +346,7 @@ class GammaTest {
         };
         for (int i = data.length - 2; i >= 0; i -= 2) {
             assertEquals(data[i + 1].getReal(),
-                                Gamma.trigamma(data[i]).getReal(), eps, String.format("trigamma %.6f", data[i].getReal()));
+                                Gamma.trigamma(data[i]).getReal(), eps, "trigamma %.6f".formatted(data[i].getReal()));
         }
     }
 
@@ -354,14 +354,14 @@ class GammaTest {
     void testTrigammaSmallArg() {
         double eps = 2;
         assertEquals(1e16,
-                            Gamma.trigamma(1e-8), eps, String.format("trigamma %.8f", 1e-8));
+                            Gamma.trigamma(1e-8), eps, "trigamma %.8f".formatted(1e-8));
     }
 
     @Test
     void testTrigammaSmallArgField() {
         double eps = 2;
         assertEquals(1e16,
-                            Gamma.trigamma(new Binary64(1e-8)).getReal(), eps, String.format("trigamma %.8f", 1e-8));
+                            Gamma.trigamma(new Binary64(1e-8)).getReal(), eps, "trigamma %.8f".formatted(1e-8));
     }
 
     @Test
@@ -533,8 +533,7 @@ class GammaTest {
     @Test
     void testLogGamma() {
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA_REF.length; i++) {
-            final double[] data = LOG_GAMMA_REF[i];
+        for (final double[] data : LOG_GAMMA_REF) {
             final double x = data[0];
             final double expected = data[1];
             final double actual = Gamma.logGamma(x);
@@ -551,8 +550,7 @@ class GammaTest {
     @Test
     void testLogGammaField() {
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA_REF.length; i++) {
-            final double[] data = LOG_GAMMA_REF[i];
+        for (final double[] data : LOG_GAMMA_REF) {
             final Binary64 x = new Binary64(data[0]);
             final double expected = data[1];
             final double actual = Gamma.logGamma(x).getReal();
@@ -631,8 +629,7 @@ class GammaTest {
     void testInvGamma1pm1() {
 
         final int ulps = 3;
-        for (int i = 0; i < INV_GAMMA1P_M1_REF.length; i++) {
-            final double[] ref = INV_GAMMA1P_M1_REF[i];
+        for (final double[] ref : INV_GAMMA1P_M1_REF) {
             final double x = ref[0];
             final double expected = ref[1];
             final double actual = Gamma.invGamma1pm1(x);
@@ -645,8 +642,7 @@ class GammaTest {
     void testInvGamma1pm1Field() {
 
         final int ulps = 3;
-        for (int i = 0; i < INV_GAMMA1P_M1_REF.length; i++) {
-            final double[] ref = INV_GAMMA1P_M1_REF[i];
+        for (final double[] ref : INV_GAMMA1P_M1_REF) {
             final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.invGamma1pm1(x).getReal();
@@ -699,8 +695,7 @@ class GammaTest {
     void testLogGamma1p() {
 
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA1P_REF.length; i++) {
-            final double[] ref = LOG_GAMMA1P_REF[i];
+        for (final double[] ref : LOG_GAMMA1P_REF) {
             final double x = ref[0];
             final double expected = ref[1];
             final double actual = Gamma.logGamma1p(x);
@@ -713,8 +708,7 @@ class GammaTest {
     void testLogGamma1pField() {
 
         final int ulps = 3;
-        for (int i = 0; i < LOG_GAMMA1P_REF.length; i++) {
-            final double[] ref = LOG_GAMMA1P_REF[i];
+        for (final double[] ref : LOG_GAMMA1P_REF) {
             final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.logGamma1p(x).getReal();
@@ -1229,8 +1223,7 @@ class GammaTest {
     @Test
     void testGamma() {
 
-        for (int i = 0; i < GAMMA_REF.length; i++) {
-            final double[] ref = GAMMA_REF[i];
+        for (final double[] ref : GAMMA_REF) {
             final double x = ref[0];
             final double expected = ref[1];
             final double actual = Gamma.gamma(x);
@@ -1255,8 +1248,7 @@ class GammaTest {
     @Test
     void testGammaField() {
 
-        for (int i = 0; i < GAMMA_REF.length; i++) {
-            final double[] ref = GAMMA_REF[i];
+        for (final double[] ref : GAMMA_REF) {
             final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.gamma(x).getReal();

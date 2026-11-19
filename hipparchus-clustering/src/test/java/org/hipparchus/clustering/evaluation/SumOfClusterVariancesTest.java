@@ -41,7 +41,7 @@ class SumOfClusterVariancesTest {
 
     @BeforeEach
     void setUp() {
-        evaluator = new SumOfClusterVariances<DoublePoint>(new EuclideanDistance());
+        evaluator = new SumOfClusterVariances<>(new EuclideanDistance());
     }
 
     @Test
@@ -58,9 +58,9 @@ class SumOfClusterVariancesTest {
                 new DoublePoint(new double[] { 10 })
         };
 
-        final List<Cluster<DoublePoint>> clusters = new ArrayList<Cluster<DoublePoint>>();
+        final List<Cluster<DoublePoint>> clusters = new ArrayList<>();
 
-        final Cluster<DoublePoint> cluster1 = new Cluster<DoublePoint>();
+        final Cluster<DoublePoint> cluster1 = new Cluster<>();
         for (DoublePoint p : points1) {
             cluster1.addPoint(p);
         }
@@ -68,7 +68,7 @@ class SumOfClusterVariancesTest {
 
         assertEquals(1.0/3.0, evaluator.score(clusters), 1e-6);
 
-        final Cluster<DoublePoint> cluster2 = new Cluster<DoublePoint>();
+        final Cluster<DoublePoint> cluster2 = new Cluster<>();
         for (DoublePoint p : points2) {
             cluster2.addPoint(p);
         }

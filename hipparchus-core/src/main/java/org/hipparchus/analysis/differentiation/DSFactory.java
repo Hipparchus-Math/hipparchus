@@ -16,6 +16,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -32,6 +33,7 @@ import org.hipparchus.util.FastMath;
 public class DSFactory implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20161222L;
 
     /** Compiler for the current dimensions. */
@@ -155,6 +157,7 @@ public class DSFactory implements Serializable {
     private static class DataTransferObject implements Serializable {
 
         /** Serializable UID. */
+        @Serial
         private static final long serialVersionUID = 20161222L;
 
         /** Number of variables.
@@ -243,9 +246,9 @@ public class DSFactory implements Serializable {
         public boolean equals(final Object other) {
             if (this == other) {
                 return true;
-            } else if (other instanceof DSField) {
+            } else if (other instanceof DSField field) {
                 DSFactory lhsFactory = zero.getFactory();
-                DSFactory rhsFactory = ((DSField) other).zero.getFactory();
+                DSFactory rhsFactory = field.zero.getFactory();
                 return lhsFactory.compiler == rhsFactory.compiler;
             } else {
                 return false;

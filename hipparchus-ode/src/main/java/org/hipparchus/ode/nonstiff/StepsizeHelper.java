@@ -30,16 +30,16 @@ import org.hipparchus.util.FastMath;
 public class StepsizeHelper {
 
     /** Allowed absolute scalar error. */
-    private double scalAbsoluteTolerance;
+    private final double scalAbsoluteTolerance;
 
     /** Allowed relative scalar error. */
-    private double scalRelativeTolerance;
+    private final double scalRelativeTolerance;
 
     /** Allowed absolute vectorial error. */
-    private double[] vecAbsoluteTolerance;
+    private final double[] vecAbsoluteTolerance;
 
     /** Allowed relative vectorial error. */
-    private double[] vecRelativeTolerance;
+    private final double[] vecRelativeTolerance;
 
     /** Main set dimension. */
     private int mainSetDimension;
@@ -48,10 +48,10 @@ public class StepsizeHelper {
     private double initialStep;
 
     /** Minimal step. */
-    private double minStep;
+    private final double minStep;
 
     /** Maximal step. */
-    private double maxStep;
+    private final double maxStep;
 
     /** Simple constructor.
      * @param minStep minimal step (sign is irrelevant, regardless of

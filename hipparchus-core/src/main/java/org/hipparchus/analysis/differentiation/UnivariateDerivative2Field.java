@@ -16,6 +16,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -29,6 +30,7 @@ import org.hipparchus.Field;
 public class UnivariateDerivative2Field implements Field<UnivariateDerivative2>, Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20200520L;
 
     /** Zero constant. */

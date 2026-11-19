@@ -329,8 +329,10 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
         // search for next events that may occur during the step
         final int orderingSign = interpolator.isForward() ? +1 : -1;
-        final Queue<FieldEventState<T>> occurringEvents = new PriorityQueue<>(new Comparator<FieldEventState<T>>() {
-            /** {@inheritDoc} */
+        final Queue<FieldEventState<T>> occurringEvents = new PriorityQueue<>(new Comparator<>() {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public int compare(FieldEventState<T> es0, FieldEventState<T> es1) {
                 return orderingSign * Double.compare(es0.getEventTime().getReal(), es1.getEventTime().getReal());

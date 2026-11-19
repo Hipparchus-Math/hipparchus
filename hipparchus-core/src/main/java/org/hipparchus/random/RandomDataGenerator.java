@@ -21,6 +21,7 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +61,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     implements RandomGenerator, Serializable { // NOPMD - this class has a high number of methods, it is normal
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160529L;
 
     /**
@@ -737,7 +739,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
 
         // Convert each byte to 2 hex digits
         for (byte randomByte : randomBytes) {
-            Integer c = Integer.valueOf(randomByte);
+            Integer c = (int) randomByte;
 
             /*
              * Add 128 to byte value to make interval 0-255 before doing hex

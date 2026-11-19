@@ -21,6 +21,7 @@ import org.hipparchus.analysis.FieldTrivariateFunction;
 import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -35,6 +36,7 @@ public class TrilinearInterpolatingFunction implements TrivariateFunction, Field
     /**
      * Serializable UID.
      */
+    @Serial
     private static final long serialVersionUID = 20180926L;
 
     /**

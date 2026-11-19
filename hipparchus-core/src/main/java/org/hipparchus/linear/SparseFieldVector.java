@@ -21,6 +21,7 @@
  */
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -46,6 +47,7 @@ import org.hipparchus.util.OpenIntToFieldHashMap;
  */
 public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector<T>, Serializable {
     /**  Serialization identifier. */
+    @Serial
     private static final long serialVersionUID = 7841233292190413362L;
     /** Field to which the elements belong. */
     private final Field<T> field;

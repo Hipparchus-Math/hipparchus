@@ -52,8 +52,8 @@ class InteractionTest {
         Skewness s= new Skewness(m4);
         Kurtosis k = new Kurtosis(m4);
 
-        for (int i = 0; i < testArray.length; i++){
-            m4.increment(testArray[i]);
+        for (double value : testArray) {
+            m4.increment(value);
         }
 
         assertEquals(mean, m.getResult(), tolerance);

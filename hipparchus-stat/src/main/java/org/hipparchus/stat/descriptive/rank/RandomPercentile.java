@@ -16,6 +16,7 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,6 +93,7 @@ public class RandomPercentile
     /** Default quantile estimation error setting */
     public static final double DEFAULT_EPSILON = 1e-4;
     /** Serialization version id */
+    @Serial
     private static final long serialVersionUID = 1L;
     /** Storage size of each buffer */
     private final int s;
@@ -416,6 +418,7 @@ public class RandomPercentile
      */
     private static class Buffer implements Serializable {
         /** Serialization version id */
+        @Serial
         private static final long serialVersionUID = 1L;
         /** Number of values actually stored in the buffer */
         private final int size;
@@ -705,6 +708,7 @@ public class RandomPercentile
      */
     private static class BufferMap implements Iterable<Buffer>, Serializable {
         /** Serialization version ID */
+        @Serial
         private static final long serialVersionUID = 1L;
         /** Total number of buffers that can be created - cap for count */
         private final int capacity;
@@ -935,15 +939,21 @@ public class RandomPercentile
          */
         @Override
         public Iterator<Buffer> iterator() {
-            return new Iterator<Buffer>() {
+            return new Iterator<>() {
 
-                /** Outer loop iterator, from level to level. */
+                /**
+                 * Outer loop iterator, from level to level.
+                 */
                 private final Iterator<Integer> levelIterator = registry.keySet().iterator();
 
-                /** List of buffers at current level. */
-                private List<Buffer> currentList = registry.get(levelIterator.next()); // NOPMD - cannot use local variable in anonymous class
+                /**
+                 * List of buffers at current level.
+                 */
+                private final List<Buffer> currentList = registry.get(levelIterator.next()); // NOPMD - cannot use local variable in anonymous class
 
-                /** Inner loop iterator, from buffer to buffer. */
+                /**
+                 * Inner loop iterator, from buffer to buffer.
+                 */
                 private Iterator<Buffer> bufferIterator =
                         currentList == null ? null : currentList.iterator();
 
@@ -969,10 +979,10 @@ public class RandomPercentile
 
                 @Override
                 public Buffer next() {
-                     if (hasNext()) {
-                         return bufferIterator.next();
-                     }
-                     throw new NoSuchElementException();
+                    if (hasNext()) {
+                        return bufferIterator.next();
+                    }
+                    throw new NoSuchElementException();
                 }
 
                 @Override

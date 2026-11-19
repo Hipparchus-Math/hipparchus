@@ -270,14 +270,14 @@ public class GTest { // NOPMD - this is not a Junit test class, PMD false positi
         double h = 0d;
         double sum_k = 0d;
         for (long[] value : k) {
-            for (int j = 0; j < value.length; j++) {
-                sum_k += value[j];
+            for (long l : value) {
+                sum_k += l;
             }
         }
         for (long[] longs : k) {
-            for (int j = 0; j < longs.length; j++) {
-                if (longs[j] != 0) {
-                    final double p_ij = longs[j] / sum_k;
+            for (long aLong : longs) {
+                if (aLong != 0) {
+                    final double p_ij = aLong / sum_k;
                     h += p_ij * FastMath.log(p_ij);
                 }
             }

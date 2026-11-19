@@ -23,6 +23,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * This class implements an interpolator for integrators using Nordsieck representation.
  *
@@ -36,10 +38,11 @@ import org.hipparchus.util.FastMath;
 public class AdamsStateInterpolator extends AbstractODEStateInterpolator {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160402L;
 
     /** Step size used in the first scaled derivative and Nordsieck vector. */
-    private double scalingH;
+    private final double scalingH;
 
     /** Reference state.
      * <p>Sometimes, the reference state is the same as globalPreviousState,
@@ -50,10 +53,10 @@ public class AdamsStateInterpolator extends AbstractODEStateInterpolator {
     private final ODEStateAndDerivative reference;
 
     /** First scaled derivative. */
-    private double[] scaled;
+    private final double[] scaled;
 
     /** Nordsieck vector. */
-    private Array2DRowRealMatrix nordsieck;
+    private final Array2DRowRealMatrix nordsieck;
 
     /** Simple constructor.
      * @param stepSize step size used in the scaled and Nordsieck arrays

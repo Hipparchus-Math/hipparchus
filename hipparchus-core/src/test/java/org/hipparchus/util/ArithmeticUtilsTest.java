@@ -134,17 +134,17 @@ class ArithmeticUtilsTest {
     @Test
     void testGcdConsistency() {
         int[] primeList = {19, 23, 53, 67, 73, 79, 101, 103, 111, 131};
-        ArrayList<Integer> primes = new ArrayList<Integer>();
-        for (int i = 0; i < primeList.length; i++) {
-            primes.add(Integer.valueOf(primeList[i]));
+        ArrayList<Integer> primes = new ArrayList<>();
+        for (int j : primeList) {
+            primes.add(j);
         }
         RandomDataGenerator randomData = new RandomDataGenerator();
         for (int i = 0; i < 20; i++) {
             Object[] sample = randomData.nextSample(primes, 4);
-            int p1 = ((Integer) sample[0]).intValue();
-            int p2 = ((Integer) sample[1]).intValue();
-            int p3 = ((Integer) sample[2]).intValue();
-            int p4 = ((Integer) sample[3]).intValue();
+            int p1 = (Integer) sample[0];
+            int p2 = (Integer) sample[1];
+            int p3 = (Integer) sample[2];
+            int p4 = (Integer) sample[3];
             int i1 = p1 * p2 * p3;
             int i2 = p1 * p2 * p4;
             int gcd = p1 * p2;

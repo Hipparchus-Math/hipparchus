@@ -30,7 +30,7 @@ import org.hipparchus.analysis.integration.FieldUnivariateIntegrator;
 public class FieldComplexUnivariateIntegrator<T extends CalculusFieldElement<T>>  {
 
     /** Underlying real integrator. */
-    private FieldUnivariateIntegrator<T> integrator;
+    private final FieldUnivariateIntegrator<T> integrator;
 
     /** Crate a complex integrator from a real integrator.
      * @param integrator underlying real integrator to use

@@ -105,8 +105,8 @@ class MultiStartUnivariateOptimizerTest {
         assertEquals(-0.0443342695, optimum.getValue(), 1e-9);
 
         UnivariatePointValuePair[] optima = optimizer.getOptima();
-        for (int i = 0; i < optima.length; ++i) {
-            assertEquals(f.value(optima[i].getPoint()), optima[i].getValue(), 1e-9);
+        for (UnivariatePointValuePair univariatePointValuePair : optima) {
+            assertEquals(f.value(univariatePointValuePair.getPoint()), univariatePointValuePair.getValue(), 1e-9);
         }
         assertTrue(optimizer.getEvaluations() >= 50);
         assertTrue(optimizer.getEvaluations() <= 100);

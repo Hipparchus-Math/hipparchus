@@ -30,6 +30,8 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 
+import java.io.Serial;
+
 /** This class represents a point on the 2-sphere.
  * <p>
  * We use the mathematical convention to use the azimuthal angle \( \theta \)
@@ -66,6 +68,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
     // CHECKSTYLE: resume ConstantName
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20131218L;
 
     /** Azimuthal angle \( \theta \) in the x-y plane. */
@@ -227,8 +230,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
             return true;
         }
 
-        if (other instanceof S2Point) {
-            final S2Point rhs = (S2Point) other;
+        if (other instanceof S2Point rhs) {
             return theta == rhs.theta && phi == rhs.phi || isNaN() && rhs.isNaN();
         }
 
@@ -261,8 +263,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
             return true;
         }
 
-        if (other instanceof S2Point) {
-            final S2Point rhs = (S2Point) other;
+        if (other instanceof S2Point rhs) {
             return phi == rhs.phi && theta == rhs.theta;
         }
 

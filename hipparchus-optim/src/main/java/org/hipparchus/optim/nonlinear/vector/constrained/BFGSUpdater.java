@@ -16,7 +16,6 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -54,28 +53,6 @@ public class BFGSUpdater {
     private static final double TH = 1.0e-3;
 
     /**
-     * AutoScaling Flag.
-     */
-    private final boolean scale;
-
-    /**
-     * EPS.
-     */
-    private final double eps;
-
-    /**
-     * Tolerance for symmetric matrices decomposition.
-     *
-     * @since 4.1
-     */
-    private final double decompositionEpsilon;
-
-    /**
-     * Stored initial Hessian for resets.
-     */
-    private final RealMatrix initialH;
-
-    /**
      * Current Cholesky factor L such that H = L·Lᵀ.
      */
     private RealMatrix L;
@@ -96,12 +73,16 @@ public class BFGSUpdater {
      * decomposition
      */
     public BFGSUpdater(final RealMatrix initialHess, final double eps, final boolean autoScale, final double decompositionEpsilon) {
-        this.initialH = new Array2DRowRealMatrix(initialHess.getData());
-        this.eps      = eps;
-        this.scale    = autoScale;
+        /**
+         * AutoScaling Flag.
+         */
         this.dim      = initialHess.getColumnDimension();
         this.factor   = 1.0;
-        this.decompositionEpsilon = decompositionEpsilon;
+        /**
+         * Tolerance for symmetric matrices decomposition.
+         *
+         * @since 4.1
+         */
         resetHessian();
     }
 

@@ -131,18 +131,18 @@ final class LongFrequencyTest {
         LongFrequency f = new LongFrequency();
 
         Integer obj1 = null;
-        obj1 = Integer.valueOf(1);
-        Integer int1 = Integer.valueOf(1);
+        obj1 = 1;
+        Integer int1 = 1;
         f.addValue(obj1);
         f.addValue(int1);
         f.addValue(2);
         f.addValue(Long.valueOf(2).intValue());
         assertEquals(2, f.getCount(1), "Integer 1 count");
-        assertEquals(2, f.getCount(Integer.valueOf(1)), "Integer 1 count");
+        assertEquals(2, f.getCount(1), "Integer 1 count");
         assertEquals(2, f.getCount(Long.valueOf(1).intValue()), "Integer 1 count");
         assertEquals(0.5, f.getCumPct(1), TOLERANCE, "Integer 1 cumPct");
         assertEquals(0.5, f.getCumPct(Long.valueOf(1).intValue()), TOLERANCE, "Integer 1 cumPct");
-        assertEquals(0.5, f.getCumPct(Integer.valueOf(1)), TOLERANCE, "Integer 1 cumPct");
+        assertEquals(0.5, f.getCumPct(1), TOLERANCE, "Integer 1 cumPct");
 
         f.incrementValue(ONE, -2);
         f.incrementValue(THREE, 5);
@@ -266,7 +266,7 @@ final class LongFrequencyTest {
         f.addValue(3L);
         mode = f.getMode();
         assertEquals(1, mode.size());
-        assertEquals(Long.valueOf(3L), mode.get(0));
+        assertEquals(Long.valueOf(3L), mode.getFirst());
 
         f.addValue(2L);
         mode = f.getMode();
@@ -277,7 +277,7 @@ final class LongFrequencyTest {
         f.addValue(2L);
         mode = f.getMode();
         assertEquals(1, mode.size());
-        assertEquals(Long.valueOf(2L), mode.get(0));
+        assertEquals(Long.valueOf(2L), mode.getFirst());
         assertFalse(mode.contains(1L));
         assertTrue(mode.contains(2L));
     }

@@ -21,6 +21,8 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.nonstiff.HighamHall54Integrator;
 
+import java.io.Serial;
+
 /**
  * This class represents an interpolator over the last step during an
  * ODE integration for the 5(4) Higham and Hall integrator.
@@ -32,6 +34,7 @@ import org.hipparchus.ode.nonstiff.HighamHall54Integrator;
 public class HighamHall54StateInterpolator extends RungeKuttaStateInterpolator {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20111120L;
 
     /** Simple constructor.
