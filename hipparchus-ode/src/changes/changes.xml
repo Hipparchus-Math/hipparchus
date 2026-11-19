@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="4.1" date="TBD" description="TBD">
+    <release version="4.1" date="2026-11-18" description="This is a minor release.">
       <action dev="vincent" type="fix" issue="issues/488">
         Time checks of field integrators (integration span and last step detection) now compare time values
         only, ignoring the derivatives carried by the time. Too small intervals were not detected and an

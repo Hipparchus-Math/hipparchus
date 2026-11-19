@@ -49,7 +49,10 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="4.1" date="TBD" description="TBD">
+    <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator,
+roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential,
+gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions, RANSAC algorithm,
+revamped constrained optimizers, and numerous small improvements and bug fixes.">
       <action dev="vincent" type="fix" issue="issues/488">
         Restored Vector.getNormSq() as a default method, and FieldVector2D.getNormSq() and
         FieldVector3D.getNormSq(), removed without prior deprecation. They are now deprecated

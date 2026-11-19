@@ -49,7 +49,9 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="4.1" date="TBD" description="TBD">
+    <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator,
+roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential,
+gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions">
       <action dev="vincent" type="fix" issue="issues/488">
         Use the magnitude of the value instead of norm() in the convergence and size checks of Carlson and
         Legendre elliptic integrals, whose results depended on the derivatives carried by the arguments,
