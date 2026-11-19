@@ -31,6 +31,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @see UnivariateDifferentiableFunction
  * @see UnivariateFunctionDifferentiator
  */
+@FunctionalInterface
 public interface UnivariateDifferentiableFunction extends UnivariateFunction {
 
     /**
@@ -44,4 +45,8 @@ public interface UnivariateDifferentiableFunction extends UnivariateFunction {
      */
     <T extends Derivative<T>> T value(T x) throws MathIllegalArgumentException;
 
+    @Override
+    default double value(double x) {
+        return value(new UnivariateDerivative1(x, 0)).getValue();
+    }
 }

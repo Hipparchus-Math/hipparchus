@@ -37,7 +37,11 @@ import org.hipparchus.util.FastMath;
  * Algorithm based on paper:"Some Theoretical properties of an augmented lagrangian merit function
  * (Gill,Murray,Sauders,Wriht,April 1986)"
  * @since 3.1
+ * @deprecated as of 4.1, will be removed in 5.0; use {@link SQPOptimizerS2} instead.
+ * Note that {@link SQPOptimizerS2} has no equivalent of this optimizer's use of the
+ * exact objective Hessian ({@link SQPOption#useFunHessian()}).
  */
+@Deprecated
 public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
     /** Jacobian constraint. */
@@ -54,6 +58,12 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
     /** Hessian of the objective function. */
     private RealMatrix hessian;
+
+    /** Simple constructor.
+     */
+    public SQPOptimizerGM() {
+        // nothing to do
+    }
 
     /** {@inheritDoc} */
     @Override

@@ -41,6 +41,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -67,21 +68,21 @@ public class RandomDataGeneratorTest {
     void testNextIntExtremeValues() {
         int x = randomData.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
         int y = randomData.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        assertFalse(x == y);
+        assertNotEquals(x, y);
     }
 
     @Test
     void testNextLongExtremeValues() {
         long x = randomData.nextLong(Long.MIN_VALUE, Long.MAX_VALUE);
         long y = randomData.nextLong(Long.MIN_VALUE, Long.MAX_VALUE);
-        assertFalse(x == y);
+        assertNotEquals(x, y);
     }
 
     @Test
     void testNextUniformExtremeValues() {
         double x = randomData.nextUniform(-Double.MAX_VALUE, Double.MAX_VALUE);
         double y = randomData.nextUniform(-Double.MAX_VALUE, Double.MAX_VALUE);
-        assertFalse(x == y);
+        assertNotEquals(x, y, 0.0);
         assertFalse(Double.isNaN(x));
         assertFalse(Double.isNaN(y));
         assertFalse(Double.isInfinite(x));

@@ -162,7 +162,8 @@ public class FieldTaylorMap<T extends CalculusFieldElement<T>> implements Differ
      * @param deltaP parameters offsets \((\Delta p_1, \Delta p_2, \ldots, \Delta p_n)\)
      * @return value of the Taylor expansion at \((p_1 + \Delta p_1, p_2 + \Delta p_2, \ldots, p_n + \Delta p_n)\)
      */
-    public T[] value(@SuppressWarnings("unchecked") final T... deltaP) {
+    @SuppressWarnings("unchecked")
+    public T[] value(final T... deltaP) {
         final T[] value = MathArrays.buildArray(functions[0].getFactory().getValueField(), functions.length);
         for (int i = 0; i < functions.length; ++i) {
             value[i] = functions[i].taylor(deltaP);

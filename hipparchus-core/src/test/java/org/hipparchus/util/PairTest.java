@@ -16,10 +16,9 @@ package org.hipparchus.util;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * Test for {@link Pair}.
@@ -39,8 +38,8 @@ class PairTest {
 
         // Check that both APIs refer to the same data.
 
-        assertTrue(p.getFirst() == p.getKey());
-        assertTrue(p.getSecond() == p.getValue());
+        assertSame(p.getFirst(), p.getKey());
+        assertSame(p.getSecond(), p.getValue());
     }
 
     @Test
@@ -73,7 +72,7 @@ class PairTest {
 
         // Different contents, different hash codes.
         m2.set(2);
-        assertFalse(p1.hashCode() == p2.hashCode());
+        assertNotEquals(p1.hashCode(), p2.hashCode());
     }
 
     @Test

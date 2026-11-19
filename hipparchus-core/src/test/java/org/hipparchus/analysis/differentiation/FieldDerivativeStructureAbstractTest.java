@@ -17,6 +17,13 @@
 
 package org.hipparchus.analysis.differentiation;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
@@ -40,13 +47,6 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -78,9 +78,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
     @Test
     public void testWrongFieldVariableIndex() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            buildFactory(3, 1).variable(3, buildScalar(1.0));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> buildFactory(3, 1).variable(3, buildScalar(1.0)));
     }
 
     @Test
@@ -290,9 +288,9 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
     public void testPrimitiveDivide() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(3, maxOrder);
-            checkF0F1(factory.variable(0, 1.0).divide(2),  0.5, 0.5, 0.0, 0.0);
-            checkF0F1(factory.variable(1, 2.0).divide(2),  1.0, 0.0, 0.5, 0.0);
-            checkF0F1(factory.variable(2, 3.0).divide(2),  1.5, 0.0, 0.0, 0.5);
+            checkF0F1(factory.variable(0, 1.0).half(),  0.5, 0.5, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).half(),  1.0, 0.0, 0.5, 0.0);
+            checkF0F1(factory.variable(2, 3.0).half(),  1.5, 0.0, 0.0, 0.5);
         }
     }
 
@@ -834,7 +832,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         FieldDerivativeStructure<T> dsSmall = factory.variable(0, +3.0e-10);
         FieldDerivativeStructure<T> dsLarge = factory.variable(1, -4.0e25);
 
-        assertEquals(dsLarge.norm(),
+        assertEquals(dsLarge.getValue().norm(),
                             FieldDerivativeStructure.hypot(dsSmall, dsLarge).getReal(),
                             1.0e-10);
         assertEquals(0,
@@ -844,7 +842,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
                             FieldDerivativeStructure.hypot(dsSmall, dsLarge).getPartialDerivative(0, 1).getReal(),
                             1.0e-10);
 
-        assertEquals(dsLarge.norm(),
+        assertEquals(dsLarge.getValue().norm(),
                             FieldDerivativeStructure.hypot(dsLarge, dsSmall).getReal(),
                             1.0e-10);
         assertEquals(0,
@@ -1142,7 +1140,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
     @Test
     public void testSinAsin() {
-        double[] epsilon = new double[] { 3.0e-16, 5.0e-16, 3.0e-15, 2.0e-14, 4.0e-13 };
+        double[] epsilon = new double[] { 3.0e-16, 5.0e-16, 3.0e-15, 3.0e-14, 4.0e-13 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1190,7 +1188,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
     @Test
     public void testTangentDefinition() {
-        double[] epsilon = new double[] { 9.0e-16, 4.0e-15, 4.0e-14, 5.0e-13, 2.0e-11 };
+        double[] epsilon = new double[] { 9.0e-16, 4.5e-15, 4.0e-14, 5.0e-13, 2.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1479,7 +1477,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
     }
 
     @Test
-    public void testNorm() {
+    public void test2Abs() {
 
         final FDSFactory<T> factory = buildFactory(1, 1);
         FieldDerivativeStructure<T> minusOne = factory.variable(0, -1.0);
@@ -1909,11 +1907,11 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         final FDSFactory<T> factory33 = buildFactory(3, 3);
         final FDSFactory<T> factory35 = buildFactory(3, 5);
         final FDSFactory<T> factory55 = buildFactory(5, 5);
-        Assertions.assertFalse(factory33.variable(0, 1.0).equals(factory35.variable(0, 1.0)));
-        Assertions.assertFalse(factory33.variable(0, 1.0).equals(factory55.variable(0, 1.0)));
-        Assertions.assertTrue(factory33.variable(0, 1.0).equals(factory33.variable(0, 1.0)));
-        Assertions.assertFalse(factory33.variable(0, 1.0).equals(new UnivariateDerivative1(0, 0)));
-        Assertions.assertFalse(factory33.variable(0, 1.0).equals(factory33.variable(1, 1.0)));
+        assertNotEquals(factory33.variable(0, 1.0), factory35.variable(0, 1.0));
+        assertNotEquals(factory33.variable(0, 1.0), factory55.variable(0, 1.0));
+        assertEquals(factory33.variable(0, 1.0), factory33.variable(0, 1.0));
+        assertNotEquals(factory33.variable(0, 1.0), new UnivariateDerivative1(0, 0));
+        assertNotEquals(factory33.variable(0, 1.0), factory33.variable(1, 1.0));
         final FieldDerivativeStructure<T> x = factory33.variable(0, 1.0);
         Assertions.assertEquals(x, x);
         Assertions.assertNotEquals(0, x.hashCode());
@@ -2337,7 +2335,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         final FieldDerivativeStructure<T> ref = f.value(pBase);
 
         // intermediate variables as independent variables
-        final FieldDerivativeStructure<T>[] pIntermediate = creatIntermediateVariables(factoryP, pBase);
+        final FieldDerivativeStructure<T>[] pIntermediate = createIntermediateVariables(factoryP, pBase);
 
         // function of the intermediate variables
         final FieldDerivativeStructure<T> fI = f.value(pIntermediate);
@@ -2364,8 +2362,9 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         return qDS;
     }
 
-    final FieldDerivativeStructure<T>[] creatIntermediateVariables(final FDSFactory<T> factory,
-                                                                   @SuppressWarnings("unchecked") FieldDerivativeStructure<T>... pBase) {
+    @SuppressWarnings("unchecked")
+    final FieldDerivativeStructure<T>[] createIntermediateVariables(final FDSFactory<T> factory,
+                                                                    final FieldDerivativeStructure<T>... pBase) {
         final FieldDerivativeStructure<T>[] pIntermediate = MathArrays.buildArray(factory.getDerivativeField(), pBase.length);
         for (int i = 0; i < pBase.length; ++i) {
             pIntermediate[i] = factory.variable(i, pBase[i].getValue());

@@ -70,7 +70,6 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
      */
     public PolynomialFunction(double... c)
         throws MathIllegalArgumentException, NullArgumentException {
-        super();
         MathUtils.checkNotNull(c);
         int n = c.length;
         if (n == 0) {

@@ -39,6 +39,7 @@ import org.hipparchus.exception.MathRuntimeException;
  * to native code present in many JVMs today and use of large tables.
  * The larger tables are lazily initialized on first use, so that the setup
  * time does not penalize methods that don't need them.
+ *
  * <p>
  * Note that FastMath is
  * extensively used inside Hipparchus, so by calling some algorithms,
@@ -78,8 +79,14 @@ import org.hipparchus.exception.MathRuntimeException;
  * </ul>
  */
 public class FastMath {
+
     /** Archimede's constant PI, ratio of circle circumference to diameter. */
     public static final double PI = 105414357.0 / 33554432.0 + 1.984187159361080883e-9;
+
+    /** Double Archimede's constant, ratio of circle circumference to radius.
+     * @since 4.1
+     */
+    public static final double TAU = 1686629713.0 / 268435456.0 + 2.43084020260247704e-10;
 
     /** Napier's constant e, base of the natural logarithm. */
     public static final double E = 2850325.0 / 1048576.0 + 8.254840070411028747e-8;
@@ -134,7 +141,7 @@ public class FastMath {
         {-0.16624879837036133, -2.6033824355191673E-8}
     };
 
-    /** Sine, Cosine, Tangent tables are for 0, 1/8, 2/8, ... 13/8 = PI/2 approx. */
+    /* Sine, Cosine, Tangent tables are for 0, 1/8, 2/8, ... 13/8 = PI/2 approx. */
 
     /** Sine table (high bits). */
     private static final double[] SINE_TABLE_A =
@@ -311,7 +318,7 @@ public class FastMath {
     private static final int MASK_NON_SIGN_INT = 0x7fffffff;
 
     /** Mask used to clear the non-sign part of a long. */
-    private static final long MASK_NON_SIGN_LONG = 0x7fffffffffffffffl;
+    private static final long MASK_NON_SIGN_LONG = 0x7fffffffffffffffL;
 
     /** Mask used to extract exponent from double bits. */
     private static final long MASK_DOUBLE_EXPONENT = 0x7ff0000000000000L;
@@ -1079,7 +1086,15 @@ public class FastMath {
     }
 
     /**
-     * Internal helper method for exponential function.
+     * Internal helper method for computing a high-precision exponential in
+     *
+     * <ul>
+     * <li>{@link #sinh(double)},</li>
+     * <li>{@link #cosh(double)},</li>
+     * <li>{@link #tanh(double)}, and</li>
+     * <li>{@link #sinhCosh(double)}</li>
+     * </ul>
+     *
      * @param x original argument of the exponential function
      * @param extra extra bits of precision on input (To Be Confirmed)
      * @param hiPrec extra bits of precision on output (To Be Confirmed)
@@ -1405,7 +1420,7 @@ public class FastMath {
         }
 
         /* Extract the exponent */
-        int exp = (int)(bits >> 52)-1023;
+        int exp = (int)(bits >>> 52)-1023;
 
         if ((bits & 0x7ff0000000000000L) == 0) {
             // Subnormal!
@@ -1695,10 +1710,10 @@ public class FastMath {
         } else {
 
             final long yBits        = Double.doubleToRawLongBits(y);
-            final int  yRawExp      = (int) ((yBits & MASK_DOUBLE_EXPONENT) >> 52);
+            final int  yRawExp      = (int) ((yBits & MASK_DOUBLE_EXPONENT) >>> 52);
             final long yRawMantissa = yBits & MASK_DOUBLE_MANTISSA;
             final long xBits        = Double.doubleToRawLongBits(x);
-            final int  xRawExp      = (int) ((xBits & MASK_DOUBLE_EXPONENT) >> 52);
+            final int  xRawExp      = (int) ((xBits & MASK_DOUBLE_EXPONENT) >>> 52);
             final long xRawMantissa = xBits & MASK_DOUBLE_MANTISSA;
 
             if (yRawExp > 1085) {
@@ -2316,7 +2331,7 @@ public class FastMath {
     {
         /* Convert input double to bits */
         long inbits = Double.doubleToRawLongBits(x);
-        int exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+        int exponent = (int) ((inbits >>> 52) & 0x7ff) - 1023;
 
         /* Convert to fixed point representation */
         inbits &= 0x000fffffffffffffL;
@@ -2330,7 +2345,7 @@ public class FastMath {
         long shpi0;
         long shpiA;
         long shpiB;
-        int idx = exponent >> 6;
+        int idx = exponent >>> 6;
         int shift = exponent - (idx << 6);
 
         if (shift != 0) {
@@ -3223,7 +3238,7 @@ public class FastMath {
     public static double cbrt(double x) {
       /* Convert input double to bits */
       long inbits = Double.doubleToRawLongBits(x);
-      int exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+      int exponent = (int) ((inbits >>> 52) & 0x7ff) - 1023;
       boolean subnormal = false;
 
       if (exponent == -1023) {
@@ -3235,7 +3250,7 @@ public class FastMath {
           subnormal = true;
           x *= 1.8014398509481984E16;  // 2^54
           inbits = Double.doubleToRawLongBits(x);
-          exponent = (int) ((inbits >> 52) & 0x7ff) - 1023;
+          exponent = (int) ((inbits >>> 52) & 0x7ff) - 1023;
       }
 
       if (exponent == 1024) {
@@ -4350,9 +4365,9 @@ public class FastMath {
 
         // split numbers in two 32 bits parts
         final long aHigh  = a >>> 32;
-        final long aLow   = a & 0xFFFFFFFFl;
+        final long aLow   = a & 0xFFFFFFFFL;
         final long bHigh  = b >>> 32;
-        final long bLow   = b & 0xFFFFFFFFl;
+        final long bLow   = b & 0xFFFFFFFFL;
 
         // ab = aHigh * bHigh * 2⁶⁴ + (aHigh * bLow + aLow * bHigh) * 2³² + aLow * bLow
         final long hh     = aHigh * bHigh;
@@ -4362,7 +4377,7 @@ public class FastMath {
 
         // adds up everything in the above 64 bit part, taking care to avoid overflow
         final long hlHigh = (hl1 >>> 32) + (hl2 >>> 32);
-        final long hlLow  = (hl1 & 0xFFFFFFFFl) + (hl2 & 0xFFFFFFFFl);
+        final long hlLow  = (hl1 & 0xFFFFFFFFL) + (hl2 & 0xFFFFFFFFL);
         final long carry  = (hlLow + (ll >>> 32)) >>> 32;
 
         return hh + hlHigh + carry;
@@ -4394,10 +4409,10 @@ public class FastMath {
      * @since 3.0
      */
     public static long divideExact(final long x, final long y) {
-        if (y == 0l) {
+        if (y == 0L) {
             throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
-        if (y == -1l && x == Long.MIN_VALUE) {
+        if (y == -1L && x == Long.MIN_VALUE) {
             throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, x, y);
         }
         return x / y;
@@ -4468,17 +4483,17 @@ public class FastMath {
      */
     public static long ceilDiv(final long a, final long b) throws MathRuntimeException {
 
-        if (b == 0l) {
+        if (b == 0L) {
             throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;
-        if ((a ^ b) < 0 || m == 0l) {
+        if ((a ^ b) < 0 || m == 0L) {
             // a and b have opposite signs, or division is exact
             return a / b;
         } else {
             // a and b have same signs and division is not exact
-            return (a / b) + 1l;
+            return (a / b) + 1L;
         }
 
     }
@@ -4497,7 +4512,7 @@ public class FastMath {
      */
     public static long ceilDivExact(final long a, final long b) throws MathRuntimeException {
 
-        if (a == Long.MIN_VALUE && b == -1l) {
+        if (a == Long.MIN_VALUE && b == -1L) {
             throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
         }
 
@@ -4580,12 +4595,12 @@ public class FastMath {
      */
     public static long ceilMod(final long a, final long b) throws MathRuntimeException {
 
-        if (b == 0l) {
+        if (b == 0L) {
             throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;
-        if ((a ^ b) < 0l || m == 0l) {
+        if ((a ^ b) < 0L || m == 0L) {
             // a and b have opposite signs, or division is exact
             return m;
         } else {
@@ -4678,17 +4693,17 @@ public class FastMath {
      */
     public static long floorDiv(final long a, final long b) throws MathRuntimeException {
 
-        if (b == 0l) {
+        if (b == 0L) {
             throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;
-        if ((a ^ b) >= 0l || m == 0l) {
+        if ((a ^ b) >= 0L || m == 0L) {
             // a and b have same sign, or division is exact
             return a / b;
         } else {
             // a and b have opposite signs and division is not exact
-            return (a / b) - 1l;
+            return (a / b) - 1L;
         }
 
     }
@@ -4708,7 +4723,7 @@ public class FastMath {
      */
     public static long floorDivExact(final long a, final long b) throws MathRuntimeException {
 
-        if (a == Long.MIN_VALUE && b == -1l) {
+        if (a == Long.MIN_VALUE && b == -1L) {
             throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
         }
 
@@ -4776,12 +4791,12 @@ public class FastMath {
      */
     public static long floorMod(final long a, final long b) {
 
-        if (b == 0l) {
+        if (b == 0L) {
             throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;
-        if ((a ^ b) >= 0l || m == 0l) {
+        if ((a ^ b) >= 0L || m == 0L) {
             // a and b have same sign, or division is exact
             return m;
         } else {
@@ -4859,6 +4874,137 @@ public class FastMath {
     public static int getExponent(final float f) {
         // NaN and Infinite will return the same exponent anyhow so can use raw bits
         return ((Float.floatToRawIntBits(f) >>> 23) & 0xff) - 127;
+    }
+
+    /**
+     * Unsigned product of unsigned arguments.
+     * @param a first multiplicand
+     * @param b second multiplicand
+     * @return product of a and b, considered unsigned, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static int unsignedMultiplyExact(int a, int b) {
+        if (a >= 0 && b >= 0) {
+            int result;
+            try {
+                result = ArithmeticUtils.mulAndCheck(a, b);
+            } catch (MathRuntimeException mre) {
+                result = -1;
+            }
+            if (result >= 0) {
+                return result;
+            }
+        }
+        throw new ArithmeticException();
+    }
+
+    /**
+     * Unsigned product of unsigned arguments.
+     * @param a first multiplicand
+     * @param b second multiplicand
+     * @return product of a and b, considered unsigned, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long unsignedMultiplyExact(long a , int b) {
+        return unsignedMultiplyExact(a, (long) b);
+    }
+
+    /**
+     * Unsigned product of unsigned arguments.
+     * @param a first multiplicand
+     * @param b second multiplicand
+     * @return product of a and b, considered unsigned, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long unsignedMultiplyExact(long a, long b) {
+        if (a >= 0L && b >= 0L) {
+            long result;
+            try {
+                result = ArithmeticUtils.mulAndCheck(a, b);
+            } catch (MathRuntimeException mre) {
+                result = -1L;
+            }
+            if (result >= 0L) {
+                return result;
+            }
+        }
+        throw new ArithmeticException();
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static int powExact(int k, int e) {
+        try {
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long powExact(long k, int e) {
+        try {
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static int unsignedPowExact(int k, int e) {
+        try {
+            if (e == 0) {
+                // process special case early (not event checking for k really be unsigned
+                return 1;
+            }
+            if (k < 0) {
+                // k is not unsigned
+                throw new ArithmeticException();
+            }
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
+    }
+
+    /**
+     * Power function.
+     * @param k base number
+     * @param e exponent
+     * @return b^e, throwing an exception in case of overflow
+     * @since 4.1
+     */
+    public static long unsignedPowExact(long k, int e) {
+        try {
+            if (e == 0) {
+                // process special case early (not event checking for k really be unsigned
+                return 1;
+            }
+            if (k < 0) {
+                // k is not unsigned
+                throw new ArithmeticException();
+            }
+            return ArithmeticUtils.pow(k, e);
+        } catch (MathRuntimeException mre) {
+            throw new ArithmeticException();
+        }
     }
 
     /** Compute Fused-multiply-add operation a * b + c.

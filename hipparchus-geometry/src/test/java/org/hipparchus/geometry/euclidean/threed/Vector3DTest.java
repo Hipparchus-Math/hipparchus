@@ -39,6 +39,7 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -71,7 +72,27 @@ class Vector3DTest {
         assertEquals(3, space.getDimension());
         assertEquals(2, space.getSubSpace().getDimension());
         Space deserialized = (Space) UnitTestUtils.serializeAndRecover(space);
-        assertTrue(space == deserialized);
+        assertSame(space, deserialized);
+    }
+
+    @Test
+    void testGetNorm2() {
+        // GIVEN
+        final Vector3D vector3D = new Vector3D(1, 2, 3);
+        // WHEN
+        final double norm2 = vector3D.getNorm2();
+        // THEN
+        assertEquals(vector3D.getNorm(), norm2);
+    }
+
+    @Test
+    void testGetNorm2Sq() {
+        // GIVEN
+        final Vector3D vector3D = new Vector3D(1, 2, 3);
+        // WHEN
+        final double norm2Sq = vector3D.getNorm2Sq();
+        // THEN
+        assertEquals(vector3D.getNorm2() * vector3D.getNorm2(), norm2Sq);
     }
 
     @Test
@@ -142,9 +163,7 @@ class Vector3DTest {
 
     @Test
     void testWrongDimension() throws MathIllegalArgumentException {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Vector3D(new double[]{2, 5});
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Vector3D(new double[]{2, 5}));
     }
 
     @Test
@@ -173,8 +192,8 @@ class Vector3DTest {
 
     @Test
     void testNormSq() {
-        assertEquals(0.0, new Vector3D(0, 0, 0).getNormSq(), 0);
-        assertEquals(14, new Vector3D(1, 2, 3).getNormSq(), 1.0e-12);
+        assertEquals(0.0, new Vector3D(0, 0, 0).getNorm2Sq(), 0);
+        assertEquals(14, new Vector3D(1, 2, 3).getNorm2Sq(), 1.0e-12);
     }
 
     @Test
@@ -461,4 +480,11 @@ class Vector3DTest {
         assertEquals(y, v.getY(), 1.0e-12);
         assertEquals(z, v.getZ(), 1.0e-12);
     }
+
+    @Test
+    @Deprecated
+    void testDeprecatedNormSq() {
+        assertEquals(14.0, new Vector3D(1, 2, 3).getNormSq(), 0.0);
+    }
+
 }

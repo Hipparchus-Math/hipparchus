@@ -99,9 +99,7 @@ final class BisectionSolverTest {
 
     @Test
     void testHipparchusGithub40() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new BisectionSolver().solve(100, x -> Math.cos(x) + 2, 0.0, 5.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new BisectionSolver().solve(100, x -> Math.cos(x) + 2, 0.0, 5.0));
     }
 
 }

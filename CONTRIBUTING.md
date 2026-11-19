@@ -56,7 +56,9 @@ In this case, it is appropriate to start the first line of a commit with '(doc)'
 Submitting Changes
 ------------------
 
-+ Sign the [Contributor License Agreement](https://hipparchus.org/licenses/#clas) if you haven't already.
++ Sign the appropriate Contributor License Agreement if you haven't already.
+  + [Individual Contributor License Agreement](https://hipparchus.org/clas/ICLA.pdf)
+  + [Corporate Contributor License Agreement](https://hipparchus.org/clas/CCLA.pdf)
 + Push your changes to a topic branch in your fork of the repository.
 + Submit a pull request to the [repository](https://github.com/Hipparchus-Math/hipparchus).
 + Update your GitHub ticket and include a link to the pull request in the ticket.

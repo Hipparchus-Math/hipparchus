@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -59,6 +60,12 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
         T prototype = build(0.0).getValue();
         return new FieldUnivariateDerivative1<>(prototype.newInstance(f0),
                                                 prototype.newInstance(f1));
+    }
+
+    @Test
+    public void testNorm() {
+        T prototype = build(2.0).getValue();
+        assertTrue(prototype.norm() >= FastMath.abs(prototype.getReal()));
     }
 
     @Test
@@ -195,7 +202,7 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final S y = x.add(3).multiply(x).subtract(5).multiply(0.5);
-                                   return y.negate().divide(4).divide(x).add(y).subtract(x).multiply(2).reciprocal();
+                                   return y.negate().divide(4).divide(x).add(y).subtract(x).twice().reciprocal();
                                }
                            });
         }
@@ -270,7 +277,7 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).hypot(x.sin().multiply(2));
+                                   return x.cos().multiply(5).hypot(x.sin().twice());
                                }
                            });
         }
@@ -282,7 +289,7 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).atan2(x.sin().multiply(2));
+                                   return x.cos().multiply(5).atan2(x.sin().twice());
                                }
                            });
         }

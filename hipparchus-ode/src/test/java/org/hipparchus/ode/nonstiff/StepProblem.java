@@ -80,9 +80,6 @@ public class StepProblem extends AbstractODEDetector<StepProblem> implements Ord
         this.rate = rate;
     }
 
-    public void init(double t0, double[] y0, double t) {
-    }
-
     private static class LocalHandler implements ODEEventHandler {
         public Action eventOccurred(ODEStateAndDerivative state, ODEEventDetector detector, boolean increasing) {
             final StepProblem sp = (StepProblem) detector;

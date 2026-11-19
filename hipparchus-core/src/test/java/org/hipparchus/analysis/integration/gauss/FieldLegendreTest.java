@@ -53,7 +53,7 @@ class FieldLegendreTest {
     @Test
     void testCos() {
         final FieldGaussIntegrator<Binary64> integrator = factory.legendre(7, new Binary64(0), new Binary64(Math.PI / 2));
-        final double s = integrator.integrate(x -> FastMath.cos(x)).getReal();
+        final double s = integrator.integrate(FastMath::cos).getReal();
         // System.out.println("s=" + s + " e=" + 1);
         assertEquals(1, s, Math.ulp(1d));
     }
@@ -66,7 +66,7 @@ class FieldLegendreTest {
         final Binary64 hi = new Binary64(456.78);
 
         final FieldGaussIntegrator<Binary64> integrator = factory.legendre(60, lo, hi);
-        final double s = integrator.integrate(x -> x.reciprocal()).getReal();
+        final double s = integrator.integrate(Binary64::reciprocal).getReal();
         final double expected = FastMath.log(hi).subtract(FastMath.log(lo)).getReal();
         // System.out.println("s=" + s + " e=" + expected);
         assertEquals(expected, s, 1e-14);

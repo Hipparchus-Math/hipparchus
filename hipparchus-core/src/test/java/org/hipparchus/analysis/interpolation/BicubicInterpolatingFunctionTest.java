@@ -224,30 +224,10 @@ final class BicubicInterpolatingFunctionTest {
         final double maxTolerance = 1e-14;
 
         // Function values
-        BivariateFunction f = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 2 * x - 3 * y + 5;
-                }
-            };
-        BivariateFunction dfdx = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 2;
-                }
-            };
-        BivariateFunction dfdy = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return -3;
-                }
-            };
-        BivariateFunction d2fdxdy = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 0;
-                }
-            };
+        BivariateFunction f = (x, y) -> 2 * x - 3 * y + 5;
+        BivariateFunction dfdx = (x, y) -> 2;
+        BivariateFunction dfdy = (x, y) -> -3;
+        BivariateFunction d2fdxdy = (x, y) -> 0;
 
         testInterpolation(minimumX,
                           maximumX,
@@ -282,30 +262,10 @@ final class BicubicInterpolatingFunctionTest {
         final double maxTolerance = 1e-12;
 
         // Function values
-        BivariateFunction f = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 2 * x * x - 3 * y * y + 4 * x * y - 5;
-                }
-            };
-        BivariateFunction dfdx = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 4 * (x + y);
-                }
-            };
-        BivariateFunction dfdy = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 4 * x - 6 * y;
-                }
-            };
-        BivariateFunction d2fdxdy = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 4;
-                }
-            };
+        BivariateFunction f = (x, y) -> 2 * x * x - 3 * y * y + 4 * x * y - 5;
+        BivariateFunction dfdx = (x, y) -> 4 * (x + y);
+        BivariateFunction dfdy = (x, y) -> 4 * x - 6 * y;
+        BivariateFunction d2fdxdy = (x, y) -> 4;
 
         testInterpolation(minimumX,
                           maximumX,

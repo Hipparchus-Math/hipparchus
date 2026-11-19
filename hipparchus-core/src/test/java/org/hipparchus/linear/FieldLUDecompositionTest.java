@@ -24,6 +24,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.FieldElement;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -37,6 +38,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -283,9 +285,9 @@ class FieldLUDecompositionTest {
         }
 
         // check the same cached instance is returned the second time
-        assertTrue(l == lu.getL());
-        assertTrue(u == lu.getU());
-        assertTrue(p == lu.getP());
+        assertSame(l, lu.getL());
+        assertSame(u, lu.getU());
+        assertSame(p, lu.getP());
 
     }
 
@@ -324,9 +326,9 @@ class FieldLUDecompositionTest {
         }
 
         // check the same cached instance is returned the second time
-        assertTrue(l == lu.getL());
-        assertTrue(u == lu.getU());
-        assertTrue(p == lu.getP());
+        assertSame(l, lu.getL());
+        assertSame(u, lu.getU());
+        assertSame(p, lu.getP());
     }
 
     @Test
@@ -348,7 +350,7 @@ class FieldLUDecompositionTest {
     @Test
     void testSolve() {
         FieldDecompositionSolver<Fraction> solver =
-                        new FieldLUDecomposer<Fraction>(e -> e.isZero()).
+                        new FieldLUDecomposer<Fraction>(FieldElement::isZero).
                         decompose(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(),
                                                                       testData));
         FieldVector<Fraction> solution = solver.solve(new ArrayFieldVector<>(new Fraction[] {
@@ -422,7 +424,7 @@ class FieldLUDecompositionTest {
     void testIssue134() {
 
         FieldMatrix<Fraction> matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData);
-        FieldLUDecomposition<Fraction> lu = new FieldLUDecomposition<Fraction>(matrix, e -> e.isZero(), false);
+        FieldLUDecomposition<Fraction> lu = new FieldLUDecomposition<Fraction>(matrix, FieldElement::isZero, false);
 
         // L
         final FieldMatrix<Fraction> l = lu.getL();

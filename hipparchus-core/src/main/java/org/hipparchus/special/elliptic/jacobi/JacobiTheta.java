@@ -109,8 +109,8 @@ public class JacobiTheta {
 
         return new Theta(sum1.multiply(2 * qFourth),
                          sum2.multiply(2 * qFourth),
-                         sum3.multiply(2).add(1),
-                         sum4.multiply(2).add(1));
+                         sum3.twice().add(1),
+                         sum4.twice().add(1));
 
     }
 

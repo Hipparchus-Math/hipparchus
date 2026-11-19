@@ -23,7 +23,6 @@
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -187,11 +186,7 @@ class SimplexOptimizerNelderMeadTest {
                     { 1, 0 },
                     { 0, 1 }
                 }, false);
-        LeastSquaresConverter ls = new LeastSquaresConverter(new MultivariateVectorFunction() {
-                public double[] value(double[] variables) {
-                    return factors.operate(variables);
-                }
-            }, new double[] { 2.0, -3.0 });
+        LeastSquaresConverter ls = new LeastSquaresConverter(factors::operate, new double[] { 2.0, -3.0 });
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-6);
         PointValuePair optimum =
             optimizer.optimize(new MaxEval(200),
@@ -213,11 +208,7 @@ class SimplexOptimizerNelderMeadTest {
                     { 1, 0 },
                     { 0, 1 }
                 }, false);
-        LeastSquaresConverter ls = new LeastSquaresConverter(new MultivariateVectorFunction() {
-                public double[] value(double[] variables) {
-                    return factors.operate(variables);
-                }
-            }, new double[] { 2, -3 }, new double[] { 10, 0.1 });
+        LeastSquaresConverter ls = new LeastSquaresConverter(factors::operate, new double[] { 2, -3 }, new double[] { 10, 0.1 });
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-6);
         PointValuePair optimum =
             optimizer.optimize(new MaxEval(200),
@@ -239,11 +230,7 @@ class SimplexOptimizerNelderMeadTest {
                     { 1, 0 },
                     { 0, 1 }
                 }, false);
-        LeastSquaresConverter ls = new LeastSquaresConverter(new MultivariateVectorFunction() {
-                public double[] value(double[] variables) {
-                    return factors.operate(variables);
-                }
-            }, new double[] { 2, -3 }, new Array2DRowRealMatrix(new double [][] {
+        LeastSquaresConverter ls = new LeastSquaresConverter(factors::operate, new double[] { 2, -3 }, new Array2DRowRealMatrix(new double [][] {
                     { 1, 1.2 }, { 1.2, 2 }
                 }));
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-6);

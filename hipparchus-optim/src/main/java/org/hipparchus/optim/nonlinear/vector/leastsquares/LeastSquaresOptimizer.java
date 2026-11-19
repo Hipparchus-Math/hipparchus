@@ -24,6 +24,7 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 /**
  * An algorithm that can be applied to a non-linear least squares problem.
  */
+@FunctionalInterface
 public interface LeastSquaresOptimizer {
 
     /**

@@ -59,7 +59,6 @@ public class Covariance {
      * Create a Covariance with no data.
      */
     public Covariance() {
-        super();
         covarianceMatrix = null;
         n = 0;
     }

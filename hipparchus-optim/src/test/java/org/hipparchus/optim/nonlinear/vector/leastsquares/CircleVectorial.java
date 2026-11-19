@@ -54,47 +54,43 @@ class CircleVectorial {
     }
 
     public MultivariateVectorFunction getModelFunction() {
-        return new MultivariateVectorFunction() {
-            public double[] value(double[] params) {
-                Vector2D center = new Vector2D(params[0], params[1]);
-                double radius = getRadius(center);
-                double[] residuals = new double[points.size()];
-                for (int i = 0; i < residuals.length; i++) {
-                    residuals[i] = points.get(i).distance(center) - radius;
-                }
-
-                return residuals;
+        return params -> {
+            Vector2D center = new Vector2D(params[0], params[1]);
+            double radius = getRadius(center);
+            double[] residuals = new double[points.size()];
+            for (int i = 0; i < residuals.length; i++) {
+                residuals[i] = points.get(i).distance(center) - radius;
             }
+
+            return residuals;
         };
     }
 
     public MultivariateMatrixFunction getModelFunctionJacobian() {
-        return new MultivariateMatrixFunction() {
-            public double[][] value(double[] params) {
-                final int n = points.size();
-                final Vector2D center = new Vector2D(params[0], params[1]);
+        return params -> {
+            final int n = points.size();
+            final Vector2D center = new Vector2D(params[0], params[1]);
 
-                double dRdX = 0;
-                double dRdY = 0;
-                for (Vector2D pk : points) {
-                    double dk = pk.distance(center);
-                    dRdX += (center.getX() - pk.getX()) / dk;
-                    dRdY += (center.getY() - pk.getY()) / dk;
-                }
-                dRdX /= n;
-                dRdY /= n;
-
-                // Jacobian of the radius residuals.
-                double[][] jacobian = new double[n][2];
-                for (int i = 0; i < n; i++) {
-                    final Vector2D pi = points.get(i);
-                    final double di = pi.distance(center);
-                    jacobian[i][0] = (center.getX() - pi.getX()) / di - dRdX;
-                    jacobian[i][1] = (center.getY() - pi.getY()) / di - dRdY;
-                }
-
-                return jacobian;
+            double dRdX = 0;
+            double dRdY = 0;
+            for (Vector2D pk : points) {
+                double dk = pk.distance(center);
+                dRdX += (center.getX() - pk.getX()) / dk;
+                dRdY += (center.getY() - pk.getY()) / dk;
             }
+            dRdX /= n;
+            dRdY /= n;
+
+            // Jacobian of the radius residuals.
+            double[][] jacobian = new double[n][2];
+            for (int i = 0; i < n; i++) {
+                final Vector2D pi = points.get(i);
+                final double di = pi.distance(center);
+                jacobian[i][0] = (center.getX() - pi.getX()) / di - dRdX;
+                jacobian[i][1] = (center.getY() - pi.getY()) / di - dRdY;
+            }
+
+            return jacobian;
         };
     }
 }

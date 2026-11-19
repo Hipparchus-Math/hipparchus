@@ -226,16 +226,23 @@ public class ADMMQPModifiedRuizEquilibrium {
      * @param v vector to limit
      * @return rescaled vector, taking scaling limits into account
      */
-    private RealVector limitScaling(RealVector v) {
+   private RealVector limitScaling(final RealVector v) {
+    final RealVector result = new ArrayRealVector(v.getDimension());
 
-        RealVector result = new ArrayRealVector(v.getDimension());
-        for (int i = 0; i < v.getDimension(); i++) {
-            result.setEntry(i,  v.getEntry(i) < MIN_SCALING ? 1.0 : v.getEntry(i));
-            result.setEntry(i,  v.getEntry(i) > MAX_SCALING ? MAX_SCALING : v.getEntry(i));
+    for (int i = 0; i < v.getDimension(); i++) {
+        final double vi = v.getEntry(i);
+
+        if (!Double.isFinite(vi) || vi <= 0.0) {
+            result.setEntry(i, 1.0);
+        } else if (vi < MIN_SCALING) {
+            result.setEntry(i, 1.0);
+        } else if (vi > MAX_SCALING) {
+            result.setEntry(i, MAX_SCALING);
+        } else {
+            result.setEntry(i, vi);
         }
-
-        return result;
-
     }
 
+    return result;
+}
 }

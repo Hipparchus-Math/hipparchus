@@ -51,28 +51,28 @@ import static org.junit.jupiter.api.Assertions.fail;
 class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
 
 
-    private double inf = Double.POSITIVE_INFINITY;
-    private double neginf = Double.NEGATIVE_INFINITY;
-    private double nan = Double.NaN;
-    private double pi = FastMath.PI;
-    private Complex oneInf = new Complex(1, inf);
-    private Complex oneNegInf = new Complex(1, neginf);
-    private Complex infOne = new Complex(inf, 1);
-    private Complex infZero = new Complex(inf, 0);
-    private Complex infNaN = new Complex(inf, nan);
-    private Complex infNegInf = new Complex(inf, neginf);
-    private Complex infInf = new Complex(inf, inf);
-    private Complex negInfInf = new Complex(neginf, inf);
-    private Complex negInfZero = new Complex(neginf, 0);
-    private Complex negInfOne = new Complex(neginf, 1);
-    private Complex negInfNaN = new Complex(neginf, nan);
-    private Complex negInfNegInf = new Complex(neginf, neginf);
-    private Complex oneNaN = new Complex(1, nan);
-    private Complex zeroInf = new Complex(0, inf);
-    private Complex zeroNaN = new Complex(0, nan);
-    private Complex nanInf = new Complex(nan, inf);
-    private Complex nanNegInf = new Complex(nan, neginf);
-    private Complex nanZero = new Complex(nan, 0);
+    private final double  inf = Double.POSITIVE_INFINITY;
+    private final double  neginf = Double.NEGATIVE_INFINITY;
+    private final double  nan = Double.NaN;
+    private final double  pi = FastMath.PI;
+    private final Complex oneInf = new Complex(1, inf);
+    private final Complex oneNegInf = new Complex(1, neginf);
+    private final Complex infOne = new Complex(inf, 1);
+    private final Complex infZero = new Complex(inf, 0);
+    private final Complex infNaN = new Complex(inf, nan);
+    private final Complex infNegInf = new Complex(inf, neginf);
+    private final Complex infInf = new Complex(inf, inf);
+    private final Complex negInfInf = new Complex(neginf, inf);
+    private final Complex negInfZero = new Complex(neginf, 0);
+    private final Complex negInfOne = new Complex(neginf, 1);
+    private final Complex negInfNaN = new Complex(neginf, nan);
+    private final Complex negInfNegInf = new Complex(neginf, neginf);
+    private final Complex oneNaN = new Complex(1, nan);
+    private final Complex zeroInf = new Complex(0, inf);
+    private final Complex zeroNaN = new Complex(0, nan);
+    private final Complex nanInf = new Complex(nan, inf);
+    private final Complex nanNegInf = new Complex(nan, neginf);
+    private final Complex nanZero = new Complex(nan, 0);
 
     @Override
     protected Complex build(final double x) {
@@ -543,23 +543,19 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
 
     @Test
     void testFloatingPointEqualsPrecondition1() {
-        assertThrows(NullPointerException.class, () -> {
-            Complex.equals(new Complex(3.0, 4.0), null, 3);
-        });
+        assertThrows(NullPointerException.class, () -> Complex.equals(new Complex(3.0, 4.0), null, 3));
     }
 
     @Test
     void testFloatingPointEqualsPrecondition2() {
-        assertThrows(NullPointerException.class, () -> {
-            Complex.equals(null, new Complex(3.0, 4.0), 3);
-        });
+        assertThrows(NullPointerException.class, () -> Complex.equals(null, new Complex(3.0, 4.0), 3));
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Test
     void testEqualsClass() {
         Complex x = new Complex(3.0, 4.0);
-        assertNotEquals(x, this);
+        assertNotEquals(this, x);
     }
 
     @Test
@@ -680,9 +676,9 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     void testHashCode() {
         Complex x = new Complex(0.0, 0.0);
         Complex y = new Complex(0.0, 0.0 + Double.MIN_VALUE);
-        assertFalse(x.hashCode()==y.hashCode());
+        assertNotEquals(x.hashCode(), y.hashCode());
         y = new Complex(0.0 + Double.MIN_VALUE, 0.0);
-        assertFalse(x.hashCode()==y.hashCode());
+        assertNotEquals(x.hashCode(), y.hashCode());
         Complex realNaN = new Complex(Double.NaN, 0.0);
         Complex imaginaryNaN = new Complex(0.0, Double.NaN);
         assertEquals(realNaN.hashCode(), imaginaryNaN.hashCode());
@@ -1276,9 +1272,7 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
 
     @Test
     void testpowNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            Complex.ONE.pow(null);
-        });
+        assertThrows(NullArgumentException.class, () -> Complex.ONE.pow(null));
     }
 
     @Test
@@ -1822,7 +1816,7 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
             assertFalse(new Complex(FastMath.nextAfter(d, Double.NEGATIVE_INFINITY), imaginary).isMathematicalInteger());
         }
 
-        double minNoFractional = 0x1l << 52;
+        double minNoFractional = 0x1L << 52;
         assertEquals(expectedForInteger, new Complex(minNoFractional, imaginary).isMathematicalInteger());
         assertFalse(new Complex(minNoFractional - 0.5, imaginary).isMathematicalInteger());
         assertEquals(expectedForInteger, new Complex(minNoFractional + 0.5, imaginary).isMathematicalInteger());
@@ -2130,6 +2124,13 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         TestComplex inftcmplx = (TestComplex)UnitTestUtils.serializeAndRecover(new TestComplex(infInf));
         assertEquals(infInf, inftcmplx);
         assertTrue(inftcmplx.isInfinite());
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(new Complex(1.0e-13, 1.0e-13).isSmall(new Complex(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new Complex(1.0e-11, 1.0e-13).isSmall(new Complex(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new Complex(1.0e-13, 1.0e-11).isSmall(new Complex(1.0, 1.0), 1.0e-12));
     }
 
     /**

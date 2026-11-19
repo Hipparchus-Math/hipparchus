@@ -110,14 +110,14 @@ public class ThreeEighthesFieldStateInterpolator<T extends CalculusFieldElement<
         final T coeffDot3  = theta.multiply(0.75);
         final T coeffDot1  = coeffDot3.multiply(theta.multiply(4).subtract(5)).add(1);
         final T coeffDot2  = coeffDot3.multiply(theta.multiply(-6).add(5));
-        final T coeffDot4  = coeffDot3.multiply(theta.multiply(2).subtract(1));
+        final T coeffDot4  = coeffDot3.multiply(theta.twice().subtract(1));
         final T[] interpolatedState;
         final T[] interpolatedDerivatives;
 
         if (getGlobalPreviousState() != null && theta.getReal() <= 0.5) {
             final T s          = thetaH.divide(8);
             final T fourTheta2 = theta.multiply(theta).multiply(4);
-            final T coeff1     = s.multiply(fourTheta2.multiply(2).subtract(theta.multiply(15)).add(8));
+            final T coeff1     = s.multiply(fourTheta2.twice().subtract(theta.multiply(15)).add(8));
             final T coeff2     = s.multiply(theta.multiply(5).subtract(fourTheta2)).multiply(3);
             final T coeff3     = s.multiply(theta).multiply(3);
             final T coeff4     = s.multiply(fourTheta2.subtract(theta.multiply(3)));
@@ -127,7 +127,7 @@ public class ThreeEighthesFieldStateInterpolator<T extends CalculusFieldElement<
             final T s          = oneMinusThetaH.divide(-8);
             final T fourTheta2 = theta.multiply(theta).multiply(4);
             final T thetaPlus1 = theta.add(1);
-            final T coeff1     = s.multiply(fourTheta2.multiply(2).subtract(theta.multiply(7)).add(1));
+            final T coeff1     = s.multiply(fourTheta2.twice().subtract(theta.multiply(7)).add(1));
             final T coeff2     = s.multiply(thetaPlus1.subtract(fourTheta2)).multiply(3);
             final T coeff3     = s.multiply(thetaPlus1).multiply(3);
             final T coeff4     = s.multiply(thetaPlus1.add(fourTheta2));

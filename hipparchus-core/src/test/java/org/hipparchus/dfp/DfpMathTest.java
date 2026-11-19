@@ -500,15 +500,15 @@ class DfpMathTest {
              factory.newDfp("-0"),
              DfpField.FLAG_INEXACT, "sin #5");
 
-        test(DfpMath.sin(factory.getPi().multiply(2)),
+        test(DfpMath.sin(factory.getPi().twice()),
              factory.getZero(),
              DfpField.FLAG_INEXACT, "sin #6");
 
-        test(DfpMath.sin(factory.getPi().divide(2)),
+        test(DfpMath.sin(factory.getPi().half()),
              factory.getOne(),
              DfpField.FLAG_INEXACT, "sin #7");
 
-        test(DfpMath.sin(factory.getPi().divide(2).negate()),
+        test(DfpMath.sin(factory.getPi().half().negate()),
              factory.getOne().negate(),
              DfpField.FLAG_INEXACT, "sin #8");
 

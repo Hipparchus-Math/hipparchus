@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -33,7 +34,7 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
     private final T[] values;
 
     /** Field the instance belongs to. */
-    private final transient FieldTupleField<T> field;
+    private final FieldTupleField<T> field;
 
     /** Creates a new instance from its components.
      * @param x components of the tuple
@@ -768,10 +769,34 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
 
     /** {@inheritDoc} */
     @Override
+    public double norm() {
+        double sum = 0;
+        for (final T value: values) {
+            sum += value.norm();
+        }
+        return sum;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldTuple<T> getPi() {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         Arrays.fill(result.values, values[0].getPi());
         return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final FieldTuple<T> base, final double relativeThreshold) {
+        if (values.length != base.values.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   values.length, base.values.length);
+        }
+        boolean ok = true;
+        for (int i = 0; i < values.length && ok; ++i) {
+            ok = values[i].isSmall(base.values[i], relativeThreshold);
+        }
+        return ok;
     }
 
     /** Field for {link FieldTuple} instances.

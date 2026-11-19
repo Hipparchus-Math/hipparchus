@@ -81,9 +81,7 @@ class ComplexUtilsTest {
 
     @Test
     void testPolar2ComplexIllegalModulus() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            ComplexUtils.polar2Complex(-1, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> ComplexUtils.polar2Complex(-1, 0));
     }
 
     @Test

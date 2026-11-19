@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BiDiagonalTransformerTest {
@@ -160,9 +161,9 @@ class BiDiagonalTransformerTest {
        assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
 
        // check the same cached instance is returned the second time
-       assertTrue(u == transformer.getU());
-       assertTrue(b == transformer.getB());
-       assertTrue(v == transformer.getV());
+        assertSame(u, transformer.getU());
+        assertSame(b, transformer.getB());
+        assertSame(v, transformer.getV());
 
     }
 
@@ -193,9 +194,9 @@ class BiDiagonalTransformerTest {
         assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
-        assertTrue(u == transformer.getU());
-        assertTrue(b == transformer.getB());
-        assertTrue(v == transformer.getV());
+        assertSame(u, transformer.getU());
+        assertSame(b, transformer.getB());
+        assertSame(v, transformer.getV());
 
     }
 

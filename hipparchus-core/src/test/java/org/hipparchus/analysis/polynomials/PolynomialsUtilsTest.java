@@ -26,11 +26,13 @@ import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests the PolynomialsUtils class.
@@ -85,12 +87,7 @@ class PolynomialsUtilsTest {
 
     @Test
     void testChebyshevOrthogonality() {
-        UnivariateFunction weight = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return 1 / FastMath.sqrt(1 - x * x);
-            }
-        };
+        UnivariateFunction weight = x -> 1 / FastMath.sqrt(1 - x * x);
         for (int i = 0; i < 10; ++i) {
             PolynomialFunction pi = PolynomialsUtils.createChebyshevPolynomial(i);
             for (int j = 0; j <= i; ++j) {
@@ -137,12 +134,7 @@ class PolynomialsUtilsTest {
 
     @Test
     void testHermiteOrthogonality() {
-        UnivariateFunction weight = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return FastMath.exp(-x * x);
-            }
-        };
+        UnivariateFunction weight = x -> FastMath.exp(-x * x);
         for (int i = 0; i < 10; ++i) {
             PolynomialFunction pi = PolynomialsUtils.createHermitePolynomial(i);
             for (int j = 0; j <= i; ++j) {
@@ -195,12 +187,7 @@ class PolynomialsUtilsTest {
 
     @Test
     void testLaguerreOrthogonality() {
-        UnivariateFunction weight = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return FastMath.exp(-x);
-            }
-        };
+        UnivariateFunction weight = x -> FastMath.exp(-x);
         for (int i = 0; i < 10; ++i) {
             PolynomialFunction pi = PolynomialsUtils.createLaguerrePolynomial(i);
             for (int j = 0; j <= i; ++j) {
@@ -247,12 +234,7 @@ class PolynomialsUtilsTest {
 
     @Test
     void testLegendreOrthogonality() {
-        UnivariateFunction weight = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return 1;
-            }
-        };
+        UnivariateFunction weight = x -> 1;
         for (int i = 0; i < 10; ++i) {
             PolynomialFunction pi = PolynomialsUtils.createLegendrePolynomial(i);
             for (int j = 0; j <= i; ++j) {
@@ -286,6 +268,16 @@ class PolynomialsUtilsTest {
     }
 
     @Test
+    void testNegativeDegree() {
+        try {
+            PolynomialsUtils.createChebyshevPolynomial(-1);
+            fail("Expected MathIllegalArgumentException");
+        } catch (org.hipparchus.exception.MathIllegalArgumentException e) {
+            // expected
+        }
+    }
+
+    @Test
     void testJacobiLegendre() {
         for (int i = 0; i < 10; ++i) {
             PolynomialFunction legendre = PolynomialsUtils.createLegendrePolynomial(i);
@@ -313,12 +305,7 @@ class PolynomialsUtilsTest {
             for (int w = v; w < 5; ++w) {
                 final int vv = v;
                 final int ww = w;
-                UnivariateFunction weight = new UnivariateFunction() {
-                    @Override
-                    public double value(double x) {
-                        return FastMath.pow(1 - x, vv) * FastMath.pow(1 + x, ww);
-                    }
-                };
+                UnivariateFunction weight = x -> FastMath.pow(1 - x, vv) * FastMath.pow(1 + x, ww);
                 for (int i = 0; i < 10; ++i) {
                     PolynomialFunction pi = PolynomialsUtils.createJacobiPolynomial(i, v, w);
                     for (int j = 0; j <= i; ++j) {
@@ -373,6 +360,26 @@ class PolynomialsUtilsTest {
         PolynomialFunction f2x3
             = new PolynomialFunction(PolynomialsUtils.shift(f2x.getCoefficients(), 3));
         checkPolynomial(f2x3, "29648 + 49239 x + 32745 x^2 + 10898 x^3 + 1815 x^4 + 121 x^5");
+
+        // Zero shift
+        double[] coeffs = { 1.0, 2.0, 3.0 };
+        Assertions.assertArrayEquals(coeffs, PolynomialsUtils.shift(coeffs, 0), 1e-15);
+
+        // Empty coeffs
+        double[] empty = new double[0];
+        Assertions.assertArrayEquals(empty, PolynomialsUtils.shift(empty, 1.0), 1e-15);
+
+        // Single coeff
+        double[] single = { 5.0 };
+        Assertions.assertArrayEquals(single, PolynomialsUtils.shift(single, 10.0), 1e-15);
+
+        // Null coeffs
+        try {
+            PolynomialsUtils.shift(null, 1.0);
+            fail("Expected NullPointerException");
+        } catch (NullPointerException e) {
+            // expected
+        }
     }
 
 
@@ -397,12 +404,7 @@ class PolynomialsUtilsTest {
                                     final double a, final double b,
                                     final double nonZeroThreshold,
                                     final double zeroThreshold) {
-        UnivariateFunction f = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                return weight.value(x) * p1.value(x) * p2.value(x);
-            }
-        };
+        UnivariateFunction f = x -> weight.value(x) * p1.value(x) * p2.value(x);
         double dotProduct =
                 new IterativeLegendreGaussIntegrator(5, 1.0e-9, 1.0e-8, 2, 15).integrate(1000000, f, a, b);
         if (p1.degree() == p2.degree()) {

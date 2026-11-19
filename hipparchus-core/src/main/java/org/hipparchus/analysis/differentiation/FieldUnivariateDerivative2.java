@@ -432,9 +432,9 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     @Override
     public FieldUnivariateDerivative2<T> sqrt() {
         final T s0 = FastMath.sqrt(f0);
-        final T s0twice = s0.multiply(2);
+        final T s0twice = s0.twice();
         final T s1 = f1.divide(s0twice);
-        final T s2 = (f2.subtract(s1.square().multiply(2))).divide(s0twice);
+        final T s2 = (f2.subtract(s1.square().twice())).divide(s0twice);
         return new FieldUnivariateDerivative2<>(s0, s1, s2);
     }
 
@@ -481,7 +481,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
             final T      aXlnA = aX.multiply(lnA);
             return new FieldUnivariateDerivative2<>(aX,
                                                     aXlnA.multiply(x.f1),
-                                                    aXlnA.multiply(x.f1.multiply(x.f1).multiply(lnA).add(x.f2)));
+                                                    aXlnA.multiply(x.f1.square().multiply(lnA).add(x.f2)));
         }
     }
 
@@ -1000,6 +1000,14 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     public FieldUnivariateDerivative2<T> getPi() {
         final T zero = getValueField().getZero();
         return new FieldUnivariateDerivative2<>(zero.getPi(), zero, zero);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final FieldUnivariateDerivative2<T> base, final double relativeThreshold) {
+        return f0.isSmall(base.f0, relativeThreshold) &&
+               f1.isSmall(base.f1, relativeThreshold) &&
+               f2.isSmall(base.f2, relativeThreshold);
     }
 
     /** Test for the equality of two univariate derivatives.

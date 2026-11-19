@@ -26,6 +26,7 @@ package org.hipparchus.analysis;
  * An interface representing a multivariate real function.
  *
  */
+@FunctionalInterface
 public interface MultivariateFunction {
 
     /**

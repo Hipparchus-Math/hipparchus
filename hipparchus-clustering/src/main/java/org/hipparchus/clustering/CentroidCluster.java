@@ -42,7 +42,6 @@ public class CentroidCluster<T extends Clusterable> extends Cluster<T> {
      * @param center the point which is to be the center of this cluster
      */
     public CentroidCluster(final Clusterable center) {
-        super();
         this.center = center;
     }
 

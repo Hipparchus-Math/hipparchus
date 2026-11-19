@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>4.0.3</version>
+    <version>4.1</version>
     <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
@@ -76,7 +76,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
+      <version>3.18.0</version>
     </dependency>
     <dependency>
       <groupId>org.hipparchus</groupId>
@@ -107,6 +107,19 @@
           <skip>true</skip>
         </configuration>
         </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
+        <configuration>
+          <inputExcludes>
+
+            <!-- text file explaining reference to a public domain image -->
+            <inputExclude>src/main/resources/references.txt</inputExclude>
+
+          </inputExcludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -122,12 +135,12 @@
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.apache-rat-plugin.version}</version>
         <configuration>
-          <excludes>
+          <inputExcludes>
 
             <!-- text file explaining reference to a public domain image -->
-            <exclude>src/main/resources/references.txt</exclude>
+            <inputExclude>src/main/resources/references.txt</inputExclude>
 
-          </excludes>
+          </inputExcludes>
         </configuration>
       </plugin>
       <plugin>

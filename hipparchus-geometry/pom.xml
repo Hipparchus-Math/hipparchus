@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>4.0.3</version>
+    <version>4.1</version>
     <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
@@ -73,6 +73,26 @@
             </dependency>
           </dependencies>
       </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
+        <configuration>
+          <inputExcludes>
+
+            <!-- the following are test data files with specific syntax that
+              cannot include Apache header (and the contained data is public, it is not
+              owned by Apache) -->
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/issue-1211.bsp</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-bad-orientation.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-hole.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-out-of-plane.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-too-close.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N.ply</inputExclude>
+
+          </inputExcludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -115,19 +135,19 @@
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.apache-rat-plugin.version}</version>
         <configuration>
-          <excludes>
+          <inputExcludes>
 
             <!-- the following are test data files with specific syntax that
               cannot include Apache header (and the contained data is public, it is not
               owned by Apache) -->
-            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/issue-1211.bsp</exclude>
-            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-bad-orientation.ply</exclude>
-            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-hole.ply</exclude>
-            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-out-of-plane.ply</exclude>
-            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-too-close.ply</exclude>
-            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N.ply</exclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/issue-1211.bsp</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-bad-orientation.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-hole.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-out-of-plane.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-too-close.ply</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N.ply</inputExclude>
 
-          </excludes>
+          </inputExcludes>
         </configuration>
       </plugin>
     </plugins>

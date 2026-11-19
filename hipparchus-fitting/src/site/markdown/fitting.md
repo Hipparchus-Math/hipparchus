@@ -82,3 +82,43 @@ class provides the basic functionality for implementing other curve fitting clas
 Users must provide their own implementation of the curve template as a class that implements
 the [ParametricUnivariateFunction](../apidocs/org/hipparchus/analysis/ParametricUnivariateFunction.html)
 interface.
+
+# Random sample consensus (RANSAC) algorithm
+
+## Overview
+
+RANSAC is a robust method for estimating the parameters of a mathematical model from a set of observed data.
+It works iteratively selecting random subsets of the input data, fitting a model to these subsets, and then
+determining how many data points from the entire set are consistent with the estimated model parameters.
+The model can yields the largest number of inliers (i.e., point that fit well) is considered the best estimate.
+
+The Hipparchus implementation is designed to be generic and can be used with different types of models, such
+as line, polynomial, etc.
+
+## Implemented Functions
+RANSAC-based fitting of specific functions are provided through the following classes:
+
+* create an instance of the model to fit using the [IModelFitter](../apidocs/org/hipparchus/fitting/ransac/IModelFitter.html) interface,
+* call the fit method of [RansacFitter](../apidocs/org/hipparchus/fitting/ransac/RansacFitter.html) with a List of observed data points as argument, which will return 
+  a java class containing the parameters that best fit the given data points.
+
+Data points must implement the [Fittable](../apidocs/org/hipparchus/fitting/ransac/Fittable.html) interface which provides a `getPoint()` method returning the point coordinates as a `double[]`.
+
+The following example shows how to fit data with a polynomial model of degree 2.
+
+    // Collect data.
+    final List<Fittable> obs = new ArrayList<>();
+    obs.add(new SimpleFittable(0.0, -61.422));
+    obs.add(new SimpleFittable(2.0, -42.28700013));
+    obs.add(new SimpleFittable(4.0, -58.97612903));
+    // ... Lots of lines omitted ...
+    obs.add(new SimpleFittable(498.0, -67.39));
+    
+    // Instantiate the model to fit.
+    final PolynomialModelFitter model = new PolynomialModelFitter(2);
+    
+    // Fit the data.
+    RansacFitterOutputs<PolynomialModelFitter.Model> fitted = new RansacFitter<>(model, 10, 1000, standardDeviation / 3, 10, 1).fit(obs);
+    
+    // Retrieve fitted parameters (coefficients of the polynomial function).
+    final double[] coeff = fitted.getBestModel().getCoefficients();

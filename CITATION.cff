@@ -1,0 +1,54 @@
+abstract: <p>Restores a Java 8 compatible mockito version, which is used only for
+  tests purposes; the library itself did not change.</p>
+authors:
+- family-names: maisonobe
+- family-names: Phil Steitz
+- family-names: Thomas Neidhart
+- family-names: Sebb
+- affiliation: '@mire, Inc.'
+  family-names: Mark Diggory
+- family-names: Romain Serra
+- family-names: Evan Ward
+- affiliation: '@CS-SI @csgroup-oss'
+  family-names: "S\xE9bastien Dinot"
+- affiliation: Dynatrace Research
+  family-names: Otmar Ertl
+- affiliation: Airbus Defence and Space
+  family-names: Bryan Cazabonne
+- family-names: Hank G
+- family-names: Robert Burrell Donkin
+- family-names: LucasGirodet
+- family-names: Axel Kramer
+- family-names: Dave Brosius
+- family-names: Maxime Journot
+- affiliation: Apache Software Foundation
+  family-names: Gary Gregory
+- family-names: rahu1
+- family-names: Mark Rutten
+- affiliation: '@Kawa-Software'
+  family-names: Olivier Lamy
+- affiliation: '@CS-SI'
+  family-names: Guilhem Bonnefille
+- family-names: jvalet
+- affiliation: Ansys Government Initiatives (AGI)
+  family-names: Andrew Goetz
+- affiliation: Firefly Semantics Corporation
+  family-names: Ole Ersoy
+- family-names: gaetanpierre0
+- family-names: romgerale
+- family-names: antolinoandrea
+- family-names: Emmanuel Bourg
+- family-names: Daniel Shahaf
+cff-version: 1.2.0
+date-released: '2025-03-21'
+doi: 10.5281/zenodo.15234468
+identifiers:
+- type: swh
+  value: swh:1:dir:62e26ea4c64189630991c0b638788d9ef3d460ed;origin=https://doi.org/10.5281/zenodo.7150113;visit=swh:1:snp:246ae2f9b849df743394bcc6f2eed391a360cf6b;anchor=swh:1:rel:33a33ff157d83ee5369279c51518d528c2033c1e;path=Hipparchus-Math-hipparchus-fab2bb9
+license:
+- apache-2.0
+message: If you use this software, please cite it using the metadata from this file.
+repository-code: https://github.com/Hipparchus-Math/hipparchus/tree/4.0.1
+title: 'Hipparchus-Math/hipparchus: Hipparchus 4.0.1'
+type: software
+version: 4.0.1

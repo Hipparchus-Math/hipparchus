@@ -69,7 +69,6 @@ class FourthMoment extends ThirdMoment implements Serializable{
      * Create a FourthMoment instance.
      */
     FourthMoment() {
-        super();
         m4 = Double.NaN;
     }
 

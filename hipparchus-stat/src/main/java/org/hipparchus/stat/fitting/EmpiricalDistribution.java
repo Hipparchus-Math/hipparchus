@@ -373,7 +373,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
          * @throws NullArgumentException if in is null
          */
         ArrayDataAdapter(double[] in) throws NullArgumentException {
-            super();
             MathUtils.checkNotNull(in);
             inputArray = in; // NOPMD - storing a reference to the array is intentional and documented here
         }

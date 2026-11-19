@@ -35,6 +35,7 @@ import org.hipparchus.geometry.Space;
  * @param <P> Point type.
  * @see EnclosingBall
  */
+@FunctionalInterface
 public interface SupportBallGenerator<S extends Space, P extends Point<S, P>> {
 
     /** Create a ball whose boundary lies on prescribed support points.

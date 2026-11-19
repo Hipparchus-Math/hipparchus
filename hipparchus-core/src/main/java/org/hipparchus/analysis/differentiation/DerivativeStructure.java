@@ -24,6 +24,7 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -1085,11 +1086,35 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double norm() {
+        double sum = 0;
+        for (final double derivative: data) {
+            sum += FastMath.abs(derivative);
+        }
+        return sum;
+    }
+
     /** {@inheritDoc}
      */
     @Override
     public DerivativeStructure getPi() {
         return factory.getDerivativeField().getPi();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final DerivativeStructure base, final double relativeThreshold) {
+        if (data.length != base.data.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   data.length, base.data.length);
+        }
+        boolean ok = true;
+        for (int i = 0; i < data.length && ok; ++i) {
+            ok = FastMath.abs(data[i]) <= FastMath.abs(base.data[i] * relativeThreshold);
+        }
+        return ok;
     }
 
     /**

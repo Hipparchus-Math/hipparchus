@@ -25,6 +25,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *
  * @param <B> blendable class
  */
+@FunctionalInterface
 public interface Blendable<B> {
 
     /**

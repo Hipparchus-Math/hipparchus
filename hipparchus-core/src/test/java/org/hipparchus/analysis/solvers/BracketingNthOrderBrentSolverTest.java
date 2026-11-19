@@ -24,7 +24,6 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -60,24 +59,17 @@ final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTe
 
     @Test
     void testInsufficientOrder1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-
-            new BracketingNthOrderBrentSolver(1.0e-10, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new BracketingNthOrderBrentSolver(1.0e-10, 1));
     }
 
     @Test
     void testInsufficientOrder2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1));
     }
 
     @Test
     void testInsufficientOrder3() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1.0e-10, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1.0e-10, 1));
     }
 
     @Test
@@ -116,12 +108,7 @@ final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTe
     void testIssue716() {
         BracketingNthOrderBrentSolver solver = new BracketingNthOrderBrentSolver(
                         1.0e-12, 1.0e-10, 1.0e-22, 5);
-        UnivariateFunction sharpTurn = new UnivariateFunction() {
-
-            public double value(double x) {
-                return (2 * x + 1) / (1.0e9 * (x + 1));
-            }
-        };
+        UnivariateFunction sharpTurn = x -> (2 * x + 1) / (1.0e9 * (x + 1));
         double result = solver.solve(100, sharpTurn, -0.9999999, 30, 15,
                                      AllowedSolution.RIGHT_SIDE);
         assertEquals(0, sharpTurn.value(result),
@@ -190,7 +177,7 @@ final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTe
 
             @Override
             public <T extends Derivative<T>> T value(T x) {
-                return x.subtract(1).multiply(x).multiply(x).subtract(1);
+                return x.subtract(1).multiply(x.square()).subtract(1);
             }
         });
 
@@ -258,7 +245,7 @@ final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTe
 
     }
 
-    private static abstract class TestFunction implements UnivariateDifferentiableFunction {
+    private abstract static class TestFunction implements UnivariateDifferentiableFunction {
 
         private final double root;
 
@@ -283,10 +270,6 @@ final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbstractTe
 
         public double getMax() {
             return max;
-        }
-
-        public double value(final double x) {
-            return value(new DSFactory(0, 0).constant(x)).getValue();
         }
 
         public abstract <T extends Derivative<T>> T value(final T t);

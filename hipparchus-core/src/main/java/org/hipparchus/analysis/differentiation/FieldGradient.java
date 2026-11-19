@@ -570,7 +570,7 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> atan2(final FieldGradient<T> x) {
-        final T inv = value.square().add(x.value.multiply(x.value)).reciprocal();
+        final T inv = value.square().add(x.value.square()).reciprocal();
         final FieldGradient<T> result = newInstance(FastMath.atan2(value, x.value));
         final T xValueInv = x.value.multiply(inv);
         final T mValueInv = value.negate().multiply(inv);
@@ -629,7 +629,8 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      */
-    public T taylor(@SuppressWarnings("unchecked") final T... delta) {
+    @SuppressWarnings("unchecked")
+    public T taylor(final T... delta) {
         T result = value;
         for (int i = 0; i < grad.length; ++i) {
             result = result.add(grad[i].multiply(delta[i]));
@@ -877,6 +878,16 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double norm() {
+        double sum = getValue().norm();
+        for (int i = 0; i < getFreeParameters(); i++) {
+            sum += getPartialDerivative(i).norm();
+        }
+        return sum;
+    }
+
     /**
      * Add an independent variable to the Taylor expansion.
      * @return object with one more variable
@@ -892,6 +903,20 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
     @Override
     public FieldGradient<T> getPi() {
         return new FieldGradient<>(getValueField().getZero().getPi(), getFreeParameters());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final FieldGradient<T> base, final double relativeThreshold) {
+        if (grad.length != base.grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   grad.length, base.grad.length);
+        }
+        boolean ok = value.isSmall(base.value, relativeThreshold);
+        for (int i = 0; i < grad.length && ok; ++i) {
+            ok = grad[i].isSmall(base.grad[i], relativeThreshold);
+        }
+        return ok;
     }
 
     /** Test for the equality of two univariate derivatives.

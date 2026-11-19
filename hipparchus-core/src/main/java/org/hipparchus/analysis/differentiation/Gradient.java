@@ -712,6 +712,16 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double norm() {
+        double sum = FastMath.abs(getValue());
+        for (int i = 0; i < getFreeParameters(); i++) {
+            sum += FastMath.abs(getPartialDerivative(i));
+        }
+        return sum;
+    }
+
     /**
      * Add an independent variable to the Taylor expansion.
      * @return object with one more variable
@@ -721,6 +731,20 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
         final double[] gradient = new double[this.getFreeParameters() + 1];
         System.arraycopy(this.grad, 0, gradient, 0, this.getFreeParameters());
         return new Gradient(gradient, this.getValue());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final Gradient base, final double relativeThreshold) {
+        if (grad.length != base.grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   grad.length, base.grad.length);
+        }
+        boolean ok = FastMath.abs(value) <= FastMath.abs(base.value * relativeThreshold);
+        for (int i = 0; i < grad.length && ok; ++i) {
+            ok = FastMath.abs(grad[i]) <= FastMath.abs(base.grad[i] * relativeThreshold);
+        }
+        return ok;
     }
 
     /** Test for the equality of two univariate derivatives.

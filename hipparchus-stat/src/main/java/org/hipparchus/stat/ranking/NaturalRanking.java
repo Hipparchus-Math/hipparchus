@@ -93,7 +93,6 @@ public class NaturalRanking implements RankingAlgorithm {
      * Create a NaturalRanking with default strategies for handling ties and NaNs.
      */
     public NaturalRanking() {
-        super();
         tiesStrategy = DEFAULT_TIES_STRATEGY;
         nanStrategy = DEFAULT_NAN_STRATEGY;
         randomData = null;
@@ -105,7 +104,6 @@ public class NaturalRanking implements RankingAlgorithm {
      * @param tiesStrategy the TiesStrategy to use
      */
     public NaturalRanking(TiesStrategy tiesStrategy) {
-        super();
         this.tiesStrategy = tiesStrategy;
         nanStrategy = DEFAULT_NAN_STRATEGY;
         randomData = new RandomDataGenerator();
@@ -117,7 +115,6 @@ public class NaturalRanking implements RankingAlgorithm {
      * @param nanStrategy the NaNStrategy to use
      */
     public NaturalRanking(NaNStrategy nanStrategy) {
-        super();
         this.nanStrategy = nanStrategy;
         tiesStrategy = DEFAULT_TIES_STRATEGY;
         randomData = null;
@@ -130,7 +127,6 @@ public class NaturalRanking implements RankingAlgorithm {
      * @param tiesStrategy TiesStrategy to use
      */
     public NaturalRanking(NaNStrategy nanStrategy, TiesStrategy tiesStrategy) {
-        super();
         this.nanStrategy = nanStrategy;
         this.tiesStrategy = tiesStrategy;
         randomData = new RandomDataGenerator();
@@ -143,7 +139,6 @@ public class NaturalRanking implements RankingAlgorithm {
      * @param randomGenerator source of random data
      */
     public NaturalRanking(RandomGenerator randomGenerator) {
-        super();
         this.tiesStrategy = TiesStrategy.RANDOM;
         nanStrategy = DEFAULT_NAN_STRATEGY;
         randomData = RandomDataGenerator.of(randomGenerator);
@@ -159,7 +154,6 @@ public class NaturalRanking implements RankingAlgorithm {
      */
     public NaturalRanking(NaNStrategy nanStrategy,
             RandomGenerator randomGenerator) {
-        super();
         this.nanStrategy = nanStrategy;
         this.tiesStrategy = TiesStrategy.RANDOM;
         randomData = RandomDataGenerator.of(randomGenerator);

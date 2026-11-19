@@ -99,6 +99,7 @@ public abstract class FixedStepRungeKuttaFieldIntegrator<T extends CalculusField
         this.b    = getB();
         this.step = step.abs();
         this.usingFieldCoefficients = false;
+        setStepSize(this.step);
     }
 
     /** Getter for the default, positive step-size assigned at constructor level.

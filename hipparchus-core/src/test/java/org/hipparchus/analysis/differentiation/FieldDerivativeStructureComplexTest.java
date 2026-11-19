@@ -65,25 +65,7 @@ class FieldDerivativeStructureComplexTest extends FieldDerivativeStructureAbstra
     @Override
     @Test
     public void testLinearCombinationReference() {
-        doTestLinearCombinationReference(x -> build(x), 4.8e-16, 1.0);
-    }
-
-    @Override
-    @Test
-    public void testLinearCombination1DSDS() {
-        doTestLinearCombination1DSDS(1.0e-15);
-    }
-
-    @Override
-    @Test
-    public void testLinearCombination1FieldDS() {
-        doTestLinearCombination1FieldDS(1.0e-15);
-    }
-
-    @Override
-    @Test
-    public void testLinearCombination1DoubleDS() {
-        doTestLinearCombination1DoubleDS(1.0e-15);
+        doTestLinearCombinationReference(this::build, 4.8e-16, 1.0);
     }
 
     @Override

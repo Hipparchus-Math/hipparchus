@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class FieldGradientTest {
 
     @Test
@@ -36,5 +38,11 @@ class FieldGradientTest {
         Assertions.assertEquals(0., gradientWithMoreVariable.getGradient()[gradient.getFreeParameters()].getReal());
         Assertions.assertArrayEquals(gradient.getGradient(), Arrays.copyOfRange(gradientWithMoreVariable.getGradient(),
                 0, gradient.getFreeParameters()));
+    }
+
+    @Test
+    void testNorm() {
+        final FieldGradient<Complex> gradient = new FieldGradient<>(Complex.ONE, new Complex(2));
+        assertEquals(3., gradient.norm());
     }
 }

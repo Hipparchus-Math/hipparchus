@@ -21,6 +21,7 @@ import java.math.RoundingMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -525,7 +526,7 @@ class PrecisionTest {
         assertEquals(1, 1 + Precision.EPSILON);
 
         // b) 1 + "the number after EPSILON" is not equal to 1.
-        assertFalse(1 + afterEpsilon == 1);
+        assertNotEquals(1, 1 + afterEpsilon, 0.0);
     }
 
     @Test

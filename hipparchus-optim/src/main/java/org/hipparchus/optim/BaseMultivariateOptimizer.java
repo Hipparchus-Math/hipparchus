@@ -34,8 +34,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * algorithm.
  *
  */
-public abstract class BaseMultivariateOptimizer<P>
-    extends BaseOptimizer<P> {
+public abstract class BaseMultivariateOptimizer<P> extends BaseOptimizer<P> {
+
     /** Initial guess. */
     private double[] start;
     /** Lower bounds. */
@@ -94,7 +94,6 @@ public abstract class BaseMultivariateOptimizer<P>
                 final SimpleBounds bounds = (SimpleBounds) data;
                 lowerBound = bounds.getLower();
                 upperBound = bounds.getUpper();
-                continue;
             }
         }
 

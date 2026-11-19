@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -67,6 +68,12 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
             assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
             assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
         }
+    }
+
+    @Test
+    public void testNorm() {
+        final T x = build(3.0);
+        assertTrue(x.norm() >= FastMath.abs(x.getValue()));
     }
 
     @Test
@@ -121,7 +128,7 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final S y = x.add(3).multiply(x).subtract(5).multiply(0.5);
-                                   return y.negate().divide(4).divide(x).add(y).subtract(x).multiply(2).reciprocal();
+                                   return y.negate().divide(4).divide(x).add(y).subtract(x).twice().reciprocal();
                                }
                            });
         }
@@ -196,7 +203,7 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).hypot(x.sin().multiply(2));
+                                   return x.cos().multiply(5).hypot(x.sin().twice());
                                }
                            });
         }
@@ -208,7 +215,7 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).atan2(x.sin().multiply(2));
+                                   return x.cos().multiply(5).atan2(x.sin().twice());
                                }
                            });
         }

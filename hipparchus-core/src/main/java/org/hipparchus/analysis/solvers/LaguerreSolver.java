@@ -377,7 +377,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
 
                 // Now pv != 0, calculate the new approximation.
                 final Complex G = dv.divide(pv);
-                final Complex G2 = G.multiply(G);
+                final Complex G2 = G.square();
                 final Complex H = G2.subtract(d2v.divide(pv));
                 final Complex delta = n1C.multiply((nC.multiply(H)).subtract(G2));
                 // Choose a denominator larger in magnitude.

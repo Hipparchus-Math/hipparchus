@@ -86,16 +86,12 @@ class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTe
 
     @Test
     void cannotAddXSampleData() {
-        assertThrows(NullArgumentException.class, () -> {
-            createRegression().newSampleData(new double[]{}, null, null);
-        });
+        assertThrows(NullArgumentException.class, () -> createRegression().newSampleData(new double[]{}, null, null));
     }
 
     @Test
     void cannotAddNullYSampleData() {
-        assertThrows(NullArgumentException.class, () -> {
-            createRegression().newSampleData(null, new double[][]{}, null);
-        });
+        assertThrows(NullArgumentException.class, () -> createRegression().newSampleData(null, new double[][]{}, null));
     }
 
     @Test
@@ -110,9 +106,7 @@ class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTe
 
     @Test
     void cannotAddNullCovarianceData() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            createRegression().newSampleData(new double[]{}, new double[][]{}, null);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> createRegression().newSampleData(new double[]{}, new double[][]{}, null));
     }
 
     @Test

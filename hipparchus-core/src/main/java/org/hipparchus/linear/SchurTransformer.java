@@ -70,7 +70,7 @@ public class SchurTransformer {
      * @throws MathIllegalArgumentException if the matrix is not square
      */
     public SchurTransformer(final RealMatrix matrix) {
-        /** Epsilon criteria taken from JAMA code (originally was 2^-52). */
+        // Epsilon criteria taken from JAMA code (originally was 2^-52)
         this(matrix, Precision.EPSILON);
     }
 

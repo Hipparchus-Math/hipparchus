@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class TriDiagonalTransformerTest {
@@ -181,7 +181,7 @@ class TriDiagonalTransformerTest {
         assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(tData)).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
-        assertTrue(q == transformer.getQ());
-        assertTrue(t == transformer.getT());
+        assertSame(q, transformer.getQ());
+        assertSame(t, transformer.getT());
     }
 }

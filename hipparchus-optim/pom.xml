@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>4.0.3</version>
+    <version>4.1</version>
     <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
@@ -77,6 +77,25 @@
             </dependency>
           </dependencies>
       </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
+        <configuration>
+          <inputExcludes>
+
+            <inputExclude>src/test/java/org/hipparchus/optim/nonlinear/vector/constrained/PROB.FOR</inputExclude>
+
+            <!-- the following are test files with specific syntax that cannot include Apache header -->
+            <inputExclude>src/test/resources/org.hipparchus.optim.nonlinear.vector.constrained.maros_meszaros/*</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Lanczos1.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/MGH17.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Hahn1.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Kirby2.dat</inputExclude>
+
+          </inputExcludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -113,6 +132,25 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
         <version>${hipparchus.maven-surefire-report-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
+        <configuration>
+          <inputExcludes>
+
+            <inputExclude>src/test/java/org/hipparchus/optim/nonlinear/vector/constrained/PROB.FOR</inputExclude>
+
+            <!-- the following are test files with specific syntax that cannot include Apache header -->
+            <inputExclude>src/test/resources/org.hipparchus.optim.nonlinear.vector.constrained.maros_meszaros/*</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Lanczos1.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/MGH17.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Hahn1.dat</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/optim/nonlinear/vector/leastsquares/Kirby2.dat</inputExclude>
+
+          </inputExcludes>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>

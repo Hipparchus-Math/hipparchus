@@ -139,16 +139,12 @@ public abstract class MultipleLinearRegressionAbstractTest {
 
     @Test
     public void testXSampleDataNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            createRegression().newXSampleData(null);
-        });
+        assertThrows(NullArgumentException.class, () -> createRegression().newXSampleData(null));
     }
 
     @Test
     public void testYSampleDataNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            createRegression().newYSampleData(null);
-        });
+        assertThrows(NullArgumentException.class, () -> createRegression().newYSampleData(null));
     }
 
 }

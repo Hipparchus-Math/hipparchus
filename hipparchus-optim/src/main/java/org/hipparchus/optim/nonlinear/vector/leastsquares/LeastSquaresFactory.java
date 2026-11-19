@@ -249,13 +249,7 @@ public class LeastSquaresFactory {
      * @return a convergence checker that delegates to {@code checker}.
      */
     public static ConvergenceChecker<Evaluation> evaluationChecker(final ConvergenceChecker<PointVectorValuePair> checker) {
-        return new ConvergenceChecker<Evaluation>() {
-            /** {@inheritDoc} */
-            @Override
-            public boolean converged(final int iteration,
-                                     final Evaluation previous,
-                                     final Evaluation current) {
-                return checker.converged(
+        return (iteration, previous, current) -> checker.converged(
                         iteration,
                         new PointVectorValuePair(
                                 previous.getPoint().toArray(),
@@ -264,10 +258,7 @@ public class LeastSquaresFactory {
                         new PointVectorValuePair(
                                 current.getPoint().toArray(),
                                 current.getResiduals().toArray(),
-                                false)
-                );
-            }
-        };
+                                false));
     }
 
     /**

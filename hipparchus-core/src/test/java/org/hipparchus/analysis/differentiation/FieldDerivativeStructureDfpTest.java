@@ -60,7 +60,7 @@ class FieldDerivativeStructureDfpTest extends FieldDerivativeStructureAbstractTe
     @Override
     @Test
     public void testLinearCombinationReference() {
-        doTestLinearCombinationReference(x -> build(x), 4.15e-9, 4.21e-9);
+        doTestLinearCombinationReference(this::build, 4.15e-9, 4.21e-9);
     }
 
     @Override

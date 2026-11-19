@@ -235,16 +235,12 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
 
     @Test
     public void testNextIntPrecondition1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            generator.nextInt(-1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> generator.nextInt(-1));
     }
 
     @Test
     public void testNextIntPrecondition2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            generator.nextInt(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> generator.nextInt(0));
     }
 
     @Test
@@ -351,49 +347,49 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextDouble();
         }
-        assertTrue(Arrays.equals(values[0], values[1]));
+        assertArrayEquals(values[0], values[1]);
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextFloat();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextFloat();
         }
-        assertTrue(Arrays.equals(values[0], values[1]));
+        assertArrayEquals(values[0], values[1]);
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextInt();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextInt();
         }
-        assertTrue(Arrays.equals(values[0], values[1]));
+        assertArrayEquals(values[0], values[1]);
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextLong();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextLong();
         }
-        assertTrue(Arrays.equals(values[0], values[1]));
+        assertArrayEquals(values[0], values[1]);
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextInt(len);
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextInt(len);
         }
-        assertTrue(Arrays.equals(values[0], values[1]));
+        assertArrayEquals(values[0], values[1]);
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextBoolean() ? 1 : 0;
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextBoolean() ? 1 : 0;
         }
-        assertTrue(Arrays.equals(values[0], values[1]));
+        assertArrayEquals(values[0], values[1]);
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextGaussian();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextGaussian();
         }
-        assertTrue(Arrays.equals(values[0], values[1]));
+        assertArrayEquals(values[0], values[1]);
     }
 
     // MATH-1300

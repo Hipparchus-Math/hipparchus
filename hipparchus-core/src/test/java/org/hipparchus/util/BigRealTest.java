@@ -146,9 +146,7 @@ class BigRealTest {
 
     @Test
     void testReciprocalOfZero() {
-        assertThrows(MathRuntimeException.class, () -> {
-            BigReal.ZERO.reciprocal();
-        });
+        assertThrows(MathRuntimeException.class, BigReal.ZERO::reciprocal);
     }
 
     @Test

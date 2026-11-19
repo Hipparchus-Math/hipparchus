@@ -33,6 +33,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -210,9 +211,9 @@ public class SingularValueDecompositionTest {
         assertEquals(0, v.subtract(vRef).getNorm1(), normTolerance);
 
         // check the same cached instance is returned the second time
-        assertTrue(u == svd.getU());
-        assertTrue(s == svd.getS());
-        assertTrue(v == svd.getV());
+        assertSame(u, svd.getU());
+        assertSame(s, svd.getS());
+        assertSame(v, svd.getV());
 
     }
 
@@ -249,9 +250,9 @@ public class SingularValueDecompositionTest {
         assertEquals(0, v.subtract(vRef).getNorm1(), normTolerance);
 
         // check the same cached instance is returned the second time
-        assertTrue(u == svd.getU());
-        assertTrue(s == svd.getS());
-        assertTrue(v == svd.getV());
+        assertSame(u, svd.getU());
+        assertSame(s, svd.getS());
+        assertSame(v, svd.getV());
 
     }
 

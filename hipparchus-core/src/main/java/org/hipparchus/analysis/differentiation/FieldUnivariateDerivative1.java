@@ -430,7 +430,7 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> atan2(final FieldUnivariateDerivative1<T> x) {
-        final T inv = f0.square().add(x.f0.multiply(x.f0)).reciprocal();
+        final T inv = f0.square().add(x.f0.square()).reciprocal();
         return new FieldUnivariateDerivative1<>(FastMath.atan2(f0, x.f0),
                                                 f0.linearCombination(x.f0, f1, x.f1.negate(), f0).multiply(inv));
     }
@@ -673,6 +673,13 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     public FieldUnivariateDerivative1<T> getPi() {
         final T zero = getValueField().getZero();
         return new FieldUnivariateDerivative1<>(zero.getPi(), zero);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final FieldUnivariateDerivative1<T> base, final double relativeThreshold) {
+        return f0.isSmall(base.f0, relativeThreshold) &&
+               f1.isSmall(base.f1, relativeThreshold);
     }
 
     /** Test for the equality of two univariate derivatives.

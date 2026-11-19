@@ -24,6 +24,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @since 2.2
  * @param <T> the type of the field elements
  */
+@FunctionalInterface
 public interface FieldMatrixDecomposer<T extends FieldElement<T>> {
 
     /**

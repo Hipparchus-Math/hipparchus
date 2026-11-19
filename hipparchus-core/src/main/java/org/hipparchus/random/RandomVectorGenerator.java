@@ -26,6 +26,7 @@ package org.hipparchus.random;
 /**
  * This interface represents a random generator for whole vectors.
  */
+@FunctionalInterface
 public interface RandomVectorGenerator {
 
     /** Generate a random vector.

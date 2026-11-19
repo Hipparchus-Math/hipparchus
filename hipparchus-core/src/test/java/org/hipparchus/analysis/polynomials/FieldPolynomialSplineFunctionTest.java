@@ -32,8 +32,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -72,7 +72,7 @@ class FieldPolynomialSplineFunctionTest {
     void testConstructor() {
         FieldPolynomialSplineFunction<Binary64> spline =
             new FieldPolynomialSplineFunction<>(knots, polynomials);
-        assertTrue(Arrays.equals(knots, spline.getKnots()));
+        assertArrayEquals(knots, spline.getKnots());
         assertEquals(1d, spline.getPolynomials()[0].getCoefficients()[2].getReal(), 0);
         assertEquals(3, spline.getN());
 

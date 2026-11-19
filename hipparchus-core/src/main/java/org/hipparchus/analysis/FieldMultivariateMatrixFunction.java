@@ -24,6 +24,7 @@ import org.hipparchus.Field;
  * @see MultivariateMatrixFunction
  * @since 2.2
  */
+@FunctionalInterface
 public interface FieldMultivariateMatrixFunction {
 
     /** Convert to a {@link CalculusFieldMultivariateMatrixFunction} with a specific type.
@@ -43,6 +44,7 @@ public interface FieldMultivariateMatrixFunction {
      * @param x Point at which the function value should be computed.
      * @return the value of the function.
      */
-    <T extends CalculusFieldElement<T>> T[][] value(@SuppressWarnings("unchecked") T... x);
+    @SuppressWarnings("unchecked")
+    <T extends CalculusFieldElement<T>> T[][] value(T... x);
 
 }

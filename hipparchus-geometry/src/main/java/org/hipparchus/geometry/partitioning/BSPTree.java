@@ -515,6 +515,7 @@ public class BSPTree<S extends Space,
      * @param <H> Type of the hyperplane.
      * @param <I> Type of the sub-hyperplane.
      */
+    @FunctionalInterface
     public interface LeafMerger<S extends Space,
                                 P extends Point<S, P>,
                                 H extends Hyperplane<S, P, H, I>,
@@ -568,6 +569,7 @@ public class BSPTree<S extends Space,
      * @param <H> Type of the hyperplane.
      * @param <I> Type of the sub-hyperplane.
      */
+    @FunctionalInterface
     public interface VanishingCutHandler<S extends Space,
                                          P extends Point<S, P>,
                                          H extends Hyperplane<S, P, H, I>,

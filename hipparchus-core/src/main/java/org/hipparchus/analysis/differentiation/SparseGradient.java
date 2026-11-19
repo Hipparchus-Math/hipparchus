@@ -529,7 +529,7 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
         if (x.value >= 0) {
 
             // compute atan2(y, x) = 2 atan(y / (r + x))
-            a = divide(r.add(x)).atan().multiply(2);
+            a = divide(r.add(x)).atan().twice();
 
         } else {
 
@@ -755,8 +755,29 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
 
     /** {@inheritDoc} */
     @Override
+    public double norm() {
+        double sum = FastMath.abs(getValue());
+        for (final double derivative: derivatives.values()) {
+            sum += FastMath.abs(derivative);
+        }
+        return sum;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public SparseGradient getPi() {
         return new SparseGradient(FastMath.PI, null);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final SparseGradient base, final double relativeThreshold) {
+        boolean ok = FastMath.abs(value) <= FastMath.abs(base.value * relativeThreshold);
+        for (final Map.Entry<Integer, Double> entry : derivatives.entrySet()) {
+            ok &= FastMath.abs(entry.getValue()) <=
+                  FastMath.abs(base.getDerivative(entry.getKey()) * relativeThreshold);
+        }
+        return ok;
     }
 
     /**

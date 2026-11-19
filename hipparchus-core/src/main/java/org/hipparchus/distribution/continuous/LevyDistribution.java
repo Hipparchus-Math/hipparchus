@@ -51,7 +51,6 @@ public class LevyDistribution extends AbstractRealDistribution {
      * @param c scale parameter
      */
     public LevyDistribution(final double mu, final double c) {
-        super();
         this.mu    = mu;
         this.c     = c;
         this.halfC = 0.5 * c;

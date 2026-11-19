@@ -26,7 +26,6 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -514,9 +513,7 @@ class ResizableDoubleArrayTest {
 
         assertEquals(11, da.getNumElements(), "Number of elements should be 11");
 
-        assertDoesNotThrow(() -> {
-            da.discardMostRecentElements(10);
-        }, "Trying to discard a negative number of element is not allowed");
+        assertDoesNotThrow(() -> da.discardMostRecentElements(10), "Trying to discard a negative number of element is not allowed");
 
         da.substituteMostRecentElement(24);
 
@@ -656,7 +653,7 @@ class ResizableDoubleArrayTest {
                                   ResizableDoubleArray b) {
         assertNotEquals(b, a);
         assertNotEquals(a, b);
-        assertFalse(a.hashCode() == b.hashCode());
+        assertNotEquals(a.hashCode(), b.hashCode());
     }
 
 }

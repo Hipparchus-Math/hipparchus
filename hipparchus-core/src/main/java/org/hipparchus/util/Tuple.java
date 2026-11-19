@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -771,10 +772,34 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
+    public double norm() {
+        double sum = 0;
+        for (final double value : values) {
+            sum += FastMath.abs(value);
+        }
+        return sum;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Tuple getPi() {
         final Tuple result = new Tuple(field, new double[values.length]);
         Arrays.fill(result.values, FastMath.PI);
         return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final Tuple base, final double relativeThreshold) {
+        if (values.length != base.values.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   values.length, base.values.length);
+        }
+        boolean ok = true;
+        for (int i = 0; i < values.length && ok; ++i) {
+            ok = FastMath.abs(values[i]) <= FastMath.abs(base.values[i] * relativeThreshold);
+        }
+        return ok;
     }
 
     /** Field for {link Tuple} instances.

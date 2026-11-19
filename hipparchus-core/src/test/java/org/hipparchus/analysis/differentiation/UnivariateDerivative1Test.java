@@ -19,6 +19,7 @@ package org.hipparchus.analysis.differentiation;
 import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -101,10 +102,10 @@ class UnivariateDerivative1Test extends UnivariateDerivativeAbstractTest<Univari
         UnivariateDerivative1 ud1 = new UnivariateDerivative1(12, -34);
         assertEquals(ud1, ud1);
         assertNotEquals("", ud1);
-        assertEquals(ud1, new UnivariateDerivative1(12, -34));
-        assertNotEquals(ud1, new UnivariateDerivative1(21, -34));
-        assertNotEquals(ud1, new UnivariateDerivative1(12, -43));
-        assertNotEquals(ud1, new UnivariateDerivative1(21, -43));
+        assertEquals(new UnivariateDerivative1(12, -34), ud1);
+        assertNotEquals(new UnivariateDerivative1(21, -34), ud1);
+        assertNotEquals(new UnivariateDerivative1(12, -43), ud1);
+        assertNotEquals(new UnivariateDerivative1(21, -43), ud1);
     }
 
 
@@ -136,6 +137,16 @@ class UnivariateDerivative1Test extends UnivariateDerivativeAbstractTest<Univari
     void testRunTimeClass() {
         Field<UnivariateDerivative1> field = build(0.0).getField();
         assertEquals(UnivariateDerivative1.class, field.getRuntimeClass());
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(new UnivariateDerivative1(1.0e-13, 2.5e-13).
+                              isSmall(new UnivariateDerivative1(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new UnivariateDerivative1(1.0e-11, 2.5e-13).
+                               isSmall(new UnivariateDerivative1(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new UnivariateDerivative1(1.0e-13, 2.5e-11).
+                               isSmall(new UnivariateDerivative1(1.0, 1.0), 1.0e-12));
     }
 
 }

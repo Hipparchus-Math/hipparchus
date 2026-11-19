@@ -29,7 +29,6 @@ import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
@@ -131,22 +130,18 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                 .target(new double[]{1})
                 .weight(new DiagonalMatrix(new double[]{1}))
                 .start(new double[]{3})
-                .model(new MultivariateJacobianFunction() {
-                    public Pair<RealVector, RealMatrix> value(final RealVector point) {
-                        return new Pair<RealVector, RealMatrix>(
-                                new ArrayRealVector(
-                                        new double[]{
-                                                FastMath.pow(point.getEntry(0), 4)
-                                        },
-                                        false),
-                                new Array2DRowRealMatrix(
-                                        new double[][]{
-                                                {0.25 * FastMath.pow(point.getEntry(0), 3)}
-                                        },
-                                        false)
-                        );
-                    }
-                })
+                .model(point -> new Pair<RealVector, RealMatrix>(
+                        new ArrayRealVector(
+                                new double[]{
+                                        FastMath.pow(point.getEntry(0), 4)
+                                },
+                                false),
+                        new Array2DRowRealMatrix(
+                                new double[][]{
+                                        {0.25 * FastMath.pow(point.getEntry(0), 3)}
+                                },
+                                false)
+                ))
                 .build();
 
         defineOptimizer(null);
@@ -254,9 +249,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
             optimizer.optimize(problem.getBuilder().build());
 
             customFail(optimizer);
-        } catch (MathIllegalArgumentException miae) {
-            // expected
-        } catch (MathIllegalStateException mise) {
+        } catch (MathIllegalArgumentException | MathIllegalStateException miae) {
             // expected
         }
     }
@@ -506,16 +499,14 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         final boolean[] checked = {false};
 
         final LeastSquaresBuilder builder = problem.getBuilder()
-                .checker(new ConvergenceChecker<Evaluation>() {
-                    public boolean converged(int iteration, Evaluation previous, Evaluation current) {
-                        assertThat(
-                                previous.getPoint(),
-                                not(sameInstance(current.getPoint())));
-                        assertArrayEquals(new double[3], previous.getPoint().toArray(), 0);
-                        assertArrayEquals(new double[] {1, 2, 3}, current.getPoint().toArray(), TOl);
-                        checked[0] = true;
-                        return true;
-                    }
+                .checker((iteration, previous, current) -> {
+                    assertThat(
+                            previous.getPoint(),
+                            not(sameInstance(current.getPoint())));
+                    assertArrayEquals(new double[3], previous.getPoint().toArray(), 0);
+                    assertArrayEquals(new double[] {1, 2, 3}, current.getPoint().toArray(), TOl);
+                    checked[0] = true;
+                    return true;
                 });
         defineOptimizer(null);
         optimizer.optimize(builder.build());
@@ -563,19 +554,11 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         }
 
         public MultivariateVectorFunction getModelFunction() {
-            return new MultivariateVectorFunction() {
-                public double[] value(double[] params) {
-                    return factors.operate(params);
-                }
-            };
+            return factors::operate;
         }
 
         public MultivariateMatrixFunction getModelFunctionJacobian() {
-            return new MultivariateMatrixFunction() {
-                public double[][] value(double[] params) {
-                    return factors.getData();
-                }
-            };
+            return params -> factors.getData();
         }
 
         public LeastSquaresBuilder getBuilder() {

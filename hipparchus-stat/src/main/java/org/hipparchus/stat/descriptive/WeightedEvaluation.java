@@ -26,6 +26,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Weighted evaluation for statistics.
  */
+@FunctionalInterface
 public interface WeightedEvaluation {
 
     /**

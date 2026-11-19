@@ -44,10 +44,10 @@ import org.hipparchus.exception.NullArgumentException;
  */
 public final class MathUtils {
     /** \(2\pi\) */
-    public static final double TWO_PI = 2 * FastMath.PI;
+    public static final double TWO_PI = FastMath.TAU;
 
     /** \(\pi^2\) */
-    public static final double PI_SQUARED = FastMath.PI * FastMath.PI;
+    public static final double PI_SQUARED = 2649351757.0 / 268435456.0 + 3.5242321997671081e-9;
 
     /** \(\pi/2\). */
     public static final double SEMI_PI = 0.5 * FastMath.PI;

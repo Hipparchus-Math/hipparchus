@@ -45,7 +45,6 @@ sub-folders:
   * `hipparchus-filtering`
   * `hipparchus-fitting`
   * `hipparchus-geometry`
-  * `hipparchus-migration`
   * `hipparchus-ode`
   * `hipparchus-optim`
   * `hipparchus-parent`

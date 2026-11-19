@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class SchurTransformerTest {
@@ -206,7 +206,7 @@ class SchurTransformerTest {
         assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
-        assertTrue(p == transformer.getP());
-        assertTrue(t == transformer.getT());
+        assertSame(p, transformer.getP());
+        assertSame(t, transformer.getT());
     }
 }

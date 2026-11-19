@@ -27,6 +27,7 @@ import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -119,11 +120,11 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
 
     @Test
     void testLongConstructor() {
-        assertEquals("0.", new Dfp(field, 0l).toString());
-        assertEquals("1.", new Dfp(field, 1l).toString());
-        assertEquals("-1.", new Dfp(field, -1l).toString());
-        assertEquals("1234567890.", new Dfp(field, 1234567890l).toString());
-        assertEquals("-1234567890.", new Dfp(field, -1234567890l).toString());
+        assertEquals("0.", new Dfp(field, 0L).toString());
+        assertEquals("1.", new Dfp(field, 1L).toString());
+        assertEquals("-1.", new Dfp(field, -1L).toString());
+        assertEquals("1234567890.", new Dfp(field, 1234567890L).toString());
+        assertEquals("-1234567890.", new Dfp(field, -1234567890L).toString());
         assertEquals("-9223372036854775808.", new Dfp(field, Long.MIN_VALUE).toString());
         assertEquals("9223372036854775807.", new Dfp(field, Long.MAX_VALUE).toString());
     }
@@ -855,7 +856,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
              pinf,
              0, "Multiply #18.1");
 
-        test(field.newDfp("5e131071").multiply(2),
+        test(field.newDfp("5e131071").twice(),
              pinf,
              DfpField.FLAG_OVERFLOW, "Multiply #19");
 
@@ -863,7 +864,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
              field.newDfp("9.9999999999999950000e131071"),
              0, "Multiply #20");
 
-        test(field.newDfp("-5e131071").multiply(2),
+        test(field.newDfp("-5e131071").twice(),
              ninf,
              DfpField.FLAG_OVERFLOW, "Multiply #22");
 
@@ -1846,7 +1847,7 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     @Test
     public void testLinearCombinationReference() {
         final DfpField field25 = new DfpField(25);
-        doTestLinearCombinationReference(x -> field25.newDfp(x), 4.15e-9, 4.21e-9);
+        doTestLinearCombinationReference(field25::newDfp, 4.15e-9, 4.21e-9);
     }
 
     @Test
@@ -1881,7 +1882,15 @@ class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         Dfp one = field.getOne();
         Dfp ulp = one.ulp();
         assertTrue(one.add(ulp).greaterThan(one));
-        assertFalse(one.add(ulp.divide(2)).greaterThan(one));
+        assertFalse(one.add(ulp.half()).greaterThan(one));
+    }
+
+    @Test
+    void testLargeIntegerExponentDoesNotHang() {
+        final DfpField field = new DfpField(20);
+        Assertions.assertTrue(field.newDfp("3").pow(1 << 30).isInfinite());   // 3^(2^30)
+        Assertions.assertTrue(field.newDfp("2000000000").exp().isInfinite());   // e^2e9
+        Assertions.assertTrue(field.newDfp("-1500000000").sinh().isInfinite()); // -Inf
     }
 
     @Test

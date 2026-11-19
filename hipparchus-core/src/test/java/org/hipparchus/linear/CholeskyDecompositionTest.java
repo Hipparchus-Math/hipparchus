@@ -27,8 +27,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class CholeskyDecompositionTest {
@@ -55,9 +55,7 @@ class CholeskyDecompositionTest {
     /** test non-square matrix */
     @Test
     void testNonSquare() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2])));
     }
 
     /** test non-symmetric matrix */
@@ -73,15 +71,13 @@ class CholeskyDecompositionTest {
     /** test non positive definite matrix */
     @Test
     void testNotPositiveDefinite() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][]{
-                {14, 11, 13, 15, 24},
-                {11, 34, 13, 8, 25},
-                {13, 13, 14, 15, 21},
-                {15, 8, 15, 18, 23},
-                {24, 25, 21, 23, 45}
-            }));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][]{
+            {14, 11, 13, 15, 24},
+            {11, 34, 13, 8, 25},
+            {13, 13, 14, 15, 21},
+            {15, 8, 15, 18, 23},
+            {24, 25, 21, 23, 45}
+        })));
     }
 
     @Test
@@ -169,7 +165,7 @@ class CholeskyDecompositionTest {
         assertEquals(0, lt.subtract(lRef.transpose()).getNorm1(), 1.0e-13);
 
         // check the same cached instance is returned the second time
-        assertTrue(l  == llt.getL());
-        assertTrue(lt == llt.getLT());
+        assertSame(l, llt.getL());
+        assertSame(lt, llt.getLT());
     }
 }

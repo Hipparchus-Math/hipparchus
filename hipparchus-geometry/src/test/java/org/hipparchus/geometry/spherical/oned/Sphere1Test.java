@@ -26,8 +26,8 @@ import org.hipparchus.geometry.Space;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Sphere1Test {
 
@@ -38,16 +38,14 @@ class Sphere1Test {
 
     @Test
     void testSubSpace() {
-        assertThrows(Sphere1D.NoSubSpaceException.class, () -> {
-            Sphere1D.getInstance().getSubSpace();
-        });
+        assertThrows(Sphere1D.NoSubSpaceException.class, () -> Sphere1D.getInstance().getSubSpace());
     }
 
     @Test
     void testSerialization() {
         Space s1 = Sphere1D.getInstance();
         Space deserialized = (Space) UnitTestUtils.serializeAndRecover(s1);
-        assertTrue(s1 == deserialized);
+        assertSame(s1, deserialized);
     }
 
 }

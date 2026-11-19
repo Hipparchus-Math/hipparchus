@@ -46,7 +46,9 @@ package org.hipparchus.optim;
  * @see org.hipparchus.optim.SimpleVectorValueChecker
  *
  */
+@FunctionalInterface
 public interface ConvergenceChecker<P> {
+
     /**
      * Check if the optimization algorithm has converged.
      *

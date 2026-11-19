@@ -40,7 +40,13 @@ import org.hipparchus.util.FastMath;
  * Algorithm based on paper:"On the convergence of a sequential quadratic
  * programming method(Klaus Shittkowki,January 1982)"
  * @since 3.1
+ * @deprecated as of 4.1, replaced by {@link SQPOptimizerS2}; will be removed in 5.0.
+ * Note that {@link SQPOptimizerS2} is not a drop-in replacement: its iteration limit is
+ * {@link SQPOption#setMaxIteration(int)}, it uses finite-difference gradients unless
+ * {@link SQPOption#setGradientMode(GradientMode)} is set to {@link GradientMode#EXTERNAL},
+ * and its convergence test differs.
  */
+@Deprecated
 public class SQPOptimizerS extends AbstractSQPOptimizer {
 
     /** Forgetting factor. */
@@ -60,6 +66,12 @@ public class SQPOptimizerS extends AbstractSQPOptimizer {
 
     /** Hessian of the objective function. */
     private RealMatrix hessian;
+
+    /** Simple constructor.
+     */
+    public SQPOptimizerS() {
+        // nothing to do
+    }
 
     /** {@inheritDoc} */
     @Override

@@ -30,7 +30,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class FractionFieldTest {
 
@@ -68,7 +68,7 @@ class FractionFieldTest {
     void testSerial() {
         // deserializing the singleton should give the singleton itself back
         FractionField field = FractionField.getInstance();
-        assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        assertSame(field, UnitTestUtils.serializeAndRecover(field));
     }
 
 }

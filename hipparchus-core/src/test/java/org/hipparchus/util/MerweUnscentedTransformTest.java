@@ -30,9 +30,7 @@ class MerweUnscentedTransformTest {
     /** test state dimension equal to 0 */
     @Test
     void testWrongStateDimension() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new MerweUnscentedTransform(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new MerweUnscentedTransform(0));
     }
 
     /** test weight computation */

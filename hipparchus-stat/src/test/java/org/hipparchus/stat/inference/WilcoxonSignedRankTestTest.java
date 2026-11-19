@@ -271,13 +271,11 @@ class WilcoxonSignedRankTestTest {
 
     @Test
     void testBadInputAllTies() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            testStatistic.wilcoxonSignedRankTest(new double[]{
-                1.0, 2.0, 3.0
-            }, new double[]{
-                1.0, 2.0, 3.0
-            }, true);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> testStatistic.wilcoxonSignedRankTest(new double[]{
+            1.0, 2.0, 3.0
+        }, new double[]{
+            1.0, 2.0, 3.0
+        }, true));
     }
 
     @Test

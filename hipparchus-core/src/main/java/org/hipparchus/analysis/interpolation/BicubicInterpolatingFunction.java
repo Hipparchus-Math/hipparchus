@@ -23,11 +23,15 @@ package org.hipparchus.analysis.interpolation;
 
 import java.util.Arrays;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
+import org.hipparchus.analysis.FieldBivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+
+import static org.hipparchus.util.MathArrays.buildArray;
 
 /**
  * Function that implements the
@@ -36,7 +40,7 @@ import org.hipparchus.util.MathUtils;
  *
  */
 public class BicubicInterpolatingFunction
-    implements BivariateFunction {
+    implements BivariateFunction, FieldBivariateFunction {
     /** Number of coefficients. */
     private static final int NUM_COEFF = 16;
     /**
@@ -152,6 +156,22 @@ public class BicubicInterpolatingFunction
     }
 
     /**
+     * {@inheritDoc}
+     * @since 4.1
+     */
+    @Override
+    public <T extends CalculusFieldElement<T>> T value(T x, T y)
+            throws MathIllegalArgumentException {
+        final int i = searchIndex(x.getReal(), xval);
+        final int j = searchIndex(y.getReal(), yval);
+
+        final T xN = x.subtract(xval[i]).divide(xval[i + 1] - xval[i]);
+        final T yN = y.subtract(yval[j]).divide(yval[j + 1] - yval[j]);
+
+        return splines[i][j].value(xN, yN);
+    }
+
+    /**
      * Indicates whether a point is within the interpolation range.
      *
      * @param x First coordinate.
@@ -250,7 +270,7 @@ public class BicubicInterpolatingFunction
 /**
  * Bicubic function.
  */
-class BicubicFunction implements BivariateFunction {
+class BicubicFunction implements BivariateFunction, FieldBivariateFunction {
     /** Number of points. */
     private static final short N = 4;
     /** Coefficients */
@@ -303,6 +323,53 @@ class BicubicFunction implements BivariateFunction {
         for (int i = 0; i < N; i++) {
             final double r = MathArrays.linearCombination(coeff[i], pY);
             result += r * pX[i];
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 4.1
+     */
+    @Override
+    public <T extends CalculusFieldElement<T>> T value(T x, T y) {
+        MathUtils.checkRangeInclusive(x.getReal(), 0, 1);
+        MathUtils.checkRangeInclusive(y.getReal(), 0, 1);
+
+        final T x2 = x.square();
+        final T x3 = x2.multiply(x);
+        final T[] pX = buildArray(x.getField(), 4);
+        pX[0] = x.getField().getOne();
+        pX[1] = x;
+        pX[2] = x2;
+        pX[3] = x3;
+
+        final T y2 = y.multiply(y);
+        final T y3 = y2.multiply(y);
+        final T[] pY = buildArray(y.getField(), 4);
+        pY[0] = y.getField().getOne();
+        pY[1] = y;
+        pY[2] = y2;
+        pY[3] = y3;
+
+        return apply(pX, pY, a);
+    }
+
+    /**
+     * Compute the value of the bicubic polynomial.
+     * @param <T> type of the field elements
+     * @param pX Powers of the x-coordinate.
+     * @param pY Powers of the y-coordinate.
+     * @param coeff Spline coefficients.
+     * @return the interpolated value.
+     * @since 4.1
+     */
+    private <T extends CalculusFieldElement<T>> T apply(T[] pX, T[] pY, double[][] coeff) {
+        T result = pX[0].getField().getZero();
+        for (int i = 0; i < N; i++) {
+            final T r = result.linearCombination(coeff[i], pY);
+            result = result.add(r.multiply(pX[i]));
         }
 
         return result;

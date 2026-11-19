@@ -17,8 +17,11 @@
 
 package org.hipparchus.analysis.differentiation;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +44,24 @@ class FieldGradientBinary64Test extends FieldGradientAbstractTest<Binary64> {
     @Override
     @Test
     public void testLinearCombinationReference() {
-        doTestLinearCombinationReference(x -> build(x), 5.0e-16, 1.0);
+        doTestLinearCombinationReference(this::build, 5.0e-16, 1.0);
     }
+
+    @Test
+    public void testIsSmallDimensionMismatch() {
+        try {
+            build(0.0).isSmall(build(0.0, 1.0), 1.0e-15);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(build(1.0e-13, 2.5e-13).isSmall(build(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(build(1.0e-11, 2.5e-13).isSmall(build(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(build(1.0e-13, 2.5e-11).isSmall(build(1.0, 1.0), 1.0e-12));
+    }
+
 }

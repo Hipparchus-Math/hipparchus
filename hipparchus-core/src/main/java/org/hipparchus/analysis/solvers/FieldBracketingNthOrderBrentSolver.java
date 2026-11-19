@@ -175,7 +175,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
     public T solve(final int maxEval, final CalculusFieldUnivariateFunction<T> f,
                    final T min, final T max, final AllowedSolution allowedSolution)
         throws MathIllegalArgumentException, NullArgumentException {
-        return solve(maxEval, f, min, max, min.add(max).divide(2), allowedSolution);
+        return solve(maxEval, f, min, max, min.add(max).half(), allowedSolution);
     }
 
     /**
@@ -296,7 +296,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
             T maxX = absXA.subtract(absXB).getReal() < 0 ? absXB : absXA;
             T maxY = absYA.subtract(absYB).getReal() < 0 ? absYB : absYA;
             final T xTol = absoluteAccuracy.add(relativeAccuracy.multiply(maxX));
-            final T midpoint = xA.add(xB.subtract(xA).divide(2));
+            final T midpoint = xA.add(xB.subtract(xA).half());
             if (xB.subtract(xA).subtract(xTol).getReal() <= 0 ||
                 maxY.subtract(functionValueAccuracy).getReal() < 0 ||
                     xA.equals(midpoint) || xB.equals(midpoint)) {
@@ -349,7 +349,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
 
             if (Double.isNaN(nextX.getReal())) {
                 // fall back to bisection
-                nextX = xA.add(xB.subtract(xA).divide(2));
+                nextX = xA.add(xB.subtract(xA).half());
                 start = signChangeIndex - 1;
                 end   = signChangeIndex;
             }

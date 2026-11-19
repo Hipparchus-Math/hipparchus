@@ -28,6 +28,7 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -53,6 +54,12 @@ class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseGradient
         SparseGradient grad = SparseGradient.createConstant(c);
         assertEquals(c, grad.getValue(), 1.0e-15); // returns the value
         assertEquals(0, grad.getFreeParameters(), 1.0e-15); // has no variables
+    }
+
+    @Test
+    void testNorm() {
+        final SparseGradient x = build(-3.0);
+        assertTrue(x.norm() >= FastMath.abs(x.getValue()));
     }
 
     @Test
@@ -1036,7 +1043,7 @@ class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseGradient
     void testLinearCombination2DSDS() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
-        Well1024a random = new Well1024a(0xc6af886975069f11l);
+        Well1024a random = new Well1024a(0xc6af886975069f11L);
 
         for (int i = 0; i < 10000; ++i) {
             final SparseGradient[] u = new SparseGradient[4];
@@ -1080,7 +1087,7 @@ class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseGradient
     void testLinearCombination2DoubleDS() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
-        Well1024a random = new Well1024a(0xc6af886975069f11l);
+        Well1024a random = new Well1024a(0xc6af886975069f11L);
 
         for (int i = 0; i < 10000; ++i) {
             final double[] u = new double[4];
@@ -1168,6 +1175,14 @@ class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseGradient
     void testRunTimeClass() {
         Field<SparseGradient> field = SparseGradient.createVariable(5, 17.0).getField();
         assertEquals(SparseGradient.class, field.getRuntimeClass());
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(SparseGradient.createVariable(3, 2.5).multiply(1.0e-13).
+                              isSmall(SparseGradient.createVariable(3, 2.5), 1.0e-12));
+        Assertions.assertFalse(SparseGradient.createVariable(3, 2.5).multiply(1.0e-11).
+                              isSmall(SparseGradient.createVariable(3, 2.5), 1.0e-12));
     }
 
     private void checkF0F1(SparseGradient sg, double value, double...derivatives) {

@@ -49,6 +49,12 @@ class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
     }
 
     @Test
+    void testNorm() {
+        final Gradient x = new Gradient(-1, 2, 3);
+        assertEquals(6., x.norm());
+    }
+
+    @Test
     void testGetGradient() {
         Gradient g = new Gradient(-0.5, 2.5, 10.0, -1.0);
         assertEquals(-0.5, g.getReal(), 1.0e-15);
@@ -178,11 +184,11 @@ class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
         Gradient g = new Gradient(12, -34, 56);
         assertEquals(g, g);
         assertNotEquals("", g);
-        assertEquals(g, new Gradient(12, -34, 56));
-        assertNotEquals(g, new Gradient(21, -34, 56));
-        assertNotEquals(g, new Gradient(12, -43, 56));
-        assertNotEquals(g, new Gradient(12, -34, 65));
-        assertNotEquals(g, new Gradient(21, -43, 65));
+        assertEquals(new Gradient(12, -34, 56), g);
+        assertNotEquals(new Gradient(21, -34, 56), g);
+        assertNotEquals(new Gradient(12, -43, 56), g);
+        assertNotEquals(new Gradient(12, -34, 65), g);
+        assertNotEquals(new Gradient(21, -43, 65), g);
     }
 
     @Test
@@ -263,7 +269,7 @@ class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final S y = x.add(3).multiply(x).subtract(5).multiply(0.5);
-                                   return y.negate().divide(4).divide(x).add(y).subtract(x).multiply(2).reciprocal();
+                                   return y.negate().divide(4).divide(x).add(y).subtract(x).twice().reciprocal();
                                }
                            });
         }
@@ -311,7 +317,7 @@ class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).hypot(x.sin().multiply(2));
+                                   return x.cos().multiply(5).hypot(x.sin().twice());
                                }
                            });
         }
@@ -323,7 +329,7 @@ class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).atan2(x.sin().multiply(2));
+                                   return x.cos().multiply(5).atan2(x.sin().twice());
                                }
                            });
         }
@@ -549,6 +555,24 @@ class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
         for (int i = 0; i < one.getFreeParameters(); ++i) {
             assertEquals(0.0, one.getPartialDerivative(i), 1.0e-15);
         }
+    }
+
+
+    @Test
+    public void testIsSmallDimensionMismatch() {
+        try {
+            new Gradient(0.0, 0.0, 0.0).isSmall(new Gradient(0.0, 0.0), 1.0e-15);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(new Gradient(1.0e-13, 2.5e-13).isSmall(new Gradient(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new Gradient(1.0e-11, 2.5e-13).isSmall(new Gradient(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new Gradient(1.0e-13, 2.5e-11).isSmall(new Gradient(1.0, 1.0), 1.0e-12));
     }
 
 }

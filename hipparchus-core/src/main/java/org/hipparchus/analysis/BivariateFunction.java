@@ -26,6 +26,7 @@ package org.hipparchus.analysis;
  * An interface representing a bivariate real function.
  *
  */
+@FunctionalInterface
 public interface BivariateFunction {
     /**
      * Compute the value for the function.

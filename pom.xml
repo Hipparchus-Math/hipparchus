@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>4.0.3</version>
+    <version>4.1</version>
     <relativePath>hipparchus-parent</relativePath>
   </parent>
 
@@ -123,6 +123,31 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
+        <configuration>
+          <inputExcludes>
+
+            <!-- the following is a generated data file -->
+            <inputExclude>src/conf/hipparchus-eclipse.xml</inputExclude>
+
+            <!-- this one is a regular expression template for Apache headers by itself! -->
+            <inputExclude>src/conf/license-header.txt</inputExclude>
+
+            <!-- trivial -->
+            <inputExclude>src/site/resources/css/site.css</inputExclude>
+            <inputExclude>.mailmap</inputExclude>
+            <inputExclude>CITATION.cff</inputExclude>
+
+            <!-- build files -->
+            <inputExclude>.github/workflows/maven.yml</inputExclude>
+            <inputExclude>.CI/maven-settings.xml</inputExclude>
+
+          </inputExcludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -147,22 +172,24 @@
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.apache-rat-plugin.version}</version>
         <configuration>
-          <excludes>
+          <inputExcludes>
 
             <!-- the following is a generated data file -->
-            <exclude>src/conf/hipparchus-eclipse.xml</exclude>
+            <inputExclude>src/conf/hipparchus-eclipse.xml</inputExclude>
 
             <!-- this one is a regular expression template for Apache headers by itself! -->
-            <exclude>src/conf/license-header.txt</exclude>
+            <inputExclude>src/conf/license-header.txt</inputExclude>
 
             <!-- trivial -->
-            <exclude>src/site/resources/css/site.css</exclude>
+            <inputExclude>src/site/resources/css/site.css</inputExclude>
+            <inputExclude>.mailmap</inputExclude>
+            <inputExclude>CITATION.cff</inputExclude>
 
             <!-- build files -->
-            <exclude>.github/workflows/maven.yml</exclude>
-            <exclude>.CI/maven-settings.xml</exclude>
+            <inputExclude>.github/workflows/maven.yml</inputExclude>
+            <inputExclude>.CI/maven-settings.xml</inputExclude>
 
-          </excludes>
+          </inputExcludes>
         </configuration>
       </plugin>
     </plugins>

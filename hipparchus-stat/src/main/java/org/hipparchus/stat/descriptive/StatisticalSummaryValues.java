@@ -67,7 +67,6 @@ public class StatisticalSummaryValues
      */
     public StatisticalSummaryValues(double mean, double variance, long n,
                                     double max, double min, double sum) {
-        super();
         this.mean = mean;
         this.variance = variance;
         this.n = n;

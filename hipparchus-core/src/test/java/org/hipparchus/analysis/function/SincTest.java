@@ -37,12 +37,9 @@ class SincTest {
     @Test
     void testShortcut() {
        final Sinc s = new Sinc();
-       final UnivariateFunction f = new UnivariateFunction() {
-           @Override
-           public double value(double x) {
-               Dfp dfpX = new DfpField(25).newDfp(x);
-               return DfpMath.sin(dfpX).divide(dfpX).toDouble();
-           }
+       final UnivariateFunction f = x -> {
+           Dfp dfpX = new DfpField(25).newDfp(x);
+           return DfpMath.sin(dfpX).divide(dfpX).toDouble();
        };
 
        for (double x = 1e-30; x < 1e10; x *= 2) {
@@ -112,13 +109,10 @@ class SincTest {
     @Test
     void testDerivativeShortcut() {
        final Sinc sinc = new Sinc();
-       final UnivariateFunction f = new UnivariateFunction() {
-               @Override
-            public double value(double x) {
-                   Dfp dfpX = new DfpField(25).newDfp(x);
-                   return DfpMath.cos(dfpX).subtract(DfpMath.sin(dfpX).divide(dfpX)).divide(dfpX).toDouble();
-               }
-           };
+       final UnivariateFunction f = x -> {
+           Dfp dfpX = new DfpField(25).newDfp(x);
+           return DfpMath.cos(dfpX).subtract(DfpMath.sin(dfpX).divide(dfpX)).divide(dfpX).toDouble();
+       };
 
        DSFactory factory = new DSFactory(1, 1);
        for (double x = 1e-30; x < 1e10; x *= 2) {

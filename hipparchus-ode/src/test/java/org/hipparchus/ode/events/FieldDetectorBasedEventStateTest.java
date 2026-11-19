@@ -89,9 +89,7 @@ class FieldDetectorBasedEventStateTest {
         final Binary64[] array = MathArrays.buildArray(field, 1);
         final FieldODEStateAndDerivative<Binary64> state = new FieldODEStateAndDerivative<>(zero.add(1.0001), array, array);
         // Action & verify
-        Assertions.assertThrows(org.hipparchus.exception.MathRuntimeException.class, () -> {
-            eventState.doEvent(state);
-        });
+        Assertions.assertThrows(org.hipparchus.exception.MathRuntimeException.class, () -> eventState.doEvent(state));
     }
 
     @ParameterizedTest

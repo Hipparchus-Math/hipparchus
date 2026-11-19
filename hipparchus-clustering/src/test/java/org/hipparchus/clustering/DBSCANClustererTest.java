@@ -181,16 +181,12 @@ class DBSCANClustererTest {
 
     @Test
     void testNegativeEps() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new DBSCANClusterer<DoublePoint>(-2.0, 5);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new DBSCANClusterer<DoublePoint>(-2.0, 5));
     }
 
     @Test
     void testNegativeMinPts() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new DBSCANClusterer<DoublePoint>(2.0, -5);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new DBSCANClusterer<DoublePoint>(2.0, -5));
     }
 
     @Test

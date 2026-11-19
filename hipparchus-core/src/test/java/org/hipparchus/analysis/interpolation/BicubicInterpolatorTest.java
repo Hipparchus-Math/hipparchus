@@ -21,9 +21,14 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
+import org.hipparchus.analysis.CalculusFieldBivariateFunction;
+import org.hipparchus.analysis.FieldBivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,16 +91,18 @@ final class BicubicInterpolatorTest {
      */
     @Test
     void testPlane() {
-        BivariateFunction f = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 2 * x - 3 * y + 5;
-                }
-            };
+        BivariateFunction f = (x, y) -> 2 * x - 3 * y + 5;
+        CalculusFieldBivariateFunction<Binary64> fT = new FieldBivariateFunction() {
+            @Override
+            public <T extends CalculusFieldElement<T>> T value(T x, T y) {
+                return x.twice().add(y.multiply(-3)).add(5);
+            }
+        }.toCalculusFieldBivariateFunction(Binary64Field.getInstance());
 
         testInterpolation(3000,
                           1e-13,
                           f,
+                          fT,
                           false);
     }
 
@@ -106,16 +113,16 @@ final class BicubicInterpolatorTest {
      */
     @Test
     void testParaboloid() {
-        BivariateFunction f = new BivariateFunction() {
-                @Override
-                public double value(double x, double y) {
-                    return 2 * x * x - 3 * y * y + 4 * x * y - 5;
-                }
-            };
+        BivariateFunction f = (x, y) -> 2 * x * x - 3 * y * y + 4 * x * y - 5;
+        CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> x.multiply(x).twice()
+                .add(y.multiply(y).multiply(-3))
+                .add(x.multiply(y).multiply(4))
+                .add(-5);
 
         testInterpolation(3000,
                           1e-12,
                           f,
+                          fT,
                           false);
     }
 
@@ -128,6 +135,7 @@ final class BicubicInterpolatorTest {
     private void testInterpolation(int numSamples,
                                    double tolerance,
                                    BivariateFunction f,
+                                   CalculusFieldBivariateFunction<Binary64> fT,
                                    boolean print) {
         final int sz = 21;
         final double[] xval = new double[sz];
@@ -173,6 +181,13 @@ final class BicubicInterpolatorTest {
             }
 
             assertEquals(expected, actual, tolerance);
+
+            final Binary64 x64 = new Binary64(x);
+            final Binary64 y64 = new Binary64(y);
+            final Binary64 expectedT = fT.value(x64, y64);
+            final Binary64 actualT = p.value(x64, y64);
+
+            assertEquals(expectedT.getReal(), actualT.getReal(), tolerance);
         }
     }
 }

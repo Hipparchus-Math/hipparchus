@@ -34,6 +34,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -65,7 +66,7 @@ class SphereGeneratorTest {
                                           0.5));
         assertEquals(0, support.get(0).distance(sphere.getCenter()), 1.0e-10);
         assertEquals(1, sphere.getSupportSize());
-        assertTrue(support.get(0) == sphere.getSupport()[0]);
+        assertSame(support.get(0), sphere.getSupport()[0]);
     }
 
     @Test
@@ -78,7 +79,7 @@ class SphereGeneratorTest {
         for (Vector3D v : support) {
             assertTrue(sphere.contains(v));
             assertEquals(1.0, v.distance(sphere.getCenter()), 1.0e-10);
-            assertTrue(v == sphere.getSupport()[i++]);
+            assertSame(v, sphere.getSupport()[i++]);
         }
         assertTrue(sphere.contains(new Vector3D(2, 0.9, 0)));
         assertFalse(sphere.contains(Vector3D.ZERO));
@@ -97,7 +98,7 @@ class SphereGeneratorTest {
         for (Vector3D v : support) {
             assertTrue(sphere.contains(v));
             assertEquals(5.0 / 4.0, v.distance(sphere.getCenter()), 1.0e-10);
-            assertTrue(v == sphere.getSupport()[i++]);
+            assertSame(v, sphere.getSupport()[i++]);
         }
         assertTrue(sphere.contains(new Vector3D(2, 0.9, 0)));
         assertFalse(sphere.contains(new Vector3D(0.9,  0, 0)));
@@ -122,7 +123,7 @@ class SphereGeneratorTest {
         for (Vector3D v : support) {
             assertTrue(sphere.contains(v));
             assertEquals(25.0, v.distance(sphere.getCenter()), 1.0e-10);
-            assertTrue(v == sphere.getSupport()[i++]);
+            assertSame(v, sphere.getSupport()[i++]);
         }
         assertTrue(sphere.contains (new Vector3D(-22.999, 2, 2)));
         assertFalse(sphere.contains(new Vector3D(-23.001, 2, 2)));

@@ -147,8 +147,8 @@ class Vector1DTest {
 
     @Test
     void testNormSq() {
-        assertEquals(0.0, new Vector1D(0).getNormSq(), 0);
-        assertEquals(9.0, new Vector1D(-3).getNormSq(), 1.0e-12);
+        assertEquals(0.0, new Vector1D(0).getNorm2Sq(), 0);
+        assertEquals(9.0, new Vector1D(-3).getNorm2Sq(), 1.0e-12);
     }
 
     @Test
@@ -266,6 +266,12 @@ class Vector1DTest {
 
     private void checkVector(Vector1D v, double x) {
         assertEquals(x, v.getX(), 1.0e-12);
+    }
+
+    @Test
+    @Deprecated
+    void testDeprecatedNormSq() {
+        assertEquals(9.0, new Vector1D(-3).getNormSq(), 0.0);
     }
 
 }

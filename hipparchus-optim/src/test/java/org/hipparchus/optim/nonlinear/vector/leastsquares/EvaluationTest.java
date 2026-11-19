@@ -72,14 +72,10 @@ public class EvaluationTest {
         RealVector point = new ArrayRealVector(2);
         Evaluation evaluation = new LeastSquaresBuilder()
                 .target(new ArrayRealVector(new double[]{3,-1}))
-                .model(new MultivariateJacobianFunction() {
-                    public Pair<RealVector, RealMatrix> value(RealVector point) {
-                        return new Pair<RealVector, RealMatrix>(
-                                new ArrayRealVector(new double[]{1, 2}),
-                                MatrixUtils.createRealIdentityMatrix(2)
-                        );
-                    }
-                })
+                .model(point1 -> new Pair<RealVector, RealMatrix>(
+                        new ArrayRealVector(new double[]{1, 2}),
+                        MatrixUtils.createRealIdentityMatrix(2)
+                ))
                 .weight(MatrixUtils.createRealIdentityMatrix(2))
                 .build()
                 .evaluate(point);
@@ -96,14 +92,10 @@ public class EvaluationTest {
         //setup
         RealVector point = new ArrayRealVector(2);
         Evaluation evaluation = new LeastSquaresBuilder()
-                .model(new MultivariateJacobianFunction() {
-                    public Pair<RealVector, RealMatrix> value(RealVector point) {
-                        return new Pair<RealVector, RealMatrix>(
-                                new ArrayRealVector(2),
-                                MatrixUtils.createRealDiagonalMatrix(new double[]{1, 1e-2})
-                        );
-                    }
-                })
+                .model(point1 -> new Pair<RealVector, RealMatrix>(
+                        new ArrayRealVector(2),
+                        MatrixUtils.createRealDiagonalMatrix(new double[]{1, 1e-2})
+                ))
                 .weight(MatrixUtils.createRealDiagonalMatrix(new double[]{1, 1}))
                 .target(new ArrayRealVector(2))
                 .build()
@@ -132,17 +124,15 @@ public class EvaluationTest {
         final RealVector point = new ArrayRealVector(new double[]{1, 2});
         Evaluation evaluation = new LeastSquaresBuilder()
                 .weight(new DiagonalMatrix(new double[]{16, 4}))
-                .model(new MultivariateJacobianFunction() {
-                    public Pair<RealVector, RealMatrix> value(RealVector actualPoint) {
-                        //verify correct values passed in
-                        assertArrayEquals(
-                                point.toArray(), actualPoint.toArray(), Precision.EPSILON);
-                        //return values
-                        return new Pair<RealVector, RealMatrix>(
-                                new ArrayRealVector(new double[]{3, 4}),
-                                MatrixUtils.createRealMatrix(new double[][]{{5, 6}, {7, 8}})
-                        );
-                    }
+                .model(actualPoint -> {
+                    //verify correct values passed in
+                    assertArrayEquals(
+                            point.toArray(), actualPoint.toArray(), Precision.EPSILON);
+                    //return values
+                    return new Pair<RealVector, RealMatrix>(
+                            new ArrayRealVector(new double[]{3, 4}),
+                            MatrixUtils.createRealMatrix(new double[][]{{5, 6}, {7, 8}})
+                    );
                 })
                 .target(new double[2])
                 .build()
@@ -259,11 +249,7 @@ public class EvaluationTest {
 
         // "ValueAndJacobianFunction" is required but we implement only
         // "MultivariateJacobianFunction".
-        final MultivariateJacobianFunction m1 = new MultivariateJacobianFunction() {
-                public Pair<RealVector, RealMatrix> value(RealVector notUsed) {
-                    return new Pair<RealVector, RealMatrix>(null, null);
-                }
-            };
+        final MultivariateJacobianFunction m1 = notUsed -> new Pair<RealVector, RealMatrix>(null, null);
 
         try {
             // Should throw.
@@ -312,19 +298,15 @@ public class EvaluationTest {
 
     /** Used for testing direct vs lazy evaluation. */
     private MultivariateVectorFunction dummyModel() {
-        return new MultivariateVectorFunction() {
-            public double[] value(double[] p) {
-                throw new RuntimeException("dummyModel");
-            }
+        return p -> {
+            throw new RuntimeException("dummyModel");
         };
     }
 
     /** Used for testing direct vs lazy evaluation. */
     private MultivariateMatrixFunction dummyJacobian() {
-        return new MultivariateMatrixFunction() {
-            public double[][] value(double[] p) {
-                throw new RuntimeException("dummyJacobian");
-            }
+        return p -> {
+            throw new RuntimeException("dummyJacobian");
         };
     }
 }

@@ -21,6 +21,13 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
  */
 public class QPOptimizer extends ConstraintOptimizer {
 
+    /** Simple constructor.
+     */
+    public QPOptimizer() {
+        // nothing to do
+    }
+
+    /** {@inheritDoc} */
     @Override
     protected LagrangeSolution doOptimize() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

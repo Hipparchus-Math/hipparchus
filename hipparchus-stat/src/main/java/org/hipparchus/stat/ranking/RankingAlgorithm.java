@@ -25,6 +25,7 @@ package org.hipparchus.stat.ranking;
 /**
  * Interface representing a rank transformation.
  */
+@FunctionalInterface
 public interface RankingAlgorithm {
     /**
      * Performs a rank transformation on the input data, returning an array

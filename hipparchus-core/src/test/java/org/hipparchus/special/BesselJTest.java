@@ -773,15 +773,11 @@ class BesselJTest {
 
     @Test
     void testIAEBadOrder() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            BesselJ.value(-1, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> BesselJ.value(-1, 1));
     }
 
     @Test
     void testIAEBadArgument() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            BesselJ.value(1, 100000);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> BesselJ.value(1, 100000));
     }
 }

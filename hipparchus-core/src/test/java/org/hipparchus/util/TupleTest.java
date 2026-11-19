@@ -17,6 +17,9 @@
 package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElementAbstractTest;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -43,6 +46,12 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
     @Override
     protected Tuple build(final double x) {
         return new Tuple(x, x);
+    }
+
+    @Test
+    void testNorm() {
+        final Tuple oneToFive = new Tuple(1, 2, 3);
+        assertEquals(6., oneToFive.norm());
     }
 
     @Test
@@ -249,6 +258,23 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
             Tuple zero = rebuilt.subtract(value);
             assertEquals(0, zero.getReal(), 3.0e-16);
         }
+    }
+
+    @Test
+    public void testIsSmallDimensionMismatch() {
+        try {
+            new Tuple(0.0).isSmall(new Tuple(0.0, 1.0), 1.0e-15);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(new Tuple(1.0e-13, 2.5e-13).isSmall(new Tuple(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new Tuple(1.0e-11, 2.5e-13).isSmall(new Tuple(1.0, 1.0), 1.0e-12));
+        Assertions.assertFalse(new Tuple(1.0e-13, 2.5e-11).isSmall(new Tuple(1.0, 1.0), 1.0e-12));
     }
 
 }

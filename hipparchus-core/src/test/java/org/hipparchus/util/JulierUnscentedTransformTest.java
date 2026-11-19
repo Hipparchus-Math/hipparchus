@@ -30,9 +30,7 @@ class JulierUnscentedTransformTest {
     /** test state dimension equal to 0 */
     @Test
     void testWrongStateDimension() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new JulierUnscentedTransform(0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new JulierUnscentedTransform(0));
     }
 
     /** test weight computation */

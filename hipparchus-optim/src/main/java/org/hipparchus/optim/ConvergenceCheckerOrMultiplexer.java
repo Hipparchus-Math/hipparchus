@@ -43,12 +43,7 @@ public class ConvergenceCheckerOrMultiplexer<P> implements ConvergenceChecker<P>
     /** {@inheritDoc} */
     @Override
     public boolean converged(final int iteration, final P previous, final P current) {
-        for (final ConvergenceChecker<P> checker : checkers) {
-            if (checker.converged(iteration, previous, current)) {
-                return true;
-            }
-        }
-        return false;
+        return checkers.stream().anyMatch(checker -> checker.converged(iteration, previous, current));
     }
 
 }

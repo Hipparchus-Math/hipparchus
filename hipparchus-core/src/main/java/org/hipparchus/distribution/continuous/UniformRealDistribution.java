@@ -58,7 +58,6 @@ public class UniformRealDistribution extends AbstractRealDistribution {
      */
     public UniformRealDistribution(double lower, double upper)
         throws MathIllegalArgumentException {
-        super();
         if (lower >= upper) {
             throw new MathIllegalArgumentException(
                             LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,

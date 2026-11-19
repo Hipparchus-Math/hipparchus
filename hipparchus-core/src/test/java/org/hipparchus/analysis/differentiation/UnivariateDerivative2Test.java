@@ -20,6 +20,7 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,6 +51,12 @@ class UnivariateDerivative2Test extends UnivariateDerivativeAbstractTest<Univari
         assertEquals(-0.5, ud1.getValue(), 1.0e-15);
         assertEquals(+2.5, ud1.getFirstDerivative(), 1.0e-15);
         assertEquals(+4.5, ud1.getSecondDerivative(), 1.0e-15);
+    }
+
+    @Test
+    void testNormUD2() {
+        final UnivariateDerivative2 udA = new UnivariateDerivative2(1, 2, 3);
+        assertEquals(6., udA.norm());
     }
 
     @Test
@@ -105,11 +112,11 @@ class UnivariateDerivative2Test extends UnivariateDerivativeAbstractTest<Univari
         UnivariateDerivative2 ud2 = new UnivariateDerivative2(12, -34, 56);
         assertEquals(ud2, ud2);
         assertNotEquals("", ud2);
-        assertEquals(ud2, new UnivariateDerivative2(12, -34, 56));
-        assertNotEquals(ud2, new UnivariateDerivative2(21, -34, 56));
-        assertNotEquals(ud2, new UnivariateDerivative2(12, -43, 56));
-        assertNotEquals(ud2, new UnivariateDerivative2(12, -34, 65));
-        assertNotEquals(ud2, new UnivariateDerivative2(21, -43, 65));
+        assertEquals(new UnivariateDerivative2(12, -34, 56), ud2);
+        assertNotEquals(new UnivariateDerivative2(21, -34, 56), ud2);
+        assertNotEquals(new UnivariateDerivative2(12, -43, 56), ud2);
+        assertNotEquals(new UnivariateDerivative2(12, -34, 65), ud2);
+        assertNotEquals(new UnivariateDerivative2(21, -43, 65), ud2);
     }
 
     @Test
@@ -164,6 +171,18 @@ class UnivariateDerivative2Test extends UnivariateDerivativeAbstractTest<Univari
     void testRunTimeClass() {
         Field<UnivariateDerivative2> field = build(0.0).getField();
         assertEquals(UnivariateDerivative2.class, field.getRuntimeClass());
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(new UnivariateDerivative2(1.0e-13, 2.5e-13, -1.4e-13).
+                              isSmall(new UnivariateDerivative2(1.0, 1.0, 2.0), 1.0e-12));
+        Assertions.assertFalse(new UnivariateDerivative2(1.0e-11, 2.5e-13, -1.4e-13).
+                               isSmall(new UnivariateDerivative2(1.0, 1.0, 2.0), 1.0e-12));
+        Assertions.assertFalse(new UnivariateDerivative2(1.0e-13, 2.5e-11, -1.4e-13).
+                               isSmall(new UnivariateDerivative2(1.0, 1.0, 2.0), 1.0e-12));
+        Assertions.assertFalse(new UnivariateDerivative2(1.0e-13, 2.5e-13, -1.4e-11).
+                               isSmall(new UnivariateDerivative2(1.0, 1.0, 2.0), 1.0e-12));
     }
 
 }

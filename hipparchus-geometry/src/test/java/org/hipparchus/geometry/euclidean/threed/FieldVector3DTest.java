@@ -135,7 +135,7 @@ class FieldVector3DTest {
                                         new Vector3D(0, 0, -1)),
                     2, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1);
 
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure[] {
+        checkVector(new FieldVector3D<>(new DerivativeStructure[] {
             factory31.variable(2,  2),
             factory31.variable(1,  5),
             factory31.variable(0, -3)
@@ -235,7 +235,7 @@ class FieldVector3DTest {
     void testWrongDimension() throws MathIllegalArgumentException {
         assertThrows(MathIllegalArgumentException.class, () -> {
             DSFactory factory31 = new DSFactory(3, 1);
-            new FieldVector3D<DerivativeStructure>(new DerivativeStructure[]{
+            new FieldVector3D<>(new DerivativeStructure[]{
                 factory31.variable(0, 2),
                 factory31.variable(0, 5)
             });
@@ -274,12 +274,12 @@ class FieldVector3DTest {
     }
 
     @Test
-    void testNormSq() {
-        assertEquals(0.0, createVector(0, 0, 0, 3).getNormSq().getReal(), 0);
-        assertEquals(14, createVector(1, 2, 3, 3).getNormSq().getReal(), 1.0e-12);
-        assertEquals( 2, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(1, 0, 0), 0);
-        assertEquals( 4, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(0, 1, 0), 0);
-        assertEquals( 6, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(0, 0, 1), 0);
+    void testNorm2Sq() {
+        assertEquals(0.0, createVector(0, 0, 0, 3).getNorm2Sq().getReal(), 0);
+        assertEquals(14, createVector(1, 2, 3, 3).getNorm2Sq().getReal(), 1.0e-12);
+        assertEquals( 2, createVector(1, 2, 3, 3).getNorm2Sq().getPartialDerivative(1, 0, 0), 0);
+        assertEquals( 4, createVector(1, 2, 3, 3).getNorm2Sq().getPartialDerivative(0, 1, 0), 0);
+        assertEquals( 6, createVector(1, 2, 3, 3).getNorm2Sq().getPartialDerivative(0, 0, 1), 0);
     }
 
     @Test
@@ -693,7 +693,7 @@ class FieldVector3DTest {
         final FieldVector3D<DerivativeStructure> u3 = createVector(12753243807587107.0 / 18446744073709551616.0,
                                                                    -2313766922703915.0 / 18446744073709551616.0,
                                                                     -227970081415313.0 /   288230376151711744.0, 3);
-        FieldVector3D<DerivativeStructure> cNaive = new FieldVector3D<DerivativeStructure>(u1.getY().multiply(u2.getZ()).subtract(u1.getZ().multiply(u2.getY())),
+        FieldVector3D<DerivativeStructure> cNaive = new FieldVector3D<>(u1.getY().multiply(u2.getZ()).subtract(u1.getZ().multiply(u2.getY())),
                                        u1.getZ().multiply(u2.getX()).subtract(u1.getX().multiply(u2.getZ())),
                                        u1.getX().multiply(u2.getY()).subtract(u1.getY().multiply(u2.getX())));
         FieldVector3D<DerivativeStructure> cAccurate = FieldVector3D.crossProduct(u1, u2);
@@ -705,7 +705,7 @@ class FieldVector3DTest {
     void testCrossProduct() {
         // we compare accurate versus naive cross product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
-        Well1024a random = new Well1024a(885362227452043214l);
+        Well1024a random = new Well1024a(885362227452043214L);
         for (int i = 0; i < 10000; ++i) {
             double ux = random.nextDouble();
             double uy = random.nextDouble();
@@ -801,6 +801,17 @@ class FieldVector3DTest {
         assertEquals(dzdy, v.getZ().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
         assertEquals(dzdz, v.getZ().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
         assertEquals(dzdt, v.getZ().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
+    }
+
+    @Test
+    @Deprecated
+    void testDeprecatedNormSq() {
+        final DerivativeStructure n2 = createVector(1, 2, 3, 3).getNormSq();
+        assertEquals(14, n2.getReal(), 0.0);
+        assertEquals(2, n2.getPartialDerivative(1, 0, 0), 0.0);
+        assertEquals(4, n2.getPartialDerivative(0, 1, 0), 0.0);
+        assertEquals(6, n2.getPartialDerivative(0, 0, 1), 0.0);
+        assertEquals(0.0, createVector(0, 0, 0, 3).getNormSq().getReal(), 0.0);
     }
 
 }

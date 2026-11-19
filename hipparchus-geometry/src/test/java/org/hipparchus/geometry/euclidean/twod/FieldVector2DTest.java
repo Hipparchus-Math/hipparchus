@@ -200,7 +200,7 @@ class FieldVector2DTest {
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(3.0, -4.0));
         assertEquals( 7.0, v.getNorm1().getReal(),   1.0e-15);
         assertEquals( 5.0, v.getNorm().getReal(),    1.0e-15);
-        assertEquals(25.0, v.getNormSq().getReal(),  1.0e-15);
+        assertEquals(25.0, v.getNorm2Sq().getReal(),  1.0e-15);
         assertEquals( 4.0, v.getNormInf().getReal(), 1.0e-15);
     }
 
@@ -416,6 +416,12 @@ class FieldVector2DTest {
                                                        final double x, final double y, final double tol) {
         assertEquals(x, v.getX().getReal(), tol);
         assertEquals(y, v.getY().getReal(), tol);
+    }
+
+    @Test
+    @Deprecated
+    void testDeprecatedNormSq() {
+        assertEquals(25.0, new FieldVector2D<>(Binary64Field.getInstance(), new Vector2D(3, -4)).getNormSq().getReal(), 0.0);
     }
 
 }

@@ -24,6 +24,7 @@ import org.hipparchus.CalculusFieldElement;
  * @see MultivariateMatrixFunction
  * @since 2.2
  */
+@FunctionalInterface
 public interface CalculusFieldMultivariateMatrixFunction<T extends CalculusFieldElement<T>> {
     /**
      * Compute the value of the function.
@@ -31,5 +32,6 @@ public interface CalculusFieldMultivariateMatrixFunction<T extends CalculusField
      * @param x Point at which the function value should be computed.
      * @return the value of the function.
      */
-    T[][] value(@SuppressWarnings("unchecked") T... x);
+    @SuppressWarnings("unchecked")
+    T[][] value(T... x);
 }

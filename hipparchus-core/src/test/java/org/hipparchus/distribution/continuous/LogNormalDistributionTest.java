@@ -182,9 +182,7 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
 
     @Test
     void testPreconditions() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new LogNormalDistribution(1, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new LogNormalDistribution(1, 0));
     }
 
     @Test

@@ -70,7 +70,6 @@ class ThirdMoment extends SecondMoment implements Serializable {
      * Create a ThirdMoment instance.
      */
     ThirdMoment() {
-        super();
         m3 = Double.NaN;
         nDevSq = Double.NaN;
     }

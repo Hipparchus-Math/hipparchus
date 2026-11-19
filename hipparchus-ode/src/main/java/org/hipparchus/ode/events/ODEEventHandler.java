@@ -57,6 +57,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see org.hipparchus.ode.events
  * @since 3.0
  */
+@FunctionalInterface
 public interface ODEEventHandler  {
 
     /** Initialize event handler at the start of an ODE integration.

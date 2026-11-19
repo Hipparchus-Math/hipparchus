@@ -60,7 +60,6 @@ public class FieldPolynomialFunction<T extends CalculusFieldElement<T>> implemen
      */
     public FieldPolynomialFunction(final T[] c)
         throws MathIllegalArgumentException, NullArgumentException {
-        super();
         MathUtils.checkNotNull(c);
         int n = c.length;
         if (n == 0) {

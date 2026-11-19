@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -99,11 +99,11 @@ class WeightedObservedPointsTest {
 
         // Adding an element to "list" has no impact on "store".
         list.add(new WeightedObservedPoint(1.2, 3.4, 5.6));
-        assertFalse(list.size() == store.toList().size());
+        assertNotEquals(list.size(), store.toList().size());
 
         // Clearing "store" has no impact on "list".
         store.clear();
-        assertFalse(list.size() == 0);
+        assertNotEquals(0, list.size());
     }
 
     /**

@@ -79,7 +79,7 @@ public class FieldLine<T extends CalculusFieldElement<T>> {
     public void reset(final FieldVector3D<T> p1, final FieldVector3D<T> p2)
         throws MathIllegalArgumentException {
         final FieldVector3D<T> delta = p2.subtract(p1);
-        final T norm2 = delta.getNormSq();
+        final T norm2 = delta.getNorm2Sq();
         if (norm2.getReal() == 0.0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
         }

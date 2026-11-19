@@ -381,13 +381,11 @@ public class CMAESOptimizerTest {
         final CMAESOptimizer optimizer
             = new CMAESOptimizer(30000, 0, true, 10,
                                  0, new MersenneTwister(), false, null);
-        final MultivariateFunction fitnessFunction = new MultivariateFunction() {
-                public double value(double[] parameters) {
-                    final double target = 1;
-                    final double error = target - parameters[0];
-                    return error * error;
-                }
-            };
+        final MultivariateFunction fitnessFunction = parameters -> {
+            final double target = 1;
+            final double error = target - parameters[0];
+            return error * error;
+        };
 
         final double[] start = { 0 };
         final double[] lower = { -1e6 };
@@ -412,13 +410,11 @@ public class CMAESOptimizerTest {
         final CMAESOptimizer optimizer
             = new CMAESOptimizer(30000, 0, true, 10,
                                  0, new MersenneTwister(), false, null);
-        final MultivariateFunction fitnessFunction = new MultivariateFunction() {
-                public double value(double[] parameters) {
-                    final double target = 11.1;
-                    final double error = target - parameters[0];
-                    return error * error;
-                }
-            };
+        final MultivariateFunction fitnessFunction = parameters -> {
+            final double target = 11.1;
+            final double error = target - parameters[0];
+            return error * error;
+        };
 
         final double[] start = { 1 };
 

@@ -31,9 +31,9 @@ import org.hipparchus.util.Precision;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -64,7 +64,7 @@ class DiagonalMatrixTest {
 
         // Check that the underlying was copied.
         d[0] = 0;
-        assertFalse(d[0] == m.getEntry(0, 0));
+        assertNotEquals(d[0], m.getEntry(0, 0), 0.0);
     }
 
     @Test
@@ -101,7 +101,7 @@ class DiagonalMatrixTest {
         final double[] d = { -1.2, 3.4, 5 };
         final DiagonalMatrix m = new DiagonalMatrix(d, false);
         final RealMatrix p = m.createMatrix(5, 5);
-        assertTrue(p instanceof DiagonalMatrix);
+        assertInstanceOf(DiagonalMatrix.class, p);
         assertEquals(5, p.getRowDimension());
         assertEquals(5, p.getColumnDimension());
     }
@@ -445,9 +445,7 @@ class DiagonalMatrixTest {
 
     @Test
     void testNull() {
-        assertThrows(NullArgumentException.class, () -> {
-            new DiagonalMatrix(null, false);
-        });
+        assertThrows(NullArgumentException.class, () -> new DiagonalMatrix(null, false));
     }
 
     @Test

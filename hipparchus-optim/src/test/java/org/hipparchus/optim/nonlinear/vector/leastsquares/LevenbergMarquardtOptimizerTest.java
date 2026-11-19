@@ -31,9 +31,7 @@ import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.Precision;
@@ -153,9 +151,7 @@ public class LevenbergMarquardtOptimizerTest
             assertFalse(shouldFail);
             //TODO check it got the right answer
 
-        } catch (MathIllegalArgumentException ee) {
-            assertTrue(shouldFail);
-        } catch (MathIllegalStateException ee) {
+        } catch (MathIllegalArgumentException | MathIllegalStateException ee) {
             assertTrue(shouldFail);
         }
     }
@@ -327,12 +323,10 @@ public class LevenbergMarquardtOptimizerTest
 
         // Build a new problem with a validator that amounts to cheating.
         final ParameterValidator cheatValidator
-            = new ParameterValidator() {
-                    public RealVector validate(RealVector params) {
-                        // Cheat: return the optimum found previously.
-                        return optimum.getPoint();
-                    }
-                };
+            = params -> {
+                // Cheat: return the optimum found previously.
+                return optimum.getPoint();
+            };
 
         final Optimum cheatOptimum
             = optimizer.optimize(builder(circle).maxIterations(50).start(init).parameterValidator(cheatValidator).build());
@@ -346,11 +340,7 @@ public class LevenbergMarquardtOptimizerTest
         //setup
         LeastSquaresProblem lsp = new LinearProblem(new double[][] {{1}}, new double[] {1})
                 .getBuilder()
-                .checker(new ConvergenceChecker<Evaluation>() {
-                    public boolean converged(int iteration, Evaluation previous, Evaluation current) {
-                        return true;
-                    }
-                })
+                .checker((iteration, previous, current) -> true)
                 .build();
 
         //action
@@ -377,40 +367,36 @@ public class LevenbergMarquardtOptimizerTest
         }
 
         public MultivariateVectorFunction getModelFunction() {
-            return new MultivariateVectorFunction() {
-                public double[] value(double[] params) {
-                    double[] values = new double[time.size()];
-                    for (int i = 0; i < values.length; ++i) {
-                        final double t = time.get(i);
-                        values[i] = params[0] +
-                            params[1] * FastMath.exp(-t / params[3]) +
-                            params[2] * FastMath.exp(-t / params[4]);
-                    }
-                    return values;
+            return params -> {
+                double[] values = new double[time.size()];
+                for (int i = 0; i < values.length; ++i) {
+                    final double t = time.get(i);
+                    values[i] = params[0] +
+                        params[1] * FastMath.exp(-t / params[3]) +
+                        params[2] * FastMath.exp(-t / params[4]);
                 }
+                return values;
             };
         }
 
         public MultivariateMatrixFunction getModelFunctionJacobian() {
-            return new MultivariateMatrixFunction() {
-                public double[][] value(double[] params) {
-                    double[][] jacobian = new double[time.size()][5];
+            return params -> {
+                double[][] jacobian = new double[time.size()][5];
 
-                    for (int i = 0; i < jacobian.length; ++i) {
-                        final double t = time.get(i);
-                        jacobian[i][0] = 1;
+                for (int i = 0; i < jacobian.length; ++i) {
+                    final double t = time.get(i);
+                    jacobian[i][0] = 1;
 
-                        final double p3 =  params[3];
-                        final double p4 =  params[4];
-                        final double tOp3 = t / p3;
-                        final double tOp4 = t / p4;
-                        jacobian[i][1] = FastMath.exp(-tOp3);
-                        jacobian[i][2] = FastMath.exp(-tOp4);
-                        jacobian[i][3] = params[1] * FastMath.exp(-tOp3) * tOp3 / p3;
-                        jacobian[i][4] = params[2] * FastMath.exp(-tOp4) * tOp4 / p4;
-                    }
-                    return jacobian;
+                    final double p3 =  params[3];
+                    final double p4 =  params[4];
+                    final double tOp3 = t / p3;
+                    final double tOp4 = t / p4;
+                    jacobian[i][1] = FastMath.exp(-tOp3);
+                    jacobian[i][2] = FastMath.exp(-tOp4);
+                    jacobian[i][3] = params[1] * FastMath.exp(-tOp3) * tOp3 / p3;
+                    jacobian[i][4] = params[2] * FastMath.exp(-tOp4) * tOp4 / p4;
                 }
+                return jacobian;
             };
         }
     }

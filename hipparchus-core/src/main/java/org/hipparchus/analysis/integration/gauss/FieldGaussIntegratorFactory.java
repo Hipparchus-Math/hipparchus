@@ -40,6 +40,8 @@ public class FieldGaussIntegratorFactory<T extends CalculusFieldElement<T>> {
     private final FieldRuleFactory<T> hermite;
     /** Generator of Gauss-Laguerre integrators. */
     private final FieldRuleFactory<T> laguerre;
+    /** Generator of Gauss-Chebyshev integrators. */
+    private final FieldRuleFactory<T> chebyshevSecondKind;
 
     /** Simple constructor.
      * @param field field to which function argument and value belong
@@ -48,6 +50,7 @@ public class FieldGaussIntegratorFactory<T extends CalculusFieldElement<T>> {
         legendre = new FieldLegendreRuleFactory<>(field);
         hermite  = new FieldHermiteRuleFactory<>(field);
         laguerre = new FieldLaguerreRuleFactory<>(field);
+        chebyshevSecondKind = new FieldChebyshevSecondKindRuleFactory<>(field);
     }
 
     /**
@@ -118,6 +121,20 @@ public class FieldGaussIntegratorFactory<T extends CalculusFieldElement<T>> {
      */
     public SymmetricFieldGaussIntegrator<T> hermite(int numberOfPoints) {
         return new SymmetricFieldGaussIntegrator<>(hermite.getRule(numberOfPoints));
+    }
+
+    /**
+     * Creates a Gauss-Chebyshev integrator of the second kind of the given order.
+     * The call to the
+     * {@link FieldGaussIntegrator#integrate(org.hipparchus.analysis.CalculusFieldUnivariateFunction)
+     * integrate} method will perform an integration on the natural interval
+     * {@code [-1 , 1]}.
+     *
+     * @param numberOfPoints Order of the integration rule.
+     * @return a Gauss-Chebyshev integrator.
+     */
+    public FieldGaussIntegrator<T> chebyshevSecondKind(int numberOfPoints) {
+        return new FieldGaussIntegrator<>(chebyshevSecondKind.getRule(numberOfPoints));
     }
 
     /**

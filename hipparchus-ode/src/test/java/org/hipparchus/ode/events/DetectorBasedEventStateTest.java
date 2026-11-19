@@ -98,9 +98,7 @@ class DetectorBasedEventStateTest {
         pendingEventTime.set(eventState, 1.0);
         final ODEStateAndDerivative state = new ODEStateAndDerivative(1.0001, new double[]{0.0}, new double[]{0.0});
         // Action & verify
-        Assertions.assertThrows(org.hipparchus.exception.MathRuntimeException.class, () -> {
-            eventState.doEvent(state);
-        });
+        Assertions.assertThrows(org.hipparchus.exception.MathRuntimeException.class, () -> eventState.doEvent(state));
     }
 
     @Test

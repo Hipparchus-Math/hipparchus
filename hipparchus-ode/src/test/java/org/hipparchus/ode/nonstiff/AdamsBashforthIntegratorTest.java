@@ -46,9 +46,7 @@ class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
 
     @Test
     public void testMinStep() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doDimensionCheck();
-        });
+        assertThrows(MathIllegalArgumentException.class, this::doDimensionCheck);
     }
 
     @Test
@@ -61,9 +59,7 @@ class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
 
     @Test
     public void exceedMaxEvaluations() {
-        assertThrows(MathIllegalStateException.class, () -> {
-            doExceedMaxEvaluations(650);
-        });
+        assertThrows(MathIllegalStateException.class, () -> doExceedMaxEvaluations(650));
     }
 
     @Test
@@ -78,9 +74,7 @@ class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
 
     @Test
     public void testStartFailure() {
-        assertThrows(MathIllegalStateException.class, () -> {
-            doTestStartFailure();
-        });
+        assertThrows(MathIllegalStateException.class, this::doTestStartFailure);
     }
 
     @Test

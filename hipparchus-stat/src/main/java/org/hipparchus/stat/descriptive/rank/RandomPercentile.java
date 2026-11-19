@@ -169,7 +169,6 @@ public class RandomPercentile
      * @param original the {@code PSquarePercentile} instance to copy
      */
     public RandomPercentile(RandomPercentile original) {
-        super();
         this.h = original.h;
         this.n = original.n;
         this.s = original.s;
@@ -741,7 +740,6 @@ public class RandomPercentile
          * @param original BufferMap to copy
          */
         BufferMap(BufferMap original) {
-            super();
             this.bufferSize = original.bufferSize;
             this.capacity = original.capacity;
             this.count = 0;

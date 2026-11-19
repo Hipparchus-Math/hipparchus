@@ -63,7 +63,6 @@ public class SecondMoment extends FirstMoment
      * Create a SecondMoment instance.
      */
     public SecondMoment() {
-        super();
         m2 = Double.NaN;
     }
 

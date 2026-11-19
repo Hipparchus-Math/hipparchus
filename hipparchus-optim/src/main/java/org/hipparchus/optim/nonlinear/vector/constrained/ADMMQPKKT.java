@@ -30,6 +30,11 @@ import org.hipparchus.util.FastMath;
  */
 public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
 
+    /** Tolerance for symmetric matrices decomposition.
+     * @since 4.1
+     */
+    private double decompositionEpsilon;
+
     /** Square matrix of weights for quadratic terms. */
     private RealMatrix H;
 
@@ -71,14 +76,22 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
      * </p>
      */
     ADMMQPKKT() {
-        // nothing initialized yet!
+        decompositionEpsilon = EigenDecompositionSymmetric.DEFAULT_EPSILON;
     }
 
     /** {@inheritDoc} */
     @Override
     public ADMMQPSolution solve(RealVector b1, final RealVector b2) {
-        RealVector z = dsX.solve(new ArrayRealVector((ArrayRealVector) b1,b2));
+        RealVector z = dsX.solve(new ArrayRealVector((ArrayRealVector) b1, b2));
         return new ADMMQPSolution(z.getSubVector(0,b1.getDimension()), z.getSubVector(b1.getDimension(), b2.getDimension()));
+    }
+
+    /** Update tolerance for matrix decomposition
+     * @param newDecompositionEpsilon tolerance for symmetric matrix decomposition
+     * @since 4.1
+     */
+    public void updateDecompositionEpsilon(final double newDecompositionEpsilon) {
+        this.decompositionEpsilon = newDecompositionEpsilon;
     }
 
     /** Update steps
@@ -96,7 +109,7 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
         M.setSubMatrix(A.getData(), H.getRowDimension(),0);
         M.setSubMatrix(A.transpose().getData(), 0, H.getRowDimension());
         M.setSubMatrix(Rinv.scalarMultiply(-1.0).getData(), H.getRowDimension(),H.getRowDimension());
-        dsX = new EigenDecompositionSymmetric(M).getSolver();
+        dsX = new EigenDecompositionSymmetric(M, decompositionEpsilon, true).getSolver();
     }
 
     /** Initialize problem
@@ -128,7 +141,7 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
         M.setSubMatrix(newA.getData(),newH.getRowDimension(),0);
         M.setSubMatrix(newA.transpose().getData(),0,newH.getRowDimension());
         M.setSubMatrix(Rinv.scalarMultiply(-1.0).getData(),newH.getRowDimension(),newH.getRowDimension());
-        dsX = new EigenDecompositionSymmetric(M).getSolver();
+        dsX = new EigenDecompositionSymmetric(M, decompositionEpsilon, true).getSolver();
     }
 
     private void createPenaltyMatrix(int me, double rho) {

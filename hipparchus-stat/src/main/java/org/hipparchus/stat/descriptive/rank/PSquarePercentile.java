@@ -139,7 +139,6 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      * @throws org.hipparchus.exception.NullArgumentException if original is null
      */
     public PSquarePercentile(PSquarePercentile original) {
-        super();
 
         this.quantile = original.quantile;
 

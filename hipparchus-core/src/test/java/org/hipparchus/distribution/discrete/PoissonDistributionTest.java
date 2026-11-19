@@ -157,9 +157,7 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
 
     @Test
     void testNegativeMean() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new PoissonDistribution(-1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new PoissonDistribution(-1));
     }
 
     @Test

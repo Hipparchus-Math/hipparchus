@@ -385,19 +385,37 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
     }
 
     /** Get the L<sub>2</sub> norm for the vector.
-     * @return Euclidean norm for the vector
+     * @return Euclidean norm for the
+     * @since 4.1
      */
-    public T getNorm() {
+    public T getNorm2() {
         // there are no cancellation problems here, so we use the straightforward formula
         return x.square().add(y.square()).sqrt();
     }
 
-    /** Get the square of the norm for the vector.
-     * @return square of the Euclidean norm for the vector
+    /** Get the most common norm for the vector, by default the Euclidean one.
+     * @return norm for the vector
      */
-    public T getNormSq() {
+    public T getNorm() {
+        return getNorm2();
+    }
+
+    /** Get the square of the 2-norm for the vector.
+     * @return square of the Euclidean norm for the vector
+     * @since 4.1
+     */
+    public T getNorm2Sq() {
         // there are no cancellation problems here, so we use the straightforward formula
         return x.square().add(y.square());
+    }
+
+    /** Get the square of the norm for the vector.
+     * @return square of the Euclidean norm for the vector
+     * @deprecated as of 4.1, replaced by {@link #getNorm2Sq()}; will be removed in 5.0
+     */
+    @Deprecated
+    public T getNormSq() {
+        return getNorm2Sq();
     }
 
     /** Get the L<sub>&infin;</sub> norm for the vector.
@@ -791,7 +809,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
 
     /** Compute the square of the distance between the instance and another vector.
      * <p>Calling this method is equivalent to calling:
-     * <code>q.subtract(p).getNormSq()</code> except that no intermediate
+     * <code>q.subtract(p).getNorm2Sq()</code> except that no intermediate
      * vector is built</p>
      * @param v second vector
      * @return the square of the distance between the instance and p
@@ -804,7 +822,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
 
     /** Compute the square of the distance between the instance and another vector.
      * <p>Calling this method is equivalent to calling:
-     * <code>q.subtract(p).getNormSq()</code> except that no intermediate
+     * <code>q.subtract(p).getNorm2Sq()</code> except that no intermediate
      * vector is built</p>
      * @param v second vector
      * @return the square of the distance between the instance and p
@@ -1019,7 +1037,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
 
     /** Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
-     * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
+     * <code>p1.subtract(p2).getNorm2Sq()</code> except that no intermediate
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
@@ -1032,7 +1050,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
 
     /** Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
-     * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
+     * <code>p1.subtract(p2).getNorm2Sq()</code> except that no intermediate
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
@@ -1045,7 +1063,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
 
     /** Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
-     * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
+     * <code>p1.subtract(p2).getNorm2Sq()</code> except that no intermediate
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector

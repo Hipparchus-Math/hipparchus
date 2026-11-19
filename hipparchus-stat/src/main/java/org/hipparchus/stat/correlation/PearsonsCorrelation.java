@@ -65,7 +65,6 @@ public class PearsonsCorrelation {
      * Create a PearsonsCorrelation instance without data.
      */
     public PearsonsCorrelation() {
-        super();
         correlationMatrix = null;
         nObs = 0;
     }

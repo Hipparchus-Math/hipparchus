@@ -122,7 +122,7 @@ public class Line implements Embedding<Euclidean3D, Vector3D, Euclidean1D, Vecto
      * @throws MathIllegalArgumentException if {@code delta} is the zero vector.
      */
     private void resetWithDirection(final Vector3D p1, final Vector3D delta) {
-        final double norm2 = delta.getNormSq();
+        final double norm2 = delta.getNorm2Sq();
         if (norm2 == 0.0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
         }

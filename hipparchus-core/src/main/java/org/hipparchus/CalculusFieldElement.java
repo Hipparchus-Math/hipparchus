@@ -162,6 +162,22 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
     T hypot(T y)
         throws MathIllegalArgumentException;
 
+    /** Compute this divided by two.
+     * @return a new element representing it halved
+     * @since 4.1
+     */
+    default T half() {
+        return divide(2);
+    }
+
+    /** Compute this &times; two.
+     * @return a new element representing it doubled
+     * @since 4.1
+     */
+    default T twice() {
+        return multiply(2);
+    }
+
     /** {@inheritDoc} */
     @Override
     default T divide(T a) {
@@ -580,6 +596,22 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      */
     default double norm() {
         return abs().getReal();
+    }
+
+    /** Check if instance is small with respect to reference.
+     * <p>
+     * This check is mainly intended for checking convergence of iterative
+     * algorithms. The idea is that {@code this + base} is <em>close enough</em>
+     * to {@code base}, using a relative threshold. The default implementation
+     * uses only the relative threshold with respect to he {@link #getReal()} part.
+     * </p>
+     * @param base base value to compare against
+     * @param relativeThreshold relative threshold
+     * @return true if instance is small with respect to reference
+     * @since 4.1
+     */
+    default boolean isSmall(final T base, final double relativeThreshold) {
+        return FastMath.abs(getReal()) <= FastMath.abs(base.getReal() * relativeThreshold);
     }
 
     /** absolute value.

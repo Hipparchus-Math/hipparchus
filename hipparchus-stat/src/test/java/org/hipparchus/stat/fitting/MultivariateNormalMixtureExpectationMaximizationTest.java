@@ -29,13 +29,12 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -202,7 +201,7 @@ class MultivariateNormalMixtureExpectationMaximizationTest {
                     Math.ulp(1d));
 
             final double[] means = component.getValue().getMeans();
-            assertTrue(Arrays.equals(correctMeans[i], means));
+            assertArrayEquals(correctMeans[i], means);
 
             final RealMatrix covMat = component.getValue().getCovariances();
             assertEquals(correctCovMats[i], covMat);
@@ -292,7 +291,7 @@ class MultivariateNormalMixtureExpectationMaximizationTest {
             final double[] mean = mvn.getMeans();
             final RealMatrix covMat = mvn.getCovariances();
             assertEquals(correctWeights[i], weight, Math.ulp(1d));
-            assertTrue(Arrays.equals(correctMeans[i], mean));
+            assertArrayEquals(correctMeans[i], mean);
             assertEquals(correctCovMats[i], covMat);
             i++;
         }

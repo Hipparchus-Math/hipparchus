@@ -17,6 +17,9 @@
 package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElementAbstractTest;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -26,29 +29,35 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<Binary64>> {
     public static final Binary64 X = new Binary64(1.2345);
 
-    public static final FieldTuple<Binary64> PLUS_X = new FieldTuple<Binary64>(X, X);
+    public static final FieldTuple<Binary64> PLUS_X = new FieldTuple<>(X, X);
 
-    public static final FieldTuple<Binary64> MINUS_X = new FieldTuple<Binary64>(X.negate(), X.negate());
+    public static final FieldTuple<Binary64> MINUS_X = new FieldTuple<>(X.negate(), X.negate());
 
     public static final Binary64 Y = new Binary64(6.789);
 
-    public static final FieldTuple<Binary64> PLUS_Y = new FieldTuple<Binary64>(Y, Y);
+    public static final FieldTuple<Binary64> PLUS_Y = new FieldTuple<>(Y, Y);
 
-    public static final FieldTuple<Binary64> MINUS_Y = new FieldTuple<Binary64>(Y.negate(), Y.negate());
+    public static final FieldTuple<Binary64> MINUS_Y = new FieldTuple<>(Y.negate(), Y.negate());
 
-    public static final FieldTuple<Binary64> PLUS_ZERO = new FieldTuple<Binary64>(new Binary64(0.0), new Binary64(0.0));
+    public static final FieldTuple<Binary64> PLUS_ZERO = new FieldTuple<>(new Binary64(0.0), new Binary64(0.0));
 
-    public static final FieldTuple<Binary64> MINUS_ZERO = new FieldTuple<Binary64>(new Binary64(-0.0), new Binary64(-0.0));
+    public static final FieldTuple<Binary64> MINUS_ZERO = new FieldTuple<>(new Binary64(-0.0), new Binary64(-0.0));
 
     @Override
     protected FieldTuple<Binary64> build(final double x) {
-        return new FieldTuple<Binary64>(new Binary64(x), new Binary64(x));
+        return new FieldTuple<>(new Binary64(x), new Binary64(x));
+    }
+
+    @Test
+    void testNorm() {
+        final FieldTuple<Binary64> oneToFive = new FieldTuple<>(Binary64.ONE, new Binary64(2));
+        assertEquals(3, oneToFive.norm());
     }
 
     @Test
     void testComponents() {
         assertEquals(2, PLUS_ZERO.getDimension());
-        final FieldTuple<Binary64> oneToFive = new FieldTuple<Binary64>(new Binary64(1),
+        final FieldTuple<Binary64> oneToFive = new FieldTuple<>(new Binary64(1),
                                                                           new Binary64(2),
                                                                           new Binary64(3),
                                                                           new Binary64(4),
@@ -102,19 +111,19 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
     void testAdd() {
         FieldTuple<Binary64> expected, actual;
 
-        expected = new FieldTuple<Binary64>(X.add(Y), X.add(Y));
+        expected = new FieldTuple<>(X.add(Y), X.add(Y));
         actual = PLUS_X.add(PLUS_Y);
         assertEquals(expected, actual);
         actual = PLUS_Y.add(PLUS_X);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.add(Y.negate()), X.add(Y.negate()));
+        expected = new FieldTuple<>(X.add(Y.negate()), X.add(Y.negate()));
         actual = PLUS_X.add(MINUS_Y);
         assertEquals(expected, actual);
         actual = MINUS_Y.add(PLUS_X);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.negate().add(Y.negate()), X.negate().add(Y.negate()));
+        expected = new FieldTuple<>(X.negate().add(Y.negate()), X.negate().add(Y.negate()));
         actual = MINUS_X.add(MINUS_Y);
         assertEquals(expected, actual);
         actual = MINUS_Y.add(MINUS_X);
@@ -126,19 +135,19 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
     void testSubtract() {
         FieldTuple<Binary64> expected, actual;
 
-        expected = new FieldTuple<Binary64>(X.subtract(Y), X.subtract(Y));
+        expected = new FieldTuple<>(X.subtract(Y), X.subtract(Y));
         actual = PLUS_X.subtract(PLUS_Y);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.subtract(Y.negate()), X.subtract(Y.negate()));
+        expected = new FieldTuple<>(X.subtract(Y.negate()), X.subtract(Y.negate()));
         actual = PLUS_X.subtract(MINUS_Y);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.negate().subtract(Y), X.negate().subtract(Y));
+        expected = new FieldTuple<>(X.negate().subtract(Y), X.negate().subtract(Y));
         actual = MINUS_X.subtract(PLUS_Y);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.negate().subtract(Y.negate()), X.negate().subtract(Y.negate()));
+        expected = new FieldTuple<>(X.negate().subtract(Y.negate()), X.negate().subtract(Y.negate()));
         actual = MINUS_X.subtract(MINUS_Y);
         assertEquals(expected, actual);
 
@@ -170,19 +179,19 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
     void testMultiply() {
         FieldTuple<Binary64> expected, actual;
 
-        expected = new FieldTuple<Binary64>(X.multiply(Y), X.multiply(Y));
+        expected = new FieldTuple<>(X.multiply(Y), X.multiply(Y));
         actual = PLUS_X.multiply(PLUS_Y);
         assertEquals(expected, actual);
         actual = PLUS_Y.multiply(PLUS_X);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.multiply(Y.negate()), X.multiply(Y.negate()));
+        expected = new FieldTuple<>(X.multiply(Y.negate()), X.multiply(Y.negate()));
         actual = PLUS_X.multiply(MINUS_Y);
         assertEquals(expected, actual);
         actual = MINUS_Y.multiply(PLUS_X);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.negate().multiply(Y.negate()), X.negate().multiply(Y.negate()));
+        expected = new FieldTuple<>(X.negate().multiply(Y.negate()), X.negate().multiply(Y.negate()));
         actual = MINUS_X.multiply(MINUS_Y);
         assertEquals(expected, actual);
         actual = MINUS_Y.multiply(MINUS_X);
@@ -194,19 +203,19 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
     void testDivide() {
         FieldTuple<Binary64> expected, actual;
 
-        expected = new FieldTuple<Binary64>(X.divide(Y), X.divide(Y));
+        expected = new FieldTuple<>(X.divide(Y), X.divide(Y));
         actual = PLUS_X.divide(PLUS_Y);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.divide(Y.negate()), X.divide(Y.negate()));
+        expected = new FieldTuple<>(X.divide(Y.negate()), X.divide(Y.negate()));
         actual = PLUS_X.divide(MINUS_Y);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.negate().divide(Y), X.negate().divide(Y));
+        expected = new FieldTuple<>(X.negate().divide(Y), X.negate().divide(Y));
         actual = MINUS_X.divide(PLUS_Y);
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.negate().divide(Y.negate()), X.negate().divide(Y.negate()));
+        expected = new FieldTuple<>(X.negate().divide(Y.negate()), X.negate().divide(Y.negate()));
         actual = MINUS_X.divide(MINUS_Y);
         assertEquals(expected, actual);
 
@@ -216,20 +225,20 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
     void testReciprocal() {
         FieldTuple<Binary64> expected, actual;
 
-        expected = new FieldTuple<Binary64>(X.reciprocal(), X.reciprocal());
+        expected = new FieldTuple<>(X.reciprocal(), X.reciprocal());
         actual = PLUS_X.reciprocal();
         assertEquals(expected, actual);
 
-        expected = new FieldTuple<Binary64>(X.negate().reciprocal(), X.negate().reciprocal());
+        expected = new FieldTuple<>(X.negate().reciprocal(), X.negate().reciprocal());
         actual = MINUS_X.reciprocal();
         assertEquals(expected, actual);
 
         expected = PLUS_ZERO;
-        actual = new FieldTuple<Binary64>(new Binary64(Double.POSITIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY)).reciprocal();
+        actual = new FieldTuple<>(new Binary64(Double.POSITIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY)).reciprocal();
         assertEquals(expected, actual);
 
         expected = MINUS_ZERO;
-        actual = new FieldTuple<Binary64>(new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.NEGATIVE_INFINITY)).reciprocal();
+        actual = new FieldTuple<>(new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.NEGATIVE_INFINITY)).reciprocal();
         assertEquals(expected, actual);
     }
 
@@ -239,7 +248,7 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 final Binary64 dec64 = new Binary64(x);
-                FieldTuple<Binary64> value = new FieldTuple<Binary64>(dec64, dec64);
+                FieldTuple<Binary64> value = new FieldTuple<>(dec64, dec64);
                 assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
             }
         }
@@ -251,7 +260,7 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 final Binary64 dec64 = new Binary64(x);
-                FieldTuple<Binary64> value = new FieldTuple<Binary64>(dec64, dec64);
+                FieldTuple<Binary64> value = new FieldTuple<>(dec64, dec64);
                 assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
             }
         }
@@ -261,11 +270,31 @@ public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<
     void testDegRad() {
         for (double x = 0.1; x < 1.2; x += 0.001) {
             final Binary64 dec64 = new Binary64(x);
-            FieldTuple<Binary64> value = new FieldTuple<Binary64>(dec64, dec64);
+            FieldTuple<Binary64> value = new FieldTuple<>(dec64, dec64);
             FieldTuple<Binary64> rebuilt = value.toDegrees().toRadians();
             FieldTuple<Binary64> zero = rebuilt.subtract(value);
             assertEquals(0, zero.getReal(), 3.0e-16);
         }
+    }
+
+    @Test
+    public void testIsSmallDimensionMismatch() {
+        try {
+            new FieldTuple<>(new Binary64(0.0)).isSmall(new FieldTuple<>(new Binary64(0.0), new Binary64(1.0)), 1.0e-15);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testIsSmall() {
+        Assertions.assertTrue(new FieldTuple<>(new Binary64(1.0e-13), new Binary64(2.5e-13)).
+                              isSmall(new FieldTuple<>(new Binary64(1.0), new Binary64(1.0)), 1.0e-12));
+        Assertions.assertFalse(new FieldTuple<>(new Binary64(1.0e-11), new Binary64(2.5e-13)).
+                               isSmall(new FieldTuple<>(new Binary64(1.0), new Binary64(1.0)), 1.0e-12));
+        Assertions.assertFalse(new FieldTuple<>(new Binary64(1.0e-13), new Binary64(2.5e-11)).
+                               isSmall(new FieldTuple<>(new Binary64(1.0), new Binary64(1.0)), 1.0e-12));
     }
 
 }

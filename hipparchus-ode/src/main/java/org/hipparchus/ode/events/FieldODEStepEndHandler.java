@@ -27,6 +27,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @since 3.0
  * @param <T> the type of the field elements
  */
+@FunctionalInterface
 public interface FieldODEStepEndHandler<T extends CalculusFieldElement<T>>  {
 
     /** Initialize step end handler at the start of an ODE integration.

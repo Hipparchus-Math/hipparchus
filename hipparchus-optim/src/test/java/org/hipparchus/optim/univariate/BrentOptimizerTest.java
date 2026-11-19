@@ -91,18 +91,15 @@ final class BrentOptimizerTest {
     void testBoundaries() {
         final double lower = -1.0;
         final double upper = +1.0;
-        UnivariateFunction f = new UnivariateFunction() {
-            @Override
-            public double value(double x) {
-                if (x < lower) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
-                                                           x, lower);
-                } else if (x > upper) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
-                                                           x, upper);
-                } else {
-                    return x;
-                }
+        UnivariateFunction f = x -> {
+            if (x < lower) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
+                                                       x, lower);
+            } else if (x > upper) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
+                                                       x, upper);
+            } else {
+                return x;
             }
         };
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-10, 1e-14);
@@ -219,17 +216,14 @@ final class BrentOptimizerTest {
 
     @Test
     void testMath832() {
-        final UnivariateFunction f = new UnivariateFunction() {
-                @Override
-                public double value(double x) {
-                    final double sqrtX = FastMath.sqrt(x);
-                    final double a = 1e2 * sqrtX;
-                    final double b = 1e6 / x;
-                    final double c = 1e4 / sqrtX;
+        final UnivariateFunction f = x -> {
+            final double sqrtX = FastMath.sqrt(x);
+            final double a = 1e2 * sqrtX;
+            final double b = 1e6 / x;
+            final double c = 1e4 / sqrtX;
 
-                    return a + b + c;
-                }
-            };
+            return a + b + c;
+        };
 
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-10, 1e-8);
         final double result = optimizer.optimize(new MaxEval(1483),

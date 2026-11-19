@@ -27,8 +27,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Binary64;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -71,7 +70,7 @@ class PolynomialSplineFunctionTest {
     void testConstructor() {
         PolynomialSplineFunction spline =
             new PolynomialSplineFunction(knots, polynomials);
-        assertTrue(Arrays.equals(knots, spline.getKnots()));
+        assertArrayEquals(knots, spline.getKnots());
         assertEquals(1d, spline.getPolynomials()[0].getCoefficients()[2], 0);
         assertEquals(3, spline.getN());
 

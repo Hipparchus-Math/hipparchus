@@ -38,7 +38,7 @@ class RcFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
     /** {@inheritDoc} */
     @Override
     protected void initialMeanPoint(final T[] va) {
-        va[2] = va[0].add(va[1].multiply(2)).divide(3.0);
+        va[2] = va[0].add(va[1].twice()).divide(3.0);
     }
 
     /** {@inheritDoc} */
@@ -50,7 +50,7 @@ class RcFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
     /** {@inheritDoc} */
     @Override
     protected void update(final int m, final T[] vaM, final T[] sqrtM, final  double fourM) {
-        final T lambdaA = sqrtM[0].multiply(sqrtM[1]).multiply(2);
+        final T lambdaA = sqrtM[0].multiply(sqrtM[1]).twice();
         final T lambdaB = vaM[1];
         vaM[0] = vaM[0].linearCombination(0.25, vaM[0], 0.25, lambdaA, 0.25, lambdaB); // xₘ
         vaM[1] = vaM[1].linearCombination(0.25, vaM[1], 0.25, lambdaA, 0.25, lambdaB); // yₘ

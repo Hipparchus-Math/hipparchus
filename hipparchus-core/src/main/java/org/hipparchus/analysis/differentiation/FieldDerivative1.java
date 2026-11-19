@@ -50,7 +50,7 @@ public interface FieldDerivative1<S extends CalculusFieldElement<S>, T extends F
     @Override
     default T square() {
         final S f0 = getValue();
-        return compose(f0.square(), f0.multiply(2));
+        return compose(f0.square(), f0.twice());
     }
 
     /** {@inheritDoc} */

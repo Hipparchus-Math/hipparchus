@@ -97,7 +97,7 @@ public class MidpointFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                                                    final T time, final T theta,
                                                                                    final T thetaH, final T oneMinusThetaH) {
 
-        final T coeffDot2 = theta.multiply(2);
+        final T coeffDot2 = theta.twice();
         final T coeffDot1 = time.getField().getOne().subtract(coeffDot2);
         final T[] interpolatedState;
         final T[] interpolatedDerivatives;

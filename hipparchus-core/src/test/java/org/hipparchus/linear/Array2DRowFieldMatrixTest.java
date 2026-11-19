@@ -884,7 +884,7 @@ final class Array2DRowFieldMatrixTest {
     @Test
     void testSetRow() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
-        assertTrue(subRow3[0][0] != m.getRow(0)[0]);
+        assertNotSame(subRow3[0][0], m.getRow(0)[0]);
         m.setRow(0, subRow3[0]);
         checkArrays(subRow3[0], m.getRow(0));
         try {
@@ -926,7 +926,7 @@ final class Array2DRowFieldMatrixTest {
     void testSetColumn() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         Fraction[] mColumn3 = columnToArray(subColumn3);
-        assertTrue(mColumn3[0] != m.getColumn(1)[0]);
+        assertNotSame(mColumn3[0], m.getColumn(1)[0]);
         m.setColumn(1, mColumn3);
         checkArrays(mColumn3, m.getColumn(1));
         try {

@@ -22,6 +22,7 @@ import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -351,4 +352,26 @@ class SmoothStepFactoryTest {
         assertEquals(computedResult2.getReal(), computedResult3.getReal(), THRESHOLD);
     }
 
+    @Test
+    void testBetweenZeroAndOneIncluded() {
+        final double EPSILON = 1E-10;
+        final SmoothStepFactory.SmoothStepFunction cubic = SmoothStepFactory.getCubic();
+
+        // Values strictly within [0, 1] must not raise an exception
+        assertDoesNotThrow(() -> cubic.value(0.0));
+        assertDoesNotThrow(() -> cubic.value(0.5));
+        assertDoesNotThrow(() -> cubic.value(1.0));
+
+        // Values within the epsilon tolerance must not raise an exception
+        assertDoesNotThrow(() -> cubic.value(0.0 - EPSILON / 2));
+        assertDoesNotThrow(() -> cubic.value(1.0 + EPSILON / 2));
+
+        // Values exactly at the epsilon threshold must not throw an exception
+        assertDoesNotThrow(() -> cubic.value(0.0 - EPSILON));
+        assertDoesNotThrow(() -> cubic.value(1.0 + EPSILON));
+
+        // Values exceeding the epsilon tolerance must throw an exception
+        assertThrows(MathIllegalArgumentException.class, () -> cubic.value(0.0 - EPSILON * 2));
+        assertThrows(MathIllegalArgumentException.class, () -> cubic.value(1.0 + EPSILON * 2));
+    }
 }

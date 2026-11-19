@@ -63,12 +63,17 @@ public class ComplexFormat {
     /**
      * Create an instance with a custom number format for both real and
      * imaginary parts.
+     * <p>
+     * BEWARE: this method has the side effect of setting the grouping
+     * of the format to {@code false}
+     * </p>
      * @param format the custom format for both real and imaginary parts.
      * @throws NullArgumentException if {@code realFormat} is {@code null}.
      */
     public ComplexFormat(NumberFormat format) throws NullArgumentException {
         MathUtils.checkNotNull(format, LocalizedCoreFormats.IMAGINARY_FORMAT);
         this.imaginaryCharacter = DEFAULT_IMAGINARY_CHARACTER;
+        format.setGroupingUsed(false);
         this.imaginaryFormat = format;
         this.realFormat = format;
     }
@@ -76,6 +81,10 @@ public class ComplexFormat {
     /**
      * Create an instance with a custom number format for the real part and a
      * custom number format for the imaginary part.
+     * <p>
+     * BEWARE: this method has the side effect of setting the grouping
+     * of both formats to {@code false}
+     * </p>
      * @param realFormat the custom format for the real part.
      * @param imaginaryFormat the custom format for the imaginary part.
      * @throws NullArgumentException if {@code imaginaryFormat} is {@code null}.
@@ -85,6 +94,8 @@ public class ComplexFormat {
         throws NullArgumentException {
         MathUtils.checkNotNull(imaginaryFormat, LocalizedCoreFormats.IMAGINARY_FORMAT);
         MathUtils.checkNotNull(realFormat, LocalizedCoreFormats.REAL_FORMAT);
+        realFormat.setGroupingUsed(false);
+        imaginaryFormat.setGroupingUsed(false);
 
         this.imaginaryCharacter = DEFAULT_IMAGINARY_CHARACTER;
         this.imaginaryFormat = imaginaryFormat;
@@ -233,7 +244,7 @@ public class ComplexFormat {
         pos.setEndIndex(0);
 
         CompositeFormat.formatDouble(absIm, getImaginaryFormat(), toAppendTo, pos);
-        if ("1".equals(toAppendTo.toString())) {
+        if ("1".contentEquals(toAppendTo)) {
             // Remove the character "1" if it is the only one.
             toAppendTo.setLength(0);
         }

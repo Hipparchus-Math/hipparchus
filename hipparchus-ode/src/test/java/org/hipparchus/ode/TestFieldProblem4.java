@@ -208,11 +208,6 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
             return Action.STOP;
         }
 
-        public FieldODEState<T> resetState(FieldODEEventDetector<T> detector,
-                                           FieldODEStateAndDerivative<T> state) {
-            return state;
-        }
-
     }
 
 }

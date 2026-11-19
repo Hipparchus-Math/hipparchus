@@ -27,6 +27,7 @@ package org.hipparchus.random;
  * scalars.
  * Normalized generator provide null mean and unit standard deviation scalars.
  */
+@FunctionalInterface
 public interface NormalizedRandomGenerator {
 
   /** Generate a random scalar with null mean and unit standard deviation.

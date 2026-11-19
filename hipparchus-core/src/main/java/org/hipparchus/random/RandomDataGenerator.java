@@ -126,11 +126,9 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
         int nextSample(RandomDataGenerator generator, IntegerDistribution distribution);
     }
 
-    /**
-     * Initialize tables.
-     */
+    /* Initialize tables. */
     static {
-        /**
+        /*
          * Filling EXPONENTIAL_SA_QI table.
          * Note that we don't want qi = 0 in the table.
          */
@@ -138,7 +136,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
         double qi = 0;
         int i = 1;
 
-        /**
+        /*
          * ArithmeticUtils provides factorials up to 20, so let's use that
          * limit together with Precision.EPSILON to generate the following
          * code (a priori, we know that there will be 16 elements, but it is

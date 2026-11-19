@@ -149,14 +149,14 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double getNorm() {
-        return FastMath.abs(x);
+    public double getNorm2Sq() {
+        return x * x;
     }
 
     /** {@inheritDoc} */
     @Override
-    public double getNormSq() {
-        return x * x;
+    public double getNorm() {
+        return FastMath.abs(x);
     }
 
     /** {@inheritDoc} */
@@ -270,7 +270,7 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
 
     /** Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
-     * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
+     * <code>p1.subtract(p2).getNorm2Sq()</code> except that no intermediate
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector

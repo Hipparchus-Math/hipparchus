@@ -25,6 +25,7 @@ package org.hipparchus.analysis;
  * An interface representing a univariate vectorial function.
  *
  */
+@FunctionalInterface
 public interface UnivariateVectorFunction {
 
     /**

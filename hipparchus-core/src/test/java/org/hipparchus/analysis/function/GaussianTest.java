@@ -43,9 +43,7 @@ class GaussianTest {
 
     @Test
     void testPreconditions() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Gaussian(1, 2, -1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Gaussian(1, 2, -1));
     }
 
     @Test

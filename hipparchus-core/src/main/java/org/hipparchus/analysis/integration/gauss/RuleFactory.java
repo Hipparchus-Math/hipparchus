@@ -22,6 +22,7 @@ import org.hipparchus.util.Pair;
 /** Interface for rules that determines the integration nodes and their weights.
  * @since 2.0
  */
+@FunctionalInterface
 public interface RuleFactory {
 
     /**

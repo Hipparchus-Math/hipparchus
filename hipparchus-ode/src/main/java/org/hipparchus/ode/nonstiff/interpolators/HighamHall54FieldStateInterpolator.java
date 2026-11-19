@@ -87,7 +87,7 @@ public class HighamHall54FieldStateInterpolator<T extends CalculusFieldElement<T
         final T bDot2 = theta.multiply(theta.multiply(theta.multiply( 135.0 / 2.0).add(-729.0 / 8.0)).add(459.0 / 16.0));
         final T bDot3 = theta.multiply(theta.multiply(theta.multiply(-120.0      ).add( 152.0      )).add(-44.0       ));
         final T bDot4 = theta.multiply(theta.multiply(theta.multiply( 125.0 / 2.0).add(-625.0 / 8.0)).add(375.0 / 16.0));
-        final T bDot5 = theta.multiply(  5.0 /  8.0).multiply(theta.multiply(2).subtract(1));
+        final T bDot5 = theta.multiply(  5.0 /  8.0).multiply(theta.twice().subtract(1));
         final T[] interpolatedState;
         final T[] interpolatedDerivatives;
 

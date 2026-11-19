@@ -78,11 +78,7 @@ class BracketFinderTest {
 
     @Test
     void testMinimumIsOnIntervalBoundary() {
-        final UnivariateFunction func = new UnivariateFunction() {
-                public double value(double x) {
-                    return x * x;
-                }
-            };
+        final UnivariateFunction func = x -> x * x;
 
         final BracketFinder bFind = new BracketFinder();
 
@@ -97,11 +93,7 @@ class BracketFinderTest {
 
     @Test
     void testIntervalBoundsOrdering() {
-        final UnivariateFunction func = new UnivariateFunction() {
-                public double value(double x) {
-                    return x * x;
-                }
-            };
+        final UnivariateFunction func = x -> x * x;
 
         final BracketFinder bFind = new BracketFinder();
 

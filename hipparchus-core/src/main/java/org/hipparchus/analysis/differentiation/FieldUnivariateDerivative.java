@@ -68,4 +68,13 @@ public abstract class FieldUnivariateDerivative<S extends CalculusFieldElement<S
      */
     public abstract FieldDerivativeStructure<S> toDerivativeStructure();
 
+    /** {@inheritDoc} */
+    @Override
+    public double norm() {
+        double sum = 0.;
+        for (int i = 0; i <= getOrder(); i++) {
+            sum += getDerivative(i).norm();
+        }
+        return sum;
+    }
 }

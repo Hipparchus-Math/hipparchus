@@ -700,7 +700,13 @@ public class Gamma {
                     (1.0 / 240 - inv * (5.0 / 660 + inv * (691.0 / 32760 - inv / 12))))));
         }
 
-        return digamma(x + 1) - 1 / x;
+        double sum = 0;
+        while (x < C_LIMIT) {
+            sum += 1 /x;
+            x += 1;
+        }
+        return digamma(x) - sum;
+
     }
 
     /**
@@ -755,7 +761,13 @@ public class Gamma {
                                .subtract(1.0 / 12)));
         }
 
-        return digamma(x.add(1.)).subtract(x.pow(-1));
+        T sum = x.getField().getZero();
+        while (x.getReal() < C_LIMIT) {
+            sum = sum.add(x.reciprocal());
+            x = x.add(1);
+        }
+        return digamma(x).subtract(sum);
+
     }
 
     /**

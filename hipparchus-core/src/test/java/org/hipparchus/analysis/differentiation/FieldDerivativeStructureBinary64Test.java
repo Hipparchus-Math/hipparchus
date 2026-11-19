@@ -18,8 +18,12 @@
 package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.Field;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
+import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -30,6 +34,15 @@ class FieldDerivativeStructureBinary64Test extends FieldDerivativeStructureAbstr
     @Override
     protected Field<Binary64> getField() {
         return Binary64Field.getInstance();
+    }
+
+    @Test
+    void testNorm() {
+        final FDSFactory<Binary64> factory = buildFactory(1, 1);
+        final FieldDerivativeStructure<Binary64> fds = new FieldDerivativeStructure<>(factory,
+                new Binary64[]{ Binary64.ONE, Binary64.PI});
+        final double norm = fds.norm();
+        Assertions.assertEquals(1 + FastMath.PI, norm);
     }
 
     @Override
@@ -48,6 +61,23 @@ class FieldDerivativeStructureBinary64Test extends FieldDerivativeStructureAbstr
     @Test
     public void testHypotNoOverflow() {
         doTestHypotNoOverflow(250);
+    }
+
+    @Test
+    public void testIsSmallDimensionMismatch() {
+        try {
+            buildFactory(3, 2).constant(0.0).isSmall(buildFactory(3, 4).constant(0.0), 1.0e-15);
+            Assertions.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testIsSmall() {
+        final FDSFactory<Binary64> factory = buildFactory(2, 2);
+        Assertions.assertTrue(factory.variable(1, 2.5).multiply(1.0e-13).isSmall(factory.variable(1, 1.0), 1.0e-12));
+        Assertions.assertFalse(factory.variable(1, 2.5).multiply(1.0e-11).isSmall(factory.variable(1, 1.0), 1.0e-12));
     }
 
 }

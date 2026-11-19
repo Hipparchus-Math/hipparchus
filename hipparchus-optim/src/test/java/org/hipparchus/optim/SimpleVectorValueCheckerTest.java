@@ -31,9 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SimpleVectorValueCheckerTest {
     @Test
     void testIterationCheckPrecondition() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new SimpleVectorValueChecker(1e-1, 1e-2, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new SimpleVectorValueChecker(1e-1, 1e-2, 0));
     }
 
     @Test

@@ -49,6 +49,91 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator,
+roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential,
+gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions">
+      <action dev="vincent" type="fix" issue="issues/488">
+        Use the magnitude of the value instead of norm() in the convergence and size checks of Carlson and
+        Legendre elliptic integrals, whose results depended on the derivatives carried by the arguments,
+        and for consistency in Jacobi theta functions.
+      </action>
+      <action dev="luc" type="fix" issue="issues/486">
+        Fixed indices problems with the GraalVM native image and Window operating system combo.
+      </action>
+      <action dev="vincent" type="fix" issue="issues/481">
+        Fixed continuous integration failures by improving test coverage of new code.
+      </action>
+      <action dev="Nicolas Kaikati" type="add" issue="issues/472">
+        Add Lebedev Integrator.
+      </action>
+      <action dev="luc" type="fix" due-to="ser10us" issue="issues/471">
+        Fixed overflow in MathArrays.distance1.
+      </action>
+      <action dev="luc" type="fix" due-to="ser10us" issue="issues/470">
+        Fixed overflow in MultidimensionalCounter.
+      </action>
+      <action dev="luc" type="add" issue="issues/469">
+        Added support for roman numerals.
+      </action>
+      <action dev="luc" type="fix" due-to="AviranAbady" issue="issues/465">
+        Fixed overflow in DfpMath.pow and DfpMath.splitPow.
+      </action>
+      <action dev="Marthym" type="update" issue="issues/460">
+        Allow small numerical tolerance in SmoothStepFactory.checkBetweenZeroAndOneIncluded
+      </action>
+      <action dev="luc" type="fix" due-to="yin-mao" issue="issues/459">
+        Forbid all grouping (including commas) in ComplexFormat.
+      </action>
+      <action dev="luc" type="fix" due-to="Hanbing59" issue="issues/457">
+        Implement in FastMath methods introduced in Math as of Java 25.
+      </action>
+      <action dev="serrof" type="update">
+        Add some FunctionalInterface tag.
+      </action>
+      <action dev="serrof" type="add" issue="issues/446">
+        Add convergence checker provider for Fielded scalar.
+      </action>
+      <action dev="axkr" type="add" issue="issues/442">
+        Added Complex Schur transformer
+      </action>
+      <action dev="krys06" type="add" issue="issues/437">
+        Added trilinear interpolation
+      </action>
+      <action dev="luc" type="add" issue="issues/439">
+        Added Field.isSmall to help convergence checks in Field iterative algorithms.
+      </action>
+      <action dev="krys06" type="add" issue="issues/355">
+        Added evaluation of bicubic and tricubic interpolation functions with CalculusFieldElement
+      </action>
+      <action dev="ryan" type="update" issue="issues/413">
+        Reverted the FastMath reduction changes
+      </action>
+      <action dev="serrof" type="update" issue="issues/430">
+        Update UnivariateDifferentiableSolver with UnivariateDerivative1.
+      </action>
+      <action dev="serrof" type="add" issue="issues/428">
+        Added half and twice on CalculusFieldElement.
+      </action>
+      <action dev="luc" type="add" issue="issues/421">
+        Added random generators for exponential, gamma and Nakagami distributions.
+      </action>
+      <action dev="luc" type="add" due-to="Xavier Vasseur" issue="issues/419">
+        Added half Cauchy, half normal and inverse gamma distributions.
+      </action>
+      <action dev="luc" type="add" issue="issues/406">
+        Added AxisChecker helper class to check grid data consistency.
+      </action>
+      <action dev="serrof" type="update" issue="issues/398">
+        Implement non-trivial norm for CalculusField inheritors. Note that norm() of derivative types and
+        tuples now includes all components, for example Gradient(0.5; 100, -200).norm() is 300.5 instead of 0.5.
+      </action>
+      <action dev="luc" type="fix" issue="issues/394">
+        Prevent stack overflow in digamma function.
+      </action>
+      <action dev="emeric" type="fix" issue="issues/392">
+        Fixed default Localizable.getLocalizedString when running on module path.
+      </action>
+    </release>
     <release version="4.0.3" date="2026-02-08" description="This is a patch release.">
       <action dev="bryan" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,
@@ -743,6 +828,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="psteitz" type="update">
         Forked from the Apache Commons Math library.
+      </action>
+      <action dev="sean-g-rae" type="update">
+        Added some basic edge case unit tests.
       </action>
     </release>
   </body>

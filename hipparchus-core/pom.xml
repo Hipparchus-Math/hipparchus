@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>4.0.3</version>
+    <version>4.1</version>
     <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
@@ -67,6 +67,32 @@
               <version>${hipparchus.checkstyle.version}</version>
             </dependency>
           </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
+        <configuration>
+          <inputExcludes>
+
+            <!-- MANIFEST files cannot have any comments, so we can't put
+              license header -->
+            <inputExclude>src/test/maxima/special/RealFunctionValidation/MANIFEST.txt</inputExclude>
+
+            <!-- the following are test files with specific syntax that cannot include Apache header -->
+            <inputExclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_en.utf8</inputExclude>
+            <inputExclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_fr.utf8</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/random/emptyFile.txt</inputExclude>
+
+            <!-- direction numbers for Sobol generation from Frances Y. Kuo
+              and Stephen Joe, available under a BSD-style license (see LICENSE.txt) -->
+            <inputExclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.21201</inputExclude>
+
+            <!-- properties file without header -->
+            <inputExclude>src/main/resources/assets/org/hipparchus/hipparchus.properties</inputExclude>
+
+          </inputExcludes>
+        </configuration>
       </plugin>
     </plugins>
     <resources>
@@ -116,25 +142,25 @@
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.apache-rat-plugin.version}</version>
         <configuration>
-          <excludes>
+          <inputExcludes>
 
             <!-- MANIFEST files cannot have any comments, so we can't put
               license header -->
-            <exclude>src/test/maxima/special/RealFunctionValidation/MANIFEST.txt</exclude>
+            <inputExclude>src/test/maxima/special/RealFunctionValidation/MANIFEST.txt</inputExclude>
 
             <!-- the following are test files with specific syntax that cannot include Apache header -->
-            <exclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_en.utf8</exclude>
-            <exclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_fr.utf8</exclude>
-            <exclude>src/test/resources/org/hipparchus/random/emptyFile.txt</exclude>
+            <inputExclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_en.utf8</inputExclude>
+            <inputExclude>src/test/resources/assets/org/hipparchus/exception/IntentionallyIncompleteLocalizable_fr.utf8</inputExclude>
+            <inputExclude>src/test/resources/org/hipparchus/random/emptyFile.txt</inputExclude>
 
             <!-- direction numbers for Sobol generation from Frances Y. Kuo
               and Stephen Joe, available under a BSD-style license (see LICENSE.txt) -->
-            <exclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.21201</exclude>
+            <inputExclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.21201</inputExclude>
 
             <!-- properties file without header -->
-            <exclude>src/main/resources/assets/org/hipparchus/hipparchus.properties</exclude>
+            <inputExclude>src/main/resources/assets/org/hipparchus/hipparchus.properties</inputExclude>
 
-          </excludes>
+          </inputExcludes>
         </configuration>
       </plugin>
     </plugins>

@@ -16,16 +16,17 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.util.Arrays;
+
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-
-import java.util.Arrays;
 
 /** Class representing both the value and the differentials of a function.
  * <p>This class is similar to {@link DerivativeStructure} except function
@@ -943,7 +944,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * with respect to the lower level parameters used in the \(p_i\)
      * @since 2.2
      */
-    public FieldDerivativeStructure<T> rebase(@SuppressWarnings("unchecked") final FieldDerivativeStructure<T>... p) {
+    @SuppressWarnings("unchecked")
+    public FieldDerivativeStructure<T> rebase(final FieldDerivativeStructure<T>... p) {
 
         MathUtils.checkDimension(getFreeParameters(), p.length);
 
@@ -1304,11 +1306,35 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double norm() {
+        double sum = 0.;
+        for (final T derivative: data) {
+            sum += derivative.norm();
+        }
+        return sum;
+    }
+
     /** {@inheritDoc}
      */
     @Override
     public FieldDerivativeStructure<T> getPi() {
         return factory.getDerivativeField().getPi();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final FieldDerivativeStructure<T> base, final double relativeThreshold) {
+        if (data.length != base.data.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   data.length, base.data.length);
+        }
+        boolean ok = true;
+        for (int i = 0; i < data.length && ok; ++i) {
+            ok = data[i].isSmall(base.data[i], relativeThreshold);
+        }
+        return ok;
     }
 
     /**

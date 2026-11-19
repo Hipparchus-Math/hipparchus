@@ -506,6 +506,13 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
         return PI;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSmall(final UnivariateDerivative1 base, final double relativeThreshold) {
+        return FastMath.abs(f0) <= FastMath.abs(base.f0 * relativeThreshold) &&
+               FastMath.abs(f1) <= FastMath.abs(base.f1 * relativeThreshold);
+    }
+
     /** Test for the equality of two univariate derivatives.
      * <p>
      * univariate derivatives are considered equal if they have the same derivatives.

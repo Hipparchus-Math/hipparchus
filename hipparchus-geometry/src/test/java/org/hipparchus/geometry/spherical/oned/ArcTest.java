@@ -52,16 +52,12 @@ class ArcTest {
 
     @Test
     void testWrongInterval() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Arc(1.2, 0.0, 1.0e-10);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Arc(1.2, 0.0, 1.0e-10));
     }
 
     @Test
     void testTooSmallTolerance() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Arc(0.0, 1.0, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Arc(0.0, 1.0, 0.9 * Sphere1D.SMALLEST_TOLERANCE));
     }
 
     @Test

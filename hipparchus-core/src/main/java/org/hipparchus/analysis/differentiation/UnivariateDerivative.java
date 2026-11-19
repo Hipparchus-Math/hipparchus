@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 
 /** Abstract class representing both the value and the differentials of a function.
  * @param <T> the type of the function derivative
@@ -71,4 +72,13 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
      */
     public abstract DerivativeStructure toDerivativeStructure();
 
+    /** {@inheritDoc} */
+    @Override
+    public double norm() {
+        double sum = 0.;
+        for (int i = 0; i <= getOrder(); i++) {
+            sum += FastMath.abs(getDerivative(i));
+        }
+        return sum;
+    }
 }

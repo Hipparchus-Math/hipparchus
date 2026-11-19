@@ -73,7 +73,7 @@ final class FieldBilinearInterpolatingFunctionTest {
         int    ny   = 15;
         UnivariateDerivative1[] yVal = createLinearGrid(yMin, yMax, ny, 2.0);
 
-        CalculusFieldBivariateFunction<UnivariateDerivative1> f = (x, y) -> x.multiply(2).subtract(y);
+        CalculusFieldBivariateFunction<UnivariateDerivative1> f = (x, y) -> x.twice().subtract(y);
         FieldBilinearInterpolatingFunction<UnivariateDerivative1> bif = createInterpolatingFunction(xVal, yVal, f);
 
         assertEquals(xMin, bif.getXInf().getValue(),           1.0e-15);

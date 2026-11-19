@@ -398,7 +398,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
         final T w        = x2.subtract(1).negate().divide(deltaQP);
         final T rf       = CarlsonEllipticIntegral.rF(x2, x.getField().getOne(), deltaRQ.multiply(w).add(1));
         final T positive = w.sqrt().multiply(rf);
-        return x.getReal() < 0 ? LegendreEllipticIntegral.bigK(getM()).multiply(2).subtract(positive) : positive;
+        return x.getReal() < 0 ? LegendreEllipticIntegral.bigK(getM()).twice().subtract(positive) : positive;
     }
 
     /** Evaluate inverse of Jacobi elliptic function pq.
@@ -425,7 +425,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
         final T rf       = CarlsonEllipticIntegral.rF(x2.multiply(deltaQP), deltaQP, deltaRQ.multiply(wDeltaQP).add(deltaQP));
         final T positive = wDeltaQP.sqrt().multiply(rf);
         return FastMath.copySign(1.0, x.getReal()) < 0 ?
-               LegendreEllipticIntegral.bigK(getM()).multiply(2).subtract(positive) :
+               LegendreEllipticIntegral.bigK(getM()).twice().subtract(positive) :
                positive;
      }
 

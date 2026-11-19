@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstractTest {
@@ -107,6 +108,26 @@ class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstractTest
     @Test
     public void testSecondaryEquations() {
         doTestSecondaryEquations(1.1e-12, 5.6e-13);
+    }
+
+    @Test
+    public void testFixedStepInitialization() {
+        double step = 60.0;
+        Assertions.assertEquals(step, new ClassicalRungeKuttaIntegrator(step).getCurrentSignedStepsize());
+    }
+
+    @Test
+    void testConstructorDoesNotCallOverridableDefaultStep() {
+        // a subclass overriding getDefaultStep() sees its own fields uninitialized during super construction
+        final ClassicalRungeKuttaIntegrator integrator = new ClassicalRungeKuttaIntegrator(0.1) {
+            private final double factor = 2.0;
+            @Override
+            public double getDefaultStep() {
+                return factor * super.getDefaultStep();
+            }
+        };
+        Assertions.assertEquals(0.1, integrator.getCurrentSignedStepsize(), 0.0);
+        Assertions.assertEquals(0.2, integrator.getDefaultStep(), 1.0e-15);
     }
 
 }

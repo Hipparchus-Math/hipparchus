@@ -192,7 +192,7 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
         mu[0] = field.getZero();
         z[0]  = field.getZero();
         for (int i = 1; i < n; i++) {
-            final T g = x[i+1].subtract(x[i - 1]).multiply(2).subtract(h[i - 1].multiply(mu[i -1]));
+            final T g = x[i+1].subtract(x[i - 1]).twice().subtract(h[i - 1].multiply(mu[i -1]));
             mu[i] = h[i].divide(g);
             z[i] =          y[i + 1].multiply(h[i - 1]).
                    subtract(y[i].multiply(x[i + 1].subtract(x[i - 1]))).

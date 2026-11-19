@@ -33,6 +33,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -239,13 +240,13 @@ class CombinationsTest {
                 next.invoke(ctr.newInstance(3, 0));
                 fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                assertTrue(ite.getCause() instanceof NoSuchElementException);
+                assertInstanceOf(NoSuchElementException.class, ite.getCause());
             }
             try {
                 remove.invoke(ctr.newInstance(3, 2));
                 fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                assertTrue(ite.getCause() instanceof UnsupportedOperationException);
+                assertInstanceOf(UnsupportedOperationException.class, ite.getCause());
             }
         } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException | InstantiationException e) {
@@ -279,13 +280,13 @@ class CombinationsTest {
                 next.invoke(iterator);
                 fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                assertTrue(ite.getCause() instanceof NoSuchElementException);
+                assertInstanceOf(NoSuchElementException.class, ite.getCause());
             }
             try {
                 remove.invoke(iterator);
                 fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                assertTrue(ite.getCause() instanceof UnsupportedOperationException);
+                assertInstanceOf(UnsupportedOperationException.class, ite.getCause());
             }
         } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException | InstantiationException e) {

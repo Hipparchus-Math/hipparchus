@@ -180,7 +180,7 @@ class FieldHermiteInterpolatorTest {
                                         y[k].getReal(),
                                         1.0e-8 * FastMath.abs(p[k].value(x.getReal())));
                     assertEquals(pPrime[k].value(x.getReal()),
-                                        yP[k].subtract(yM[k]).divide(h.multiply(2)).getReal(),
+                                        yP[k].subtract(yM[k]).divide(h.twice()).getReal(),
                                         4.0e-8 * FastMath.abs(p[k].value(x.getReal())));
                 }
             }
@@ -263,16 +263,12 @@ class FieldHermiteInterpolatorTest {
 
     @Test
     void testEmptySampleValue() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FieldHermiteInterpolator<BigFraction>().value(BigFraction.ZERO);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FieldHermiteInterpolator<BigFraction>().value(BigFraction.ZERO));
     }
 
     @Test
     void testEmptySampleDerivative() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FieldHermiteInterpolator<BigFraction>().derivatives(BigFraction.ZERO, 1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FieldHermiteInterpolator<BigFraction>().derivatives(BigFraction.ZERO, 1));
     }
 
     @Test

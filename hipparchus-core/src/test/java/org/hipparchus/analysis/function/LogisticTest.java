@@ -41,16 +41,12 @@ class LogisticTest {
 
     @Test
     void testPreconditions1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Logistic(1, 0, 1, 1, 0, -1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Logistic(1, 0, 1, 1, 0, -1));
     }
 
     @Test
     void testPreconditions2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Logistic(1, 0, 1, 1, 0, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Logistic(1, 0, 1, 1, 0, 0));
     }
 
     @Test

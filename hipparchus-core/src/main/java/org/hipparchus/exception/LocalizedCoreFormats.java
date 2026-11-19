@@ -207,6 +207,9 @@ public enum LocalizedCoreFormats implements Localizable {
     /** NOT_FINITE_NUMBER. */
     NOT_FINITE_NUMBER("{0} is not a finite number"), /* keep */
 
+    /** NEGATIVE_VALUE. */
+    NEGATIVE_VALUE("{0} is negative"),
+
     /** INFINITE_BOUND. */
     INFINITE_BOUND("interval bounds must be finite"),
 
@@ -567,6 +570,9 @@ public enum LocalizedCoreFormats implements Localizable {
     /** NUMBER_OF_POINTS. */
     NUMBER_OF_POINTS("number of points ({0})"), /* keep */
 
+    /** UNSUPPORTED_QUADRATURE_ORDER. */
+    UNSUPPORTED_QUADRATURE_ORDER("unsupported quadrature order {0}, must be one of {1}"),
+
     /** ZERO_DENOMINATOR. */
     ZERO_DENOMINATOR("denominator must be different from 0"), /* keep */
 
@@ -589,7 +595,22 @@ public enum LocalizedCoreFormats implements Localizable {
     RIGHT_EDGE_GREATER_THAN_LEFT_EDGE("left edge {0} should be smaller than right edge {1}"),
 
     /** INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED. */
-    INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED("input {0} is expected to be between [0:1]");
+    INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED("input {0} is expected to be between [0:1]"),
+
+    /** IRREGULAR_GRID. */
+    IRREGULAR_GRID("grid should have {0} elements at index {1}, it has {2} elements"),
+
+    /** MISALIGNED_GRID_POINT. */
+    MISALIGNED_GRID_POINT("grid point at index {0} should have coordinate {1}, but is {2} away from it"),
+
+    /** ROMAN_NUMERAL_RANGE. */
+    ROMAN_NUMERAL_RANGE("{0} cannot be represented as a roman numeral (must be between 1 and 3999)"),
+
+    /** INVALID_ROMAN_NUMERAL. */
+    INVALID_ROMAN_NUMERAL("{0} is not a valid roman numeral"),
+
+    /** INVALID CODE FOR GEN_OH FUNCTION OF LEBEDEV QUADRATURE. */
+    GEN_OH_ILLEGAL_CODE("GEN_OH - Illegal value of code: {0}");
 
     /** Source English format. */
     private final String sourceFormat;

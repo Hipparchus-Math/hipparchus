@@ -33,6 +33,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -62,7 +63,7 @@ class DiskGeneratorTest {
                                         0.5));
         assertEquals(0, support.get(0).distance(disk.getCenter()), 1.0e-10);
         assertEquals(1, disk.getSupportSize());
-        assertTrue(support.get(0) == disk.getSupport()[0]);
+        assertSame(support.get(0), disk.getSupport()[0]);
     }
 
     @Test
@@ -75,7 +76,7 @@ class DiskGeneratorTest {
         for (Vector2D v : support) {
             assertTrue(disk.contains(v));
             assertEquals(1.0, v.distance(disk.getCenter()), 1.0e-10);
-            assertTrue(v == disk.getSupport()[i++]);
+            assertSame(v, disk.getSupport()[i++]);
         }
         assertTrue(disk.contains(new Vector2D(2, 0.9)));
         assertFalse(disk.contains(Vector2D.ZERO));
@@ -94,7 +95,7 @@ class DiskGeneratorTest {
         for (Vector2D v : support) {
             assertTrue(disk.contains(v));
             assertEquals(5.0 / 4.0, v.distance(disk.getCenter()), 1.0e-10);
-            assertTrue(v == disk.getSupport()[i++]);
+            assertSame(v, disk.getSupport()[i++]);
         }
         assertTrue(disk.contains(new Vector2D(2, 0.9)));
         assertFalse(disk.contains(new Vector2D(0.9,  0)));

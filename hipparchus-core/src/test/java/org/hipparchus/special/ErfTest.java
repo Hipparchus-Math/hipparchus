@@ -210,7 +210,7 @@ class ErfTest {
         }
         assertEquals(one.negate().getReal(), Erf.erf(new Binary64(Double.NEGATIVE_INFINITY)).getReal(), 0);
         assertEquals(one.getReal(), Erf.erf(new Binary64(Double.POSITIVE_INFINITY)).getReal(), 0);
-        assertEquals(one.multiply(2).getReal(), new Binary64(Erf.erfc(Double.NEGATIVE_INFINITY)).getReal(), 0);
+        assertEquals(one.twice().getReal(), new Binary64(Erf.erfc(Double.NEGATIVE_INFINITY)).getReal(), 0);
         assertEquals(zero.getReal(), Erf.erfc(new Binary64(Double.POSITIVE_INFINITY)).getReal(), 0);
     }
 

@@ -55,9 +55,10 @@ public abstract class AbstractConstrainedOptimizerTest {
 
         // find optimum solution
         final ConstraintOptimizer optimizer = buildOptimizer();
-        final OptimizationData[] data = new OptimizationData[constraints.length + (initialGuess == null ? 1 : 2)];
+        final OptimizationData[] data = new OptimizationData[constraints.length + (initialGuess == null ? 2 : 3)];
         data[0] = objectiveFunction;
-        System.arraycopy(constraints, 0, data, 1, constraints.length);
+        data[1] = new MatrixDecompositionTolerance(2.0e-11);
+        System.arraycopy(constraints, 0, data, 2, constraints.length);
         if (initialGuess != null) {
             data[data.length - 1] = new InitialGuess(initialGuess);
         }
@@ -65,12 +66,12 @@ public abstract class AbstractConstrainedOptimizerTest {
 
         // check result
         assertEquals(0.0,
-                            MatrixUtils.createRealVector(expectedSolution).subtract(solution.getX()).getL1Norm(),
-                            solutionTolerance);
+                     MatrixUtils.createRealVector(expectedSolution).subtract(solution.getX()).getL1Norm(),
+                     solutionTolerance);
         assertEquals(0.0,
-                            MatrixUtils.createRealVector(expectedMultipliers).subtract(solution.getLambda()).getL1Norm(),
-                            multipliersTolerance);
-        assertEquals(expectedValue, solution.getValue(),                                  valueTolerance);
+                     MatrixUtils.createRealVector(expectedMultipliers).subtract(solution.getLambda()).getL1Norm(),
+                     multipliersTolerance);
+        assertEquals(expectedValue, solution.getValue(), valueTolerance);
 
         // check neighboring points either violate constraints or have worst objective function
         for (int i = 0; i < expectedSolution.length; ++i) {

@@ -283,7 +283,7 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final S y = x.add(3).multiply(x).subtract(5).multiply(0.5);
-                                   return y.negate().divide(4).divide(x).add(y).subtract(x).multiply(2).reciprocal();
+                                   return y.negate().divide(4).divide(x).add(y).subtract(x).twice().reciprocal();
                                }
                            });
         }
@@ -379,7 +379,7 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).hypot(x.sin().multiply(2));
+                                   return x.cos().multiply(5).hypot(x.sin().twice());
                                }
                            });
         }
@@ -391,7 +391,7 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cos().multiply(5).atan2(x.sin().multiply(2));
+                                   return x.cos().multiply(5).atan2(x.sin().twice());
                                }
                            });
         }

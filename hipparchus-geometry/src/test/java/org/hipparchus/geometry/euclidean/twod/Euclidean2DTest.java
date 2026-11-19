@@ -27,7 +27,7 @@ import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class Euclidean2DTest {
 
@@ -38,14 +38,14 @@ class Euclidean2DTest {
 
     @Test
     void testSubSpace() {
-        assertTrue(Euclidean1D.getInstance() == Euclidean2D.getInstance().getSubSpace());
+        assertSame(Euclidean1D.getInstance(), Euclidean2D.getInstance().getSubSpace());
     }
 
     @Test
     void testSerialization() {
         Space e2 = Euclidean2D.getInstance();
         Space deserialized = (Space) UnitTestUtils.serializeAndRecover(e2);
-        assertTrue(e2 == deserialized);
+        assertSame(e2, deserialized);
     }
 
 }

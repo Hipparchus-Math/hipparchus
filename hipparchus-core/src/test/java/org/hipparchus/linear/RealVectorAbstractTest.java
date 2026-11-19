@@ -212,16 +212,12 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testGetEntryInvalidIndex1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[4]).getEntry(-1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[4]).getEntry(-1));
     }
 
     @Test
     public void testGetEntryInvalidIndex2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[4]).getEntry(4);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[4]).getEntry(4));
     }
 
     @Test
@@ -262,16 +258,12 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testSetEntryInvalidIndex1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[4]).setEntry(-1, getPreferredEntryValue());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[4]).setEntry(-1, getPreferredEntryValue()));
     }
 
     @Test
     public void testSetEntryInvalidIndex2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[4]).setEntry(4, getPreferredEntryValue());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[4]).setEntry(4, getPreferredEntryValue()));
     }
 
     @Test
@@ -313,16 +305,12 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testAddToEntryInvalidIndex1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[3]).addToEntry(-1, getPreferredEntryValue());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[3]).addToEntry(-1, getPreferredEntryValue()));
     }
 
     @Test
     public void testAddToEntryInvalidIndex2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[3]).addToEntry(4, getPreferredEntryValue());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[3]).addToEntry(4, getPreferredEntryValue()));
     }
 
     private void doTestAppendVector(final String message, final RealVector v1,
@@ -451,23 +439,17 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testSetSubVectorInvalidIndex1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[10]).setSubVector(-1, create(new double[2]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[10]).setSubVector(-1, create(new double[2])));
     }
 
     @Test
     public void testSetSubVectorInvalidIndex2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[10]).setSubVector(10, create(new double[2]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[10]).setSubVector(10, create(new double[2])));
     }
 
     @Test
     public void testSetSubVectorInvalidIndex3() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[10]).setSubVector(9, create(new double[2]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[10]).setSubVector(9, create(new double[2])));
     }
 
     @Test
@@ -580,9 +562,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testAddDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.ADD);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.ADD));
     }
 
     @Test
@@ -597,9 +577,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testSubtractDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.SUB);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.SUB));
     }
 
     @Test
@@ -614,9 +592,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testEbeMultiplyDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.MUL);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.MUL));
     }
 
     @Test
@@ -631,9 +607,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testEbeDivideDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.DIV);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.DIV));
     }
 
     private void doTestGetDistance(final boolean mixed) {
@@ -669,9 +643,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testGetDistanceDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[4]).getDistance(createAlien(new double[5]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[4]).getDistance(createAlien(new double[5])));
     }
 
     @Test
@@ -720,9 +692,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testGetL1DistanceDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[4]).getL1Distance(createAlien(new double[5]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[4]).getL1Distance(createAlien(new double[5])));
     }
 
     @Test
@@ -771,9 +741,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testGetLInfDistanceDimensionMismatch() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            create(new double[4]).getLInfDistance(createAlien(new double[5]));
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> create(new double[4]).getLInfDistance(createAlien(new double[5])));
     }
 
     @Test
@@ -1024,9 +992,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testProjectionNullVector() {
-        assertThrows(MathRuntimeException.class, () -> {
-            create(new double[4]).projection(create(new double[4]));
-        });
+        assertThrows(MathRuntimeException.class, () -> create(new double[4]).projection(create(new double[4])));
     }
 
     @Test
@@ -1109,16 +1075,12 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testUnitVectorNullVector() {
-        assertThrows(MathRuntimeException.class, () -> {
-            doTestUnitVectorNullVector(false);
-        });
+        assertThrows(MathRuntimeException.class, () -> doTestUnitVectorNullVector(false));
     }
 
     @Test
     public void testUnitizeNullVector() {
-        assertThrows(MathRuntimeException.class, () -> {
-            doTestUnitVectorNullVector(true);
-        });
+        assertThrows(MathRuntimeException.class, () -> doTestUnitVectorNullVector(true));
     }
 
     @Test
@@ -1208,16 +1170,12 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testCombineDimensionMismatchSameType() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestCombineDimensionMismatch(false, false);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestCombineDimensionMismatch(false, false));
     }
 
     @Test
     public void testCombineDimensionMismatchMixedTypes() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestCombineDimensionMismatch(false, true);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestCombineDimensionMismatch(false, true));
     }
 
     @Test
@@ -1232,16 +1190,12 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testCombineToSelfDimensionMismatchSameType() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestCombineDimensionMismatch(true, false);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestCombineDimensionMismatch(true, false));
     }
 
     @Test
     public void testCombineToSelfDimensionMismatchMixedTypes() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestCombineDimensionMismatch(true, true);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestCombineDimensionMismatch(true, true));
     }
 
     @Test
@@ -1320,9 +1274,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testDotProductDimensionMismatchSameType() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestDotProductDimensionMismatch(false);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestDotProductDimensionMismatch(false));
     }
 
     @Test
@@ -1333,9 +1285,7 @@ public abstract class RealVectorAbstractTest {
 
     @Test
     public void testDotProductDimensionMismatchMixedTypes() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            doTestDotProductDimensionMismatch(true);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> doTestDotProductDimensionMismatch(true));
     }
 
     private void doTestCosine(final boolean mixed) {

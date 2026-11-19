@@ -594,7 +594,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testLinearCombinationReference() {
-        doTestLinearCombinationReference(x -> build(x), 5.0e-16, 1.0);
+        doTestLinearCombinationReference(this::build, 5.0e-16, 1.0);
     }
 
     protected void doTestLinearCombinationReference(final DoubleFunction<T> builder,

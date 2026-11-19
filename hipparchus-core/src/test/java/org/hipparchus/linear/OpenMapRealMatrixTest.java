@@ -31,9 +31,7 @@ final class OpenMapRealMatrixTest {
 
     @Test
     void testMath679() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new OpenMapRealMatrix(3, Integer.MAX_VALUE);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new OpenMapRealMatrix(3, Integer.MAX_VALUE));
     }
 
     @Test

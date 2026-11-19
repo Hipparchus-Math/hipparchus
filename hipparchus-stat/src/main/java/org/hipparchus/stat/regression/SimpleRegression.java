@@ -116,7 +116,6 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     * the regression model
     */
     public SimpleRegression(boolean includeIntercept) {
-        super();
         hasIntercept = includeIntercept;
     }
 

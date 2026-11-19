@@ -79,10 +79,10 @@ public class ADMMQPOptimizer extends QPOptimizer {
      * </p>
      */
     public ADMMQPOptimizer() {
-        settings   = new ADMMQPOption();
-        solver     = new ADMMQPKKT();
-        converged  = false;
-        rho        = 0.1;
+        settings  = new ADMMQPOption();
+        solver    = new ADMMQPKKT();
+        converged = false;
+        rho       = 0.1;
     }
 
     /** {@inheritDoc} */
@@ -126,6 +126,11 @@ public class ADMMQPOptimizer extends QPOptimizer {
                 settings = (ADMMQPOption) data;
             }
 
+            if (data instanceof MatrixDecompositionTolerance) {
+                final MatrixDecompositionTolerance tolerance = (MatrixDecompositionTolerance) data;
+                solver.updateDecompositionEpsilon(tolerance.getEpsMatrixDecomposition());
+            }
+
         }
         // if we got here, convexObjective exists
         int n = function.dim();
@@ -155,17 +160,17 @@ public class ADMMQPOptimizer extends QPOptimizer {
         //PHASE 1 First Solution
 
 
-       //QUADRATIC TERM
+        //QUADRATIC TERM
         RealMatrix H = function.getP();
-       //GRADIENT
+        //GRADIENT
         RealVector q = function.getQ();
 
 
-       //EQUALITY CONSTRAINT
+        //EQUALITY CONSTRAINT
         if (eqConstraint != null) {
             me = eqConstraint.dimY();
         }
-       //INEQUALITY CONSTRAINT
+        //INEQUALITY CONSTRAINT
         if (iqConstraint != null) {
             mi = iqConstraint.dimY();
         }

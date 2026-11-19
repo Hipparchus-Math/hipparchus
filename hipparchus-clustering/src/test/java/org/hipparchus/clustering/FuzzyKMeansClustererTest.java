@@ -89,9 +89,7 @@ class FuzzyKMeansClustererTest {
 
     @Test
     void testTooSmallFuzzynessFactor() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new FuzzyKMeansClusterer<DoublePoint>(3, 1.0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new FuzzyKMeansClusterer<DoublePoint>(3, 1.0));
     }
 
     @Test

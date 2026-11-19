@@ -28,8 +28,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class QRDecompositionTest {
@@ -244,9 +244,9 @@ class QRDecompositionTest {
         assertEquals(0, h.subtract(hRef).getNorm1(), 1.0e-13);
 
         // check the same cached instance is returned the second time
-        assertTrue(q == qr.getQ());
-        assertTrue(r == qr.getR());
-        assertTrue(h == qr.getH());
+        assertSame(q, qr.getQ());
+        assertSame(r, qr.getR());
+        assertSame(h, qr.getH());
 
     }
 

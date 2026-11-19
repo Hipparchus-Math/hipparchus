@@ -73,7 +73,7 @@ public class TestFieldProblem2<T extends CalculusFieldElement<T>>
     public T[] computeTheoreticalState(T t) {
         final T[] y = MathArrays.buildArray(getField(), getDimension());
         T t2 = t.multiply(t);
-        T c = t2.add(t2.multiply(-0.5).exp().subtract(1).multiply(2));
+        T c = t2.add(t2.multiply(-0.5).exp().subtract(1).twice());
         for (int i = 0; i < getDimension(); ++i) {
             y[i] = c;
         }

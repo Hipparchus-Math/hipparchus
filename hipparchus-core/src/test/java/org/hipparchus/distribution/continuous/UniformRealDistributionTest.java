@@ -92,17 +92,13 @@ public class UniformRealDistributionTest extends RealDistributionAbstractTest {
     /** Test pre-condition for equal lower/upper bound. */
     @Test
     void testPreconditions1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new UniformRealDistribution(0, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new UniformRealDistribution(0, 0));
     }
 
     /** Test pre-condition for lower bound larger than upper bound. */
     @Test
     void testPreconditions2() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new UniformRealDistribution(1, 0);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new UniformRealDistribution(1, 0));
     }
 
     /** Test mean/variance. */

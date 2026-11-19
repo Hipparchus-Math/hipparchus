@@ -104,22 +104,22 @@ public class DormandPrince853FieldStateInterpolator<T extends CalculusFieldEleme
         d[1][14] = d[0][14].negate(); // really 0
         d[1][15] = d[0][15].negate(); // really 0
 
-        d[2][ 0] = d[0][ 0].multiply(2).subtract(1);
-        d[2][ 1] = d[0][ 1].multiply(2);
-        d[2][ 2] = d[0][ 2].multiply(2);
-        d[2][ 3] = d[0][ 3].multiply(2);
-        d[2][ 4] = d[0][ 4].multiply(2);
-        d[2][ 5] = d[0][ 5].multiply(2);
-        d[2][ 6] = d[0][ 6].multiply(2);
-        d[2][ 7] = d[0][ 7].multiply(2);
-        d[2][ 8] = d[0][ 8].multiply(2);
-        d[2][ 9] = d[0][ 9].multiply(2);
-        d[2][10] = d[0][10].multiply(2);
-        d[2][11] = d[0][11].multiply(2);
-        d[2][12] = d[0][12].multiply(2).subtract(1); // really -1
-        d[2][13] = d[0][13].multiply(2);             // really  0
-        d[2][14] = d[0][14].multiply(2);             // really  0
-        d[2][15] = d[0][15].multiply(2);             // really  0
+        d[2][ 0] = d[0][ 0].twice().subtract(1);
+        d[2][ 1] = d[0][ 1].twice();
+        d[2][ 2] = d[0][ 2].twice();
+        d[2][ 3] = d[0][ 3].twice();
+        d[2][ 4] = d[0][ 4].twice();
+        d[2][ 5] = d[0][ 5].twice();
+        d[2][ 6] = d[0][ 6].twice();
+        d[2][ 7] = d[0][ 7].twice();
+        d[2][ 8] = d[0][ 8].twice();
+        d[2][ 9] = d[0][ 9].twice();
+        d[2][10] = d[0][10].twice();
+        d[2][11] = d[0][11].twice();
+        d[2][12] = d[0][12].twice().subtract(1); // really -1
+        d[2][13] = d[0][13].twice();             // really  0
+        d[2][14] = d[0][14].twice();             // really  0
+        d[2][15] = d[0][15].twice();             // really  0
 
         d[3][ 0] = fraction(field,         -17751989329.0, 2106076560.0);
         d[3][ 1] = field.getZero();
@@ -225,7 +225,7 @@ public class DormandPrince853FieldStateInterpolator<T extends CalculusFieldEleme
 
         final T one      = time.getField().getOne();
         final T eta      = one.subtract(theta);
-        final T twoTheta = theta.multiply(2);
+        final T twoTheta = theta.twice();
         final T theta2   = theta.multiply(theta);
         final T dot1     = one.subtract(twoTheta);
         final T dot2     = theta.multiply(theta.multiply(-3).add(2));

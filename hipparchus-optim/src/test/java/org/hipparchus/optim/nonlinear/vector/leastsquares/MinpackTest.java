@@ -599,19 +599,11 @@ class MinpackTest {
         }
 
         public MultivariateVectorFunction getModelFunction() {
-            return new MultivariateVectorFunction() {
-                public double[] value(double[] point) {
-                    return computeValue(point);
-                }
-            };
+            return this::computeValue;
         }
 
         public MultivariateMatrixFunction getModelFunctionJacobian() {
-            return new MultivariateMatrixFunction() {
-                public double[][] value(double[] point) {
-                    return computeJacobian(point);
-                }
-            };
+            return this::computeJacobian;
         }
 
         public abstract double[][] computeJacobian(double[] variables);

@@ -42,9 +42,7 @@ class HarmonicCurveFitterTest {
      */
     @Test
     void testPreconditions1() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            HarmonicCurveFitter.create().fit(new WeightedObservedPoints().toList());
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> HarmonicCurveFitter.create().fit(new WeightedObservedPoints().toList()));
     }
 
     @Test

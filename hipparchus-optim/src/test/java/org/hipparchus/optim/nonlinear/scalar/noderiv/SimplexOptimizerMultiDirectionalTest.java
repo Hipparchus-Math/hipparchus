@@ -142,14 +142,12 @@ class SimplexOptimizerMultiDirectionalTest {
     @Test
     void testRosenbrock() {
         MultivariateFunction rosenbrock
-            = new MultivariateFunction() {
-                    public double value(double[] x) {
-                        ++count;
-                        double a = x[1] - x[0] * x[0];
-                        double b = 1.0 - x[0];
-                        return 100 * a * a + b * b;
-                    }
-                };
+            = x -> {
+                ++count;
+                double a = x[1] - x[0] * x[0];
+                double b = 1.0 - x[0];
+                return 100 * a * a + b * b;
+            };
 
         count = 0;
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-3);
@@ -172,16 +170,14 @@ class SimplexOptimizerMultiDirectionalTest {
     @Test
     void testPowell() {
         MultivariateFunction powell
-            = new MultivariateFunction() {
-                    public double value(double[] x) {
-                        ++count;
-                        double a = x[0] + 10 * x[1];
-                        double b = x[2] - x[3];
-                        double c = x[1] - 2 * x[2];
-                        double d = x[0] - x[3];
-                        return a * a + 5 * b * b + c * c * c * c + 10 * d * d * d * d;
-                    }
-                };
+            = x -> {
+                ++count;
+                double a = x[0] + 10 * x[1];
+                double b = x[2] - x[3];
+                double c = x[1] - 2 * x[2];
+                double d = x[0] - x[3];
+                return a * a + 5 * b * b + c * c * c * c + 10 * d * d * d * d;
+            };
 
         count = 0;
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-3);

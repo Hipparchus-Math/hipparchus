@@ -103,17 +103,17 @@ public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
             sum1  = sum1.add(sc2n1.sin().multiply(qNNp1.multiply(sgn)));
             sum2  = sum2.add(sc2n1.cos().multiply(qNNp1));
 
-            if (qNNp1.norm() <= eps) {
+            if (qNNp1.abs().getReal() <= eps) {
                 // we have reach convergence
                 break;
             }
 
         }
 
-        return new FieldTheta<>(sum1.multiply(qFourth.multiply(2)),
-                                sum2.multiply(qFourth.multiply(2)),
-                                sum3.multiply(2).add(1),
-                                sum4.multiply(2).add(1));
+        return new FieldTheta<>(sum1.multiply(qFourth.twice()),
+                                sum2.multiply(qFourth.twice()),
+                                sum3.twice().add(1),
+                                sum4.twice().add(1));
 
     }
 

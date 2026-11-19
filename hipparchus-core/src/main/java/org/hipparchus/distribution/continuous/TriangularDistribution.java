@@ -55,7 +55,6 @@ public class TriangularDistribution extends AbstractRealDistribution {
      */
     public TriangularDistribution(double a, double c, double b)
         throws MathIllegalArgumentException {
-        super();
 
         if (a >= b) {
             throw new MathIllegalArgumentException(

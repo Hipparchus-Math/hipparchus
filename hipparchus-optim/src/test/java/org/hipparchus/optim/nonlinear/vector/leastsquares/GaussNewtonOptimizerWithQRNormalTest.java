@@ -123,10 +123,8 @@ public class GaussNewtonOptimizerWithQRNormalTest
     @Override
     @Test
     public void testMoreEstimatedParametersSimple() {
-        assertThrows(MathIllegalStateException.class, () -> {
-            // reduced numerical stability when forming the normal equations
-            super.testMoreEstimatedParametersSimple();
-        });
+        // reduced numerical stability when forming the normal equations
+        assertThrows(MathIllegalStateException.class, super::testMoreEstimatedParametersSimple);
     }
 
 }

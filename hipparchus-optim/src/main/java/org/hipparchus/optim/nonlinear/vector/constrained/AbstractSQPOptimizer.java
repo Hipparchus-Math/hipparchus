@@ -28,7 +28,9 @@ import org.hipparchus.util.MathUtils;
 /**
  * Abstract class for Sequential Quadratic Programming solvers
  * @since 3.1
+ * @deprecated as of 4.1, replaced by {@link AbstractSQPOptimizer2}; will be removed in 5.0
  */
+@Deprecated
 public abstract class AbstractSQPOptimizer extends ConstraintOptimizer {
 
     /** Algorithm settings. */
@@ -44,9 +46,16 @@ public abstract class AbstractSQPOptimizer extends ConstraintOptimizer {
     private InequalityConstraint iqConstraint;
 
     /** Simple constructor.
+     * <p>
+     * The default settings use the 4.0.3 values of {@link SQPOption} defaults, which differ
+     * from the current {@link SQPOption} defaults (tuned for {@link SQPOptimizerS2}).
+     * </p>
      */
     protected AbstractSQPOptimizer() {
         this.settings = new SQPOption();
+        settings.setEps(1.0e-9);
+        settings.setMu(0.1);
+        settings.setMaxLineSearchIteration(20);
     }
 
     /** Getter for settings.

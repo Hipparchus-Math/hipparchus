@@ -91,8 +91,6 @@ class IntervalTest {
     // MATH-1256
     @Test
     void testStrictOrdering() {
-        assertThrows(MathIllegalArgumentException.class, () -> {
-            new Interval(0, -1);
-        });
+        assertThrows(MathIllegalArgumentException.class, () -> new Interval(0, -1));
     }
 }

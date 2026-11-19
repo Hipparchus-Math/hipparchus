@@ -48,7 +48,7 @@ class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
     /** {@inheritDoc} */
     @Override
     protected void initialMeanPoint(final T[] va) {
-        va[4] = va[0].add(va[1]).add(va[2]).add(va[3].multiply(2)).divide(5.0);
+        va[4] = va[0].add(va[1]).add(va[2]).add(va[3].twice()).divide(5.0);
     }
 
     /** {@inheritDoc} */
@@ -69,7 +69,7 @@ class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
             // equation A.3 in Carlson[2000]
             final T rM = sM.multiply(delta.divide(sM.multiply(sM).multiply(fourM)).add(1.0).sqrt().add(1.0));
             sM = dM.multiply(rM).subtract(delta.divide(fourM * fourM)).
-                 divide(dM.add(rM.divide(fourM)).multiply(2));
+                 divide(dM.add(rM.divide(fourM)).twice());
         }
 
         // equation 2.19 in Carlson[1995]
@@ -102,8 +102,8 @@ class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
         final T xyz    = bigX.multiply(bigY).multiply(bigZ);
         final T e2     = bigX.multiply(bigY.add(bigZ)).add(bigY.multiply(bigZ)).
                                subtract(bigP.multiply(bigP).multiply(3));
-        final T e3     = xyz.add(bigP.multiply(2).multiply(e2.add(bigP2.multiply(2))));
-        final T e4     = xyz.multiply(2).add(bigP.multiply(e2.add(bigP2.multiply(3)))).multiply(bigP);
+        final T e3     = xyz.add(bigP.twice().multiply(e2.add(bigP2.twice())));
+        final T e4     = xyz.twice().add(bigP.multiply(e2.add(bigP2.multiply(3)))).multiply(bigP);
         final T e5     = xyz.multiply(bigP2);
 
         final T e2e2   = e2.multiply(e2);

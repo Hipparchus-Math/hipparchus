@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class HessenbergTransformerTest {
@@ -225,7 +225,7 @@ class HessenbergTransformerTest {
         assertEquals(0, h.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm1(), 1.3e-14);
 
         // check the same cached instance is returned the second time
-        assertTrue(p == transformer.getP());
-        assertTrue(h == transformer.getH());
+        assertSame(p, transformer.getP());
+        assertSame(h, transformer.getH());
     }
 }
