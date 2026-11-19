@@ -570,6 +570,7 @@
     <hipparchus.hamcrest.version>3.0</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
     <hipparchus.sonar-maven-plugin.version>5.8.0.7211</hipparchus.sonar-maven-plugin.version>
+    <hipparchus.cyclonedx-maven-plugin.version>2.9.1</hipparchus.cyclonedx-maven-plugin.version>
     <hipparchus.mathjax.enable>&lt;script src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot; id=&quot;MathJax-script&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
   </properties>
 
@@ -944,6 +945,19 @@
               </sources>
               <outputDirectory>${build.directory}/site/images/userguide</outputDirectory>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.cyclonedx</groupId>
+        <artifactId>cyclonedx-maven-plugin</artifactId>
+        <version>${hipparchus.cyclonedx-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>makeAggregateBom</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

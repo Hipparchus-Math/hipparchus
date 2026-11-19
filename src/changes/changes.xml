@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="5.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/505">
+        Added Software Build Of Materials generation.
+      </action>
+    </release>
     <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator,
 roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential,
 gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions, RANSAC algorithm,
