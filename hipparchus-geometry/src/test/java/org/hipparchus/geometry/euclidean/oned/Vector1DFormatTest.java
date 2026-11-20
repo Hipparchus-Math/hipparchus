@@ -22,7 +22,14 @@
 
 package org.hipparchus.geometry.euclidean.oned;
 
+import org.hipparchus.exception.MathIllegalStateException;
+import org.junit.jupiter.api.Test;
+
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class Vector1DFormatTest extends Vector1DFormatAbstractTest {
@@ -35,5 +42,39 @@ public class Vector1DFormatTest extends Vector1DFormatAbstractTest {
     @Override
     protected Locale getLocale() {
         return Locale.US;
+    }
+
+    @Test
+    void testGetAvailableLocales() {
+        Locale[] locales = Vector1DFormat.getAvailableLocales();
+        assertNotNull(locales);
+        assertEquals(NumberFormat.getAvailableLocales().length, locales.length);
+    }
+
+    @Test
+    void testParse() {
+        Vector1DFormat format = Vector1DFormat.getVector1DFormat();
+        Vector1D expected = new Vector1D(1.0);
+        assertEquals(expected, format.parse("{1}"));
+        assertThrows(MathIllegalStateException.class, () -> format.parse("invalid"));
+    }
+
+    @Test
+    void testParseCoordinatesFailure() {
+        // This targets the parseCoordinates method in VectorFormat via a concrete subclass
+        Vector1DFormat format = Vector1DFormat.getVector1DFormat();
+        
+        // Missing prefix
+        ParsePosition pos = new ParsePosition(0);
+        assertNull(format.parse("1}", pos));
+        
+        // Invalid number
+        pos = new ParsePosition(0);
+        assertNull(format.parse("{abc}", pos));
+        assertEquals(0, pos.getIndex()); // Should reset to initial index
+        
+        // Missing suffix
+        pos = new ParsePosition(0);
+        assertNull(format.parse("{1", pos));
     }
 }

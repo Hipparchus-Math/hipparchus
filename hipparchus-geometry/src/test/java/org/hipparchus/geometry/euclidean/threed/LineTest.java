@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class LineTest {
 
     @Test
-    void testContains() throws MathIllegalArgumentException, MathRuntimeException {
+    void testContains() throws MathRuntimeException {
         Vector3D p1 = new Vector3D(0, 0, 1);
         Line l = new Line(p1, new Vector3D(0, 0, 2), 1.0e-10);
         assertTrue(l.contains(p1));
@@ -49,7 +49,7 @@ class LineTest {
     }
 
     @Test
-    void testSimilar() throws MathIllegalArgumentException, MathRuntimeException {
+    void testSimilar() throws MathRuntimeException {
         Vector3D p1  = new Vector3D (1.2, 3.4, -5.8);
         Vector3D p2  = new Vector3D (3.4, -5.8, 1.2);
         Line     lA  = new Line(p1, p2, 1.0e-10);

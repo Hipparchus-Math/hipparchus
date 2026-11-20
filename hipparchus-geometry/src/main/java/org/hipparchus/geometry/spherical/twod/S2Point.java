@@ -148,7 +148,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
         return phi;
     }
 
-    /** Get the corresponding normalized vector in the 3D euclidean space.
+    /** Get the corresponding normalized vector in the 3D Euclidean space.
      * @return normalized vector
      */
     public Vector3D getVector() {
@@ -245,7 +245,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
      * {@code Double.NaN}, the two points are considered to be equal.
      * </p>
      * <p>
-     * In compliance with IEEE754 handling, if any coordinates of any of the
+     * In compliance with IEEE754 handling, if any coordinates of the
      * two points are {@code NaN}, then the points are considered different.
      * This implies that {@link #NaN S2Point.NaN}.equals({@link #NaN S2Point.NaN})
      * returns {@code false} despite the instance is checked against itself.

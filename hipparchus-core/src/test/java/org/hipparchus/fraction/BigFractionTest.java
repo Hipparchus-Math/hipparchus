@@ -27,6 +27,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Pair;
 import org.hipparchus.util.Precision;
 import org.junit.jupiter.api.Test;
 
@@ -750,6 +751,62 @@ class BigFractionTest {
                                         new BigInteger("32626522339992622633551470546282737778505821290344832738793182277348616222987431136114480634269341408071340993046760559082031250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"));
         // reference value compured using Emacs-calc with 20 digits
         assertEquals(36.027247984128935385, f.doubleValue(), 1.0e-15);
+    }
+
+    @Test
+    void testSubtractBigInteger() {
+        BigFraction f = new BigFraction(3, 4);
+        assertEquals(new BigFraction(-1, 4), f.subtract(BigInteger.ONE));
+        assertEquals(f, f.subtract(BigInteger.ZERO));
+        assertEquals(new BigFraction(-1, 1), BigFraction.ZERO.subtract(BigInteger.ONE));
+    }
+
+    @Test
+    void testSubtractIntLong() {
+        BigFraction f = new BigFraction(3, 4);
+        assertEquals(new BigFraction(-1, 4), f.subtract(1));
+        assertEquals(new BigFraction(-1, 4), f.subtract(1L));
+    }
+
+    @Test
+    void testToString() {
+        assertEquals("0", BigFraction.ZERO.toString());
+        assertEquals("1", BigFraction.ONE.toString());
+        assertEquals("3 / 4", new BigFraction(3, 4).toString());
+    }
+
+    @Test
+    void testReduce() {
+        BigFraction f = new BigFraction(6, 8); // Constructor already reduces
+        assertEquals(new BigFraction(3, 4), f.reduce());
+    }
+
+    @Test
+    void testPowDouble() {
+        BigFraction f = new BigFraction(2, 1);
+        assertEquals(4.0, f.pow(2.0), 1e-15);
+    }
+
+    @Test
+    void testGCDWithZero() {
+        BigFraction f1 = new BigFraction(3, 4);
+        assertEquals(f1, f1.gcd(BigFraction.ZERO));
+        assertEquals(f1, BigFraction.ZERO.gcd(f1));
+    }
+
+    @Test
+    void testLCMWithZero() {
+        BigFraction f1 = new BigFraction(3, 4);
+        assertEquals(BigFraction.ZERO, f1.lcm(BigFraction.ZERO));
+        assertEquals(BigFraction.ZERO, BigFraction.ZERO.lcm(f1));
+    }
+
+    @Test
+    void testConvergentWithTest() {
+        double value = 0.3333333333;
+        Pair<BigFraction, Boolean> result = BigFraction.convergent(value, 5, (n, d) -> n > 0);
+        assertTrue(result.getValue());
+        assertEquals(new BigFraction(1, 3), result.getKey());
     }
 
 }

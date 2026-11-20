@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +42,7 @@ class DiskGeneratorTest {
 
     @Test
     void testSupport0Point() {
-        List<Vector2D> support = Arrays.asList(new Vector2D[0]);
+        List<Vector2D> support = Collections.emptyList();
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
         assertTrue(disk.getRadius() < 0);
         assertEquals(0, disk.getSupportSize());
@@ -50,7 +51,7 @@ class DiskGeneratorTest {
 
     @Test
     void testSupport1Point() {
-        List<Vector2D> support = Arrays.asList(new Vector2D(1, 2));
+        List<Vector2D> support = Collections.singletonList(new Vector2D(1, 2));
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
         assertEquals(0.0, disk.getRadius(), 1.0e-10);
         assertTrue(disk.contains(support.getFirst()));
@@ -108,7 +109,7 @@ class DiskGeneratorTest {
 
     @Test
     void testRandom() {
-        final RandomGenerator random = new Well1024a(0x12faa818373ffe90l);
+        final RandomGenerator random = new Well1024a(0x12faa818373ffe90L);
         final UnitSphereRandomVectorGenerator sr = new UnitSphereRandomVectorGenerator(2, random);
         for (int i = 0; i < 500; ++i) {
             double d = 25 * random.nextDouble();

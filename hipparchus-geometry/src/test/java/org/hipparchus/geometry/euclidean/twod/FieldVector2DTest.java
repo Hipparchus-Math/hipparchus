@@ -246,7 +246,7 @@ class FieldVector2DTest {
     private <T extends CalculusFieldElement<T>> void doTestNormalize(final Field<T> field) {
         try {
             FieldVector2D.getZero(field).normalize();
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR, mre.getSpecifier());
         }
@@ -256,7 +256,7 @@ class FieldVector2DTest {
     private <T extends CalculusFieldElement<T>> void doTestAngle(final Field<T> field) {
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), FieldVector2D.getPlusI(field));
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
@@ -280,7 +280,7 @@ class FieldVector2DTest {
                             1.0e-15);
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), Vector2D.PLUS_I);
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
@@ -302,7 +302,7 @@ class FieldVector2DTest {
                      1.0e-15);
         try {
             FieldVector2D.angle(Vector2D.ZERO, FieldVector2D.getPlusI(field));
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }

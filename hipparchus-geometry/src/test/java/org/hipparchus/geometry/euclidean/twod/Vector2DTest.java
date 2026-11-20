@@ -157,7 +157,7 @@ class Vector2DTest {
     void testNormalize() {
         try {
             Vector2D.ZERO.normalize();
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR, mre.getSpecifier());
         }
@@ -168,7 +168,7 @@ class Vector2DTest {
     void testAngle() {
         try {
             Vector2D.angle(Vector2D.ZERO, Vector2D.PLUS_I);
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }

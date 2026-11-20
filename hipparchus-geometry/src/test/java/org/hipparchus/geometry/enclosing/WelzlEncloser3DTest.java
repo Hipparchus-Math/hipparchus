@@ -29,7 +29,6 @@ import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -109,8 +108,8 @@ class WelzlEncloser3DTest {
     }
 
     @Test
-    void testLargeSamples() throws IOException {
-        RandomGenerator random = new Well1024a(0x35ddecfc78131e1dl);
+    void testLargeSamples() {
+        RandomGenerator random = new Well1024a(0x35ddecfc78131e1dL);
         final UnitSphereRandomVectorGenerator sr = new UnitSphereRandomVectorGenerator(3, random);
         for (int k = 0; k < 50; ++k) {
 
