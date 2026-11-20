@@ -35,9 +35,14 @@ import org.hipparchus.random.GaussianRandomGenerator;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomVectorGenerator;
 import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.optim.OptimizationData;
+import org.hipparchus.optim.SimpleBounds;
+import org.hipparchus.random.HaltonSequenceGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MultiStartMultivariateOptimizerTest {
@@ -56,7 +61,7 @@ class MultiStartMultivariateOptimizerTest {
             = new NonLinearConjugateGradientOptimizer(NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
                                                       new SimpleValueChecker(1e-10, 1e-10));
         JDKRandomGenerator g = new JDKRandomGenerator();
-        g.setSeed(753289573253l);
+        g.setSeed(753289573253L);
         RandomVectorGenerator generator
             = new UncorrelatedRandomVectorGenerator(new double[] { 50, 50 },
                                                     new double[] { 10, 10 },
@@ -101,7 +106,7 @@ class MultiStartMultivariateOptimizerTest {
                 {  3.5, -2.3 }
             });
         JDKRandomGenerator g = new JDKRandomGenerator();
-        g.setSeed(16069223052l);
+        g.setSeed(16069223052L);
         RandomVectorGenerator generator
             = new UncorrelatedRandomVectorGenerator(2, new GaussianRandomGenerator(g));
         int nbStarts = 10;
@@ -119,6 +124,78 @@ class MultiStartMultivariateOptimizerTest {
         assertTrue(optimizer.getEvaluations() > 900);
         assertTrue(optimizer.getEvaluations() < 1200);
         assertTrue(optimum.getValue() < 5e-5);
+    }
+
+    @Test
+    void testMissingMaxEval() {
+        SimplexOptimizer underlying = new SimplexOptimizer(new SimpleValueChecker(1e-10, 1e-10));
+        RandomVectorGenerator generator = new UncorrelatedRandomVectorGenerator(2, new GaussianRandomGenerator(new JDKRandomGenerator()));
+        MultiStartMultivariateOptimizer optimizer = new MultiStartMultivariateOptimizer(underlying, 10, generator);
+        assertThrows(MathIllegalStateException.class, () ->
+            optimizer.optimize(new ObjectiveFunction(x -> 0), GoalType.MINIMIZE, new InitialGuess(new double[] { 0, 0 }))
+        );
+    }
+
+    @Test
+    void testMissingInitialGuess() {
+        SimplexOptimizer underlying = new SimplexOptimizer(new SimpleValueChecker(1e-10, 1e-10));
+        RandomVectorGenerator generator = new UncorrelatedRandomVectorGenerator(2, new GaussianRandomGenerator(new JDKRandomGenerator()));
+        MultiStartMultivariateOptimizer optimizer = new MultiStartMultivariateOptimizer(underlying, 10, generator);
+        assertThrows(MathIllegalStateException.class, () ->
+            optimizer.optimize(new MaxEval(100), new ObjectiveFunction(x -> 0), GoalType.MINIMIZE)
+        );
+    }
+
+    @Test
+    void testAllRunsFail() {
+        JDKRandomGenerator g = new JDKRandomGenerator();
+        g.setSeed(16069223052L);
+        RandomVectorGenerator generator = new UncorrelatedRandomVectorGenerator(2, new GaussianRandomGenerator(g));
+        
+        // Optimizer that always fails
+        MultivariateOptimizer underlying = new MultivariateOptimizer(new SimpleValueChecker(1e-10, 1e-10)) {
+            @Override
+            protected PointValuePair doOptimize() {
+                throw new RuntimeException("failed");
+            }
+        };
+        
+        MultiStartMultivariateOptimizer optimizer = new MultiStartMultivariateOptimizer(underlying, 10, generator);
+        RuntimeException ex = assertThrows(RuntimeException.class, () ->
+            optimizer.optimize(new MaxEval(100), new ObjectiveFunction(x -> 0), GoalType.MINIMIZE, new InitialGuess(new double[] { 0, 0 }))
+        );
+        assertEquals("failed", ex.getMessage());
+    }
+
+    @Test
+    void testVectorGeneratorRetry() {
+        // Use an optimizer that supports bounds, like BOBYQA
+        MultivariateOptimizer underlying = new org.hipparchus.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer(5);
+        // Generator that returns values outside bounds
+        RandomVectorGenerator generator = new RandomVectorGenerator() {
+            private int count = 0;
+            @Override
+            public double[] nextVector() {
+                return (count++ == 0) ? new double[] { 10, 10 } : new double[] { 0.5, 0.5 };
+            }
+        };
+        MultiStartMultivariateOptimizer optimizer = new MultiStartMultivariateOptimizer(underlying, 2, generator);
+        optimizer.optimize(new MaxEval(100), new ObjectiveFunction(x -> (x[0]-0.5)*(x[0]-0.5) + (x[1]-0.5)*(x[1]-0.5)), GoalType.MINIMIZE,
+                           new InitialGuess(new double[] { 0.5, 0.5 }),
+                           new SimpleBounds(new double[] { 0, 0 }, new double[] { 1, 1 }));
+        assertEquals(2, optimizer.getOptima().length);
+    }
+
+    @Test
+    void testVectorGeneratorExhausted() {
+        MultivariateOptimizer underlying = new org.hipparchus.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer(5);
+        // Generator that always returns null
+        RandomVectorGenerator generator = () -> null;
+        MultiStartMultivariateOptimizer optimizer = new MultiStartMultivariateOptimizer(underlying, 2, generator);
+        assertThrows(MathIllegalStateException.class, () ->
+            optimizer.optimize(new MaxEval(100), new ObjectiveFunction(x -> 0), GoalType.MINIMIZE,
+                               new InitialGuess(new double[] { 0.5, 0.5 }))
+        );
     }
 
     private static class Rosenbrock implements MultivariateFunction {

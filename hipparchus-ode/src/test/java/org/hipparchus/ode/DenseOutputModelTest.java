@@ -72,7 +72,7 @@ public class DenseOutputModelTest {
         integ.addStepHandler(dom);
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-        Random random = new Random(347588535632l);
+        Random random = new Random(347588535632L);
         double maxError    = 0.0;
         double maxErrorDot = 0.0;
         for (int i = 0; i < 1000; ++i) {
@@ -186,7 +186,7 @@ public class DenseOutputModelTest {
             ObjectInputStream     ois = new ObjectInputStream(bis);
             DenseOutputModel cm  = (DenseOutputModel) ois.readObject();
 
-            Random random = new Random(347588535632l);
+            Random random = new Random(347588535632L);
             double maxError = 0.0;
             for (int i = 0; i < 1000; ++i) {
                 double r = random.nextDouble();

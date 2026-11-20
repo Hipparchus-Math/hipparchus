@@ -90,7 +90,7 @@ class WelzlEncloser2DTest {
 
     @Test
     void testLargeSamples() {
-        RandomGenerator random = new Well1024a(0xa2a63cad12c01fb2l);
+        RandomGenerator random = new Well1024a(0xa2a63cad12c01fb2L);
         for (int k = 0; k < 100; ++k) {
             int nbPoints = random.nextInt(10000);
             List<Vector2D> points = new ArrayList<>();

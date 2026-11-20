@@ -22,7 +22,13 @@
 
 package org.hipparchus.geometry.euclidean.twod;
 
+import org.junit.jupiter.api.Test;
+
+import java.text.ParsePosition;
 import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 public class Vector2DFormatTest extends Vector2DFormatAbstractTest {
@@ -35,5 +41,12 @@ public class Vector2DFormatTest extends Vector2DFormatAbstractTest {
     @Override
     protected Locale getLocale() {
         return Locale.US;
+    }
+
+    @Test
+    void testParseSeparatorFailure() {
+        Vector2DFormat format = Vector2DFormat.getVector2DFormat();
+        ParsePosition pos = new ParsePosition(0);
+        assertNull(format.parse("{1, 2}", pos)); // default separator is "; "
     }
 }

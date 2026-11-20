@@ -31,6 +31,7 @@ import org.hipparchus.util.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class SphericalCoordinatesTest {
 
@@ -185,6 +186,7 @@ public class SphericalCoordinatesTest {
     void testSerialization() {
         SphericalCoordinates a = new SphericalCoordinates(3, 2, 1);
         SphericalCoordinates b = (SphericalCoordinates) UnitTestUtils.serializeAndRecover(a);
+        assertNotNull(b);
         assertEquals(0, a.getCartesian().distance(b.getCartesian()), 1.0e-10);
         assertEquals(a.getR(),     b.getR(),     1.0e-10);
         assertEquals(a.getTheta(), b.getTheta(), 1.0e-10);

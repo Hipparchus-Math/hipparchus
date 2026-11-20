@@ -25,7 +25,11 @@ package org.hipparchus.optim;
 import org.hipparchus.UnitTestUtils;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class PointVectorValuePairTest {
     @Test
@@ -41,5 +45,38 @@ class PointVectorValuePairTest {
         for (int i = 0; i < pv1.getValue().length; ++i) {
             assertEquals(pv1.getValue()[i], pv2.getValue()[i], 1.0e-15);
         }
+    }
+
+    @Test
+    void testConstructors() {
+        double[] p = { 1, 2 };
+        double[] v = { 3, 4 };
+        PointVectorValuePair pv = new PointVectorValuePair(p, v);
+        assertNotSame(p, pv.getPointRef());
+        assertNotSame(v, pv.getValueRef());
+
+        pv = new PointVectorValuePair(p, v, false);
+        assertSame(p, pv.getPointRef());
+        assertSame(v, pv.getValueRef());
+    }
+
+    @Test
+    void testGetters() {
+        double[] p = { 1, 2 };
+        double[] v = { 3, 4 };
+        PointVectorValuePair pv = new PointVectorValuePair(p, v);
+        assertNotSame(pv.getPointRef(), pv.getPoint());
+        assertNotSame(pv.getValueRef(), pv.getValue());
+        assertArrayEquals(pv.getPointRef(), pv.getPoint());
+        assertArrayEquals(pv.getValueRef(), pv.getValue());
+    }
+
+    @Test
+    void testNullArray() {
+        PointVectorValuePair pv = new PointVectorValuePair(null, null);
+        assertNull(pv.getPoint());
+        assertNull(pv.getPointRef());
+        assertNull(pv.getValue());
+        assertNull(pv.getValueRef());
     }
 }

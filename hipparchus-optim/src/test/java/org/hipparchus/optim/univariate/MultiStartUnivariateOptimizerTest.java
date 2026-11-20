@@ -31,6 +31,8 @@ import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.util.FastMath;
 import org.junit.jupiter.api.Test;
 
+import java.io.Serial;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -43,7 +45,7 @@ class MultiStartUnivariateOptimizerTest {
         assertThrows(MathIllegalStateException.class, () -> {
             UnivariateOptimizer underlying = new BrentOptimizer(1e-10, 1e-14);
             JDKRandomGenerator g = new JDKRandomGenerator();
-            g.setSeed(44428400075l);
+            g.setSeed(44428400075L);
             MultiStartUnivariateOptimizer optimizer = new MultiStartUnivariateOptimizer(underlying, 10, g);
             optimizer.optimize(new UnivariateObjectiveFunction(new Sin()),
                 GoalType.MINIMIZE,
@@ -56,7 +58,7 @@ class MultiStartUnivariateOptimizerTest {
         assertThrows(MathIllegalStateException.class, () -> {
             UnivariateOptimizer underlying = new BrentOptimizer(1e-10, 1e-14);
             JDKRandomGenerator g = new JDKRandomGenerator();
-            g.setSeed(44428400075l);
+            g.setSeed(44428400075L);
             MultiStartUnivariateOptimizer optimizer = new MultiStartUnivariateOptimizer(underlying, 10, g);
             optimizer.optimize(new MaxEval(300),
                 new UnivariateObjectiveFunction(new Sin()),
@@ -69,7 +71,7 @@ class MultiStartUnivariateOptimizerTest {
         UnivariateFunction f = new Sin();
         UnivariateOptimizer underlying = new BrentOptimizer(1e-10, 1e-14);
         JDKRandomGenerator g = new JDKRandomGenerator();
-        g.setSeed(44428400075l);
+        g.setSeed(44428400075L);
         MultiStartUnivariateOptimizer optimizer = new MultiStartUnivariateOptimizer(underlying, 10, g);
         optimizer.optimize(new MaxEval(300),
                            new UnivariateObjectiveFunction(f),
@@ -140,7 +142,7 @@ class MultiStartUnivariateOptimizerTest {
     }
 
     private static class LocalException extends RuntimeException {
+        @Serial
         private static final long serialVersionUID = 1194682757034350629L;
     }
-
 }

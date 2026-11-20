@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +43,7 @@ class SphereGeneratorTest {
 
     @Test
     void testSupport0Point() {
-        List<Vector3D> support = Arrays.asList(new Vector3D[0]);
+        List<Vector3D> support = Collections.emptyList();
         EnclosingBall<Euclidean3D, Vector3D> sphere = new SphereGenerator().ballOnSupport(support);
         assertTrue(sphere.getRadius() < 0);
         assertEquals(0, sphere.getSupportSize());
@@ -51,7 +52,7 @@ class SphereGeneratorTest {
 
     @Test
     void testSupport1Point() {
-        List<Vector3D> support = Arrays.asList(new Vector3D(1, 2, 3));
+        List<Vector3D> support = Collections.singletonList(new Vector3D(1, 2, 3));
         EnclosingBall<Euclidean3D, Vector3D> sphere = new SphereGenerator().ballOnSupport(support);
         assertEquals(0.0, sphere.getRadius(), 1.0e-10);
         assertTrue(sphere.contains(support.getFirst()));
@@ -143,7 +144,7 @@ class SphereGeneratorTest {
 
     @Test
     void testRandom() {
-        final RandomGenerator random = new Well1024a(0xd015982e9f31ee04l);
+        final RandomGenerator random = new Well1024a(0xd015982e9f31ee04L);
         final UnitSphereRandomVectorGenerator sr = new UnitSphereRandomVectorGenerator(3, random);
         for (int i = 0; i < 100; ++i) {
             double d = 25 * random.nextDouble();

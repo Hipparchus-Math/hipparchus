@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FieldLineTest {
 
     @Test
-    void testContains() throws MathIllegalArgumentException, MathRuntimeException {
+    void testContains() throws MathRuntimeException {
         FieldVector3D<Binary64> p1 = FieldVector3D.getPlusK(Binary64Field.getInstance());
         FieldLine<Binary64> l = new FieldLine<>(p1,
                                                  new FieldVector3D<>(new Binary64(0),
@@ -55,7 +55,7 @@ class FieldLineTest {
     }
 
     @Test
-    void testSimilar() throws MathIllegalArgumentException, MathRuntimeException {
+    void testSimilar() throws MathRuntimeException {
         FieldVector3D<Binary64> p1  = createVector(1.2, 3.4, -5.8);
         FieldVector3D<Binary64> p2  = createVector(3.4, -5.8, 1.2);
         FieldLine<Binary64>     lA  = new FieldLine<>(p1, p2, 1.0e-10);
@@ -204,7 +204,7 @@ class FieldLineTest {
         // verify
         Binary64[] e = expected.toArray();
         Binary64[] r = reverted.getDirection().toArray();
-        assertEquals(e.length, e.length);
+        assertEquals(e.length, r.length);
         for (int i = 0; i < e.length; ++i) {
             assertEquals(e[i].getReal(), r[i].getReal(), 1.0e-10);
         }

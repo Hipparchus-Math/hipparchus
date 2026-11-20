@@ -24,10 +24,7 @@ package org.hipparchus.geometry.euclidean.threed;
 import org.hipparchus.exception.MathRuntimeException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlaneTest {
 
@@ -150,6 +147,7 @@ class PlaneTest {
         Plane p2 = new Plane(reference, new Vector3D(-2, 4, 0), 1.0e-10);
         Plane p3 = new Plane(reference, new Vector3D(7, 0, -4), 1.0e-10);
         Vector3D p = Plane.intersection(p1, p2, p3);
+        assertNotNull(p);
         assertEquals(reference.getX(), p.getX(), 1.0e-10);
         assertEquals(reference.getY(), p.getY(), 1.0e-10);
         assertEquals(reference.getZ(), p.getZ(), 1.0e-10);
@@ -201,6 +199,30 @@ class PlaneTest {
         assertEquals(-1.5, plane.getOffset(plane.moveToOffset(p2, -1.5)), 1.0e-10);
         assertEquals(17.0, plane.getOffset(plane.moveToOffset(p3, 17.0)), 1.0e-10);
 
+    }
+
+    @Test
+    void testGetOffsetPlane() {
+        Vector3D p1    = new Vector3D (1.2, 3.4, -5.8);
+        Vector3D p2    = new Vector3D (3.4, -5.8, 1.2);
+        Vector3D p3    = new Vector3D (-2.0, 4.3, 0.7);
+        Plane    plane = new Plane(p1, p2, p3, 1.0e-10);
+        assertEquals(0.0, plane.getOffset(plane), 1.0e-10);
+        
+        Plane parallel = plane.translate(new Vector3D(1.2, plane.getNormal()));
+        assertEquals(1.2, plane.getOffset(parallel), 1.0e-10);
+    }
+
+    @Test
+    void testReset() {
+        Plane p = new Plane(Vector3D.PLUS_I, 1.0e-10);
+        Plane p2 = new Plane(Vector3D.PLUS_J, 1.0e-10);
+        p.reset(p2);
+        assertTrue(p.isSimilarTo(p2));
+        
+        p.reset(Vector3D.ZERO, Vector3D.PLUS_K);
+        assertEquals(0.0, p.getOffset(Vector3D.ZERO), 1.0e-10);
+        assertEquals(1.0, p.getOffset(Vector3D.PLUS_K), 1.0e-10);
     }
 
 }
