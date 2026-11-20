@@ -19,22 +19,25 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
 import java.io.Serial;
 
 /**
- * Calculates the L<sub>&infin;</sub> (max of abs) distance between two points.
+ * Calculates the Earh Mover's distance (also known as Wasserstein metric) between two distributions.
+ *
+ * @see <a href="http://en.wikipedia.org/wiki/Earth_mover's_distance">Earth Mover's distance (Wikipedia)</a>
  *
  */
-public class ChebyshevDistance implements DistanceMeasure {
+public class EarthMoversDistance implements DistanceMeasure {
 
     /** Serializable version identifier. */
     @Serial
-    private static final long serialVersionUID = -4694868171115238296L;
+    private static final long serialVersionUID = -5406732779747414922L;
 
     /** Empty constructor.
      * <p>
@@ -43,7 +46,7 @@ public class ChebyshevDistance implements DistanceMeasure {
      * </p>
      * @since 3.0
      */
-    public ChebyshevDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    public EarthMoversDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 
@@ -51,7 +54,15 @@ public class ChebyshevDistance implements DistanceMeasure {
     @Override
     public double compute(double[] a, double[] b)
     throws MathIllegalArgumentException {
-        return MathArrays.distanceInf(a, b);
+        MathArrays.checkEqualLength(a, b);
+        double lastDistance = 0;
+        double totalDistance = 0;
+        for (int i = 0; i < a.length; i++) {
+            final double currentDistance = (a[i] + lastDistance) - b[i];
+            totalDistance += FastMath.abs(currentDistance);
+            lastDistance = currentDistance;
+        }
+        return totalDistance;
     }
 
 }

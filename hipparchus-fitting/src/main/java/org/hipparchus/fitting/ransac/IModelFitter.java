@@ -18,6 +18,8 @@ package org.hipparchus.fitting.ransac;
 
 import java.util.List;
 
+import org.hipparchus.util.DataPoint;
+
 /**
  * Base class for mathematical model fitter used with {@link RansacFitter}.
  * @param <M> mathematical model representing the parameters to estimate
@@ -30,7 +32,7 @@ public interface IModelFitter<M> {
      * @param points set of observed data
      * @return the fitted model parameters
      */
-    M fitModel(List<Fittable> points);
+    M fitModel(List<DataPoint> points);
 
     /**
      * Computes the error between the model and an observed data.
@@ -41,5 +43,5 @@ public interface IModelFitter<M> {
      * @param point observed data
      * @return the error between the model and the observed data
      */
-    double computeModelError(M model, Fittable point);
+    double computeModelError(M model, DataPoint point);
 }

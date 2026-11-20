@@ -46,7 +46,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import org.hipparchus.clustering.CentroidCluster;
-import org.hipparchus.clustering.Clusterable;
+import org.hipparchus.util.DataPoint;
 import org.hipparchus.clustering.KMeansPlusPlusClusterer;
 import org.hipparchus.samples.ExampleUtils;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
@@ -158,7 +158,7 @@ public class ImageClusteringExample {
 
             WritableRaster raster = clusterImage.getRaster();
             for (CentroidCluster<PixelClusterable> cluster : clusters) {
-                double[] color = cluster.getCenter().getPoint();
+                double[] color = cluster.getCenter().values();
                 for (PixelClusterable pixel : cluster.getPoints()) {
                     raster.setPixel(pixel.x, pixel.y, color);
                 }
@@ -168,7 +168,7 @@ public class ImageClusteringExample {
         }
 
         /** Container for one pixel that can be used in clusters. */
-        private class PixelClusterable implements Clusterable {
+        private class PixelClusterable implements DataPoint {
 
             /** Abscissa. */
             private final int x;
@@ -191,7 +191,7 @@ public class ImageClusteringExample {
 
             /** {@inheritDoc} */
             @Override
-            public double[] getPoint() {
+            public double[] values() {
                 if (color == null) {
                     color = referenceRaster.getPixel(x, y, (double[]) null);
                 }

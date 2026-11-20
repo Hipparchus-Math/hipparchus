@@ -24,16 +24,17 @@ package org.hipparchus.clustering;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.clustering.distance.DistanceMeasure;
+import org.hipparchus.distance.DistanceMeasure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.util.DataPoint;
 
 /**
  * Base class for clustering algorithms.
  *
  * @param <T> the type of points that can be clustered
  */
-public abstract class Clusterer<T extends Clusterable> {
+public abstract class Clusterer<T extends DataPoint> {
 
     /** The distance measure to use. */
     private final DistanceMeasure measure;
@@ -48,9 +49,9 @@ public abstract class Clusterer<T extends Clusterable> {
     }
 
     /**
-     * Perform a cluster analysis on the given set of {@link Clusterable} instances.
+     * Perform a cluster analysis on the given set of {@link DataPoint} instances.
      *
-     * @param points the set of {@link Clusterable} instances
+     * @param points the set of {@link DataPoint} instances
      * @return a {@link List} of clusters
      * @throws MathIllegalArgumentException if points are null or the number of
      *   data points is not compatible with this clusterer
@@ -70,15 +71,15 @@ public abstract class Clusterer<T extends Clusterable> {
     }
 
     /**
-     * Calculates the distance between two {@link Clusterable} instances
+     * Calculates the distance between two {@link DataPoint} instances
      * with the configured {@link DistanceMeasure}.
      *
-     * @param p1 the first clusterable
-     * @param p2 the second clusterable
-     * @return the distance between the two clusterables
+     * @param p1 the first data point
+     * @param p2 the second data point
+     * @return the distance between the two data points
      */
-    protected double distance(final Clusterable p1, final Clusterable p2) {
-        return measure.compute(p1.getPoint(), p2.getPoint());
+    protected double distance(final DataPoint p1, final DataPoint p2) {
+        return measure.compute(p1, p2);
     }
 
 }

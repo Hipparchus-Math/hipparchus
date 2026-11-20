@@ -26,17 +26,17 @@ import java.util.List;
 
 import org.hipparchus.clustering.CentroidCluster;
 import org.hipparchus.clustering.Cluster;
-import org.hipparchus.clustering.Clusterable;
-import org.hipparchus.clustering.DoublePoint;
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.util.DataPoint;
+import org.hipparchus.util.DoublePoint;
+import org.hipparchus.distance.DistanceMeasure;
+import org.hipparchus.distance.EuclideanDistance;
 
 /**
  * Base class for cluster evaluation methods.
  *
  * @param <T> type of the clustered points
  */
-public abstract class ClusterEvaluator<T extends Clusterable> {
+public abstract class ClusterEvaluator<T extends DataPoint> {
 
     /** The distance measure to use when evaluating the cluster. */
     private final DistanceMeasure measure;
@@ -80,15 +80,15 @@ public abstract class ClusterEvaluator<T extends Clusterable> {
     }
 
     /**
-     * Calculates the distance between two {@link Clusterable} instances
+     * Calculates the distance between two {@link DataPoint} instances
      * with the configured {@link DistanceMeasure}.
      *
-     * @param p1 the first clusterable
-     * @param p2 the second clusterable
-     * @return the distance between the two clusterables
+     * @param p1 the first data point
+     * @param p2 the second data point
+     * @return the distance between the two data points
      */
-    protected double distance(final Clusterable p1, final Clusterable p2) {
-        return measure.compute(p1.getPoint(), p2.getPoint());
+    protected double distance(final DataPoint p1, final DataPoint p2) {
+        return measure.compute(p1, p2);
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class ClusterEvaluator<T extends Clusterable> {
      * @return the computed centroid for the cluster,
      * or {@code null} if the cluster does not contain any points
      */
-    protected Clusterable centroidOf(final Cluster<T> cluster) {
+    protected DataPoint centroidOf(final Cluster<T> cluster) {
         final List<T> points = cluster.getPoints();
         if (points.isEmpty()) {
             return null;
@@ -109,10 +109,10 @@ public abstract class ClusterEvaluator<T extends Clusterable> {
             return ((CentroidCluster<T>) cluster).getCenter();
         }
 
-        final int dimension = points.getFirst().getPoint().length;
+        final int dimension = points.getFirst().values().length;
         final double[] centroid = new double[dimension];
         for (final T p : points) {
-            final double[] point = p.getPoint();
+            final double[] point = p.values();
             for (int i = 0; i < centroid.length; i++) {
                 centroid[i] += point[i];
             }

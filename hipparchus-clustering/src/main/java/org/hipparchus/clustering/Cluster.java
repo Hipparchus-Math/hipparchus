@@ -27,11 +27,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.util.DataPoint;
+
 /**
- * Cluster holding a set of {@link Clusterable} points.
+ * Cluster holding a set of {@link DataPoint} points.
  * @param <T> the type of points that can be clustered
  */
-public class Cluster<T extends Clusterable> implements Serializable {
+public class Cluster<T extends DataPoint> implements Serializable {
 
     /** Serializable version identifier. */
     @Serial

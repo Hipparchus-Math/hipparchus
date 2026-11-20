@@ -19,7 +19,7 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus.clustering.distance;
+package org.hipparchus.distance;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -27,14 +27,14 @@ import org.hipparchus.util.MathArrays;
 import java.io.Serial;
 
 /**
- * Calculates the L<sub>2</sub> (Euclidean) distance between two points.
+ * Calculates the L<sub>&infin;</sub> (max of abs) distance between two points.
  *
  */
-public class EuclideanDistance implements DistanceMeasure {
+public class ChebyshevDistance implements DistanceMeasure {
 
     /** Serializable version identifier. */
     @Serial
-    private static final long serialVersionUID = 1717556319784040040L;
+    private static final long serialVersionUID = -4694868171115238296L;
 
     /** Empty constructor.
      * <p>
@@ -43,7 +43,7 @@ public class EuclideanDistance implements DistanceMeasure {
      * </p>
      * @since 3.0
      */
-    public EuclideanDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    public ChebyshevDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
         // nothing to do
     }
 
@@ -51,7 +51,7 @@ public class EuclideanDistance implements DistanceMeasure {
     @Override
     public double compute(double[] a, double[] b)
     throws MathIllegalArgumentException {
-        return MathArrays.distance(a, b);
+        return MathArrays.distanceInf(a, b);
     }
 
 }

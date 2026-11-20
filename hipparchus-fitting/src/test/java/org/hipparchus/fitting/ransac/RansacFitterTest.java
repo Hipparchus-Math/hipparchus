@@ -28,17 +28,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 import org.mockito.internal.util.io.IOUtil;
+import org.hipparchus.util.DataPoint;
 
 class RansacFitterTest {
 
-    /** Simple implementation of {@link Fittable} wrapping a double array. */
-    private static final class SimpleFittable implements Fittable {
+    /** Simple implementation of {@link DataPoint} wrapping a double array. */
+    private static final class SimpleFittable implements DataPoint {
         private final double[] point;
         SimpleFittable(final double[] point) {
             this.point = point.clone();
         }
         @Override
-        public double[] getPoint() {
+        public double[] values() {
             return point.clone();
         }
     }
@@ -64,7 +65,7 @@ class RansacFitterTest {
     @Test
     void testCanFitALineWithLargeNumberOfOutliers() throws IOException {
         // This test reproduces the example provided in RANSAC wikipedia page. Results are strongly consistent
-        final List<Fittable> points = loadData("line_dataset.csv");
+        final List<DataPoint> points = loadData("line_dataset.csv");
         final double standardDeviation = 0.6159842899599051;
         final RansacFitterOutputs<PolynomialModelFitter.Model> fitted = new RansacFitter<>(new PolynomialModelFitter(1), 10, 100, standardDeviation / 3, 10, 1).fit(points);
         Assertions.assertNotNull(fitted);
@@ -77,7 +78,7 @@ class RansacFitterTest {
     @Test
     void testCanFitAPolynomialOfDegree2WithOutliers() throws IOException {
         // Reference: https://forum.orekit.org/t/addition-of-ransac-algorithm/5102
-        final List<Fittable> points = loadData("quadratic_dataset.csv");
+        final List<DataPoint> points = loadData("quadratic_dataset.csv");
         final double standardDeviation = 72.59099534185657;
         final RansacFitterOutputs<PolynomialModelFitter.Model> fitted = new RansacFitter<>(new PolynomialModelFitter(2), 10, 1000, standardDeviation / 3, 10, 1).fit(points);
         Assertions.assertNotNull(fitted);
@@ -102,18 +103,18 @@ class RansacFitterTest {
         Assertions.assertEquals(numberOfTrueData, fitted.getBestInliers().size());
     }
 
-    private List<Fittable> generateLine(final int seed, final double expectedSlope, final double expectedIntercept,
+    private List<DataPoint> generateLine(final int seed, final double expectedSlope, final double expectedIntercept,
                                          final int trueDataCount, final int falseDataCount, final double noiseFactor) {
         final Random random = new Random(seed);
         final PolynomialModelFitter.Model trueModel = new PolynomialModelFitter.Model(new double[]{expectedIntercept, expectedSlope});
-        final List<Fittable> points = IntStream.range(0, trueDataCount)
+        final List<DataPoint> points = IntStream.range(0, trueDataCount)
                                                 .mapToObj(x -> new SimpleFittable(new double[]{x, trueModel.predict(x) + random.nextGaussian() * noiseFactor}))
                                                 .collect(Collectors.toList());
         points.addAll(IntStream.range(0, falseDataCount).mapToObj(x -> new SimpleFittable(new double[]{x * 3, random.nextDouble() * 20})).collect(Collectors.toList()));
         return points;
     }
 
-    private List<Fittable> loadData(final String fileName) {
+    private List<DataPoint> loadData(final String fileName) {
         final InputStream inputStream = this.getClass().getResourceAsStream("/" + this.getClass().getSimpleName() + "/" + fileName);
         Assertions.assertNotNull(inputStream, "Could not find resource " + fileName);
         return IOUtil.readLines(inputStream)

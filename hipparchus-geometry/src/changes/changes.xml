@@ -49,6 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
+    <release version="5.0" date="TBD" description="TBD">
+    </release>
     <release version="4.1" date="2026-11-18" description="This is a minor release.">
       <action dev="vincent" type="fix" issue="issues/488">
         Restored Vector.getNormSq() as a default method, and FieldVector2D.getNormSq() and
