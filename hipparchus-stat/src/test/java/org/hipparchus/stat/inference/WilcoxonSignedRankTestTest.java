@@ -286,4 +286,11 @@ class WilcoxonSignedRankTestTest {
         assertEquals(1.0, testStatistic.wilcoxonSignedRankTest(x,y, true), 0);
     }
 
+    @Test
+    void testIssue502() {
+        final double[] x = {0, 0, 0};
+        final double[] y = {1, 2, -3};
+        assertEquals(1.0, testStatistic.wilcoxonSignedRankTest(x, y, true), 1.0e-15);
+    }
+
 }

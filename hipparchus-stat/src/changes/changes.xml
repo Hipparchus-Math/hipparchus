@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="5.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" due-to="Tasuku Kobayashi" issue="issues/502">
+        Fixed Wilcoxon singed rank test whenever the positive and negative rank sums are equal.
+      </action>
     </release>
     <release version="4.1" date="2026-11-18" description="This is a patch release.">
       <action dev="luc" type="update">
