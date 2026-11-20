@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="5.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/507" due-to="rcgiri-physics">
+        Fixed wrong advertised order of Adams-Moulton integrator (double and Field versions).
+      </action>
     </release>
     <release version="4.1" date="2026-11-18" description="This is a minor release.">
       <action dev="vincent" type="fix" issue="issues/488">
