@@ -21,7 +21,12 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.FieldODEState;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
+import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -83,6 +88,49 @@ class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest {
     @Test
     public void testStartFailure() {
         assertThrows(MathIllegalStateException.class, () -> doTestStartFailure(Binary64Field.getInstance()));
+    }
+
+    @Test
+    public void testOrder() {
+        Assertions.assertEquals(1.97, estimateOrderestOrder(2).getReal(), 0.01);
+        Assertions.assertEquals(2.95, estimateOrderestOrder(3).getReal(), 0.01);
+        Assertions.assertEquals(3.92, estimateOrderestOrder(4).getReal(), 0.01);
+        Assertions.assertEquals(4.92, estimateOrderestOrder(5).getReal(), 0.01);
+        Assertions.assertEquals(5.89, estimateOrderestOrder(6).getReal(), 0.01);
+    }
+
+    private Binary64 estimateOrderestOrder(final int n) {
+        FieldOrdinaryDifferentialEquation<Binary64> ode = new FieldOrdinaryDifferentialEquation<>() {
+
+            /** {@inheritDoc} */
+            @Override
+            public int getDimension() {
+                return 1;
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public Binary64[] computeDerivatives(final Binary64 t, final Binary64[] y) {
+                return new Binary64[] {
+                        y[0].multiply(FastMath.cos(t))
+                };
+            }
+        };
+
+        final FieldODEState<Binary64> initialState =
+                new FieldODEState<>(Binary64.ZERO, new Binary64[] { Binary64.ONE });
+        Binary64 prev = Binary64.NAN;
+        Binary64 curr = Binary64.NAN;
+        for (int k = 2; k <= 7; k++) {
+            double h = 1.0 / FastMath.scalb(1.0, k);
+            AdamsMoultonFieldIntegrator<Binary64> am =
+                    new AdamsMoultonFieldIntegrator<>(Binary64Field.getInstance(), n, h, h, 1e3, 1e3);
+            final Binary64 integrated = am.integrate(ode, initialState, Binary64.ONE).getPrimaryState()[0];
+            prev = curr;
+            curr = FastMath.abs(integrated.subtract(FastMath.exp(FastMath.sin(Binary64.ONE))));
+        }
+        return FastMath.log(prev.divide(curr)).divide(FastMath.log(new Binary64(2.0)));
+
     }
 
 }
