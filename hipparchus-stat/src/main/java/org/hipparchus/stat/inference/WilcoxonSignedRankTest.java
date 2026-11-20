@@ -247,7 +247,7 @@ public class WilcoxonSignedRankTest { // NOPMD - this is not a Junit test class,
          * largerRankSums / m gives the one-sided p-value, so it's multiplied
          * with 2 to get the two-sided p-value
          */
-        return 2 * ((double) largerRankSums) / m;
+        return FastMath.min(1.0, 2 * ((double) largerRankSums) / m);
     }
 
     /**
