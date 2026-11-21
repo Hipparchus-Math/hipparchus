@@ -68,6 +68,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="bryan" type="update" issue="issues/497">
         Added compute(DataPoint, DataPoint) to DistanceMeasure.
       </action>
+      <action dev="luc" type="fix" issue="issues/341" due-to="mmatsn">
+        Fixed documentation.
+      </action>
     </release>
     <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator,
 roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential,

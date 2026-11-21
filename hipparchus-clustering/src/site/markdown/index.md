@@ -34,17 +34,6 @@ An comparison of the available clustering algorithms:<br/>
 ![Comparison of clustering algorithms](images/userguide/cluster_comparison.png)
 
 
-## Distance measures
-Each clustering algorithm requires a distance measure to determine the distance
-between two points (either data points or cluster centers).
-The following distance measures are available:
-* [KMeans++](../apidocs/org/hipparchus/clustering/KMeansPlusPlusClusterer.html): It is based on the well-known kMeans algorithm, but uses a different method for choosing the initial values (or "seeds") and thus avoids cases where KMeans sometimes results in poor clusterings. KMeans/KMeans++ clustering aims to partition n observations into k clusters in such that each point belongs to the cluster with the nearest center.
-* [Fuzzy-KMeans](../apidocs/org/hipparchus/clustering/FuzzyKMeansClusterer.html): A variation of the classical K-Means algorithm, with the major difference that a single data point is not uniquely assigned to a single cluster. Instead, each point i has a set of weights u<sub>ij</sub> which indicate the degree of membership to the cluster j. The fuzzy variant does not require initial values for the cluster centers and is thus more robust, although slower than the original kMeans algorithm.
-* [DBSCAN](../apidocs/org/hipparchus/clustering/DBSCANClusterer.html): Density-based spatial clustering of applications with noise (DBSCAN) finds a number of clusters starting from the estimated density distribution of corresponding nodes. The main advantages over KMeans/KMeans++ are that DBSCAN does not require the specification of an initial number of clusters and can find arbitrarily shaped clusters.
-* [Multi-KMeans++](../apidocs/org/hipparchus/clustering/MultiKMeansPlusPlusClusterer.html): Multi-KMeans++ is a meta algorithm that basically performs n runs using KMeans++ and then chooses the best clustering (i.e., the one with the lowest distance variance over all clusters) from those runs.
-
-
-
 ## Example
 Here is an example of a clustering execution. Let us assume we have a set of locations from our domain model,
 where each location has a method `double getX()` and `double getY()`

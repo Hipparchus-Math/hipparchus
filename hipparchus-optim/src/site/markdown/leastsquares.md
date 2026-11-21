@@ -91,21 +91,16 @@ numbers, though.
 
 As the least squares engine uses the Jacobians matrices of the model function, both
 its value and its derivatives <em>with respect to the parameters, \\( p \\)</em>,
-must be available. There are two ways to provide this:
+must be available. There are two ways to provide this to the [LeastSquaresFactory](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresFactory.html)
+create method:
 
-* an implementation of the measurement model \\( f(p) \\) and its Jacobian, \\( \\frac{\\partial f}{\\partial p} \\). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
-* the observed (or target) values: \\( o \\).
-* the start values for all parameters: \\( s \\).
-* optionally a validator for the parameters \\( p \\). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
-* optionally weights for sample point: \\( w \\), this defaults to 1.0 if not provided.
-* a maximum number of iterations.
-* a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.
-* a convergence criterion, which is an implementation of [ConvergenceChecker&lt;Evaluation&gt;](../apidocs/org/hipparchus/optim/ConvergenceChecker.html)
+* implementing directly [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
+* or implementing separately [MultivariateVectorFunction](../apidocs/org/hipparchus/analysis/MultivariateVectorFunction.html)
+  for the model and [MultivariateMatrixFunction](../apidocs/org/hipparchus/analysis/MultivariateMatrixFunction.html)
+  for the Jacobian
 
-The first alternative is best suited for models which are not computationally intensive
-as it allows more modularized code with one method for each type of computation. The second
-alternative is best suited for models which are computationally intensive and evaluating
-both the values and derivatives in one sweep saves a lot of work.
+Internally, there is no real difference as the second method will just create an intermediate
+container for both value and Jacobian and they will both be called the same number of times.
 
 The `point` parameter of the `value` methods in the
 [MultivariateVectorFunction](../apidocs/org/hipparchus/analysis/MultivariateVectorFunction.html),
