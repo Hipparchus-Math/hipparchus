@@ -155,10 +155,10 @@ create_remote_branch()
           --silent \
           --output /dev/null \
           --request POST \
-          --header "PRIVATE-TOKEN: $1" \
-          --data "branch=$2" \
-          --data "ref=$3" \
-          ${github_api}/repository/branches
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer $1" \
+          --data "{ \"ref\" : \"refs/heads/$2\" , \"sha\" : \"$3\" }" \
+          ${github_api}/git/refs
 
         # waiting for remote branch to be available
         while test -z "$created_branch" ; do
@@ -167,7 +167,13 @@ create_remote_branch()
           sleep 5
           timeout=$(expr $timeout + 5)
           test $timeout -lt 600 || complain "branch $2 not created in $4 after 10 minutes, exiting"
-          created_branch=$(search_in_repository "$1" branches $2 .[].name)
+          created_branch=$(curl \
+                             --silent \
+                             --request GET \
+                             --header "Accept: application/vnd.github+json" \
+                             --header "Authorization: Bearer $1" \
+                             ${github_api}/git/refs/heads/$2 |
+                           jq --raw-output .object.sha)
         done
         echo "branch $2 has been created"
         echo ""
@@ -185,7 +191,8 @@ merge_remote_branch()
     mr_id=$(curl \
               --silent \
               --request POST \
-              --header "PRIVATE-TOKEN: $1" \
+              --header "Accept: application/vnd.github+json" \
+              --header "Authorization: Bearer $1" \
               --data   "source_branch=$2" \
               --data   "target_branch=$3" \
               --data   "remove_source_branch=$4" \
@@ -213,7 +220,8 @@ merge_remote_branch()
       --silent \
       --output /dev/null \
       --request PUT \
-      --header "PRIVATE-TOKEN: $1" \
+      --header "Accept: application/vnd.github+json" \
+      --header "Authorization: Bearer $1" \
       "${github_api}/merge_requests/${mr_id}/merge"
 
     # waiting for merge request to be merged
@@ -236,7 +244,8 @@ get_milestone_id()
     curl \
       --silent \
       --request GET \
-      --header "PRIVATE-TOKEN: $1" \
+      --header "Accept: application/vnd.github+json" \
+      --header "Authorization: Bearer $1" \
       "${github_api}/milestones" \
    | jq ".[] | select(.title==\"$2\") | .id"
 }
@@ -247,7 +256,8 @@ close_milestone()
       --silent \
       --output /dev/null \
       --request PUT \
-      --header "PRIVATE-TOKEN: $1" \
+      --header "Accept: application/vnd.github+json" \
+      --header "Authorization: Bearer $1" \
       --data "state_event=close" \
       "${github_api}/milestones/$2"
 }
@@ -258,7 +268,8 @@ create_milestone()
       --silent \
       --output /dev/null \
       --request POST \
-      --header "PRIVATE-TOKEN: $1" \
+      --header "Accept: application/vnd.github+json" \
+      --header "Authorization: Bearer $1" \
       --data   "title=\"$2\"" \
       "${github_api}/milestones"
 }
@@ -276,7 +287,8 @@ monitor_pipeline()
         pipeline_id=$(curl \
                         --silent \
                         --request GET \
-                        --header "PRIVATE-TOKEN: $1" \
+                        --header "Accept: application/vnd.github+json" \
+                        --header "Authorization: Bearer $1" \
                         "${github_api}/pipelines" | \
                       jq ".[] | select(.sha==\"$2\" and .ref==\"$3\") | .id")
     done
@@ -294,7 +306,8 @@ monitor_pipeline()
       pipeline_status=$(curl  \
                           --silent \
                           --request GET \
-                          --header "PRIVATE-TOKEN: $1" \
+                          --header "Accept: application/vnd.github+json" \
+                          --header "Authorization: Bearer $1" \
                           "${github_api}/pipelines" \
                         | jq --raw-output ".[] | select(.id==$pipeline_id) | .status")
     done
@@ -349,7 +362,8 @@ search_in_repository()
         curl \
           --silent \
           --request GET \
-          --header "PRIVATE-TOKEN: $1" \
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer $1" \
           --data "search=^${3}$" \
           ${github_api}/repository/$2 \
         | jq --raw-output "$4"
@@ -359,10 +373,11 @@ search_in_repository()
 delete_in_repository()
 {
     if test ! -z "$1" ; then
-      curl \
-        --silent \
-        --request DELETE \
-        --header "PRIVATE-TOKEN: $1" \
+        curl \
+          --silent \
+          --request DELETE \
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer $1" \
         ${github_api}/repository/$2/$3
     fi
 }
@@ -375,7 +390,8 @@ get_mr()
         curl \
           --silent \
           --request GET \
-          --header "PRIVATE-TOKEN: $1" \
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer $1" \
           ${github_api}/merge_requests/$2 \
         | jq --raw-output "$3"
     fi
