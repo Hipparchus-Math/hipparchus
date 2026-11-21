@@ -68,6 +68,7 @@
       <item name="Building"                      href="../building.html"/>
       <item name="Downloads"                     href="../downloads.html"/>
       <item name="Forum"                         href="../forum.html"/>
+      <item name="Release guide"                 href="../release-guide.html"/>
       <item name="Latest API docs (development)" href="../apidocs/index.html"/>
       <item name="1.0 API docs"                  href="https://hipparchus.org/apidocs-1.0/index.html"/>
       <item name="1.1 API docs"                  href="https://hipparchus.org/apidocs-1.1/index.html"/>

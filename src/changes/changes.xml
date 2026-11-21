@@ -57,7 +57,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Added Software Build Of Materials generation.
       </action>
       <action dev="luc" type="fix" due-to="Tasuku Kobayashi" issue="issues/502">
-        Fixed Wilcoxon singed rank test whenever the positive and negative rank sums are equal.
+        Fixed Wilcoxon signed rank test whenever the positive and negative rank sums are equal.
       </action>
       <action dev="bryan" type="update" issue="issues/497">
         Moved DistanceMeasure from clustering module to core module.
