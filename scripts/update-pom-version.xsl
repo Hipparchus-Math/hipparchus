@@ -15,4 +15,10 @@
       <xsl:value-of select="$release-version"/>
   </xsl:template>
 
+  <!-- specific template for version number -->
+  <!-- the release-version parameter must be passed as stringparam when calling xsltproc -->
+  <xsl:template match="/p:project/p:parent/p:version/text()">
+      <xsl:value-of select="$release-version"/>
+  </xsl:template>
+
 </xsl:stylesheet>
