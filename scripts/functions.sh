@@ -9,6 +9,7 @@ trap "exit 1" 1 2 15
 github_owner=maisonobe
 github_project=hipparchus
 github_api=https://api.github.com/repos/${github_owner}/${github_project}
+github_api_version=2026-03-1
 forum_fqdn=forum.orekit.org
 hipparchus_server_fqdn=ganymede.hipparchus.org
 
@@ -146,19 +147,12 @@ create_remote_branch()
 
     local created_branch="" timeout=0 current_date
 
-    created_branch=$(search_in_repository "$1" branches $2 .[].name)
+    created_branch=$(github_get "$1" "git/refs/heads/$2" | jq --raw-output .object.sha)
     if test -z "$created_branch" ; then
         # release branch does not exist on origin yet, create it
         echo
         echo "creating remote branch $4/$2"
-        curl \
-          --silent \
-          --output /dev/null \
-          --request POST \
-          --header "Accept: application/vnd.github+json" \
-          --header "Authorization: Bearer $1" \
-          --data "{ \"ref\" : \"refs/heads/$2\" , \"sha\" : \"$3\" }" \
-          ${github_api}/git/refs
+        github_post $1 "{ \"ref\": \"refs/heads/$2\", \"sha\": \"$3\" }" git/refs
 
         # waiting for remote branch to be available
         while test -z "$created_branch" ; do
@@ -167,13 +161,7 @@ create_remote_branch()
           sleep 5
           timeout=$(expr $timeout + 5)
           test $timeout -lt 600 || complain "branch $2 not created in $4 after 10 minutes, exiting"
-          created_branch=$(curl \
-                             --silent \
-                             --request GET \
-                             --header "Accept: application/vnd.github+json" \
-                             --header "Authorization: Bearer $1" \
-                             ${github_api}/git/refs/heads/$2 |
-                           jq --raw-output .object.sha)
+          created_branch=$(github_get $1 git/refs/heads/$2 | jq --raw-output .object.sha)
         done
         echo "branch $2 has been created"
         echo ""
@@ -182,96 +170,36 @@ create_remote_branch()
 
 }
 
+delete_remote_branch()
+{
+
+     echo
+     echo "deleting remote branch $2"
+     github_delete $1 git/refs/heads/$2
+     echo "branch $2 has been deleted"
+     echo ""
+
+}
+
 merge_remote_branch()
 {
-    local mr_id merge_status="preparing" merge_state="opened" timeout=0 current_date
-
-    # create merge request
-    echo "creating merge request from $2 to $3"
-    mr_id=$(curl \
-              --silent \
-              --request POST \
-              --header "Accept: application/vnd.github+json" \
-              --header "Authorization: Bearer $1" \
-              --data   "source_branch=$2" \
-              --data   "target_branch=$3" \
-              --data   "remove_source_branch=$4" \
-              --data   "title=$5" \
-              "${github_api}/merge_requests" \
-           | jq .iid)
-    echo "merge request ID is $mr_id"
-    echo ""
-
-    # wait for merge request to be mergeable
-    while test "$merge_status" != "mergeable" ; do
-      current_date=$(date +"%Y-%m-%dT%H:%M:%S")
-      echo "${current_date} merge request ${mr_id} status: ${merge_status}, waiting…"
-      sleep 5
-      timeout=$(expr $timeout + 5)
-      test $timeout -lt 600 || complain "merge request ${mr_id} not mergeable after 10 minutes, exiting"
-      merge_status=$(get_mr "$1" ${mr_id} ".detailed_merge_status")
-    done
-    echo "merge request ${mr_id} is mergeable"
-    echo ""
-
-    # perform merging (this will trigger continuous integration pipelines)
-    echo "merging merge request $mr_id from $2 to $3"
-    curl \
-      --silent \
-      --output /dev/null \
-      --request PUT \
-      --header "Accept: application/vnd.github+json" \
-      --header "Authorization: Bearer $1" \
-      "${github_api}/merge_requests/${mr_id}/merge"
-
-    # waiting for merge request to be merged
-    timeout=0
-    while test "$merge_state" != "merged"; do
-      current_date=$(date +"%Y-%m-%dT%H:%M:%S")
-      echo "${current_date} merge request ${mr_id} state: ${merge_state}, waiting…"
-      sleep 5
-      timeout=$(expr $timeout + 5)
-      test $timeout -lt 600 || complain "merge request ${mr_id} not merged after 10 minutes, exiting"
-      merge_state=$(get_mr "$1" ${mr_id} ".state")
-    done
-    echo "merge request ${mr_id} has been merged"
-    echo ""
-
+    echo "merging $2 into $3"
+    github_post $1 "{  \"head\": \"$2\", \"base\": \"$3\", \"commit_message\": \"$4\"}" merges
 }
 
-get_milestone_id()
+get_milestone_number()
 {
-    curl \
-      --silent \
-      --request GET \
-      --header "Accept: application/vnd.github+json" \
-      --header "Authorization: Bearer $1" \
-      "${github_api}/milestones" \
-   | jq ".[] | select(.title==\"$2\") | .id"
+    github_get $1 milestones | jq ".[] | select(.title==\"$2\") | .number"
 }
 
-close_milestone()
+delete_milestone()
 {
-    curl \
-      --silent \
-      --output /dev/null \
-      --request PUT \
-      --header "Accept: application/vnd.github+json" \
-      --header "Authorization: Bearer $1" \
-      --data "state_event=close" \
-      "${github_api}/milestones/$2"
+    github_delete $1 milestones/$2
 }
 
 create_milestone()
 {
-    curl \
-      --silent \
-      --output /dev/null \
-      --request POST \
-      --header "Accept: application/vnd.github+json" \
-      --header "Authorization: Bearer $1" \
-      --data   "title=\"$2\"" \
-      "${github_api}/milestones"
+    github_post $1 "{ \"title\": \"$2\" }" milestones
 }
 
 monitor_pipeline()
@@ -284,13 +212,7 @@ monitor_pipeline()
         sleep 5
         timeout=$(expr $timeout + 5)
         test $timeout -lt 1800 || complain "pipeline not started after 30 minutes, exiting"
-        pipeline_id=$(curl \
-                        --silent \
-                        --request GET \
-                        --header "Accept: application/vnd.github+json" \
-                        --header "Authorization: Bearer $1" \
-                        "${github_api}/pipelines" | \
-                      jq ".[] | select(.sha==\"$2\" and .ref==\"$3\") | .id")
+        pipeline_id=$(github_get $1 pipelines | jq ".[] | select(.sha==\"$2\" and .ref==\"$3\") | .id")
     done
     echo "pipeline $pipeline_id triggered"
 
@@ -303,13 +225,7 @@ monitor_pipeline()
       sleep 30
       timeout=$(expr $timeout + 30)
       test $timeout -lt 3600 || complain "pipeline not completed after 1 hour, exiting"
-      pipeline_status=$(curl  \
-                          --silent \
-                          --request GET \
-                          --header "Accept: application/vnd.github+json" \
-                          --header "Authorization: Bearer $1" \
-                          "${github_api}/pipelines" \
-                        | jq --raw-output ".[] | select(.id==$pipeline_id) | .status")
+      pipeline_status=$(github_get $1 pipelines | jq --raw-output ".[] | select(.id==$pipeline_id) | .status")
     done
 
     if test "$pipeline_status" = "success" ; then
@@ -339,7 +255,8 @@ delete_local_and_remote_branch()
     if test ! -z "$2" ; then
         if test ! -z "$(git branch --list $2)" ; then
             git branch -D $2
-            test -z "$(search_in_repository "$1" branches $2 .[].name)" || delete_in_repository "$1" branches $2
+            test -z "$(github_get "$1" "git/refs/heads/$2" | jp --raw-output .object.sha)" \
+                || github_delete "$1" "git/refs/heads/$2"
         fi
     fi
 }
@@ -349,52 +266,44 @@ delete_local_and_remote_tag()
     if test ! -z "$2" ; then
         if test ! -z "$(git tag --list $2)" ; then
             git tag -d $2
-            test -z "$(search_in_repository "$1" tags $2 .[].name)" || delete_in_repository "$1" tags $2
+            test -z "$(github_get "$1" "git/refs/tags/$2" | jp --raw-output .object.sha)" \
+                || github_delete "$1" "git/refs/tags/$2"
         fi
     fi
 }
 
-search_in_repository()
+github_get()
 {
-    if test -z "$1" ; then
-        echo ""
-    else
-        curl \
-          --silent \
-          --request GET \
-          --header "Accept: application/vnd.github+json" \
-          --header "Authorization: Bearer $1" \
-          --data "search=^${3}$" \
-          ${github_api}/repository/$2 \
-        | jq --raw-output "$4"
-    fi
+  curl \
+    --silent \
+    --request GET \
+    --header "Accept: application/vnd.github+json" \
+    --header "Authorization: Bearer $1" \
+    --header "X-GitHub-Api-Version: ${github_api_version}" \
+  ${github_api}/$2
 }
 
-delete_in_repository()
+github_delete()
 {
-    if test ! -z "$1" ; then
-        curl \
-          --silent \
-          --request DELETE \
-          --header "Accept: application/vnd.github+json" \
-          --header "Authorization: Bearer $1" \
-        ${github_api}/repository/$2/$3
-    fi
+  curl \
+    --silent \
+    --request DELETE \
+    --header "Accept: application/vnd.github+json" \
+    --header "Authorization: Bearer $1" \
+    --header "X-GitHub-Api-Version: ${github_api_version}" \
+  ${github_api}/$2
 }
 
-get_mr()
+github_post()
 {
-    if test -z "$1" ; then
-        echo ""
-    else
-        curl \
-          --silent \
-          --request GET \
-          --header "Accept: application/vnd.github+json" \
-          --header "Authorization: Bearer $1" \
-          ${github_api}/merge_requests/$2 \
-        | jq --raw-output "$3"
-    fi
+  curl \
+    --silent \
+    --request POST \
+    --header "Accept: application/vnd.github+json" \
+    --header "Authorization: Bearer $1" \
+    --header "X-GitHub-Api-Version: ${github_api_version}" \
+    --data   "$2" \
+  ${github_api}/$3
 }
 
 find_forum_category()
@@ -413,7 +322,7 @@ post_to_forum()
 {
     curl --silent \
          --request POST \
-         --header "Content-Type: app1ication/json" \
+         --header "Content-Type: application/json" \
          --header "Accept: application/json" \
          --header "Api-Username: $1"\
          --header "Api-Key: $2" \

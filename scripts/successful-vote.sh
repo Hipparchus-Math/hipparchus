@@ -116,14 +116,14 @@ git push $github_origin $release_tag
 request_confirmation "merge $release_branch to main?"
 
 # merge release branch to main branch
-merge_remote_branch "$github_token" $release_branch main false "Release $release_version is now the main official release."
+merge_remote_branch "$github_token" $release_branch main "Release $release_version is now the main official release."
 git checkout main
 git pull $github_origin main
 echo ""
 
 # merge main branch to develop branch
 request_confirmation "merge main to develop?"
-merge_remote_branch "$github_token" main develop false "Merging main branch back to develop."
+merge_remote_branch "$github_token" main develop "Merging main branch back to develop."
 git checkout develop
 git pull $github_origin develop
 echo ""
@@ -166,7 +166,8 @@ git push $github_origin $preparation_branch
 
 # merge to develop branch
 request_confirmation "merge $preparation_branch branch to develop branch at ${github_origin}?"
-merge_remote_branch "$github_token" $preparation_branch develop true "preparing development for version $next_version."
+merge_remote_branch "$github_token" $preparation_branch develop "preparing development for version $next_version."
+delete_remote_branch "$github_token" $preparation_branch
 git checkout develop
 git pull --prune $github_origin
 git branch -d $preparation_branch
@@ -174,21 +175,17 @@ echo ""
 
 # manage milestones
 request_confirmation "close milestone $release_version?"
-release_milestone_id=$(get_milestone_id "$github_token" $release_version)
-close_milestone "$github_token" $release_milestone_id
-if test -z "$(get_milestone_id "$github_token" $next_version)" ; then
+release_milestone_number=$(get_milestone_number "$github_token" $release_version)
+close_milestone "$github_token" $release_milestone_number
+if test -z "$(get_milestone_number "$github_token" $next_version)" ; then
     create_milestone "$github_token" $next_version
 fi
 
 # create GitHub release
 request_confirmation "create release on GitHub repository?"
-github_release_url=$(curl --silent \
-                          --request POST \
-                          --header "Accept: application/vnd.github+json" \
-                          --header "Authorization: Bearer $github_token" \
-                          --header "X-GitHub-Api-Version: 2022-11-28" \
-                          --data   "{ \"tag_name\": \"${release_tag}\", \"name\": \"$release_tag\", \"body\":\"$release_description\"}" \
-                         ${github_api}/releases \
+github_release_url=$(github_post $github_token \
+                                 "{ \"tag_name\": \"${release_tag}\", \"name\": \"$release_tag\", \"body\": \"$release_description\" }" \
+                                 releases \
                      | jq --raw-output .html_url)
 echo "GitHub release URL: $github_release_url"
 echo ""

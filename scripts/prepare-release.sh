@@ -161,7 +161,8 @@ git commit -m "Updated documentation for official release."
 
 # push to origin
 echo
-test -z "$(search_in_repository "$github_token" branches $rc_branch .[].name)" || complain "branch $rc_branch already exists in ${github_origin}"
+test -z "$(github_get "$github_token" "git/ref/heads/$rc_branch" | jp --raw-output .object.sha)" \
+  || complain "branch $rc_branch already exists in ${github_origin}"
 request_confirmation "push $rc_branch branch to ${github_origin}?"
 git push $github_origin $rc_branch
 
@@ -199,7 +200,7 @@ echo "please prepare staging site on Hipparchus server so people can review the 
 create_remote_branch "$github_token" $release_branch $start_sha $github_origin
 
 # remotely merge release candidate branch into release branch
-merge_remote_branch "$github_token" $rc_branch $release_branch true "preparing release $release_version"
+merge_remote_branch "$github_token" $rc_branch $release_branch "preparing release $release_version"
 
 # switch to release branch and delete release candidate branch
 git fetch --prune ${github_origin}
