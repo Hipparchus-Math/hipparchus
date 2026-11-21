@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <!--
    Licensed to the Hipparchus project under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -15,9 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus</artifactId>
@@ -115,7 +112,7 @@
       <name>Peter Andrews</name>
     </contributor>
     <contributor>
-      <name>R&#233;mi Arntzen</name>
+      <name>Rémi Arntzen</name>
     </contributor>
     <contributor>
       <name>Bill Barker</name>
@@ -142,7 +139,7 @@
       <name>Cyril Briquet</name>
     </contributor>
     <contributor>
-      <name>S&#233;bastien Brisard</name>
+      <name>Sébastien Brisard</name>
     </contributor>
     <contributor>
       <name>Dave Brosius</name>
@@ -196,7 +193,7 @@
       <name>Ajo Fod</name>
     </contributor>
     <contributor>
-      <name>Alberto Foss&#224;</name>
+      <name>Alberto Fossà</name>
     </contributor>
     <contributor>
       <name>John Gant</name>
@@ -214,7 +211,7 @@
       <name>Hank Grabowski</name>
     </contributor>
     <contributor>
-      <name>Bernhard Gr&#252;newaldt</name>
+      <name>Bernhard Grünewaldt</name>
     </contributor>
     <contributor>
       <name>Elliotte Rusty Harold</name>
@@ -298,7 +295,7 @@
       <name>Todd C. Parnell</name>
     </contributor>
     <contributor>
-      <name>Ga&#235;tan Pierre</name>
+      <name>Gaëtan Pierre</name>
     </contributor>
     <contributor>
       <name>J. Pietschmann</name>
@@ -319,7 +316,7 @@
       <name>Andreas Rieger</name>
     </contributor>
     <contributor>
-      <name>S&#233;bastien Riou</name>
+      <name>Sébastien Riou</name>
     </contributor>
     <contributor>
       <name>Benedikt Ritter</name>
@@ -385,7 +382,7 @@
       <name>Andrew Waterman</name>
     </contributor>
     <contributor>
-      <name>J&#246;rg Weimar</name>
+      <name>Jörg Weimar</name>
     </contributor>
     <contributor>
       <name>Christian Winter</name>
@@ -577,7 +574,7 @@
     <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
     <hipparchus.sonar-maven-plugin.version>5.8.0.7211</hipparchus.sonar-maven-plugin.version>
     <hipparchus.cyclonedx-maven-plugin.version>2.9.1</hipparchus.cyclonedx-maven-plugin.version>
-    <hipparchus.mathjax.enable>&lt;script src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot; id=&quot;MathJax-script&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
+    <hipparchus.mathjax.enable>&lt;script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
   </properties>
 
   <build>
@@ -647,9 +644,9 @@
             <additionalOptions>
               <option>--allow-script-in-comments</option>
               <option>-header</option>
-              <option>&apos;${hipparchus.mathjax.enable}&apos;</option>
+              <option>'${hipparchus.mathjax.enable}'</option>
             </additionalOptions>
-            <bottom><![CDATA[Copyright &copy; ${project.inceptionYear}-{currentYear} <a href="https://www.c-s.fr">CS GROUP</a>. All rights reserved.]]></bottom>
+            <bottom>Copyright &amp;copy; ${project.inceptionYear}-{currentYear} &lt;a href="https://www.c-s.fr"&gt;CS GROUP&lt;/a&gt;. All rights reserved.</bottom>
           </configuration>
           <executions>
             <execution>
