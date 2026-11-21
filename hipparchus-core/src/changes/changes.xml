@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="5.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/513">
+        Fixed Complex isFinite method.
+      </action>
       <action dev="bryan" type="update" issue="issues/497">
         Moved DistanceMeasure from clustering module to core module.
       </action>
