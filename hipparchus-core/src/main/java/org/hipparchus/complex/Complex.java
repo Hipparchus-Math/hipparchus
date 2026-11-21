@@ -565,6 +565,12 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
         return isInfinite;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean isFinite() {
+        return !isInfinite;
+    }
+
     /**
      * Returns a {@code Complex} whose value is {@code this * factor}.
      * Implements preliminary checks for {@code NaN} and infinity followed by
