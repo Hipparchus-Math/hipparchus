@@ -73,6 +73,7 @@ for module in $(modules); do
              scripts/update-pom-version.xsl \
              $tmpdir/original-${module}-pom.xml \
              > $(module_dir ${module})/pom.xml
+done
 echo
 git diff
 echo
@@ -80,7 +81,7 @@ request_confirmation "commit modules pom.xml?"
 for module in $(modules); do
     git add $(module_dir $module)/pom.xml
     git commit -m "Dropped -SNAPSHOT in version number for official release."
-fi
+done
 
 # compute release date in the future
 release_date=$(TZ=UTC date -d "+3 days" +"%Y-%m-%d")
