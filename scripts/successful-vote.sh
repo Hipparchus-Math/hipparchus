@@ -29,7 +29,7 @@ github_token=$(enter_private_credentials "enter your github private token")
 
 # check branch
 start_branch=$(find_current_branch)
-release_version=$(find_pom_version)
+release_version=$(find_pom_version hipparchus-parent/pom.xml)
 release_type=$(release_type $release_version)
 release_branch=$(release_branch $release_version)
 test "$start_branch" = "$release_branch" || complain "$start_branch is not a release branch"

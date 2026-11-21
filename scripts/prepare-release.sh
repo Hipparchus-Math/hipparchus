@@ -36,7 +36,7 @@ start_branch=$(find_current_branch)
 start_sha=$(find_current_sha)
 
 # extract version numbers
-pom_version=$(find_pom_version)
+pom_version=$(find_pom_version hipparchus-parent/pom.xml)
 changes_version=$(find_changes_version)
 release_version=$(echo $pom_version | sed 's,-SNAPSHOT,,')
 release_type=$(release_type $release_version)

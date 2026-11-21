@@ -63,7 +63,7 @@ find_current_sha()
 
 find_pom_version()
 {
-    xsltproc scripts/get-pom-version.xsl pom.xml
+    xsltproc scripts/get-pom-version.xsl $1
 }
 
 find_changes_version()
