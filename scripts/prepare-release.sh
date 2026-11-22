@@ -158,7 +158,7 @@ git commit -m "Updated documentation for official release."
 
 # push to origin
 echo
-test -z "$(github_get "$github_token" "git/ref/heads/$rc_branch" | jp --raw-output .object.sha)" \
+test -z "$(github_get "$github_token" "git/ref/heads/$rc_branch" | jq --raw-output .object.sha)" \
   || complain "branch $rc_branch already exists in ${github_origin}"
 request_confirmation "push $rc_branch branch to ${github_origin}?"
 git push $github_origin $rc_branch

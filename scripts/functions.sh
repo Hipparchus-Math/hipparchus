@@ -253,7 +253,7 @@ delete_local_and_remote_branch()
     if test ! -z "$2" ; then
         if test ! -z "$(git branch --list $2)" ; then
             git branch -D $2
-            test -z "$(github_get "$1" "git/refs/heads/$2" | jp --raw-output .object.sha)" \
+            test -z "$(github_get "$1" "git/refs/heads/$2" | jq --raw-output .object.sha)" \
                 || github_delete "$1" "git/refs/heads/$2"
         fi
     fi
@@ -264,7 +264,7 @@ delete_local_and_remote_tag()
     if test ! -z "$2" ; then
         if test ! -z "$(git tag --list $2)" ; then
             git tag -d $2
-            test -z "$(github_get "$1" "git/refs/tags/$2" | jp --raw-output .object.sha)" \
+            test -z "$(github_get "$1" "git/refs/tags/$2" | jq --raw-output .object.sha)" \
                 || github_delete "$1" "git/refs/tags/$2"
         fi
     fi
