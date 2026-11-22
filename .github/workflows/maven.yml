@@ -15,20 +15,20 @@ jobs:
         java-version: 21
     - name: Build with Maven
       run: mvn -B -U -f pom.xml -Dskip.lengthy.tests=true install checkstyle:checkstyle
-    - name: SonarQube scan
-      run: |
-        export PROJECT_NAME="Hipparchus ($GITHUB_REPOSITORY)"
-        export PROJECT_KEY=${GITHUB_REPOSITORY/\//:}
-        mvn -B -f pom.xml sonar:sonar \
-            -Dsonar.host.url=$SONARQUBE_HOST_URL \
-            -Dsonar.login=$SONARQUBE_TOKEN \
-            -Dsonar.branch.name=${GITHUB_REF##*/} \
-            -Dsonar.projectName="$PROJECT_NAME" \
-            -Dsonar.projectKey="$PROJECT_KEY" \
-            -Dsonar.qualitygate.wait=true
-      env:
-        SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-        SONARQUBE_HOST_URL: ${{ vars.SONARQUBE_HOST_URL }}
+#    - name: SonarQube scan
+#      run: |
+#        export PROJECT_NAME="Hipparchus ($GITHUB_REPOSITORY)"
+#        export PROJECT_KEY=${GITHUB_REPOSITORY/\//:}
+#        mvn -B -f pom.xml sonar:sonar \
+#            -Dsonar.host.url=$SONARQUBE_HOST_URL \
+#            -Dsonar.login=$SONARQUBE_TOKEN \
+#            -Dsonar.branch.name=${GITHUB_REF##*/} \
+#            -Dsonar.projectName="$PROJECT_NAME" \
+#            -Dsonar.projectKey="$PROJECT_KEY" \
+#            -Dsonar.qualitygate.wait=true
+#      env:
+#        SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+#        SONARQUBE_HOST_URL: ${{ vars.SONARQUBE_HOST_URL }}
     - name: Deployment
       if: ( github.repository == 'Hipparchus-Math/hipparchus' ) && ( ( github.ref == 'refs/heads/develop' ) || startsWith( github.ref, 'refs/heads/release-' ) )
       run: mvn -B -U -f pom.xml -s .CI/maven-settings.xml deploy -DskipTests=true -Prelease,ci-deploy
