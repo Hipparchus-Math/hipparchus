@@ -137,7 +137,7 @@ Hipparchus ${release_version} is now available for download from the
 [Hipparchus download page](downloads.html) or on Maven central and its
 mirrors under the groupId **org.hipparchus**.
 
-$(extract_release_description | sed 's,^*,    *,')
+$(extract_release_description | sed 's,^*,   *,')
 EOT
 
 # update README

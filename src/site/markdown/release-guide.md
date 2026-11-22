@@ -54,6 +54,16 @@ This key must be provided to other Hipparchus server admins so they can add it t
 set of trusted keys file at https://www.hipparchus.org/KEYS. There are instructions at the
 top of this file explaining how to export the key.
 
+## Access to the Hipparchus server upload area
+
+In order to upload the non-maven artifacts to the Hipparchus server, release managers
+must set up a SSH key and provide its public part to the Hipparchus server admins so
+they can authorize access. This can be done using a command similar to:
+
+    ssh-keygen -t ed25519 \
+               -C "Access to Hipparchus server upload area" \
+               -f .ssh/id_ed25519_hipparchus_upload
+
 ## GitHub personal access token
 
 The release process shell script described below creates releases in the Hipparchus GitHub
