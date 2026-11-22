@@ -169,15 +169,17 @@ create_remote_branch "$github_token" $release_branch $start_sha $github_origin
 # remotely merge release candidate branch into release branch
 merge_remote_branch "$github_token" $rc_branch $release_branch "preparing release $release_version"
 
-# generate site (this takes *a lot* of time)
-LANG=C mvn -Prelease clean site site:stage
+# generate artifacts (this takes *a lot* of time)
+LANG=C mvn -Prelease clean package site site:stage
 
 # create sha256 hash and signatures
 echo "enter the id of the GPG key used to sign non-maven artifacts"
 read signature_key
-for f in target/hipparchus-*.zip target/hipparchus-*.tar.bz2 ; do
-  sha256sum $f | sed 's,target/,,' > $f.sha256
-  gpg -b --armor -u ${signature_key} $f
+for content in bin src ; do
+  for packaging in zip tar.bz2 ; do
+    f=hipparchus-${release_version}-${content}.${packaging}
+    (cd target ; sha256sum $f > $f.sha256 ; gpg -b --armor -u ${signature_key} $f)
+  done
 done
 
 # create site archive
