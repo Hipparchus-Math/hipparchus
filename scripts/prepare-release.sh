@@ -108,12 +108,12 @@ git commit -m "Updated changes.xml for official release."
 # update downloads page
 first_table=$(sed -n -e '/| *package *| *link *|/=' -e '/| *package *| *link *|/q' src/site/markdown/downloads.md)
 sed -i -e "${first_table} i\\
-|     package       | link                                                                   | hash                                              | signature                                         |\\
-|-------------------|------------------------------------------------------------------------|---------------------------------------------------|---------------------------------------------------|\\
-|  source (zip)     | [hipparchus-${release_version}-src.zip](downloads/hipparchus-${release_version}-src.zip)             | [md5](downloads/hipparchus-${release_version}-src.zip.md5)       | [sig](downloads/hipparchus-${release_version}-src.zip.asc)       |\\
-|  source (tar.bz2) | [hipparchus-${release_version}-src.tar.bz2](downloads/hipparchus-${release_version}-src.tar.bz2)     | [md5](downloads/hipparchus-${release_version}-src.tar.bz2.md5)   | [sig](downloads/hipparchus-${release_version}-src.tar.bz2.asc)   |\\
-|  binary (zip)     | [hipparchus-${release_version}-bin.zip](downloads/hipparchus-${release_version}-bin.zip)             | [md5](downloads/hipparchus-${release_version}-bin.zip.md5)       | [sig](downloads/hipparchus-${release_version}-bin.zip.asc)       |\\
-|  binary (tar.bz2) | [hipparchus-${release_version}-bin.tar.bz2](downloads/hipparchus-${release_version}-bin.tar.bz2)     | [md5](downloads/hipparchus-${release_version}-bin.tar.bz2.md5)   | [sig](downloads/hipparchus-${release_version}-bin.tar.bz2.asc)   |\\
+|     package       | link                                                                   | hash                                                    | signature                                         |\\
+|-------------------|------------------------------------------------------------------------|---------------------------------------------------------|---------------------------------------------------|\\
+|  source (zip)     | [hipparchus-${release_version}-src.zip](downloads/hipparchus-${release_version}-src.zip)             | [sha256](downloads/hipparchus-${release_version}-src.zip.sha256)       | [sig](downloads/hipparchus-${release_version}-src.zip.asc)       |\\
+|  source (tar.bz2) | [hipparchus-${release_version}-src.tar.bz2](downloads/hipparchus-${release_version}-src.tar.bz2)     | [sha256](downloads/hipparchus-${release_version}-src.tar.bz2.sha256)   | [sig](downloads/hipparchus-${release_version}-src.tar.bz2.asc)   |\\
+|  binary (zip)     | [hipparchus-${release_version}-bin.zip](downloads/hipparchus-${release_version}-bin.zip)             | [sha256](downloads/hipparchus-${release_version}-bin.zip.sha256)       | [sig](downloads/hipparchus-${release_version}-bin.zip.asc)       |\\
+|  binary (tar.bz2) | [hipparchus-${release_version}-bin.tar.bz2](downloads/hipparchus-${release_version}-bin.tar.bz2)     | [sha256](downloads/hipparchus-${release_version}-bin.tar.bz2.sha256)   | [sig](downloads/hipparchus-${release_version}-bin.tar.bz2.asc)   |\\
 version ${release_version} downloads (release date: ${release_date})\\
 \\
 ---\\
@@ -166,11 +166,11 @@ git push $github_origin $rc_branch
 # generate site (this takes *a lot* of time)
 LANG=C mvn -Prelease site site:stage
 
-# create MD5 hash and signatures
+# create sha256 hash and signatures
 echo "enter the id of the GPG key used to sign non-maven artifacts"
 read signature_key
 for f in target/hipparchus-*.zip target/hipparchus-*.tar.bz2 ; do
-  md5sum < $f > $f.md5
+  sha256sum $f | sed 's,target/,,' > $f.sha256
   gpg -b --armor -u ${signature_key} $f
 done
 
@@ -180,19 +180,19 @@ done
 # upload non-maven artifacts
 request_confirmation "upload non-maven artifacts to Hipparchus site?"
 scp -p \
-  target/hipparchus-${release_version}-bin.zip          \
-  target/hipparchus-${release_version}-bin.zip.asc      \
-  target/hipparchus-${release_version}-bin.zip.md5      \
-  target/hipparchus-${release_version}-bin.tar.bz2      \
-  target/hipparchus-${release_version}-bin.tar.bz2.asc  \
-  target/hipparchus-${release_version}-bin.tar.bz2.md5  \
-  target/hipparchus-${release_version}-src.zip          \
-  target/hipparchus-${release_version}-src.zip.asc      \
-  target/hipparchus-${release_version}-src.zip.md5      \
-  target/hipparchus-${release_version}-src.tar.bz2      \
-  target/hipparchus-${release_version}-src.tar.bz2.asc  \
-  target/hipparchus-${release_version}-src.tar.bz2.md5  \
-  target/www-${release_version}.hipparchus.org.tar.bz2  \
+  target/hipparchus-${release_version}-bin.zip            \
+  target/hipparchus-${release_version}-bin.zip.asc        \
+  target/hipparchus-${release_version}-bin.zip.sha256     \
+  target/hipparchus-${release_version}-bin.tar.bz2        \
+  target/hipparchus-${release_version}-bin.tar.bz2.asc    \
+  target/hipparchus-${release_version}-bin.tar.bz2.sha256 \
+  target/hipparchus-${release_version}-src.zip            \
+  target/hipparchus-${release_version}-src.zip.asc        \
+  target/hipparchus-${release_version}-src.zip.sha256     \
+  target/hipparchus-${release_version}-src.tar.bz2        \
+  target/hipparchus-${release_version}-src.tar.bz2.asc    \
+  target/hipparchus-${release_version}-src.tar.bz2.sha256 \
+  target/www-${release_version}.hipparchus.org.tar.bz2    \
   upload@${hipparchus_server_fqdn}:~
 echo "the staging site on Hipparchus server will be created automatically, it may take some time"
 

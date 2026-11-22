@@ -36,7 +36,7 @@ request_confirmation()
 
 safety_checks()
 {
-    for cmd in git sed xsltproc sort tail curl stty base64 jq md5sum gpg scp ; do
+    for cmd in git sed xsltproc sort tail curl stty base64 jq sha256sum gpg scp ; do
         which -s $cmd || complain "$cmd command not found"
     done
     git -C . rev-parse 2>/dev/null || complain "$(pwd) does not contain a git repository"
