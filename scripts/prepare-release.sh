@@ -87,30 +87,27 @@ done
 release_date=$(TZ=UTC date -d "+3 days" +"%Y-%m-%d")
 
 # update changes.xml
-for module in $(modules); do
-    if test -f $(module_dir $module)/src/changes/changes.xml ; then
-        cp -p $(module_dir $module)/src/changes/changes.xml $tmpdir/original-${module}-changes.xml
-        xsltproc --stringparam release-version     "$release_version" \
-                 --stringparam release-date        "$release_date" \
-                 --stringparam release-description "$release_version is a $release_type release." \
-                 scripts/update-changes.xsl \
-                 $tmpdir/original-${module}-changes.xml \
-                 > $(module_dir $module)/src/changes/changes.xml
-    fi
+for module in $(modules | sed -e 's,hipparchus-coverage,,' -e 's,hipparchus-parent,,'); do
+    cp -p $(module_dir $module)/src/changes/changes.xml $tmpdir/original-${module}-changes.xml
+    xsltproc --stringparam release-version     "$release_version" \
+             --stringparam release-date        "$release_date" \
+             --stringparam release-description "$release_version is a $release_type release." \
+             scripts/update-changes.xsl \
+             $tmpdir/original-${module}-changes.xml \
+             > $(module_dir $module)/src/changes/changes.xml
     echo
 done
 git diff
 echo
 request_confirmation "commit modules changes.xml?"
-for module in $(modules); do
-    test -f $(module_dir $module)/src/changes/changes.xml && git add $(module_dir $module)/src/changes/changes.xml
+for module in $(modules | sed -e 's,hipparchus-coverage,,' -e 's,hipparchus-parent,,'); do
+    git add $(module_dir $module)/src/changes/changes.xml
 done
 git commit -m "Updated changes.xml for official release."
 
 # update downloads page
-first_table=$(sed -n -e '/^---$/=' -e '/^---$/q' src/site/markdown/downloads.md)
-sed -i -e "${first_table} a\\
-\\
+first_table=$(sed -n -e '/| *package *| *link *|/=' -e '/| *package *| *link *|/q' src/site/markdown/downloads.md)
+sed -i -e "${first_table} i\\
 |     package       | link                                                                   | hash                                              | signature                                         |\\
 |-------------------|------------------------------------------------------------------------|---------------------------------------------------|---------------------------------------------------|\\
 |  source (zip)     | [hipparchus-${release_version}-src.zip](downloads/hipparchus-${release_version}-src.zip)             | [md5](downloads/hipparchus-${release_version}-src.zip.md5)       | [sig](downloads/hipparchus-${release_version}-src.zip.asc)       |\\
@@ -119,10 +116,11 @@ sed -i -e "${first_table} a\\
 |  binary (tar.bz2) | [hipparchus-${release_version}-bin.tar.bz2](downloads/hipparchus-${release_version}-bin.tar.bz2)     | [md5](downloads/hipparchus-${release_version}-bin.tar.bz2.md5)   | [sig](downloads/hipparchus-${release_version}-bin.tar.bz2.asc)   |\\
 version ${release_version} downloads (release date: ${release_date})\\
 \\
----" src/site/markdown/downloads.md
+---\\
+" src/site/markdown/downloads.md
 
 # update site structure menus
-for module in $(modules); do
+for module in $(modules | sed -e 's,hipparchus-coverage,,' -e 's,hipparchus-parent,,'); do
     last_api_doc=$(sed -n -e "/API docs.*href=/=" $(module_dir $module)/src/site/site.xml | tail -1)
     sed -i -e "${last_api_doc} a\\
       <item name=\"${release_version} API docs\"                  href=\"https://hipparchus.org/apidocs-${release_version}/index.html\"/>" \
@@ -130,7 +128,7 @@ for module in $(modules); do
 done
 
 # update main page
-release_out_line=$(sed -n -e "/## Release is out!/=" src/site/markdown/index.md | tail -1)
+release_out_line=$(sed -n -e "/## .* Release is out!/=" src/site/markdown/index.md | tail -1)
 sed -i -e "$release_out_line,\\$d" src/site/markdown/index.md
 cat <<EOT >> src/site/markdown/index.md
 \#\# ${release_version} Release is out!
@@ -144,8 +142,7 @@ EOT
 
 # update README
 h_prop="myprojectname.hipparchus.version"
-sed -i -e "s,<${h_prop}>.*</${h_prop}>,<${h_prop}>${release_version}</${h_prop}>," \
-    README.md
+sed -i -e "s,<${h_prop}>.*</${h_prop}>,<${h_prop}>${release_version}</${h_prop}>," README.md
 
 echo
 git diff
@@ -154,7 +151,7 @@ request_confirmation "commit documentation updates?"
 git add src/site/markdown/downloads.md \
         src/site/markdown/index.md \
         README.md
-for module in $(modules); do
+for module in $(modules | sed -e 's,hipparchus-coverage,,' -e 's,hipparchus-parent,,'); do
   git add $(module_dir $module)/src/site/site.xml
 done
 git commit -m "Updated documentation for official release."
@@ -215,9 +212,9 @@ git tag $rc_tag -m "Release Candidate $next_rc for version $release_version."
 git push $github_origin $rc_tag
 echo ""
 
-# monitor continuous integration pipeline triggering (10 minutes max)
+# monitor continuous integration actions triggering (2 hours max)
 merge_sha=$(git rev-parse --verify HEAD)
-monitor_pipeline "$github_token" $merge_sha $release_branch || complain "pipeline did not succeed"
+monitor_run "$github_token" $merge_sha $release_branch || complain "action run did not succeed"
 
 if test "$release_type" = "patch" ; then
     # for patch release, there are no votes, we jump directly to the publish step

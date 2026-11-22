@@ -202,38 +202,37 @@ create_milestone()
     github_post $1 "{ \"title\": \"$2\" }" milestones
 }
 
-monitor_pipeline()
+monitor_run()
 {
-    local pipeline_id="" timeout=0 pipeline_status="pending" current_date
+    local run_id="" timeout=0 run_conclusion="null" current_date
 
-    while test -z "$pipeline_id" ; do
+    while test -z "$run_id" ; do
         current_date=$(date +"%Y-%m-%dT%H:%M:%S")
         echo "${current_date} waiting for pipeline to be triggered…"
         sleep 5
         timeout=$(expr $timeout + 5)
         test $timeout -lt 1800 || complain "pipeline not started after 30 minutes, exiting"
-        pipeline_id=$(github_get $1 pipelines | jq ".[] | select(.sha==\"$2\" and .ref==\"$3\") | .id")
-    done
-    echo "pipeline $pipeline_id triggered"
+        run_id=$(github_get $1 actions/runs | jq ".workflow_runs[] | select(.head_sha==\"$2\" and .head_branch==\"$3\") | .id"
 
-    # monitor continuous integration pipeline run (1 hour max)
-    # the status is one of
-    # created, waiting_for_resource, preparing, pending, running, success, failed, canceling, canceled, skipped, manual, scheduled
-    while test "$pipeline_status" != "success" -a "$pipeline_status" != "failed"  -a "$pipeline_status" != "canceled" ; do
+    done
+    echo "run $run_id triggered"
+
+    # monitor continuous integration action run (2 hours max)
+    # conclusion is "null" while status is "in_progress" (i.e. not "completed")
+    while test "$run_conclusion" != "success" -a "$run_conclusion" != "failure"  -a "$run_conclusion" != "cancelled" ; do
       current_date=$(date +"%Y-%m-%dT%H:%M:%S")
-      echo "${current_date} pipeline ${pipeline_id} status: ${pipeline_status}, waiting…"
+      echo "${current_date} pipeline ${run_id} status: ${run_conclusion}, waiting…"
       sleep 30
       timeout=$(expr $timeout + 30)
-      test $timeout -lt 3600 || complain "pipeline not completed after 1 hour, exiting"
-      pipeline_status=$(github_get $1 pipelines | jq --raw-output ".[] | select(.id==$pipeline_id) | .status")
+      test $timeout -lt 7200 || complain "pipeline not completed after 2 hours, exiting"
+      run_conclusion=$(github_get $1 actions/runs/run_id | jq --raw-output ".conclusion")
     done
 
-    if test "$pipeline_status" = "success" ; then
+    if test "$run_conclusion" = "success" ; then
         return 0
     else
         return 1
     fi
-
 
 }
 

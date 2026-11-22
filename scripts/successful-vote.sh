@@ -45,7 +45,7 @@ test -z "$(git tag -l \"${release_tag}\")" || complain "tag $release_tag already
 bundle_dir=$tmpdir/bundle/org/hipparchus;
 mkdir -p ${bundle_dir}/hipparchus/${release_version}
 base_url="https://packages.orekit.org/repository/maven-releases/org/hipparchus"
-for module in $(modules | sed 's,hipparchus-parent,,'); do
+for module in $(modules | sed -e 's,hipparchus-coverage,,' -e 's,hipparchus-parent,,'); do
     mkdir -p ${bundle_dir}/$(module_dir ${module})/${release_version}
     for artifact in "-cyclonedx.json" "-cyclonedx.xml" ".pom" ; do
         for suffix in "" ".asc" ".md5" ".sha1" ; do
