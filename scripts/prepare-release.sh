@@ -129,9 +129,9 @@ done
 
 # update main page
 release_out_line=$(sed -n -e "/## .* Release is out!/=" src/site/markdown/index.md | tail -1)
-sed -i -e "$release_out_line,\\$d" src/site/markdown/index.md
+sed -i -e "$release_out_line,\$d" src/site/markdown/index.md
 cat <<EOT >> src/site/markdown/index.md
-\#\# ${release_version} Release is out!
+## ${release_version} Release is out!
 
 Hipparchus ${release_version} is now available for download from the
 [Hipparchus download page](downloads.html) or on Maven central and its
