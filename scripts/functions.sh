@@ -285,6 +285,7 @@ github_delete()
 {
   curl \
     --silent \
+    --output /dev/null \
     --request DELETE \
     --header "Accept: application/vnd.github+json" \
     --header "Authorization: Bearer $1" \
@@ -296,6 +297,7 @@ github_post()
 {
   curl \
     --silent \
+    --output /dev/null \
     --request POST \
     --header "Accept: application/vnd.github+json" \
     --header "Authorization: Bearer $1" \
