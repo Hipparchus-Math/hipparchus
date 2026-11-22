@@ -170,7 +170,7 @@ create_remote_branch "$github_token" $release_branch $start_sha $github_origin
 merge_remote_branch "$github_token" $rc_branch $release_branch "preparing release $release_version"
 
 # generate site (this takes *a lot* of time)
-LANG=C mvn -Prelease site site:stage
+LANG=C mvn -Prelease clean site site:stage
 
 # create sha256 hash and signatures
 echo "enter the id of the GPG key used to sign non-maven artifacts"
