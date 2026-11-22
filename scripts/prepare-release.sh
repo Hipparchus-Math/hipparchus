@@ -241,6 +241,9 @@ https://github.com/${github_owner}/${github_project}/releases/tag/${release_vers
 The maven artifacts are available in the Orekit Nexus repository at:
 https://packages.orekit.org/#browse/browse:maven-releases:org%2Fhipparchus
 
+The generated site is available at:
+https://www.hipparchus.org/staging/index.html
+
 The vote will be tallied on $vote_date (UTC time)"
 
     echo ""

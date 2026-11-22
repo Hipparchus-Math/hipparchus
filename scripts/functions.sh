@@ -4,9 +4,7 @@ tmpdir=$(mktemp -d /tmp/hipparchus-script.XXXXXX)
 trap "rm -fr $tmpdir" 0
 trap "exit 1" 1 2 15
 
-#TODO: update owner before merging to Hipparchus official repository
-#github_owner=Hipparchus-Math
-github_owner=maisonobe
+github_owner=Hipparchus-Math
 github_project=hipparchus
 github_api=https://api.github.com/repos/${github_owner}/${github_project}
 github_api_version=2026-03-10
