@@ -80,8 +80,8 @@ echo
 request_confirmation "commit modules pom.xml?"
 for module in $(modules); do
     git add $(module_dir $module)/pom.xml
-    git commit -m "Dropped -SNAPSHOT in version number for official release."
 done
+git commit -m "Dropped -SNAPSHOT in version number for official release."
 
 # compute release date in the future
 release_date=$(TZ=UTC date -d "+3 days" +"%Y-%m-%d")
