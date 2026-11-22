@@ -40,8 +40,8 @@ often than would be possible in a large monolithic library.
   * In situations where multiple standard algorithms exist, a
      Strategy pattern is used to support multiple implementations.
   * Limited dependencies. No external dependencies beyond the
-     core Java platform (at least Java 1.8 starting with version
-     1.0 of the library).
+     core Java platform (at least Java 21 starting with version
+     5.0 of the library).
 
 ## Community
 
