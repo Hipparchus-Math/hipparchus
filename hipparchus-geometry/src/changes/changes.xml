@@ -83,8 +83,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         the library itself did not change.
       </action>
     </release>
-    <release version="4.0" date="2025-03-20"
-             description="This is a major release. It improves numerical stability of BSP-tree operations.">
+    <release version="4.0" date="2025-03-20" description="This is a major release. It improves numerical stability of BSP-tree operations.">
       <action dev="luc" type="update">
         Added moveTowards method to Point interface.
       </action>
@@ -101,8 +100,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Migrated tests from JUnit 4 to JUnit 5
       </action>
     </release>
-    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes one
-                                                          bugfix on 3D rotations at Cardan/Euler singularity.">
+    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes one                                                           bugfix on 3D rotations at Cardan/Euler singularity.">
       <action dev="luc" type="update" issue="issues/304">
         Allow retrieving correct Cardan/Euler angles even at singularity.
       </action>
@@ -117,8 +115,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Added SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
       </action>
     </release>
-    <release version="2.3" date="2022-10-05" description="This is a maintenance release. The main change
-    is a fix of wrong negation of points on the 2-sphere.">
+    <release version="2.3" date="2022-10-05" description="This is a maintenance release. The main change     is a fix of wrong negation of points on the 2-sphere.">
       <action dev="luc" type="fix" issue="issues/208">
         Fixed wrong negation of point on the 2-sphere.
       </action>
@@ -129,8 +126,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         hence a new release was needed.
       </action>
     </release>
-    <release version="2.1" date="2022-04-24" description="This is a maintenance release. The main
-      change is addition of equalsIee754 to points in all topologies to handle NaN coordinates.">
+    <release version="2.1" date="2022-04-24" description="This is a maintenance release. The main       change is addition of equalsIee754 to points in all topologies to handle NaN coordinates.">
       <action dev="luc" type="fix" issue="issues/187">
         Fixed wrong set operation with ArcsSet when two BSP trees share
         the same angle as a cut hyperplane.
@@ -142,8 +138,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         choices, including Double.equals (which is different from the double == operator).
       </action>
     </release>
-    <release version="2.0" date="2021-08-07" description="This is a major release. The only changes are
-    removal of deprecated methods.">
+    <release version="2.0" date="2021-08-07" description="This is a major release. The only changes are     removal of deprecated methods.">
       <action dev="luc" type="fix" issue="issues/121">
         Removed methods and constants deprecated during the 1.x series.
         Github: fixes #120.
@@ -155,8 +150,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         hence a new release was needed.
       </action>
     </release>
-    <release version="1.7"  date="2020-06-23" description="This is a maintenance release. The only
-    changes are addition of Line.fromDirection(...) and changed RotationOrder from final class to enum.">
+    <release version="1.7" date="2020-06-23" description="This is a maintenance release. The only     changes are addition of Line.fromDirection(...) and changed RotationOrder from final class to enum.">
       <action dev="evan" type="add" issue="issues/78">
         Add Line.fromDirection(...).
       </action>
@@ -164,21 +158,18 @@ If the output is not quite correct, check for invisible trailing spaces!
         Changed RotationOrder from final class to enum.
       </action>
     </release>
-    <release version="1.6"  date="2019-11-01" description="This is a maintenance release. The only
-    change is addition of a field version of Vector2D.">
+    <release version="1.6" date="2019-11-01" description="This is a maintenance release. The only     change is addition of a field version of Vector2D.">
       <action dev="luc" type="add">
         Added field version of Vector2D.
       </action>
     </release>
-    <release version="1.5" date="2019-05-06" description="This is a maintenance release, it
-    includes only bug fixes.">
+    <release version="1.5" date="2019-05-06" description="This is a maintenance release, it     includes only bug fixes.">
       <action dev="luc" type="fix" due-to="Matt Juntunen">
         Fixed lines/polyhedrons intersection occurring on facets boundaries.
         This was ported from Apache Commons Geometry issue 38.
       </action>
     </release>
-    <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main
-    changes since last version are various fixes in partitioning.">
+    <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main     changes since last version are various fixes in partitioning.">
       <action dev="evan" type="fix" issue="issues/46">
         Fixed creating a SphericalPolygonsSet from oversampled or noisy data.
       </action>
@@ -225,7 +216,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
     </release>
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
-      <action dev="luc" type="fix" issue="issues/20" >
+      <action dev="luc" type="fix" issue="issues/20">
         Fixed numerical noise issues in Welzl smallest enclosing ball computation.
         Thanks to jerdmanGH for reporting the issue.
         GitHub: fixes #20.

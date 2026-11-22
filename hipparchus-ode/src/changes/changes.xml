@@ -81,9 +81,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         the library itself did not change.
       </action>
     </release>
-    <release version="4.0" date="2025-03-20"
-             description="This is a major release. It adds a reset mechanism in events and
-                          adds propagation direction in (Field)AdaptableInterval.">
+    <release version="4.0" date="2025-03-20" description="This is a major release. It adds a reset mechanism in events and                           adds propagation direction in (Field)AdaptableInterval.">
       <action dev="serrof" type="add" issue="issues/382">
         Added reset mechanism in ODE event detection.
       </action>
@@ -100,8 +98,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Migrated tests from JUnit 4 to JUnit 5
       </action>
     </release>
-    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes one
-                                                          bugfixes and adds two features on existing integrators.">
+    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes one                                                           bugfixes and adds two features on existing integrators.">
       <action dev="serrof" type="add" issue="issues/269">
         Add public, static access to integrators name.
       </action>
@@ -144,16 +141,13 @@ If the output is not quite correct, check for invisible trailing spaces!
         Added a getPrimary method to FieldExpandableODE.
       </action>
     </release>
-    <release version="2.1" date="2022-04-24" description="This is a maintenance release. It
-      includes only one bug fix.">
+    <release version="2.1" date="2022-04-24" description="This is a maintenance release. It       includes only one bug fix.">
       <action dev="luc" type="fix" issue="issues/184">
         Fixed non-bracketing issue when RESET_STATE slightly moves an event at the start
         of a step and another regular event happens in the first half of the same step
       </action>
     </release>
-    <release version="2.0" date="2021-08-07" description="This is a major release. The mains changes
-    are improved relatived scheduling of step handlers and events handlers in ODE, addition of a
-    finish callback in step handlers and bug fixes.">
+    <release version="2.0" date="2021-08-07" description="This is a major release. The mains changes     are improved relatived scheduling of step handlers and events handlers in ODE, addition of a     finish callback in step handlers and bug fixes.">
       <action dev="luc" type="add" issue="issues/147">
         Allow retrieving event handler configuration from ODE integrators.
       </action>
@@ -184,8 +178,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         hence a new release was needed.
       </action>
     </release>
-    <release version="1.7" date="2020-06-23" description="This is a maintenance release. It fixes
-    an infinite loop in event handling.">
+    <release version="1.7" date="2020-06-23" description="This is a maintenance release. It fixes     an infinite loop in event handling.">
       <action dev="evan" type="fix" issue="issues/94" due-to="Mikael">
         Fix infinite loop in event handling when a RESET_STATE or RESET_DERIVATIVES event
         causes two other event detectors to trigger simultaneously and discontinuously at
@@ -198,13 +191,12 @@ If the output is not quite correct, check for invisible trailing spaces!
         hence a new release was needed.
       </action>
     </release>
-    <release version="1.5" date="2019-05-06" description="This is a maintenance release. The main
-    changes since last version are the introduction reset events in ODE.">
-     <action dev="luc" type="fix" issue="issues/62" >
+    <release version="1.5" date="2019-05-06" description="This is a maintenance release. The main     changes since last version are the introduction reset events in ODE.">
+     <action dev="luc" type="fix" issue="issues/62">
        Fixed missing safety check in multi-step integrators.
        Github: fixes #62.
      </action>
-     <action dev="luc" type="fix" issue="issues/54" >
+     <action dev="luc" type="fix" issue="issues/54">
        Avoid too many multi-step integrator restarts after event resetting derivatives.
        Github: fixes #54.
      </action>
@@ -214,21 +206,17 @@ If the output is not quite correct, check for invisible trailing spaces!
         depends on events occurring in another event detector.
       </action>
     </release>
-    <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main
-    changes since last version are the introduction of support for complex ordinary differential
-    equations (both primary and secondary equations).">
-      <action dev="luc" type="add" issue="issues/39" >
+    <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main     changes since last version are the introduction of support for complex ordinary differential     equations (both primary and secondary equations).">
+      <action dev="luc" type="add" issue="issues/39">
         Added support for complex ordinary differential equations (both primary and secondary equations).
         Github: fixes #39.
       </action>
     </release>
-    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main
-    changes since last version is that secondary equations can now updates the derivatives of
-    the primary equation.">
+    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main     changes since last version is that secondary equations can now updates the derivatives of     the primary equation.">
        <action dev="evan" type="fix">
          Fix Field ODE interpolation with restricted step.
        </action>
-       <action dev="luc" type="add" issue="issues/31" >
+       <action dev="luc" type="add" issue="issues/31">
         Allow secondary equations to update derivatives of primary equation in ODE.
         GitHub: fixes #31.
       </action>
@@ -240,7 +228,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
     </release>
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
-      <action dev="luc" type="fix" issue="issues/7" >
+      <action dev="luc" type="fix" issue="issues/7">
         Fixed Field ODE integrators handling of secondary equations.
         GitHub: fixes #7.
       </action>
