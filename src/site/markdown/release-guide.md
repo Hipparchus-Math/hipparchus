@@ -43,6 +43,17 @@ up such a key, candidate release managers should just send direct messages to th
 administrators, and they will proceed with generating the API key and sending it, using
 any means they see fit.
 
+## Signing key for non-maven artifacts
+
+Release managers should set up a gpg key for signing non-maven artifacts. This can be done
+using
+
+    gpg --gen-key
+
+This key must be provided to other Hipparchus server admins so they can add it to the
+set of trusted keys file at https://www.hipparchus.org/KEYS. There are instructions at the
+top of this file explaining how to export the key.
+
 ## GitHub personal access token
 
 The release process shell script described below creates releases in the Hipparchus GitHub
@@ -313,7 +324,7 @@ for user confirmation before any commit:
     - update all `changes.xml` files with release date and release type and commit the change
     - update site structure menus and downloads page and commit the changes
     - generate the non-maven artifacts (binary, sources and site), this takes a lot of time
-    - upload the non-maven artifacts to release manager home directory on Hipparchus server
+    - upload the non-maven artifacts to Hipparchus server
     - push the RCn-X.Y branch to origin
     - if the release-X.Y branch does not exist on the Hipparchus GitHub repository, create it remotely
     - trigger a merge request from RCn-X.Y branch to release-X.Y branch

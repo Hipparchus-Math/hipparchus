@@ -36,7 +36,7 @@ request_confirmation()
 
 safety_checks()
 {
-    for cmd in git sed xsltproc sort tail curl stty base64 jq md5sum scp ; do
+    for cmd in git sed xsltproc sort tail curl stty base64 jq md5sum gpg scp ; do
         which -s $cmd || complain "$cmd command not found"
     done
     git -C . rev-parse 2>/dev/null || complain "$(pwd) does not contain a git repository"
@@ -148,14 +148,14 @@ create_remote_branch()
     local created_branch="" timeout=0 current_date
 
     created_branch=$(github_get "$1" "git/refs/heads/$2" | jq --raw-output .object.sha)
-    if test -z "$created_branch" ; then
+    if test "$created_branch" = "null" ; then
         # release branch does not exist on origin yet, create it
         echo
         echo "creating remote branch $4/$2"
         github_post $1 "{ \"ref\": \"refs/heads/$2\", \"sha\": \"$3\" }" git/refs
 
         # waiting for remote branch to be available
-        while test -z "$created_branch" ; do
+        while test "$created_branch" = null ; do
           current_date=$(date +"%Y-%m-%dT%H:%M:%S")
           echo "${current_date} branch $2 not yet available in $4, waiting…"
           sleep 5

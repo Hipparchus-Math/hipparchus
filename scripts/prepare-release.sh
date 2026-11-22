@@ -166,15 +166,18 @@ git push $github_origin $rc_branch
 # generate site (this takes *a lot* of time)
 LANG=C mvn -Prelease site site:stage
 
-# create MD5 hash
+# create MD5 hash and signatures
+echo "enter the id of the GPG key used to sign non-maven artifacts"
+read signature_key
 for f in target/hipparchus-*.zip target/hipparchus-*.tar.bz2 ; do
   md5sum < $f > $f.md5
+  gpg -b --armor -u ${signature_key} $f
 done
 
 # create site archive
 (cd target/staging ; tar cjf ../www-${release_version}.hipparchus.org.tar.bz2 .)
 
-# ask release manager to upload files
+# upload non-maven artifacts
 request_confirmation "upload non-maven artifacts to Hipparchus site?"
 scp -p \
   target/hipparchus-${release_version}-bin.zip          \
@@ -190,8 +193,8 @@ scp -p \
   target/hipparchus-${release_version}-src.tar.bz2.asc  \
   target/hipparchus-${release_version}-src.tar.bz2.md5  \
   target/www-${release_version}.hipparchus.org.tar.bz2  \
-  ${hipparchus_server_fqdn}:~
-echo "please prepare staging site on Hipparchus server so people can review the uploaded artifacts"
+  upload@${hipparchus_server_fqdn}:~
+echo "the staging site on Hipparchus server will be created automatically, it may take some time"
 
 # make sure we can merge in a release branch on the origin server
 create_remote_branch "$github_token" $release_branch $start_sha $github_origin
