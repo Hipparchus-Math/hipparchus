@@ -163,6 +163,12 @@ test "$(github_get "$github_token" "git/ref/heads/$rc_branch" | jq --raw-output 
 request_confirmation "push $rc_branch branch to ${github_origin}?"
 git push $github_origin $rc_branch
 
+# make sure we can merge in a release branch on the origin server
+create_remote_branch "$github_token" $release_branch $start_sha $github_origin
+
+# remotely merge release candidate branch into release branch
+merge_remote_branch "$github_token" $rc_branch $release_branch "preparing release $release_version"
+
 # generate site (this takes *a lot* of time)
 LANG=C mvn -Prelease site site:stage
 
@@ -195,12 +201,6 @@ scp -p \
   target/www-${release_version}.hipparchus.org.tar.bz2    \
   upload@${hipparchus_server_fqdn}:~
 echo "the staging site on Hipparchus server will be created automatically, it may take some time"
-
-# make sure we can merge in a release branch on the origin server
-create_remote_branch "$github_token" $release_branch $start_sha $github_origin
-
-# remotely merge release candidate branch into release branch
-merge_remote_branch "$github_token" $rc_branch $release_branch "preparing release $release_version"
 
 # switch to release branch and delete release candidate branch
 git fetch --prune ${github_origin}
