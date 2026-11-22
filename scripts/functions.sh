@@ -9,7 +9,7 @@ trap "exit 1" 1 2 15
 github_owner=maisonobe
 github_project=hipparchus
 github_api=https://api.github.com/repos/${github_owner}/${github_project}
-github_api_version=2026-03-1
+github_api_version=2026-03-10
 forum_fqdn=forum.orekit.org
 hipparchus_server_fqdn=ganymede.hipparchus.org
 
