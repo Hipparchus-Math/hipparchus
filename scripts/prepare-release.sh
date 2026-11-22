@@ -177,19 +177,19 @@ done
 # ask release manager to upload files
 request_confirmation "upload non-maven artifacts to Hipparchus site?"
 scp -p \
-  target/hipparchus-${release_version}-bin.zip
-  target/hipparchus-${release_version}-bin.zip.asc
-  target/hipparchus-${release_version}-bin.zip.md5`
-  target/hipparchus-${release_version}-bin.tar.bz2
-  target/hipparchus-${release_version}-bin.tar.bz2.asc
-  target/hipparchus-${release_version}-bin.tar.bz2.md5
-  target/hipparchus-${release_version}-src.zip
-  target/hipparchus-${release_version}-src.zip.asc
-  target/hipparchus-${release_version}-src.zip.md5
-  target/hipparchus-${release_version}-src.tar.bz2
-  target/hipparchus-${release_version}-src.tar.bz2.asc
-  target/hipparchus-${release_version}-src.tar.bz2.md5
-  target/www-${release_version}.hipparchus.org.tar.bz2
+  target/hipparchus-${release_version}-bin.zip          \
+  target/hipparchus-${release_version}-bin.zip.asc      \
+  target/hipparchus-${release_version}-bin.zip.md5      \
+  target/hipparchus-${release_version}-bin.tar.bz2      \
+  target/hipparchus-${release_version}-bin.tar.bz2.asc  \
+  target/hipparchus-${release_version}-bin.tar.bz2.md5  \
+  target/hipparchus-${release_version}-src.zip          \
+  target/hipparchus-${release_version}-src.zip.asc      \
+  target/hipparchus-${release_version}-src.zip.md5      \
+  target/hipparchus-${release_version}-src.tar.bz2      \
+  target/hipparchus-${release_version}-src.tar.bz2.asc  \
+  target/hipparchus-${release_version}-src.tar.bz2.md5  \
+  target/www-${release_version}.hipparchus.org.tar.bz2  \
   ${hipparchus_server_fqdn}:~
 echo "please prepare staging site on Hipparchus server so people can review the uploaded artifacts"
 

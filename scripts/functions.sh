@@ -122,7 +122,7 @@ modules()
 
 module_dir()
 {
-    if "$1" = "hipparchus" ; then
+    if test "$1" = "hipparchus" ; then
         echo "."
     else
         echo "$1"
@@ -212,8 +212,7 @@ monitor_run()
         sleep 5
         timeout=$(expr $timeout + 5)
         test $timeout -lt 1800 || complain "pipeline not started after 30 minutes, exiting"
-        run_id=$(github_get $1 actions/runs | jq ".workflow_runs[] | select(.head_sha==\"$2\" and .head_branch==\"$3\") | .id"
-
+        run_id=$(github_get $1 actions/runs | jq ".workflow_runs[] | select(.head_sha==\"$2\" and .head_branch==\"$3\") | .id")
     done
     echo "run $run_id triggered"
 
