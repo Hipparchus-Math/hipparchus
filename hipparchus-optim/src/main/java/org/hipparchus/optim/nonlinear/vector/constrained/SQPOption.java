@@ -36,9 +36,6 @@ public class SQPOption implements OptimizationData {
     /** Default max value admitted for additional variable in QP subproblem. */
     public static final  double DEFAULT_SIGMA_MAX = 0.90;//0<sigma<1
 
-    /** Default max iteration admitted for QP subproblem. */
-    public static final  int DEFAULT_QP_MAX_LOOP = 4;
-
     /** Default parameter for evaluation of Armijo condition for descend direction. */
     public static final  double DEFAULT_MU = 1.0e-4;//[0,0.5]
 
@@ -50,9 +47,6 @@ public class SQPOption implements OptimizationData {
 
     /** Default parameter for non monotone line search history. */
     public static final  int DEFAULT_HISTORY = 10;
-
-    /** Default flag for using BFGS update formula. */
-    public static final  boolean DEFAULT_USE_FUNCTION_HESSIAN = false;
 
     /** Default max iteration before reset hessian. */
     public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 30;
@@ -78,11 +72,6 @@ public class SQPOption implements OptimizationData {
      /** Max value admitted for the solution of the additional variable in QP subproblem. */
     private double sigmaMax;
 
-    /** Max iteration admitted for QP subproblem evaluation.
-     * (over this threshold the descend direction will be approximated using the merit function).
-     */
-    private int qpMaxLoop;
-
     /** Parameter for evaluation of Armijo condition for descend direction.
      * (fhi(alfa)-fhi(0)<=mu * alfa * fhi'(0)) */
     private double mu;
@@ -98,9 +87,6 @@ public class SQPOption implements OptimizationData {
 
     /** Max Iteration for the line search. */
     private int maxLineSearchIteration;
-
-    /** Enable or Disable using direct the function Hessian. */
-    private boolean useFunHessian;
 
     /** Gradient Mode. */
     private GradientMode gradientMode;
@@ -127,12 +113,10 @@ public class SQPOption implements OptimizationData {
         this.epsQP                  = DEFAULT_EPSILON_QP;
         this.rhoCons                = DEFAULT_RHO;
         this.sigmaMax               = DEFAULT_SIGMA_MAX;
-        this.qpMaxLoop              = DEFAULT_QP_MAX_LOOP;
         this.mu                     = DEFAULT_MU;
         this.b                      = DEFAULT_B;
         this.alphaMin               = DEFAULT_ALPHA_MIN;
         this.maxLineSearchIteration = DEFAULT_MAX_LINE_SEARCH_ITERATION;
-        this.useFunHessian          = DEFAULT_USE_FUNCTION_HESSIAN;
         this.gradientMode           = DEFAULT_GRADIENT_MODE;
         this.gradientEps            = DEFAULT_GRAD_EPS;
         this.maxIteration           = DEFAULT_MAX_ITERATION;
@@ -228,20 +212,6 @@ public class SQPOption implements OptimizationData {
         return sigmaMax;
     }
 
-    /** Set max iteration admitted for QP subproblem evaluation.
-     * @param qpMaxLoop max iteration admitted for QP subproblem evaluation
-     */
-    public void setQpMaxLoop(final int qpMaxLoop) {
-        this.qpMaxLoop = qpMaxLoop;
-    }
-
-    /** Get max iteration admitted for QP subproblem evaluation.
-     * @return max iteration admitted for QP subproblem evaluation
-     */
-    public int getQpMaxLoop() {
-        return qpMaxLoop;
-    }
-
     /** Set parameter for evaluation of Armijo condition for descend direction.
      * @param mu parameter for evaluation of Armijo condition for descend direction
      */
@@ -324,20 +294,6 @@ public class SQPOption implements OptimizationData {
      */
     public int getMaxIteration() {
         return maxIteration;
-    }
-
-    /** Enable or Disable using direct the function Hessian.
-     * @param useFunHessian enable or Disable using direct the function Hessian
-     */
-    public void setUseFunHessian(final boolean useFunHessian) {
-        this.useFunHessian = useFunHessian;
-    }
-
-    /** Check if using direct the function Hessian is enabled or disabled.
-     * @return true if using direct the function Hessian is enabled
-     */
-    public boolean useFunHessian() {
-        return useFunHessian;
     }
 
      /** Set custom convergence criteria function

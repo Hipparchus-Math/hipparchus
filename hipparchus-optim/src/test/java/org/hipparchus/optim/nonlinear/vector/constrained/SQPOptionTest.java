@@ -44,17 +44,6 @@ class SQPOptionTest {
     }
 
     @Test
-    void testSettersBoolean() {
-        // GIVEN
-        final SQPOption option = new SQPOption();
-        // WHEN
-        final boolean expectedValue = true;
-        option.setUseFunHessian(expectedValue);
-        // THEN
-        assertEquals(expectedValue, option.useFunHessian());
-    }
-
-    @Test
     void testSettersIntegers() {
         // GIVEN
         final SQPOption option = new SQPOption();
@@ -62,11 +51,9 @@ class SQPOptionTest {
         final int expectedValue = 10;
        
         option.setMaxLineSearchIteration(expectedValue);
-        option.setQpMaxLoop(expectedValue);
         // THEN
        
         assertEquals(expectedValue, option.getMaxLineSearchIteration());
-        assertEquals(expectedValue, option.getQpMaxLoop());
     }
 
 }
