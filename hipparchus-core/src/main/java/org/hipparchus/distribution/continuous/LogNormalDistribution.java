@@ -26,6 +26,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 import java.io.Serial;
 
@@ -197,6 +198,13 @@ public class LogNormalDistribution extends AbstractRealDistribution {
             return dev < 0 ? 0.0d : 1.0d;
         }
         return 0.5 + 0.5 * Erf.erf(dev / (shape * SQRT2));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
+        MathUtils.checkRangeInclusive(p, 0, 1);
+        return FastMath.exp(location + (shape * SQRT2 * Erf.erfInv(2 * p - 1)));
     }
 
     /** {@inheritDoc} */

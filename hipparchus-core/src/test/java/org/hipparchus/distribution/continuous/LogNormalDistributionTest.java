@@ -23,6 +23,8 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -254,6 +256,36 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
         LogNormalDistribution dist = new LogNormalDistribution(0, 1e-9);
         double t = dist.getNumericalVariance();
         assertEquals(1e-18, t, 1e-20);
+    }
+
+    @Test
+    void testIssue521Regular() {
+
+        final double probability = 1e-6;
+
+        // `LogNormalDistribution` has `inverseCumulativeProbability`, which is inherited from
+        // `AbstractRealDistribution` and uses a numerical solver.
+        final LogNormalDistribution logNormalDistribution = new LogNormalDistribution(-2.5, 2.0);
+        final double quantileBasedValue = logNormalDistribution.inverseCumulativeProbability(probability);
+
+        // The analytic formula for the inverse CDF of a log-normal distribution is exp(mu + sigma * z_score),
+        // where z_score comes from the probit function.
+        final double zScore = new NormalDistribution(0., 1.).inverseCumulativeProbability(probability);
+        final double analyticValue = FastMath.exp(logNormalDistribution.getLocation() +
+                                                  (logNormalDistribution.getShape() * zScore));
+
+        Assertions.assertEquals(analyticValue, quantileBasedValue, 1.0e-15);
+
+    }
+
+    @Test
+    void testIssue521Extreme() {
+        // There are situations where the analytic formula can produce values for extreme inputs,
+        // but the quantile-based approach may fail due to numerical limitations.
+        final double extremeMu    = 123123.0;
+        final double extremeSigma = 1.0;
+        final LogNormalDistribution extremeLogNormalDistribution = new LogNormalDistribution(extremeMu, extremeSigma);
+        Assertions.assertTrue(Double.isInfinite(extremeLogNormalDistribution.inverseCumulativeProbability(1.0e-6)));
     }
 
 }
