@@ -47,6 +47,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="5.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" due-to="ajrilatt" issue="issues/521">
+        Fixed log normal distribution inverse CDF.
+      </action>
       <action dev="vincent" type="update" issue="issues/516">
         Removed deprecated AbstractUnivariateDifferentiableSolver.computeObjectiveValueAndDerivative(double),
         replaced by computeObjectiveValueAndDerivative1(double).
