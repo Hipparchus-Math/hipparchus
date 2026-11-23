@@ -44,7 +44,7 @@ safety_checks()
 
 find_github_origin()
 {
-  git remote -v | sed -n "s,\([^ \t]*\)\t*.*@github.com:${github_owner}/${github_project}.git.*(push).*,\1,p"
+  git remote -v | sed -n "s,\([^ \t]*\)\t*.*@github.com[:/]${github_owner}/${github_project}.git.*(push).*,\1,p"
 }
 
 find_current_branch()
