@@ -114,7 +114,7 @@ class Vector2DTest {
         assertEquals( 2,   v.toArray().length);
         assertEquals( 2.5, v.toArray()[0], 1.0e-15);
         assertEquals(-0.5, v.toArray()[1], 1.0e-15);
-        assertEquals("{2.5; -0.5}", v.toString().replaceAll(",", "."));
+        assertEquals("{2.5; -0.5}", v.toString().replace(",", "."));
         assertEquals("{2,5; -0,5}", v.toString(NumberFormat.getInstance(Locale.FRENCH)));
     }
 
@@ -326,12 +326,6 @@ class Vector2DTest {
     private void check(final Vector2D v, final double x, final double y, final double tol) {
         assertEquals(x, v.getX(), tol);
         assertEquals(y, v.getY(), tol);
-    }
-
-    @Test
-    @Deprecated
-    void testDeprecatedNormSq() {
-        assertEquals(25.0, new Vector2D(3, -4).getNormSq(), 0.0);
     }
 
 }

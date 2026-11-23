@@ -130,11 +130,6 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
   <Match>
-    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.AbstractSQPOptimizer"/>
-    <Method name="getSettings"/>
-    <Bug pattern="EI_EXPOSE_REP" />
-  </Match>
-  <Match>
     <Class name="org.hipparchus.optim.nonlinear.vector.constrained.AbstractSQPOptimizer2"/>
     <Method name="getSettings"/>
     <Bug pattern="EI_EXPOSE_REP" />

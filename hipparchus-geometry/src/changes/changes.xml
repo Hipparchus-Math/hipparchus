@@ -47,9 +47,8 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="5.0" date="TBD" description="TBD">
-      <action dev="luc" type="update">
-        No changes directly in this module. However, lower level Hipparchus modules did change,
-        hence a new release was needed.
+      <action dev="luc" type="fix" issue="issues/516">
+        Removed deprecated methods in vectors.
       </action>
     </release>
     <release version="4.1" date="2026-11-18" description="This is a minor release.">

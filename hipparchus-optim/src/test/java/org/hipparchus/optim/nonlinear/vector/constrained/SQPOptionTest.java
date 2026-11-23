@@ -69,13 +69,4 @@ class SQPOptionTest {
         assertEquals(expectedValue, option.getQpMaxLoop());
     }
 
-    @Test
-    @Deprecated
-    void testDeprecatedConvCriteria() {
-        final SQPOption option = new SQPOption();
-        assertEquals(1, option.getConvCriteria());
-        option.setConvCriteria(0);
-        assertEquals(0, option.getConvCriteria());
-    }
-
 }
