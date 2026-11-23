@@ -27,23 +27,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class AbstractSQPOptimizerTest {
-
-    @Test
-    void testLagrangianGradX() {
-        // GIVEN
-        final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
-        final TwiceDifferentiableFunction multivariateFunction = new RosenbrockFunction();
-        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(multivariateFunction);
-        testSQPOptimizer.parseOptimizationData(objectiveFunction);
-        final RealVector expectedVector = MatrixUtils.createRealVector(new double[] { 1 });
-        // WHEN
-        final RealVector actualVector = testSQPOptimizer.lagrangianGradX(expectedVector, null,null, null);
-        // THEN
-        for (int i = 0; i < expectedVector.getDimension(); i++) {
-            assertEquals(expectedVector.getEntry(i), actualVector.getEntry(i), 0);
-        }
-    }
+class AbstractSQPOptimizer2Test {
 
     @Test
     void testParseOptimizationData() {
@@ -92,7 +76,7 @@ class AbstractSQPOptimizerTest {
         }
     }
 
-    private static class TestSQPOptimizer extends AbstractSQPOptimizer {
+    private static class TestSQPOptimizer extends AbstractSQPOptimizer2 {
 
         TestSQPOptimizer() {
             super();

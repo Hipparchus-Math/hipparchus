@@ -192,7 +192,7 @@ class FieldVector2DTest {
         assertEquals( 2.5, v.toArray()[0].getReal(), 1.0e-15);
         assertEquals(-0.5, v.toArray()[1].getReal(), 1.0e-15);
         assertEquals(new Vector2D(2.5, -0.5), v.toVector2D());
-        assertEquals("{2.5; -0.5}", v.toString().replaceAll(",", "."));
+        assertEquals("{2.5; -0.5}", v.toString().replace(",", "."));
         assertEquals("{2,5; -0,5}", v.toString(NumberFormat.getInstance(Locale.FRENCH)));
     }
 
@@ -416,12 +416,6 @@ class FieldVector2DTest {
                                                        final double x, final double y, final double tol) {
         assertEquals(x, v.getX().getReal(), tol);
         assertEquals(y, v.getY().getReal(), tol);
-    }
-
-    @Test
-    @Deprecated
-    void testDeprecatedNormSq() {
-        assertEquals(25.0, new FieldVector2D<>(Binary64Field.getInstance(), new Vector2D(3, -4)).getNormSq().getReal(), 0.0);
     }
 
 }

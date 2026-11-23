@@ -481,10 +481,4 @@ class Vector3DTest {
         assertEquals(z, v.getZ(), 1.0e-12);
     }
 
-    @Test
-    @Deprecated
-    void testDeprecatedNormSq() {
-        assertEquals(14.0, new Vector3D(1, 2, 3).getNormSq(), 0.0);
-    }
-
 }

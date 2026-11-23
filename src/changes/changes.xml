@@ -47,6 +47,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="5.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/516">
+        Removed deprecated classes and methods in geometry and optimizers.
+      </action>
       <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/513">
         Fixed Complex isFinite method.
       </action>

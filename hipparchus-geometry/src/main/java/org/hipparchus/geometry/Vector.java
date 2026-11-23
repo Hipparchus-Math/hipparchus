@@ -62,15 +62,6 @@ public interface Vector<S extends Space, V extends Vector<S, V>> extends Point<S
         return getNorm2() * getNorm2();
     }
 
-    /** Get the square of the norm for the vector.
-     * @return square of the Euclidean norm for the vector
-     * @deprecated as of 4.1, replaced by {@link #getNorm2Sq()}; will be removed in 5.0
-     */
-    @Deprecated
-    default double getNormSq() {
-        return getNorm2Sq();
-    }
-
     /** Get the L<sub>2</sub> norm for the vector.
      * @return Euclidean norm for the vector
      */
