@@ -47,6 +47,20 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="5.0" date="TBD" description="TBD">
+      <action dev="vincent" type="update" issue="issues/516">
+        Removed deprecated AbstractUnivariateDifferentiableSolver.computeObjectiveValueAndDerivative(double),
+        replaced by computeObjectiveValueAndDerivative1(double).
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Removed deprecated SQPOption.getConvCriteria, setConvCriteria and DEFAULT_CONV_CRITERIA.
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Removed SQPOption qpMaxLoop and useFunHessian settings (getters, setters and default constants),
+        which were used only by the removed SQPOptimizerS and SQPOptimizerGM.
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Changed ADMMQPOption.DEFAULT_SCALING from true to false.
+      </action>
       <action dev="luc" type="fix" issue="issues/516">
         Removed deprecated classes and methods in geometry and optimizers.
       </action>

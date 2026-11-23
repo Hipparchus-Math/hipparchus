@@ -62,8 +62,8 @@ public interface Vector<S extends Space, V extends Vector<S, V>> extends Point<S
         return getNorm2() * getNorm2();
     }
 
-    /** Get the L<sub>2</sub> norm for the vector.
-     * @return Euclidean norm for the vector
+    /** Get the most common norm for the vector. By default, it is the Euclidean one.
+     * @return norm for the vector
      */
     double getNorm();
 
