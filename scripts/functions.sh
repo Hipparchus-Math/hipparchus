@@ -206,22 +206,22 @@ monitor_run()
 
     while test -z "$run_id" ; do
         current_date=$(date +"%Y-%m-%dT%H:%M:%S")
-        echo "${current_date} waiting for pipeline to be triggered…"
+        echo "${current_date} waiting for workflow run to be triggered…"
         sleep 5
         timeout=$(expr $timeout + 5)
-        test $timeout -lt 1800 || complain "pipeline not started after 30 minutes, exiting"
+        test $timeout -lt 1800 || complain "workflow run not started after 30 minutes, exiting"
         run_id=$(github_get $1 actions/runs | jq ".workflow_runs[] | select(.head_sha==\"$2\" and .head_branch==\"$3\") | .id")
     done
-    echo "run $run_id triggered"
+    echo "workflow run $run_id triggered"
 
     # monitor continuous integration action run (2 hours max)
     # conclusion is "null" while status is "in_progress" (i.e. not "completed")
     while test "$run_conclusion" != "success" -a "$run_conclusion" != "failure"  -a "$run_conclusion" != "cancelled" ; do
       current_date=$(date +"%Y-%m-%dT%H:%M:%S")
-      echo "${current_date} pipeline ${run_id} status: ${run_conclusion}, waiting…"
+      echo "${current_date} workflow run ${run_id} status: ${run_conclusion}, waiting…"
       sleep 30
       timeout=$(expr $timeout + 30)
-      test $timeout -lt 7200 || complain "pipeline not completed after 2 hours, exiting"
+      test $timeout -lt 7200 || complain "workflow run not completed after 2 hours, exiting"
       run_conclusion=$(github_get $1 actions/runs/run_id | jq --raw-output ".conclusion")
     done
 

@@ -105,6 +105,24 @@ for module in $(modules | sed -e 's,hipparchus-coverage,,' -e 's,hipparchus-pare
 done
 git commit -m "Updated changes.xml for official release."
 
+# update release notes
+mkdir -p hipparchus-parent/src/changes
+cp src/changes/* hipparchus-parent/src/changes/
+mvn -Dversion=${release_version} changes:announcement-generate -pl hipparchus-parent
+cp hipparchus-parent/target/announcement/release-notes.vm RELEASE-NOTES.txt
+rm -rf hipparchus-parent/src
+
+echo
+echo "please review RELEASE-NOTES.txt file in another window"
+echo "edit it to improve readability (whitespaces, indentation, lines wrapping)"
+request_confirmation "has manual edit of RELEASE-NOTES.txt been completed?"
+echo
+git diff
+echo
+request_confirmation "commit RELEASE-NOTES.txt?"
+git add RELEASE-NOTES.txt src/changes/changes.xml hipparchus-*/src/changes/changes.xml
+git commit -m "Updated release notes for official release."
+
 # update downloads page
 first_table=$(sed -n -e '/| *package *| *link *|/=' -e '/| *package *| *link *|/q' src/site/markdown/downloads.md)
 sed -i -e "${first_table} i\\
@@ -219,7 +237,7 @@ echo ""
 
 # monitor continuous integration actions triggering (2 hours max)
 merge_sha=$(git rev-parse --verify HEAD)
-monitor_run "$github_token" $merge_sha $release_branch || complain "action run did not succeed"
+monitor_run "$github_token" $merge_sha $rc_tag || complain "action run did not succeed"
 
 if test "$release_type" = "patch" ; then
     # for patch release, there are no votes, we jump directly to the publish step

@@ -332,6 +332,7 @@ for user confirmation before any commit:
     - drop -SNAPSHOT version number from all modules `pom.xml` files and commit the change
     - compute candidate release date, allocating 3 days for the vote
     - update all `changes.xml` files with release date and release type and commit the change
+    - update the `RELEASE-NOTES.txt` file and commit the changes
     - update site structure menus and downloads page and commit the changes
     - generate the non-maven artifacts (binary, sources and site), this takes a lot of time
     - upload the non-maven artifacts to Hipparchus server
