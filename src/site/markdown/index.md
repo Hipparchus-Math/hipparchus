@@ -71,19 +71,25 @@ at fork time.
 
  ---
 
-## 4.1 Release is out!
+## 5.0 Release is out!
 
-Hipparchus 4.1 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 4.1 release
-are additions of:
+Hipparchus 5.0 is now available for download from the
+[Hipparchus download page](downloads.html) or on Maven central and its
+mirrors under the groupId **org.hipparchus**.
 
-   * Lebedev integrator
-   * roman numerals
-   * complex Schur transformer
-   * trilinear interpolation
-   * random generators for exponential, gamma and Nakagami distributions
-   * half Cauchy, half normal and inverse gamma distributions
-   * RANSAC algorithm
-   * revamped constrained optimizers
+Hipparchus version 5.0. The main changes are:
 
-and numerous small improvements and bug fixes.
+   * Fixed log normal distribution inverse CDF.
+   * Removed deprecated AbstractUnivariateDifferentiableSolver.computeObjectiveValueAndDerivative(double), replaced by computeObjectiveValueAndDerivative1(double).
+   * Removed deprecated SQPOption.getConvCriteria, setConvCriteria and DEFAULT_CONV_CRITERIA.
+   * Removed SQPOption qpMaxLoop and useFunHessian settings (getters, setters and default constants), which were used only by the removed SQPOptimizerS and SQPOptimizerGM.
+   * Changed ADMMQPOption.DEFAULT_SCALING from true to false.
+   * Removed deprecated classes and methods in geometry and optimizers.
+   * Fixed Complex isFinite method.
+   * Fixed wrong advertised order of Adams-Moulton integrator (double and Field versions).
+   * Added Software Build Of Materials generation.
+   * Fixed Wilcoxon signed rank test whenever the positive and negative rank sums are equal.
+   * Moved DistanceMeasure from clustering module to core module.
+   * Added DataPoint interface and replaced Clusterable and Fittable interfaces.
+   * Added compute(DataPoint, DataPoint) to DistanceMeasure.
+   * Fixed documentation.
