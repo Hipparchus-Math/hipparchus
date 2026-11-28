@@ -46,7 +46,9 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Fitting Release Notes</title>
   </properties>
   <body>
-    <release version="5.0" date="TBD" description="TBD">
+    <release version="5.1" date="TBD" description="TBD">
+    </release>
+    <release version="5.0" date="2026-11-27" description="This is a major release.>
       <action dev="bryan" type="add" issue="issues/497">
         Added DataPoint interface and replaced Clusterable and Fittable interfaces.
       </action>
