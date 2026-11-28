@@ -46,17 +46,18 @@ bundle_dir=$tmpdir/bundle/org/hipparchus;
 mkdir -p ${bundle_dir}/hipparchus/${release_version}
 base_url="https://packages.orekit.org/repository/maven-releases/org/hipparchus"
 for module in $(modules | sed -e 's,hipparchus-coverage,,' -e 's,hipparchus-parent,,'); do
+    echo "retrieving maven artifacts for ${module}, please wait…"
     mkdir -p ${bundle_dir}/$(module_dir ${module})/${release_version}
     for artifact in "-cyclonedx.json" "-cyclonedx.xml" ".pom" ; do
         for suffix in "" ".asc" ".md5" ".sha1" ; do
-           artifact_with_suffix=$(module_dir ${module})/${release_version}/${module}-${release_version}${artifact}${suffix}
+           artifact_with_suffix=${module}/${release_version}/${module}-${release_version}${artifact}${suffix}
            curl --silent --output ${bundle_dir}/${artifact_with_suffix} $base_url/${artifact_with_suffix}
         done
     done
-    if "${module}" != "hipparchus" ; then
+    if test "${module}" != "hipparchus" ; then
         for artifact in "-javadoc.jar" "-sources.jar" ".jar" ; do
             for suffix in "" ".asc" ".md5" ".sha1" ; do
-               artifact_with_suffix=$(module_dir ${module})/${release_version}/${module}-${release_version}${artifact}${suffix}
+               artifact_with_suffix=${module}/${release_version}/${module}-${release_version}${artifact}${suffix}
                curl --silent --output ${bundle_dir}/${artifact_with_suffix} $base_url/${artifact_with_suffix}
             done
         done
@@ -160,7 +161,7 @@ request_confirmation "commit all modules pom.xml and changes.xml and push $prepa
 for module in $(modules); do
     git add $(module_dir ${module})/pom.xml
     test -f $(module_dir ${module})/src/changes/changes.xml && git add $(module_dir ${module})/src/changes/changes.xml
-fi
+done
 git commit -m "Incremented version number for next-release."
 git push $github_origin $preparation_branch
 
