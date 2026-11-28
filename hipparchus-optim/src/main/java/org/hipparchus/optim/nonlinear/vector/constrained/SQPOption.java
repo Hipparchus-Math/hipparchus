@@ -24,12 +24,6 @@ import org.hipparchus.util.Precision;
  */
 public class SQPOption implements OptimizationData {
 
-    /** Default convergence criteria.
-     * @deprecated as of 4.1, only used by deprecated {@link SQPOptimizerS} and {@link SQPOptimizerGM}; will be removed in 5.0
-     */
-    @Deprecated
-    public static final int DEFAULT_CONV_CRITERIA = 1;
-
     /** Default tolerance for convergence and active constraint(proportional to sqrt of function an constraints evaluation accuracy) */
     public static final double DEFAULT_EPSILON = 1.0e-7;//>0
 
@@ -42,9 +36,6 @@ public class SQPOption implements OptimizationData {
     /** Default max value admitted for additional variable in QP subproblem. */
     public static final  double DEFAULT_SIGMA_MAX = 0.90;//0<sigma<1
 
-    /** Default max iteration admitted for QP subproblem. */
-    public static final  int DEFAULT_QP_MAX_LOOP = 4;
-
     /** Default parameter for evaluation of Armijo condition for descend direction. */
     public static final  double DEFAULT_MU = 1.0e-4;//[0,0.5]
 
@@ -56,9 +47,6 @@ public class SQPOption implements OptimizationData {
 
     /** Default parameter for non monotone line search history. */
     public static final  int DEFAULT_HISTORY = 10;
-
-    /** Default flag for using BFGS update formula. */
-    public static final  boolean DEFAULT_USE_FUNCTION_HESSIAN = false;
 
     /** Default max iteration before reset hessian. */
     public static final  int DEFAULT_MAX_LINE_SEARCH_ITERATION = 30;
@@ -84,11 +72,6 @@ public class SQPOption implements OptimizationData {
      /** Max value admitted for the solution of the additional variable in QP subproblem. */
     private double sigmaMax;
 
-    /** Max iteration admitted for QP subproblem evaluation.
-     * (over this threshold the descend direction will be approximated using the merit function).
-     */
-    private int qpMaxLoop;
-
     /** Parameter for evaluation of Armijo condition for descend direction.
      * (fhi(alfa)-fhi(0)<=mu * alfa * fhi'(0)) */
     private double mu;
@@ -105,9 +88,6 @@ public class SQPOption implements OptimizationData {
     /** Max Iteration for the line search. */
     private int maxLineSearchIteration;
 
-    /** Enable or Disable using direct the function Hessian. */
-    private boolean useFunHessian;
-
     /** Gradient Mode. */
     private GradientMode gradientMode;
 
@@ -116,9 +96,6 @@ public class SQPOption implements OptimizationData {
 
     /** Max Iteration */
     private int maxIteration;
-
-    /** Convergence criteria (only used by deprecated optimizers). */
-    private int convCriteria;
 
     /** Convergence criteria function for specific problems
      * to avoid not significative iterations
@@ -136,16 +113,13 @@ public class SQPOption implements OptimizationData {
         this.epsQP                  = DEFAULT_EPSILON_QP;
         this.rhoCons                = DEFAULT_RHO;
         this.sigmaMax               = DEFAULT_SIGMA_MAX;
-        this.qpMaxLoop              = DEFAULT_QP_MAX_LOOP;
         this.mu                     = DEFAULT_MU;
         this.b                      = DEFAULT_B;
         this.alphaMin               = DEFAULT_ALPHA_MIN;
         this.maxLineSearchIteration = DEFAULT_MAX_LINE_SEARCH_ITERATION;
-        this.useFunHessian          = DEFAULT_USE_FUNCTION_HESSIAN;
         this.gradientMode           = DEFAULT_GRADIENT_MODE;
         this.gradientEps            = DEFAULT_GRAD_EPS;
         this.maxIteration           = DEFAULT_MAX_ITERATION;
-        this.convCriteria           = DEFAULT_CONV_CRITERIA;
         this.customCovergence       = null;
     }
 
@@ -176,24 +150,6 @@ public class SQPOption implements OptimizationData {
      */
     public double getGradientEps() {
         return gradientEps;
-    }
-
-    /** Set convergence criteria.
-     * @param convCriteria convergence criteria
-     * @deprecated as of 4.1, only used by deprecated {@link SQPOptimizerS} and {@link SQPOptimizerGM}; will be removed in 5.0
-     */
-    @Deprecated
-    public void setConvCriteria(final int convCriteria) {
-        this.convCriteria = convCriteria;
-    }
-
-    /** Get convergence criteria.
-     * @return convergence criteria
-     * @deprecated as of 4.1, only used by deprecated {@link SQPOptimizerS} and {@link SQPOptimizerGM}; will be removed in 5.0
-     */
-    @Deprecated
-    public int getConvCriteria() {
-        return convCriteria;
     }
 
     /** Set tolerance for convergence
@@ -254,20 +210,6 @@ public class SQPOption implements OptimizationData {
      */
     public double getSigmaMax() {
         return sigmaMax;
-    }
-
-    /** Set max iteration admitted for QP subproblem evaluation.
-     * @param qpMaxLoop max iteration admitted for QP subproblem evaluation
-     */
-    public void setQpMaxLoop(final int qpMaxLoop) {
-        this.qpMaxLoop = qpMaxLoop;
-    }
-
-    /** Get max iteration admitted for QP subproblem evaluation.
-     * @return max iteration admitted for QP subproblem evaluation
-     */
-    public int getQpMaxLoop() {
-        return qpMaxLoop;
     }
 
     /** Set parameter for evaluation of Armijo condition for descend direction.
@@ -352,20 +294,6 @@ public class SQPOption implements OptimizationData {
      */
     public int getMaxIteration() {
         return maxIteration;
-    }
-
-    /** Enable or Disable using direct the function Hessian.
-     * @param useFunHessian enable or Disable using direct the function Hessian
-     */
-    public void setUseFunHessian(final boolean useFunHessian) {
-        this.useFunHessian = useFunHessian;
-    }
-
-    /** Check if using direct the function Hessian is enabled or disabled.
-     * @return true if using direct the function Hessian is enabled
-     */
-    public boolean useFunHessian() {
-        return useFunHessian;
     }
 
      /** Set custom convergence criteria function

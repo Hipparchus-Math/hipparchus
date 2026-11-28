@@ -353,12 +353,12 @@ public class LevenbergMarquardtOptimizerTest
     }
 
     private static class BevingtonProblem {
-        private List<Double> time;
-        private List<Double> count;
+        private final List<Double> time;
+        private final List<Double> count;
 
         public BevingtonProblem() {
-            time = new ArrayList<Double>();
-            count = new ArrayList<Double>();
+            time = new ArrayList<>();
+            count = new ArrayList<>();
         }
 
         public void addPoint(double t, double c) {

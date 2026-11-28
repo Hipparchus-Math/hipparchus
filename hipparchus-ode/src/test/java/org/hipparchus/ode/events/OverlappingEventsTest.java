@@ -92,8 +92,8 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
         double t = 0.0;
         double tEnd = 9.75;
         double[] y = {0.0, 0.0};
-        List<Double> events1 = new ArrayList<Double>();
-        List<Double> events2 = new ArrayList<Double>();
+        List<Double> events1 = new ArrayList<>();
+        List<Double> events2 = new ArrayList<>();
         while (t < tEnd) {
             final ODEStateAndDerivative finalState =
                             integrator.integrate(this, new ODEState(t, y), tEnd);
@@ -133,7 +133,7 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
     }
 
     /** State events for this unit test. */
-    private class Event implements ODEEventDetector {
+    private static class Event implements ODEEventDetector {
 
         private final AdaptableInterval             maxCheck;
         private final int                           maxIter;

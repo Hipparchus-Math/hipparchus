@@ -28,6 +28,8 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 
+import java.io.Serial;
+
 /** This class represents a point on the 1-sphere.
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
@@ -39,6 +41,7 @@ public class S1Point implements Point<Sphere1D, S1Point> {
     // CHECKSTYLE: resume ConstantName
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20131218L;
 
     /** Azimuthal angle \( \alpha \). */
@@ -139,8 +142,7 @@ public class S1Point implements Point<Sphere1D, S1Point> {
             return true;
         }
 
-        if (other instanceof S1Point) {
-            final S1Point rhs = (S1Point) other;
+        if (other instanceof S1Point rhs) {
             return alpha == rhs.alpha || isNaN() && rhs.isNaN();
         }
 
@@ -173,8 +175,7 @@ public class S1Point implements Point<Sphere1D, S1Point> {
             return true;
         }
 
-        if (other instanceof S1Point) {
-            final S1Point rhs = (S1Point) other;
+        if (other instanceof S1Point rhs) {
             return alpha == rhs.alpha;
         }
 

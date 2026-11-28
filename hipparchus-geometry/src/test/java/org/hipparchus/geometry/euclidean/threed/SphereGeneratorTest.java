@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +43,7 @@ class SphereGeneratorTest {
 
     @Test
     void testSupport0Point() {
-        List<Vector3D> support = Arrays.asList(new Vector3D[0]);
+        List<Vector3D> support = Collections.emptyList();
         EnclosingBall<Euclidean3D, Vector3D> sphere = new SphereGenerator().ballOnSupport(support);
         assertTrue(sphere.getRadius() < 0);
         assertEquals(0, sphere.getSupportSize());
@@ -51,22 +52,22 @@ class SphereGeneratorTest {
 
     @Test
     void testSupport1Point() {
-        List<Vector3D> support = Arrays.asList(new Vector3D(1, 2, 3));
+        List<Vector3D> support = Collections.singletonList(new Vector3D(1, 2, 3));
         EnclosingBall<Euclidean3D, Vector3D> sphere = new SphereGenerator().ballOnSupport(support);
         assertEquals(0.0, sphere.getRadius(), 1.0e-10);
-        assertTrue(sphere.contains(support.get(0)));
-        assertTrue(sphere.contains(support.get(0), 0.5));
-        assertFalse(sphere.contains(new Vector3D(support.get(0).getX() + 0.1,
-                                                        support.get(0).getY() + 0.1,
-                                                        support.get(0).getZ() + 0.1),
+        assertTrue(sphere.contains(support.getFirst()));
+        assertTrue(sphere.contains(support.getFirst(), 0.5));
+        assertFalse(sphere.contains(new Vector3D(support.getFirst().getX() + 0.1,
+                                                        support.getFirst().getY() + 0.1,
+                                                        support.getFirst().getZ() + 0.1),
                                            0.001));
-        assertTrue(sphere.contains(new Vector3D(support.get(0).getX() + 0.1,
-                                                       support.get(0).getY() + 0.1,
-                                                       support.get(0).getZ() + 0.1),
+        assertTrue(sphere.contains(new Vector3D(support.getFirst().getX() + 0.1,
+                                                       support.getFirst().getY() + 0.1,
+                                                       support.getFirst().getZ() + 0.1),
                                           0.5));
-        assertEquals(0, support.get(0).distance(sphere.getCenter()), 1.0e-10);
+        assertEquals(0, support.getFirst().distance(sphere.getCenter()), 1.0e-10);
         assertEquals(1, sphere.getSupportSize());
-        assertSame(support.get(0), sphere.getSupport()[0]);
+        assertSame(support.getFirst(), sphere.getSupport()[0]);
     }
 
     @Test
@@ -143,13 +144,13 @@ class SphereGeneratorTest {
 
     @Test
     void testRandom() {
-        final RandomGenerator random = new Well1024a(0xd015982e9f31ee04l);
+        final RandomGenerator random = new Well1024a(0xd015982e9f31ee04L);
         final UnitSphereRandomVectorGenerator sr = new UnitSphereRandomVectorGenerator(3, random);
         for (int i = 0; i < 100; ++i) {
             double d = 25 * random.nextDouble();
             double refRadius = 10 * random.nextDouble();
             Vector3D refCenter = new Vector3D(d, new Vector3D(sr.nextVector()));
-            List<Vector3D> support = new ArrayList<Vector3D>();
+            List<Vector3D> support = new ArrayList<>();
             for (int j = 0; j < 5; ++j) {
                 support.add(new Vector3D(1.0, refCenter, refRadius, new Vector3D(sr.nextVector())));
             }

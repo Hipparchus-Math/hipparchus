@@ -69,8 +69,7 @@ public class JacobiPreconditioner implements RealLinearOperator {
                                                    a.getRowDimension(), n);
         }
         final double[] diag = new double[n];
-        if (a instanceof AbstractRealMatrix) {
-            final AbstractRealMatrix m = (AbstractRealMatrix) a;
+        if (a instanceof AbstractRealMatrix m) {
             for (int i = 0; i < n; i++) {
                 diag[i] = m.getEntry(i, i);
             }

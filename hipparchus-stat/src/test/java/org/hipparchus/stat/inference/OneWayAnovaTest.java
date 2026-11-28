@@ -43,19 +43,19 @@ class OneWayAnovaTest {
 
     protected OneWayAnova testStatistic = new OneWayAnova();
 
-    private double[] emptyArray = {};
+    private final double[] emptyArray = {};
 
-    private double[] classA =
+    private final double[] classA =
             {93.0, 103.0, 95.0, 101.0, 91.0, 105.0, 96.0, 94.0, 101.0 };
-    private double[] classB =
+    private final double[] classB =
             {99.0, 92.0, 102.0, 100.0, 102.0, 89.0 };
-    private double[] classC =
+    private final double[] classC =
             {110.0, 115.0, 111.0, 117.0, 128.0, 117.0 };
 
     @Test
     void testAnovaFValue() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
-        List<double[]> threeClasses = new ArrayList<double[]>();
+        List<double[]> threeClasses = new ArrayList<>();
         threeClasses.add(classA);
         threeClasses.add(classB);
         threeClasses.add(classC);
@@ -63,14 +63,14 @@ class OneWayAnovaTest {
         assertEquals(24.67361709460624,
                  testStatistic.anovaFValue(threeClasses), 1E-12, "ANOVA F-value");
 
-        List<double[]> twoClasses = new ArrayList<double[]>();
+        List<double[]> twoClasses = new ArrayList<>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
         assertEquals(0.0150579150579,
                  testStatistic.anovaFValue(twoClasses), 1E-12, "ANOVA F-value");
 
-        List<double[]> emptyContents = new ArrayList<double[]>();
+        List<double[]> emptyContents = new ArrayList<>();
         emptyContents.add(emptyArray);
         emptyContents.add(classC);
         try {
@@ -80,7 +80,7 @@ class OneWayAnovaTest {
             // expected
         }
 
-        List<double[]> tooFew = new ArrayList<double[]>();
+        List<double[]> tooFew = new ArrayList<>();
         tooFew.add(classA);
         try {
             testStatistic.anovaFValue(tooFew);
@@ -94,7 +94,7 @@ class OneWayAnovaTest {
     @Test
     void testAnovaPValue() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
-        List<double[]> threeClasses = new ArrayList<double[]>();
+        List<double[]> threeClasses = new ArrayList<>();
         threeClasses.add(classA);
         threeClasses.add(classB);
         threeClasses.add(classC);
@@ -102,7 +102,7 @@ class OneWayAnovaTest {
         assertEquals(6.959446E-06,
                  testStatistic.anovaPValue(threeClasses), 1E-12, "ANOVA P-value");
 
-        List<double[]> twoClasses = new ArrayList<double[]>();
+        List<double[]> twoClasses = new ArrayList<>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
@@ -114,7 +114,7 @@ class OneWayAnovaTest {
     @Test
     void testAnovaPValueSummaryStatistics() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
-        List<StreamingStatistics> threeClasses = new ArrayList<StreamingStatistics>();
+        List<StreamingStatistics> threeClasses = new ArrayList<>();
         StreamingStatistics statsA = new StreamingStatistics();
         for (double a : classA) {
             statsA.addValue(a);
@@ -134,7 +134,7 @@ class OneWayAnovaTest {
         assertEquals(6.959446E-06,
                  testStatistic.anovaPValue(threeClasses, true), 1E-12, "ANOVA P-value");
 
-        List<StreamingStatistics> twoClasses = new ArrayList<StreamingStatistics>();
+        List<StreamingStatistics> twoClasses = new ArrayList<>();
         twoClasses.add(statsA);
         twoClasses.add(statsB);
 
@@ -146,14 +146,14 @@ class OneWayAnovaTest {
     @Test
     void testAnovaTest() {
         // Target comparison values computed using R version 2.3.1 (Linux version)
-        List<double[]> threeClasses = new ArrayList<double[]>();
+        List<double[]> threeClasses = new ArrayList<>();
         threeClasses.add(classA);
         threeClasses.add(classB);
         threeClasses.add(classC);
 
         assertTrue(testStatistic.anovaTest(threeClasses, 0.01), "ANOVA Test P<0.01");
 
-        List<double[]> twoClasses = new ArrayList<double[]>();
+        List<double[]> twoClasses = new ArrayList<>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 

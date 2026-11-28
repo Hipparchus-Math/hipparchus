@@ -192,7 +192,7 @@ class FieldVector2DTest {
         assertEquals( 2.5, v.toArray()[0].getReal(), 1.0e-15);
         assertEquals(-0.5, v.toArray()[1].getReal(), 1.0e-15);
         assertEquals(new Vector2D(2.5, -0.5), v.toVector2D());
-        assertEquals("{2.5; -0.5}", v.toString().replaceAll(",", "."));
+        assertEquals("{2.5; -0.5}", v.toString().replace(",", "."));
         assertEquals("{2,5; -0,5}", v.toString(NumberFormat.getInstance(Locale.FRENCH)));
     }
 
@@ -246,7 +246,7 @@ class FieldVector2DTest {
     private <T extends CalculusFieldElement<T>> void doTestNormalize(final Field<T> field) {
         try {
             FieldVector2D.getZero(field).normalize();
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR, mre.getSpecifier());
         }
@@ -256,7 +256,7 @@ class FieldVector2DTest {
     private <T extends CalculusFieldElement<T>> void doTestAngle(final Field<T> field) {
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), FieldVector2D.getPlusI(field));
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
@@ -280,7 +280,7 @@ class FieldVector2DTest {
                             1.0e-15);
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), Vector2D.PLUS_I);
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
@@ -302,7 +302,7 @@ class FieldVector2DTest {
                      1.0e-15);
         try {
             FieldVector2D.angle(Vector2D.ZERO, FieldVector2D.getPlusI(field));
-            fail("an exception should habe been thrown");
+            fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.ZERO_NORM, mre.getSpecifier());
         }
@@ -416,12 +416,6 @@ class FieldVector2DTest {
                                                        final double x, final double y, final double tol) {
         assertEquals(x, v.getX().getReal(), tol);
         assertEquals(y, v.getY().getReal(), tol);
-    }
-
-    @Test
-    @Deprecated
-    void testDeprecatedNormSq() {
-        assertEquals(25.0, new FieldVector2D<>(Binary64Field.getInstance(), new Vector2D(3, -4)).getNormSq().getReal(), 0.0);
     }
 
 }

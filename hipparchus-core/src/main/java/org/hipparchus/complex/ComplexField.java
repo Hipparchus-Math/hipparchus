@@ -22,6 +22,7 @@
 
 package org.hipparchus.complex;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -36,6 +37,7 @@ import org.hipparchus.Field;
 public class ComplexField implements Field<Complex>, Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160305L;
 
     /** Private constructor for the singleton.

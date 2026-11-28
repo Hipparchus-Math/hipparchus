@@ -109,7 +109,7 @@ class Characterization<S extends Space,
                 splitters.add(node);
                 characterize(node.getPlus(),  split.getPlus(),  splitters);
                 characterize(node.getMinus(), split.getMinus(), splitters);
-                splitters.remove(splitters.size() - 1);
+                splitters.removeLast();
                 break;
             default:
                 // this should not happen

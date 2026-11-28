@@ -90,7 +90,7 @@ public interface Region<S extends Space, P extends Point<S, P>, H extends Hyperp
     Region<S, P, H, I> buildNew(BSPTree<S, P, H, I> newTree);
 
     /** Copy the instance.
-     * <p>The instance created is completely independant of the original
+     * <p>The instance created is completely independent of the original
      * one. A deep copy is used, none of the underlying objects are
      * shared (except for the underlying tree {@code Boolean}
      * attributes and immutable objects).</p>

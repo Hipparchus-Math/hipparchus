@@ -22,6 +22,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.geometry.Space;
@@ -33,6 +34,7 @@ import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 public class Euclidean3D implements Serializable, Space {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 6249091865814886817L;
 
     /** Private constructor for the singleton.

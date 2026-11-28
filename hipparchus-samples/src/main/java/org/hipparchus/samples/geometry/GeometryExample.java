@@ -198,10 +198,10 @@ public class GeometryExample {
         private List<Vector2D> points;
 
         /** Canvas for plotting. */
-        private PCanvas canvas;
+        private final PCanvas canvas;
 
         /** Container. */
-        private JComponent container;
+        private final JComponent container;
 
         /** Simple constructor.
          */

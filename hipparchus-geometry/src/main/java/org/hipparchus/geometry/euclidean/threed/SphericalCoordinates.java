@@ -21,7 +21,7 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.util.FastMath;
@@ -57,6 +57,7 @@ import org.hipparchus.util.SinCos;
 public class SphericalCoordinates implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20130206L;
 
     /** Cartesian coordinates. */
@@ -358,6 +359,7 @@ public class SphericalCoordinates implements Serializable {
     private static class DataTransferObject implements Serializable {
 
         /** Serializable UID. */
+        @Serial
         private static final long serialVersionUID = 20130206L;
 
         /** Abscissa.

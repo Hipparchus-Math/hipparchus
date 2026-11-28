@@ -165,7 +165,7 @@ class SphericalPolygonsSetTest {
         boolean xVFound = false;
         boolean yVFound = false;
         boolean zVFound = false;
-        Vertex first = loops.get(0);
+        Vertex first = loops.getFirst();
         int count = 0;
         for (Vertex v = first; count == 0 || v != first; v = v.getOutgoing().getEnd()) {
             ++count;
@@ -256,7 +256,7 @@ class SphericalPolygonsSetTest {
         boolean xVFound = false;
         boolean yVFound = false;
         boolean zVFound = false;
-        Vertex first = loops.get(0);
+        Vertex first = loops.getFirst();
         int count = 0;
         double sumPoleX = 0;
         double sumPoleY = 0;
@@ -327,7 +327,7 @@ class SphericalPolygonsSetTest {
         boolean mYFound = false;
         boolean pZFound = false;
         boolean mZFound = false;
-        Vertex first = loops.get(0);
+        Vertex first = loops.getFirst();
         int count = 0;
         for (Vertex v = first; count == 0 || v != first; v = v.getOutgoing().getEnd()) {
             ++count;
@@ -706,7 +706,7 @@ class SphericalPolygonsSetTest {
         SphericalPolygonsSet zone = new SphericalPolygonsSet(tol, vertices);
         // sample high resolution boundary
         List<S2Point> points = new ArrayList<>();
-        final Vertex start = zone.getBoundaryLoops().get(0);
+        final Vertex start = zone.getBoundaryLoops().getFirst();
         Vertex v = start;
         double step = tol / 10;
         do {

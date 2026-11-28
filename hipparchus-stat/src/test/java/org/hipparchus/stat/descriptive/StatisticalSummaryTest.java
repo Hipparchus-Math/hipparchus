@@ -56,8 +56,8 @@ class StatisticalSummaryTest {
 
         // Compute combined stats directly
         StreamingStatistics totalStats = new StreamingStatistics();
-        for (int i = 0; i < totalSample.length; i++) {
-            totalStats.addValue(totalSample[i]);
+        for (double v : totalSample) {
+            totalStats.addValue(v);
         }
 
         // Now compute subsample stats individually and aggregate
@@ -65,7 +65,7 @@ class StatisticalSummaryTest {
         for (int i = 0; i < nSamples; i++) {
             subSampleStats[i] = new StreamingStatistics();
         }
-        Collection<StreamingStatistics> aggregate = new ArrayList<StreamingStatistics>();
+        Collection<StreamingStatistics> aggregate = new ArrayList<>();
         for (int i = 0; i < nSamples; i++) {
             for (int j = 0; j < subSamples[i].length; j++) {
                 subSampleStats[i].addValue(subSamples[i][j]);
@@ -92,8 +92,8 @@ class StatisticalSummaryTest {
 
         // Compute combined stats directly
         StreamingStatistics totalStats = new StreamingStatistics();
-        for (int i = 0; i < totalSample.length; i++) {
-            totalStats.addValue(totalSample[i]);
+        for (double v : totalSample) {
+            totalStats.addValue(v);
         }
 
         // Now compute subsample stats individually and aggregate
@@ -101,7 +101,7 @@ class StatisticalSummaryTest {
         for (int i = 0; i < nSamples; i++) {
             subSampleStats[i] = new StreamingStatistics();
         }
-        Collection<StatisticalSummary> aggregate = new ArrayList<StatisticalSummary>();
+        Collection<StatisticalSummary> aggregate = new ArrayList<>();
         for (int i = 0; i < nSamples; i++) {
             for (int j = 0; j < subSamples[i].length; j++) {
                 subSampleStats[i].addValue(subSamples[i][j]);
@@ -121,8 +121,8 @@ class StatisticalSummaryTest {
 
         // Compute combined stats directly
         StreamingStatistics totalStats = new StreamingStatistics();
-        for (int i = 0; i < totalSample.length; i++) {
-            totalStats.addValue(totalSample[i]);
+        for (double v : totalSample) {
+            totalStats.addValue(v);
         }
 
         // Now compute subsample stats individually and aggregate
@@ -130,7 +130,7 @@ class StatisticalSummaryTest {
         for (int i = 0; i < 5; i++) {
             subSampleStats[i] = new StreamingStatistics();
         }
-        Collection<StreamingStatistics> aggregate = new ArrayList<StreamingStatistics>();
+        Collection<StreamingStatistics> aggregate = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < subSamples[i].length; j++) {
                 subSampleStats[i].addValue(subSamples[i][j]);
@@ -150,8 +150,8 @@ class StatisticalSummaryTest {
 
         // Compute combined stats directly
         StreamingStatistics totalStats = new StreamingStatistics();
-        for (int i = 0; i < totalSample.length; i++) {
-            totalStats.addValue(totalSample[i]);
+        for (double v : totalSample) {
+            totalStats.addValue(v);
         }
 
         // Now compute subsample stats individually and aggregate
@@ -159,7 +159,7 @@ class StatisticalSummaryTest {
         for (int i = 0; i < 4; i++) {
             subSampleStats[i] = new StreamingStatistics();
         }
-        Collection<StreamingStatistics> aggregate = new ArrayList<StreamingStatistics>();
+        Collection<StreamingStatistics> aggregate = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < subSamples[i].length; j++) {
                 subSampleStats[i].addValue(subSamples[i][j]);

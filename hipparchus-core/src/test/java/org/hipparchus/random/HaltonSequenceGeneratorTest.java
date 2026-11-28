@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class HaltonSequenceGeneratorTest {
 
-    private double[][] referenceValues = {
+    private final double[][] referenceValues = {
             { 0.0,    0.0,    0.0  },
             { 0.5,    0.6667, 0.6  },
             { 0.25,   0.3333, 0.2  },
@@ -45,7 +45,7 @@ class HaltonSequenceGeneratorTest {
             { 0.5625, 0.0740, 0.52 }
     };
 
-    private double[][] referenceValuesUnscrambled = {
+    private final double[][] referenceValuesUnscrambled = {
             { 0.0,    0.0    },
             { 0.5,    0.3333 },
             { 0.25,   0.6666 },

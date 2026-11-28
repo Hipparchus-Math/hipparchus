@@ -60,10 +60,10 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
     private final Field<T> field;
 
     /** Entries of LU decomposition. */
-    private T[][] lu;
+    private final T[][] lu;
 
     /** Pivot permutation associated with LU decomposition. */
-    private int[] pivot;
+    private final int[] pivot;
 
     /** Parity of the permutation associated with the LU decomposition. */
     private boolean even;

@@ -179,7 +179,7 @@ class BigRealTest {
         BigReal nullReal = null;
         assertEquals(zero, zero);
         assertNotEquals(zero, nullReal);
-        assertNotEquals(zero, Double.valueOf(0));
+        assertNotEquals(zero, (double) 0);
         BigReal zero2 = new BigReal(0.0);
         assertEquals(zero, zero2);
         assertEquals(zero.hashCode(), zero2.hashCode());

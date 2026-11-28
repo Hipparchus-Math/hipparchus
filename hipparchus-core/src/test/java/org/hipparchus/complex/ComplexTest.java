@@ -1753,26 +1753,26 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         // NaN + finite -> NaN
         List<Complex> roots = oneNaN.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.NaN, roots.get(0));
+        assertEquals(Complex.NaN, roots.getFirst());
 
         roots = nanZero.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.NaN, roots.get(0));
+        assertEquals(Complex.NaN, roots.getFirst());
 
         // NaN + infinite -> NaN
         roots = nanInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.NaN, roots.get(0));
+        assertEquals(Complex.NaN, roots.getFirst());
 
         // finite + infinite -> Inf
         roots = oneInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.INF, roots.get(0));
+        assertEquals(Complex.INF, roots.getFirst());
 
         // infinite + infinite -> Inf
         roots = negInfInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(Complex.INF, roots.get(0));
+        assertEquals(Complex.INF, roots.getFirst());
     }
 
     @Test
@@ -2131,6 +2131,14 @@ class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         Assertions.assertTrue(new Complex(1.0e-13, 1.0e-13).isSmall(new Complex(1.0, 1.0), 1.0e-12));
         Assertions.assertFalse(new Complex(1.0e-11, 1.0e-13).isSmall(new Complex(1.0, 1.0), 1.0e-12));
         Assertions.assertFalse(new Complex(1.0e-13, 1.0e-11).isSmall(new Complex(1.0, 1.0), 1.0e-12));
+    }
+
+    @Test
+    public void testInfinite() {
+        Assertions.assertTrue(new Complex(0.0, Double.POSITIVE_INFINITY).isInfinite());
+        Assertions.assertFalse(new Complex(0.0, Double.POSITIVE_INFINITY).isFinite());
+        Assertions.assertTrue(new Complex(Double.POSITIVE_INFINITY, 0.0).isInfinite());
+        Assertions.assertFalse(new Complex(Double.POSITIVE_INFINITY, 0.0).isFinite());
     }
 
     /**

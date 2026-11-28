@@ -293,13 +293,13 @@ class BetaTest {
          * Use reflection to access private method.
          */
         try {
-            return ((Double) LOG_GAMMA_SUM_METHOD.invoke(null, a, b)).doubleValue();
+            return (Double) LOG_GAMMA_SUM_METHOD.invoke(null, a, b);
         } catch (final IllegalAccessException | IllegalArgumentException e) {
             fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
-            if (te instanceof MathIllegalArgumentException) {
-                throw (MathIllegalArgumentException) te;
+            if (te instanceof MathIllegalArgumentException exception) {
+                throw exception;
             }
             fail(e.getMessage());
         }
@@ -309,8 +309,7 @@ class BetaTest {
     @Test
     void testLogGammaSum() {
         final int ulps = 2;
-        for (int i = 0; i < LOG_GAMMA_SUM_REF.length; i++) {
-            final double[] ref = LOG_GAMMA_SUM_REF[i];
+        for (final double[] ref : LOG_GAMMA_SUM_REF) {
             final double a = ref[0];
             final double b = ref[1];
             final double expected = ref[2];
@@ -473,13 +472,13 @@ class BetaTest {
          */
         try {
             final Method m = LOG_GAMMA_MINUS_LOG_GAMMA_SUM_METHOD;
-            return ((Double) m.invoke(null, a, b)).doubleValue();
+            return (Double) m.invoke(null, a, b);
         } catch (final IllegalAccessException | IllegalArgumentException e) {
             fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
-            if (te instanceof MathIllegalArgumentException) {
-                throw (MathIllegalArgumentException) te;
+            if (te instanceof MathIllegalArgumentException exception) {
+                throw exception;
             }
             fail(e.getMessage());
         }
@@ -489,8 +488,7 @@ class BetaTest {
     @Test
     void testLogGammaMinusLogGammaSum() {
         final int ulps = 4;
-        for (int i = 0; i < LOG_GAMMA_MINUS_LOG_GAMMA_SUM_REF.length; i++) {
-            final double[] ref = LOG_GAMMA_MINUS_LOG_GAMMA_SUM_REF[i];
+        for (final double[] ref : LOG_GAMMA_MINUS_LOG_GAMMA_SUM_REF) {
             final double a = ref[0];
             final double b = ref[1];
             final double expected = ref[2];
@@ -644,13 +642,13 @@ class BetaTest {
          */
         try {
             final Method m = SUM_DELTA_MINUS_DELTA_SUM_METHOD;
-            return ((Double) m.invoke(null, a, b)).doubleValue();
+            return (Double) m.invoke(null, a, b);
         } catch (final IllegalAccessException | IllegalArgumentException e) {
             fail(e.getMessage());
         } catch (final InvocationTargetException e) {
             final Throwable te = e.getTargetException();
-            if (te instanceof MathIllegalArgumentException) {
-                throw (MathIllegalArgumentException) te;
+            if (te instanceof MathIllegalArgumentException exception) {
+                throw exception;
             }
             fail(e.getMessage());
         }
@@ -661,8 +659,7 @@ class BetaTest {
     void testSumDeltaMinusDeltaSum() {
 
         final int ulps = 3;
-        for (int i = 0; i < SUM_DELTA_MINUS_DELTA_SUM_REF.length; i++) {
-            final double[] ref = SUM_DELTA_MINUS_DELTA_SUM_REF[i];
+        for (final double[] ref : SUM_DELTA_MINUS_DELTA_SUM_REF) {
             final double a = ref[0];
             final double b = ref[1];
             final double expected = ref[2];
@@ -946,8 +943,7 @@ class BetaTest {
     @Test
     void testLogBeta() {
         final int ulps = 3;
-        for (int i = 0; i < LOG_BETA_REF.length; i++) {
-            final double[] ref = LOG_BETA_REF[i];
+        for (final double[] ref : LOG_BETA_REF) {
             final double a = ref[0];
             final double b = ref[1];
             final double expected = ref[2];

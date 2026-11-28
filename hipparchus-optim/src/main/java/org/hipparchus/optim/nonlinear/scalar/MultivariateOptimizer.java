@@ -86,12 +86,12 @@ public abstract class MultivariateOptimizer
         // The existing values (as set by the previous call) are reused if
         // not provided in the argument list.
         for (OptimizationData data : optData) {
-            if (data instanceof GoalType) {
-                goal = (GoalType) data;
+            if (data instanceof GoalType type) {
+                goal = type;
                 continue;
             }
-            if (data instanceof ObjectiveFunction) {
-                function = ((ObjectiveFunction) data).getObjectiveFunction();
+            if (data instanceof ObjectiveFunction objectiveFunction) {
+                function = objectiveFunction.getObjectiveFunction();
                 continue;
             }
         }

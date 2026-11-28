@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +42,7 @@ class DiskGeneratorTest {
 
     @Test
     void testSupport0Point() {
-        List<Vector2D> support = Arrays.asList(new Vector2D[0]);
+        List<Vector2D> support = Collections.emptyList();
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
         assertTrue(disk.getRadius() < 0);
         assertEquals(0, disk.getSupportSize());
@@ -50,20 +51,20 @@ class DiskGeneratorTest {
 
     @Test
     void testSupport1Point() {
-        List<Vector2D> support = Arrays.asList(new Vector2D(1, 2));
+        List<Vector2D> support = Collections.singletonList(new Vector2D(1, 2));
         EnclosingBall<Euclidean2D, Vector2D> disk = new DiskGenerator().ballOnSupport(support);
         assertEquals(0.0, disk.getRadius(), 1.0e-10);
-        assertTrue(disk.contains(support.get(0)));
-        assertTrue(disk.contains(support.get(0), 0.5));
-        assertFalse(disk.contains(new Vector2D(support.get(0).getX() + 0.1,
-                                                      support.get(0).getY() - 0.1),
+        assertTrue(disk.contains(support.getFirst()));
+        assertTrue(disk.contains(support.getFirst(), 0.5));
+        assertFalse(disk.contains(new Vector2D(support.getFirst().getX() + 0.1,
+                                                      support.getFirst().getY() - 0.1),
                                          0.001));
-        assertTrue(disk.contains(new Vector2D(support.get(0).getX() + 0.1,
-                                                     support.get(0).getY() - 0.1),
+        assertTrue(disk.contains(new Vector2D(support.getFirst().getX() + 0.1,
+                                                     support.getFirst().getY() - 0.1),
                                         0.5));
-        assertEquals(0, support.get(0).distance(disk.getCenter()), 1.0e-10);
+        assertEquals(0, support.getFirst().distance(disk.getCenter()), 1.0e-10);
         assertEquals(1, disk.getSupportSize());
-        assertSame(support.get(0), disk.getSupport()[0]);
+        assertSame(support.getFirst(), disk.getSupport()[0]);
     }
 
     @Test
@@ -108,13 +109,13 @@ class DiskGeneratorTest {
 
     @Test
     void testRandom() {
-        final RandomGenerator random = new Well1024a(0x12faa818373ffe90l);
+        final RandomGenerator random = new Well1024a(0x12faa818373ffe90L);
         final UnitSphereRandomVectorGenerator sr = new UnitSphereRandomVectorGenerator(2, random);
         for (int i = 0; i < 500; ++i) {
             double d = 25 * random.nextDouble();
             double refRadius = 10 * random.nextDouble();
             Vector2D refCenter = new Vector2D(d, new Vector2D(sr.nextVector()));
-            List<Vector2D> support = new ArrayList<Vector2D>();
+            List<Vector2D> support = new ArrayList<>();
             for (int j = 0; j < 3; ++j) {
                 support.add(new Vector2D(1.0, refCenter, refRadius, new Vector2D(sr.nextVector())));
             }

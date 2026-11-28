@@ -190,9 +190,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
       integ.addStepHandler(handler);
       double convergence = 1.0e-8 * maxStep;
       ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
-      for (int l = 0; l < functions.length; ++l) {
-          integ.addEventDetector(functions[l]);
-      }
+        for (ODEEventDetector function : functions) {
+            integ.addEventDetector(function);
+        }
       List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
       assertEquals(functions.length, detectors.size());
 
@@ -227,8 +227,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
         double convergence = 1.0e-8 * maxStep;
         ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
-        for (int l = 0; l < functions.length; ++l) {
-            integ.addEventDetector(functions[l]);
+        for (ODEEventDetector function : functions) {
+            integ.addEventDetector(function);
         }
         List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
         assertEquals(functions.length, detectors.size());
@@ -266,8 +266,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
         double convergence = 1.0e-8 * maxStep;
         ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
-        for (int l = 0; l < functions.length; ++l) {
-            integ.addEventDetector(functions[l]);
+        for (ODEEventDetector function : functions) {
+            integ.addEventDetector(function);
         }
         List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
         assertEquals(functions.length, detectors.size());
@@ -302,8 +302,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
         double convergence = 1.0e-8 * maxStep;
         ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
-        for (int l = 0; l < functions.length; ++l) {
-            integ.addEventDetector(functions[l]);
+        for (ODEEventDetector function : functions) {
+            integ.addEventDetector(function);
         }
         List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
         assertEquals(functions.length, detectors.size());
@@ -739,7 +739,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         private final TestProblem8 pb;
         private final double epsilonOmega;
         private final double epsilonQ;
-        private double outputStep;
+        private final double outputStep;
         private double current;
 
         public TorqueFreeHandler(TestProblem8 pb, double epsilonOmega, double epsilonQ) {
@@ -1210,7 +1210,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
             assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            assertTrue((Double) mise.getParts()[0] <= 0.0);
         }
     }
 

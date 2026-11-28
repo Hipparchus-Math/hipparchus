@@ -322,14 +322,11 @@ public class ELECTest {
 
     private static int coordinateIndex(final int coordinate,
                                        final int point) {
-        switch (coordinate) {
-            case 0:
-                return xIndex(point);
-            case 1:
-                return yIndex(point);
-            default:
-                return zIndex(point);
-        }
+        return switch (coordinate) {
+            case 0 -> xIndex(point);
+            case 1 -> yIndex(point);
+            default -> zIndex(point);
+        };
     }
 
     @Test

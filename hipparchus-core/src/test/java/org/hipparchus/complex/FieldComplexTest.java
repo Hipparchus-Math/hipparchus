@@ -1839,26 +1839,26 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         // NaN + finite -> NaN
         List<FieldComplex<Binary64>> roots = oneNaN.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.get(0));
+        assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.getFirst());
 
         roots = nanZero.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.get(0));
+        assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.getFirst());
 
         // NaN + infinite -> NaN
         roots = nanInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.get(0));
+        assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.getFirst());
 
         // finite + infinite -> Inf
         roots = oneInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(FieldComplex.getInf(Binary64Field.getInstance()), roots.get(0));
+        assertEquals(FieldComplex.getInf(Binary64Field.getInstance()), roots.getFirst());
 
         // infinite + infinite -> Inf
         roots = negInfInf.nthRoot(3);
         assertEquals(1,roots.size());
-        assertEquals(FieldComplex.getInf(Binary64Field.getInstance()), roots.get(0));
+        assertEquals(FieldComplex.getInf(Binary64Field.getInstance()), roots.getFirst());
     }
 
     @Test

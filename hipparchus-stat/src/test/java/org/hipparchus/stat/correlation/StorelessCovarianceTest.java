@@ -123,8 +123,8 @@ class StorelessCovarianceTest {
     void testLonglySimpleVar(){
         double rCov = 12333921.73333333246;
         StorelessBivariateCovariance cov = new StorelessBivariateCovariance();
-        for(int i=0;i<longleyDataSimple.length;i++){
-            cov.increment(longleyDataSimple[i][0],longleyDataSimple[i][0]);
+        for (double[] doubles : longleyDataSimple) {
+            cov.increment(doubles[0], doubles[0]);
         }
         UnitTestUtils.customAssertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
     }
@@ -133,8 +133,8 @@ class StorelessCovarianceTest {
     void testLonglySimpleCov(){
         double rCov = 36796.660000;
         StorelessBivariateCovariance cov = new StorelessBivariateCovariance();
-        for(int i=0;i<longleyDataSimple.length;i++){
-            cov.increment(longleyDataSimple[i][0], longleyDataSimple[i][1]);
+        for (double[] doubles : longleyDataSimple) {
+            cov.increment(doubles[0], doubles[1]);
         }
         UnitTestUtils.customAssertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
     }

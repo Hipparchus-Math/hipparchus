@@ -21,6 +21,7 @@
  */
 package org.hipparchus.distribution;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ import org.hipparchus.util.Precision;
 public class EnumeratedDistribution<T> implements Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20123308L;
 
     /**

@@ -22,6 +22,7 @@
 
 package org.hipparchus.fraction;
 
+import java.io.Serial;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -40,6 +41,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 public class FractionFormat extends AbstractFormat {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160323L;
 
     /**
@@ -179,10 +181,10 @@ public class FractionFormat extends AbstractFormat {
                                final StringBuffer toAppendTo, final FieldPosition pos)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        if (obj instanceof Fraction) {
-            return format((Fraction) obj, toAppendTo, pos);
-        } else if (obj instanceof Number) {
-            return format(new Fraction(((Number) obj).doubleValue()), toAppendTo, pos);
+        if (obj instanceof Fraction fraction) {
+            return format(fraction, toAppendTo, pos);
+        } else if (obj instanceof Number number) {
+            return format(new Fraction(number.doubleValue()), toAppendTo, pos);
         } else {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
         }

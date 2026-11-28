@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <!--
  Licensed to the Hipparchus project under one or more
  contributor license agreements.  See the NOTICE file distributed with
@@ -33,7 +32,6 @@ mvn changes:announcement-generate -Prelease-notes [-Dchanges.version]
 
 The <action> type attribute can be add,update,fix,remove.
 -->
-
 <!-- NOTE:
 The description attribute entries below are specially formatted
 so as to improve the layout of the generated text release notes.
@@ -43,15 +41,33 @@ The Velocity template in src/changes/release-notes.vm has been enhanced to repla
 with a new-line in the release notes. (These spaces are ignored when displaying HTML).
 If the output is not quite correct, check for invisible trailing spaces!
 -->
-
-<document>
+<document xmlns="http://maven.apache.org/changes/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/2.0.0 https://maven.apache.org/xsd/changes-2.0.0.xsd">
   <properties>
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator,
-roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential,
-gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions">
+    <release version="5.0" date="2026-11-27" description="5.0 is a major release.">
+      <action dev="luc" type="fix" due-to="ajrilatt" issue="issues/521">
+        Fixed log normal distribution inverse CDF.
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Removed deprecated AbstractUnivariateDifferentiableSolver.computeObjectiveValueAndDerivative(double),
+        replaced by computeObjectiveValueAndDerivative1(double).
+      </action>
+      <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/513">
+        Fixed Complex isFinite method.
+      </action>
+      <action dev="bryan" type="update" issue="issues/497">
+        Moved DistanceMeasure from clustering module to core module.
+      </action>
+      <action dev="bryan" type="add" issue="issues/497">
+        Added DataPoint interface and replaced Clusterable and Fittable interfaces.
+      </action>
+      <action dev="bryan" type="update" issue="issues/497">
+        Added compute(DataPoint, DataPoint) to DistanceMeasure.
+      </action>
+    </release>
+    <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator, roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential, gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions">
       <action dev="vincent" type="fix" issue="issues/488">
         Use the magnitude of the value instead of norm() in the convergence and size checks of Carlson and
         Legendre elliptic integrals, whose results depended on the derivatives carried by the arguments,
@@ -151,8 +167,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         the library itself did not change.
       </action>
     </release>
-    <release version="4.0" date="2025-03-20"
-             description="This is a major release. It include several improvements, mostly linked to Fields.">
+    <release version="4.0" date="2025-03-20" description="This is a major release. It include several improvements, mostly linked to Fields.">
       <action dev="luc" type="fix" issue="issues/367">
         Added getHipparchusVersion method to MathUtils.
       </action>
@@ -178,10 +193,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         Migrated tests from JUnit 4 to JUnit 5
       </action>
     </release>
-    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes several
-                                                          bugfixes and improvements. The main additions are
-                                                          Gauss-Markov order 1 autoregressive process generation
-                                                          and GCD/LCM to {Big}Fraction.">
+    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes several                                                           bugfixes and improvements. The main additions are                                                           Gauss-Markov order 1 autoregressive process generation                                                           and GCD/LCM to {Big}Fraction.">
       <action dev="luc" type="update" issue="issues/333">
         Added Gauss-Markov order 1 autoregressive process generation.
       </action>
@@ -270,8 +282,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         Fieldified Erf and Gamma classes and added FieldContinuedFraction.
       </action>
     </release>
-    <release version="2.3" date="2022-10-05" description="This is a maintenance release. The main
-    changes are HessenbergTransformer and SchurTransformer are now public.">
+    <release version="2.3" date="2022-10-05" description="This is a maintenance release. The main     changes are HessenbergTransformer and SchurTransformer are now public.">
       <action dev="luc" type="add" issue="issues/204">
         Changed HessenbergTransformer visibility to public.
       </action>
@@ -279,8 +290,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         Changed SchurTransformer visibility to public.
       </action>
     </release>
-    <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main
-    change is: addition of Taylor map inversion.">
+    <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main     change is: addition of Taylor map inversion.">
       <action dev="luc" type="add" issue="issues/190">
         Added {Field}TaylorMap, supporting evaluation, composition and inversion.
       </action>
@@ -312,10 +322,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         Added integration/differentiation of {Field}DerivativeStructure.
       </action>
     </release>
-    <release version="2.1" date="2022-04-24" description="Thist is a maintenance release. The main
-      changes are addition of inverse Jacobi elliptic functions, optional modified weights to
-      Akima interpolation, modified Gram-Schmidt basis orthonormalization process, generation
-      of convergents streams in continued fractions. Various bugs were fixed.">
+    <release version="2.1" date="2022-04-24" description="Thist is a maintenance release. The main       changes are addition of inverse Jacobi elliptic functions, optional modified weights to       Akima interpolation, modified Gram-Schmidt basis orthonormalization process, generation       of convergents streams in continued fractions. Various bugs were fixed.">
       <action dev="luc" type="fix" issue="issues/189">
         Fixed some wrong branch cuts in inverse Jacobi elliptic functions in the complex case.
       </action>
@@ -352,19 +359,11 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         and base class ComplexEigenDecomposition.
       </action>
     </release>
-    <release version="2.0" date="2021-08-07" description="This is a major release. The main changes
-    are replacement of RealFieldElement by CalculusFieldElement interface, many improvements in Complex
-    to fully implement CalculusFieldElement with correct branch cuts so complex numbers can be used in
-    many Hipparchus algorithms, addition of FieldComplex, addition of complex and field complex univariate
-    integrals, addition of field univariate integrators, and faster simultaneous computation of sinhcos.
-    Experimental implementation of elliptic functions and integrals for real, complex and general fields
-    have been added. Beware the elliptic integrals for complex and field complex numbers in the incomplete
-    case are considered experimental for now, they have known issues. Methods deprecated during the 1.X
-    series have been removed. Numerous bugs were also fixed.">
+    <release version="2.0" date="2021-08-07" description="This is a major release. The main changes     are replacement of RealFieldElement by CalculusFieldElement interface, many improvements in Complex     to fully implement CalculusFieldElement with correct branch cuts so complex numbers can be used in     many Hipparchus algorithms, addition of FieldComplex, addition of complex and field complex univariate     integrals, addition of field univariate integrators, and faster simultaneous computation of sinhcos.     Experimental implementation of elliptic functions and integrals for real, complex and general fields     have been added. Beware the elliptic integrals for complex and field complex numbers in the incomplete     case are considered experimental for now, they have known issues. Methods deprecated during the 1.X     series have been removed. Numerous bugs were also fixed.">
       <action dev="luc" type="add" issue="issues/153">
         Added field versions of univariate integrators.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added numerical evaluation of complex elliptic integrals.
       </action>
       <action dev="luc" type="add" issue="issues/149">
@@ -459,9 +458,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         Fixed exception in OrderedComplexEigenDecomposition when eigenvalues are equal.
       </action>
     </release>
-    <release version="1.8" date="2020-12-05" description="This is a maintenance release.
-    It fixes a few bugs, mainly a serious one for complex eigendecomposition when
-    several eigenvalues are equal. It also add sum and angle differences in SinCos and FieldSinCos.">
+    <release version="1.8" date="2020-12-05" description="This is a maintenance release.     It fixes a few bugs, mainly a serious one for complex eigendecomposition when     several eigenvalues are equal. It also add sum and angle differences in SinCos and FieldSinCos.">
       <action dev="luc" type="fix" issue="issues/106">
         Added sum and difference of angles in SinCos and FieldSinCos.
       </action>
@@ -475,11 +472,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         Fixed complex eigendecomposition when several eigenvalues are equals.
       </action>
     </release>
-    <release version="1.7" date="2020-06-23" description="This is a maintenance release.
-    It fixes several bugs, including a nasty one in ODE events handling, improves a lot
-    the Complex class so it implements the new CalculusFieldElement interface, and adds
-    several new differentiation classes to handle simpler cases (univariate derivatives
-    at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.">
+    <release version="1.7" date="2020-06-23" description="This is a maintenance release.     It fixes several bugs, including a nasty one in ODE events handling, improves a lot     the Complex class so it implements the new CalculusFieldElement interface, and adds     several new differentiation classes to handle simpler cases (univariate derivatives     at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.">
       <action dev="bryan" type="add" issue="issues/97">
       Added ExtendedUnivariateDifferentiableVectorFunction interface
       for differentiable vectorial function.
@@ -496,7 +489,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
       <action dev="luc" type="add" issue="issues/92">
         Added isMathematicalInteger to Complex.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added isMathematicalInteger to Precision for double and float numbers.
       </action>
       <action dev="luc" type="add" issue="issues/93">
@@ -513,7 +506,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
       <action dev="luc" type="fix" issue="issues/91">
         Fixed accuracy of linear combination for Dfp.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added Dfp conversion to either larger or smaller number of digits.
       </action>
       <action dev="luc" type="fix" issue="issues/88">
@@ -538,18 +531,18 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         Fixed Complex.pow(Complex p) and Complex.pow(double p) for special cases (real arguments,
         integer power, 0).
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added Complex.pow(int n) with integer power computed more accurately by successive squarings
         rather than complex logarithm and exponential.
       </action>
       <action dev="luc" type="fix" issue="issues/63">
         Added signum to Fraction and BigFraction.
       </action>
-      <action dev="luc" type="fix" >
+      <action dev="luc" type="fix">
         Prevent random failure of micro-sphere test case.
       </action>
     </release>
-    <release version="1.6"  date="2019-11-01" description="This is a maintenance release. It includes only bug fixes.">
+    <release version="1.6" date="2019-11-01" description="This is a maintenance release. It includes only bug fixes.">
       <action dev="luc" type="fix" issue="issues/61">
         Prevent stack overflow error when attempting integration with too large number of points.
       </action>
@@ -561,10 +554,8 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
         trace.
       </action>
     </release>
-    <release version="1.5"  date="2019-05-06" description="This is a maintenance release. The main
-    changes since last version are the introduction of field versions of bilinear interpolation,
-    univariate interpolators, polynomials and polynomial spline functions.">
-      <action dev="luc" type="add" issue="issues/55" >
+    <release version="1.5" date="2019-05-06" description="This is a maintenance release. The main     changes since last version are the introduction of field versions of bilinear interpolation,     univariate interpolators, polynomials and polynomial spline functions.">
+      <action dev="luc" type="add" issue="issues/55">
         Added FieldBivariateFunction and make both BilinearInterpolatingFunction
         and PiecewiseBicubicSplineInterpolatingFunction implement it.
         Github: fixes #55.
@@ -576,54 +567,50 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
       <action dev="luc" type="add">
         Added FieldPolynomialFunction and FieldPolynomialSplineFunction.
       </action>
-      <action dev="luc" type="add" issue="issues/53" >
+      <action dev="luc" type="add" issue="issues/53">
         Fixed documentation for interpolation algorithms.
         Github: fixes #53.
       </action>
     </release>
-    <release version="1.4"  date="2018-11-17" description="This is a maintenance release. The main
-    changes since last version are the introduction of bilinear interpolation for 2D grids, field
-    versions of sinCos and a way to build three-dimensional field arrays.">
-      <action dev="luc" type="add" issue="issues/48" >
+    <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main     changes since last version are the introduction of bilinear interpolation for 2D grids, field     versions of sinCos and a way to build three-dimensional field arrays.">
+      <action dev="luc" type="add" issue="issues/48">
         Added bilinear interpolation for 2D grids.
         Github: fixes #48.
       </action>
-      <action dev="luc" type="add" issue="issues/47" >
+      <action dev="luc" type="add" issue="issues/47">
         Added field version of sinCos.
         Github: fixes #47.
       </action>
-      <action dev="luc" type="fix" issue="issues/44" >
+      <action dev="luc" type="fix" issue="issues/44">
         Fixed wrong construction of an Illinois solver that really built a Pegasus solver.
         Github: fixes #44.
       </action>
-      <action dev="luc" type="fix" issue="issues/4" >
+      <action dev="luc" type="fix" issue="issues/4">
         Renamed scale parameter to location parameter in the log-normal distribution,
         to avoid confusion.
         Github: fixes #4.
       </action>
-      <action dev="luc" type="fix" issue="issues/40" >
+      <action dev="luc" type="fix" issue="issues/40">
         Bisection solvers failed to raise an exception when the search
         interval did not bracket a root.
         Github: fixes #40.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added a way to build three-dimensional field arrays.
       </action>
     </release>
-    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main
-    changes since last version are the introduction of complex eigen decomposition, and introduction
-    of a solver for continuous time algebraic Riccati equation.">
-      <action dev="luc" type="add" issue="issues/36" >
+    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main     changes since last version are the introduction of complex eigen decomposition, and introduction     of a solver for continuous time algebraic Riccati equation.">
+      <action dev="luc" type="add" issue="issues/36">
         Added in FastMath the methods Java 9 added in StrictMath.
         This ensures FastMath is always a drop-in replacement for Math/StrictMath.
         Github: fixes #36.
       </action>
-      <action dev="luc" type="fix" issue="issues/35" >
+      <action dev="luc" type="fix" issue="issues/35">
         Added FieldUnivariateVectorFunction and FieldUnivariateMatrixFunction interfaces,
         as well as RealFieldUnivariateVectorFunction and RealFieldUnivariateMatrixFunction
         Github: fixes #35.
       </action>
-      <action dev="luc" type="fix" issue="issues/34" >
+      <action dev="luc" type="fix" issue="issues/34">
         Added FieldUnivariateFunction interface and have polynomials implement it.
         Github: fixes #34.
       </action>
@@ -646,11 +633,11 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
       <action dev="luc" type="add" due-to="Evan Ward">
         Added MatrixDecomposer interface that encapsulates algorithms tolerances.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added a way to compute both sin and cos at once faster than performing two calls.
         This also speeds up DerivativeStructure.sin and DerivativeStructure.cos.
       </action>
-      <action dev="luc" type="fix" issue="issues/30" >
+      <action dev="luc" type="fix" issue="issues/30">
         Fixed a problem with eigen decomposition of matrices with large coefficients.
         Github: fixes #30.
       </action>
@@ -662,7 +649,7 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
       </action>
     </release>
     <release version="1.2" date="2017-10-25" description="This is a maintenance release.">
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added new RealFieldElement implementations computing a tuple. This allow to perform the
         same computation on several values at once. The getReal() value correspond to the
         first component of the tuple.
@@ -677,11 +664,11 @@ gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma dis
       </action>
     </release>
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
-      <action dev="psteitz" type="add" issue="issues/19" >
+      <action dev="psteitz" type="add" issue="issues/19">
         Added support for sampling from enumerated distributions in RandomDataGenerator.
         GitHub: fixes issue #19.
       </action>
-      <action dev="psteitz" type="add" issue="issues/18" >
+      <action dev="psteitz" type="add" issue="issues/18">
         Added support for exact integration in PolynomialFunction.
         GitHub: fixes issue #18.
       </action>

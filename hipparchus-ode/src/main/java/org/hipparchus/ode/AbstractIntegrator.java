@@ -52,7 +52,7 @@ import org.hipparchus.util.Incrementor;
 public abstract class AbstractIntegrator implements ODEIntegrator {
 
     /** Step handler. */
-    private List<ODEStepHandler> stepHandlers;
+    private final List<ODEStepHandler> stepHandlers;
 
     /** Current step start time. */
     private ODEStateAndDerivative stepStart;
@@ -67,10 +67,10 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
     private boolean resetOccurred;
 
     /** Events states related to event detectors. */
-    private List<DetectorBasedEventState> detectorBasedEventsStates;
+    private final List<DetectorBasedEventState> detectorBasedEventsStates;
 
     /** Events states related to step end. */
-    private List<StepEndEventState> stepEndEventsStates;
+    private final List<StepEndEventState> stepEndEventsStates;
 
     /** Initialization indicator of events states. */
     private boolean statesInitialized;
@@ -312,8 +312,10 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
         // search for next events that may occur during the step
         final int orderingSign = interpolator.isForward() ? +1 : -1;
-        final Queue<EventState> occurringEvents = new PriorityQueue<>(new Comparator<EventState>() {
-            /** {@inheritDoc} */
+        final Queue<EventState> occurringEvents = new PriorityQueue<>(new Comparator<>() {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public int compare(final EventState es0, final EventState es1) {
                 return orderingSign * Double.compare(es0.getEventTime(), es1.getEventTime());

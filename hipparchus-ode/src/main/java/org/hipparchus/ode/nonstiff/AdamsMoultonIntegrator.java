@@ -54,7 +54,7 @@ import org.hipparchus.util.FastMath;
  *   <li>...</li>
  * </ul>
  *
- * <p>A k-steps Adams-Moulton method is of order k+1.</p>
+ * <p>A k-steps Adams-Moulton method is of order k.</p>
  *
  * <p> There must be sufficient time for the {@link #setStarterIntegrator(org.hipparchus.ode.ODEIntegrator)
  * starter integrator} to take several steps between the the last reset event, and the end

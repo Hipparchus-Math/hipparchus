@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class VectorialStorelessStatisticTest {
-    private double[][] points;
+    private final double[][] points;
 
     public VectorialStorelessStatisticTest() {
         points = new double[][] {
@@ -67,8 +67,8 @@ public class VectorialStorelessStatisticTest {
     void testBasicStats() {
 
         VectorialStorelessStatistic stat = createStatistic(points[0].length);
-        for (int i = 0; i < points.length; ++i) {
-            stat.increment(points[i]);
+        for (double[] point : points) {
+            stat.increment(point);
         }
 
         assertEquals(points.length, stat.getN());
@@ -84,8 +84,8 @@ public class VectorialStorelessStatisticTest {
     @Test
     void testSerial() {
         VectorialStorelessStatistic stat = createStatistic(points[0].length);
-        for (int i = 0; i < points.length; ++i) {
-            stat.increment(points[i]);
+        for (double[] point : points) {
+            stat.increment(point);
         }
         assertEquals(stat, UnitTestUtils.serializeAndRecover(stat));
     }

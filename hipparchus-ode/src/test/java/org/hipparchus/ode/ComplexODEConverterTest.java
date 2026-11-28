@@ -141,8 +141,8 @@ class ComplexODEConverterTest {
     private static class Circle
         implements ComplexOrdinaryDifferentialEquation, ComplexSecondaryODE {
 
-        private int n;
-        private Complex iOmega;
+        private final int n;
+        private final Complex iOmega;
 
         public Circle(int n, double omega) {
             this.n     = n;

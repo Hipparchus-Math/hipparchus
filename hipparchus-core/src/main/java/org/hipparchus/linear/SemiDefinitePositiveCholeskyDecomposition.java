@@ -41,9 +41,9 @@ public class SemiDefinitePositiveCholeskyDecomposition {
     /** Default threshold below which elements are not considered positive. */
     public static final double POSITIVITY_THRESHOLD = 1.0e-15;
     /** Cached value of L. */
-    private RealMatrix cachedL;
+    private final RealMatrix cachedL;
     /** Cached value of LT. */
-    private RealMatrix cachedLT;
+    private final RealMatrix cachedLT;
 
     /**
      * Calculates the Cholesky decomposition of the given matrix.

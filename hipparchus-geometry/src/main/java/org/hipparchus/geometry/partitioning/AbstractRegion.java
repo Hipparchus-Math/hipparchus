@@ -125,8 +125,10 @@ public abstract class AbstractRegion<S extends Space,
             // sort the boundary elements in decreasing size order
             // (we don't want equal size elements to be removed, so
             // we use a trick to fool the TreeSet)
-            final TreeSet<I> ordered = new TreeSet<>(new Comparator<I>() {
-                /** {@inheritDoc} */
+            final TreeSet<I> ordered = new TreeSet<>(new Comparator<>() {
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public int compare(final I o1, final I o2) {
                     final double size1 = o1.getSize();
@@ -141,20 +143,26 @@ public abstract class AbstractRegion<S extends Space,
             insertCuts(tree, ordered);
 
             // set up the inside/outside flags
-            tree.visit(new BSPTreeVisitor<S, P, H, I>() {
+            tree.visit(new BSPTreeVisitor<>() {
 
-                /** {@inheritDoc} */
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public Order visitOrder(final BSPTree<S, P, H, I> node) {
                     return Order.PLUS_SUB_MINUS;
                 }
 
-                /** {@inheritDoc} */
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public void visitInternalNode(final BSPTree<S, P, H, I> node) {
                 }
 
-                /** {@inheritDoc} */
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public void visitLeafNode(final BSPTree<S, P, H, I> node) {
                     if (node.getParent() == null || node == node.getParent().getMinus()) {

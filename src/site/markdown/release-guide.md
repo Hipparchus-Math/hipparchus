@@ -14,380 +14,414 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-# Release Guide
+# Hipparchus Release Guide
 
-Releasing a new version of Hipparchus is not an easy process. Here are
-some steps that have been used in the past. They can be used as
-guidelines to avoid forgetting something.
+This release guide lists the steps that are needed to release a new version of Hipparchus.  
+When in doubt, ask a question on the ["Hipparchus development" section of the forum](https://forum.orekit.org/c/hipparchus-development/16).
 
-You can also use the `release.sh` shell script to perform some of
-the commands depicted here.
+Three types of versions can be released:
+ - **Major version**: numbered xx.0, a version that can introduce both new features and bug corrections.  
+ This is the only type of version where APIs are allowed to evolve, creating eventual incompatibilities with former versions.
+ - **Minor version**: numbered xx.y, with y > 0, a version that can introduce both new features and bug corrections but where breaking APIs is forbidden.  
+ A version xx.y must be perfectly compatible with its xx.0 major version counterpart.
+ - **Patch version**: numbered xx.y.z, a version where only bug corrections are allowed.  
+ Once again APIs incompatibilities with version xx.y or xx.0 are not allowed.  
+ A patch version is the only type of version where a vote from the PMC isn't required to publish the release.
 
-## Prerequisites
+# 0. Prerequisites
 
-In order to sign the binary releases, one has to create (once) a GPG
-signing key. This can be done on Linux-type using the command:
+The following tasks are one-time actions (or at least they should only be renewed infrequently).
+They just prepare the credentials for performing the release, but these credentials will remain
+valid for months and for several releases.
 
-    gpg --full-generate-key
+## Forum API Key
 
-Once the key has been generated, it should be registered on the
-Hipparchus server so users would be able to download it from
-[https://www.hipparchus.org/KEYS](https://www.hipparchus.org/KEYS). Ask
-on the Hipparchus forum or on the GitHub discussion so the project
-team can add it.
+The release process shell script described below creates the vote topic automatically
+on the Orekit forum https://forum.orekit.org. In order to do this, it needs an API key
+to post on behalf of the release manager. There are no automatic processes for setting
+up such a key, candidate release managers should just send direct messages to the forum
+administrators, and they will proceed with generating the API key and sending it, using
+any means they see fit.
 
-## Prepare Git branch for release
+## Signing key for non-maven artifacts
 
-Release will be performed on a dedicated branch, not directly on
-the develop branch. So a new branch must be created as follows and
-used for everything else:
+Release managers should set up a gpg key for signing non-maven artifacts. This can be done
+using
 
-    git checkout develop
-    git branch release-X.Y
-    git checkout release-X.Y
+    gpg --gen-key
 
-## Change library version number
+This key must be provided to other Hipparchus server admins so they can add it to the
+set of trusted keys file at https://www.hipparchus.org/KEYS. There are instructions at the
+top of this file explaining how to export the key.
 
-The pom.xml files (both the top level one in the aggregator and the lower level
-ones for the various modules) contain the version number of the library. During
-development, this version number has the form `X.Y-SNAPSHOT`. For release, the
-`-SNAPSHOT` part must be removed. On a system with Unix utilities, you can do
-it with the single following line:
+## Access to the Hipparchus server upload area
 
-    for pom in pom.xml hipparchus-*/pom.xml ; do sed -i 's,-SNAPSHOT,,' $pom ; done
+In order to upload the non-maven artifacts to the Hipparchus server, release managers
+must set up a SSH key and provide its public part to the Hipparchus server admins so
+they can authorize access. This can be done using a command similar to:
 
-Commit the change:
+    ssh-keygen -t ed25519 \
+               -C "Access to Hipparchus server upload area" \
+               -f .ssh/id_ed25519_hipparchus_upload
 
-    git add pom.xml hipparchus-*/pom.xml
-    git commit -m "Dropped -SNAPSHOT in version number for official release."
+## GitHub personal access token
 
-This step is performed by the `release.sh` shell script.
+The release process shell script described below creates releases in the Hipparchus GitHub
+mirror repository. In order to do this, it needs a personal access token with repos and workflow
+access. This access token can be created by users directly from their GitHub account (User Settings →
+Access → Credentials → Personal Access Tokens (classic)).
 
-## Update maven plugins versions
+Note that the access token is only visible once from the creation page, so it must be saved
+before leaving the page. The GitHub personal access token have an expiration date, hence this step
+must be renewed from time to time.
 
-Release is a good opportunity to update the maven plugin versions. They are all
-gathered at one place, in a set of properties in `hipparchus-parent/pom.xml`,
-in a set of properties:
+## Sonatype central portal
+
+Binary artifacts are published in the maven central repository, which is managed by Sonatype.
+The `org.hipparchus` namespace is used for these artifacts, and only people that have
+been identified as allowed to publish releases can push binary artifacts for publication.
+
+In order to publish, candidate release managers should therefore create an account on
+Sonatype central repository using the [signup page](https://my.sonatype.com/). Once the
+account has been created they should ask existing release managers to add them to the
+allowed list for the `org.hipparchus` namespace.
+
+After creating the account on Sonatype central portal, release managers should create
+a User Token. This is done by login to [central portal login page](https://central.sonatype.com/),
+selecting the `View User Tokens` item from the menu drop list at the upper right of the page (small
+button that displays the start of the username) and selecting the `Generate User Token` button in
+the `Tokens` page. This will generate a token with a small random Id and a long random password.
+
+Note that Hipparchus does *not* use the `central-publishing-maven-plugin`. The reason is
+that we need to provide public access to the binary artifacts for the voting process. As
+of summer 2025, the central portal does not allow that, it restricts the visibility of
+staged artifacts before they are officially published. So the Hipparchus process is to use
+the Orekit Nexus repository at `https://packages.orekit.org/` during the voting period,
+and to transfer the artifacts from the Orekit Nexus repository to central portal only
+after the vote has been tallied and publication has been allowed.
+
+As we don't use the `central-publishing-maven-plugin`, there is no need to copy the xml
+snippet that is generated by central portal into the `$HOME/.m2/settings.xml` file. Users
+could just store these credentials in any password manager they prefer, the script will
+ask for them when needed.
+
+The Sonatype [publish portal guide](https://central.sonatype.org/publish/publish-portal-guide/)
+explains everything in detail, but this release guide is enough to perform a release.
+
+## Note on maven plugins versions
+
+Maven plugins should be updated from time to time, but it is probably
+unwise to do it at release time, it is too late, so these updates
+should happen well before the release. All maven plugin versions are
+gathered at one place, in a set of properties in `hipparchus-parent/pom.xml`:
 
     <!-- Project specific plugin versions -->
-
     <hipparchus.spotbugs-maven-plugin.version>4.10.5.0</hipparchus.spotbugs-maven-plugin.version>
     <hipparchus.jacoco-maven-plugin.version>0.8.16</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.8.0</hipparchus.maven-assembly-plugin.version>
     ...
 
 You can find the latest version of the plugins using the search feature at
-[https://central.sonatype.com/search](https://central.sonatype.com/search).
-The properties name all follow the pattern `hipparchus.some-plugin-name.version`, the plugin
-name should be used in the web form to check for available versions.
+[https://central.sonatype.com/](https://central.sonatype.com/). The
+properties name all follow the pattern `hipparchus.some-plugin-name.version`, the
+plugin name should be used in the web form to check for available versions.
 
-Beware that in some cases, the latest version cannot be used due to incompatibilities.
+Beware that in some cases, the latest version cannot be used due to
+incompatibilities. For example, when a plugin was not recently updated and
+conflicts appear with newer versions of its dependencies.
 
-Beware also that some plugins use configuration files that may need update too. This is
-typically the case with `maven-checkstyle-plugin` and `maven-pmd-plugin`. The
-`src/conf/checkstyle.xml` and `src/conf/pmd-ruleset` files may need to be checked.
+Beware also that some plugins use configuration files that may need update too.
+This is typically the case with `maven-checkstyle-plugin` and
+`spotbugs-maven-plugin`. The `src/conf/checkstyle.xml` and
+`hipparchus-<some-module>/src/conf/spotbugs-exclude-filter.xml` files may need to be checked.
 
-Before committing these changes, you have to check that everything works. So run
-the following command:
+Before committing these changes, you have to check that everything works. So
+run the following command, taking care to use the Java version that matches
+the compatibility requirements (Java 21 at time of writing):
 
-    LANG=C mvn -Prelease site site:stage
+    mvn clean
+    LANG=C JAVA_HOME=/path/to/correct/java/version PATH=${JAVA_HOME}/bin:$PATH mvn -Prelease site site:stage
 
 If something goes wrong, either fix it by changing the plugin configuration or
 roll back to an earlier version of the plugin.
 
-Browse the generated site starting at page `target/staging/index.html`.
-Beware not to use `target/site/index.html` because it only contains
-the top level part of the site, not the modules. The `target/staging`
-directory which was generated by the `site:stage` part of the command gathers
-everything in one place.
+Browse the generated site starting at page `target/staging/index.html` and check
+that everything is rendered properly.
 
-When everything runs fine and the generated site is OK, then you can commit the changes:
+When everything runs fine and the generated site is OK, then you can commit the
+changes:
 
-    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml src/conf/pmd-ruleset.xml
+    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml hipparchus-*/src/conf/spotbugs-exclude-filter.xml
     git commit -m "Updated maven plugins versions."
 
-## Creating release notes
 
-The release notes are created automatically using the `maven-changes-plugin`.
+# 1. Verify the status of start branch
 
-Some preparation is needed as Hipparchus is a multi-module product and this is not
-managed directly by the plugin.
+Major and minor versions are released starting from the develop branch. Patch versions
+are released from a dedicated branch (typically named patch-X.Y.Z where X.Y.Z is the
+candidate version number).
 
-The first step is to finalize the modules `hipparchus-x/src/changes/changes.xml` files.
-The release date and description, which are often only set to `TBD` during development,
-must be set to appropriate values. The release date at this step is only a guess three or
-four days in the future, in order to take into account the 72 hours release vote delay. If some
-modules had no changes at all, it is still worth adding a new `<release>` entry for the
-version, if the `hipparchus-core` module itself changed, as all other modules depend on
-it. It also simplifies management for users, as for any X.Y version released, all modules
-will have such a version number.
+Before anything, check on the
+[continuous integration](https://sonar.orekit.org/dashboard?id=hipparchus%3Ahipparchus&branch=develop)
+that everything is fine on develop branch for major or minor release; adapt the URL for patch
+release which starts from dedicated branches and not from the develop branch.
 
-The second step to perform is to gather the entries from the modules
-`hipparchus-x/src/changes/changes.xml` files into the aggregator
-file `src/changes/changes.xml`. Forgetting this step would imply the release notes are
-incomplete as only this file is parsed during release notes generation.
+Start from the
+[milestone](https://github.com/Hipparchus-Math/hipparchus/milestones) of
+the version, note the issues in the scope that are not closed, and
+find the associated pull requests.
 
-The third step to perform is to run the following commands (don't forget to replace
-X.Y by the correct version number):
+Then, for each pull request:
+* Check that the pipeline was a success (i.e. all stages passed)
+* If it exists, find the SonarQube report for the pull request, either in a short-lived branch of
+  [Hipparchus main CI report](https://sonar.orekit.org/dashboard?id=hipparchus%3Ahipparchus) or on
+  the developer's own [sub-project](https://sonar.orekit.org/projects?sort=-analysis_date)
+  on SonarQube.  
 
-    mkdir -p hipparchus-parent/src/changes
-    cp src/changes/* hipparchus-parent/src/changes/
-    mvn -Dversion=X.Y changes:announcement-generate -pl hipparchus-parent
-    cp hipparchus-parent/target/announcement/release-notes.vm RELEASE-NOTES.txt
-    rm -rf hipparchus-parent/src
-
-After these commands have been run, the `RELEASE-NOTES.txt` file has been updated
-automatically. It should be reviewed and edited manually to improve readability
-(mainly whitespaces, indentation and lines wrapping) and then committed:
-
-    git add RELEASE-NOTES.txt src/changes/changes.xml hipparchus-*/src/changes/changes.xml
-    git commit -m "Updated release notes."
+On the start branch, check that:
+* All tests pass;
+* Code coverage is up to the requirements;
+* There are no bugs, vulnerabilities or code smells.
 
-This third step is performed by the `release.sh` shell script (but the first two
-steps must be performed manually).
+If not, fix the warnings and errors first!
 
-## Updating documentation
+It is also necessary to check on the
+[GitHub actions](https://github.com/Hipparchus-Math/hipparchus/actions)
+that everything is fine on develop branch (i.e., all stages are passed); here again,
+adapt the URL for patch release which starts from dedicated branches and not from
+the develop branch.
 
-Several files must be updated to take into account the new version:
+### 1.1. Merging the remaining merge requests
 
-|            file name             |           usage            |                                     required update                                                    | 
-|----------------------------------|----------------------------|--------------------------------------------------------------------------------------------------------|
-| `hipparchus-*/src/site/site.xml` | site structure and menus   | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
-| `src/site/site.xml         `     | site structure and menus   | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
-| `src/site/markdown/index.md`     | site home page             | Update the text about the latest available version, including important changes from RELEASE-NOTES.txt |
-| `src/site/markdown/downloads.md` | downloads links            | Add a table with the links for files of the new versions, don't forget the date in the table caption   |
-| `README.md`                      | introduction for new users | Use the latest version number in the example property myprojectname.hipparchus.version                 |
-Documentation files to update
+For patch releases, it is possible to include merge requests if they were created from the
+`release-X.Y` branch, but not if they were created from the `develop` branch as it would
+include evolutions and not only bug fixes.
 
-Once the files have been updated, commit the changes:
+Note that if there aren't any conflicts in GitHub you can directly do
+the merge from GitHub; just make sure that the target branch is
+`release-X.Y` and not "develop".
 
-    git add hipparchus-*/src/site/site.xml src/site/site.xml src/site/markdown/*.md README.md
-    git commit -m "Updated documentation for the release."
+Find the pull request on the repository, it should be in branch `origin/merge-requests/XXX`
+with XXX the number of the pull request
+
+    git merge --no-ff origin/merge-requests/XXX
+
+The `--no-ff` option will force a merge commit to be made, instead of doing a fast-forward on the branch.  
+You can keep the automatic merge message unless you want to add some content to it.
+
+Eventually, resolve any conflict and commit the result.
+
+### 1.2. Cherry-picking the commits
+
+If the developers started from develop branch (or any other branch),
+then the pull request branch may contain code that should not be added to the
+release.  You will have to cherry-pick the appropriate commits and add
+them to a dedicated branch.  It is advised to use an IDE to do the
+cherry-picking, although the command lines below will help you.
 
-## Tag and sign the git repository
-
-When all previous steps have been performed, the local git repository holds the final state
-of the sources and build files for the release. It must be tagged and the tag must be signed.
-Note that before the vote is finished, the tag can only signed with a `-RCx` suffix to denote
-Release Candidate. The final tag without the `-RCx` suffix will be put once the vote succeeds,
-on the same commit (which will therefore have two tags). Tagging and signing is done using the
-following command, with `-RCn` replaced with the Release Candidate number:
-
-    git tag X.Y-RCn -s -u key-ID -m "Release Candidate n for version X.Y."
-
-The key ID is the 16 hexadecimal digits representing the manager keyID. This key ID should be
-available in the [https://www.hipparchus.org/KEYS](https://www.hipparchus.org/KEYS) file.
-
-The tag should be verified using command:
-
-    git tag -v X.Y-RCn
-
-## Pushing the branch and the tag
-
-When the tag is ready, the branch and the tag must be pushed to GitHub so everyone can
-review it:
-
-    git push --tags origin release-X.Y
-
-## Generating signed artifacts
-
-In order to upload the generated artifacts to SonaType OSS site, an account must have been
-set up and the corresponding credentials must be set in the `servers` section of the
-`$HOME/.m2/settings.xml` file, using an id of `ossrh`:
-
-    <servers>
-      <server>
-        <id>ossrh</id>
-        <username>the user name to connect to the OSS site</username>
-        <password>the encrypted password</password>
-      </server>
-    </servers>
-
-In order to sign the generated artifacts, the `gpg` key ID must be configured properly
-for maven to pick it. This can be done by adding a property that will be triggered
-automatically as follows in the `profiles` section of the `$HOME/.m2/settings.xml` file:
-
-    <profiles>
-      <profile>
-         <id>hipparchus-gpg-settings</id>
-         <activation>
-           <file>
-             <exists>${basedir}/hipparchus-core</exists>
-           </file>
-         </activation>
-         <properties>
-           <gpg.keyname>the 16 hexadecimal digits representing the manager keyID</gpg.keyname>
-         </properties>
-       </profile>
-     </profiles>
-
-When these settings have been set up, generating the artifacts is done by running the following commands:
-
-    mvn clean
-    mvn deploy -DskipStagingRepositoryClose=true -Prelease
-
-During the generation, maven will trigger gpg which will ask the user for the pass phrase to
-access the signing key.
-
-A huge number of files will be uploaded to SonaType server, some of which we do not really
-release. So once the commands ends, you will have to log into SonaType OSS site
-[https://oss.sonatype.org/](https://oss.sonatype.org/), check the staging repository and
-remove all the artifacts related to `hipparchus-aggregator` and
-`hipparchus-coverage` modules by right-clicking and selecting "delete".
-When the artifacts are considered OK, the repository must be closed so it is ready for the
-upcoming vote for the release.
-
-This step is performed by the `release.sh` shell script, except the closing of the OSS repository,
-removing the spurious artifacts.
-
-## Uploading non-maven artifacts
-
-The non-maven artifacts are the web site and the source and binary archives.
-
-In addition to generate the maven artifacts and upload them, the command from the previous step
-also generated the source and binary release files we provide directly at the Hipparchus site in
-the downloads pages. Archives in both `.zip` and `.tar.bz2` formats are created for sources and
-binaries, as well as their signatures but missing the checksums. The checksums must be generated
-manually using the command:
-
-    for f in target/hipparchus-*.zip target/hipparchus-*.tar.bz2 ; do md5sum < $f > $f.md5 ; done
-
-The 12 files (`hipparchus-X.Y-bin.zip`, `hipparchus-X.Y-bin.zip.asc`, `hipparchus-X.Y-bin.zip.md5`,
-`hipparchus-X.Y-bin.tar.bz2`, `hipparchus-X.Y-bin.tar.bz2.asc`, `hipparchus-X.Y-bin.tar.bz2.md5`,
-`hipparchus-X.Y-src.zip`, `hipparchus-X.Y-src.zip.asc`, `hipparchus-X.Y-src.zip.md5`,
-`hipparchus-X.Y-src.tar.bz2`, `hipparchus-X.Y-src.tar.bz2.asc`, `hipparchus-X.Y-src.tar.bz2.md5`) must
-be uploaded manually to the Hipparchus site (in a new `staging/downloads` directory) so people
-can review them.
-
-The site is generated locally using:
-
-    LANG=C mvn site site:stage
-
-Once generated, the site can be archived and uploaded to the Hipparchus site:
-
-    cd target/staging
-    tar cjf ../www-X.Y.hipparchus.org.tar.bz2 .
-
-This archive content must be extracted in the `staging` directory that already contains the
-`downloads` directory with the 12 files uploaded just before.
-
-## Prepare the site for the release
-
-When the `staging` directory is ready, the Apache server configuration
-must be updated to allow this directory to be served (it is not served
-when no vote is going on). This server configuration file is located
-in the `/etc/apache2/sites-enabled` folder. The `#` comment marker in
-front of the line that references the staging directory must be
-removed, the file must be saved and the `apache2ctl restart` command
-must be run to relaunch the Apache server.
-
-## Calling for the vote
-
-Everything is now ready so the developers and PMC can vote for the release. Create a
-new topic in the developers category of the forum with a subject line of the form:
-
-    [VOTE] Releasing hipparchus X.Y from release candidate n
-
-and a content of the form:
-
-    This is a VOTE in order to release version X.Y of the Hipparchus library.
-    Version X.Y is a maintenance release.
-
-
-    Highlights in the X.Y release are:
-      - feature 1 description
-      ...
-      - feature n description
-
-    The release candidate n can be found on the GitHub repository as
-    tag X.Y-RCn in the release-X.Y branch.
-
-    Source and binary archives are available using the staged web
-    site downloads page at
-    <https://hipparchus.org/staging/downloads.html>.
-
-    Note that the index page at /downloads does not show the X.Y release,
-    as it has not been voted yet.
-
-    The release notes can be read here:
-    <https://hipparchus.org/staging/changes-report.html>.
-
-    Maven artifacts are available at
-    <https://oss.sonatype.org/content/repositories/orghipparchus-xxxx/>.
-
-    The votes will be tallied in 72 hours for now, on 20yy-mm-ddThh:mm:00Z (this is UTC time).
-
-## After the vote
-
-If the vote fails, the maven artifacts must be removed from OSS site by dropping the repository
-and non-maven artifacts must be removed from the `staging` directory in the Hipparchus site.
-Then a new release candidate must be created, with a new number, a new tag and new artifacts.
-Another vote is needed for this new release candidate.
-
-### Tagging the released version
-
-As the vote passed, a final signed tag must be added to the succeeding release candidate,
-verified and pushed:
-
-    git tag X.Y -s -u key-ID -m "Version X.Y."
-    git tag -v X.Y
-    git push --tags
-
-### Merging the release version into main
-
-After the release branch has been completed, it should be merged back
-to the main branch:
-
-    git checkout main
-    git merge --no-ff release-X.Y
-    git push
-
-### Releasing maven artifacts on SonaType
-
-In order to publish the maven artifacts, one should log into SonaType OSS site
-[https://oss.sonatype.org/](https://oss.sonatype.org/), select the
-staging repository and press the "Release" button in the top menu.
-
-### Releasing source artifacts on GitHub
-
-In order to publish the source artifacts, one should log to GitHub, go
-to the
-[https://github.com/Hipparchus-Math/hipparchus/releases/](https://github.com/Hipparchus-Math/hipparchus/releases/)
-page and declare the new release.
-
-### Finalize the site after the successful vote
-
-The non-maven artifacts must also be published on the Hipparchus
-server by moving them from the `staging` repository to the general
-repository. Beware to create a new `www-X.Y.hipparchus.org` directory
-for the site and link the latest version to it. This allows older
-versions to be kept available if needed. A dedicated `apidocs-X.Y`
-folder must also be set up with a copy of the
-`www-X.Y.hipparchus.org/apidocs` directory. Here again, it allows
-older versions to still be available online.
-
-The Apache server configuration must be updated to forbid serving the
-now unused `staging` directory, and to add an alias for the new
-`apidocs-X.Y` folder. Once again, this is done by editing the Apache
-configuration file in the `/etc/apache2/sites-enabled` folder, saving
-it and running `apache2ctl restart`.
-
-### Announcing the release
-
-The last step is to announce the release by creating a new topic in the announcements category of the forum.
-
-## Preparing next version
-
-After the release branch has been completed, it should be merged back to the develop branch and the `pom.xml`
-must be updated with the `-SNAPSHOT`flag for the next release number. On a system with Unix utilities, you can do
-it with the single following lines:
-
-    git checkout develop
-    git merge --no-ff release-X.Y
-    for pom in pom.xml hipparchus-*/pom.xml ; do sed -i 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>,' $pom ; done
-
-Commit the change:
-
-    git add pom.xml hipparchus-*/pom.xml
-    git commit -m "Preparing development of next version."
-    git push
+Find the pull request on the repository and the commits you are interested in.
+
+Create a dedicated branch for the issue in your local repository:
+
+    git checkout -b issue-YYY
+
+Where YYY is the issue number that the pull request XXX fixes.  
+If the branch already exists, give it a different name like `integrate-issue-YYY` or `integrate-PR-XXX`
+
+Make a list of the IDs of the commits you want to add, example `A B C D` (in the order they were committed).
+
+Cherry-pick the commits in a chronological order:
+
+    git cherry-pick A B C D
+
+Eventually, resolve any conflict and commit the result.
+
+Return to the start branch and merge the branch issue-YYY:
+
+    git checkout <name of the start branch>
+    git merge --no-ff issue-YYY
+
+# 2. Merging the module-specific changes.xml files
+
+Hipparchus is a multi-module product hence there are several module-specific
+`hipparchus-<some-module>/src/changes/changes.xml` files, and one top-level
+`src/changes/changes.xml` aggregator file. Copying the entries from the module-specific
+files to the top-level aggregation file is not yet managed by the release scripts below
+(contributions welcome). It has to be done manually beforehand. Note that the release date*
+and release type (major, minor or patch) in the various `changes.xml` files will be
+computed automatically by the script, so it should remain set to `TBD` when manually
+editing the files.
+
+# 3.Run the prepare-release.sh script
+
+There is a `prepare-release.sh` shell script in the `scripts`
+directory that automatically performs all the release steps by
+itself. It asks questions and waits for confirmation at various
+stages. It creates branches, checks them out, performs some automated
+edition on several files, commits the changes, sets up tags that will
+be recognized by Hipparchus Continuous Integration setup, and pushes
+everything to Hipparchus GitHub repository.
+
+When releasing a major or minor version, the script automatically
+posts a vote topic on the Orekit forum so that community and PMC
+members can vote on the release. When releasing a patch version, the
+script skips the vote topic creation and continues up to promoting the
+release from staging to published.
+
+The shell script performs the release on a temporary branch that is
+merged to the release branch after the last automatic file edition.
+
+When the temporary branch is remotely merged to the release branch on
+the Hipparchus GitHub repository, the Continuous Integration is automatically
+triggered. It performs a full build, signs the artifacts using the
+release key and puts them in a staging repository, where users will
+later be able to review them during the voting period.
+
+Several steps (creating the release branch, merging the temporary
+branch into the release branch, creating the binary artifacts…) are
+performed remotely, from the release manager computer to the Hipparchus
+GitHub repository (this is the reason why release managers need a GitHub
+personal access token).  Several of these steps take some time, for
+example when the merge request is created, it is not executed
+immediately. There are several waiting loops that monitor the progress
+of these steps, polling the forge regularly. These loops display a
+timestamped waiting message evey 5 seconds (every 30 seconds for the
+long pipeline run loop) until the operation is performed, and stop the
+release process if the operation exceeds a timeout. Branch creation,
+merge request creation, and merge request completion have a 10 minutes
+timeout but should typically be completed in one or two
+minutes. Continuous Integration pipeline start has a 30 minutes
+timeout as runners may be busy with already running compilations. Once
+started, Continuous Integration pipeline run time has a 120 minutes
+timeout. The final step (creating the vote thread) is triggered only
+if the Continuous Integration pipeline succeeds.
+
+Note that the binary artifacts are *not* generated locally on the
+release manager computer, they are generated (and signed) by the
+Continuous Integration server.
+
+If something goes wrong, or if the release manager answers "no" to one
+of the confirmation questions triggered by the script, or if the release
+manager interrupts the script by a signal like hitting ctrl-C, then the
+script removes all the branches and tags it created (both locally and on
+the Hipparchus GitHub repository) and then stops. This ensures everything
+remains clean. The last chance to stop the release process corresponds to
+the question about posting the vote thread to the forum.
+
+This script must be run from the command line on a computer with
+several Linux utilities (git, sed, xsltproc, sort, tail, curl, stty,
+base64, jq, md5sum and scp), with the git worktree already set to the start branch (i.e.,
+develop or a patch branch):
+
+    sh scripts/prepare-release.sh
+
+Here are the steps the script performs on its own, asking
+for user confirmation before any commit:
+
+    - perform safety checks (files and directories present, utilities available, java version)
+    - ask for GitHub personal access token
+    - check if the release is a major, minor or patch release
+      using the -SNAPSHOT version number from the current branch top-level `pom.xml`
+    - set up a release candidate number, starting from 1 or incrementing existing RC tags
+    - for first release candidate of major or minor release, create a release-X.Y branch from develop
+      (reuse existing branch otherwise)
+    - checkout the release-X.Y branch
+    - create a RCn-X.Y branch
+    - checkout the RCn-X.Y branch
+    - merge the start branch into the RCn-X.Y branch
+    - drop -SNAPSHOT version number from all modules `pom.xml` files and commit the change
+    - compute candidate release date, allocating 3 days for the vote
+    - update all `changes.xml` files with release date and release type and commit the change
+    - update the `RELEASE-NOTES.txt` file and commit the changes
+    - update site structure menus and downloads page and commit the changes
+    - generate the non-maven artifacts (binary, sources and site), this takes a lot of time
+    - upload the non-maven artifacts to Hipparchus server
+    - push the RCn-X.Y branch to origin
+    - if the release-X.Y branch does not exist on the Hipparchus GitHub repository, create it remotely
+    - trigger a merge request from RCn-X.Y branch to release-X.Y branch
+      (this will trigger full build, signing and deployment to Orekit Nexus instance)
+    - switch to release-X.Y branch
+    - pull merged branch from origin
+    - tag the RCn-X.Y branch with tag X.Y-RCn and push the tag to origin
+    - monitor continuous integration run
+    - if the release is a patch release, call immediately the `successful-vote.sh` script
+    - if the release is a major or minor release, create the vote topic automatically on the forum
+      (the API key for posting to the forum will be asked for at this point)
+
+## Managing non-maven artifacts
+
+The non-maven artifacts are the web site and the source and binary archives. They are
+generated and uploaded to the Hipparchus server by the script above, but only to the
+release manager home directory. Some manual operations need to be performed on this
+server:
+    - a new `staging/downloads` directory must be created in the web server
+    - the non-maven artifacts should be moved there
+    - the generated website www-X.Y.hipparchus.org.tar.bz2 must be unpacked in the `staging` directory
+    - the Apache server configuration must be updated to allow this `staging` directory to be served
+      (it is not served when no vote is going on)
+    - the `apache2ctl restart` command must be run to relaunch the Apache server after the configuration change
+
+These operations must be performed on the Hipparhus server itself, so they are *not* performed by the script.
+
+## 4. Voting period
+
+For major and minor releases, the script generates the vote topic on
+the forum by itself. The voting period is 3 days, so release managers
+should wait until this time has elapsed before concluding. Of course,
+if one of the voters raises concerns that should be addressed, the
+vote can be canceled before the 5-day duration.
+
+### 4.1. Failed or canceled vote
+
+If the vote fails or is canceled, the only thing to do is edit the title
+of the vote thread on the forum to add a [CANCELED] or [FAILED] label.
+This is done manually directly on the forum web pages. The failed
+release candidate can be kept, it will just not be published.
+
+Once the problem has been addressed and a new release candidate can be
+created, the release process should just be started again using the
+`prepare-release.sh` script.  Note that the script keeps track of the
+release candidate number on its own as it looks for the tags in the
+git repository and as release candidate tags are not deleted if the
+release preparation script has completed.
+
+### 4.2. Successful vote
+
+When the vote for a release candidate succeeds (or automatically when
+the release is a patch release), the maven artifacts must be published
+to the central portal. A final tag (without reference to release
+candidate number) must be created. The repository must also be prepared
+for the next development cycle. This is done by running the
+`successful-vote.sh` script, taking care to be in the release-X.Y
+branch:
+
+    sh scripts/successful-vote.sh
+
+Here are the steps the script performs on its own, asking
+for user confirmation before any commit:
+
+    - perform safety checks (files and directories present, utilities available)
+    - ask for GitHub personal access token
+    - check the branch to see it is really a release branch
+    - check the tag for the successful release candidate
+    - retrieve maven artifacts from the Orekit Nexus repository
+    - publish maven artifacts to the central portal
+      (the API key for connecting to the central portal will be asked for at this point)
+    - tag the repository
+    - push the tag to origin
+    - trigger a merge request from release branch to main branch
+    - pull merged main branch from origin
+    - trigger a merge request from main branch to develop branch
+    - pull merged develop branch from origin
+    - create a temporary preparation branch for next development cycle
+    - update version number in all modules `pom.xml` files
+    - update version number in all modules `changes.xml` files
+    - push temporary preparation branch to origin
+    - trigger a merge request from preparation branch to develop branch
+    - pull merged develop branch from origin
+    - delete temporary preparation branch
+    - close milestone for released version on the GitHub repository
+    - create milestone for next version on the GitHub repository if it doesn't exist yet
+    - create release on the GitHub repository
+    - create the annoucement topic automatically on the forum
+      (the API key for posting to the forum will be asked for at this point)

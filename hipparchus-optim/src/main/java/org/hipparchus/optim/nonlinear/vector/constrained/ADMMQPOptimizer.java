@@ -103,31 +103,30 @@ public class ADMMQPOptimizer extends QPOptimizer {
         super.parseOptimizationData(optData);
         for (OptimizationData data: optData) {
 
-             if (data instanceof ObjectiveFunction) {
-                function = (QuadraticFunction) ((ObjectiveFunction) data).getObjectiveFunction();
+             if (data instanceof ObjectiveFunction objectiveFunction) {
+                function = (QuadraticFunction) objectiveFunction.getObjectiveFunction();
                 continue;
             }
 
-            if (data instanceof LinearEqualityConstraint) {
-                eqConstraint = (LinearEqualityConstraint) data;
+            if (data instanceof LinearEqualityConstraint constraint) {
+                eqConstraint = constraint;
                 continue;
             }
-            if (data instanceof LinearInequalityConstraint) {
-                iqConstraint = (LinearInequalityConstraint) data;
-                continue;
-            }
-
-            if (data instanceof LinearBoundedConstraint) {
-                bqConstraint = (LinearBoundedConstraint) data;
+            if (data instanceof LinearInequalityConstraint constraint1) {
+                iqConstraint = constraint1;
                 continue;
             }
 
-            if (data instanceof ADMMQPOption) {
-                settings = (ADMMQPOption) data;
+            if (data instanceof LinearBoundedConstraint constraint2) {
+                bqConstraint = constraint2;
+                continue;
             }
 
-            if (data instanceof MatrixDecompositionTolerance) {
-                final MatrixDecompositionTolerance tolerance = (MatrixDecompositionTolerance) data;
+            if (data instanceof ADMMQPOption option) {
+                settings = option;
+            }
+
+            if (data instanceof MatrixDecompositionTolerance tolerance) {
                 solver.updateDecompositionEpsilon(tolerance.getEpsMatrixDecomposition());
             }
 

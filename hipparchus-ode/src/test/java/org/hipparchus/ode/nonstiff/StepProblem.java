@@ -36,10 +36,10 @@ import org.hipparchus.ode.events.ODEEventHandler;
 
 public class StepProblem extends AbstractODEDetector<StepProblem> implements OrdinaryDifferentialEquation {
 
-    private double rateBefore;
-    private double rateAfter;
+    private final double rateBefore;
+    private final double rateAfter;
     private double rate;
-    private double switchTime;
+    private final double switchTime;
 
     public StepProblem(final AdaptableInterval maxCheck, final double threshold, final int maxIter,
                        double rateBefore, double rateAfter, double switchTime) {

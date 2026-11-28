@@ -122,7 +122,7 @@ class UnscentedKalmanFilterTest {
 
     private static class ConstantProcess implements UnscentedProcess<SimpleMeasurement> {
 
-        private RealMatrix q = MatrixUtils.createRealDiagonalMatrix(new double[] {
+        private final RealMatrix q = MatrixUtils.createRealDiagonalMatrix(new double[] {
             1.0e-5
         });
         @Override
@@ -333,9 +333,9 @@ class UnscentedKalmanFilterTest {
 
     }
 
-    private final class WelshBishopProcess implements UnscentedProcess<SimpleMeasurement> {
+    private static final class WelshBishopProcess implements UnscentedProcess<SimpleMeasurement> {
 
-        private RealMatrix q;
+        private final RealMatrix q;
 
         WelshBishopProcess(double qValue) {
             q = MatrixUtils.createRealDiagonalMatrix(new double[] {

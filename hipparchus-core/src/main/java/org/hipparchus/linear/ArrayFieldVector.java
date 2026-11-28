@@ -21,6 +21,7 @@
  */
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -39,10 +40,11 @@ import org.hipparchus.util.MathUtils;
  */
 public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<T>, Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 7648186910365927050L;
 
     /** Entries of the vector. */
-    private T[] data;
+    private final T[] data;
 
     /** Field to which the elements belong. */
     private final Field<T> field;

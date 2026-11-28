@@ -23,6 +23,8 @@ import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * This class implements an interpolator for the Gragg-Bulirsch-Stoer
  * integrator.
@@ -72,6 +74,7 @@ import org.hipparchus.util.FastMath;
 public class GraggBulirschStoerStateInterpolator extends AbstractODEStateInterpolator {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160329L;
 
     /** Scaled derivatives at the middle of the step $\tau$.

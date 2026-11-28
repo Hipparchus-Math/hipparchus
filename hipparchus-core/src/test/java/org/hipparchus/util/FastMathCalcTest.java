@@ -270,7 +270,7 @@ class FastMathCalcTest {
 
             final Field fmLen = FastMath.class.getDeclaredField(lenName);
             fmLen.setAccessible(true);
-            return ((Integer) fmLen.get(null)).intValue();
+            return (Integer) fmLen.get(null);
 
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
             fail(e.getLocalizedMessage());

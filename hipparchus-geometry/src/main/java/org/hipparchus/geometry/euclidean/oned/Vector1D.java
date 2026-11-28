@@ -21,6 +21,7 @@
  */
 package org.hipparchus.geometry.euclidean.oned;
 
+import java.io.Serial;
 import java.text.NumberFormat;
 
 import org.hipparchus.geometry.Space;
@@ -53,6 +54,7 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
         new Vector1D(Double.NEGATIVE_INFINITY);
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 7556674948671647925L;
 
     /** Abscissa. */
@@ -311,8 +313,7 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
             return true;
         }
 
-        if (other instanceof Vector1D) {
-            final Vector1D rhs = (Vector1D) other;
+        if (other instanceof Vector1D rhs) {
             return x == rhs.x || isNaN() && rhs.isNaN();
         }
 
@@ -346,8 +347,7 @@ public class Vector1D implements Vector<Euclidean1D, Vector1D> {
             return true;
         }
 
-        if (other instanceof Vector1D) {
-            final Vector1D rhs = (Vector1D) other;
+        if (other instanceof Vector1D rhs) {
             return x == rhs.x;
         }
 

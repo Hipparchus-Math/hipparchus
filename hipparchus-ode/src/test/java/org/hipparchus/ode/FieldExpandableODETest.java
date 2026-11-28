@@ -41,8 +41,8 @@ class FieldExpandableODETest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestOnlyMainEquation(final Field<T> field) {
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
         assertEquals(main.getDimension(), equation.getMapper().getTotalDimension());
         assertEquals(1, equation.getMapper().getNumberOfEquations());
         T t0 = field.getZero().add(10);
@@ -72,11 +72,11 @@ class FieldExpandableODETest {
 
     private <T extends CalculusFieldElement<T>> void doTestPrimaryAndSecondary(final Field<T> field) {
 
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
-        FieldSecondaryODE<T> secondary1 = new Linear<T>(field, 3, main.getDimension());
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
+        FieldSecondaryODE<T> secondary1 = new Linear<>(field, 3, main.getDimension());
         int i1 = equation.addSecondaryEquations(secondary1);
-        FieldSecondaryODE<T> secondary2 = new Linear<T>(field, 5, main.getDimension() + secondary1.getDimension());
+        FieldSecondaryODE<T> secondary2 = new Linear<>(field, 5, main.getDimension() + secondary1.getDimension());
         int i2 = equation.addSecondaryEquations(secondary2);
         assertEquals(main.getDimension() + secondary1.getDimension() + secondary2.getDimension(),
                             equation.getMapper().getTotalDimension());
@@ -129,11 +129,11 @@ class FieldExpandableODETest {
 
     private <T extends CalculusFieldElement<T>> void doTestMap(final Field<T> field) {
 
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
-        FieldSecondaryODE<T> secondary1 = new Linear<T>(field, 3, main.getDimension());
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
+        FieldSecondaryODE<T> secondary1 = new Linear<>(field, 3, main.getDimension());
         int i1 = equation.addSecondaryEquations(secondary1);
-        FieldSecondaryODE<T> secondary2 = new Linear<T>(field, 5, main.getDimension() + secondary1.getDimension());
+        FieldSecondaryODE<T> secondary2 = new Linear<>(field, 5, main.getDimension() + secondary1.getDimension());
         int i2 = equation.addSecondaryEquations(secondary2);
         assertEquals(main.getDimension() + secondary1.getDimension() + secondary2.getDimension(),
                             equation.getMapper().getTotalDimension());
@@ -217,9 +217,9 @@ class FieldExpandableODETest {
     private <T extends CalculusFieldElement<T>> void doTestExtractDimensionMismatch(final Field<T> field)
         throws MathIllegalArgumentException {
 
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
-        FieldSecondaryODE<T> secondary1 = new Linear<T>(field, 3, main.getDimension());
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
+        FieldSecondaryODE<T> secondary1 = new Linear<>(field, 3, main.getDimension());
         int i1 = equation.addSecondaryEquations(secondary1);
         T[] tooShort    = MathArrays.buildArray(field, main.getDimension());
         equation.getMapper().extractEquationData(i1, tooShort);
@@ -233,9 +233,9 @@ class FieldExpandableODETest {
     private <T extends CalculusFieldElement<T>> void doTestInsertTooShortComplete(final Field<T> field)
         throws MathIllegalArgumentException {
 
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
-        FieldSecondaryODE<T> secondary1 = new Linear<T>(field, 3, main.getDimension());
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
+        FieldSecondaryODE<T> secondary1 = new Linear<>(field, 3, main.getDimension());
         int i1 = equation.addSecondaryEquations(secondary1);
         T[] equationData = MathArrays.buildArray(field, secondary1.getDimension());
         T[] tooShort     = MathArrays.buildArray(field, main.getDimension());
@@ -250,9 +250,9 @@ class FieldExpandableODETest {
     private <T extends CalculusFieldElement<T>> void doTestInsertWrongEquationData(final Field<T> field)
         throws MathIllegalArgumentException {
 
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
-        FieldSecondaryODE<T> secondary1 = new Linear<T>(field, 3, main.getDimension());
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
+        FieldSecondaryODE<T> secondary1 = new Linear<>(field, 3, main.getDimension());
         int i1 = equation.addSecondaryEquations(secondary1);
         T[] wrongEquationData = MathArrays.buildArray(field, secondary1.getDimension() + 1);
         T[] complete          = MathArrays.buildArray(field, equation.getMapper().getTotalDimension());
@@ -267,8 +267,8 @@ class FieldExpandableODETest {
     private <T extends CalculusFieldElement<T>> void doTestNegativeIndex(final Field<T> field)
         throws MathIllegalArgumentException {
 
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
         T[] complete = MathArrays.buildArray(field, equation.getMapper().getTotalDimension());
         equation.getMapper().extractEquationData(-1, complete);
     }
@@ -281,8 +281,8 @@ class FieldExpandableODETest {
     private <T extends CalculusFieldElement<T>> void doTestTooLargeIndex(final Field<T> field)
         throws MathIllegalArgumentException {
 
-        FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
-        FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
+        FieldOrdinaryDifferentialEquation<T> main = new Linear<>(field, 3, 0);
+        FieldExpandableODE<T> equation = new FieldExpandableODE<>(main);
         T[] complete = MathArrays.buildArray(field, equation.getMapper().getTotalDimension());
         equation.getMapper().extractEquationData(+1, complete);
     }

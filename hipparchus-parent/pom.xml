@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <!--
    Licensed to the Hipparchus project under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -15,13 +14,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus</artifactId>
-  <version>4.1</version>
+  <version>5.0</version>
   <packaging>pom</packaging>
 
   <name>Hipparchus</name>
@@ -100,6 +97,9 @@
       <name>Eldar Agalarov</name>
     </contributor>
     <contributor>
+      <name>ajrilatt</name>
+    </contributor>
+    <contributor>
       <name>Tim Allison</name>
     </contributor>
     <contributor>
@@ -115,7 +115,7 @@
       <name>Peter Andrews</name>
     </contributor>
     <contributor>
-      <name>R&#233;mi Arntzen</name>
+      <name>Rémi Arntzen</name>
     </contributor>
     <contributor>
       <name>Bill Barker</name>
@@ -142,7 +142,7 @@
       <name>Cyril Briquet</name>
     </contributor>
     <contributor>
-      <name>S&#233;bastien Brisard</name>
+      <name>Sébastien Brisard</name>
     </contributor>
     <contributor>
       <name>Dave Brosius</name>
@@ -196,7 +196,7 @@
       <name>Ajo Fod</name>
     </contributor>
     <contributor>
-      <name>Alberto Foss&#224;</name>
+      <name>Alberto Fossà</name>
     </contributor>
     <contributor>
       <name>John Gant</name>
@@ -214,7 +214,7 @@
       <name>Hank Grabowski</name>
     </contributor>
     <contributor>
-      <name>Bernhard Gr&#252;newaldt</name>
+      <name>Bernhard Grünewaldt</name>
     </contributor>
     <contributor>
       <name>Elliotte Rusty Harold</name>
@@ -245,6 +245,9 @@
     </contributor>
     <contributor>
       <name>Eugene Kirpichov</name>
+    </contributor>
+    <contributor>
+      <name>Tasuku Kobayashi</name>
     </contributor>
     <contributor>
       <name>Piotr Kochanski</name>
@@ -295,7 +298,7 @@
       <name>Todd C. Parnell</name>
     </contributor>
     <contributor>
-      <name>Ga&#235;tan Pierre</name>
+      <name>Gaëtan Pierre</name>
     </contributor>
     <contributor>
       <name>J. Pietschmann</name>
@@ -310,10 +313,13 @@
       <name>Qualtagh</name>
     </contributor>
     <contributor>
+      <name>Sean-G-Rae</name>
+    </contributor>
+    <contributor>
       <name>Andreas Rieger</name>
     </contributor>
     <contributor>
-      <name>S&#233;bastien Riou</name>
+      <name>Sébastien Riou</name>
     </contributor>
     <contributor>
       <name>Benedikt Ritter</name>
@@ -379,7 +385,7 @@
       <name>Andrew Waterman</name>
     </contributor>
     <contributor>
-      <name>J&#246;rg Weimar</name>
+      <name>Jörg Weimar</name>
     </contributor>
     <contributor>
       <name>Christian Winter</name>
@@ -525,8 +531,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <hipparchus.compiler.release>21</hipparchus.compiler.release>
 
     <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
     <hipparchusParentDir>${basedir}</hipparchusParentDir>
@@ -544,7 +549,7 @@
     <hipparchus.spotbugs-maven-plugin.version>4.10.5.0</hipparchus.spotbugs-maven-plugin.version>
     <hipparchus.jacoco-maven-plugin.version>0.8.16</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.8.0</hipparchus.maven-assembly-plugin.version>
-    <hipparchus.maven-bundle-plugin.version>5.1.9</hipparchus.maven-bundle-plugin.version>
+    <hipparchus.maven-bundle-plugin.version>6.2.0</hipparchus.maven-bundle-plugin.version>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>3.6.0</hipparchus.maven-checkstyle-plugin.version>
     <hipparchus.checkstyle.version>10.26.1</hipparchus.checkstyle.version>
@@ -571,7 +576,8 @@
     <hipparchus.hamcrest.version>3.0</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
     <hipparchus.sonar-maven-plugin.version>5.8.0.7211</hipparchus.sonar-maven-plugin.version>
-    <hipparchus.mathjax.enable>&lt;script src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot; id=&quot;MathJax-script&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
+    <hipparchus.cyclonedx-maven-plugin.version>2.9.1</hipparchus.cyclonedx-maven-plugin.version>
+    <hipparchus.mathjax.enable>&lt;script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
   </properties>
 
   <build>
@@ -606,10 +612,9 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${hipparchus.maven-compiler-plugin.version}</version>
           <configuration>
-            <source>${maven.compiler.source}</source>
-            <target>${maven.compiler.target}</target>
             <compilerArgument>-Xlint:deprecation</compilerArgument>
             <compilerArgument>-Xlint:unchecked</compilerArgument>
+            <release>${hipparchus.compiler.release}</release>
           </configuration>
         </plugin>
         <plugin>
@@ -620,8 +625,8 @@
             <archive>
               <manifestFile>${project.build.directory}/osgi/MANIFEST.MF</manifestFile>
               <manifestEntries>
-                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
-                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+                <X-Compile-Source-JDK>${hipparchus.compiler.release}</X-Compile-Source-JDK>
+                <X-Compile-Target-JDK>${hipparchus.compiler.release}</X-Compile-Target-JDK>
               </manifestEntries>
             </archive>
           </configuration>
@@ -642,9 +647,9 @@
             <additionalOptions>
               <option>--allow-script-in-comments</option>
               <option>-header</option>
-              <option>&apos;${hipparchus.mathjax.enable}&apos;</option>
+              <option>'${hipparchus.mathjax.enable}'</option>
             </additionalOptions>
-            <bottom><![CDATA[Copyright &copy; ${project.inceptionYear}-{currentYear} <a href="https://www.c-s.fr">CS GROUP</a>. All rights reserved.]]></bottom>
+            <bottom>Copyright &amp;copy; ${project.inceptionYear}-{currentYear} &lt;a href="https://www.c-s.fr"&gt;CS GROUP&lt;/a&gt;. All rights reserved.</bottom>
           </configuration>
           <executions>
             <execution>
@@ -814,7 +819,7 @@
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${hipparchus.maven-pmd-plugin.version}</version>
           <configuration>
-            <targetJdk>${maven.compiler.target}</targetJdk>
+            <targetJdk>${hipparchus.compiler.release}</targetJdk>
             <skipEmptyReport>false</skipEmptyReport>
             <renderSuppressedViolations>false</renderSuppressedViolations>
             <rulesets>
@@ -894,7 +899,7 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>1.8.0</version>
+                  <version>21.0.0</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
@@ -909,24 +914,55 @@
         <groupId>com.github.davidmoten</groupId>
         <artifactId>plantuml-maven-plugin</artifactId>
         <version>${hipparchus.plantuml-maven-plugin.version}</version>
-        <configuration>
-          <sourceFiles>
-            <directory>${project.basedir}/src/site/design</directory>
-            <includes>
-              <include>
-                *.puml
-              </include>
-            </includes>
-          </sourceFiles>
-          <outputDirectory>
-            ${project.build.directory}/site/images/userguide
-          </outputDirectory>
-        </configuration>
         <executions>
           <execution>
+            <id>javadoc-diagrams</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <directory>${basedir}/src/main/plantuml</directory>
+                  <includes>
+                    <include>**/*.puml</include>
+                  </includes>
+              </sources>
+              <outputDirectory>${project.build.directory}/generated-sources/plantuml</outputDirectory>
+                <formats>
+                  <format>png</format>
+                </formats>
+                <preserveDirectoryStructure>true</preserveDirectoryStructure>
+                <generateMarkdownIndex>false</generateMarkdownIndex>
+            </configuration>
+          </execution>
+          <execution>
+            <id>site-images</id>
             <phase>pre-site</phase>
             <goals>
               <goal>generate</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <directory>${basedir}/src/site/design</directory>
+                <includes>
+                  <include>**/*.puml</include>
+                </includes>
+              </sources>
+              <outputDirectory>${project.build.directory}/site/images/userguide</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.cyclonedx</groupId>
+        <artifactId>cyclonedx-maven-plugin</artifactId>
+        <version>${hipparchus.cyclonedx-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>makeAggregateBom</goal>
             </goals>
           </execution>
         </executions>

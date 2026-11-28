@@ -51,7 +51,7 @@ public class ExpandableODE {
     private final OrdinaryDifferentialEquation primary;
 
     /** Components of the expandable ODE. */
-    private List<SecondaryODE> components;
+    private final List<SecondaryODE> components;
 
     /** Mapper for all equations. */
     private EquationsMapper mapper;

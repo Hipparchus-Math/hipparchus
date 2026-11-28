@@ -54,10 +54,10 @@ class RuleFactoryTest {
 
         final ThreadPoolExecutor exec
             = new ThreadPoolExecutor(3, numTasks, 1, TimeUnit.SECONDS,
-                                     new ArrayBlockingQueue<Runnable>(2));
+                new ArrayBlockingQueue<>(2));
 
         final List<Future<Pair<double[], double[]>>> results
-            = new ArrayList<Future<Pair<double[], double[]>>>();
+            = new ArrayList<>();
         for (int i = 0; i < numTasks; i++) {
             results.add(exec.submit(new RuleBuilder()));
         }
@@ -87,7 +87,7 @@ class RuleFactoryTest {
 
     private static class DummyRuleFactory extends AbstractRuleFactory {
         /** Rule computations counter. */
-        private static AtomicInteger nCalls = new AtomicInteger();
+        private static final AtomicInteger nCalls = new AtomicInteger();
 
         @Override
         protected Pair<double[], double[]> computeRule(int order) {
@@ -103,8 +103,8 @@ class RuleFactoryTest {
             final double[] p = new double[order];
             final double[] w = new double[order];
             for (int i = 0; i < order; i++) {
-                p[i] = Double.valueOf(i);
-                w[i] = Double.valueOf(i);
+                p[i] = (double) i;
+                w[i] = (double) i;
             }
             return new Pair<>(p, w);
         }

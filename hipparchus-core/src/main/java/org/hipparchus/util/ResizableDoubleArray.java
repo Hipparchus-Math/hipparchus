@@ -21,6 +21,7 @@
  */
 package org.hipparchus.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -78,6 +79,7 @@ import org.hipparchus.exception.NullArgumentException;
  */
 public class ResizableDoubleArray implements Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160327L;
 
     /** Default value for initial capacity. */

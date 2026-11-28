@@ -56,10 +56,10 @@ class FieldRuleFactoryTest {
 
         final ThreadPoolExecutor exec
             = new ThreadPoolExecutor(3, numTasks, 1, TimeUnit.SECONDS,
-                                     new ArrayBlockingQueue<Runnable>(2));
+                new ArrayBlockingQueue<>(2));
 
         final List<Future<Pair<Binary64[], Binary64[]>>> results
-            = new ArrayList<Future<Pair<Binary64[], Binary64[]>>>();
+            = new ArrayList<>();
         for (int i = 0; i < numTasks; i++) {
             results.add(exec.submit(new RuleBuilder()));
         }
@@ -89,7 +89,7 @@ class FieldRuleFactoryTest {
 
     private static class DummyRuleFactory extends FieldAbstractRuleFactory<Binary64> {
         /** Rule computations counter. */
-        private static AtomicInteger nCalls = new AtomicInteger();
+        private static final AtomicInteger nCalls = new AtomicInteger();
 
         
         DummyRuleFactory() {

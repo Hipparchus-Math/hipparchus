@@ -228,7 +228,7 @@ public class EnumeratedRealDistributionTest {
         final EnumeratedRealDistribution distribution = new EnumeratedRealDistribution(data);
         final List<Pair<Double, Double>> pmf = distribution.getPmf();
         assertEquals(5, pmf.size());
-        final Map<Double, Double> pmfMap = new HashMap<Double, Double>();
+        final Map<Double, Double> pmfMap = new HashMap<>();
         pmfMap.put(0d, 0.2);
         pmfMap.put(1d, 0.2);
         pmfMap.put(2d, 0.4);

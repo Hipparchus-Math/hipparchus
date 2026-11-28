@@ -90,7 +90,7 @@ class MultivariateFunctionPenaltyAdapterTest {
                                                       biQuadratic.getUpper(),
                                                       1000.0, new double[] { 100.0, 100.0 });
 
-        SimplexOptimizer optimizer = new SimplexOptimizer(new SimplePointChecker<PointValuePair>(1.0e-11, 1.0e-20));
+        SimplexOptimizer optimizer = new SimplexOptimizer(new SimplePointChecker<>(1.0e-11, 1.0e-20));
         final AbstractSimplex simplex = new NelderMeadSimplex(new double[] { 1.0, 0.5 });
 
         final PointValuePair optimum
@@ -140,7 +140,7 @@ class MultivariateFunctionPenaltyAdapterTest {
                                                        biQuadratic.getUpper(),
                                                        1000.0, new double[] { 100.0, 100.0 });
 
-        SimplexOptimizer optimizer = new SimplexOptimizer(new SimplePointChecker<PointValuePair>(1.0e-10, 1.0e-20));
+        SimplexOptimizer optimizer = new SimplexOptimizer(new SimplePointChecker<>(1.0e-10, 1.0e-20));
         final AbstractSimplex simplex = new NelderMeadSimplex(new double[] { 1.0, 0.5 });
 
         final PointValuePair optimum

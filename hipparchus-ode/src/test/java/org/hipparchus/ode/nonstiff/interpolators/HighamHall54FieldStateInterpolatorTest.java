@@ -35,15 +35,15 @@ class HighamHall54FieldStateInterpolatorTest extends RungeKuttaFieldStateInterpo
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState,
                        FieldEquationsMapper<T> mapper) {
-        return new HighamHall54FieldStateInterpolator<T>(field, forward, yDotK,
-                                                        globalPreviousState, globalCurrentState,
-                                                        softPreviousState, softCurrentState,
-                                                        mapper);
+        return new HighamHall54FieldStateInterpolator<>(field, forward, yDotK,
+                globalPreviousState, globalCurrentState,
+                softPreviousState, softCurrentState,
+                mapper);
     }
 
     protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
-        return new HighamHall54FieldIntegrator<T>(field, 0, 1, 1, 1);
+        return new HighamHall54FieldIntegrator<>(field, 0, 1, 1, 1);
     }
 
     @Test

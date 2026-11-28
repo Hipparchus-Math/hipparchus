@@ -21,6 +21,8 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serial;
+
 
 /**
  * This class implements the WELL19937a pseudo-random number generator
@@ -39,6 +41,7 @@ package org.hipparchus.random;
 public class Well19937a extends AbstractWell {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20150223L;
 
     /** Number of bits in the pool. */

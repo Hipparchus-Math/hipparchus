@@ -870,22 +870,28 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix, Field
      * @since 1.7
      */
     default FieldMatrix<T> mapToSelf(final Function<T,T> function) {
-        walkInOptimizedOrder(new FieldMatrixChangingVisitor<T>() {
+        walkInOptimizedOrder(new FieldMatrixChangingVisitor<>() {
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public T visit(int row, int column, T value) {
                 // apply the function to the current entry
                 return function.apply(value);
             }
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void start(int rows, int columns, int startRow, int endRow,
                               int startColumn, int endColumn) {
             }
 
-            /** {@inheritDoc} */
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public T end() {
                 return getField().getZero();

@@ -26,6 +26,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +65,7 @@ public class PLYParser {
         throws IOException, ParseException {
 
         try {
-            br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 
             // parse the header
             List<Field> fields = parseNextLine();
@@ -83,7 +84,7 @@ public class PLYParser {
             boolean inFaceElt     = false;
             while (parsing) {
                 fields = parseNextLine();
-                if (fields.size() < 1) {
+                if (fields.isEmpty()) {
                     complain();
                 }
                 switch (fields.get(0).getToken()) {
@@ -214,11 +215,10 @@ public class PLYParser {
     /** Parse next line.
      * @return parsed fields
      * @exception IOException if stream cannot be read
-     * @exception ParseException if the line does not contain the expected number of fields
      */
     private List<Field> parseNextLine()
-        throws IOException, ParseException {
-        final List<Field> fields = new ArrayList<Field>();
+        throws IOException {
+        final List<Field> fields = new ArrayList<>();
         line = br.readLine();
         if (line == null) {
             throw new EOFException();
@@ -245,11 +245,11 @@ public class PLYParser {
     }
 
     /** Tokens from PLY files. */
-    private static enum Token {
+    private enum Token {
         PLY, FORMAT, ASCII, BINARY_BIG_ENDIAN, BINARY_LITTLE_ENDIAN,
         COMMENT, ELEMENT, VERTEX, FACE, PROPERTY, LIST, OBJ_INFO,
         CHAR, UCHAR, SHORT, USHORT, INT, UINT, FLOAT, DOUBLE,
-        X, Y, Z, VERTEX_INDICES, END_HEADER, UNKNOWN;
+        X, Y, Z, VERTEX_INDICES, END_HEADER, UNKNOWN
     }
 
     /** Parsed line fields. */
@@ -265,7 +265,7 @@ public class PLYParser {
          * @param value field value
          */
         public Field(final String value) {
-            Token parsedToken = null;
+            Token parsedToken;
             try {
                 parsedToken = Token.valueOf(value.toUpperCase());
             } catch (IllegalArgumentException iae) {

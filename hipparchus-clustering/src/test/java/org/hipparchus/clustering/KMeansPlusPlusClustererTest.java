@@ -22,10 +22,11 @@
 
 package org.hipparchus.clustering;
 
-import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.distance.EuclideanDistance;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.util.DoublePoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,18 +57,18 @@ class KMeansPlusPlusClustererTest {
     @Test
     void testPerformClusterAnalysisDegenerate() {
         KMeansPlusPlusClusterer<DoublePoint> transformer =
-                new KMeansPlusPlusClusterer<DoublePoint>(1, 1);
+                new KMeansPlusPlusClusterer<>(1, 1);
 
         DoublePoint[] points = new DoublePoint[] {
                 new DoublePoint(new int[] { 1959, 325100 }),
                 new DoublePoint(new int[] { 1960, 373200 }), };
         List<? extends Cluster<DoublePoint>> clusters = transformer.cluster(Arrays.asList(points));
         assertEquals(1, clusters.size());
-        assertEquals(2, (clusters.get(0).getPoints().size()));
+        assertEquals(2, (clusters.getFirst().getPoints().size()));
         DoublePoint pt1 = new DoublePoint(new int[] { 1959, 325100 });
         DoublePoint pt2 = new DoublePoint(new int[] { 1960, 373200 });
-        assertTrue(clusters.get(0).getPoints().contains(pt1));
-        assertTrue(clusters.get(0).getPoints().contains(pt2));
+        assertTrue(clusters.getFirst().getPoints().contains(pt1));
+        assertTrue(clusters.getFirst().getPoints().contains(pt2));
 
     }
 
@@ -106,7 +107,7 @@ class KMeansPlusPlusClustererTest {
 
             for (int n = 2; n < 27; ++n) {
                 KMeansPlusPlusClusterer<DoublePoint> transformer =
-                    new KMeansPlusPlusClusterer<DoublePoint>(n, 100, new EuclideanDistance(), random, strategy);
+                        new KMeansPlusPlusClusterer<>(n, 100, new EuclideanDistance(), random, strategy);
 
                 List<? extends Cluster<DoublePoint>> clusters =
                         transformer.cluster(Arrays.asList(breakingPoints));
@@ -126,7 +127,7 @@ class KMeansPlusPlusClustererTest {
      * A helper class for testSmallDistances(). This class is similar to DoublePoint, but
      * it defines a different distanceFrom() method that tends to return distances less than 1.
      */
-    private class CloseDistance extends EuclideanDistance {
+    private static class CloseDistance extends EuclideanDistance {
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -147,7 +148,7 @@ class KMeansPlusPlusClustererTest {
         DoublePoint repeatedPoint = new DoublePoint(repeatedArray);
         DoublePoint uniquePoint = new DoublePoint(uniqueArray);
 
-        Collection<DoublePoint> points = new ArrayList<DoublePoint>();
+        Collection<DoublePoint> points = new ArrayList<>();
         final int NUM_REPEATED_POINTS = 10 * 1000;
         for (int i = 0; i < NUM_REPEATED_POINTS; ++i) {
             points.add(repeatedPoint);
@@ -162,8 +163,8 @@ class KMeansPlusPlusClustererTest {
         random.setSeed(RANDOM_SEED);
 
         KMeansPlusPlusClusterer<DoublePoint> clusterer =
-            new KMeansPlusPlusClusterer<DoublePoint>(NUM_CLUSTERS, NUM_ITERATIONS,
-                    new CloseDistance(), random);
+                new KMeansPlusPlusClusterer<>(NUM_CLUSTERS, NUM_ITERATIONS,
+                        new CloseDistance(), random);
         List<CentroidCluster<DoublePoint>> clusters = clusterer.cluster(points);
 
         // Check that one of the chosen centers is the unique point.
@@ -183,7 +184,7 @@ class KMeansPlusPlusClustererTest {
     void testPerformClusterAnalysisToManyClusters() {
         assertThrows(MathIllegalArgumentException.class, () -> {
             KMeansPlusPlusClusterer<DoublePoint> transformer =
-                new KMeansPlusPlusClusterer<DoublePoint>(3, 1, new EuclideanDistance(), random);
+                    new KMeansPlusPlusClusterer<>(3, 1, new EuclideanDistance(), random);
 
             DoublePoint[] points = new DoublePoint[]{
                 new DoublePoint(new int[]{

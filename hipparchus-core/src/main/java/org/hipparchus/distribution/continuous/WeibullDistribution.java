@@ -28,6 +28,8 @@ import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Weibull distribution. This implementation uses the
  * two parameter form of the distribution defined by
@@ -39,6 +41,7 @@ import org.hipparchus.util.MathUtils;
  */
 public class WeibullDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20160320L;
     /** The shape parameter. */
     private final double shape;

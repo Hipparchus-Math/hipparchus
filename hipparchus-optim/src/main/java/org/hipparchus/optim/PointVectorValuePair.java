@@ -21,6 +21,7 @@
  */
 package org.hipparchus.optim;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.util.Pair;
@@ -34,6 +35,7 @@ import org.hipparchus.util.Pair;
  */
 public class PointVectorValuePair extends Pair<double[], double[]> implements Serializable {
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20120513L;
 
     /**
@@ -120,6 +122,7 @@ public class PointVectorValuePair extends Pair<double[], double[]> implements Se
     /** Internal class used only for serialization. */
     private static class DataTransferObject implements Serializable {
         /** Serializable UID. */
+        @Serial
         private static final long serialVersionUID = 20120513L;
         /**
          * Point coordinates.

@@ -57,7 +57,7 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
     private static final double OFFSET = 1.2;
 
     /** Time offset. */
-    private T a;
+    private final T a;
 
     /** Simple constructor.
      * @param field field to which elements belong
@@ -184,7 +184,7 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
             T[] y = state.getPrimaryState();
             y[0] = y[0].negate();
             y[1] = y[1].negate();
-            return new FieldODEState<T>(state.getTime(), y);
+            return new FieldODEState<>(state.getTime(), y);
         }
 
     }

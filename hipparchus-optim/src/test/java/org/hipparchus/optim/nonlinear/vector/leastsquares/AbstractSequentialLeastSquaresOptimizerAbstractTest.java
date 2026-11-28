@@ -130,7 +130,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                 .target(new double[]{1})
                 .weight(new DiagonalMatrix(new double[]{1}))
                 .start(new double[]{3})
-                .model(point -> new Pair<RealVector, RealMatrix>(
+                .model(point -> new Pair<>(
                         new ArrayRealVector(
                                 new double[]{
                                         FastMath.pow(point.getEntry(0), 4)

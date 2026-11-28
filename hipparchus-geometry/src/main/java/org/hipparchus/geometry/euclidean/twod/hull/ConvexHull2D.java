@@ -16,6 +16,7 @@
  */
 package org.hipparchus.geometry.euclidean.twod.hull;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -39,6 +40,7 @@ import org.hipparchus.util.Precision;
 public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D, Line, SubLine>, Serializable {
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20140129L;
 
     /** Vertices of the hull. */

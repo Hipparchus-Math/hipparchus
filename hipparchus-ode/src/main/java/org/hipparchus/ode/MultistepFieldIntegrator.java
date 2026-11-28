@@ -84,7 +84,7 @@ public abstract class MultistepFieldIntegrator<T extends CalculusFieldElement<T>
     private final int nSteps;
 
     /** Stepsize control exponent. */
-    private double exp;
+    private final double exp;
 
     /** Safety factor for stepsize control. */
     private double safety;

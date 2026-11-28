@@ -156,8 +156,7 @@ public abstract class UnivariateStatisticAbstractTest {
     public void testCopyData() {
         UnivariateStatistic stat = getUnivariateStatistic();
 
-        if (stat instanceof AbstractUnivariateStatistic) {
-            AbstractUnivariateStatistic original = (AbstractUnivariateStatistic) stat;
+        if (stat instanceof AbstractUnivariateStatistic original) {
             original.setData(testArray);
             assertEquals(expectedValue(), original.evaluate(), getTolerance());
 
@@ -206,12 +205,12 @@ public abstract class UnivariateStatisticAbstractTest {
         // Fill values array with random data from N(mu, sigma)
         // and fill valuesList with values from values array with
         // values[i] repeated weights[i] times, each i
-        List<Double> valuesList = new ArrayList<Double>();
+        List<Double> valuesList = new ArrayList<>();
         for (int i = 0; i < len; i++) {
             double value = randomDataGenerator.nextNormal(mu, sigma);
             values[i] = value;
             for (int j = 0; j < intWeights[i]; j++) {
-                valuesList.add(Double.valueOf(value));
+                valuesList.add(value);
             }
         }
 

@@ -93,9 +93,9 @@ class MultivariateNormalDistributionTest {
         final int dim = d.getDimension();
         final double[] sampleMeans = new double[dim];
 
-        for (int i = 0; i < samples.length; i++) {
+        for (double[] sample : samples) {
             for (int j = 0; j < dim; j++) {
-                sampleMeans[j] += samples[i][j];
+                sampleMeans[j] += sample[j];
             }
         }
 

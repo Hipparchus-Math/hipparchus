@@ -22,6 +22,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 
+import java.io.Serial;
+
 /**
  * Implementation of the Inverse Gamma distribution.
  *
@@ -29,16 +31,12 @@ import org.hipparchus.util.FastMath;
  */
 public class InvGammaDistribution extends AbstractRealDistribution {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20250915L;
     /** The shape parameter. */
     private final double shape;
     /** The scale parameter. */
     private final double scale;
-    /**
-     * The constant value of {@code shape + g + 0.5}, where {@code g} is the
-     * Lanczos constant {@link Gamma#LANCZOS_G}.
-     */
-    private final double shiftedShape;
     /**
      * The constant value of
      * {@code shape / scale * sqrt(e / (2 * pi * (shape + g + 0.5))) / L(shape)},
@@ -98,7 +96,11 @@ public class InvGammaDistribution extends AbstractRealDistribution {
 
         this.shape = shape;
         this.scale = scale;
-        this.shiftedShape = shape + Gamma.LANCZOS_G + 0.5;
+        /**
+         * The constant value of {@code shape + g + 0.5}, where {@code g} is the
+         * Lanczos constant {@link Gamma#LANCZOS_G}.
+         */
+        double shiftedShape = shape + Gamma.LANCZOS_G + 0.5;
         // gammaShape is the Lanczos approximation of Gamma function evaluated at shape
         // See https://www.hipparchus.org/apidocs/org/hipparchus/special/Gamma.html#lanczos(double)
         final double gammaShape;

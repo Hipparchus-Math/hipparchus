@@ -21,13 +21,15 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * A linear constraint for a linear optimization problem.
@@ -50,6 +52,7 @@ import org.hipparchus.linear.RealVector;
  */
 public class LinearConstraint implements Serializable {
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = -764632794033034092L;
     /** Coefficients of the constraint (left hand side). */
     private final transient RealVector coefficients;
@@ -183,8 +186,7 @@ public class LinearConstraint implements Serializable {
         if (this == other) {
             return true;
         }
-        if (other instanceof LinearConstraint) {
-            LinearConstraint rhs = (LinearConstraint) other;
+        if (other instanceof LinearConstraint rhs) {
             return relationship == rhs.relationship &&
                 value == rhs.value &&
                 coefficients.equals(rhs.coefficients);
@@ -205,6 +207,7 @@ public class LinearConstraint implements Serializable {
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
+    @Serial
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
         oos.defaultWriteObject();
@@ -221,6 +224,7 @@ public class LinearConstraint implements Serializable {
      * @throws ClassNotFoundException if a class in the stream cannot be found
      * @throws IOException if object cannot be read from the stream
      */
+    @Serial
     private void readObject(ObjectInputStream ois)
       throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
@@ -239,9 +243,7 @@ public class LinearConstraint implements Serializable {
             f.setAccessible(true); // NOPMD
             f.set(this, vector);
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            IOException ioe = new IOException();
-            ioe.initCause(e);
-            throw ioe;
+            throw new IOException(e);
         }
 
     }

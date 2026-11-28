@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.DoubleConsumer;
@@ -71,6 +72,7 @@ public class DescriptiveStatistics
     protected static final int INFINITE_WINDOW = -1;
 
     /** Serialization UID */
+    @Serial
     private static final long serialVersionUID = 20160411L;
 
     /** The statistic used to calculate the population variance - fixed. */

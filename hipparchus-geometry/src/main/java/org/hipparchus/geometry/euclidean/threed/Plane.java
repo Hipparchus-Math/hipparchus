@@ -114,7 +114,7 @@ public class Plane
     }
 
     /** Copy the instance.
-     * <p>The instance created is completely independant of the original
+     * <p>The instance created is completely independent of the original
      * one. A deep copy is used, none of the underlying objects are
      * shared (except for immutable objects).</p>
      * @return a new hyperplane, copy of the instance
@@ -136,7 +136,7 @@ public class Plane
     }
 
     /** Reset the instance from another one.
-     * <p>The updated instance is completely independant of the original
+     * <p>The updated instance is completely independent of the original
      * one. A deep reset is used none of the underlying object is
      * shared.</p>
      * @param original plane to reset from
@@ -149,7 +149,7 @@ public class Plane
         w            = original.w;
     }
 
-    /** Set the normal vactor.
+    /** Set the normal vector.
      * @param normal normal direction to the plane (will be copied)
      * @exception MathRuntimeException if the normal norm is too small
      */

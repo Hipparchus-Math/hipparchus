@@ -30,6 +30,8 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 
+import java.io.Serial;
+
 /** This class represents a point on the 2-sphere.
  * <p>
  * We use the mathematical convention to use the azimuthal angle \( \theta \)
@@ -66,6 +68,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
     // CHECKSTYLE: resume ConstantName
 
     /** Serializable UID. */
+    @Serial
     private static final long serialVersionUID = 20131218L;
 
     /** Azimuthal angle \( \theta \) in the x-y plane. */
@@ -145,7 +148,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
         return phi;
     }
 
-    /** Get the corresponding normalized vector in the 3D euclidean space.
+    /** Get the corresponding normalized vector in the 3D Euclidean space.
      * @return normalized vector
      */
     public Vector3D getVector() {
@@ -227,8 +230,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
             return true;
         }
 
-        if (other instanceof S2Point) {
-            final S2Point rhs = (S2Point) other;
+        if (other instanceof S2Point rhs) {
             return theta == rhs.theta && phi == rhs.phi || isNaN() && rhs.isNaN();
         }
 
@@ -243,7 +245,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
      * {@code Double.NaN}, the two points are considered to be equal.
      * </p>
      * <p>
-     * In compliance with IEEE754 handling, if any coordinates of any of the
+     * In compliance with IEEE754 handling, if any coordinates of the
      * two points are {@code NaN}, then the points are considered different.
      * This implies that {@link #NaN S2Point.NaN}.equals({@link #NaN S2Point.NaN})
      * returns {@code false} despite the instance is checked against itself.
@@ -261,8 +263,7 @@ public class S2Point implements Point<Sphere2D, S2Point> {
             return true;
         }
 
-        if (other instanceof S2Point) {
-            final S2Point rhs = (S2Point) other;
+        if (other instanceof S2Point rhs) {
             return phi == rhs.phi && theta == rhs.theta;
         }
 

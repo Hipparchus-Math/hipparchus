@@ -80,9 +80,9 @@ class FirstOrderConverterTest {
     private static class Equations
     implements SecondOrderODE {
 
-        private int n;
+        private final int n;
 
-        private double omega2;
+        private final double omega2;
 
         public Equations(int n, double omega) {
             this.n = n;

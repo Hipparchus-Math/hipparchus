@@ -335,7 +335,7 @@ public abstract class RealDistributionAbstractTest {
         final BaseAbstractUnivariateIntegrator integrator =
             new IterativeLegendreGaussIntegrator(5, 1.0e-12, 1.0e-10);
         final UnivariateFunction d = x -> distribution.density(x);
-        final ArrayList<Double> integrationTestPoints = new ArrayList<Double>();
+        final ArrayList<Double> integrationTestPoints = new ArrayList<>();
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
             if (Double.isNaN(cumulativeTestValues[i]) ||
                     cumulativeTestValues[i] < 1.0e-5 ||

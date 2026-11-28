@@ -21,6 +21,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.function.DoubleConsumer;
 
@@ -61,6 +62,7 @@ public class StreamingStatistics
                DoubleConsumer, Serializable {
 
     /** Serialization UID */
+    @Serial
     private static final long serialVersionUID = 20160422L;
 
     /** count of values that have been added */

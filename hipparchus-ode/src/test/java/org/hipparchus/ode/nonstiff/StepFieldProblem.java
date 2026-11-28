@@ -40,11 +40,11 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
     extends AbstractFieldODEDetector<StepFieldProblem<T>, T>
     implements FieldOrdinaryDifferentialEquation<T> {
 
-    private Field<T> field;
-    private T        rateBefore;
-    private T        rateAfter;
+    private final Field<T> field;
+    private final T        rateBefore;
+    private final T        rateAfter;
     private T        rate;
-    private T        switchTime;
+    private final T        switchTime;
 
     public StepFieldProblem(Field<T> field,
                             final FieldAdaptableInterval<T> maxCheck, final T threshold, final int maxIter,

@@ -22,6 +22,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
@@ -45,6 +46,7 @@ import org.hipparchus.util.MathArrays;
 public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBlendable<FieldVector3D<T>, T>, Serializable {
 
     /** Serializable version identifier. */
+    @Serial
     private static final long serialVersionUID = 20130224L;
 
     /** Abscissa. */
@@ -483,15 +485,6 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
     public T getNorm2Sq() {
         // there are no cancellation problems here, so we use the straightforward formula
         return x.square().add(y.square()).add(z.square());
-    }
-
-    /** Get the square of the norm for the vector.
-     * @return square of the Euclidean norm for the vector
-     * @deprecated as of 4.1, replaced by {@link #getNorm2Sq()}; will be removed in 5.0
-     */
-    @Deprecated
-    public T getNormSq() {
-        return getNorm2Sq();
     }
 
     /** Get the L<sub>&infin;</sub> norm for the vector.

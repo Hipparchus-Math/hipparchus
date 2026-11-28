@@ -268,10 +268,4 @@ class Vector1DTest {
         assertEquals(x, v.getX(), 1.0e-12);
     }
 
-    @Test
-    @Deprecated
-    void testDeprecatedNormSq() {
-        assertEquals(9.0, new Vector1D(-3).getNormSq(), 0.0);
-    }
-
 }

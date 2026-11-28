@@ -72,7 +72,7 @@ public class EvaluationTest {
         RealVector point = new ArrayRealVector(2);
         Evaluation evaluation = new LeastSquaresBuilder()
                 .target(new ArrayRealVector(new double[]{3,-1}))
-                .model(point1 -> new Pair<RealVector, RealMatrix>(
+                .model(point1 -> new Pair<>(
                         new ArrayRealVector(new double[]{1, 2}),
                         MatrixUtils.createRealIdentityMatrix(2)
                 ))
@@ -92,7 +92,7 @@ public class EvaluationTest {
         //setup
         RealVector point = new ArrayRealVector(2);
         Evaluation evaluation = new LeastSquaresBuilder()
-                .model(point1 -> new Pair<RealVector, RealMatrix>(
+                .model(point1 -> new Pair<>(
                         new ArrayRealVector(2),
                         MatrixUtils.createRealDiagonalMatrix(new double[]{1, 1e-2})
                 ))
@@ -129,7 +129,7 @@ public class EvaluationTest {
                     assertArrayEquals(
                             point.toArray(), actualPoint.toArray(), Precision.EPSILON);
                     //return values
-                    return new Pair<RealVector, RealMatrix>(
+                    return new Pair<>(
                             new ArrayRealVector(new double[]{3, 4}),
                             MatrixUtils.createRealMatrix(new double[][]{{5, 6}, {7, 8}})
                     );
@@ -249,7 +249,7 @@ public class EvaluationTest {
 
         // "ValueAndJacobianFunction" is required but we implement only
         // "MultivariateJacobianFunction".
-        final MultivariateJacobianFunction m1 = notUsed -> new Pair<RealVector, RealMatrix>(null, null);
+        final MultivariateJacobianFunction m1 = notUsed -> new Pair<>(null, null);
 
         try {
             // Should throw.
@@ -261,7 +261,7 @@ public class EvaluationTest {
 
         final MultivariateJacobianFunction m2 = new ValueAndJacobianFunction() {
                 public Pair<RealVector, RealMatrix> value(RealVector notUsed) {
-                    return new Pair<RealVector, RealMatrix>(null, null);
+                    return new Pair<>(null, null);
                 }
                 public RealVector computeValue(final double[] params) {
                     return null;

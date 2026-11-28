@@ -50,7 +50,7 @@ final class StatisticalSummaryValuesTest {
         StatisticalSummaryValues t = null;
         assertEquals(u, u, "reflexive");
         assertNotEquals(u, t, "non-null compared to null");
-        assertNotEquals(u, Double.valueOf(0), "wrong type");
+        assertNotEquals(u, (double) 0, "wrong type");
         t = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
         assertEquals(t, u, "instances with same data should be equal");
         assertEquals(u.hashCode(), t.hashCode(), "hash code");
@@ -76,14 +76,16 @@ final class StatisticalSummaryValuesTest {
         StatisticalSummaryValues u  = new StatisticalSummaryValues(4.5, 16, 10, 5, 4, 45);
         Locale d = Locale.getDefault();
         Locale.setDefault(Locale.US);
-        assertEquals("StatisticalSummaryValues:\n" +
-                     "n: 10\n" +
-                     "min: 4.0\n" +
-                     "max: 5.0\n" +
-                     "mean: 4.5\n" +
-                     "std dev: 4.0\n" +
-                     "variance: 16.0\n" +
-                     "sum: 45.0\n",  u.toString());
+        assertEquals("""
+                     StatisticalSummaryValues:
+                     n: 10
+                     min: 4.0
+                     max: 5.0
+                     mean: 4.5
+                     std dev: 4.0
+                     variance: 16.0
+                     sum: 45.0
+                     """,  u.toString());
         Locale.setDefault(d);
     }
 }

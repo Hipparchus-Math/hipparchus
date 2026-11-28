@@ -63,7 +63,7 @@ class FieldVector3DTest {
                                                                                        factory21.variable(1, -FastMath.PI / 4)));
         checkVector(u, 2 * cosAlpha * cosDelta, 2 * sinAlpha * cosDelta, 2 * sinDelta);
         assertEquals(-2 * sinAlpha * cosDelta, u.getX().getPartialDerivative(1, 0), 1.0e-12);
-        assertEquals(+2 * cosAlpha * cosDelta, u.getY().getPartialDerivative(1, 0), 1.0e-12);
+        assertEquals(2 * cosAlpha * cosDelta, u.getY().getPartialDerivative(1, 0), 1.0e-12);
         assertEquals(0,                        u.getZ().getPartialDerivative(1, 0), 1.0e-12);
         assertEquals(-2 * cosAlpha * sinDelta, u.getX().getPartialDerivative(0, 1), 1.0e-12);
         assertEquals(-2 * sinAlpha * sinDelta, u.getY().getPartialDerivative(0, 1), 1.0e-12);
@@ -631,7 +631,7 @@ class FieldVector3DTest {
     void testAccurateDotProduct() {
         // the following two vectors are nearly but not exactly orthogonal
         // naive dot product (i.e. computing u1.x * u2.x + u1.y * u2.y + u1.z * u2.z
-        // leads to a result of 0.0, instead of the correct -1.855129...
+        // leads to a result of 0.0, instead of the correct -1.855129...)
         FieldVector3D<DerivativeStructure> u1 = createVector(-1321008684645961.0 /  268435456.0,
                                    -5774608829631843.0 /  268435456.0,
                                    -7645843051051357.0 / 8589934592.0, 3);
@@ -648,7 +648,7 @@ class FieldVector3DTest {
     void testDotProduct() {
         // we compare accurate versus naive dot product implementations
         // on regular vectors (i.e. not extreme cases like in the previous test)
-        Well1024a random = new Well1024a(553267312521321234l);
+        Well1024a random = new Well1024a(553267312521321234L);
         for (int i = 0; i < 10000; ++i) {
             double ux = 10000 * random.nextDouble();
             double uy = 10000 * random.nextDouble();
@@ -801,17 +801,6 @@ class FieldVector3DTest {
         assertEquals(dzdy, v.getZ().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
         assertEquals(dzdz, v.getZ().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
         assertEquals(dzdt, v.getZ().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
-    }
-
-    @Test
-    @Deprecated
-    void testDeprecatedNormSq() {
-        final DerivativeStructure n2 = createVector(1, 2, 3, 3).getNormSq();
-        assertEquals(14, n2.getReal(), 0.0);
-        assertEquals(2, n2.getPartialDerivative(1, 0, 0), 0.0);
-        assertEquals(4, n2.getPartialDerivative(0, 1, 0), 0.0);
-        assertEquals(6, n2.getPartialDerivative(0, 0, 1), 0.0);
-        assertEquals(0.0, createVector(0, 0, 0, 3).getNormSq().getReal(), 0.0);
     }
 
 }

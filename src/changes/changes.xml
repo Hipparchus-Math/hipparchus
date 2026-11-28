@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <!--
  Licensed to the Hipparchus project under one or more
  contributor license agreements.  See the NOTICE file distributed with
@@ -33,7 +32,6 @@ mvn changes:announcement-generate -Prelease-notes [-Dchanges.version]
 
 The <action> type attribute can be add,update,fix,remove.
 -->
-
 <!-- NOTE:
 The description attribute entries below are specially formatted 
 so as to improve the layout of the generated text release notes.
@@ -43,16 +41,58 @@ The Velocity template in src/changes/release-notes.vm has been enhanced to repla
 with a new-line in the release notes. (These spaces are ignored when displaying HTML).
 If the output is not quite correct, check for invisible trailing spaces!
 -->
-
-<document>
+<document xmlns="http://maven.apache.org/changes/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/2.0.0 https://maven.apache.org/xsd/changes-2.0.0.xsd">
   <properties>
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator,
-roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential,
-gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions, RANSAC algorithm,
-revamped constrained optimizers, and numerous small improvements and bug fixes.">
+    <release version="5.0" date="2026-11-27" description="5.0 is a major release.">
+      <action dev="luc" type="fix" due-to="ajrilatt" issue="issues/521">
+        Fixed log normal distribution inverse CDF.
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Removed deprecated AbstractUnivariateDifferentiableSolver.computeObjectiveValueAndDerivative(double),
+        replaced by computeObjectiveValueAndDerivative1(double).
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Removed deprecated SQPOption.getConvCriteria, setConvCriteria and DEFAULT_CONV_CRITERIA.
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Removed SQPOption qpMaxLoop and useFunHessian settings (getters, setters and default constants),
+        which were used only by the removed SQPOptimizerS and SQPOptimizerGM.
+      </action>
+      <action dev="vincent" type="update" issue="issues/516">
+        Changed ADMMQPOption.DEFAULT_SCALING from true to false.
+      </action>
+      <action dev="luc" type="fix" issue="issues/516">
+        Removed deprecated classes and methods in geometry and optimizers.
+      </action>
+      <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/513">
+        Fixed Complex isFinite method.
+      </action>
+      <action dev="luc" type="fix" issue="issues/507" due-to="rcgiri-physics">
+        Fixed wrong advertised order of Adams-Moulton integrator (double and Field versions).
+      </action>
+      <action dev="luc" type="fix" issue="issues/505">
+        Added Software Build Of Materials generation.
+      </action>
+      <action dev="luc" type="fix" due-to="Tasuku Kobayashi" issue="issues/502">
+        Fixed Wilcoxon signed rank test whenever the positive and negative rank sums are equal.
+      </action>
+      <action dev="bryan" type="update" issue="issues/497">
+        Moved DistanceMeasure from clustering module to core module.
+      </action>
+      <action dev="bryan" type="add" issue="issues/497">
+        Added DataPoint interface and replaced Clusterable and Fittable interfaces.
+      </action>
+      <action dev="bryan" type="update" issue="issues/497">
+        Added compute(DataPoint, DataPoint) to DistanceMeasure.
+      </action>
+      <action dev="luc" type="fix" issue="issues/341" due-to="mmatsn">
+        Fixed documentation.
+      </action>
+    </release>
+    <release version="4.1" date="2026-11-18" description="This is a minor release, adding Lebedev integrator, roman numerals, complex Schur transformer, trilinear interpolation, random generators for exponential, gamma and Nakagami distributions, half Cauchy, half normal and inverse gamma distributions, RANSAC algorithm, revamped constrained optimizers, and numerous small improvements and bug fixes.">
       <action dev="vincent" type="fix" issue="issues/488">
         Restored Vector.getNormSq() as a default method, and FieldVector2D.getNormSq() and
         FieldVector3D.getNormSq(), removed without prior deprecation. They are now deprecated
@@ -194,11 +234,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         the library itself did not change.
       </action>
     </release>
-    <release version="4.0" date="2025-03-20"
-             description="This is a major release. It adds features to Kalman filtering,
-                          adds a reset mechanism in events and propagation direction in
-                          (Field)AdaptableInterval, and improves numerical stability in
-                          BSP-tree operations.">
+    <release version="4.0" date="2025-03-20" description="This is a major release. It adds features to Kalman filtering,                           adds a reset mechanism in events and propagation direction in                           (Field)AdaptableInterval, and improves numerical stability in                           BSP-tree operations.">
       <action dev="luc" type="fix" issue="issues/367">
         Added getHipparchusVersion method to MathUtils.
       </action>
@@ -266,11 +302,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Changed CDN for faster site load.
       </action>
     </release>
-    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes several
-                                                          bugfixes and improvements, and adds one important
-                                                          feature: constrained optimization! Other additions
-                                                          are Gauss-Markov order 1 autoregressive process
-                                                          generation and GCD/LCM to {Big}Fraction">
+    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes several                                                           bugfixes and improvements, and adds one important                                                           feature: constrained optimization! Other additions                                                           are Gauss-Markov order 1 autoregressive process                                                           generation and GCD/LCM to {Big}Fraction">
       <action dev="serrof" type="add" issue="issues/269">
         Add public, static access to integrators name.
       </action>
@@ -431,9 +463,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Changed SchurTransformer visibility to public.
       </action>
     </release>
-    <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main
-    changes are: addition of Unscented Kalman Filter for non linear estimations and
-    addition of Taylor map inversion.">
+    <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main     changes are: addition of Unscented Kalman Filter for non linear estimations and     addition of Taylor map inversion.">
       <action dev="luc" type="add" issue="issues/190">
         Added {Field}TaylorMap, supporting evaluation, composition and inversion.
       </action>
@@ -471,17 +501,11 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Added integration/differentiation of {Field}DerivativeStructure.
       </action>
     </release>
-    <release version="2.1" date="2022-04-24" description="This is a maintenance release. The main
-      changes are: addition of 3D version of complex function plotter, addition of
-      ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer, addition of inverse
-      Jacobi elliptic functions, optional modified weights to Akima interpolation, modified
-      Gram-Schmidt basis orthonormalization process, generation of convergents streams in continued
-      fractions, addition of equalsIee754 to points in all topologies to handle NaN coordinates.
-      Various bugs were fixed.">
+    <release version="2.1" date="2022-04-24" description="This is a maintenance release. The main       changes are: addition of 3D version of complex function plotter, addition of       ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer, addition of inverse       Jacobi elliptic functions, optional modified weights to Akima interpolation, modified       Gram-Schmidt basis orthonormalization process, generation of convergents streams in continued       fractions, addition of equalsIee754 to points in all topologies to handle NaN coordinates.       Various bugs were fixed.">
       <action dev="luc" type="fix" issue="issues/189">
         Fixed some wrong branch cuts in inverse Jacobi elliptic functions in the complex case.
       </action>
-      <action dev="luc" type="update" >
+      <action dev="luc" type="update">
         Added a 3D version of complex plots.
       </action>
       <action dev="luc" type="add" issue="issues/172">
@@ -534,21 +558,11 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         and base class ComplexEigenDecomposition.
       </action>
     </release>
-    <release version="2.0" date="2021-08-07" description="This is a major release. The main changes
-    are the addition of a sequential Gauss-Newton optimizer, improved relative scheduling of step handlers
-    and events handlers in ODE, addition of a finish callback in step handlers, replacement of
-    RealFieldElement by CalculusFieldElement interface, many improvements in Complex to fully
-    implement CalculusFieldElement with correct branch cuts so complex numbers can be used in many
-    Hipparchus algorithms, addition of FieldComplex, addition of complex and field complex univariate integrals,
-    addition of field univariate integrators, and faster simultaneous computation of sinhcos.
-    Experimental implementation of elliptic functions and integrals for real, complex and general fields
-    have been added. Beware the elliptic integrals for complex and field complex numbers in the incomplete case
-    are considered experimental for now, they have known issues. Methods deprecated during the 1.X series have
-    been removed. Numerous bugs were also fixed.">
+    <release version="2.0" date="2021-08-07" description="This is a major release. The main changes     are the addition of a sequential Gauss-Newton optimizer, improved relative scheduling of step handlers     and events handlers in ODE, addition of a finish callback in step handlers, replacement of     RealFieldElement by CalculusFieldElement interface, many improvements in Complex to fully     implement CalculusFieldElement with correct branch cuts so complex numbers can be used in many     Hipparchus algorithms, addition of FieldComplex, addition of complex and field complex univariate integrals,     addition of field univariate integrators, and faster simultaneous computation of sinhcos.     Experimental implementation of elliptic functions and integrals for real, complex and general fields     have been added. Beware the elliptic integrals for complex and field complex numbers in the incomplete case     are considered experimental for now, they have known issues. Methods deprecated during the 1.X series have     been removed. Numerous bugs were also fixed.">
       <action dev="luc" type="add" issue="issues/153">
         Added field versions of univariate integrators.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added numerical evaluation of complex elliptic integrals.
       </action>
       <action dev="luc" type="add" issue="issues/149">
@@ -569,7 +583,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
       <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/144">
         Fixed array index error in field LU decomposition.
       </action>
-      <action dev="luc" type="add" due-to="Julie Bayard" >
+      <action dev="luc" type="add" due-to="Julie Bayard">
         Added sequential Gauss-Newton optimizer.
       </action>
       <action dev="luc" type="add" issue="issues/135">
@@ -660,9 +674,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Fixed exception in OrderedComplexEigenDecomposition when eigenvalues are equal.
       </action>
     </release>
-    <release version="1.8" date="2020-12-05" description="This is a maintenance release.
-    It fixes a few bugs, mainly a serious one for complex eigendecomposition when
-    several eigenvalues are equal. It also add sum and angle differences in SinCos and FieldSinCos.">
+    <release version="1.8" date="2020-12-05" description="This is a maintenance release.     It fixes a few bugs, mainly a serious one for complex eigendecomposition when     several eigenvalues are equal. It also add sum and angle differences in SinCos and FieldSinCos.">
       <action dev="luc" type="fix" issue="issues/106">
         Added sum and difference of angles in SinCos and FieldSinCos.
       </action>
@@ -676,11 +688,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Fixed complex eigendecomposition when several eigenvalues are equals.
       </action>
     </release>
-    <release version="1.7"  date="2020-06-23" description="This is a maintenance release.
-    It fixes several bugs, including a nasty one in ODE events handling, improves a lot
-    the Complex class so it implements the new CalculusFieldElement interface, and adds
-    several new differentiation classes to handle simpler cases (univariate derivatives
-    at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.">
+    <release version="1.7" date="2020-06-23" description="This is a maintenance release.     It fixes several bugs, including a nasty one in ODE events handling, improves a lot     the Complex class so it implements the new CalculusFieldElement interface, and adds     several new differentiation classes to handle simpler cases (univariate derivatives     at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.">
       <action dev="bryan" type="add" issue="issues/97">
       Added ExtendedUnivariateDifferentiableVectorFunction interface
       for differentiable vectorial function.
@@ -697,7 +705,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
       <action dev="luc" type="add" issue="issues/92">
         Added isMathematicalInteger to Complex.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added isMathematicalInteger to Precision for double and float numbers.
       </action>
       <action dev="evan" type="fix" issue="issues/94" due-to="Mikael">
@@ -719,7 +727,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
       <action dev="luc" type="fix" issue="issues/91">
         Fixed accuracy of linear combination for Dfp.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added Dfp conversion to either larger or smaller number of digits.
       </action>
       <action dev="luc" type="fix" issue="issues/88">
@@ -750,27 +758,25 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Fixed Complex.pow(Complex p) and Complex.pow(double p) for special cases (real arguments,
         integer power, 0).
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added Complex.pow(int n) with integer power computed more accurately by successive squarings
         rather than complex logarithm and exponential.
       </action>
       <action dev="luc" type="fix" issue="issues/63">
         Added signum to Fraction and BigFraction.
       </action>
-      <action dev="luc" type="fix" >
+      <action dev="luc" type="fix">
         Prevent random failure of micro-sphere test case.
       </action>
     </release>
-    <release version="1.6"  date="2019-11-01" description="This is a maintenance release. The main
-    changes are the addition of a field version of Vector2D, addition of an Optimum.of() factory
-    method and a visibility change of the AbstractEvaluation constructor.">
+    <release version="1.6" date="2019-11-01" description="This is a maintenance release. The main     changes are the addition of a field version of Vector2D, addition of an Optimum.of() factory     method and a visibility change of the AbstractEvaluation constructor.">
       <action dev="ward" type="add">
         Add Optimum.of(...).
       </action>
       <action dev="ward" type="add">
         Make AbstractEvaluation constructor public, fix javadoc.
       </action>
-     <action dev="luc" type="fix" issue="issues/62" >
+     <action dev="luc" type="fix" issue="issues/62">
        Fixed missing safety check in multi-step integrators.
        Github: fixes #62.
      </action>
@@ -788,10 +794,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         trace.
       </action>
     </release>
-    <release version="1.5" date="2019-05-06" description="This is a maintenance release. The main
-    changes since last version are the introduction of field versions of bilinear interpolation,
-    univariate interpolators, polynomials and polynomial spline functions, and the introduction of
-    reset events in ODE.">
+    <release version="1.5" date="2019-05-06" description="This is a maintenance release. The main     changes since last version are the introduction of field versions of bilinear interpolation,     univariate interpolators, polynomials and polynomial spline functions, and the introduction of     reset events in ODE.">
       <action dev="luc" type="fix" due-to="Hao Peng">
         Nullify corrected state after predict in abstract Kalman filter. Note that this affects
         only custom extensions of AbstractKalmanFilter because the implementations provided
@@ -799,7 +802,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         step after having called prediction step, so the nullified corrected state is reset
         properly at the end. This was initially reported as https://gitlab.orekit.org/orekit/orekit/issues/540.
       </action>
-      <action dev="luc" type="add" issue="issues/55" >
+      <action dev="luc" type="add" issue="issues/55">
         Added FieldBivariateFunction and make both BilinearInterpolatingFunction
         and PiecewiseBicubicSplineInterpolatingFunction implement it.
         Github: fixes #55.
@@ -811,7 +814,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
       <action dev="luc" type="add">
         Added FieldPolynomialFunction and FieldPolynomialSplineFunction.
       </action>
-     <action dev="luc" type="fix" issue="issues/54" >
+     <action dev="luc" type="fix" issue="issues/54">
        Avoid too many multi-step integrator restarts after event resetting derivatives.
        Github: fixes #54.
      </action>
@@ -820,7 +823,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         without recomputing the step. Use when the g function of one event detector
         depends on events occurring in another event detector.
       </action>
-      <action dev="luc" type="add" issue="issues/53" >
+      <action dev="luc" type="add" issue="issues/53">
         Fixed documentation for interpolation algorithms.
         Github: fixes #53.
       </action>
@@ -829,17 +832,12 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         This was ported from Apache Commons Geometry issue 38.
       </action>
     </release>
-    <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main
-    changes since last version are the introduction of bilinear interpolation for 2D grids, field
-    versions of sinCos and a way to build three-dimensional field arrays, accessors for state
-    transition matrix, Jacobian matrix H, innovation covariance matrix and Kalman gain in Kalman
-    filters, support for complex ordinary differential equations (both primary and secondary
-    equations), and various fixes in partitioning.">
-      <action dev="luc" type="add" issue="issues/48" >
+    <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main     changes since last version are the introduction of bilinear interpolation for 2D grids, field     versions of sinCos and a way to build three-dimensional field arrays, accessors for state     transition matrix, Jacobian matrix H, innovation covariance matrix and Kalman gain in Kalman     filters, support for complex ordinary differential equations (both primary and secondary     equations), and various fixes in partitioning.">
+      <action dev="luc" type="add" issue="issues/48">
         Added bilinear interpolation for 2D grids.
         Github: fixes #48.
       </action>
-      <action dev="luc" type="add" issue="issues/47" >
+      <action dev="luc" type="add" issue="issues/47">
         Added field version of sinCos.
         Github: fixes #47.
       </action>
@@ -847,15 +845,15 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Fixed 2D outline extraction from 3D polyhedrons sets with holes.
         GitHub: fixes #45.
       </action>
-      <action dev="luc" type="add" issue="issues/39" >
+      <action dev="luc" type="add" issue="issues/39">
         Added support for complex ordinary differential equations (both primary and secondary equations).
         Github: fixes #39.
       </action>
-      <action dev="luc" type="fix" issue="issues/44" >
+      <action dev="luc" type="fix" issue="issues/44">
         Fixed wrong construction of an Illinois solver that really built a Pegasus solver.
         Github: fixes #44.
       </action>
-      <action dev="luc" type="fix" issue="issues/4" >
+      <action dev="luc" type="fix" issue="issues/4">
         Renamed scale parameter to location parameter in the log-normal distribution,
         to avoid confusion.
         Github: fixes #4.
@@ -878,32 +876,27 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Fixed a corner case in BSPTree split.
         GitHub: fixes #41.
       </action>
-      <action dev="luc" type="fix" issue="issues/40" >
+      <action dev="luc" type="fix" issue="issues/40">
         Bisection solvers failed to raise an exception when the search
         interval did not bracket a root.
         GitHub: fixes #40.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added a way to build three-dimensional field arrays.
       </action>
     </release>
-    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main
-    changes since last version are the introduction of complex eigen decomposition, introduction of
-    a solver for continuous time algebraic Riccati equation, a new Kalman module featuring both a
-    filter for linear processes and a filter for non-linear processes, capability for secondary
-    equations to update the derivatives of the primary equation in ODE, and introduction of a
-    matrix decomposer to configure decomposition threshold independently of the matrix.">
-      <action dev="luc" type="add" issue="issues/36" >
+    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main     changes since last version are the introduction of complex eigen decomposition, introduction of     a solver for continuous time algebraic Riccati equation, a new Kalman module featuring both a     filter for linear processes and a filter for non-linear processes, capability for secondary     equations to update the derivatives of the primary equation in ODE, and introduction of a     matrix decomposer to configure decomposition threshold independently of the matrix.">
+      <action dev="luc" type="add" issue="issues/36">
         Added in FastMath the methods Java 9 added in StrictMath.
         This ensures FastMath is always a drop-in replacement for Math/StrictMath.
         Github: fixes #36.
       </action>
-      <action dev="luc" type="fix" issue="issues/35" >
+      <action dev="luc" type="fix" issue="issues/35">
         Added FieldUnivariateVectorFunction and FieldUnivariateMatrixFunction interfaces,
         as well as RealFieldUnivariateVectorFunction and RealFieldUnivariateMatrixFunction 
         Github: fixes #35.
       </action>
-      <action dev="luc" type="fix" issue="issues/34" >
+      <action dev="luc" type="fix" issue="issues/34">
         Added FieldUnivariateFunction interface and have polynomials implement it.
         Github: fixes #34.
       </action>
@@ -923,21 +916,21 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
         Added a multiplyTransposed method to compute A.B^T
         without creating the intermediate transposed matrix.
       </action>
-      <action dev="luc" type="add" issue="issues/32" >
+      <action dev="luc" type="add" issue="issues/32">
         Added linear and extended Kalman filters, with support for outliers rejection.
       </action>
       <action dev="luc" type="add" due-to="Evan Ward">
         Added MatrixDecomposer interface that encapsulates algorithms tolerances.
       </action>
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added a way to compute both sin and cos at once faster than performing two calls.
         This also speeds up DerivativeStructure.sin and DerivativeStructure.cos.
       </action>
-       <action dev="luc" type="add" issue="issues/31" >
+       <action dev="luc" type="add" issue="issues/31">
         Allow secondary equations to update derivatives of primary equation in ODE.
         GitHub: fixes #31.
       </action>
-      <action dev="luc" type="fix" issue="issues/30" >
+      <action dev="luc" type="fix" issue="issues/30">
         Fixed a problem with eigen decomposition of matrices with large coefficients.
         Github: fixes #30.
       </action>
@@ -962,7 +955,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
       </action>
     </release>
     <release version="1.2" date="2017-10-25" description="This is a maintenance release.">
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add">
         Added new RealFieldElement implementations computing a tuple. This allow to perform the
         same computation on several values at once.  The getReal() value correspond to the
         first component of the tuple.
@@ -999,11 +992,11 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
       </action>
     </release>
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
-     <action dev="psteitz" type="add" issue="issues/19" >
+     <action dev="psteitz" type="add" issue="issues/19">
        Core: Added support for sampling from enumerated distributions in RandomDataGenerator.
        GitHub: fixes issue #19.
      </action>
-     <action dev="psteitz" type="add" issue="issues/18" >
+     <action dev="psteitz" type="add" issue="issues/18">
        Core: Added support for exact integration in PolynomialFunction.
        GitHub: fixes issue #18.
      </action>
@@ -1025,7 +1018,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
        Core: Added field-based QR decomposition.
        GitHub: fixes issue #17.
      </action>
-     <action dev="ebourg" type="update" issue="issues/12"  due-to="Christoph Dibak">
+     <action dev="ebourg" type="update" issue="issues/12" due-to="Christoph Dibak">
        Core: Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
        Array2DRowFieldMatrix.getSubMatrix()).
        GitHub: fixes issue #12.
@@ -1038,7 +1031,7 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
        Core: Added methods to expose the probability mass function to EnumeratedRealDistribution
        and EnumeratedIntegerDistribution.
      </action>
-     <action dev="psteitz" type="fix" issue="issues/13" >
+     <action dev="psteitz" type="fix" issue="issues/13">
        Stat: Fixed overly-aggressive sufficient data check in OLS/GLS regression classes.
        When there is no intercept in the model, the number of observations can equal
        the number of regressors.  GitHub: fixes #13.
@@ -1057,11 +1050,11 @@ revamped constrained optimizers, and numerous small improvements and bug fixes."
        Stat: "StorelessUnivariateStatistic", "DescriptiveStatistics" and "StreamingStatistics"
        now extend from "DoubleConsumer", allowing to easily use them within streams.
      </action>
-     <action dev="luc" type="fix" issue="issues/7" >
+     <action dev="luc" type="fix" issue="issues/7">
        Ode: Fixed Field ODE integrators handling of secondary equations.
        GitHub: fixes #7.
      </action>
-     <action dev="luc" type="fix" issue="issues/20" >
+     <action dev="luc" type="fix" issue="issues/20">
        Geometry: Fixed numerical noise issues in Welzl smallest enclosing ball computation.
        Thanks to jerdmanGH for reporting the issue.
        GitHub: fixes #20.

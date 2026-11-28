@@ -22,6 +22,7 @@
 
 package org.hipparchus.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
@@ -36,6 +37,7 @@ import org.hipparchus.Field;
 public class BigRealField implements Field<BigReal>, Serializable  {
 
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 20160327L;
 
     /** Private constructor for the singleton.

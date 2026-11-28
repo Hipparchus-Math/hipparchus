@@ -63,20 +63,18 @@ public class SQPLogger {
         this.width = precision + 7; // space for digits, sign, exponent, padding
 
         final String f = "%%-%ds";
-        String col = String.format(f, width);
-        String lsCol = String.format(f, LS_WIDTH);
-        this.headerFormat = String.format(
-            "[SQP] ITER %%4s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
-            col, lsCol, col, col, col, col, col, col, col, col, col, lsCol
+        String col = f.formatted(width);
+        String lsCol = f.formatted(LS_WIDTH);
+        this.headerFormat = "[SQP] ITER %%4s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |".formatted(
+                col, lsCol, col, col, col, col, col, col, col, col, col, lsCol
         );
 
         final String percent = "%%";
         // use scientific notation for all doubles
         String fld  = String.format(percent + width + "." + precision + "e");
         String intf = String.format(percent + LS_WIDTH + "d");
-        this.rowFormat = String.format(
-            "[SQP] ITER %%4d | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |",
-            fld, intf, fld, fld, fld, fld, fld, fld, fld, fld, fld, intf
+        this.rowFormat = "[SQP] ITER %%4d | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |".formatted(
+                fld, intf, fld, fld, fld, fld, fld, fld, fld, fld, fld, intf
         );
     }
 
@@ -91,8 +89,8 @@ public class SQPLogger {
      * @return header line
      */
     public String header() {
-        return String.format(headerFormat,
-            "", "alpha", "LS", "dxNorm", "dx'Hdx", "complSlack", "KKT", "viol", "sigma", "penalty", "f(x)", "funDiff", "Hupd");
+        return headerFormat.formatted(
+                "", "alpha", "LS", "dxNorm", "dx'Hdx", "complSlack", "KKT", "viol", "sigma", "penalty", "f(x)", "funDiff", "Hupd");
     }
 
     /** Format one row.
@@ -116,8 +114,8 @@ public class SQPLogger {
                             final double kkt, final double viol, final double sigma,
                             final double penalty, final double fx, final double funDiff,
                             final int hUpdate) {
-        return String.format(rowFormat,
-                             iter, alpha, lsCount, dxNorm, dxHdx, complSlack, kkt, viol, sigma, penalty, fx, funDiff, hUpdate);
+        return rowFormat.formatted(
+                iter, alpha, lsCount, dxNorm, dxHdx, complSlack, kkt, viol, sigma, penalty, fx, funDiff, hUpdate);
     }
 
     /** Log header.
@@ -144,7 +142,7 @@ public class SQPLogger {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("[SQP] ITER %4d |", -1)).
+        sb.append("[SQP] ITER %4d |".formatted(-1)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, "")).
            append(String.format(FIELD_START + LS_WIDTH  + FIELD_CONTINUATION, funEvalCount)).
            append(String.format(FIELD_START + width     + FIELD_CONTINUATION, crit2)).

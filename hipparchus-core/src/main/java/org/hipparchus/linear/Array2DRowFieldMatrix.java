@@ -22,6 +22,7 @@
 
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
@@ -46,6 +47,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     extends AbstractFieldMatrix<T>
     implements Serializable {
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 7260756672015356458L;
     /** Entries of the matrix */
     private T[][] data;

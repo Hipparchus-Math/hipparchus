@@ -30,7 +30,6 @@ import org.hipparchus.util.Precision;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -299,9 +298,7 @@ class FractionTest {
 
     @Test
     void testReciprocal() {
-        Fraction f = null;
-
-        f = new Fraction(50, 75);
+        Fraction f = new Fraction(50, 75);
         f = f.reciprocal();
         assertEquals(3, f.getNumerator());
         assertEquals(2, f.getDenominator());
@@ -320,7 +317,7 @@ class FractionTest {
         try {
             f = f.reciprocal();
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         // large values
         f = new Fraction(Integer.MAX_VALUE, 1);
@@ -331,9 +328,7 @@ class FractionTest {
 
     @Test
     void testNegate() {
-        Fraction f = null;
-
-        f = new Fraction(50, 75);
+        Fraction f = new Fraction(50, 75);
         f = f.negate();
         assertEquals(-2, f.getNumerator());
         assertEquals(3, f.getDenominator());
@@ -353,7 +348,7 @@ class FractionTest {
         try {
             f = f.negate();
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
     }
 
     @Test
@@ -384,7 +379,7 @@ class FractionTest {
         try {
             f.add(null);
             fail("expecting NullArgumentException");
-        } catch (NullArgumentException ex) {}
+        } catch (NullArgumentException ignored) {}
 
         // if this fraction is added naively, it will overflow.
         // check that it doesn't.
@@ -409,7 +404,7 @@ class FractionTest {
         try {
             f = f.add(Fraction.ONE); // should overflow
             fail("expecting MathRuntimeException but got: " + f.toString());
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         // denominator should not be a multiple of 2 or 3 to trigger overflow
         f1 = new Fraction(Integer.MIN_VALUE, 5);
@@ -417,26 +412,26 @@ class FractionTest {
         try {
             f = f1.add(f2); // should overflow
             fail("expecting MathRuntimeException but got: " + f.toString());
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         try {
             f= new Fraction(-Integer.MAX_VALUE, 1);
             f = f.add(f);
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         try {
             f= new Fraction(-Integer.MAX_VALUE, 1);
             f = f.add(f);
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         f1 = new Fraction(3,327680);
         f2 = new Fraction(2,59049);
         try {
             f = f1.add(f2); // should overflow
             fail("expecting MathRuntimeException but got: " + f.toString());
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
     }
 
     @Test
@@ -454,7 +449,7 @@ class FractionTest {
         try {
             f1.divide(f2);
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         f1 = new Fraction(0, 5);
         f2 = new Fraction(2, 7);
@@ -481,24 +476,23 @@ class FractionTest {
         try {
             f.divide(null);
             fail("NullArgumentException");
-        } catch (NullArgumentException ex) {}
+        } catch (NullArgumentException ignored) {}
 
         try {
             f1 = new Fraction(1, Integer.MAX_VALUE);
             f = f1.divide(f1.reciprocal());  // should overflow
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
         try {
             f1 = new Fraction(1, -Integer.MAX_VALUE);
             f = f1.divide(f1.reciprocal());  // should overflow
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         f1 = new Fraction(6, 35);
         f  = f1.divide(15);
         assertEquals(2, f.getNumerator());
         assertEquals(175, f.getDenominator());
-
     }
 
     @Test
@@ -520,7 +514,7 @@ class FractionTest {
         try {
             f.multiply(null);
             fail("expecting NullArgumentException");
-        } catch (NullArgumentException ex) {}
+        } catch (NullArgumentException ignored) {}
 
         f1 = new Fraction(6, 35);
         f  = f1.multiply(15);
@@ -542,7 +536,7 @@ class FractionTest {
         try {
             f.subtract(null);
             fail("expecting NullArgumentException");
-        } catch (NullArgumentException ex) {}
+        } catch (NullArgumentException ignored) {}
 
         // if this fraction is subtracted naively, it will overflow.
         // check that it doesn't.
@@ -572,7 +566,7 @@ class FractionTest {
             f2 = new Fraction(1, Integer.MAX_VALUE - 1);
             f = f1.subtract(f2);
             fail("expecting MathRuntimeException");  //should overflow
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         // denominator should not be a multiple of 2 or 3 to trigger overflow
         f1 = new Fraction(Integer.MIN_VALUE, 5);
@@ -580,26 +574,26 @@ class FractionTest {
         try {
             f = f1.subtract(f2); // should overflow
             fail("expecting MathRuntimeException but got: " + f.toString());
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         try {
             f= new Fraction(Integer.MIN_VALUE, 1);
             f = f.subtract(Fraction.ONE);
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         try {
             f= new Fraction(Integer.MAX_VALUE, 1);
             f = f.subtract(Fraction.ONE.negate());
             fail("expecting MathRuntimeException");
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
 
         f1 = new Fraction(3,327680);
         f2 = new Fraction(2,59049);
         try {
             f = f1.subtract(f2); // should overflow
             fail("expecting MathRuntimeException but got: " + f.toString());
-        } catch (MathRuntimeException ex) {}
+        } catch (MathRuntimeException ignored) {}
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -609,7 +603,7 @@ class FractionTest {
         Fraction nullFraction = null;
         assertEquals(zero, zero);
         assertNotEquals(zero, nullFraction);
-        assertNotEquals(zero, Double.valueOf(0));
+        assertNotEquals(zero, (double) 0);
         Fraction zero2 = new Fraction(0,2);
         assertEquals(zero, zero2);
         assertEquals(zero.hashCode(), zero2.hashCode());
@@ -619,35 +613,35 @@ class FractionTest {
 
     @Test
     void testGCD() {
-      Fraction first = new Fraction(1, 3);
-      Fraction second = new Fraction(2, 5);
-      Fraction third = new Fraction(3, 7);
-      Fraction gcd1 = first.gcd(second);
+        Fraction first = new Fraction(1, 3);
+        Fraction second = new Fraction(2, 5);
+        Fraction third = new Fraction(3, 7);
+        Fraction gcd1 = first.gcd(second);
         assertEquals(gcd1, Fraction.getReducedFraction(1, 15));
-      Fraction gcd2 = gcd1.gcd(third);
+        Fraction gcd2 = gcd1.gcd(third);
         assertEquals(gcd2, Fraction.getReducedFraction(1, 105));
 
-      // example from https://math.stackexchange.com/a/151089
-      Fraction x = new Fraction(3, 7);
-      Fraction y = new Fraction(12, 22);
-      Fraction gcd = x.gcd(y);
+        // example from https://math.stackexchange.com/a/151089
+        Fraction x = new Fraction(3, 7);
+        Fraction y = new Fraction(12, 22);
+        Fraction gcd = x.gcd(y);
         assertEquals(gcd, Fraction.getReducedFraction(3, 77));
 
-      x = new Fraction(13, 6);
-      y = new Fraction(3, 4);
-      gcd = x.gcd(y);
+        x = new Fraction(13, 6);
+        y = new Fraction(3, 4);
+        gcd = x.gcd(y);
         assertEquals(gcd, Fraction.getReducedFraction(1, 12));
 
     }
 
     @Test
     void testLCM() {
-      Fraction first = new Fraction(1, 3);
-      Fraction second = new Fraction(2, 5);
-      Fraction third = new Fraction(3, 7);
-      Fraction lcm1 = first.lcm(second);
+        Fraction first = new Fraction(1, 3);
+        Fraction second = new Fraction(2, 5);
+        Fraction third = new Fraction(3, 7);
+        Fraction lcm1 = first.lcm(second);
         assertEquals(lcm1, Fraction.getReducedFraction(2, 1));
-      Fraction lcm2 = lcm1.lcm(third);
+        Fraction lcm2 = lcm1.lcm(third);
         assertEquals(lcm2, Fraction.getReducedFraction(6, 1));
     }
 
@@ -663,9 +657,9 @@ class FractionTest {
             // expected
         }
         assertEquals(-1, Fraction.getReducedFraction
-            (2, Integer.MIN_VALUE).getNumerator());
+                (2, Integer.MIN_VALUE).getNumerator());
         assertEquals(-1, Fraction.getReducedFraction
-            (1, -1).getNumerator());
+                (1, -1).getNumerator());
     }
 
     @Test
@@ -683,9 +677,9 @@ class FractionTest {
     @Test
     void testSerial() {
         Fraction[] fractions = {
-            new Fraction(3, 4), Fraction.ONE, Fraction.ZERO,
-            new Fraction(17), new Fraction(FastMath.PI, 1000),
-            new Fraction(-5, 2)
+                new Fraction(3, 4), Fraction.ONE, Fraction.ZERO,
+                new Fraction(17), new Fraction(FastMath.PI, 1000),
+                new Fraction(-5, 2)
         };
         for (Fraction fraction : fractions) {
             assertEquals(fraction, UnitTestUtils.serializeAndRecover(fraction));
@@ -698,9 +692,9 @@ class FractionTest {
         // 0, 1, 3, 22, 333, 355, 103993, 104348, 208341, 312689, 833719, 1146408, 4272943, 5419351, 80143857, 165707065, 245850922
         // OEIS A002486, Apart from two leading terms (which are present by convention), denominators of convergents to Pi (https://oeis.org/A002486)
         // 1, 0, 1,  7, 106, 113,  33102,  33215,  66317,  99532, 265381,  364913, 1360120, 1725033, 25510582,  52746197, 78256779
-        List<Fraction> convergents = Fraction.convergents(FastMath.PI, 20).collect(Collectors.toList());
+        List<Fraction> convergents = Fraction.convergents(FastMath.PI, 20).toList();
         assertEquals(13, convergents.size());
-        assertEquals(new Fraction(       3,        1), convergents.get( 0));
+        assertEquals(new Fraction(       3,        1), convergents.get(0));
         assertEquals(new Fraction(      22,        7), convergents.get( 1));
         assertEquals(new Fraction(     333,      106), convergents.get( 2));
         assertEquals(new Fraction(     355,      113), convergents.get( 3));
@@ -730,5 +724,4 @@ class FractionTest {
         assertEquals(new Fraction(312689, 99532),
                 Fraction.convergent(value, 20, (p, q) -> FastMath.abs(p / (double) q - value) < 1.0e-10).getKey());
     }
-
 }

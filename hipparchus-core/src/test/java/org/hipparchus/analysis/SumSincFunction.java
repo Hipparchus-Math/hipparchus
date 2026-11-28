@@ -49,8 +49,7 @@ public class SumSincFunction implements MultivariateFunction {
     @Override
     public double value(double[] point) {
         double sum = 0;
-        for (int i = 0, max = point.length; i < max; i++) {
-            final double x = point[i];
+        for (final double x : point) {
             final double v = sinc.value(x);
             sum += v;
         }

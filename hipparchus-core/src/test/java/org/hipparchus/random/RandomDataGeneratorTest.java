@@ -128,7 +128,7 @@ public class RandomDataGeneratorTest {
 
     private void checkNextIntUniform(int min, int max) {
         final int len = max - min + 1;
-        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
+        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<>();
         for (int i = 0; i < smallSampleSize; i++) {
             final int value = randomData.nextInt(min, max);
             assertTrue((value >= min) && (value <= max), "nextInt range");
@@ -202,7 +202,7 @@ public class RandomDataGeneratorTest {
 
     private void checkNextLongUniform(long min, long max) {
         final int len = ((int) (max - min)) + 1;
-        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
+        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<>();
         for (int i = 0; i < smallSampleSize; i++) {
             final long value = randomData.nextLong(min, max);
             assertTrue((value >= min) && (value <= max),
@@ -268,7 +268,7 @@ public class RandomDataGeneratorTest {
         final double mean = 4.0d;
         final int len = 5;
         PoissonDistribution poissonDistribution = new PoissonDistribution(mean);
-        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
+        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<>();
         randomData.setSeed(1000);
         for (int i = 0; i < largeSampleSize; i++) {
             freq.addValue(randomData.nextPoisson(mean));
@@ -317,7 +317,7 @@ public class RandomDataGeneratorTest {
         final int minExpectedCount = 7;     // Minimum size of expected bin count
         long maxObservedValue = 0;
         final double alpha = 0.001;         // Probability of false failure
-        UnitTestUtils.Frequency<Long> frequency = new UnitTestUtils.Frequency<Long>();
+        UnitTestUtils.Frequency<Long> frequency = new UnitTestUtils.Frequency<>();
         for (int i = 0; i < sampleSize; i++) {
             long value = randomData.nextPoisson(mean);
             if (value > maxObservedValue) {
@@ -360,7 +360,7 @@ public class RandomDataGeneratorTest {
          *    [binBounds[binCount - 2], upper = binBounds[binCount - 1]), [upper, +inf)
          *
          */
-        List<Integer> binBounds = new ArrayList<Integer>();
+        List<Integer> binBounds = new ArrayList<>();
         binBounds.add(lower);
         int bound = lower + binWidth;
         while (bound < upper - binWidth) {
@@ -459,7 +459,7 @@ public class RandomDataGeneratorTest {
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
-        UnitTestUtils.Frequency<String> f = new UnitTestUtils.Frequency<String> ();
+        UnitTestUtils.Frequency<String> f = new UnitTestUtils.Frequency<>();
         for (int i = 0; i < smallSampleSize; i++) {
             hexString = randomData.nextHexString(100);
             if (hexString.length() != 100) {
@@ -550,7 +550,7 @@ public class RandomDataGeneratorTest {
             binBounds[i] = binBounds[i - 1] + binSize;  // + instead of * to avoid overflow in extreme case
         }
 
-        UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
+        UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<>();
         for (int i = 0; i < smallSampleSize; i++) {
             final double value = randomData.nextUniform(min, max);
             assertTrue((value > min) && (value < max), "nextUniform range");
@@ -661,14 +661,14 @@ public class RandomDataGeneratorTest {
         long[] observed = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         double[] expected = { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 };
 
-        HashSet<Object> cPop = new HashSet<Object>(); // {0,1,2,3,4}
+        HashSet<Object> cPop = new HashSet<>(); // {0,1,2,3,4}
         for (int i = 0; i < 5; i++) {
             cPop.add(Integer.toString(i));
         }
 
         Object[] sets = new Object[10]; // 2-sets from 5
         for (int i = 0; i < 10; i++) {
-            HashSet<Object> hs = new HashSet<Object>();
+            HashSet<Object> hs = new HashSet<>();
             hs.add(c[i][0]);
             hs.add(c[i][1]);
             sets[i] = hs;
@@ -687,7 +687,7 @@ public class RandomDataGeneratorTest {
                 "chi-square test -- will fail about 1 in 1000 times");
 
         // Make sure sample of size = size of collection returns same collection
-        HashSet<Object> hs = new HashSet<Object>();
+        HashSet<Object> hs = new HashSet<>();
         hs.add("one");
         Object[] one = randomData.nextSample(hs, 1);
         String oneString = (String) one[0];
@@ -705,7 +705,7 @@ public class RandomDataGeneratorTest {
 
         // Make sure we fail for empty collection
         try {
-            hs = new HashSet<Object>();
+            hs = new HashSet<>();
             one = randomData.nextSample(hs, 0);
             fail("n = k = 0, expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
@@ -717,9 +717,9 @@ public class RandomDataGeneratorTest {
     private int findSample(Object[] u, Object[] samp) {
         for (int i = 0; i < u.length; i++) {
             HashSet<Object> set = (HashSet<Object>) u[i];
-            HashSet<Object> sampSet = new HashSet<Object>();
-            for (int j = 0; j < samp.length; j++) {
-                sampSet.add(samp[j]);
+            HashSet<Object> sampSet = new HashSet<>();
+            for (Object o : samp) {
+                sampSet.add(o);
             }
             if (set.equals(sampSet)) {
                 return i;

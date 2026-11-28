@@ -41,9 +41,9 @@ class TTestTest {
 
     protected TTest testStatistic = new TTest();
 
-    private double[] tooShortObs = { 1.0 };
-    private double[] emptyObs = {};
-    private StreamingStatistics emptyStats = new StreamingStatistics();
+    private final double[] tooShortObs = { 1.0 };
+    private final double[] emptyObs = {};
+    private final StreamingStatistics emptyStats = new StreamingStatistics();
    StreamingStatistics tooShortStats = null;
 
     @BeforeEach
@@ -59,8 +59,8 @@ class TTestTest {
         double mu = 100.0;
         StreamingStatistics sampleStats = null;
         sampleStats = new StreamingStatistics();
-        for (int i = 0; i < observed.length; i++) {
-            sampleStats.addValue(observed[i]);
+        for (double v : observed) {
+            sampleStats.addValue(v);
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
@@ -133,8 +133,8 @@ class TTestTest {
         double[] oneSidedP =
             {2d, 0d, 6d, 6d, 3d, 3d, 2d, 3d, -6d, 6d, 6d, 6d, 3d, 0d, 1d, 1d, 0d, 2d, 3d, 3d };
         StreamingStatistics oneSidedPStats = new StreamingStatistics();
-        for (int i = 0; i < oneSidedP.length; i++) {
-            oneSidedPStats.addValue(oneSidedP[i]);
+        for (double v : oneSidedP) {
+            oneSidedPStats.addValue(v);
         }
         // Target comparison values computed using R version 1.8.1 (Linux version)
         assertEquals(3.86485535541,
@@ -171,12 +171,12 @@ class TTestTest {
         double[] sample1 = { 7d, -4d, 18d, 17d, -3d, -5d, 1d, 10d, 11d, -2d };
         double[] sample2 = { -1d, 12d, -1d, -3d, 3d, -5d, 5d, 2d, -11d, -1d, -3d };
         StreamingStatistics sampleStats1 = new StreamingStatistics();
-        for (int i = 0; i < sample1.length; i++) {
-            sampleStats1.addValue(sample1[i]);
+        for (double value : sample1) {
+            sampleStats1.addValue(value);
         }
         StreamingStatistics sampleStats2 = new StreamingStatistics();
-        for (int i = 0; i < sample2.length; i++) {
-            sampleStats2.addValue(sample2[i]);
+        for (double v : sample2) {
+            sampleStats2.addValue(v);
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
@@ -257,12 +257,12 @@ class TTestTest {
         double[] sample1 ={2, 4, 6, 8, 10, 97};
         double[] sample2 = {4, 6, 8, 10, 16};
         StreamingStatistics sampleStats1 = new StreamingStatistics();
-        for (int i = 0; i < sample1.length; i++) {
-            sampleStats1.addValue(sample1[i]);
+        for (double value : sample1) {
+            sampleStats1.addValue(value);
         }
         StreamingStatistics sampleStats2 = new StreamingStatistics();
-        for (int i = 0; i < sample2.length; i++) {
-            sampleStats2.addValue(sample2[i]);
+        for (double v : sample2) {
+            sampleStats2.addValue(v);
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)

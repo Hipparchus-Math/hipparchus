@@ -46,7 +46,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import org.hipparchus.clustering.CentroidCluster;
-import org.hipparchus.clustering.Clusterable;
+import org.hipparchus.util.DataPoint;
 import org.hipparchus.clustering.KMeansPlusPlusClusterer;
 import org.hipparchus.samples.ExampleUtils;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
@@ -73,19 +73,16 @@ public class ImageClusteringExample {
     public static class Display extends ExampleFrame {
 
         /** Reference image. */
-        private BufferedImage referenceImage;
+        private final BufferedImage referenceImage;
 
         /** Cluster image. */
-        private BufferedImage clusterImage;
+        private final BufferedImage clusterImage;
 
         /** Reference raster. */
-        private Raster referenceRaster;
-
-        /** Painter for the clusters. */
-        private ImagePainter painter;
+        private final Raster referenceRaster;
 
         /** Spinner. */
-        private JSpinner clusterSizeSpinner;
+        private final JSpinner clusterSizeSpinner;
 
         /** Simple constructor.
          * @throws IOException if image cannot be created
@@ -114,7 +111,8 @@ public class ImageClusteringExample {
             JLabel picLabel = new JLabel(new ImageIcon(referenceImage));
             bar.add(picLabel);
 
-            painter = new ImagePainter(clusterImage.getWidth(), clusterImage.getHeight());
+            /** Painter for the clusters. */
+            ImagePainter painter = new ImagePainter(clusterImage.getWidth(), clusterImage.getHeight());
             bar.add(painter);
 
             JPanel controlBox = new JPanel();
@@ -160,7 +158,7 @@ public class ImageClusteringExample {
 
             WritableRaster raster = clusterImage.getRaster();
             for (CentroidCluster<PixelClusterable> cluster : clusters) {
-                double[] color = cluster.getCenter().getPoint();
+                double[] color = cluster.getCenter().values();
                 for (PixelClusterable pixel : cluster.getPoints()) {
                     raster.setPixel(pixel.x, pixel.y, color);
                 }
@@ -170,7 +168,7 @@ public class ImageClusteringExample {
         }
 
         /** Container for one pixel that can be used in clusters. */
-        private class PixelClusterable implements Clusterable {
+        private class PixelClusterable implements DataPoint {
 
             /** Abscissa. */
             private final int x;
@@ -193,7 +191,7 @@ public class ImageClusteringExample {
 
             /** {@inheritDoc} */
             @Override
-            public double[] getPoint() {
+            public double[] values() {
                 if (color == null) {
                     color = referenceRaster.getPixel(x, y, (double[]) null);
                 }
@@ -206,10 +204,10 @@ public class ImageClusteringExample {
         private class ImagePainter extends Component {
 
             /** Width. */
-            private int width;
+            private final int width;
 
             /** Height. */
-            private int height;
+            private final int height;
 
             /** Simple constructor.
              * @param width width

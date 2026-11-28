@@ -52,7 +52,7 @@ class RealMatrixTest {
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf
     // so the default methods are called
-    private class DefaultMatrix extends AbstractRealMatrix {
+    private static class DefaultMatrix extends AbstractRealMatrix {
 
         RealMatrix m;
         public DefaultMatrix(RealMatrix m) {

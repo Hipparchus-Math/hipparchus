@@ -260,7 +260,7 @@ class PolyhedronsSetTest {
                                                                 1.0, c,
                                                                 1.0, r.applyTo(vertex4.subtract(c)))
         };
-        tree.getTree(true).visit(new BSPTreeVisitor<Euclidean3D, Vector3D, Plane, SubPlane>() {
+        tree.getTree(true).visit(new BSPTreeVisitor<>() {
 
             public Order visitOrder(BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
                 return Order.MINUS_SUB_PLUS;
@@ -269,7 +269,7 @@ class PolyhedronsSetTest {
             public void visitInternalNode(BSPTree<Euclidean3D, Vector3D, Plane, SubPlane> node) {
                 @SuppressWarnings("unchecked")
                 BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane> attribute =
-                    (BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane>) node.getAttribute();
+                        (BoundaryAttribute<Euclidean3D, Vector3D, Plane, SubPlane>) node.getAttribute();
                 if (attribute.getPlusOutside() != null) {
                     checkFacet(attribute.getPlusOutside());
                 }
@@ -284,7 +284,7 @@ class PolyhedronsSetTest {
             private void checkFacet(SubPlane facet) {
                 Plane plane = facet.getHyperplane();
                 Vector2D[][] vertices =
-                    ((PolygonsSet) facet.getRemainingRegion()).getVertices();
+                        ((PolygonsSet) facet.getRemainingRegion()).getVertices();
                 assertEquals(1, vertices.length);
                 for (int i = 0; i < vertices[0].length; ++i) {
                     Vector3D v = plane.toSpace(vertices[0][i]);
@@ -571,19 +571,40 @@ class PolyhedronsSetTest {
 
     private String loadTestData(final String resourceName)
             throws IOException {
-            InputStream stream = getClass().getResourceAsStream(resourceName);
-            Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-            StringBuilder builder = new StringBuilder();
-            for (int c = reader.read(); c >= 0; c = reader.read()) {
-                builder.append((char) c);
-            }
-            return builder.toString();
+        InputStream stream = getClass().getResourceAsStream(resourceName);
+        assertNotNull(stream);
+        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        StringBuilder builder = new StringBuilder();
+        for (int c = reader.read(); c >= 0; c = reader.read()) {
+            builder.append((char) c);
         }
+        return builder.toString();
+    }
 
     private void checkPoints(Region.Location expected, PolyhedronsSet tree, Vector3D[] points) {
         for (final Vector3D point : points) {
             assertEquals(expected, tree.checkPoint(point));
         }
+    }
+
+    @Test
+    void testGetInteriorPoint() {
+        PolyhedronsSet box = new PolyhedronsSet(0, 1, 0, 1, 0, 1, 1.0e-10);
+        Vector3D interior = box.getInteriorPoint();
+        assertEquals(0.5, interior.getX(), 1.0e-10);
+        assertEquals(0.5, interior.getY(), 1.0e-10);
+        assertEquals(0.5, interior.getZ(), 1.0e-10);
+    }
+
+    @Test
+    void testTranslation() {
+        PolyhedronsSet box = new PolyhedronsSet(0, 1, 0, 1, 0, 1, 1.0e-10);
+        PolyhedronsSet translated = box.translate(new Vector3D(1, 2, 3));
+        assertEquals(1.0, translated.getSize(), 1.0e-10);
+        Vector3D interior = translated.getInteriorPoint();
+        assertEquals(1.5, interior.getX(), 1.0e-10);
+        assertEquals(2.5, interior.getY(), 1.0e-10);
+        assertEquals(3.5, interior.getZ(), 1.0e-10);
     }
 
 }

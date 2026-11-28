@@ -21,6 +21,8 @@
  */
 package org.hipparchus.exception;
 
+import java.io.Serial;
+
 /**
  * Base class for all preconditions violation exceptions.
  * In most cases, this class should not be instantiated directly: it should
@@ -30,6 +32,7 @@ package org.hipparchus.exception;
  */
 public class MathIllegalArgumentException extends MathRuntimeException {
     /** Serializable version Id. */
+    @Serial
     private static final long serialVersionUID = -6024911025449780478L;
 
     /** Simple constructor.

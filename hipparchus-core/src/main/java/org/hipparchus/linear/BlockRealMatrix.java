@@ -22,6 +22,7 @@
 
 package org.hipparchus.linear;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -72,6 +73,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** Block size. */
     public static final int BLOCK_SIZE = 52;
     /** Serializable version identifier */
+    @Serial
     private static final long serialVersionUID = 4991895511313664478L;
     /** Blocks of matrix entries. */
     private final double[][] blocks;
@@ -302,8 +304,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public BlockRealMatrix add(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof BlockRealMatrix) {
-            return add((BlockRealMatrix) m);
+        if (m instanceof BlockRealMatrix matrix) {
+            return add(matrix);
         } else {
             // safety check
             MatrixUtils.checkAdditionCompatible(this, m);
@@ -370,8 +372,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public BlockRealMatrix subtract(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof BlockRealMatrix) {
-            return subtract((BlockRealMatrix) m);
+        if (m instanceof BlockRealMatrix matrix) {
+            return subtract(matrix);
         } else {
             // safety check
             MatrixUtils.checkSubtractionCompatible(this, m);
@@ -473,8 +475,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public BlockRealMatrix multiply(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof BlockRealMatrix) {
-            return multiply((BlockRealMatrix) m);
+        if (m instanceof BlockRealMatrix matrix) {
+            return multiply(matrix);
         } else {
             // safety check
             MatrixUtils.checkMultiplicationCompatible(this, m);
@@ -660,8 +662,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public BlockRealMatrix multiplyTransposed(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof BlockRealMatrix) {
-            return multiplyTransposed((BlockRealMatrix) m);
+        if (m instanceof BlockRealMatrix matrix) {
+            return multiplyTransposed(matrix);
         } else {
             // safety check
             MatrixUtils.checkSameColumnDimension(this, m);
@@ -788,8 +790,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public BlockRealMatrix transposeMultiply(final RealMatrix m)
         throws MathIllegalArgumentException {
-        if (m instanceof BlockRealMatrix) {
-            return transposeMultiply((BlockRealMatrix) m);
+        if (m instanceof BlockRealMatrix matrix) {
+            return transposeMultiply(matrix);
         } else {
             // safety check
             MatrixUtils.checkSameRowDimension(this, m);
@@ -1147,8 +1149,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void setRowMatrix(final int row, final RealMatrix matrix)
         throws MathIllegalArgumentException {
-        if (matrix instanceof BlockRealMatrix) {
-            setRowMatrix(row, (BlockRealMatrix) matrix);
+        if (matrix instanceof BlockRealMatrix realMatrix) {
+            setRowMatrix(row, realMatrix);
         } else {
             super.setRowMatrix(row, matrix);
         }
@@ -1231,8 +1233,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void setColumnMatrix(final int column, final RealMatrix matrix)
         throws MathIllegalArgumentException {
-        if (matrix instanceof BlockRealMatrix) {
-            setColumnMatrix(column, (BlockRealMatrix) matrix);
+        if (matrix instanceof BlockRealMatrix realMatrix) {
+            setColumnMatrix(column, realMatrix);
         } else {
             super.setColumnMatrix(column, matrix);
         }
@@ -1305,8 +1307,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void setRowVector(final int row, final RealVector vector)
         throws MathIllegalArgumentException {
-        if (vector instanceof ArrayRealVector) {
-            setRow(row, ((ArrayRealVector) vector).getDataRef());
+        if (vector instanceof ArrayRealVector realVector) {
+            setRow(row, realVector.getDataRef());
         } else {
             super.setRowVector(row, vector);
         }
@@ -1339,8 +1341,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void setColumnVector(final int column, final RealVector vector)
         throws MathIllegalArgumentException {
-        if (vector instanceof ArrayRealVector) {
-            setColumn(column, ((ArrayRealVector) vector).getDataRef());
+        if (vector instanceof ArrayRealVector realVector) {
+            setColumn(column, realVector.getDataRef());
         } else {
             super.setColumnVector(column, vector);
         }

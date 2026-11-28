@@ -36,7 +36,7 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
     implements FieldODEStepHandler<T> {
 
     /** Associated problem. */
-    private TestFieldProblemAbstract<T> problem;
+    private final TestFieldProblemAbstract<T> problem;
 
     /** Maximal errors encountered during the integration. */
     private T maxValueError;
@@ -49,7 +49,7 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
     private T lastTime;
 
     /** ODE solver used. */
-    private FieldODEIntegrator<T> integrator;
+    private final FieldODEIntegrator<T> integrator;
 
     /** Expected start for step. */
     private T expectedStepStart;

@@ -228,7 +228,7 @@ class FunctionsWithFastMathVersionTest {
 
     private void checkF0Equality(final UnivariateFunction f, final Method ref, final double x) {
         try {
-            double yRef = ((Double) ref.invoke(null, x)).doubleValue();
+            double yRef = (Double) ref.invoke(null, x);
             double y    = f.value(x);
             if (Double.isNaN(yRef)) {
                 assertTrue(Double.isNaN(y));

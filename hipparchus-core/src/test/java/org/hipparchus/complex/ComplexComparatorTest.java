@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ComplexComparatorTest {
 
     private final ComplexComparator comp = new ComplexComparator();
-    private Complex o1 = new Complex(1, 1);
-    private Complex o11 = new Complex(1, 1);
-    private Complex o2 = new Complex(1, 0);
-    private Complex o3 = new Complex(2, 0);
+    private final Complex o1 = new Complex(1, 1);
+    private final Complex o11 = new Complex(1, 1);
+    private final Complex o2 = new Complex(1, 0);
+    private final Complex o3 = new Complex(2, 0);
 
     @Test
     void test() {

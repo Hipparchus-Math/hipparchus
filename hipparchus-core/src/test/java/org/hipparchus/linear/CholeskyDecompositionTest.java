@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class CholeskyDecompositionTest {
 
-    private double[][] testData = new double[][] {
+    private final double[][] testData = new double[][] {
             {  1,  2,   4,   7,  11 },
             {  2, 13,  23,  38,  58 },
             {  4, 23,  77, 122, 182 },

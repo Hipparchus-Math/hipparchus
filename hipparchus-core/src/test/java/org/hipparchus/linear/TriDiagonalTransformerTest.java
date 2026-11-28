@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class TriDiagonalTransformerTest {
 
-    private double[][] testSquare5 = {
+    private final double[][] testSquare5 = {
             { 1, 2, 3, 1, 1 },
             { 2, 1, 1, 3, 1 },
             { 3, 1, 1, 1, 2 },
@@ -43,7 +43,7 @@ class TriDiagonalTransformerTest {
             { 1, 1, 2, 1, 3 }
     };
 
-    private double[][] testSquare3 = {
+    private final double[][] testSquare3 = {
             { 1, 3, 4 },
             { 3, 2, 2 },
             { 4, 2, 0 }

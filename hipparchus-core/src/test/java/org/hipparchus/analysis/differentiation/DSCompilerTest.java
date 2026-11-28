@@ -167,7 +167,7 @@ class DSCompilerTest {
         throws SecurityException, NoSuchFieldException, IllegalArgumentException,
         IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
-        Map<String,String> referenceRules = new HashMap<String, String>();
+        Map<String,String> referenceRules = new HashMap<>();
         referenceRules.put("(f*g)",             "f * g");
         referenceRules.put("∂(f*g)/∂p₀",        "f * ∂g/∂p₀ + ∂f/∂p₀ * g");
         referenceRules.put("∂(f*g)/∂p₁",        referenceRules.get("∂(f*g)/∂p₀").replaceAll("p₀", "p₁"));
@@ -250,16 +250,16 @@ class DSCompilerTest {
                                                     "(f*g)", variables("p"));
                     StringBuilder rule = new StringBuilder();
                     for (Object term : multIndirection[k]) {
-                        if (rule.length() > 0) {
+                        if (!rule.isEmpty()) {
                             rule.append(" + ");
                         }
-                        if (((Integer) coeffMethod.invoke(term)).intValue() > 1) {
+                        if ((Integer) coeffMethod.invoke(term) > 1) {
                             rule.append(((Integer) coeffMethod.invoke(term)).intValue()).append(" * ");
                         }
-                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) lhsField.get(term)).intValue()),
+                        rule.append(ordersToString(compiler.getPartialDerivativeOrders((Integer) lhsField.get(term)),
                                                    "f", variables("p")));
                         rule.append(" * ");
-                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) rhsField.get(term)).intValue()),
+                        rule.append(ordersToString(compiler.getPartialDerivativeOrders((Integer) rhsField.get(term)),
                                                    "g", variables("p")));
                     }
                     assertEquals(referenceRules.get(product), rule.toString(), product);
@@ -275,7 +275,7 @@ class DSCompilerTest {
 
         // the following reference rules have all been computed independently from the library,
         // using only pencil and paper and some search and replace to handle symmetries
-        Map<String,String> referenceRules = new HashMap<String, String>();
+        Map<String,String> referenceRules = new HashMap<>();
         referenceRules.put("(f(g))",              "(f(g))");
         referenceRules.put("∂(f(g))/∂p₀",          "∂(f(g))/∂g * ∂g/∂p₀");
         referenceRules.put("∂(f(g))/∂p₁",          referenceRules.get("∂(f(g))/∂p₀").replaceAll("p₀", "p₁"));
@@ -453,7 +453,7 @@ class DSCompilerTest {
 
         // the following reference rules have all been computed independently from the library,
         // using only pencil and paper (which was really tedious) and using search and replace to handle symmetries
-        Map<String,String> referenceRules = new HashMap<String, String>();
+        Map<String,String> referenceRules = new HashMap<>();
         referenceRules.put("f",              "f");
         referenceRules.put("∂f/∂q₀",         "∂f/∂p₀ ∂p₀/∂q₀ + ∂f/∂p₁ ∂p₁/∂q₀");
         referenceRules.put("∂f/∂q₁",         referenceRules.get("∂f/∂q₀").replaceAll("q₀", "q₁"));
@@ -597,18 +597,18 @@ class DSCompilerTest {
 
              StringBuilder rule = new StringBuilder();
              for (Object term : mappers) {
-                 if (rule.length() > 0) {
+                 if (!rule.isEmpty()) {
                      rule.append(" + ");
                  }
-                 if (((Integer) coeffMethod.invoke(term)).intValue() > 1) {
+                 if ((Integer) coeffMethod.invoke(term) > 1) {
                      rule.append(((Integer) coeffMethod.invoke(term)).intValue()).append(" * ");
                  }
-                 rule.append(orderToString(((Integer) fIndexField.get(term)).intValue(), "(f(g))", "g"));
+                 rule.append(orderToString((Integer) fIndexField.get(term), "(f(g))", "g"));
                  int[] dsIndex = (int[]) dsIndicesField.get(term);
-                 for (int l = 0; l < dsIndex.length; ++l) {
+                 for (int index : dsIndex) {
                      rule.append(" * ");
-                     rule.append(ordersToString(compiler.getPartialDerivativeOrders(dsIndex[l]),
-                                                "g", "p₀", "p₁", "p₂", "p₃"));
+                     rule.append(ordersToString(compiler.getPartialDerivativeOrders(index),
+                             "g", "p₀", "p₁", "p₂", "p₃"));
                  }
              }
              return rule.toString();
@@ -644,7 +644,7 @@ class DSCompilerTest {
                  if (i > 0) {
                      rule.append(" + ");
                  }
-                 final int coeff = ((Integer) coeffMethod.invoke(mappers[i])).intValue();
+                 final int coeff = (Integer) coeffMethod.invoke(mappers[i]);
                  if (coeff > 1) {
                      rule.append(coeff);
                      rule.append(' ');

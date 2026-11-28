@@ -19,6 +19,10 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
+import org.hipparchus.util.FastMath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -80,6 +84,47 @@ class AdamsMoultonIntegratorTest extends AdamsIntegratorAbstractTest {
     @Test
     public void testStartFailure() {
         assertThrows(MathIllegalStateException.class, this::doTestStartFailure);
+    }
+
+    @Test
+    public void testOrder() {
+        Assertions.assertEquals(1.97, estimateOrderestOrder(2), 0.01);
+        Assertions.assertEquals(2.95, estimateOrderestOrder(3), 0.01);
+        Assertions.assertEquals(3.92, estimateOrderestOrder(4), 0.01);
+        Assertions.assertEquals(4.92, estimateOrderestOrder(5), 0.01);
+        Assertions.assertEquals(5.89, estimateOrderestOrder(6), 0.01);
+    }
+
+    private double estimateOrderestOrder(final int n) {
+        OrdinaryDifferentialEquation ode = new OrdinaryDifferentialEquation() {
+
+            /** {@inheritDoc} */
+            @Override
+            public int getDimension() {
+                return 1;
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double[] computeDerivatives(final double t, final double[] y) {
+                return new double[] {
+                        y[0] * FastMath.cos(t)
+                };
+            }
+        };
+
+        final ODEState initialState =  new ODEState(0.0, new double[] { 1.0 });
+        double prev = Double.NaN;
+        double curr = Double.NaN;
+        for (int k = 2; k <= 7; k++) {
+            double h = 1.0 / FastMath.scalb(1.0, k);
+            AdamsMoultonIntegrator am = new AdamsMoultonIntegrator(n, h, h, 1e3, 1e3);
+            final double integrated = am.integrate(ode, initialState, 1.0).getPrimaryState()[0];
+            prev = curr;
+            curr = FastMath.abs(integrated - FastMath.exp(FastMath.sin(1.0)));
+        }
+        return FastMath.log(prev / curr) / FastMath.log(2);
+
     }
 
 }

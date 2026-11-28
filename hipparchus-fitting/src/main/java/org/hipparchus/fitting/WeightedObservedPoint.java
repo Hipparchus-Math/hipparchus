@@ -21,6 +21,7 @@
  */
 package org.hipparchus.fitting;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -30,6 +31,7 @@ import java.io.Serializable;
  */
 public class WeightedObservedPoint implements Serializable {
     /** Serializable version id. */
+    @Serial
     private static final long serialVersionUID = 5306874947404636157L;
     /** Weight of the measurement in the fitting process. */
     private final double weight;

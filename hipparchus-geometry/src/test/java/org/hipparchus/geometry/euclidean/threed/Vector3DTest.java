@@ -379,7 +379,7 @@ class Vector3DTest {
     void testAccurateDotProduct() {
         // the following two vectors are nearly but not exactly orthogonal
         // naive dot product (i.e. computing u1.x * u2.x + u1.y * u2.y + u1.z * u2.z
-        // leads to a result of 0.0, instead of the correct -1.855129...
+        // leads to a result of 0.0, instead of the correct -1.855129...)
         Vector3D u1 = new Vector3D(-1321008684645961.0 /  268435456.0,
                                    -5774608829631843.0 /  268435456.0,
                                    -7645843051051357.0 / 8589934592.0);
@@ -479,12 +479,6 @@ class Vector3DTest {
         assertEquals(x, v.getX(), 1.0e-12);
         assertEquals(y, v.getY(), 1.0e-12);
         assertEquals(z, v.getZ(), 1.0e-12);
-    }
-
-    @Test
-    @Deprecated
-    void testDeprecatedNormSq() {
-        assertEquals(14.0, new Vector3D(1, 2, 3).getNormSq(), 0.0);
     }
 
 }

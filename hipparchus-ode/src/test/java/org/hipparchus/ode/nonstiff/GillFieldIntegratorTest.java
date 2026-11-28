@@ -27,7 +27,7 @@ class GillFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> FixedStepRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {
-        return new GillFieldIntegrator<T>(field, step);
+        return new GillFieldIntegrator<>(field, step);
     }
 
     @Override

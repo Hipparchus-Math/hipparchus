@@ -248,8 +248,10 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
         private List<WeightedObservedPoint> sortObservations(Collection<WeightedObservedPoint> unsorted) {
             final List<WeightedObservedPoint> observations = new ArrayList<>(unsorted);
 
-            final Comparator<WeightedObservedPoint> cmp = new Comparator<WeightedObservedPoint>() {
-                /** {@inheritDoc} */
+            final Comparator<WeightedObservedPoint> cmp = new Comparator<>() {
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public int compare(WeightedObservedPoint p1,
                                    WeightedObservedPoint p2) {
